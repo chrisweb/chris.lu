@@ -37,7 +37,33 @@ in october 2022 the next.js team released [Next.js 13](https://nextjs.org/blog/n
 
 files inside app will be rendered on the server as "React Server Components"
 
-Inside the app/ directory, there is a powerful new way to fetch data with React’s use() hook and the extended Web fetch() API. This allows you to colocate data fetching directly inside components for the most flexibility, including inside layouts
+but those files in the app directory can also be client components
+
+you can have both server and client components in a component tree, read more: [BETA Next.js documentation: Rendering Fundamentals](https://beta.nextjs.org/docs/rendering/fundamentals)
+
+Inside the app/ directory, there is a powerful new way to fetch data with React's use() hook and the extended Web fetch() API. This allows you to colocate data fetching directly inside components for the most flexibility, including inside layouts
+
+When a route is loaded, the Next.js and React runtime will be loaded, which is cacheable and predictable in size. This runtime does not increase in size as your application grows. Further, the runtime is asynchronously loaded, enabling your HTML from the server to be progressively enhanced on the client
+
+Question(s): what exactly is the runtime? how is it loaded asynchronously? Isn't it bundled like everything else?
+
+
+
+### rendering
+
+you can choose the rendering environment at the component level
+
+Glossary:
+
+Rendering Environments: there are two environments where your application code can be rendered, the client and the server
+
+similar to what we were achieving getServerSideProps and getStaticProps, with next.js 13's app directory, you have two main options, "dynamic rendering" and optimized "static rendering"
+
+read more: [BETA Next.js documentation: Rendering Fundamentals](https://beta.nextjs.org/docs/rendering/fundamentals)
+
+### streaming
+
+The app/ directory introduces the ability to progressively render and incrementally stream rendered units of the UI to the client
 
 ## 
 
@@ -49,3 +75,231 @@ Question(s): what about react Streaming, react Suspense, and react Transitions?
 converting images to AVIF and WEBP and thumbnails
 
 https://www.npmjs.com/package/sharp
+
+## blog
+
+### initialize project
+
+Note: install nodejs: the next.js app directory requires nodejs v16.8.0 or later
+
+```shell
+npm init
+```
+
+add the next.js scripts to the `package.json` file:
+
+```json
+{
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "npx eslint ./"
+  }
+}
+```
+
+create the next.js configuration `next.config.js` file:
+
+```js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    experimental: {
+        appDir: true,
+    },
+}
+
+module.exports = nextConfig
+```
+
+create the app directory:
+
+```shell
+mkdir app
+```
+
+### install first dependencies
+
+install react and next.js
+
+```shell
+npm i react@latest react-dom@latest next@latest --save-exact
+```
+
+install eslint and some plugins like the next.js eslint configuration
+
+```shell
+npm i eslint-config-next@latest eslint-plugin-react@latest eslint-plugin-react-hooks@latest eslint-plugin-jsx-a11y@latest eslint-plugin-import@latest @typescript-eslint/eslint-plugin@latest @typescript-eslint/parser@latest eslint@latest --save-dev --save-exact
+```
+
+Question(s): some plugins like import, react-hooks, jsx-a11y, ... get already added by next.js https://github.com/vercel/next.js/blob/canary/packages/eslint-config-next/package.json ... so it might be overkill to add them, not sure if it is good to add them so that you can create custom rules for those later on in your eslint configuration!?
+
+install typescript and types:
+
+```shell
+npm i typescript@latest @types/react @types/react-dom @types/node --save-dev --save-exact
+```
+
+## eslint setup
+
+you have 3 options, when it comes to configuring eslint, option 1 is to use the eslint init command, this in my opinion good as you get to see what eslint thinks are "best practices" when it comes to setting it up, option 2 is to use the next.js eslint init command (when you have no eslint configuration file yet, just run `npm run lint` and the next.js eslint configuration will start) which again is good because you get to see what next.js thinks is a good eslint setup and finally option 3 is that you create an eslint configuration manually and add configure it as you pleases
+
+what is great about those 3 options is that you can combine all 3 to get the best of each world, so lets do just that
+
+first we configure eslint using their own configuration tool, using this command:
+
+```shell
+npm init @eslint/config
+```
+
+chose the options you like best, I for my part chose the following:
+
+* how would you like to use eslint: check syntax, find problems and enforce code style
+* what type of modules does your project use: javascript (import / export)
+* which framework does your project use: react
+* does your project use typescript: yes
+* where does your project run: press the "a" key to have both selected, "browser" and "node"
+* how would you like to define a style for your project: you can select "use a popular style guide", eslint will let you chose between ["standard"](https://www.npmjs.com/package/eslint-config-standard-with-typescript) and ["XO"](https://www.npmjs.com/package/eslint-config-xo), check out their repositories if you want to know more about what configuration they apply, I for my part prefer to answer some questions to set my own rules and also because in the next step we will extend the next.js elint configuration
+* what format do you want your config to be in: I like to use javascript configuration files over json as it allows me to leave comments for myself and other developers that might come after me, if I wish to do so, so I chose "javascript"
+* what style of indentation do you use: I have always used 4 spaces, so I will stick to this, some prefer 2 spaces others prefer tabs these days, there is no right or wrong here, chose what you like best
+* what quotes do you use for strings: I always use single quotes, double quotes make me think of html attributes
+* what line endings do you use: I chose windows as I'm on windows, I don't think it doesn't matter much, because when you commit to github they will get converted anyway, ["for compatibility, line endings are converted to Unix style when you commit files"](https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings#about-line-endings), also if you want to know more about line endings I recommend reading this article ["Dealing with line endings in Windows with Git and ESLint"](https://markoskon.com/line-endings-in-vscode-with-git-and-eslint/)
+* do you require semicolons: I don't anymore, less to code is a win for me, but I know it can cause problems as there are some places where they are mandatory, like between statements in a for loop, but in all these years spoting those has not been a problem
+
+now eslint init has created a `.eslintrc.js` configuration file for us
+
+next step we will extend the ["next.js eslint configuration"](https://nextjs.org/docs/basic-features/eslint#additional-configurations) in our own `.eslintrc.js`
+
+```js
+'extends': [
+    'next/core-web-vitals',
+],
+```
+
+Note: as they say in their documentation, it is very important that "next" is last in the list of extended configurations to ensure none of their configurations get overwritten
+
+there are two types of next.js eslint configurations you can extend, the "base" one and the "strict" one, the "strict" one adds web vitals specific checks, for example they recommend you use their "next/image" module, I will enable it for now but we might tweak that configuration later, if you don't want those extra checks, just switch to using "base" instead
+
+to know more you can check out their ["next.js eslint documentation"](https://nextjs.org/docs/basic-features/eslint)
+
+### eslint custom configuration
+
+a plugin I like to add to my eslint configurations is the ["react-hooks eslint plugin"](https://www.npmjs.com/package/eslint-plugin-react-hooks), it was part of the eslint dependencies we installed earlier, now we just need add it to our configuration too:
+
+```js
+'extends': [
+    'plugin:react-hooks/recommended',
+],
+```
+
+finally you can now add your own custom rules to the eslint configuration, I for example always like to add a custom rule, to ensure all my typescript interfaces start with a big "i", I find this helpful when they get imported later on, to distinguish them from regular functions and variables, if you wish to do so, add the following code in the "rules" section of your `.eslintrc.js`:
+
+```js
+'rules': {
+    '@typescript-eslint/naming-convention': [
+        'error',
+        {
+            'selector': 'interface',
+            'format": [
+                'PascalCase'
+            ],
+            'custom': {
+                'regex': '^I[A-Z]',
+                'match': true
+            }
+        }
+    ],
+}
+```
+
+the completed eslint `.eslintrc.js` configuration file should now look something like this:
+
+```js
+module.exports = {
+    'env': {
+        'browser': true,
+        'es2021': true,
+        'node': true
+    },
+    'extends': [
+        'eslint:recommended',
+        'plugin:react/recommended',
+        'plugin:@typescript-eslint/recommended',
+        'next/core-web-vitals',
+    ],
+    'overrides': [
+    ],
+    'parser': '@typescript-eslint/parser',
+    'parserOptions': {
+        'ecmaVersion': 'latest',
+        'sourceType': 'module'
+    },
+    'plugins': [
+        'react',
+        '@typescript-eslint'
+    ],
+    'rules': {
+        'indent': [
+            'error',
+            4,
+        ],
+        'quotes': [
+            'error',
+            'single',
+        ],
+        'semi': [
+            'error',
+            'never',
+        ],
+        '@typescript-eslint/naming-convention': [
+            'error',
+            {
+                'selector': 'interface',
+                'format': [
+                    'PascalCase'
+                ],
+                'custom': {
+                    'regex': '^I[A-Z]',
+                    'match': true
+                },
+            }
+        ],
+    },
+}
+
+```
+
+### using eslint
+
+if you now want to lint your code, just run the following command
+
+```shell
+npm run lint
+```
+
+Note: but wait, there is currently a bug in next.js eslint configuration, the `app` directory is not in the list of directories yet (as of january 2023), there is however already a ticket ["next lint omits app dir by default"](https://github.com/vercel/next.js/issues/43021) as well as PR ["[ESLint] Add app dir to default linting directories"](https://github.com/vercel/next.js/pull/44426) and when the PR gets merged this problem will be solved
+
+if you used eslint before you might have used [eslint cli options](https://eslint.org/docs/latest/user-guide/command-line-interface), next lint supports some of these too
+
+which means that if in the past you did, something like this:
+
+```shell
+npx eslint ./ --fix
+```
+
+then you can still do the same with next lint, like so:
+
+```shell
+npm run lint --fix
+```
+
+Note: if you look at the code of linting cli from the next.js package, you can see which eslint options next.js supports ["cli/next-lint.ts"](https://github.com/vercel/next.js/blob/canary/packages/next/src/cli/next-lint.ts#L63)
+
+
+
+
+
+
+add mui to our project
+
+install mui but also the mui eslint plugin, then edit the eslint configuration to activate it
