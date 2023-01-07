@@ -63,7 +63,13 @@ read more: [BETA Next.js documentation: Rendering Fundamentals](https://beta.nex
 
 ### streaming
 
-The app/ directory introduces the ability to progressively render and incrementally stream rendered units of the UI to the client
+from the ["next.js 13 blog post"](https://nextjs.org/blog/next-13):
+
+> the app/ directory introduces the ability to progressively render and incrementally stream rendered units of the UI to the client
+
+I let you check out the [next.js "what is Streaming?" documentation section](https://beta.nextjs.org/docs/data-fetching/streaming-and-suspense) it is very informative about what limitations SSR has and why streaming is good solution
+
+
 
 ## 
 
