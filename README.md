@@ -84,15 +84,33 @@ https://www.npmjs.com/package/sharp
 
 ## blog
 
+### create a new repository on github
+
+use github to create a new repository for your project
+
+also let github create a README.md a LICENSE as well as a default .gitignore file for you
+
+Note: if you chose "node" as template for the `.gitignore` it will create a quite large gitignore file that contains patterns for lots of common frameworks used when working with nodejs, one of them being next.js, which means the `.next` folder will get excluded if you use this gitignore, the other rules are less useful in our case but also do no harm, so you don't really need to touch that file, also in case you wonder, yes the .gitignore file should get commited
+
+now you can check out your project locally, typing the following command into favorite command line tool / terminal:
+
+```shell
+git clone git@github.com:MY_GITHUB_USERNAME/MY_REPOSITORY_NAME.git
+```
+
 ### initialize project
 
-Note: install nodejs: the next.js app directory requires nodejs v16.8.0 or later
+Note: install nodejs: the next.js 13 "app directory features" require nodejs v16.8.0 or later
+
+run the following command to have eslint guide you step by step through the creation of your `package.json` file:
 
 ```shell
 npm init
 ```
 
-add the next.js scripts to the `package.json` file:
+anser the question that get displayed in your command line, when this is done npm will create a `package.json` in the root of your project for you
+
+add the next.js scripts to the `package.json` file, which is in the root of the project:
 
 ```json
 {
@@ -105,7 +123,7 @@ add the next.js scripts to the `package.json` file:
 }
 ```
 
-create the next.js configuration `next.config.js` file:
+create the next.js configuration `next.config.js` file, in the root of the project:
 
 ```js
 /** @type {import('next').NextConfig} */
@@ -116,12 +134,6 @@ const nextConfig = {
 }
 
 module.exports = nextConfig
-```
-
-create the app directory:
-
-```shell
-mkdir app
 ```
 
 ### install first dependencies
@@ -139,6 +151,8 @@ npm i eslint-config-next@latest eslint-plugin-react@latest eslint-plugin-react-h
 ```
 
 Question(s): some plugins like import, react-hooks, jsx-a11y, ... get already added by next.js https://github.com/vercel/next.js/blob/canary/packages/eslint-config-next/package.json ... so it might be overkill to add them, not sure if it is good to add them so that you can create custom rules for those later on in your eslint configuration!?
+
+TODO: when I found a bug mentioned later in the configuration chapter, that next lint was not going into the "app" directory, I however noticed that in vscode linting errors in files from the app directory were being displayed, so I wonder if this impacts other things related to next lint, for example I wonder if plugins added by eslint get actually used by the configuration used in vscode, to answer that question I should extend "next/config" in my eslint configuration but not yet install the "eslint import plugin" or "eslint react hooks plugin" via npm install (clear the node_modules directory and do a fresh install without them to be sure) and do some mistakes that those plugins are supposed to catch in any of my files to see if they get catched, I'm sure next lint will catch them but I wonder if they also get catched in vscode as those are not directly in my config but only in the nextjs eslint that I extend, then as mentioned in the question above, I also wonder if I extend nextjs eslint if I then can add custom rules that are based on plugins that nextjs lint calls but that are not explicitly in my own configuration
 
 install typescript and types:
 
@@ -190,7 +204,7 @@ to know more you can check out their ["next.js eslint documentation"](https://ne
 
 ### eslint custom configuration
 
-a plugin I like to add to my eslint configurations is the ["react-hooks eslint plugin"](https://www.npmjs.com/package/eslint-plugin-react-hooks), it was part of the eslint dependencies we installed earlier, now we just need add it to our configuration too:
+a plugin I like to add to my eslint configurations is the ["react-hooks eslint plugin"](https://www.npmjs.com/package/eslint-plugin-react-hooks), the package itself we installed it earlier as it was part of the eslint dependencies in our npm install command that we used when we installed all our dependencies in the chapter ["install first dependencies"](#install-first-dependencies), now we just need add it to our configuration for it:
 
 ```js
 'extends': [
@@ -301,6 +315,96 @@ npm run lint --fix
 
 Note: if you look at the code of linting cli from the next.js package, you can see which eslint options next.js supports ["cli/next-lint.ts"](https://github.com/vercel/next.js/blob/canary/packages/next/src/cli/next-lint.ts#L63)
 
+### our first page
+
+first we create the app directory in the root of our project, by using the following command or by using your IDE:
+
+```shell
+mkdir app
+```
+
+inside of the `app` directory create a first page called `page.tsx` and put the following content into it:
+
+```typescript
+export default function Homepage() {
+    return <main>Hello, World!</main>
+}
+```
+
+Note: you will see in VSCode that the `<main>` element is underlined and shows an error, ignore this for now, it will go away in the next step as soon as next.js has created the typescript configuration file for us
+
+Note: did you notice how our first page is called `page.tsx` but the function itself has as name `Homepage`, if you worked with next.js before you might be used to create files for pages where the file name and the function were both identical and represented the content of that page, this isn't the case anymore, in the app directory every file containing UI code of a page is always called `page.tsx`
+
+TODO: probably here would be a good place to explain the new routing system and how URL segments get matched to files in the new app directory
+
+Note: now we could create two more initial files ourself `head.tsx` and `layout.tsx`, but wait because we can also let next.js do it for us and that's the option I will chose here because I want to see what initial code next.js puts into them
+
+in your command line tool (or a vscode terminal), type this command to start the development server:
+
+```shell
+npm run dev
+```
+
+when you do this for the first time a lot of things will happen:
+
+* because next.js has detected that `page.tsx` is a typescript file, it will display a message, saying that:
+
+> We detected TypeScript in your project and created a tsconfig.json file for you.
+
+so next.js automatically created a `tsconfig.json` file but also a `next-env.d.ts` for us in the root of our project to configure typescript for us
+
+Note: learn more about next.js typescript support and the two files I just mentioned, check out their ["next.js TypeScript documentation page"](https://nextjs.org/docs/basic-features/typescript)
+
+Note: also good to know is that starting with version 12 next.js typescript compilation is now much faster thx to ["SWC"](https://swc.rs/), which is now the new next.js compiler, for a bit of history and more in depth information check out their ["next.js compiler documentation page"](https://nextjs.org/docs/advanced-features/compiler)
+
+* you will notice that in your terminal a message appeared telling you that:
+
+> info  - VS Code settings.json has been created for Next.js' automatic app types, this file can be added to .gitignore if desired
+
+this vscode "workspace settings" file got created in a folder called `.vscode` and the file is called `settings.js`, it contains workspace specific configuration instructions for your VSCode IDE, as next.js tells you, it is up to you if you add them to .gitignore to ensure they don't get shared with other people using your repository, I usually however share mine, I think it can be helpful if the entire team working on a project uses the same IDE configuration
+
+* because of that new VSCode settings file next.js just created, a notification will appear in your VSCode, saying that it detected that you installed typescript in the current workspace and will ask you if you allow it to use that version instead of it's own typescript version that is bundled into vscode, so we click on "Allow"
+
+![vscode notification typescript version](./documentation/assets/images/vscode_notification_typescript_version.png)
+
+this notification is related to a new typescript plugin the next.js team created and which is included in the release of next.js 13, here isc a little quote from their [next.js 13.1 blog post](https://nextjs.org/blog/next-13-1):
+
+> We've built a new TypeScript plugin that provides suggestions for page and layout configuration options and provides helpful usage hints around Server and Client Components
+
+Note: check out the [youtube video "Next.js 13: Prevent Common Mistakes w/ New TypeScript Plugin"](https://www.youtube.com/watch?v=pqMqn9fKEf8) from [Delba](https://twitter.com/delba_oliveira) which is part of the next.js developer experience team giving more info about what the new plugin is and what it does
+
+* but this is not all next.js does for us, because now if you visit the your first page by using the URL `http://localhost:3000`, next.js will also create the two files, `head.tsx` and `layout.tsx`, that I mentioned ealier, inside of the `app` directory
+
+the `head.tsx` next.js created for us, looks like this:
+
+```typescript
+export default function Head() {
+    return (
+        <>
+            <title></title>
+            <meta content="width=device-width, initial-scale=1" name="viewport" />
+            <link rel="icon" href="/favicon.ico" />
+        </>
+    )
+}
+```
+
+the `layout.tsx` next.js created for us, looks like this:
+
+```typescript
+export default function RootLayout({
+    children,
+}: {
+    children: React.ReactNode
+}) {
+    return (
+        <html>
+            <head />
+            <body>{children}</body>
+        </html>
+    )
+}
+```
 
 
 
