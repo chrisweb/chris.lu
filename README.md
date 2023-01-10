@@ -35,17 +35,9 @@ in october 2022 the next.js team released [Next.js 13](https://nextjs.org/blog/n
 
 ## react server components
 
-files inside app will be rendered on the server as "React Server Components"
 
-but those files in the app directory can also be client components
 
-you can have both server and client components in a component tree, read more: [BETA Next.js documentation: Rendering Fundamentals](https://beta.nextjs.org/docs/rendering/fundamentals)
 
-Inside the app/ directory, there is a powerful new way to fetch data with React's use() hook and the extended Web fetch() API. This allows you to colocate data fetching directly inside components for the most flexibility, including inside layouts
-
-When a route is loaded, the Next.js and React runtime will be loaded, which is cacheable and predictable in size. This runtime does not increase in size as your application grows. Further, the runtime is asynchronously loaded, enabling your HTML from the server to be progressively enhanced on the client
-
-Question(s): what exactly is the runtime? how is it loaded asynchronously? Isn't it bundled like everything else?
 
 
 
@@ -406,9 +398,92 @@ export default function RootLayout({
 }
 ```
 
+layout:
 
+with the pages folder in previous next.js version, you had the possibility to wrap the children property of your _app.tsx with a layout component to then have that layout being applied to every page, but the disadvantage was that it would then be used by every single page in your pages folder, all other solutions involved writing more code, for example by adding custom code inside of your _app.tsx that would check which route you were on and based on that switch to another layout, or you could have imported different layouts in every page file and wrap you page into those layout components
 
+with the new layout system it is much easier to have different layouts for different segments of your website
 
+layouts will apply to the segment they are in and all segments nested below that, which brings us to another feature which is that now it is possible to have a cascade of layouts where one layout from a child segment is encapsulated into the layout of the parent segment
+
+Server Components and data fetching:
+
+all files inside app directory are by default "React Server Components" and hence will be rendered on the server
+
+but you can also have files in the app directory that are client components
+
+which finally means you can have both server and client components in a component tree
+
+Note: for more info and good diagrams that help you understand how client and server components can be mixed can be found in the [next.js (beta) documentation "Rendering Fundamentals"](https://beta.nextjs.org/docs/rendering/fundamentals)
+
+TODO: show an example with a console log, show that the console log appears in the terminal but not in the console logs of your browser developer tools
+
+you can fetch data directly inside of your "Server Component" function, so now there is NO need to use an extra async function like getServerSideProps or getStaticProps anymore (also there is no need to try to use them, they are not supported in the app directory anymore, in the pages directory on the other hand nothing changed in that regard)
+
+a big novelty for server components versus client components, is that in server components you can use await, this means you declare that the function is async and then use await inside of it
+
+TODO: show example of async component function with an await, that calls an /library/fetch file which returns some dummy json data
+
+in clients you still can't use async / await but in client components there is another novelty which is called the "use" hook, this hook is still very experimental and the [proposed RFC](https://github.com/acdlite/rfcs/blob/first-class-promises/text/0000-first-class-support-for-promises.md) has not even be merged into the official RFCs repository yet
+
+Note: more info about the new react hook "use()" can be found in the [next.js "use in Client Components" documentation page](https://beta.nextjs.org/docs/data-fetching/fetching#use-in-client-components) or the [proposed RFC](https://github.com/acdlite/rfcs/blob/first-class-promises/text/0000-first-class-support-for-promises.md) (careful these informations can change as any moment and some of it might not be true anymore in a few weeks, I will update this part as the situation evolves)
+
+```typescript
+import { use } from 'react'
+```
+
+from the next.js documentation:
+
+> When a route is loaded, the Next.js and React runtime will be loaded, which is cacheable and predictable in size. This runtime does not increase in size as your application grows. Further, the runtime is asynchronously loaded, enabling your HTML from the server to be progressively enhanced on the client
+
+Question(s): what exactly is the runtime? how is it loaded asynchronously? Isn't it bundled like everything else?
+
+routes:
+
+you can create static route segments, like /users but same as with pages you can also create dynamic routes like [id], to get the dynamic value you use the "params" prop
+
+Question(s): do ["catch all"](https://nextjs.org/docs/routing/dynamic-routes#catch-all-routes) routes (that have 3 dots: [...id]) and ["optional catch all"](https://nextjs.org/docs/routing/dynamic-routes#optional-catch-all-routes) routes (that have 2 square brackets [[...id]]) still work in the app directory???
+
+next.js created a layout file for us in the root segment, but if inside of that segment we add a new segment /posts/[id] then this page will use the same layout, the best here is that all data that is being fetched in the layout is not getting refetched when you **navigate** from one to another
+
+TODO: show an example with just "a href" links, which reload the entire page and then an example which uses next/link, explain that when I say **"navigate"** I mean by using **next/link** and NOT a conventinal **html anchor element**, show clearly that the data query in the layout is not being executed twice, just the main content (children of layout) are being updated
+
+loading:
+
+you can now create new loading files and these files have an error prop that contains details about the error
+
+Question(s): are loading scripts also getting used by nested segments, like with layouts or do you need a loading script in each segment?
+
+TODO: create a small demo by creating a loading file and adding a setTimeout to our library/fetch that returns the dummy json
+
+error:
+
+similar as loading, you can create error files
+
+Question(s): error files can only be client components???
+
+components:
+
+Question(s): do you store the components in the segment folder or a seperate components folder, you can do both, it is as you prefer, I for my part prefer a seperate components folder that acts as a library for all my components, for several reasons:
+* because some components will be used by more than one segment
+* all files in the components folder will have react only code and no next.js specific code
+* it will hopefully be easier in the future to re-use or share the components
+* not sure about this? -> all components are client side components
+
+TODO: Web fetch() API ???
+https://beta.nextjs.org/docs/data-fetching/fundamentals
+TODO: client components
+TODO: when to use client and when to use server components (that's not a very isomorphix approach :( )
+check out the table of use cases in the next.js documentation: https://beta.nextjs.org/docs/rendering/server-and-client-components#when-to-use-server-vs-client-components
+TODO: list all reserved next.js file names:
+layout.tsx
+page.tsx
+loading.tsx
+error.tsx
+template.tsx ??? (coming soo? it is grayed out in next docs)
+head.tsx
+not-found.tsx
+are there more?
 
 add mui to our project
 
