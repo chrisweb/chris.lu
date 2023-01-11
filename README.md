@@ -485,6 +485,11 @@ head.tsx
 not-found.tsx
 are there more?
 
+TODO: increase dev server speed with turbopack, add the option `--turbo` to `next dev` in the package json scripts
+https://nextjs.org/docs/advanced-features/turbopack
+Question(s): is turbo also used for build command? I mean prod build, same as for dev?
+
+
 add mui to our project
 
 install mui but also the mui eslint plugin, then edit the eslint configuration to activate it
