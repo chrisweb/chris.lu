@@ -1,8 +1,10 @@
 # chris.lu
 
 
-this series of articles will showcase how to build a blog using next.js 13 and focus on using features like "React Server Components", "React Streaming Components", "React Suspense"
+this series of articles will showcase how to build a blog using next.js 13 rendering framework as well as the react 18 frontend framework and focus on using new features like "next.js app directory", "React Server Components", "React Streaming Components", "React Suspense"
 
+react is in 2022/2023 the most used frontend framework based on ["state of js survey results: frontend frameworks"](https://2022.stateofjs.com/en-US/libraries/front-end-frameworks/)
+next.js is in 2022/2023 the most used rendering framework ["state of js survey results: frontend frameworks"](https://2022.stateofjs.com/en-US/libraries/rendering-frameworks/)
 
 ## history
 
@@ -406,7 +408,7 @@ with the new layout system it is much easier to have different layouts for diffe
 
 layouts will apply to the segment they are in and all segments nested below that, which brings us to another feature which is that now it is possible to have a cascade of layouts where one layout from a child segment is encapsulated into the layout of the parent segment
 
-Server Components and data fetching:
+Server Components and Client Components:
 
 all files inside app directory are by default "React Server Components" and hence will be rendered on the server
 
@@ -418,9 +420,23 @@ Note: for more info and good diagrams that help you understand how client and se
 
 TODO: show an example with a console log, show that the console log appears in the terminal but not in the console logs of your browser developer tools
 
+so may wonder but when do I need to define a client component as being a client component? well there are several things that when added to a component will have next.js tell you that those can't be used in client components, like when using reacts local state, or react context or a clickHandler on a button
+
+TODO: show example of a component getting imported by a Server Component, show the error (warning?) message, then show how to fix it
+
+Question(s): if my component is not in the app directory and has no statement "use client", but I import it inside of a Server Component, do I still get the error that server components can not use XY?
+
+TODO: show example of question above, where component is in components directory and being imported inside of server component, but there is no error, because as it is not in the app directory it is not getting treated as server component but client component
+
+as I mentioned above you can mix server and client components, for example if you explicitly state that component is a client component but then inside of it import a server component (so a component with no statement, a component located into a segment folder), then this component will also be considered being a client component without having to explicitly add the 'use client' statement on top
+
+TODO: show example of server component being imported into client component and it just works
+
+data fetching:
+
 you can fetch data directly inside of your "Server Component" function, so now there is NO need to use an extra async function like getServerSideProps or getStaticProps anymore (also there is no need to try to use them, they are not supported in the app directory anymore, in the pages directory on the other hand nothing changed in that regard)
 
-a big novelty for server components versus client components, is that in server components you can use await, this means you declare that the function is async and then use await inside of it
+a big novelty for server components versus client components, is that in server components you can use await, this means you declare that the function is async and then use await inside of it, so now we can do "await getSomeData()" inside components, compared to previously where we would have created a seperate function to fetch data and put that data into local react state of our component
 
 TODO: show example of async component function with an await, that calls an /library/fetch file which returns some dummy json data
 
@@ -437,6 +453,28 @@ from the next.js documentation:
 > When a route is loaded, the Next.js and React runtime will be loaded, which is cacheable and predictable in size. This runtime does not increase in size as your application grows. Further, the runtime is asynchronously loaded, enabling your HTML from the server to be progressively enhanced on the client
 
 Question(s): what exactly is the runtime? how is it loaded asynchronously? Isn't it bundled like everything else?
+
+Question(s): as we saw in the previous chapter, you can import a Server Component inside of a Client Component and it will be considered a Client Component too, but what if that component for example fetches some data from database, this code can't run in the client?
+
+TODO: to answer the question above, show example code of passing a server component via the children prop into a client component (that client component needs to be inside of a server component)
+
+Isomorphic code:
+
+Note: to be honest I find all this quite complex, I don't like having to remember all the time that I need to do something in a specific way for it to work, I like to be able to always do the same thing and be sure I will get the best result
+unfortunatly now, we will always have to think about passing server components as children, because if we just import them, we will lose the SSR benefits
+this to me is not "Isomorphic" at all, I personally expect from a modern framework to be Isomorphic, you should be able to reuse most of your code on server side as well as the client side and only have a few files that function as adapters and do something different based on the environment, like having a getData function for both the server and the client code but inside getData you check the environemnt and based on the result you either do browser fetch request using an API URL if you are in the client and if you are on the server the database adapter is being used to make a database query, same for caching for example, you should be able to cache data queries with a unique function that you use the same way, be it on the server or the client, but inside the cache function there is a bit of code that if on the client uses an adapter that caches data for example into the localstorage and if on server another adapter caches or retrieves the data from for example a redis database
+
+can we solve this headache by using the new next.js fetch? if so, this would mean we need an API! I don't mind needing an API, we would need one anyway for POST, PUT, PATCH and DELETE methods that client side code would call to execute actions, what is also nice is that the features like being able to use the `loading.tsx` file in your segment folder is not lost and still gets used when making a server side fetch, but finally all this all means that we never make any component function async and also not use await inside of it, but instead always use the new react `use` hook, only if we do all of this then we come very close to a real Isomorphic experience where we don't need to think about the question is this a component I can import or a component I need to pass via the `children` prop
+
+the problem with fetch is that we after fetching the data from API, it is the client which needs to do the rendering job to produce the html, so we lose the SSR benefit where the client gets the html pre-rendered and just needs to hydrate it, you can compare this to have someone delivering you all the ingredients to cook your meal but you still need to do the cooking vs having someone delivering a pre-cooked meal to your place that you then just need to heat before being able to eat it
+
+so unfortunatly to not lose the SSR benefit, we might have to live with having to decide if we pass a component via the `children` prop or can just import it
+
+TODO: It might be better to put all this into a speraret blog post, outside of the scope of this tutorial and then link to it
+
+Question(s): what would be nice is that if the framework when encountering a server component inside a client component, would not consider it a client component but instead pre-render it automatically on the server for you and send the html to the client component to then get hydrated
+
+Question(s): can streaming fix some of these problems? make it easier for the devs?
 
 routes:
 
@@ -462,13 +500,18 @@ similar as loading, you can create error files
 
 Question(s): error files can only be client components???
 
-components:
+components directory or not:
 
-Question(s): do you store the components in the segment folder or a seperate components folder, you can do both, it is as you prefer, I for my part prefer a seperate components folder that acts as a library for all my components, for several reasons:
+prior to next.js 13's release or if you worked previously with create react app and did not use next.js at all, like me you might be used to put all components into a folder called `components`, but with next.js you can put all your components into the segment directories themself, you can even put your test files, like a jest test file to test your component into that folder too
+
+so now the question is do you store the components in the segment folder or a seperate components folder, you can do both, it is as you prefer, for the moment as next.js is very new there is not yet really a trend which shows as that most devs do it this or that way
+
+I for my part prefer a seperate components folder that acts as a library for all my components, for several reasons:
+
 * because some components will be used by more than one segment
-* all files in the components folder will have react only code and no next.js specific code
+* not sure about this? -> all components are handled as client side components by next.js and we don't need to add the "use client" statement explicitly
+* all files in the components folder will have react only code and no have any next.js specific code
 * it will hopefully be easier in the future to re-use or share the components
-* not sure about this? -> all components are client side components
 
 TODO: Web fetch() API ???
 https://beta.nextjs.org/docs/data-fetching/fundamentals
@@ -493,3 +536,11 @@ Question(s): is turbo also used for build command? I mean prod build, same as fo
 add mui to our project
 
 install mui but also the mui eslint plugin, then edit the eslint configuration to activate it
+
+
+add authentification using next-auth
+the session provider that was previously in _app now goes into the root layout
+the login button component which has a clickHandler must have a "use client" statement if it is located inside of the app dirctory or get moved to the components directory
+
+use jest to write some tests
+jest seems to have the biggest user base right now if you look at the ["state of js 2022 survey results"](https://2022.stateofjs.com/en-US/libraries/testing/)
