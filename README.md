@@ -1,10 +1,8 @@
 # chris.lu
 
+this series of articles will showcase how to build a blog using [Next.js](https://nextjs.org/) version 13 and up as our rendering framework as well as the [React](https://reactjs.org/) version 18 and up as our frontend framework and focus on using new features like "next.js app directory", "React Server Components", "React Streaming Components", "React Suspense"
 
-this series of articles will showcase how to build a blog using next.js 13 rendering framework as well as the react 18 frontend framework and focus on using new features like "next.js app directory", "React Server Components", "React Streaming Components", "React Suspense"
-
-react is in 2022/2023 the most used frontend framework based on ["state of js survey results: frontend frameworks"](https://2022.stateofjs.com/en-US/libraries/front-end-frameworks/)
-next.js is in 2022/2023 the most used rendering framework ["state of js survey results: frontend frameworks"](https://2022.stateofjs.com/en-US/libraries/rendering-frameworks/)
+both [React](https://reactjs.org/) and [Next.js](https://nextjs.org/) are very popular in the javascript community, based on the latest results from the **state of js survey** that got released in january 2023 and is based on a survey they did at the end of november 2022. This time almost 40k developers from around the world participated and based on their feedback react is in 2022/2023 the most used frontend framework: ["state of js survey results: frontend frameworks"](https://2022.stateofjs.com/en-US/libraries/front-end-frameworks/) and next.js is the most used rendering framework ["state of js survey results: frontend frameworks"](https://2022.stateofjs.com/en-US/libraries/rendering-frameworks/)
 
 ## history
 
@@ -34,41 +32,6 @@ recap of the 1st and 2nd generation of data fetching in next.js:
 * `getStaticProps` appeared alongside getServerSideProps, the difference between the two is that getServerSideProps disables ["Automatic Static Optimization"](https://nextjs.org/docs/advanced-features/automatic-static-optimization) but getStaticProps does not, getStaticProps it is a method that you would use to fetch data not at "runtime" but at "build time", so when a user visits a page no data call is being made, all data got already fetched at build time (and the page props have been put in a static json file), which means for any request being made by a user your data won't change, this can be very interesting to build pages that load super fast as they use data that does not change between two builds, however getStaticProps has a feature so that you can "revalidate" data in the background, this is what gets used by "[Incremental Static Regeneration](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)" and allows you to update the static data you got at build time. read more: [next.js getStaticProps documentation](https://nextjs.org/docs/basic-features/data-fetching/get-static-props)
 
 in october 2022 the next.js team released [Next.js 13](https://nextjs.org/blog/next-13) which included the first version of the new `app` folder and two months later in december [Next.js 13.1](https://nextjs.org/blog/next-13-1)
-
-## react server components
-
-
-
-
-
-
-
-### rendering
-
-you can choose the rendering environment at the component level
-
-Glossary:
-
-Rendering Environments: there are two environments where your application code can be rendered, the client and the server
-
-similar to what we were achieving getServerSideProps and getStaticProps, with next.js 13's app directory, you have two main options, "dynamic rendering" and optimized "static rendering"
-
-read more: [BETA Next.js documentation: Rendering Fundamentals](https://beta.nextjs.org/docs/rendering/fundamentals)
-
-### streaming
-
-from the ["next.js 13 blog post"](https://nextjs.org/blog/next-13):
-
-> the app/ directory introduces the ability to progressively render and incrementally stream rendered units of the UI to the client
-
-I let you check out the [next.js "what is Streaming?" documentation section](https://beta.nextjs.org/docs/data-fetching/streaming-and-suspense) it is very informative about what limitations SSR has and why streaming is good solution
-
-
-
-## 
-
-Question(s): what about react Streaming, react Suspense, and react Transitions?
-
 
 ## image(s) manipulation
 
@@ -117,7 +80,14 @@ add the next.js scripts to the `package.json` file, which is in the root of the 
 }
 ```
 
-create the next.js configuration `next.config.js` file, in the root of the project:
+those 4 scripts are the npm commands we will later in this tutorial use to execute different task, like:
+
+`npm run dev`: to start the development server
+`npm run build`: to make a production build
+`npm run start`: to start the server on a production server using the build we made with the previous command
+`npm run lint`: to run a linting script that will scan our code and help us find problems in our code
+
+then we create the next.js configuration `next.config.js` file, in the root of the project:
 
 ```js
 /** @type {import('next').NextConfig} */
@@ -129,6 +99,10 @@ const nextConfig = {
 
 module.exports = nextConfig
 ```
+
+not much in there right now, for the moment we only add one line in the experimental block to enable the app dir which is still experimental (in beta at the time 01.01.2003)
+
+Note: next,js 13 got released at the end of 2022 and even though it included a lot of improvements for existing features it also now includes the new `app` directory which is what we will use in this toturial, as the next.js team reminds as at several places this feature will evolve and get improved a lot over the coming months, the next.js team added it to next.js 13 so that developers can start playing with it and to hopefully gather a lot of good feedback from the community but they also made it clear that you probably shouldn't use this in production just yet and wait a little bit longer for it to mature
 
 ### install first dependencies
 
@@ -153,6 +127,9 @@ install typescript and types:
 ```shell
 npm i typescript@latest @types/react @types/react-dom @types/node --save-dev --save-exact
 ```
+
+of course if you prefer to use [pNpM](https://pnpm.io/) or [Yarn](https://yarnpkg.com/) as your package managers to install the dependencies above, feel free to do so they are great tools too, I for my part prefer to use npm so this is what you will see in this tutorial but the install commands of [pNpM install](https://pnpm.io/cli/install) or [yarn install](https://yarnpkg.com/getting-started/usage) are very similar
+
 
 ## eslint setup
 
@@ -408,6 +385,10 @@ with the new layout system it is much easier to have different layouts for diffe
 
 layouts will apply to the segment they are in and all segments nested below that, which brings us to another feature which is that now it is possible to have a cascade of layouts where one layout from a child segment is encapsulated into the layout of the parent segment
 
+
+
+
+
 Server Components and Client Components:
 
 all files inside app directory are by default "React Server Components" and hence will be rendered on the server
@@ -422,15 +403,70 @@ TODO: show an example with a console log, show that the console log appears in t
 
 so may wonder but when do I need to define a client component as being a client component? well there are several things that when added to a component will have next.js tell you that those can't be used in client components, like when using reacts local state, or react context or a clickHandler on a button
 
-TODO: show example of a component getting imported by a Server Component, show the error (warning?) message, then show how to fix it
+hmmm weird this page <https://beta.nextjs.org/docs/rendering/server-and-client-components#convention> contradicts the previous statement, as it says only hooks in the code will force you to mark a component as client component:
+
+> You only need to mark components as 'use client' when they use client hooks such as useState or useEffect. It's best to leave components that do not depend on client hooks without the directive so that they can automatically be rendered as a Server Component when they aren't imported by another Client Component. This helps ensure the smallest amount of client-side JavaScript.
+
+TODO: do an example of a component that is a server component, then add for example an onClick handler and demonstrate the next.js message that says that you need to turn the component into a client component, is it really only hooks that trigger this message and things like onClick are listed in this table <https://beta.nextjs.org/docs/rendering/server-and-client-components#when-to-use-server-vs-client-components> to explain that an onclick would never get "clicked" on the server by a user???
 
 Question(s): if my component is not in the app directory and has no statement "use client", but I import it inside of a Server Component, do I still get the error that server components can not use XY?
 
-TODO: show example of question above, where component is in components directory and being imported inside of server component, but there is no error, because as it is not in the app directory it is not getting treated as server component but client component
+TODO: show example of question above, where the component is in components directory and being imported inside of server component, but there is no error, because as it is not in the app directory it is not getting treated as server component but a client component
 
-as I mentioned above you can mix server and client components, for example if you explicitly state that component is a client component but then inside of it import a server component (so a component with no statement, a component located into a segment folder), then this component will also be considered being a client component without having to explicitly add the 'use client' statement on top
+as I mentioned above you can mix server and client components, for example if you explicitly state that component is a client component but then inside of it use a server component or vice versa
 
-TODO: show example of server component being imported into client component and it just works
+so a component with no statement, a component located into a segment folder if loaded by a client component will also be considered being a client component without having to explicitly add the 'use client' statement on top
+
+TODO: show example of server component, show it printing a message in the terminal, then re-use it but his time being imported into a client component and it just works (no need to add 'use client' statement) and show that now the message appears in the browser console and not the server anymore
+
+Question(s): how to add a server component into a client component (if next.js then thinks it also a client component), is there a 'use server' statement?
+
+Note: to learn more about the advantages of server components, check out the [next.js documentation "Why Server Components?"](https://beta.nextjs.org/docs/rendering/server-and-client-components#why-server-components)
+
+server components can NOT get IMPORTED into client components, you ALWAYS need to pass them as children prop from within a server component down to the client component that will use it: <https://beta.nextjs.org/docs/rendering/server-and-client-components#importing-server-components-into-client-components>
+
+TODO: to answer the question above, show example code of passing a server component via the children prop into a client component (that client component needs to be inside of a server component)
+
+Is next.js 13 Isomorphic and do I even want it to be Isomorphic:
+
+Note: to be honest I find all this quite complex, I don't like having to remember all the time that I need to do something in a specific way for it to work based on the environment where I'm, this adds complexity when creating components and also forces me to do some refactoring when I convert a component from a server component to a client component or vice versa and suddenly I need to remove the async await I could previously use, I like to be able to always do the same thing and be sure I will get the best result, I don't want to also have to wonder if my component is a server component inside a client component then I will fetch data so I need to pass it via children to client side components
+
+to me this is not "Isomorphic" at all, I personally expect from a modern framework to be Isomorphic, you should be able to reuse most of your code on server side as well as the client side and only have a few files that function as adapters and do something different based on the environment, like having a getData function for both on the server and the client side, but inside getData you check the environemnt and based on the result you either do a browser fetch request using an API URL if you are in the client or if you are on the server you use the database adapter to make a direct database query without passing through an API, same would get done for caching, for example you would be able to cache data queries with a unique function that you can use the same way on the server side as well as the client, the cache function would use an adapter that caches data for example using the localstorage if you are in the client and if on server another adapter that caches or retrieves the data from for example a redis database
+
+can we solve this headache by using the new next.js fetch? if so, this would mean we need an API! I don't mind needing an API, we would need one anyway for POST, PUT, PATCH and DELETE methods that client side code would call to execute actions, what is also nice is that the features like being able to use the `loading.tsx` file in your segment folder is not lost and still gets used when making a server side fetch, but finally all this all means that we never make any component function async and also not use await inside of it, but instead always use the new react `use` hook, only if we do all of this then we come very close to a real Isomorphic experience where we don't need to think about the question is this a component I can import or a component I need to pass via the `children` prop
+
+the problem with fetching data in the client, is that after fetching the data from API, it is the client which needs to do the rendering job to produce the final html, so we lose the SSR benefit where the client gets the html pre-rendered and just needs to hydrate it, next.js in their documentation explicitly mentions that fetching in the client should get avoided: <https://beta.nextjs.org/docs/rendering/server-and-client-components#data-fetching>, you can compare this to have someone deliver to you you all the ingredients to cook your meal but you still need to do the cooking vs having someone deliver to you a pre-cooked meal that you just need to heat before you can eat it
+
+so unfortunatly to not lose the SSR benefit, if we are in a situation where a client component makes use of a server component, then we have to pass it to the client component via the `children`
+
+having to pass components via children however reminds me a lot to ugly and code intensive **props drilling** problem we had before react introduced react context
+
+TODO: It might be better to put all this into a separate blog post, outside of the scope of this tutorial and then link to it
+
+Question(s): what would be nice is that if the framework when encountering a server component inside a client component, would not consider it a client component but instead pre-render it automatically on the server for you and send the html to the client component to then get hydrated
+
+Question(s): can streaming fix some of these problems? make it easier for the devs?
+
+next problem, apparently you can't just pass any props from a server to a client component, they need to be serializable: <https://beta.nextjs.org/docs/rendering/server-and-client-components#passing-props-from-server-to-client-components-serialization>, which means that a function for example can't be passed from a server component to a client component
+
+because some components can be used ONLY on the server or ONLY in the client, next.js added two new optional packages you need to import into your component: <https://beta.nextjs.org/docs/rendering/server-and-client-components#keeping-server-only-code-out-of-client-components-poisoning>
+
+Question(s): what happens if you put a useState hook into a page.tsx or layout.tsx? next.js recommends to seperate such code and externalize it into client components: <https://beta.nextjs.org/docs/rendering/server-and-client-components#moving-client-components-to-the-leaves>
+
+third party packages that use client only hooks, can't be used in server components as is, you need to wrap them into a client component and re-export them before using them in your server component: <https://beta.nextjs.org/docs/rendering/server-and-client-components#third-party-packages>
+
+similar problem with context, context can not be used as is in server components, so you need to put the provider into a client component that has the 'use client' statement and then you can use that component inside of your server component: <https://beta.nextjs.org/docs/rendering/server-and-client-components#using-context-in-client-components>
+
+and also same problem for third party providers: <https://beta.nextjs.org/docs/rendering/server-and-client-components#rendering-third-party-context-providers-in-server-components>
+
+for sharing data between multiple server components you need to use a pattern like **singletons** to make it work: <https://beta.nextjs.org/docs/rendering/server-and-client-components#sharing-data-between-server-components>
+
+TODO: for this a good example is the database file we already share between files in the api routes
+
+
+
+
+
 
 data fetching:
 
@@ -454,27 +490,47 @@ from the next.js documentation:
 
 Question(s): what exactly is the runtime? how is it loaded asynchronously? Isn't it bundled like everything else?
 
-Question(s): as we saw in the previous chapter, you can import a Server Component inside of a Client Component and it will be considered a Client Component too, but what if that component for example fetches some data from database, this code can't run in the client?
+so sharing data between server components, as mentioned in the previous chapter, can't be done via context, so the previous chapter recommended using a pattern for example like the **singleton** pattern, but an alternative when fetching data is to use fetch, if we do the same fetch in several server components next.js will cache the result and only a single query will be made: <https://beta.nextjs.org/docs/rendering/server-and-client-components#sharing-fetch-requests-between-server-components>, there are more details about this caching on this page: <https://beta.nextjs.org/docs/data-fetching/fundamentals#automatic-fetch-request-deduping> which says that the caching technique being used is called **deduping** and it is mentioned that this works on both the server and in the client, on the server the fetch result is cached until the request is done and on the client it is cached until the page is reloaded, which means on the client if using navigate and then fetching again will use the data from cache and not trigger a new API request
 
-TODO: to answer the question above, show example code of passing a server component via the children prop into a client component (that client component needs to be inside of a server component)
 
-Isomorphic code:
 
-Note: to be honest I find all this quite complex, I don't like having to remember all the time that I need to do something in a specific way for it to work, I like to be able to always do the same thing and be sure I will get the best result
-unfortunatly now, we will always have to think about passing server components as children, because if we just import them, we will lose the SSR benefits
-this to me is not "Isomorphic" at all, I personally expect from a modern framework to be Isomorphic, you should be able to reuse most of your code on server side as well as the client side and only have a few files that function as adapters and do something different based on the environment, like having a getData function for both the server and the client code but inside getData you check the environemnt and based on the result you either do browser fetch request using an API URL if you are in the client and if you are on the server the database adapter is being used to make a database query, same for caching for example, you should be able to cache data queries with a unique function that you use the same way, be it on the server or the client, but inside the cache function there is a bit of code that if on the client uses an adapter that caches data for example into the localstorage and if on server another adapter caches or retrieves the data from for example a redis database
 
-can we solve this headache by using the new next.js fetch? if so, this would mean we need an API! I don't mind needing an API, we would need one anyway for POST, PUT, PATCH and DELETE methods that client side code would call to execute actions, what is also nice is that the features like being able to use the `loading.tsx` file in your segment folder is not lost and still gets used when making a server side fetch, but finally all this all means that we never make any component function async and also not use await inside of it, but instead always use the new react `use` hook, only if we do all of this then we come very close to a real Isomorphic experience where we don't need to think about the question is this a component I can import or a component I need to pass via the `children` prop
 
-the problem with fetch is that we after fetching the data from API, it is the client which needs to do the rendering job to produce the html, so we lose the SSR benefit where the client gets the html pre-rendered and just needs to hydrate it, you can compare this to have someone delivering you all the ingredients to cook your meal but you still need to do the cooking vs having someone delivering a pre-cooked meal to your place that you then just need to heat before being able to eat it
 
-so unfortunatly to not lose the SSR benefit, we might have to live with having to decide if we pass a component via the `children` prop or can just import it
+caching:
 
-TODO: It might be better to put all this into a speraret blog post, outside of the scope of this tutorial and then link to it
+this page <https://beta.nextjs.org/docs/routing/fundamentals#server-centric-routing-with-client-side-navigation> mentions:
 
-Question(s): what would be nice is that if the framework when encountering a server component inside a client component, would not consider it a client component but instead pre-render it automatically on the server for you and send the html to the client component to then get hydrated
+> Additionally, as users navigate around the app, the router will store the result of the React Server Component payload in an in-memory client-side cache. The cache is split by route segments which allows invalidation at any level and ensures consistency across concurrent renders. This means that for certain cases, the cache of a previously fetched segment can be re-used, further improving performance.
 
-Question(s): can streaming fix some of these problems? make it easier for the devs?
+
+
+
+
+
+
+rendering:
+
+there are two environments where your application code can be rendered, the client and the server, you can choose the rendering environment at the component level, a server component is rendered on the server and a client component in the client
+
+read more: [BETA Next.js documentation: Rendering Fundamentals](https://beta.nextjs.org/docs/rendering/fundamentals)
+
+similar to what we were achieving getServerSideProps and getStaticProps, with next.js 13's app directory, you have two main options, "dynamic rendering" and optimized "static rendering"
+
+weird, the [rendering](https://beta.nextjs.org/docs/rendering/fundamentals#dynamic-rendering) doc says:
+
+> With Dynamic Rendering, both Server and Client Components are rendered on the server at request time.
+
+Question(s): I don't get it, why it says client side components are rendered on the server
+
+with dynamic rendering client components are prerendered on the server: <https://beta.nextjs.org/docs/rendering/static-and-dynamic-rendering<>
+
+Question(s): what is "prerendering", how does it differ from "rendering", how is it better than no prerendering at all
+
+TODO: can we analyze what is in next.js bundle files sent to the client, can we look at what a prerendered component looks like in terms of code, is for example the jsx already turned into html?... this next.js page <https://nextjs.org/learn/basics/data-fetching/pre-rendering> is for nextjs pages, but it explains what nextjs means by "prerendering" and it also explains how to check if prerendering happen, so this is worth reading before making an example that shows and explaisn prerendering
+
+
+
 
 routes:
 
@@ -513,17 +569,33 @@ I for my part prefer a seperate components folder that acts as a library for all
 * all files in the components folder will have react only code and no have any next.js specific code
 * it will hopefully be easier in the future to re-use or share the components
 
+
+
+
+
+
+
+
+
+streaming:
+
+from the ["next.js 13 blog post"](https://nextjs.org/blog/next-13):
+
+> the app/ directory introduces the ability to progressively render and incrementally stream rendered units of the UI to the client
+
+I let you check out the [next.js "what is Streaming?" documentation section](https://beta.nextjs.org/docs/data-fetching/streaming-and-suspense) it is very informative about what limitations SSR has and why streaming is good solution
+
+
+
 TODO: Web fetch() API ???
 https://beta.nextjs.org/docs/data-fetching/fundamentals
 TODO: client components
-TODO: when to use client and when to use server components (that's not a very isomorphix approach :( )
-check out the table of use cases in the next.js documentation: https://beta.nextjs.org/docs/rendering/server-and-client-components#when-to-use-server-vs-client-components
 TODO: list all reserved next.js file names:
 layout.tsx
 page.tsx
 loading.tsx
 error.tsx
-template.tsx ??? (coming soo? it is grayed out in next docs)
+template.tsx (similar to layouts, but the difference is that on navigation a new instance is being created)
 head.tsx
 not-found.tsx
 are there more?
