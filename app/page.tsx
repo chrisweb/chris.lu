@@ -1,4 +1,4 @@
-import NeonRoad from '../components/head/NeonRoad'
+import NeonRoadCanvas from '../components/neonRoad/Canvas'
 
 
 export default function Homepage() {
@@ -8,7 +8,7 @@ export default function Homepage() {
     return (
         <>
             <main>Hello, World!</main>
-            <NeonRoad />
+            <NeonRoadCanvas />
         </>
     )
 }

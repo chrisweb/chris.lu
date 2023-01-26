@@ -17,6 +17,7 @@ react three fiber camera explained: <https://youtu.be/Isr-hIveUK0>
 react three fiber orbit controls documentation: <https://sbcode.net/react-three-fiber/orbit-controls/>
 
 react three fiber examples repository (each repository branch is a different example): <https://github.com/Sean-Bradley/React-Three-Fiber-Boilerplate>
+another three fiber examples repository (with demo page linked in readme): <https://github.com/onion2k/r3f-by-example>
 
 ## install dependencies
 
@@ -34,8 +35,10 @@ install react three drei (<https://github.com/pmndrs/drei>):
 
 ## colors
 
-floor lines: `ff22ff`
-floor surface: `250025`
+road lines pink: `ff22ff`
+mountain lines blue: `222fff`
+road surface: `1a0928`
+mountain surface: `130c3d`
 
 used in the grid image
 
