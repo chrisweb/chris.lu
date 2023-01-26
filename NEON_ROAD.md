@@ -46,3 +46,19 @@ used in the grid image
 
 
 
+
+
+
+
+
+
+
+## gltf experiments
+
+cc palm tree model: <https://sketchfab.com/3d-models/tree-palm-556752eb551d4ee7b342092c3bd3ed5e>
+gltf tutorial: <https://docs.pmnd.rs/react-three-fiber/tutorials/loading-models>
+gltf loader example: <https://sbcode.net/react-three-fiber/gltfloader/>
+mesh border tutorial: <https://blender.stackexchange.com/questions/163539/how-do-i-add-a-3d-border-on-all-edges-of-a-mesh>
+uv images and maps: <https://medium.com/@matthewmain/how-to-import-a-3d-blender-object-into-a-three-js-project-as-a-gltf-file-5a67290f65f2>
+blender gltf docs: <https://docs.blender.org/manual/en/2.82/addons/import_export/scene_gltf2.html>
+online gltf viewer to test exports: <https://gltf-viewer.donmccurdy.com/>

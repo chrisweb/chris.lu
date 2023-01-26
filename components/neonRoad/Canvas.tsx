@@ -43,15 +43,18 @@ const NeonRoadCanvas: React.FC/*<IProps>*/ = () => {
 
     camera.position.x = 0
     camera.position.y = 0.06
-    camera.position.z = 1.1
+    camera.position.z = 1
 
     return (
+        // TODO: add the accessibility package: https://docs.pmnd.rs/a11y/introduction
         <>
             <div id="canvas-container" ref={canvasContainerRef} style={{ width: '100vw', height: 'calc(100vh/2)' }}>
                 {/* to set the pixel ratio use: dpr={} */}
                 <Canvas
                     camera={camera}
                     dpr={Math.min(window.devicePixelRatio, 2)}
+                    aria-label="Chris.lu header image, displaying an 80s style sunset"
+                    role="img"
                 >
                     <Mesh />
                     {/*<perspectiveCamera args={[
