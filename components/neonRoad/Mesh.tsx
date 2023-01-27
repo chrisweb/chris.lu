@@ -1,12 +1,14 @@
 import { useRef } from 'react'
-import { Mesh, Sprite } from 'three'
-import { useFrame } from '@react-three/fiber'
+import { Object3D, Mesh, Group } from 'three'
+import { useFrame, useLoader } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
+import { PalmModel } from './Palm'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 const NeonRoadMesh: React.FC = () => {
 
     // TODO: for production image needs to be delivered by CDN not public folder
-    const FLOOR_TEXTURE_PATH = './assets/images/grid9.png'
+    const FLOOR_TEXTURE_PATH = './assets/images/grid13.png'
     //const FLOOR_TEXTURE_PATH = './assets/images/grid_from_example.png'
     // TODO: if we use avif though, we need to check if browser supports it
     //const FLOOR_TEXTURE_PATH = './assets/images/grid.avif'
@@ -17,10 +19,10 @@ const NeonRoadMesh: React.FC = () => {
     //const floorTexture = useLoader(TextureLoader, FLOOR_TEXTURE_PATH)
     //const displacementMap = useLoader(TextureLoader, DISPLACEMENT_MAP_PATH)
 
-    const PALM_SPRITE_LEFT_PATH = './assets/images/palm_sprite_right.png'
-    const PALM_SPRITE_RIGHT_PATH = './assets/images/palm_sprite_left.png'
+    const PALM_SPRITE_LEFT_PATH = './assets/images/palm_sprite_left.png'
+    const PALM_SPRITE_RIGHT_PATH = './assets/images/palm_sprite_right.png'
 
-    const [floorTexture, displacementMap, palmRightTexture, palmLeftTexture] = useTexture([
+    const [floorTexture, displacementMap, palmLeftTexture, palmRightTexture] = useTexture([
         FLOOR_TEXTURE_PATH,
         DISPLACEMENT_MAP_PATH,
         PALM_SPRITE_LEFT_PATH,
@@ -31,97 +33,100 @@ const NeonRoadMesh: React.FC = () => {
 
     const meshARef = useRef<Mesh>(null)
     const meshBRef = useRef<Mesh>(null)
-    const spriteARef = useRef<Sprite>(null)
-    const spriteBRef = useRef<Sprite>(null)
-    const spriteCRef = useRef<Sprite>(null)
-    const spriteDRef = useRef<Sprite>(null)
-    const spriteERef = useRef<Sprite>(null)
-    const spriteFRef = useRef<Sprite>(null)
-    const spriteGRef = useRef<Sprite>(null)
-    const spriteHRef = useRef<Sprite>(null)
-    const spriteIRef = useRef<Sprite>(null)
-    const spriteJRef = useRef<Sprite>(null)
-    const spriteKRef = useRef<Sprite>(null)
-    const spriteLRef = useRef<Sprite>(null)
-    const spriteMRef = useRef<Sprite>(null)
-    const spriteNRef = useRef<Sprite>(null)
-    const spriteORef = useRef<Sprite>(null)
-    const spritePRef = useRef<Sprite>(null)
-    const spriteQRef = useRef<Sprite>(null)
-    const spriteRRef = useRef<Sprite>(null)
-    const spriteSRef = useRef<Sprite>(null)
 
-    const spriteTRef = useRef<Sprite>(null)
+    // 19 trees on the left side
+    const leftSideTreesRefs = useRef<Mesh[]>([])
+
+    // 19 trees on the right side
+    const rightSideTreesRefs = useRef<Mesh[]>([])
+
+    //const leftSideTreesRefs = useRef<Group[]>([])
+    //const rightSideTreesRefs = useRef<Group[]>([])
+
+    //const leftSideTreesRefs = useRef<Object3D[]>([])
+    //const rightSideTreesRefs = useRef<Object3D[]>([])
 
     useFrame((state/*, delta, xrFrame*/) => {
+
         //console.log(state, delta, xrFrame)
+
         const newZPosition = (state.clock.elapsedTime * 0.15) % 2
+
         if (meshARef.current) {
             meshARef.current.position.z = newZPosition
         }
         if (meshBRef.current) {
             meshBRef.current.position.z = newZPosition - 2
         }
-        if (spriteARef.current) {
-            spriteARef.current.position.z = newZPosition - 0.8
-        }
-        if (spriteBRef.current) {
-            spriteBRef.current.position.z = newZPosition - 0.6
-        }
-        if (spriteCRef.current) {
-            spriteCRef.current.position.z = newZPosition - 0.4
-        }
-        if (spriteDRef.current) {
-            spriteDRef.current.position.z = newZPosition - 0.2
-        }
-        if (spriteERef.current) {
-            spriteERef.current.position.z = newZPosition
-        }
-        if (spriteFRef.current) {
-            spriteFRef.current.position.z = newZPosition + 0.2
-        }
-        if (spriteGRef.current) {
-            spriteGRef.current.position.z = newZPosition + 0.4
-        }
-        if (spriteHRef.current) {
-            spriteHRef.current.position.z = newZPosition + 0.6
-        }
-        if (spriteIRef.current) {
-            spriteIRef.current.position.z = newZPosition + 0.8
-        }
 
-        if (spriteJRef.current) {
-            spriteJRef.current.position.z = newZPosition - 2.8
-        }
-        if (spriteKRef.current) {
-            spriteKRef.current.position.z = newZPosition - 2.6
-        }
-        if (spriteLRef.current) {
-            spriteLRef.current.position.z = newZPosition - 2.4
-        }
-        if (spriteMRef.current) {
-            spriteMRef.current.position.z = newZPosition - 2.2
-        }
-        if (spriteNRef.current) {
-            spriteNRef.current.position.z = newZPosition - 2
-        }
-        if (spriteORef.current) {
-            spriteORef.current.position.z = newZPosition - 1.8
-        }
-        if (spritePRef.current) {
-            spritePRef.current.position.z = newZPosition - 1.6
-        }
-        if (spriteQRef.current) {
-            spriteQRef.current.position.z = newZPosition - 1.4
-        }
-        if (spriteRRef.current) {
-            spriteRRef.current.position.z = newZPosition - 1.2
-        }
-        if (spriteSRef.current) {
-            spriteSRef.current.position.z = newZPosition - 1
-        }
+        // from position "-2.8" to "0.8" 
+        let positionChange = -2.8
+
+        leftSideTreesRefs.current.forEach((leftSideTreeRef) => {
+            leftSideTreeRef.position.set(0.21, 0, newZPosition + positionChange)
+            positionChange += 0.2
+        })
+
+        positionChange = -2.8
+
+        rightSideTreesRefs.current.forEach((rightSideTreeRef) => {
+            rightSideTreeRef.position.set(0.21, 0, newZPosition + positionChange)
+            positionChange += 0.2
+        })
 
     })
+
+    /*function TreeSprites({ amount, side }) {
+        const spritesElements: React.ReactElement[] = []
+        // from position "-2.8" to "0.8" 
+        let positionChange = -2.8
+        const palmTexture = side === 'right' ? palmRightTexture : palmLeftTexture
+        for (let i = 0; i <= amount; i++) {
+            spritesElements.push(
+                <mesh
+                    //rotation={[-Math.PI * 0.5, 0, 0]}
+                    position={[side === 'right' ? 0.21 : -0.21, 0.05, positionChange]}
+                    ref={ref => {
+                        side === 'right' ? rightSideTreesRefs.current[i] = ref : leftSideTreesRefs.current[i] = ref
+                    }}
+                    scale={[0.1, 0.1, 0.1]}
+                    castShadow={true} // default is false
+                    key={side + i}
+                >
+                    <planeGeometry />
+                    <meshBasicMaterial
+                        map={palmTexture}
+                        transparent={true}
+                    //side={DoubleSide}
+                    />
+                </mesh>
+            )
+            positionChange += 0.2
+        }
+        return <>{spritesElements}</>
+    }*/
+
+    function TreeSprites({ amount, side }) {
+        const spritesElements: React.ReactElement[] = []
+        // from position "-2.8" to "0.8" 
+        let positionChange = -2.8
+        for (let i = 0; i < amount; i++) {
+            spritesElements.push(
+                <PalmModel
+                    //rotation={[-Math.PI * 0.5, 0, 0]}
+                    position={[side === 'right' ? 0.21 : -0.21, 0, positionChange]}
+                    ref={ref => {
+                        side === 'right' ? rightSideTreesRefs.current[i] = ref : leftSideTreesRefs.current[i] = ref
+                    }}
+                    scale={[0.009, 0.009, 0.009]}
+                    castShadow={true} // default is false
+                    key={side + i}
+                />
+            )
+            positionChange += 0.2
+        }
+        return <>{spritesElements}</>
+    }
 
     return (
         <>
@@ -129,212 +134,38 @@ const NeonRoadMesh: React.FC = () => {
                 rotation={[-Math.PI * 0.5, 0, 0]}
                 position={[0, 0, 0]}
                 ref={meshARef}
+                receiveShadow={true} // default is false
             >
                 <planeGeometry args={[1, 2, 24, 24]} />
+                {/*<meshPhongMaterial <- more reflection but light is less beautiful, could experiment more with options like shininess */}
                 <meshStandardMaterial
                     map={floorTexture}
                     displacementMap={displacementMap}
                     displacementScale={displacementScale}
-                    roughness={0}
+                    roughness={0.9}
+                    metalness={0.9}
+                //color={'#ff00aa'}
                 />
             </mesh>
             <mesh
                 rotation={[-Math.PI * 0.5, 0, 0]}
                 position={[0, 0, -2]}
                 ref={meshBRef}
+                receiveShadow={true} // default is false
             >
                 <planeGeometry args={[1, 2, 24, 24]} />
+                {/*<meshPhongMaterial <- more reflection but light is less beautiful, could experiment more with options like shininess */}
                 <meshStandardMaterial
                     map={floorTexture}
                     displacementMap={displacementMap}
                     displacementScale={displacementScale}
-                    roughness={0}
+                    roughness={0.9}
+                    metalness={0.9}
+                //color={'#ff00aa'}
                 />
             </mesh>
-
-            <sprite
-                position={[-0.21, 0.05, -0.8]}
-                scale={[0.1, 0.1, 0.1]}
-                ref={spriteARef}
-            >
-                <spriteMaterial
-                    map={palmLeftTexture}
-                />
-            </sprite>
-            <sprite
-                position={[-0.21, 0.05, -0.6]}
-                scale={[0.1, 0.1, 0.1]}
-                ref={spriteBRef}
-            >
-                <spriteMaterial
-                    map={palmLeftTexture}
-                />
-            </sprite>
-            <sprite
-                position={[-0.21, 0.05, -0.4]}
-                scale={[0.1, 0.1, 0.1]}
-                ref={spriteCRef}
-            >
-                <spriteMaterial
-                    map={palmLeftTexture}
-                />
-            </sprite>
-            <sprite
-                position={[-0.21, 0.05, -0.2]}
-                scale={[0.1, 0.1, 0.1]}
-                ref={spriteDRef}
-            >
-                <spriteMaterial
-                    map={palmLeftTexture}
-                />
-            </sprite>
-            <sprite
-                position={[-0.21, 0.05, 0]}
-                scale={[0.1, 0.1, 0.1]}
-                ref={spriteERef}
-            >
-                <spriteMaterial
-                    map={palmLeftTexture}
-                />
-            </sprite>
-            <sprite
-                position={[-0.21, 0.05, 0.2]}
-                scale={[0.1, 0.1, 0.1]}
-                ref={spriteFRef}
-            >
-                <spriteMaterial
-                    map={palmLeftTexture}
-                />
-            </sprite>
-            <sprite
-                position={[-0.21, 0.05, 0.4]}
-                scale={[0.1, 0.1, 0.1]}
-                ref={spriteGRef}
-            >
-                <spriteMaterial
-                    map={palmLeftTexture}
-                />
-            </sprite>
-            <sprite
-                position={[-0.21, 0.05, 0.6]}
-                scale={[0.1, 0.1, 0.1]}
-                ref={spriteHRef}
-            >
-                <spriteMaterial
-                    map={palmLeftTexture}
-                />
-            </sprite>
-            <sprite
-                position={[-0.21, 0.05, 0.8]}
-                scale={[0.1, 0.1, 0.1]}
-                ref={spriteIRef}
-            >
-                <spriteMaterial
-                    map={palmLeftTexture}
-                />
-            </sprite>
-            <sprite
-                position={[-0.21, 0.05, -2.8]}
-                scale={[0.1, 0.1, 0.1]}
-                ref={spriteJRef}
-            >
-                <spriteMaterial
-                    map={palmLeftTexture}
-                />
-            </sprite>
-            <sprite
-                position={[-0.21, 0.05, -2.6]}
-                scale={[0.1, 0.1, 0.1]}
-                ref={spriteKRef}
-            >
-                <spriteMaterial
-                    map={palmLeftTexture}
-                />
-            </sprite>
-            <sprite
-                position={[-0.21, 0.05, -2.4]}
-                scale={[0.1, 0.1, 0.1]}
-                ref={spriteLRef}
-            >
-                <spriteMaterial
-                    map={palmLeftTexture}
-                />
-            </sprite>
-            <sprite
-                position={[-0.21, 0.05, -2.2]}
-                scale={[0.1, 0.1, 0.1]}
-                ref={spriteMRef}
-            >
-                <spriteMaterial
-                    map={palmLeftTexture}
-                />
-            </sprite>
-            <sprite
-                position={[-0.21, 0.05, -2]}
-                scale={[0.1, 0.1, 0.1]}
-                ref={spriteNRef}
-            >
-                <spriteMaterial
-                    map={palmLeftTexture}
-                />
-            </sprite>
-            <sprite
-                position={[-0.21, 0.05, -1.8]}
-                scale={[0.1, 0.1, 0.1]}
-                ref={spriteORef}
-            >
-                <spriteMaterial
-                    map={palmLeftTexture}
-                />
-            </sprite>
-            <sprite
-                position={[-0.21, 0.05, -1.6]}
-                scale={[0.1, 0.1, 0.1]}
-                ref={spritePRef}
-            >
-                <spriteMaterial
-                    map={palmLeftTexture}
-                />
-            </sprite>
-            <sprite
-                position={[-0.21, 0.05, -1.4]}
-                scale={[0.1, 0.1, 0.1]}
-                ref={spriteQRef}
-            >
-                <spriteMaterial
-                    map={palmLeftTexture}
-                />
-            </sprite>
-            <sprite
-                position={[-0.21, 0.05, -1.2]}
-                scale={[0.1, 0.1, 0.1]}
-                ref={spriteRRef}
-            >
-                <spriteMaterial
-                    map={palmLeftTexture}
-                />
-            </sprite>
-            <sprite
-                position={[-0.21, 0.05, -1]}
-                scale={[0.1, 0.1, 0.1]}
-                ref={spriteSRef}
-            >
-                <spriteMaterial
-                    map={palmLeftTexture}
-                />
-            </sprite>
-
-
-            
-            <sprite
-                position={[0.21, 0.05, 0.8]}
-                scale={[0.1, 0.1, 0.1]}
-                ref={spriteTRef}
-            >
-                <spriteMaterial
-                    map={palmRightTexture}
-                />
-            </sprite>
+            <TreeSprites amount={19} side={'right'} />
+            {/*<TreeSprites amount={19} side={'left'} />*/}
         </>
     )
 }

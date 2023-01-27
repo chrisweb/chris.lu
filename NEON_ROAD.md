@@ -19,6 +19,8 @@ react three fiber orbit controls documentation: <https://sbcode.net/react-three-
 react three fiber examples repository (each repository branch is a different example): <https://github.com/Sean-Bradley/React-Three-Fiber-Boilerplate>
 another three fiber examples repository (with demo page linked in readme): <https://github.com/onion2k/r3f-by-example>
 
+nice codesandbox "space shooter" game example that uses three fiber to import 3d models as well as sprites: <https://codesandbox.io/s/b7e01?file=/src/App.js:1392-1405>
+
 ## install dependencies
 
 install three.js (<https://github.com/mrdoob/three.js/>):
