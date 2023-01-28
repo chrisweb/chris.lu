@@ -1,10 +1,10 @@
 'use client'
 
 import { useRef } from 'react'
-import { PerspectiveCamera, SpotLightHelper } from 'three'
+import { PerspectiveCamera, SpotLightHelper, PCFSoftShadowMap, BasicShadowMap } from 'three'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Stats, useHelper } from '@react-three/drei'
-import Mesh from './Mesh'
+import Meshes from './Meshes'
 
 const NeonRoadCanvas: React.FC = () => {
 
@@ -39,11 +39,19 @@ const NeonRoadCanvas: React.FC = () => {
             <spotLight
                 color="#ffa700"
                 intensity={10}
-                position={[0, 2, -10]}
+                position={[0, 2, -4]}
                 distance={20}
                 angle={Math.PI/8} // default is Math.PI/3
                 ref={spotLightRef}
                 castShadow={true} // default is false
+                //shadowBias={0.001}
+                shadow-mapSize-width={2048}
+                shadow-mapSize-height={2048}
+                shadow-camera-far={500}
+                shadow-camera-left={-100}
+                shadow-camera-right={100}
+                shadow-camera-top={100}
+                shadow-camera-bottom={-100}
             />
         )
     }
@@ -58,10 +66,10 @@ const NeonRoadCanvas: React.FC = () => {
                     dpr={Math.min(window.devicePixelRatio, 2)}
                     aria-label="Chris.lu header image, displaying an 80s style sunset"
                     role="img"
-                    //shadows={'soft'}
-                    shadows
+                    shadows={{ type: PCFSoftShadowMap }}
+                    //shadows={{ type: BasicShadowMap }}
                 >
-                    <Mesh />
+                    <Meshes />
                     <Lights />
                     <OrbitControls camera={camera} />
                     <ambientLight color={'#ffffff'} intensity={40} />

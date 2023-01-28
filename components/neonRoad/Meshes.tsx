@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { Object3D, Mesh, Group } from 'three'
 import { useFrame, useLoader } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
-import { PalmModel } from './Palm'
+import PalmModel from './Palm'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 const NeonRoadMesh: React.FC = () => {
@@ -35,13 +35,13 @@ const NeonRoadMesh: React.FC = () => {
     const meshBRef = useRef<Mesh>(null)
 
     // 19 trees on the left side
-    const leftSideTreesRefs = useRef<Mesh[]>([])
+    //const leftSideTreesRefs = useRef<Mesh[]>([])
 
     // 19 trees on the right side
-    const rightSideTreesRefs = useRef<Mesh[]>([])
+    //const rightSideTreesRefs = useRef<Mesh[]>([])
 
-    //const leftSideTreesRefs = useRef<Group[]>([])
-    //const rightSideTreesRefs = useRef<Group[]>([])
+    const leftSideTreesRefs = useRef<Group[]>([])
+    const rightSideTreesRefs = useRef<Group[]>([])
 
     //const leftSideTreesRefs = useRef<Object3D[]>([])
     //const rightSideTreesRefs = useRef<Object3D[]>([])
@@ -63,14 +63,16 @@ const NeonRoadMesh: React.FC = () => {
         let positionChange = -2.8
 
         leftSideTreesRefs.current.forEach((leftSideTreeRef) => {
-            leftSideTreeRef.position.set(0.21, 0, newZPosition + positionChange)
+            leftSideTreeRef.position.z = newZPosition + positionChange
             positionChange += 0.2
         })
 
         positionChange = -2.8
 
+        console.log(rightSideTreesRefs)
+
         rightSideTreesRefs.current.forEach((rightSideTreeRef) => {
-            rightSideTreeRef.position.set(0.21, 0, newZPosition + positionChange)
+            rightSideTreeRef.position.z = newZPosition + positionChange
             positionChange += 0.2
         })
 
@@ -106,15 +108,16 @@ const NeonRoadMesh: React.FC = () => {
         return <>{spritesElements}</>
     }*/
 
-    function TreeSprites({ amount, side }) {
+    function TreeModels({ amount, side }) {
         const spritesElements: React.ReactElement[] = []
         // from position "-2.8" to "0.8" 
         let positionChange = -2.8
         for (let i = 0; i < amount; i++) {
+            const xPosition = side === 'right' ? -0.21 : 0.21
             spritesElements.push(
                 <PalmModel
                     //rotation={[-Math.PI * 0.5, 0, 0]}
-                    position={[side === 'right' ? 0.21 : -0.21, 0, positionChange]}
+                    position={[xPosition, 0, positionChange]}
                     ref={ref => {
                         side === 'right' ? rightSideTreesRefs.current[i] = ref : leftSideTreesRefs.current[i] = ref
                     }}
@@ -139,12 +142,12 @@ const NeonRoadMesh: React.FC = () => {
                 <planeGeometry args={[1, 2, 24, 24]} />
                 {/*<meshPhongMaterial <- more reflection but light is less beautiful, could experiment more with options like shininess */}
                 <meshStandardMaterial
+                    //color={'#ff00aa'}
                     map={floorTexture}
                     displacementMap={displacementMap}
                     displacementScale={displacementScale}
                     roughness={0.9}
                     metalness={0.9}
-                //color={'#ff00aa'}
                 />
             </mesh>
             <mesh
@@ -156,16 +159,18 @@ const NeonRoadMesh: React.FC = () => {
                 <planeGeometry args={[1, 2, 24, 24]} />
                 {/*<meshPhongMaterial <- more reflection but light is less beautiful, could experiment more with options like shininess */}
                 <meshStandardMaterial
+                    //color={'#ff00aa'}
                     map={floorTexture}
                     displacementMap={displacementMap}
                     displacementScale={displacementScale}
                     roughness={0.9}
                     metalness={0.9}
-                //color={'#ff00aa'}
                 />
             </mesh>
-            <TreeSprites amount={19} side={'right'} />
             {/*<TreeSprites amount={19} side={'left'} />*/}
+            {/*<TreeSprites amount={19} side={'right'} />*/}
+            <TreeModels amount={19} side={'left'} />
+            <TreeModels amount={19} side={'right'} />
         </>
     )
 }
