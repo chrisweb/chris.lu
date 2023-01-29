@@ -50,7 +50,7 @@ const NeonRoadMesh: React.FC = () => {
 
         //console.log(state, delta, xrFrame)
 
-        const newZPosition = (state.clock.elapsedTime * 0.15) % 2
+        const newZPosition = (state.clock.elapsedTime * 0.1) % 2
 
         if (meshARef.current) {
             meshARef.current.position.z = newZPosition

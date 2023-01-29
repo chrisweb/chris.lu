@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { PerspectiveCamera, SpotLightHelper, PCFSoftShadowMap, BasicShadowMap } from 'three'
+import { PerspectiveCamera, SpotLightHelper, PCFSoftShadowMap } from 'three'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Stats, useHelper } from '@react-three/drei'
 import Meshes from './Meshes'

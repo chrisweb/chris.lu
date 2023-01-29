@@ -39,12 +39,16 @@ install react three drei (<https://github.com/pmndrs/drei>):
 
 ## colors
 
-road lines pink: `ff22ff`
-mountain lines blue: `222fff`
-road surface: `1a0928`
-mountain surface: `130c3d`
+road lines pink: `ff00aa`
+mountain lines blue: `00feff`
+road surface: `0e0226`
+mountain surface: `040728`
 
 used in the grid image
+
+sun as css gradiant:
+background: rgb(255,233,21);
+background: linear-gradient(90deg, rgba(255,233,21,1) 0%, rgba(255,208,31,1) 20%, rgba(252,167,25,1) 35%, rgba(249,113,25,1) 50%, rgba(249,85,48,1) 65%, rgba(245,61,93,1) 80%, rgba(255,0,170,1) 100%);
 
 !important: when changing the colors of the grid image, to optimize its size, you need to switch the color mode to **Indexed** and set the amount of colors to **2**
 
