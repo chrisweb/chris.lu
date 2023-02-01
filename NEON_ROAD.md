@@ -13,6 +13,8 @@ nextjs and react three fiber setup example repository: <https://github.com/pmndr
 
 react three fiber documentation: <https://docs.pmnd.rs/react-three-fiber/api/objects>
 
+an important page to read from the documentation is the **performance** section: <https://docs.pmnd.rs/react-three-fiber/advanced/pitfalls#%E2%9C%85-use-starttransition-for-expensive-ops>
+
 react three fiber camera explained: <https://youtu.be/Isr-hIveUK0>
 react three fiber orbit controls documentation: <https://sbcode.net/react-three-fiber/orbit-controls/>
 
@@ -22,6 +24,8 @@ another three fiber examples repository (with demo page linked in readme): <http
 nice codesandbox "space shooter" game example that uses three fiber to import 3d models as well as sprites: <https://codesandbox.io/s/b7e01?file=/src/App.js:1392-1405>
 
 another nice codesandbox showing the usage of shadows: <https://codesandbox.io/s/elastic-cache-p325m?file=/src/App.js:631-640>
+
+you will find a lot of outdated tutorials on the web that got writen prior to version 8, to convert the info of those to moden R3F (react three fiber): <https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#react-native-support>
 
 ## install dependencies
 
@@ -75,3 +79,7 @@ online gltf viewer to test exports: <https://gltf-viewer.donmccurdy.com/>
 important to convert a gltf model into a react component for easy usage (as mentioned in <https://docs.pmnd.rs/react-three-fiber/tutorials/loading-models#loading-gltf-models-as-jsx-components>), use this online tool: <https://gltf.pmnd.rs/>, or it can be used on the command line, the github repository is here: <https://github.com/pmndrs/gltfjsx>
 
 current gltf palm tree model, is from here: <https://sketchfab.com/3d-models/neon-palm-tree-base-8e552601aeff4e3fa1aa3d6b70ae2638>
+
+## TODOs
+
+check if enabling useTransition is needed: <https://docs.pmnd.rs/react-three-fiber/advanced/scaling-performance#enable-concurrency>
