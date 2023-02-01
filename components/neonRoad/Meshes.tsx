@@ -1,32 +1,30 @@
+'use client'
+
 import { useRef } from 'react'
-import { Object3D, Mesh, Group } from 'three'
-import { useFrame, useLoader } from '@react-three/fiber'
+import { Mesh, Group } from 'three'
+import { useFrame } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
 import PalmModel from './Palm'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 const NeonRoadMesh: React.FC = () => {
 
     // TODO: for production image needs to be delivered by CDN not public folder
-    const FLOOR_TEXTURE_PATH = './assets/images/grid13.png'
-    //const FLOOR_TEXTURE_PATH = './assets/images/grid_from_example.png'
-    // TODO: if we use avif though, we need to check if browser supports it
-    //const FLOOR_TEXTURE_PATH = './assets/images/grid.avif'
-    //const FLOOR_TEXTURE_PATH = './assets/images/grid2.avif'
+    //const FLOOR_TEXTURE_PATH = './assets/images/grid13.png'
+    const FLOOR_TEXTURE_PATH = './assets/images/grid_578.svg'
 
     const DISPLACEMENT_MAP_PATH = './assets/images/displacement-map.png'
 
     //const floorTexture = useLoader(TextureLoader, FLOOR_TEXTURE_PATH)
     //const displacementMap = useLoader(TextureLoader, DISPLACEMENT_MAP_PATH)
 
-    const PALM_SPRITE_LEFT_PATH = './assets/images/palm_sprite_left.png'
-    const PALM_SPRITE_RIGHT_PATH = './assets/images/palm_sprite_right.png'
+    //const PALM_SPRITE_LEFT_PATH = './assets/images/palm_sprite_left.png'
+    //const PALM_SPRITE_RIGHT_PATH = './assets/images/palm_sprite_right.png'
 
-    const [floorTexture, displacementMap, palmLeftTexture, palmRightTexture] = useTexture([
+    const [floorTexture, displacementMap/*, palmLeftTexture, palmRightTexture*/] = useTexture([
         FLOOR_TEXTURE_PATH,
         DISPLACEMENT_MAP_PATH,
-        PALM_SPRITE_LEFT_PATH,
-        PALM_SPRITE_RIGHT_PATH,
+        //PALM_SPRITE_LEFT_PATH,
+        //PALM_SPRITE_RIGHT_PATH,
     ])
 
     const displacementScale = 0.4
@@ -68,8 +66,6 @@ const NeonRoadMesh: React.FC = () => {
         })
 
         positionChange = -2.8
-
-        console.log(rightSideTreesRefs)
 
         rightSideTreesRefs.current.forEach((rightSideTreeRef) => {
             rightSideTreeRef.position.z = newZPosition + positionChange

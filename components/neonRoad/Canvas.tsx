@@ -1,33 +1,41 @@
 'use client'
 
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { PerspectiveCamera, SpotLightHelper, PCFSoftShadowMap } from 'three'
-import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Stats, useHelper } from '@react-three/drei'
+import { Canvas/*, RenderProps*/ } from '@react-three/fiber'
+import { OrbitControls, Stats, useDetectGPU, useHelper } from '@react-three/drei'
 import Meshes from './Meshes'
 
 const NeonRoadCanvas: React.FC = () => {
 
     const canvasContainerRef = useRef<HTMLDivElement>(null)
 
+    const gpuInfo = useDetectGPU()
+
     let sizes = {
         width: 0,
         height: 0,
     }
 
-    if (typeof window !== 'undefined') {
-        sizes = {
-            width: window.innerWidth,
-            height: window.innerHeight / 2,
+    let camera: PerspectiveCamera
+
+    const sceneSetup = () => {
+
+        if (typeof window !== 'undefined') {
+            sizes = {
+                width: window.innerWidth,
+                height: window.innerHeight / 2,
+            }
         }
+
+        // basic camera
+        camera = new PerspectiveCamera(75, sizes.width / sizes.height, 0.01, 20)
+
+        camera.position.x = 0
+        camera.position.y = 0.06
+        camera.position.z = 1
+
     }
-
-    // basic camera
-    const camera = new PerspectiveCamera(75, sizes.width / sizes.height, 0.01, 20)
-
-    camera.position.x = 0
-    camera.position.y = 0.06
-    camera.position.z = 1
 
     function Lights() {
         const spotLightRef = useRef(null)
@@ -41,7 +49,7 @@ const NeonRoadCanvas: React.FC = () => {
                 intensity={10}
                 position={[0, 2, -4]}
                 distance={20}
-                angle={Math.PI/8} // default is Math.PI/3
+                angle={Math.PI / 8} // default is Math.PI/3
                 ref={spotLightRef}
                 castShadow={true} // default is false
                 //shadowBias={0.001}
@@ -56,6 +64,17 @@ const NeonRoadCanvas: React.FC = () => {
         )
     }
 
+    // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#expanded-gl-prop
+    // https://threejs.org/docs/#api/en/renderers/WebGLRenderer
+    /*const renderOptions: RenderProps = {
+        gl: {}
+    }*/
+
+    if (typeof window !== 'undefined') {
+        console.log('useDetectGPU: ', gpuInfo)
+        sceneSetup()
+    }
+
     return (
         // TODO: add the accessibility package: https://docs.pmnd.rs/a11y/introduction
         <>
@@ -66,8 +85,9 @@ const NeonRoadCanvas: React.FC = () => {
                     dpr={Math.min(window.devicePixelRatio, 2)}
                     aria-label="Chris.lu header image, displaying an 80s style sunset"
                     role="img"
+                    // https://docs.pmnd.rs/react-three-fiber/api/canvas#render-defaults
                     shadows={{ type: PCFSoftShadowMap }}
-                    //shadows={{ type: BasicShadowMap }}
+                //shadows={{ type: BasicShadowMap }} 
                 >
                     <Meshes />
                     <Lights />
