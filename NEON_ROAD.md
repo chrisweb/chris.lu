@@ -83,10 +83,13 @@ current gltf palm tree model, is from here: <https://sketchfab.com/3d-models/neo
 
 * check if enabling useTransition is needed: <https://docs.pmnd.rs/react-three-fiber/advanced/scaling-performance#enable-concurrency>
 * check if making use of react suspense is needed
+* loading animation?
+* have a static image while loading or for when webgl is not available?
 * check if changing rendering performance setting is needed when mobile is detected
 * check if the shadows settings (camera) can bne tweaked for better performance
 * limit camera movement to slighly left/right, no up/down, no zoom
 * add the accessibility package & set it up
+* check for user preference for animation(s) should be low, then set the framerate to very low value
 * clean up code
 * optimize all images
 * optimize the palm model
