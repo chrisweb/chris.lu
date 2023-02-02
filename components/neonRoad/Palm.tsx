@@ -20,21 +20,10 @@ type GLTFResult = GLTF & {
         Feuille_6_feuilles_0: Mesh
         Feuille_7_feuilles_0: Mesh
         Feuille_8_feuilles_0: Mesh
-        Feuille_1_feuilles_0001: Mesh
-        Feuille_2_feuilles_0001: Mesh
-        Feuille_3_feuilles_0001: Mesh
-        Feuille_4_feuilles_0001: Mesh
-        Feuille_5_feuilles_0001: Mesh
-        Feuille_6_feuilles_0001: Mesh
-        Feuille_7_feuilles_0001: Mesh
-        Feuille_8_feuilles_0001: Mesh
-        tronc_tronc1_0001: Mesh
     }
     materials: {
         tronc1: MeshStandardMaterial
         feuilles: MeshStandardMaterial
-        ['feuilles.001']: MeshStandardMaterial
-        ['tronc1.001']: MeshStandardMaterial
     }
 }
 
