@@ -3,46 +3,33 @@
 import { useRef } from 'react'
 import { Mesh, Group } from 'three'
 import { useFrame } from '@react-three/fiber'
-import { useTexture } from '@react-three/drei'
+import { useTexture, useAspect } from '@react-three/drei'
 import PalmModel from './Palm'
 
 const NeonRoadMesh: React.FC = () => {
 
-    // TODO: for production image needs to be delivered by CDN not public folder
-    //const FLOOR_TEXTURE_PATH = './assets/images/grid13.png'
-    const FLOOR_TEXTURE_PATH = './assets/images/grid_578.svg'
-
-    const DISPLACEMENT_MAP_PATH = './assets/images/displacement-map.png'
-
-    //const floorTexture = useLoader(TextureLoader, FLOOR_TEXTURE_PATH)
-    //const displacementMap = useLoader(TextureLoader, DISPLACEMENT_MAP_PATH)
-
-    //const PALM_SPRITE_LEFT_PATH = './assets/images/palm_sprite_left.png'
-    //const PALM_SPRITE_RIGHT_PATH = './assets/images/palm_sprite_right.png'
-
-    const [floorTexture, displacementMap/*, palmLeftTexture, palmRightTexture*/] = useTexture([
-        FLOOR_TEXTURE_PATH,
-        DISPLACEMENT_MAP_PATH,
-        //PALM_SPRITE_LEFT_PATH,
-        //PALM_SPRITE_RIGHT_PATH,
-    ])
-
-    const displacementScale = 0.4
+    const displacementScale = 0.5
 
     const meshARef = useRef<Mesh>(null)
     const meshBRef = useRef<Mesh>(null)
 
+    const FLOOR_TEXTURE_PATH = './assets/images/grid_4096x8192-min.png'
+    const DISPLACEMENT_MAP_PATH = './assets/images/displacement_32x64-min.png'
+    const SUN_TEXTURE_PATH = './assets/images/sun_gradient.svg'
+    const CITY_TEXTURE_PATH = './assets/images/city_texture.png'
+
+    const [floorTexture, displacementMap, sunTexture, cityTexture] = useTexture([
+        FLOOR_TEXTURE_PATH,
+        DISPLACEMENT_MAP_PATH,
+        SUN_TEXTURE_PATH,
+        CITY_TEXTURE_PATH,
+    ])
+
     // 19 trees on the left side
-    //const leftSideTreesRefs = useRef<Mesh[]>([])
+    const leftSideTreesRefs = useRef<Group[]>([])
 
     // 19 trees on the right side
-    //const rightSideTreesRefs = useRef<Mesh[]>([])
-
-    const leftSideTreesRefs = useRef<Group[]>([])
     const rightSideTreesRefs = useRef<Group[]>([])
-
-    //const leftSideTreesRefs = useRef<Object3D[]>([])
-    //const rightSideTreesRefs = useRef<Object3D[]>([])
 
     useFrame((state/*, delta, xrFrame*/) => {
 
@@ -74,36 +61,6 @@ const NeonRoadMesh: React.FC = () => {
 
     })
 
-    /*function TreeSprites({ amount, side }) {
-        const spritesElements: React.ReactElement[] = []
-        // from position "-2.8" to "0.8" 
-        let positionChange = -2.8
-        const palmTexture = side === 'right' ? palmRightTexture : palmLeftTexture
-        for (let i = 0; i <= amount; i++) {
-            spritesElements.push(
-                <mesh
-                    //rotation={[-Math.PI * 0.5, 0, 0]}
-                    position={[side === 'right' ? 0.21 : -0.21, 0.05, positionChange]}
-                    ref={ref => {
-                        side === 'right' ? rightSideTreesRefs.current[i] = ref : leftSideTreesRefs.current[i] = ref
-                    }}
-                    scale={[0.1, 0.1, 0.1]}
-                    castShadow={true} // default is false
-                    key={side + i}
-                >
-                    <planeGeometry />
-                    <meshBasicMaterial
-                        map={palmTexture}
-                        transparent={true}
-                    //side={DoubleSide}
-                    />
-                </mesh>
-            )
-            positionChange += 0.2
-        }
-        return <>{spritesElements}</>
-    }*/
-
     function TreeModels({ amount, side }) {
         const spritesElements: React.ReactElement[] = []
         // from position "-2.8" to "0.8" 
@@ -127,18 +84,48 @@ const NeonRoadMesh: React.FC = () => {
         return <>{spritesElements}</>
     }
 
+    function Sun() {
+        return (
+            <mesh
+                position={[0, 0.5, -2]}
+                scale={[3, 3, 3]}
+            >
+                <planeGeometry />
+                <meshBasicMaterial
+                    map={sunTexture}
+                    transparent={true}
+                />
+            </mesh>
+        )
+    }
+
+    function City() {
+        const cityScale = useAspect(1024, 256, 0.2)
+        return (
+            <mesh
+                position={[0, 0.14, -1.5]}
+                scale={cityScale}
+            >
+                <planeGeometry />
+                <meshBasicMaterial
+                    map={cityTexture}
+                    transparent={true}
+                />
+            </mesh>
+        )
+    }
+
     return (
         <>
+            <color attach="background" args={['#2f0f30']} />
             <mesh
                 rotation={[-Math.PI * 0.5, 0, 0]}
                 position={[0, 0, 0]}
                 ref={meshARef}
                 receiveShadow={true} // default is false
             >
-                <planeGeometry args={[1, 2, 24, 24]} />
-                {/*<meshPhongMaterial <- more reflection but light is less beautiful, could experiment more with options like shininess */}
+                <planeGeometry args={[1, 2, 32, 32]} />
                 <meshStandardMaterial
-                    //color={'#ff00aa'}
                     map={floorTexture}
                     displacementMap={displacementMap}
                     displacementScale={displacementScale}
@@ -152,10 +139,8 @@ const NeonRoadMesh: React.FC = () => {
                 ref={meshBRef}
                 receiveShadow={true} // default is false
             >
-                <planeGeometry args={[1, 2, 24, 24]} />
-                {/*<meshPhongMaterial <- more reflection but light is less beautiful, could experiment more with options like shininess */}
+                <planeGeometry args={[1, 2, 32, 32]} />
                 <meshStandardMaterial
-                    //color={'#ff00aa'}
                     map={floorTexture}
                     displacementMap={displacementMap}
                     displacementScale={displacementScale}
@@ -163,10 +148,10 @@ const NeonRoadMesh: React.FC = () => {
                     metalness={0.9}
                 />
             </mesh>
-            {/*<TreeSprites amount={19} side={'left'} />*/}
-            {/*<TreeSprites amount={19} side={'right'} />*/}
             <TreeModels amount={19} side={'left'} />
             <TreeModels amount={19} side={'right'} />
+            <Sun />
+            <City />
         </>
     )
 }
