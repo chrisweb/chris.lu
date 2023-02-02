@@ -1,0 +1,19 @@
+@import url(https://fonts.googleapis.com/css?family=Permanent+Marker);
+
+.eighties {
+    position: absolute;
+    top: 27vh;
+    text-align: center;
+    width: 100%;
+    z-index: 1;
+    -webkit-transform: skew(335deg, 350deg);
+    transform: skew(340deg, 345deg);
+    font-family: 'Permanent Marker', cursive;
+    font-size: 80px;
+    background-image: -webkit-linear-gradient(#00feff 0%, #ff00aa 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-filter: drop-shadow(2px 2px 20px #1b0008);
+    filter: drop-shadow(4px 4px 10px #1b0008);
+}

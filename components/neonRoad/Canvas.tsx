@@ -3,7 +3,7 @@
 import { useRef } from 'react'
 import { PerspectiveCamera, PCFSoftShadowMap } from 'three'
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, useDetectGPU, useHelper } from '@react-three/drei'
+import { OrbitControls, useDetectGPU } from '@react-three/drei'
 import Meshes from './Meshes'
 
 const NeonRoadCanvas: React.FC = () => {
@@ -44,6 +44,7 @@ const NeonRoadCanvas: React.FC = () => {
         }
         // uncomment the next lines to use the spotlight helper which helps to visualize the size and direction of your light
         //import { SpotLightHelper } from 'three'
+        //import { useHelper } from '@react-three/drei'
         //useHelper(spotLightRef, SpotLightHelper, '#fff400')
         return (
             <spotLight

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { Mesh, Group, MathUtils} from 'three'
+import { Mesh, Group} from 'three'
 import { useFrame } from '@react-three/fiber'
 import { useTexture, useAspect } from '@react-three/drei'
 import PalmModel from './Palm'
@@ -53,7 +53,7 @@ const NeonRoadMesh: React.FC = () => {
             return
         }
 
-        const newZPosition = (state.clock.elapsedTime * 0.1) % 2
+        const newZPosition = (state.clock.elapsedTime * 0.07) % 2
 
         if (meshARef.current) {
             meshARef.current.position.z = newZPosition
