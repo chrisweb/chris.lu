@@ -56,10 +56,9 @@ background: linear-gradient(90deg, rgba(255,233,21,1) 0%, rgba(255,208,31,1) 20%
 
 !important: when changing the colors of the grid image, to optimize its size, you need to switch the color mode to **Indexed** and set the amount of colors to **2**
 
+## optimising PNGs
 
-
-
-
+I used this online tool: <https://compresspng.com/>
 
 
 
@@ -82,4 +81,12 @@ current gltf palm tree model, is from here: <https://sketchfab.com/3d-models/neo
 
 ## TODOs
 
-check if enabling useTransition is needed: <https://docs.pmnd.rs/react-three-fiber/advanced/scaling-performance#enable-concurrency>
+* check if enabling useTransition is needed: <https://docs.pmnd.rs/react-three-fiber/advanced/scaling-performance#enable-concurrency>
+* check if making use of react suspense is needed
+* check if changing rendering performance setting is needed when mobile is detected
+* check if the shadows settings (camera) can bne tweaked for better performance
+* limit camera movement to slighly left/right, no up/down, no zoom
+* add the accessibility package & set it up
+* clean up code
+* optimize all images
+* optimize the palm model
