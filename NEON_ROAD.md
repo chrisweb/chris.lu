@@ -82,19 +82,14 @@ optimize the GLTF model: <>
 
 important! to convert a gltf model into a react component for easy usage (as mentioned in <https://docs.pmnd.rs/react-three-fiber/tutorials/loading-models#loading-gltf-models-as-jsx-components>), use this online tool: <https://gltf.pmnd.rs/>, or it can be used on the command line, the github repository is here: <https://github.com/pmndrs/gltfjsx>
 
-another useful resource is the GLTF mesh optimizer: <https://github.com/zeux/meshoptimizer>
+another useful resource is this GLTF mesh optimizer called "gltf pack": <https://github.com/zeux/meshoptimizer/releases>
 
 ## TODOs
 
-* check if making use of react suspense is needed
 * loading animation?
 * have a static image while loading or for when webgl is not available?
 * check if changing rendering performance setting is needed when mobile is detected
-* check if the shadows settings (camera) can bne tweaked for better performance
+* check if the shadows settings (camera) can be tweaked for better performance
 * limit camera movement to slighly left/right, no up/down, no zoom
 * add the accessibility package & set it up
 * check for user preference for animation(s) should be low, then set the framerate to very low value
-* clean up code
-* optimize all images (including the leaves PNGs loaded by the GLTF palm)
-* optimize the palm model GLTF mesh optimizer using <https://github.com/zeux/meshoptimizer>
-* add the "chris.lu" banner over the animation

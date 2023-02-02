@@ -15,8 +15,8 @@ const NeonRoadMesh: React.FC = () => {
 
     const FLOOR_TEXTURE_PATH = './assets/images/grid_4096x8192-min.png'
     const DISPLACEMENT_MAP_PATH = './assets/images/displacement_32x64-min.png'
-    const SUN_TEXTURE_PATH = './assets/images/sun_gradient.svg'
-    const CITY_TEXTURE_PATH = './assets/images/city_texture.png'
+    const SUN_TEXTURE_PATH = './assets/images/sun_gradient-min.svg'
+    const CITY_TEXTURE_PATH = './assets/images/city_texture-min.png'
 
     const [floorTexture, displacementMap, sunTexture, cityTexture] = useTexture([
         FLOOR_TEXTURE_PATH,

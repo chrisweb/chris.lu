@@ -9,6 +9,7 @@ import { useGLTF } from '@react-three/drei'
 import { GLTF } from 'three-stdlib'
 import { GroupProps } from '@react-three/fiber'
 
+// types for the gltf version
 type GLTFResult = GLTF & {
     nodes: {
         tronc_tronc1_0: Mesh
@@ -29,7 +30,8 @@ type GLTFResult = GLTF & {
 
 const PALM_GLTF_PATH = '/assets/3d_models/palm/palm.gltf'
 
-const PalmModel: React.FC<GroupProps> = forwardRef((props, ref: Ref<Group>) => {
+// code for the gltf version
+const PalmModel: React.FC<GroupProps> = forwardRef((props: JSX.IntrinsicElements['group'], ref: Ref<Group>) => {
 
     // types problem see: https://github.com/pmndrs/gltfjsx/issues/167
     const { nodes, materials } = useGLTF(PALM_GLTF_PATH) as unknown as GLTFResult
@@ -90,3 +92,55 @@ PalmModel.displayName = 'PalmModel'
 useGLTF.preload(PALM_GLTF_PATH)
 
 export default PalmModel
+
+// optimized the gltf using https://github.com/zeux/meshoptimizer/releases
+// the optimized version displays no palm, I have no clue as to why it does not show???
+/*
+import { forwardRef, Ref } from 'react'
+import { Mesh, MeshStandardMaterial, Group } from 'three'
+import { useGLTF } from '@react-three/drei'
+import { GLTF } from 'three-stdlib'
+import { GroupProps } from '@react-three/fiber'
+
+const PALM_GLB_PATH = '/assets/3d_models/palm/palm.glb'
+
+type GLTFResult = GLTF & {
+    nodes: {
+        mesh_0: Mesh;
+        mesh_0_1: Mesh;
+    };
+    materials: {
+        tronc1: MeshStandardMaterial;
+        feuilles: MeshStandardMaterial;
+    };
+};
+
+const PalmModel: React.FC<GroupProps> = forwardRef((props: JSX.IntrinsicElements['group'], ref: Ref<Group>) => {
+    // types problem see: https://github.com/pmndrs/gltfjsx/issues/167
+    const { nodes, materials } = useGLTF(PALM_GLB_PATH) as unknown as GLTFResult
+    return (
+        <group name={'PalmModel'} {...props} ref={ref}>
+            <mesh
+                name="mesh_0"
+                castShadow
+                receiveShadow
+                geometry={nodes.mesh_0.geometry}
+                material={materials.tronc1}
+            />
+            <mesh
+                name="mesh_0_1"
+                castShadow
+                receiveShadow
+                geometry={nodes.mesh_0_1.geometry}
+                material={materials.feuilles}
+            />
+        </group>
+    )
+})
+
+PalmModel.displayName = 'PalmModel'
+
+useGLTF.preload(PALM_GLB_PATH)
+
+export default PalmModel
+*/
