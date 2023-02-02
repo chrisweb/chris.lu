@@ -1,9 +1,9 @@
 'use client'
 
 import { useRef } from 'react'
-import { PerspectiveCamera, SpotLightHelper, PCFSoftShadowMap } from 'three'
-import { Canvas/*, RenderProps*/ } from '@react-three/fiber'
-import { OrbitControls, Stats, useDetectGPU, useHelper } from '@react-three/drei'
+import { PerspectiveCamera, PCFSoftShadowMap } from 'three'
+import { Canvas } from '@react-three/fiber'
+import { OrbitControls, useDetectGPU, useHelper } from '@react-three/drei'
 import Meshes from './Meshes'
 
 const NeonRoadCanvas: React.FC = () => {
@@ -42,7 +42,9 @@ const NeonRoadCanvas: React.FC = () => {
         if (spotLightRef.current) {
             spotLightRef.current.target.position.set([0, -1, 0])
         }
-        useHelper(spotLightRef, SpotLightHelper, '#fff400')
+        // uncomment the next lines to use the spotlight helper which helps to visualize the size and direction of your light
+        //import { SpotLightHelper } from 'three'
+        //useHelper(spotLightRef, SpotLightHelper, '#fff400')
         return (
             <spotLight
                 color="#ffa700"
@@ -66,6 +68,7 @@ const NeonRoadCanvas: React.FC = () => {
 
     // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#expanded-gl-prop
     // https://threejs.org/docs/#api/en/renderers/WebGLRenderer
+    //import { RenderProps } from '@react-three/fiber'
     /*const renderOptions: RenderProps = {
         gl: {}
     }*/
@@ -74,6 +77,10 @@ const NeonRoadCanvas: React.FC = () => {
         console.log('useDetectGPU: ', gpuInfo)
         sceneSetup()
     }
+
+    // to enable stats import the module
+    //import { Stats } from '@react-three/drei'
+    // then add <Stats /> into the <Canvas></Canvas>
 
     return (
         // TODO: add the accessibility package: https://docs.pmnd.rs/a11y/introduction
@@ -86,14 +93,13 @@ const NeonRoadCanvas: React.FC = () => {
                     aria-label="Chris.lu header image, displaying an 80s style sunset"
                     role="img"
                     // https://docs.pmnd.rs/react-three-fiber/api/canvas#render-defaults
+                    //shadows={{ type: BasicShadowMap }} 
                     shadows={{ type: PCFSoftShadowMap }}
-                //shadows={{ type: BasicShadowMap }} 
                 >
                     <Meshes />
                     <Lights />
                     <OrbitControls camera={camera} />
                     <ambientLight color={'#ffffff'} intensity={40} />
-                    <Stats />
                 </Canvas>
             </div>
         </>
