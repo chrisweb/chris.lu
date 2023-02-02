@@ -38,12 +38,12 @@ type GLTFResult = GLTF & {
     }
 }
 
-
+const PALM_GLTF_PATH = '/assets/3d_models/palm/palm.gltf'
 
 const PalmModel: React.FC<GroupProps> = forwardRef((props, ref: Ref<Group>) => {
 
     // types problem see: https://github.com/pmndrs/gltfjsx/issues/167
-    const { nodes, materials } = useGLTF('/assets/3d_models/palm/palm.gltf') as unknown as GLTFResult
+    const { nodes, materials } = useGLTF(PALM_GLTF_PATH) as unknown as GLTFResult
 
     return (
         <group name={'PalmModel'} {...props} ref={ref}>
@@ -98,6 +98,6 @@ const PalmModel: React.FC<GroupProps> = forwardRef((props, ref: Ref<Group>) => {
 
 PalmModel.displayName = 'PalmModel'
 
-export default PalmModel
+useGLTF.preload(PALM_GLTF_PATH)
 
-useGLTF.preload('/palm8.gltf')
+export default PalmModel
