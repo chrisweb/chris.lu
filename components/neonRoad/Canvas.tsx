@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { PerspectiveCamera, SpotLightHelper, PCFSoftShadowMap } from 'three'
 import { Canvas/*, RenderProps*/ } from '@react-three/fiber'
 import { OrbitControls, Stats, useDetectGPU, useHelper } from '@react-three/drei'
@@ -79,10 +79,10 @@ const NeonRoadCanvas: React.FC = () => {
         // TODO: add the accessibility package: https://docs.pmnd.rs/a11y/introduction
         <>
             <div id="canvas-container" ref={canvasContainerRef} style={{ width: '100vw', height: 'calc(100vh/2)' }}>
-                {/* to set the pixel ratio use: dpr={} */}
                 <Canvas
                     camera={camera}
-                    dpr={Math.min(window.devicePixelRatio, 2)}
+                    // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#new-pixel-ratio-default
+                    //dpr={Math.min(window.devicePixelRatio, 2)} // pixel ratio, should be 1 or 2
                     aria-label="Chris.lu header image, displaying an 80s style sunset"
                     role="img"
                     // https://docs.pmnd.rs/react-three-fiber/api/canvas#render-defaults
