@@ -1,7 +1,7 @@
 'use client'
 
-import { useRef } from 'react'
-import { Mesh, Group } from 'three'
+import { useEffect, useRef } from 'react'
+import { Mesh, Group, MathUtils} from 'three'
 import { useFrame } from '@react-three/fiber'
 import { useTexture, useAspect } from '@react-three/drei'
 import PalmModel from './Palm'
@@ -25,15 +25,33 @@ const NeonRoadMesh: React.FC = () => {
         CITY_TEXTURE_PATH,
     ])
 
+    const animate = useRef(true)
+
     // 19 trees on the left side
     const leftSideTreesRefs = useRef<Group[]>([])
 
     // 19 trees on the right side
     const rightSideTreesRefs = useRef<Group[]>([])
 
+    const setAnimate = () => {
+        animate.current = !document.hidden
+    }
+
+    useEffect(() => {
+        // https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API
+        document.addEventListener('visibilitychange', setAnimate)
+        return () => {
+            document.removeEventListener('visibilitychange', setAnimate)
+        }
+    })
+
     useFrame((state/*, delta, xrFrame*/) => {
 
         //console.log(state, delta, xrFrame)
+
+        if (!animate.current) {
+            return
+        }
 
         const newZPosition = (state.clock.elapsedTime * 0.1) % 2
 
