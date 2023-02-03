@@ -87,9 +87,11 @@ another useful resource is this GLTF mesh optimizer called "gltf pack": <https:/
 ## TODOs
 
 * loading animation?
+* use next analyzer first to check build size, then probably try to tree shake three.js to optimize build size
 * have a static image while loading or for when webgl is not available?
 * check if changing rendering performance setting is needed when mobile is detected
 * check if the shadows settings (camera) can be tweaked for better performance
 * limit camera movement to slighly left/right, no up/down, no zoom
 * add the accessibility package & set it up
 * check for user preference for animation(s) should be low, then set the framerate to very low value
+
