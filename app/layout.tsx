@@ -14,7 +14,7 @@ export default function RootLayout({
                     <h1 className={styles.eighties}>Chris.lu</h1>
                     <NeonRoadCanvas />
                 </header>
-                <main></main>{children}
+                <main>{children}</main>
             </body>
         </html>
     )

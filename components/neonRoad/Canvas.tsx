@@ -8,8 +8,6 @@ import Meshes from './Meshes'
 
 const NeonRoadCanvas: React.FC = () => {
 
-    const canvasContainerRef = useRef<HTMLDivElement>(null)
-
     const gpuInfo = useDetectGPU()
 
     let sizes = {
@@ -86,7 +84,8 @@ const NeonRoadCanvas: React.FC = () => {
     return (
         // TODO: add the accessibility package: https://docs.pmnd.rs/a11y/introduction
         <>
-            <div id="canvas-container" ref={canvasContainerRef} style={{ width: '100vw', height: 'calc(100vh/2)' }}>
+            <div style={{ width: '100vw', height: 'calc(100vh/2)', zIndex: -2, position: 'absolute', top: 0 }}>Loading...</div>
+            <div id="canvas-container" style={{ width: '100vw', height: 'calc(100vh/2)', zIndex: -2, position: 'absolute', top: 0 }}>
                 <Canvas
                     camera={camera}
                     // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#new-pixel-ratio-default
@@ -96,6 +95,7 @@ const NeonRoadCanvas: React.FC = () => {
                     // https://docs.pmnd.rs/react-three-fiber/api/canvas#render-defaults
                     //shadows={{ type: BasicShadowMap }} 
                     shadows={{ type: PCFSoftShadowMap }}
+                    fallback={<img src="/assets/images/fallback.png" />}
                 >
                     <Meshes />
                     <Lights />
