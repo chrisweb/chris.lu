@@ -2,14 +2,15 @@
 
 .eighties {
     position: absolute;
-    top: 27vh;
+    top: 16vh;
     text-align: center;
-    width: 100%;
+    width:100vw;
+    max-width: 97%;
     z-index: 1;
     -webkit-transform: skew(335deg, 350deg);
-    transform: skew(340deg, 345deg);
+    transform: skew(345deg, 345deg);
     font-family: 'Permanent Marker', cursive;
-    font-size: 80px;
+    font-size: 180px;
     background-image: -webkit-linear-gradient(#00feff 0%, #ff00aa 100%);
     -webkit-background-clip: text;
     background-clip: text;

@@ -616,3 +616,84 @@ the login button component which has a clickHandler must have a "use client" sta
 
 use jest to write some tests
 jest seems to have the biggest user base right now if you look at the ["state of js 2022 survey results"](https://2022.stateofjs.com/en-US/libraries/testing/)
+
+
+
+### next/image
+
+images go into the public folder, but "public" is not part of the src path, only what comes after
+
+so an image called "foo.jpg" located in "/public/images/" would have an src like this: "/images/foo.jpg"
+
+Note: if you used next/image prior to next.js 13 you might want to check out the migration guide as there are some major changes as to how some options work: <https://nextjs.org/docs/messages/next-image-upgrade-to-13>
+
+for the layout header, we will add a fallback image for the canvas element, the goal is to use the [css property object fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) to make it as large as the canvas container:
+
+```ts
+<Image
+    src="/assets/images/fallback.png"
+    alt="Chris.lu header image, displaying an 80s style landscape and sunset"
+    fill
+    style={{objectFit:'cover'}}
+/>
+```
+
+if now open the page in your browser and inspect the html you will see that next.js add a lot of different srcset attributes to the img tag
+
+Note: when you start your server with `npm run dev`, next.js will automatically create files with different dimensions of your image and store them into the folder `\.next\cache\images`
+
+our original image is a PNG image, so it's quite heavy, because modern browser support formats like [AVIF](https://en.wikipedia.org/wiki/AVIF) or [WebP](https://en.wikipedia.org/wiki/WebP) we want next.js to convert our original file into these formats and depending on what format the browser supports we want next.js to either ship .avif files to the user (best compression / smallest size) or else ship .webp files (good compression / smaller size) and only if none of those two is formats is supported it should ship .png files (worst compression / bigger size)
+
+to add support for webp and avif we need to add the following code to our next.config.js:
+
+```js
+module.exports = {
+ images: {
+  formats: ['image/avif', 'image/webp']
+ }
+}
+```
+
+no need to change any code of the `<Image>` component we added previously, next.js will handle the conversion to the different formats automatically now that we have added them to the configuration file and will store the different versions into `\.next\cache\images`
+
+Note: next/image uses sharp <https://www.npmjs.com/package/sharp> to convert images to other formats
+
+read more:
+
+* next.js next/image documentation: <https://nextjs.org/docs/api-reference/next/image>
+* use avif in next.js: <https://avif.io/blog/tutorials/nextjs/>
+
+### state management
+
+here are the libraries I consider using:
+
+jotai: <https://github.com/pmndrs/jotai>
+zustand: <https://github.com/pmndrs/zustand>
+recoil: <https://github.com/facebookexperimental/Recoil>
+
+here is a comparison of the 3: <https://npmtrends.com/jotai-vs-recoil-vs-zustand>
+
+
+### setting up planetscale account
+
+planetscale website: <https://planetscale.com/>
+planetscale is free for "hobby" projects, like your personal blog: <https://planetscale.com/pricing>
+
+the planetscale javascript database driver repository on github: <https://github.com/planetscale/database-js>
+
+Note: when using planetscale in combination with vercel, you add planetscale as an "integration" in your vercel account and then you don't need to set up the env variables by yourself, vercel will automatically get them from planetscale for you
+
+read more:
+
+* integrate plantscale with vercel (by vercel): <https://vercel.com/integrations/planetscale>
+* integrate plantscale with vercel (by plantscale): <https://planetscale.com/docs/tutorials/deploy-to-vercel>
+
+### setting up vercel account
+
+vercel website: <https://vercel.com/>
+vercel is free for personal prjects, like your blog: <https://vercel.com/pricing>
+
+Note: when using vercel, you add env variables to the project via the vercel web interface, you don't create local `.env.*` files manually
+also to check out your env variables (that you have added to the project via the vercel web interface) locally, you use their cli command `vercel env pull`
+
+Note: if using vercel and also next.js, you don't need to use their cli command vercel dev as next dev does already handle serverless on localhost: <https://vercel.com/blog/vercel-dev>

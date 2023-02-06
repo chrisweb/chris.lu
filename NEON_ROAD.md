@@ -34,6 +34,8 @@ you will find a lot of outdated tutorials on the web that got written prior to v
 
 check out the [GLTF models chapter](#gltf-experiments) for more links to must reads about GLTF files
 
+here is a nice tool I found (but that I didn't try out), which makes npm packages out of your GLSL files (shaders): <https://github.com/glslify/glslify>, they have a website listing all available packages (there are a lot of interesting ones that might be useful to you): <http://stack.gl/packages/>
+
 ## installed these dependencies
 
 install three.js (<https://github.com/mrdoob/three.js/>):
@@ -87,7 +89,9 @@ another useful resource is this GLTF mesh optimizer called "gltf pack": <https:/
 ## TODOs
 
 * loading animation?
-* use next analyzer first to check build size, then probably try to tree shake three.js to optimize build size
+* use next analyzer first to check build size, then probably try to tree shake three.js to optimize build size: <https://www.npmjs.com/package/@next/bundle-analyzer>
+* in this article <https://www.gatsbyjs.com/blog/performance-optimization-for-three-js-web-animations/> I read about a feature called saveData, should try to use it `navigator?.connection?.saveData`
+* from the same article, they recommend using react lazy and suspense, I tried this with next.js 13 but the dependencies are still in the intial build so it doesn't help, is there a way to tell next.js 13 to not bundle an import?
 * have a static image while loading or for when webgl is not available?
 * check if changing rendering performance setting is needed when mobile is detected
 * check if the shadows settings (camera) can be tweaked for better performance

@@ -5,6 +5,20 @@ import { PerspectiveCamera, PCFSoftShadowMap } from 'three'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, useDetectGPU } from '@react-three/drei'
 import Meshes from './Meshes'
+import Image from 'next/image'
+
+const FallbackImage: React.FC = () => {
+
+    return(
+        <Image
+            src="/assets/images/neonroad/fallback-min.png"
+            alt="Chris.lu header image, displaying an 80s style landscape and sunset"
+            fill
+            style={{objectFit:'cover'}}
+        />
+    )
+
+}
 
 const NeonRoadCanvas: React.FC = () => {
 
@@ -84,24 +98,23 @@ const NeonRoadCanvas: React.FC = () => {
     return (
         // TODO: add the accessibility package: https://docs.pmnd.rs/a11y/introduction
         <>
-            <div style={{ width: '100vw', height: 'calc(100vh/2)', zIndex: -2, position: 'absolute', top: 0 }}>Loading...</div>
-            <div id="canvas-container" style={{ width: '100vw', height: 'calc(100vh/2)', zIndex: -2, position: 'absolute', top: 0 }}>
-                <Canvas
+            <div id="canvas-container" style={{ width: '100vw', height: 'calc(100vh/2)', maxWidth:'100%', position: 'relative' }}>
+                {/*<Canvas
                     camera={camera}
                     // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#new-pixel-ratio-default
                     //dpr={Math.min(window.devicePixelRatio, 2)} // pixel ratio, should be 1 or 2
-                    aria-label="Chris.lu header image, displaying an 80s style sunset"
+                    aria-label="Chris.lu header image, displaying an 80s style landscape and sunset"
                     role="img"
                     // https://docs.pmnd.rs/react-three-fiber/api/canvas#render-defaults
                     //shadows={{ type: BasicShadowMap }} 
                     shadows={{ type: PCFSoftShadowMap }}
-                    fallback={<img src="/assets/images/fallback.png" />}
+                    fallback={<FallbackImage />}
                 >
                     <Meshes />
                     <Lights />
                     <OrbitControls camera={camera} />
                     <ambientLight color={'#ffffff'} intensity={40} />
-                </Canvas>
+    </Canvas>*/}<FallbackImage />
             </div>
         </>
     )
