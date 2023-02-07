@@ -78,6 +78,9 @@ typings/
 # Next.js build output
 .next
 
+# Next bundle analyzer
+/analyze
+
 # Nuxt.js build / generate output
 .nuxt
 dist

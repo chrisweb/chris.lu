@@ -4,7 +4,8 @@ import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 const nextConfig = (phase) => {
 
     const withBundleAnalyzer = WithBundleAnalyzer({
-        enabled: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        //enabled: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        enabled: false,
         //openAnalyzer: false,
     })
 

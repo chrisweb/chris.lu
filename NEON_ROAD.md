@@ -86,6 +86,95 @@ important! to convert a gltf model into a react component for easy usage (as men
 
 another useful resource is this GLTF mesh optimizer called "gltf pack": <https://github.com/zeux/meshoptimizer/releases>
 
+## analyze the bundle size
+
+install the next.js bundle analyzer using this command:
+
+`npm install @next/bundle-analyzer --save-dev --save-exact`
+
+then we edit the `next.config.mjs` file and change it to this:
+
+```js
+import WithBundleAnalyzer from '@next/bundle-analyzer'
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+
+const nextConfig = (phase) => {
+
+    const withBundleAnalyzer = WithBundleAnalyzer({
+        enabled: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        //openAnalyzer: false,
+    })
+
+    /** @type {import('next').NextConfig} */
+    const nextConfig = {
+        experimental: {
+            appDir: true,
+        },
+        images: {
+            formats: ['image/avif', 'image/webp']
+        },
+    }
+
+    return withBundleAnalyzer(nextConfig)
+
+}
+
+export default nextConfig
+```
+
+now we start the dev server and after that the analyzer will automatically open one or more pages in our browser with an analysis of the javascript chunks of our app
+
+in the layout.js file chunk, we can see that three.js takes a lot of space and that it is 1.12MB heavy in development and would still be 648KB heavy if gzipped
+
+![vscode notification typescript version](./documentation/assets/images/bundle_analyzer_layout.png)
+
+to optimize the layout.tsx file size and load all the scripts used by our three.js animation in an async way, we create a container which we set as client component
+
+we then use [next/dynamic](dynamic) which is the next.js of [react lazy](https://reactjs.org/docs/code-splitting.html#reactlazy) and which works like an [javascript dynamic import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import):
+
+```ts
+'use client'
+
+import { useState, useEffect, Suspense } from 'react'
+import dynamic from 'next/dynamic'
+const NeonRoadCanvas = dynamic(() => import('./Canvas'), { ssr: false })
+
+const Container: React.FC = () => {
+
+    const [isMounted, setIsMounted] = useState(false)
+
+    useEffect(() => {
+        setIsMounted(true)
+    }, [])
+
+    return (
+        <>
+            {!isMounted ? null : (
+                <Suspense fallback={null}>
+                    <NeonRoadCanvas />
+                </Suspense>
+            )}
+        </>
+    )
+}
+
+export default Container
+```
+
+now we run the analyzer again and we notice that the layout.tsx is now super small (just a few kb), but this time we have a new file containing all the three.js libraries:
+
+![vscode notification typescript version](./documentation/assets/images/bundle_analyzer_layout_externalized_neonroad.png)
+
+if we now compare the first version without lazy loading we see that the LCP is at 700ms:
+
+![vscode notification typescript version](./documentation/assets/images/bundle_analyzer_LCP_before_optimization.png)
+
+after we have added the lazy loading the LCP drops to 460ms:
+
+![vscode notification typescript version](./documentation/assets/images/bundle_analyzer_LCP_after_optimization.png)
+
+here is a good article from web.dev that explains what LCP is, that will show you that it is a metric used by core web vitals and why it matters: <https://web.dev/optimize-lcp/>
+
 ## TODOs
 
 * loading animation?
@@ -98,4 +187,3 @@ another useful resource is this GLTF mesh optimizer called "gltf pack": <https:/
 * limit camera movement to slighly left/right, no up/down, no zoom
 * add the accessibility package & set it up
 * check for user preference for animation(s) should be low, then set the framerate to very low value
-
