@@ -9,18 +9,17 @@ import Image from 'next/image'
 
 const FallbackImage: React.FC = () => {
 
-    return(
+    return (
         <Image
             src="/assets/images/neonroad/fallback-min.png"
             alt="Chris.lu header image, displaying an 80s style landscape and sunset"
             fill
-            style={{objectFit:'cover'}}
+            style={{ objectFit: 'cover' }}
             sizes="100vw"
             priority
             quality={80}
         />
     )
-
 }
 
 const NeonRoadCanvas: React.FC = () => {
@@ -101,23 +100,22 @@ const NeonRoadCanvas: React.FC = () => {
     return (
         // TODO: add the accessibility package: https://docs.pmnd.rs/a11y/introduction
         <>
-            
-                {/*<Canvas
-                    camera={camera}
-                    // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#new-pixel-ratio-default
-                    //dpr={Math.min(window.devicePixelRatio, 2)} // pixel ratio, should be 1 or 2
-                    aria-label="Chris.lu header image, displaying an 80s style landscape and sunset"
-                    role="img"
-                    // https://docs.pmnd.rs/react-three-fiber/api/canvas#render-defaults
-                    //shadows={{ type: BasicShadowMap }} 
-                    shadows={{ type: PCFSoftShadowMap }}
-                    fallback={<FallbackImage />}
-                >
-                    <Meshes />
-                    <Lights />
-                    <OrbitControls camera={camera} />
-                    <ambientLight color={'#ffffff'} intensity={40} />
-    </Canvas>*/}<FallbackImage />
+            <Canvas
+                camera={camera}
+                // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#new-pixel-ratio-default
+                //dpr={Math.min(window.devicePixelRatio, 2)} // pixel ratio, should be 1 or 2
+                aria-label="Chris.lu header image, displaying an 80s style landscape and sunset"
+                role="img"
+                // https://docs.pmnd.rs/react-three-fiber/api/canvas#render-defaults
+                //shadows={{ type: BasicShadowMap }} 
+                shadows={{ type: PCFSoftShadowMap }}
+                fallback={<FallbackImage />}
+            >
+                <Meshes />
+                <Lights />
+                <OrbitControls camera={camera} />
+                <ambientLight color={'#ffffff'} intensity={40} />
+            </Canvas>
         </>
     )
 }
