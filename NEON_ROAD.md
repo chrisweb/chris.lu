@@ -67,10 +67,10 @@ the css gradient I did to fill the sun SVG image:
 
 !important: when changing the colors of the grid PNG image, to optimize its size, you need to switch the color mode to **Indexed** and set the amount of colors to a minimum, in my case I set it to **4**
 
-I used this online tool to optimize  the PNGs: <https://compresspng.com/>
 To optimize  the SVG I used this tool: <https://svgoptimizer.com/>
+I used this online tool to optimize  the PNGs: <https://compresspng.com/> and <https://tinypng.com/>
 
-optimize the GLTF model: <>
+Note: I used tinypng for the fallback image, it seemed to produce a smaller file than compresspng and the quality seemed a bit better, for the other files I used compresspng
 
 ## gltf experiments
 
