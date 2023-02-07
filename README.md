@@ -631,10 +631,13 @@ for the layout header, we will add a fallback image for the canvas element, the 
 
 ```ts
 <Image
-    src="/assets/images/fallback.png"
+    src="/assets/images/neonroad/fallback-min.png"
     alt="Chris.lu header image, displaying an 80s style landscape and sunset"
     fill
     style={{objectFit:'cover'}}
+    sizes="100vw"
+    priority
+    quality={80}
 />
 ```
 
@@ -642,7 +645,7 @@ if now open the page in your browser and inspect the html you will see that next
 
 Note: when you start your server with `npm run dev`, next.js will automatically create files with different dimensions of your image and store them into the folder `\.next\cache\images`
 
-our original image is a PNG image, so it's quite heavy, because modern browser support formats like [AVIF](https://en.wikipedia.org/wiki/AVIF) or [WebP](https://en.wikipedia.org/wiki/WebP) we want next.js to convert our original file into these formats and depending on what format the browser supports we want next.js to either ship .avif files to the user (best compression / smallest size) or else ship .webp files (good compression / smaller size) and only if none of those two is formats is supported it should ship .png files (worst compression / bigger size)
+our original image is a PNG image, so it's quite heavy, because modern browser support formats like [AVIF](https://developer.mozilla.org/docs/Web/Media/Formats/Image_types#avif_image) or [WebP](https://developer.mozilla.org/docs/Web/Media/Formats/Image_types#webp_image) we want next.js to convert our original file into these formats and depending on what format the browser supports we want next.js to either ship .avif files to the user (best compression / smallest size) or else ship .webp files (good compression / smaller size) and only if none of those two is formats is supported it should ship .png files (worst compression / bigger size)
 
 to add support for webp and avif we need to add the following code to our next.config.js:
 
@@ -658,9 +661,13 @@ no need to change any code of the `<Image>` component we added previously, next.
 
 Note: next/image uses sharp <https://www.npmjs.com/package/sharp> to convert images to other formats
 
+Note: when using next/image for the first time, check out the browser dev tools console, next.js might give you tips about how to improve the usage you make of it, for example if your image is on top of the page but you have not set the attribute ["priority"](https://beta.nextjs.org/docs/api-reference/components/image#priority) then next.js will tell you to do so:
+
+> Image with src "/assets/images/neonroad/fallback-min.png" was detected as the Largest Contentful Paint (LCP). Please add the "priority" property if this image is above the fold.
+
 read more:
 
-* next.js next/image documentation: <https://nextjs.org/docs/api-reference/next/image>
+* next.js next/image documentation: <https://beta.nextjs.org/docs/api-reference/components/image>
 * use avif in next.js: <https://avif.io/blog/tutorials/nextjs/>
 
 ### state management

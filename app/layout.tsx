@@ -11,7 +11,7 @@ export default function RootLayout({
         <html>
             <head />
             <body>
-                <header>
+                <header style={{ width: '100vw', height: 'calc(100vh/2)', maxWidth:'100%', position: 'relative' }}>
                     <h1 className={styles.eighties}>Chris.lu</h1>
                     <NeonRoadCanvas />
                 </header>

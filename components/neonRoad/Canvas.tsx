@@ -15,6 +15,9 @@ const FallbackImage: React.FC = () => {
             alt="Chris.lu header image, displaying an 80s style landscape and sunset"
             fill
             style={{objectFit:'cover'}}
+            sizes="100vw"
+            priority
+            quality={80}
         />
     )
 
@@ -98,7 +101,7 @@ const NeonRoadCanvas: React.FC = () => {
     return (
         // TODO: add the accessibility package: https://docs.pmnd.rs/a11y/introduction
         <>
-            <div id="canvas-container" style={{ width: '100vw', height: 'calc(100vh/2)', maxWidth:'100%', position: 'relative' }}>
+            
                 {/*<Canvas
                     camera={camera}
                     // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#new-pixel-ratio-default
@@ -115,7 +118,6 @@ const NeonRoadCanvas: React.FC = () => {
                     <OrbitControls camera={camera} />
                     <ambientLight color={'#ffffff'} intensity={40} />
     </Canvas>*/}<FallbackImage />
-            </div>
         </>
     )
 }
