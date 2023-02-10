@@ -50,6 +50,12 @@ install react three drei (<https://github.com/pmndrs/drei>):
 
 `npm i @react-three/drei --save-exact`
 
+react three fiber a11y (accessibility package for react three fiber: <https://docs.pmnd.rs/a11y/introduction>):
+
+`npm i @react-three/a11y --save-exact`
+
+Note: removed it, the animation has no clickable content, this package seemed to not add any value for such an animation
+
 ## colors I used
 
 for the terrain (used in the grid image):
@@ -71,6 +77,20 @@ To optimize  the SVG I used this tool: <https://svgoptimizer.com/>
 I used this online tool to optimize  the PNGs: <https://compresspng.com/> and <https://tinypng.com/>
 
 Note: I used tinypng for the fallback image, it seemed to produce a smaller file than compresspng and the quality seemed a bit better, for the other files I used compresspng
+
+## firefox SVG size bug
+
+instead of displaying the svg sun firefox was showing a black square, I checked the firefox network tab and the svg had a size but when hovering over the line of the svg it showed no image and a size of 0x0, in chrome the svg got displayed with no problem
+
+firefox bug report: <https://bugzilla.mozilla.org/show_bug.cgi?id=700533> and seems to be related to: <https://github.com/whatwg/html/issues/3510>
+
+my initial SVG image had a viewbox defined but no width or height attribute
+
+I fixed the problem by adding a width and height attribute:
+
+```xml
+<svg width="1220" height="1220" viewBox="0 0 1220 1220">
+```
 
 ## gltf experiments
 
@@ -178,12 +198,10 @@ here is a good article from web.dev that explains what LCP is, that will show yo
 ## TODOs
 
 * loading animation?
-* use next analyzer first to check build size, then probably try to tree shake three.js to optimize build size: <https://www.npmjs.com/package/@next/bundle-analyzer>
+* if mouse over animation and mouse to right or left, make the camera move (might be problematic because of text div over animation)
 * in this article <https://www.gatsbyjs.com/blog/performance-optimization-for-three-js-web-animations/> I read about a feature called saveData, should try to use it `navigator?.connection?.saveData`
-* from the same article, they recommend using react lazy and suspense, I tried this with next.js 13 but the dependencies are still in the intial build so it doesn't help, is there a way to tell next.js 13 to not bundle an import?
-* have a static image while loading or for when webgl is not available?
+* check for user preference for animation(s) should be low (via three fiber accessibility package > user preferences > <https://docs.pmnd.rs/a11y/access-user-preferences>), then set the framerate to very low value
+* firefox accessibility says canvas is clickable and has no alt text, but setting aria attributes on canvas element has them moved to container div by three fiber
 * check if changing rendering performance setting is needed when mobile is detected
 * check if the shadows settings (camera) can be tweaked for better performance
-* limit camera movement to slighly left/right, no up/down, no zoom
 * add the accessibility package & set it up
-* check for user preference for animation(s) should be low, then set the framerate to very low value
