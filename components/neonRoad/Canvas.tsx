@@ -3,16 +3,18 @@
 import { useRef } from 'react'
 import { PerspectiveCamera, PCFSoftShadowMap } from 'three'
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, useDetectGPU } from '@react-three/drei'
+import { /*OrbitControls, */useDetectGPU } from '@react-three/drei'
 import Meshes from './Meshes'
 import Image from 'next/image'
+
+const altText = 'Chris.lu header image, displaying an 80s style landscape and sunset'
 
 const FallbackImage: React.FC = () => {
 
     return (
         <Image
             src="/assets/images/neonroad/fallback-min.png"
-            alt="Chris.lu header image, displaying an 80s style landscape and sunset"
+            alt={altText}
             fill
             style={{ objectFit: 'cover' }}
             sizes="100vw"
@@ -104,16 +106,16 @@ const NeonRoadCanvas: React.FC = () => {
                 camera={camera}
                 // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#new-pixel-ratio-default
                 //dpr={Math.min(window.devicePixelRatio, 2)} // pixel ratio, should be 1 or 2
-                aria-label="Chris.lu header image, displaying an 80s style landscape and sunset"
-                role="img"
                 // https://docs.pmnd.rs/react-three-fiber/api/canvas#render-defaults
                 //shadows={{ type: BasicShadowMap }} 
                 shadows={{ type: PCFSoftShadowMap }}
                 fallback={<FallbackImage />}
+                aria-label={'canvas:'+altText}
+                role="img"
             >
                 <Meshes />
                 <Lights />
-                <OrbitControls camera={camera} />
+                {/*<OrbitControls camera={camera} />*/ /*enable for development*/}
                 <ambientLight color={'#ffffff'} intensity={40} />
             </Canvas>
         </>
