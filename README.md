@@ -733,23 +733,49 @@ Note: if using vercel and also next.js, you don't need to use their cli command 
 planetscale website: <https://planetscale.com/>
 planetscale is free for "hobby" projects, like your personal blog: <https://planetscale.com/pricing>
 
+go to your planetscale account and create your first database
 
+enter a name and chose a default region for your first database (idially a location close to your own location)
+
+now on top you will see a button that reads "initializing" with a loading spinner, wait for it to finish
+
+Note: we don't define a schema just yet, we will come to that in a bit
 
 ## connecting planetscale to vercel
 
 after you have created a plantscale account and set up the database for your project head back to your [vercel dashboard](https://vercel.com/dashboard)
 
-in the top navigation bar click on the **integrations** tab
+Note: [vercel integrations](https://vercel.com/docs/integrations) let you connect third party tools to your vercel account
 
-[vercel integrations](https://vercel.com/docs/integrations) let you connect third party tools to your vercel account
+in the top navigation bar click on the **settings** tab and then in the left navighation click on **integrations**, ot in this case as we know what we want to add we can also directly visit the plantscale integration page: <https://vercel.com/integrations/planetscale>
 
+now in the top right of the page click on the button "Add integration"
 
+select the vercel account you want to connect planetscale to and then click on "continue"
 
-the planetscale javascript database driver repository on github: <https://github.com/planetscale/database-js>
+on the next step, select "Specific Projects" and chose the project you want to connect planetscale to
+
+next click on "Add Integration"
+
+on the next step, on the "Vercel" side is a field named "Framework" with 3 options, "General" "Nodejs" and "Prisma", which have an impact on what environment variables will be created for you in the vercel environment variables interface
 
 Note: when using planetscale in combination with vercel, you add planetscale as an "integration" in your vercel account and then you don't need to set up the env variables by yourself, vercel will automatically get them from planetscale for you
+
+we are not going to use Prisma as ORM for now, so as framework we chose "Nodejs", we are actually going to use the planetscale javascript database driver to connect to our database which supports ["database URLs"](https://github.com/planetscale/database-js#database-url) which is what vercel is going to set up as environment variable for us when chosing "Nodejs" as framework, you could also use "General", the only difference is that instead of one environment variable containing everything it will setup multiple variables (username, password, host, ...), you can chose that option if you prefer, I for my part prefer to have all in one database URL
+
+Note: personally I think any ORM is overkill for small projects, they add overhead to queries and there is a lot to learn before you know exactly how to make good use of it, this is why I like to start with a basic mysql client and regular mysql queries before going over to using something more complex but if you prefer to go straight to using Prisma, fell free to do so
+
+Note: the plantscale repository on github: <https://github.com/planetscale/database-js>
+
+now click on the button "Connect database", you will see a message successfully connected and then "installation process" will start, don't close the window but instead wait for the installation to finish (the window will close itself when the installation is done)
 
 read more:
 
 * integrate plantscale with vercel (by vercel): <https://vercel.com/integrations/planetscale>
 * integrate plantscale with vercel (by plantscale): <https://planetscale.com/docs/tutorials/deploy-to-vercel>
+
+## using planetscale in our project
+
+## planetscale staging environment
+
+> plantscale lets you branch your production database to create a staging environment for testing out schema changes
