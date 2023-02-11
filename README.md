@@ -680,11 +680,70 @@ recoil: <https://github.com/facebookexperimental/Recoil>
 
 here is a comparison of the 3: <https://npmtrends.com/jotai-vs-recoil-vs-zustand>
 
+### setting up vercel account
+
+vercel website: <https://vercel.com/>
+vercel is free for personal prjects, like your blog: <https://vercel.com/pricing>
+
+first one your dashboard: <https://vercel.com/dashboard>, if haven't connected your git account (github, gitlab, ...) do that first
+
+click on "Add new project", then select your git account
+
+now for the repositories you can chose to enable vercel on all of them or just a selection (I chose to select which ones I want to use with vercel as I have a bunch of accounts which are either forks, own packages or just experiments I created)
+
+then click on "Install"
+
+on the next page, click the "import" button next to the project you want to set up
+
+Note: if like me in this project, you use next.js, vercel will set up your project using default values for projects using next.js with will reduce the time you spend on configuring the next step
+
+now you must configure the project, you will notice that most values have default values but feel free to edit them if you need to
+
+when I look at the "Build and Output Settings" section, I see vercel says they will use "npm install" by default to install the projects dependencies, I'm a bit surprised that they don't use `npm ci` [(npm ci documentation)](https://docs.npmjs.com/cli/commands/npm-ci)
+
+TODO: for now I did not change the install command to `npm ci`, I let the default value, I will do a deployment and see if I can see in the logs which command is really being used
+
+one section we will need to make some changes at some point is the [environment variables section](https://vercel.com/docs/concepts/projects/environment-variables), but for now we have no environment variables, so we skip it for now
+
+finally click on "Deploy"
+
+wait for the deployment to finish
+
+if the deployment was successfull it will show you a preview image of the homepage, click on that image to visit your deployment
+
+## vercel analytics
+
+next you can enable [vercel analytics](https://vercel.com/docs/concepts/analytics/audiences/quickstart) for your project, by visiting your dashboard and then clicking on top on the **analytics** tab
+
+Note: apparently vercel analytics is GDPR compliant (without cookie banner requirement), read more on their [privacy policy explanation page in the documentation](https://vercel.com/docs/concepts/analytics/privacy)
+
+after enbabling vercel anayltics for your project you need to add their ([vercel analytics on github](https://github.com/vercel/analytics)) package to your project
+
+## adding environment variables
+
+## checking out env variables locally
+
+Note: when using vercel, you add env variables to the project via the vercel web interface, you don't create local `.env.*` files manually
+also to check out your env variables (that you have added to the project via the vercel web interface) locally, you use their cli command `vercel env pull`
+
+Note: if using vercel and also next.js, you don't need to use their cli command vercel dev as next dev does already handle serverless on localhost: <https://vercel.com/blog/vercel-dev>
 
 ### setting up planetscale account
 
 planetscale website: <https://planetscale.com/>
 planetscale is free for "hobby" projects, like your personal blog: <https://planetscale.com/pricing>
+
+
+
+## connecting planetscale to vercel
+
+after you have created a plantscale account and set up the database for your project head back to your [vercel dashboard](https://vercel.com/dashboard)
+
+in the top navigation bar click on the **integrations** tab
+
+[vercel integrations](https://vercel.com/docs/integrations) let you connect third party tools to your vercel account
+
+
 
 the planetscale javascript database driver repository on github: <https://github.com/planetscale/database-js>
 
@@ -694,13 +753,3 @@ read more:
 
 * integrate plantscale with vercel (by vercel): <https://vercel.com/integrations/planetscale>
 * integrate plantscale with vercel (by plantscale): <https://planetscale.com/docs/tutorials/deploy-to-vercel>
-
-### setting up vercel account
-
-vercel website: <https://vercel.com/>
-vercel is free for personal prjects, like your blog: <https://vercel.com/pricing>
-
-Note: when using vercel, you add env variables to the project via the vercel web interface, you don't create local `.env.*` files manually
-also to check out your env variables (that you have added to the project via the vercel web interface) locally, you use their cli command `vercel env pull`
-
-Note: if using vercel and also next.js, you don't need to use their cli command vercel dev as next dev does already handle serverless on localhost: <https://vercel.com/blog/vercel-dev>
