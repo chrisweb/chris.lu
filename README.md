@@ -711,23 +711,6 @@ wait for the deployment to finish
 
 if the deployment was successfull it will show you a preview image of the homepage, click on that image to visit your deployment
 
-## vercel analytics
-
-next you can enable [vercel analytics](https://vercel.com/docs/concepts/analytics/audiences/quickstart) for your project, by visiting your dashboard and then clicking on top on the **analytics** tab
-
-Note: apparently vercel analytics is GDPR compliant (without cookie banner requirement), read more on their [privacy policy explanation page in the documentation](https://vercel.com/docs/concepts/analytics/privacy)
-
-after enbabling vercel anayltics for your project you need to add their ([vercel analytics on github](https://github.com/vercel/analytics)) package to your project
-
-## adding environment variables
-
-## checking out env variables locally
-
-Note: when using vercel, you add env variables to the project via the vercel web interface, you don't create local `.env.*` files manually
-also to check out your env variables (that you have added to the project via the vercel web interface) locally, you use their cli command `vercel env pull`
-
-Note: if using vercel and also next.js, you don't need to use their cli command vercel dev as next dev does already handle serverless on localhost: <https://vercel.com/blog/vercel-dev>
-
 ### setting up planetscale account
 
 planetscale website: <https://planetscale.com/>
@@ -761,7 +744,7 @@ on the next step, on the "Vercel" side is a field named "Framework" with 3 optio
 
 Note: when using planetscale in combination with vercel, you add planetscale as an "integration" in your vercel account and then you don't need to set up the env variables by yourself, vercel will automatically get them from planetscale for you
 
-we are not going to use Prisma as ORM for now, so as framework we chose "Nodejs", we are actually going to use the planetscale javascript database driver to connect to our database which supports ["database URLs"](https://github.com/planetscale/database-js#database-url) which is what vercel is going to set up as environment variable for us when chosing "Nodejs" as framework, you could also use "General", the only difference is that instead of one environment variable containing everything it will setup multiple variables (username, password, host, ...), you can chose that option if you prefer, I for my part prefer to have all in one database URL
+we are not going to use Prisma as ORM for now, so as framework we chose "Nodejs", we are actually going to use the planetscale javascript database driver to connect to our database which supports ["database URLs"](https://github.com/planetscale/database-js#database-url) which is what vercel is going to set up as environment variable for us when chosing "Nodejs" as framework, you could also use "General", the only difference is that instead of one environment variable containing everything it will setup multiple variables (username, password, host), you can chose that option if you prefer, I for my part prefer to have all in one database URL
 
 Note: personally I think any ORM is overkill for small projects, they add overhead to queries and there is a lot to learn before you know exactly how to make good use of it, this is why I like to start with a basic mysql client and regular mysql queries before going over to using something more complex but if you prefer to go straight to using Prisma, fell free to do so
 
@@ -774,8 +757,33 @@ read more:
 * integrate plantscale with vercel (by vercel): <https://vercel.com/integrations/planetscale>
 * integrate plantscale with vercel (by plantscale): <https://planetscale.com/docs/tutorials/deploy-to-vercel>
 
-## using planetscale in our project
+## creating a database using the planetscale interface
+
+Note: you can import an existing database, if you wish to do so follow the [planetscale database imports guide](https://planetscale.com/docs/imports/database-imports), but as we are working on the new project we will use the planetscale web interface to create a new database and tables
+
+go to your planetscale account and then click on "Branches" in the top navigation bar
+
+we earlier created a "default" branch when setting up our project, which is called **main**, click on the branch name to access its details page
+
+
 
 ## planetscale staging environment
 
 > plantscale lets you branch your production database to create a staging environment for testing out schema changes
+
+## vercel analytics
+
+next you can enable [vercel analytics](https://vercel.com/docs/concepts/analytics/audiences/quickstart) for your project, by visiting your dashboard and then clicking on top on the **analytics** tab
+
+Note: apparently vercel analytics is GDPR compliant (without cookie banner requirement), read more on their [privacy policy explanation page in the documentation](https://vercel.com/docs/concepts/analytics/privacy)
+
+after enbabling vercel anayltics for your project you need to add their ([vercel analytics on github](https://github.com/vercel/analytics)) package to your project
+
+## adding environment variables
+
+## checking out vercel env variables locally
+
+Note: when using vercel, you add env variables to the project via the vercel web interface, you don't create local `.env.*` files manually
+also to check out your env variables (that you have added to the project via the vercel web interface) locally, you use their cli command `vercel env pull`
+
+Note: if using vercel and also next.js, you don't need to use their cli command vercel dev as next dev does already handle serverless on localhost: <https://vercel.com/blog/vercel-dev>
