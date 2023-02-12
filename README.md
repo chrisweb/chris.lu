@@ -761,9 +761,12 @@ read more:
 
 Note: you can import an existing database, if you wish to do so follow the [planetscale database imports guide](https://planetscale.com/docs/imports/database-imports), but as we are working on the new project we will use the planetscale web interface to create a new database and tables
 
-go to your planetscale account and then click on "Branches" in the top navigation bar
+go to your planetscale account and then click on "Console" in the top navigation bar
 
-we earlier created a "default" branch when setting up our project, which is called **main**, click on the branch name to access its details page
+Note: we earlier created a database, for that database planetscale has created a "default" branch called **main**, this branch should be selected by default in the console
+
+next click on **connect**
+
 
 
 
