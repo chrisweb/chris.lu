@@ -790,3 +790,18 @@ Note: when using vercel, you add env variables to the project via the vercel web
 also to check out your env variables (that you have added to the project via the vercel web interface) locally, you use their cli command `vercel env pull`
 
 Note: if using vercel and also next.js, you don't need to use their cli command vercel dev as next dev does already handle serverless on localhost: <https://vercel.com/blog/vercel-dev>
+
+
+
+
+
+
+
+
+
+## TODOs
+
+* build authentification: <https://authjs.dev/>, can have a look at how 
+* add all sorts of meta data to head.tsx https://github.com/whoisryosuke/r3f-next-starter/blob/main/src/components/dom/Header.tsx
+* improve accessibility: https://vercel.com/blog/improving-the-accessibility-of-our-nextjs-site
+* 
