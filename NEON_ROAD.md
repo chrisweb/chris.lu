@@ -23,7 +23,7 @@ react three fiber orbit controls documentation: <https://sbcode.net/react-three-
 react three fiber examples repository (each repository branch is a different example): <https://github.com/Sean-Bradley/React-Three-Fiber-Boilerplate>
 another three fiber examples repository (with demo page linked in readme): <https://github.com/onion2k/r3f-by-example>
 
-a lot of good examples of what can be done using "react three drei": <https://github.com/pmndrs/drei#index>
+a lot of good examples of what can be done using "react three drei": <https://github.com/pmndrs/drei#index> and here is their Storybook examples page: <https://drei.pmnd.rs/>
 here is a good list of performance related tools that "react three drei" offers: <https://github.com/pmndrs/drei#performance>
 
 nice codesandbox "space shooter" game example that uses three fiber to import 3d models as well as sprites: <https://codesandbox.io/s/b7e01?file=/src/App.js:1392-1405>
@@ -105,6 +105,22 @@ I fixed the problem by adding a width and height attribute:
 important! to convert a gltf model into a react component for easy usage (as mentioned in <https://docs.pmnd.rs/react-three-fiber/tutorials/loading-models#loading-gltf-models-as-jsx-components>), use this online tool: <https://gltf.pmnd.rs/>, or it can be used on the command line, the github repository is here: <https://github.com/pmndrs/gltfjsx>
 
 another useful resource is this GLTF mesh optimizer called "gltf pack": <https://github.com/zeux/meshoptimizer/releases>
+
+## font for text
+
+for the text I used react three drei's Text element: <https://github.com/pmndrs/drei#text>
+
+for the font, using the google URL that was fetching a woff2 file didn't work
+
+so instead I downloaded the font from google fonts: <https://fonts.google.com/specimen/Permanent+Marker>
+
+the downloaded zip contains a ttf file, which worked with drei's Text
+
+## transform of the text
+
+to transform the text I wanted to achieve something similar then what I would achieve in HTML using the [CSS skew function](https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/skew)
+
+to do so I used threeJS makeshear: <https://threejs.org/docs/#api/en/math/Matrix4.makeShear>
 
 ## analyze the bundle size
 
@@ -197,10 +213,14 @@ here is a good article from web.dev that explains what LCP is, that will show yo
 
 ## TODOs
 
+* put chris.lu text into animation, using a technique used for HUDs <https://github.com/pmndrs/drei#portals>? make it clickable to return home via react router and accessible using <https://docs.pmnd.rs/a11y>? use the Text3D from '@react-three/drei package, like in this example <https://onion2k.github.io/r3f-by-example/examples/other/text/>? to position the text use react three drei center <https://github.com/pmndrs/drei#center> like in this example: <https://codesandbox.io/s/j3ycvl?file=/src/App.js:182-199>
+* use react three drei to add stars to night sky? <https://github.com/pmndrs/drei#stars>
+* add post processing effects? <https://github.com/pmndrs/postprocessing>, if so then using performance monitor would be good <https://vercel.com/blog/building-an-interactive-webgl-experience-in-next-js#3.-optimize-performance>
 * loading animation?
-* if mouse over animation and mouse to right or left, make the camera move (might be problematic because of text div over animation)
+* if mouse over animation and mouse to right or left, make the camera move using OrbitControls? or maybe like in this example with onMouseMove: <https://codesandbox.io/embed/troika-3d-text-via-react-three-fiber-ntfx2?fontsize=14>, but restrict the zoom as well as movement to only go slight to left / right / top / bottom? make the map slightly turn to the right and left when moving to make it more 3d?
 * in this article <https://www.gatsbyjs.com/blog/performance-optimization-for-three-js-web-animations/> I read about a feature called saveData, should try to use it `navigator?.connection?.saveData`
 * check for user preference for animation(s) should be low (via three fiber accessibility package > user preferences > <https://docs.pmnd.rs/a11y/access-user-preferences>), then set the framerate to very low value
+* based on the performance monitor <https://github.com/pmndrs/drei#performancemonitor> value, change the gl antialias value, decrease the animation speed and change the canvas dpr value? I think gl can be accessed in useframe: `useFrame(({ gl }) => { })`
 * firefox accessibility says canvas is clickable and has no alt text, but setting aria attributes on canvas element has them moved to container div by three fiber
 * check if changing rendering performance setting is needed when mobile is detected
 * check if the shadows settings (camera) can be tweaked for better performance
