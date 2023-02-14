@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { Mesh, Group} from 'three'
+import { Mesh, Group } from 'three'
 import { useFrame } from '@react-three/fiber'
 import { useTexture, useAspect } from '@react-three/drei'
 import PalmModel from './Palm'
@@ -10,8 +10,8 @@ const NeonRoadMesh: React.FC = () => {
 
     const displacementScale = 0.5
 
-    const meshARef = useRef<Mesh>(null)
-    const meshBRef = useRef<Mesh>(null)
+    const terrainARef = useRef<Mesh>(null)
+    const terrainBRef = useRef<Mesh>(null)
 
     const FLOOR_TEXTURE_PATH = './assets/images/neonroad/grid_4096x8192-min.png'
     const DISPLACEMENT_MAP_PATH = './assets/images/neonroad/displacement_32x64-min.png'
@@ -55,11 +55,11 @@ const NeonRoadMesh: React.FC = () => {
 
         const newZPosition = (state.clock.elapsedTime * 0.07) % 2
 
-        if (meshARef.current) {
-            meshARef.current.position.z = newZPosition
+        if (terrainARef.current) {
+            terrainARef.current.position.z = newZPosition
         }
-        if (meshBRef.current) {
-            meshBRef.current.position.z = newZPosition - 2
+        if (terrainBRef.current) {
+            terrainBRef.current.position.z = newZPosition - 2
         }
 
         // from position "-2.8" to "0.8" 
@@ -102,6 +102,27 @@ const NeonRoadMesh: React.FC = () => {
         return <>{spritesElements}</>
     }
 
+    function Terrain({ positionZ, terrainRef }) {
+
+        return (
+            <mesh
+                rotation={[-Math.PI * 0.5, 0, 0]}
+                position={[0, 0, positionZ]}
+                ref={terrainRef}
+                receiveShadow={true} // default is false
+            >
+                <planeGeometry args={[1, 2, 32, 32]} />
+                <meshStandardMaterial
+                    map={floorTexture}
+                    displacementMap={displacementMap}
+                    displacementScale={displacementScale}
+                    roughness={0.9}
+                    metalness={0.9}
+                />
+            </mesh>
+        )
+    }
+
     function Sun() {
         return (
             <mesh
@@ -135,37 +156,8 @@ const NeonRoadMesh: React.FC = () => {
 
     return (
         <>
-            <color attach="background" args={['#2f0f30']} />
-            <mesh
-                rotation={[-Math.PI * 0.5, 0, 0]}
-                position={[0, 0, 0]}
-                ref={meshARef}
-                receiveShadow={true} // default is false
-            >
-                <planeGeometry args={[1, 2, 32, 32]} />
-                <meshStandardMaterial
-                    map={floorTexture}
-                    displacementMap={displacementMap}
-                    displacementScale={displacementScale}
-                    roughness={0.9}
-                    metalness={0.9}
-                />
-            </mesh>
-            <mesh
-                rotation={[-Math.PI * 0.5, 0, 0]}
-                position={[0, 0, -2]}
-                ref={meshBRef}
-                receiveShadow={true} // default is false
-            >
-                <planeGeometry args={[1, 2, 32, 32]} />
-                <meshStandardMaterial
-                    map={floorTexture}
-                    displacementMap={displacementMap}
-                    displacementScale={displacementScale}
-                    roughness={0.9}
-                    metalness={0.9}
-                />
-            </mesh>
+            <Terrain positionZ={0} terrainRef={terrainARef} />
+            <Terrain positionZ={-2} terrainRef={terrainBRef} />
             <TreeModels amount={19} side={'left'} />
             <TreeModels amount={19} side={'right'} />
             <Sun />

@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react'
 import dynamic from 'next/dynamic'
 const NeonRoadCanvas = dynamic(() => import('./Canvas'), { ssr: false })
+import styles from '../../app/styles.module.css'
 
 const Container: React.FC = () => {
 
