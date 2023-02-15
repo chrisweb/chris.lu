@@ -1,12 +1,16 @@
 'use client'
 
+import { useEffect, useCallback, useRef } from 'react'
 import { PerspectiveCamera, PCFSoftShadowMap, Matrix4 } from 'three'
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, useDetectGPU, Text, GradientTexture, Hud, Sparkles } from '@react-three/drei'
+import { /*OrbitControls, useDetectGPU,*/ Text, GradientTexture, Hud, Sparkles } from '@react-three/drei'
 import Meshes from './Meshes'
 import Image from 'next/image'
 
-
+interface IWindowSizes {
+    width: number
+    height: number
+}
 
 const altText = 'Chris.lu header image, displaying an 80s style landscape and sunset'
 
@@ -27,33 +31,39 @@ const FallbackImage: React.FC = () => {
 
 const NeonRoadCanvas: React.FC = () => {
 
-    const gpuInfo = useDetectGPU()
+    // uncomment if you want to see what useDetectGPU returns
+    //const gpuInfo = useDetectGPU()
+    //console.log('useDetectGPU: ', gpuInfo)
 
-    let sizes = {
+    const windowSizesRef = useRef<IWindowSizes>({
         width: 0,
         height: 0,
-    }
+    })
 
-    let camera: PerspectiveCamera
+    const cameraRef = useRef<PerspectiveCamera>(null)
 
-    const sceneSetup = () => {
+    const sceneSetup = useCallback(() => {
 
         if (typeof window !== 'undefined') {
-            sizes = {
+            windowSizesRef.current = {
                 width: window.innerWidth,
                 height: window.innerHeight / 2,
             }
         }
 
         // basic camera
-        camera = new PerspectiveCamera(75, sizes.width / sizes.height, 0.01, 20)
+        cameraRef.current = new PerspectiveCamera(75, windowSizesRef.current.width / windowSizesRef.current.height, 0.01, 20)
 
-        camera.position.x = 0
-        camera.position.y = 0.06
-        camera.position.z = 1
+        cameraRef.current.position.x = 0
+        cameraRef.current.position.y = 0.06
+        cameraRef.current.position.z = 1
 
-    }
+    }, [])
 
+    useEffect(() => {
+        sceneSetup()
+    }, [sceneSetup])
+    
     function Sunshine() {
 
         // uncomment the next lines to use the spotlight helper
@@ -92,11 +102,6 @@ const NeonRoadCanvas: React.FC = () => {
         gl: {}
     }*/
 
-    if (typeof window !== 'undefined') {
-        console.log('useDetectGPU: ', gpuInfo)
-        sceneSetup()
-    }
-
     // to enable stats import the module
     //import { Stats } from '@react-three/drei'
     // then add <Stats /> into the <Canvas></Canvas>
@@ -110,7 +115,7 @@ const NeonRoadCanvas: React.FC = () => {
         // TODO: add the accessibility package: https://docs.pmnd.rs/a11y/introduction
         <>
             <Canvas
-                camera={camera}
+                camera={cameraRef.current}
                 // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#new-pixel-ratio-default
                 //dpr={Math.min(window.devicePixelRatio, 2)} // pixel ratio, should be 1 or 2
                 // https://docs.pmnd.rs/react-three-fiber/api/canvas#render-defaults
@@ -124,13 +129,13 @@ const NeonRoadCanvas: React.FC = () => {
                 <color attach="background" args={['#2f0f30']} />
                 <Sparkles count={400} size={2} position={[0, 1, -2.1]} scale={[30, 5, 1]} speed={0} />
                 {/*<axesHelper />*/}{/*enable for development*/}
-                <OrbitControls camera={camera} />{/*enable for development*/}
+                {/*<OrbitControls camera={cameraRef.current} />*/}{/*enable for development*/}
                 <ambientLight color={'#ffffff'} intensity={40} />
                 <Meshes />
                 <Sunshine />
                 <Hud>
                     <Text
-                        fontSize={window.innerWidth / window.innerHeight > 1 ? 0.5 : 0.3}
+                        fontSize={windowSizesRef.current.width / windowSizesRef.current.height > 1 ? 0.5 : 0.3}
                         maxWidth={200}
                         lineHeight={1}
                         letterSpacing={0.02}
