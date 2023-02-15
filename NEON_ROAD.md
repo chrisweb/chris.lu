@@ -235,10 +235,25 @@ declare module '@react-three/fiber' {
 </Effects>
 ```
 
+## performance tuning
+
+performance monitor <https://github.com/pmndrs/drei#performancemonitor> can be used to check the performance and apply changes based on the returned value, like for example disable antialiasing
+
+we could also check the user preference for animation speed <https://docs.pmnd.rs/a11y/access-user-preferences> and if low animations are requested we could reduce the speed of movement inside of useFrame
+
+if the user browser tells us that saveData is enabled `navigator?.connection?.saveData`, we could not run the animation and instead just display the fallback image
+
+### detect the GPU / is mobile for performance tuning
+
+```ts
+import { useDetectGPU } from '@react-three/drei'
+const gpuInfo = useDetectGPU()
+console.log('useDetectGPU: ', gpuInfo)
+```
+
 ## TODOs
 
-* put chris.lu text into animation, using a technique used for HUDs <https://github.com/pmndrs/drei#portals>? make it clickable to return home via react router and accessible using <https://docs.pmnd.rs/a11y>? use the Text3D from '@react-three/drei package, like in this example <https://onion2k.github.io/r3f-by-example/examples/other/text/>? to position the text use react three drei center <https://github.com/pmndrs/drei#center> like in this example: <https://codesandbox.io/s/j3ycvl?file=/src/App.js:182-199>
-* use react three drei to add stars to night sky? <https://github.com/pmndrs/drei#stars>
+* make chris.lu text clickable to return home via react router and accessible using <https://docs.pmnd.rs/a11y>?
 * add post processing effects? <https://github.com/pmndrs/postprocessing>, if so then using performance monitor would be good <https://vercel.com/blog/building-an-interactive-webgl-experience-in-next-js#3.-optimize-performance>
 * loading animation?
 * if mouse over animation and mouse to right or left, make the camera move using OrbitControls? or maybe like in this example with onMouseMove: <https://codesandbox.io/embed/troika-3d-text-via-react-three-fiber-ntfx2?fontsize=14>, but restrict the zoom as well as movement to only go slight to left / right / top / bottom? make the map slightly turn to the right and left when moving to make it more 3d?
