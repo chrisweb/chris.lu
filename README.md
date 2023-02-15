@@ -789,7 +789,35 @@ open your repository on github and now on the right side you should see a sectio
 
 click on **preview** to go to the deployments history page, there you can click on **View deployment** and then you can test the deployment
 
-if everything is ok, you need to merge the changes from your **preview** branch into the **main** branch, or even better do a PR (pull request) 
+## github: pull request from preview into main branch (automatically link / close tickets)
+
+if everything is ok, you need to merge the changes from your **preview** branch into the **main** branch, or even better do a [PR (pull request)](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)
+
+go to your repository on github, if you are on the **main** branch switch to the **preview** branch
+
+if you did a commit not long ago github will automatically show a message on top "preview had recent pushes", if that the case click on **Compare and pull request**, if the latest commits are a bit older you will have a button **Pull request** on the top right side of your branch files list, click it to go to the PR page
+
+github creates a PR brings you to the PR page
+
+first add a good title to describe what is in the PR
+
+then you can add an optional description
+
+Note: to [automatically link your PRs to one or more tickets](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue), edit the PR description, type hashtag and then select your ticket from the list or manually type #TICKET_NUMBER
+
+Note: if you want the linked ticket to get automatically **closed** by the PR, put a word like **closes** or **fixes** (for a full list of keywords check out the [github "ticket linking" documentation page](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword)) in front of the #TICKET_NUMBER in your PR description, so for example `fixes #1`, then after doing the PR the ticket will get automatically set to **closed** by github
+
+![github: this PR closes the issue(s)](./documentation/assets/images/PR_closes_issue.png)
+
+if you are part of a team and want to have other people check out your PR, you also assign one or more reviewers on the right side of the PR page
+
+when your PR is ready to get merged into the **main** branch, click the button **Merge pull request** on the bottom of the page
+
+Note: after the PR is done, if you listed your ticket(s) in the description of the PR, then on the page of your ticket you will see that it automatically got linked to your PR and if you used one of the keywords that automatically closes the ticket then you will notice that it also got closed
+
+![github: linked PR message](./documentation/assets/images/linked_PR_and_ticket_closed.png)
+
+now that the PR into the **main** branch is done, vercel will do a new production deployment for you
 
 ## planetscale staging environment
 
