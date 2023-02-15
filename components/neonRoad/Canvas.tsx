@@ -42,7 +42,7 @@ const NeonRoadCanvas: React.FC = () => {
 
     const cameraRef = useRef<PerspectiveCamera>(null)
 
-    const sceneSetup = useCallback(() => {
+    const sceneSetup = () => {
 
         if (typeof window !== 'undefined') {
             windowSizesRef.current = {
@@ -58,12 +58,10 @@ const NeonRoadCanvas: React.FC = () => {
         cameraRef.current.position.y = 0.06
         cameraRef.current.position.z = 1
 
-    }, [])
+    }
 
-    useEffect(() => {
-        sceneSetup()
-    }, [sceneSetup])
-    
+    sceneSetup()
+
     function Sunshine() {
 
         // uncomment the next lines to use the spotlight helper
