@@ -770,6 +770,27 @@ next click on **connect**
 
 
 
+
+## vercel preview (staging environment)
+
+if you have a repository with a **main** and do a commit vercel will do a new deployment of your production environment
+
+some people like to live dangerously:
+
+![I don't always test my code, but when I do, I do it in production](./documentation/assets/images/test_in_production.png)
+
+it is useful to have **preview** deployments, so that you can check out changes you made before pushing those into production
+
+to have vercel create **preview** deployments we create a new branch in our repository and call it **preview**, then we switch to that branch in VSCode
+
+now every change we do, we commit it into our **preview** branch, this will trigger a **preview** deployment by vercel
+
+open your repository on github and now on the right side you should see a section environments, you now have two environments listed here, **production** and **preview**
+
+click on **preview** to go to the deployments history page, there you can click on **View deployment** and then you can test the deployment
+
+if everything is ok, you need to merge the changes from your **preview** branch into the **main** branch, or even better do a PR (pull request) 
+
 ## planetscale staging environment
 
 > plantscale lets you branch your production database to create a staging environment for testing out schema changes
