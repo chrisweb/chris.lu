@@ -67,6 +67,8 @@ npm init
 
 anser the question that get displayed in your command line, when this is done npm will create a `package.json` in the root of your project for you
 
+#### next.js npm scripts
+
 add the next.js scripts to the `package.json` file, which is in the root of the project:
 
 ```json
@@ -87,6 +89,8 @@ those 4 scripts are the npm commands we will later in this tutorial use to execu
 `npm run start`: to start the server on a production server using the build we made with the previous command
 `npm run lint`: to run a linting script that will scan our code and help us find problems in our code
 
+#### enable the app directory in the next.js configuration file
+
 then we create the next.js configuration `next.config.js` file, in the root of the project:
 
 ```js
@@ -103,6 +107,36 @@ module.exports = nextConfig
 not much in there right now, for the moment we only add one line in the experimental block to enable the app dir which is still experimental (in beta at the time 01.01.2003)
 
 Note: next,js 13 got released at the end of 2022 and even though it included a lot of improvements for existing features it also now includes the new `app` directory which is what we will use in this toturial, as the next.js team reminds as at several places this feature will evolve and get improved a lot over the coming months, the next.js team added it to next.js 13 so that developers can start playing with it and to hopefully gather a lot of good feedback from the community but they also made it clear that you probably shouldn't use this in production just yet and wait a little bit longer for it to mature
+
+#### convert the next.js configuration to an ES module
+
+if you prefer to keep using the CommonJS (CJS) style configuration this is fine as long as you don't use any packages that are [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c), I personally prefer [ECMAScript modules (ES modules / ESM)](https://nodejs.org/api/esm.html) so I decided to convert my `next.config.js` into a `next.config.mjs`
+
+Note: later in this project we will use an [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c) package and at that point is will be mandatory to convert the next.js configuration to an ESM
+
+to do so change the next.config file extension from `.js` to `.mjs` and then change the file content to this:
+
+```js
+const nextConfig = () => {
+
+    /** @type {import('next').NextConfig} */
+    const nextConfig = {
+        experimental: {
+            appDir: true,
+        },
+    }
+
+    return nextConfig
+
+}
+
+export default nextConfig
+```
+
+read more:
+
+* next.js configuration documentation: <https://nextjs.org/docs/api-reference/next.config.js/introduction>
+* ESM only packages: <https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c>
 
 ### install first dependencies
 
@@ -787,6 +821,8 @@ now every change we do, we commit it into our **preview** branch, this will trig
 
 open your repository on github and now on the right side you should see a section environments, you now have two environments listed here, **production** and **preview**
 
+![github / vercel deployment environments](./documentation/assets/images/github_vercel_deployment_environments.png)
+
 click on **preview** to go to the deployments history page, there you can click on **View deployment** and then you can test the deployment
 
 ## github: pull request from preview into main branch (automatically link / close tickets)
@@ -818,6 +854,53 @@ Note: after the PR is done, if you listed your ticket(s) in the description of t
 ![github: linked PR message](./documentation/assets/images/linked_PR_and_ticket_closed.png)
 
 now that the PR into the **main** branch is done, vercel will do a new production deployment for you
+
+## articles (pages) using MDX ()
+
+the articles of our blog will be MDX files
+
+Note: MDX extends the [markdown](https://en.wikipedia.org/wiki/Markdown) markup language
+
+one of the great features of MDX is that it lets you integrate react components into your markdown
+
+to create content using MDX we will use the [next.js @next/mdx package](https://beta.nextjs.org/docs/guides/mdx)
+
+@next/mdx uses [remark](https://www.npmjs.com/package/remark) and [rehype](https://www.npmjs.com/package/rehype) under the hood, but if you prefer to use them without @next/mdx, check out the example called **Deep Dive: How do you transform markdown into HTML?** in the next.js ["Markdown and MDX" documentation](https://beta.nextjs.org/docs/guides/mdx)
+
+first we will add a bunch of new depencies to our next.js project, execute the following command in your VSCode terminal:
+
+```shell
+npm install @next/mdx @mdx-js/loader @mdx-js/react --save-exact
+```
+
+then we need to update the content our `next.config.mjs` file, to this:
+
+```js
+const nextConfig = () => {
+
+    /** @type {import('next').NextConfig} */
+    const nextConfig = {
+        experimental: {
+            appDir: true,
+        },
+    }
+
+    return nextConfig
+
+}
+
+export default nextConfig
+```
+
+TODO: in next config, do I need to configure pageExtensions for MDX to work in app directory, or is this just for pages directory???
+TODO: the `mdxRs: true` in next config that they tell you to add in the beta docs <https://beta.nextjs.org/docs/guides/mdx>, because in the regular docs they say to not use it in production, so is it mandatory for the app directory or not???
+TODO: in the regular docs they say you need to install @mdx-js/loader @mdx-js/react, but they don't mention those in the beta docs, so do I need to add them manually or not???
+
+read more:
+
+* MDX documentation: <https://mdxjs.com/docs/>
+* next.js MDX package documentation: <https://nextjs.org/docs/advanced-features/using-mdx>
+
 
 ## planetscale staging environment
 
@@ -851,6 +934,6 @@ Note: if using vercel and also next.js, you don't need to use their cli command 
 ## TODOs
 
 * build authentification: <https://authjs.dev/>, can have a look at how 
-* add all sorts of meta data to head.tsx https://github.com/whoisryosuke/r3f-next-starter/blob/main/src/components/dom/Header.tsx
-* improve accessibility: https://vercel.com/blog/improving-the-accessibility-of-our-nextjs-site
+* add all sorts of meta data to head.tsx <https://github.com/whoisryosuke/r3f-next-starter/blob/main/src/components/dom/Header.tsx>, also check out <https://beta.nextjs.org/docs/guides/seo>, create a chapter "head.js: SEO and metadata"
+* improve accessibility: <https://vercel.com/blog/improving-the-accessibility-of-our-nextjs-site>
 * 
