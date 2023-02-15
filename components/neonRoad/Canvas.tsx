@@ -1,11 +1,12 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
-import { PerspectiveCamera, PCFSoftShadowMap, Matrix4, Mesh } from 'three'
+import { PerspectiveCamera, PCFSoftShadowMap, Matrix4 } from 'three'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, useDetectGPU, Text, GradientTexture, Hud, Sparkles } from '@react-three/drei'
 import Meshes from './Meshes'
 import Image from 'next/image'
+
+
 
 const altText = 'Chris.lu header image, displaying an 80s style landscape and sunset'
 
@@ -84,17 +85,6 @@ const NeonRoadCanvas: React.FC = () => {
         )
     }
 
-    const chrisRef = useRef<Mesh>(null)
-
-    useEffect(() => {
-        console.log('chrisRef.current: ', chrisRef.current)
-        if (chrisRef.current) {
-            const chrisTextMatrix = new Matrix4()
-            chrisTextMatrix.makeShear(1, 0, 0, 0, 0, 0)
-            chrisRef.current.applyMatrix4(chrisTextMatrix)
-        }
-    }, [chrisRef])
-
     // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#expanded-gl-prop
     // https://threejs.org/docs/#api/en/renderers/WebGLRenderer
     //import { RenderProps } from '@react-three/fiber'
@@ -145,7 +135,6 @@ const NeonRoadCanvas: React.FC = () => {
                         lineHeight={1}
                         letterSpacing={0.02}
                         font='/assets/fonts/PermanentMarker-Regular.ttf'
-                        ref={chrisRef}
                         matrixAutoUpdate={false}
                         matrix={chrisTextMatrix}
                     >
