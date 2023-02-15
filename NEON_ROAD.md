@@ -211,6 +211,30 @@ after we have added the lazy loading the LCP drops to 460ms:
 
 here is a good article from web.dev that explains what LCP is, that will show you that it is a metric used by core web vitals and why it matters: <https://web.dev/optimize-lcp/>
 
+## failed bloompass experiment(s)
+
+here is some code I tried to make the bloom effect work, the results were not good so I removed it:
+
+```ts
+import { extend, Object3DNode } from '@react-three/fiber'
+import { Effects } from '@react-three/drei'
+import { UnrealBloomPass } from 'three-stdlib'
+
+extend({ UnrealBloomPass })
+
+// https://docs.pmnd.rs/react-three-fiber/tutorials/typescript#extending-threeelements
+declare module '@react-three/fiber' {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    interface ThreeElements {
+        unrealBloomPass: Object3DNode<UnrealBloomPass, typeof UnrealBloomPass>
+    }
+}
+
+<Effects disableGamma>
+    <unrealBloomPass threshold={0.9} strength={10} radius={0.5} />
+</Effects>
+```
+
 ## TODOs
 
 * put chris.lu text into animation, using a technique used for HUDs <https://github.com/pmndrs/drei#portals>? make it clickable to return home via react router and accessible using <https://docs.pmnd.rs/a11y>? use the Text3D from '@react-three/drei package, like in this example <https://onion2k.github.io/r3f-by-example/examples/other/text/>? to position the text use react three drei center <https://github.com/pmndrs/drei#center> like in this example: <https://codesandbox.io/s/j3ycvl?file=/src/App.js:182-199>
