@@ -302,8 +302,6 @@ if you now want to lint your code, just run the following command
 npm run lint
 ```
 
-Note: but wait, there is currently a bug in next.js eslint configuration, the `app` directory is not in the list of directories yet (as of january 2023), there is however already a ticket ["next lint omits app dir by default"](https://github.com/vercel/next.js/issues/43021) as well as PR ["[ESLint] Add app dir to default linting directories"](https://github.com/vercel/next.js/pull/44426) and when the PR gets merged this problem will be solved
-
 if you used eslint before you might have used [eslint cli options](https://eslint.org/docs/latest/user-guide/command-line-interface), next lint supports some of these too
 
 which means that if in the past you did, something like this:
