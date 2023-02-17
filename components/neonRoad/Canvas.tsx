@@ -1,16 +1,11 @@
 'use client'
 
-import { useEffect, useCallback, useRef } from 'react'
+import { useRef } from 'react'
 import { PerspectiveCamera, PCFSoftShadowMap, Matrix4 } from 'three'
 import { Canvas } from '@react-three/fiber'
 import { /*OrbitControls, useDetectGPU,*/ Text, GradientTexture, Hud, Sparkles } from '@react-three/drei'
 import Meshes from './Meshes'
 import Image from 'next/image'
-
-interface IWindowSizes {
-    width: number
-    height: number
-}
 
 const altText = 'Chris.lu header image, displaying an 80s style landscape and sunset'
 
@@ -35,33 +30,23 @@ const NeonRoadCanvas: React.FC = () => {
     //const gpuInfo = useDetectGPU()
     //console.log('useDetectGPU: ', gpuInfo)
 
-    const windowSizesRef = useRef<IWindowSizes>({
-        width: 0,
-        height: 0,
-    })
-
     const cameraRef = useRef<PerspectiveCamera>(null)
 
     const sceneSetup = () => {
 
         if (typeof window !== 'undefined') {
-            windowSizesRef.current = {
-                width: window.innerWidth,
-                height: window.innerHeight / 2,
-            }
+            // basic camera
+            cameraRef.current = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 20)
+
+            cameraRef.current.position.x = 0
+            cameraRef.current.position.y = 0.06
+            cameraRef.current.position.z = 1
         }
-
-        // basic camera
-        cameraRef.current = new PerspectiveCamera(75, windowSizesRef.current.width / windowSizesRef.current.height, 0.01, 20)
-
-        cameraRef.current.position.x = 0
-        cameraRef.current.position.y = 0.06
-        cameraRef.current.position.z = 1
 
     }
 
     sceneSetup()
-
+    
     function Sunshine() {
 
         // uncomment the next lines to use the spotlight helper
@@ -107,7 +92,7 @@ const NeonRoadCanvas: React.FC = () => {
     // "skew" like transform for the text
     const chrisTextMatrix = new Matrix4()
     chrisTextMatrix.makeShear(0.2, 0, 0.4, 0, 0, 0)
-    chrisTextMatrix.setPosition(0, -0.4, 0)
+    chrisTextMatrix.setPosition(-0.1, -0.3, 0)
 
     return (
         // TODO: add the accessibility package: https://docs.pmnd.rs/a11y/introduction
@@ -127,16 +112,14 @@ const NeonRoadCanvas: React.FC = () => {
                 <color attach="background" args={['#2f0f30']} />
                 <Sparkles count={400} size={2} position={[0, 1, -2.1]} scale={[30, 5, 1]} speed={0} />
                 {/*<axesHelper />*/}{/*enable for development*/}
-                {/*<OrbitControls camera={cameraRef.current} />*/}{/*enable for development*/}
+                { }{/*enable for development*/}
                 <ambientLight color={'#ffffff'} intensity={40} />
                 <Meshes />
                 <Sunshine />
                 <Hud>
                     <Text
-                        fontSize={windowSizesRef.current.width / windowSizesRef.current.height > 1 ? 0.5 : 0.3}
-                        maxWidth={200}
+                        fontSize={window.innerWidth / window.innerHeight > 1 ? 0.5 : 0.3}
                         lineHeight={1}
-                        letterSpacing={0.02}
                         font='/assets/fonts/PermanentMarker-Regular.ttf'
                         matrixAutoUpdate={false}
                         matrix={chrisTextMatrix}

@@ -2,7 +2,10 @@
 
 import { Suspense } from 'react'
 import dynamic from 'next/dynamic'
-const NeonRoadCanvas = dynamic(() => import('./Canvas'))
+// in this dynamic import case it is important to set "ssr: false"
+// as in the NeonRoadCanvas component we use window
+// else you get "window is not defined"
+const NeonRoadCanvas = dynamic(() => import('./Canvas'), { ssr: false })
 
 const Container: React.FC = () => {
 
