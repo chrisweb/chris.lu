@@ -1079,6 +1079,8 @@ either the files will be regular fetch requests or maybe use HLS
 * improve accessibility: <https://vercel.com/blog/improving-the-accessibility-of-our-nextjs-site>
 * add tests <https://2022.stateofjs.com/en-US/libraries/testing/>
 * optimize the images of the documentation (readme.md)
+* add "protect main branch" instructions to github chapter
+* add mdx support to eslint
 
 
 ## future articles
