@@ -13,10 +13,10 @@ const NeonRoadMesh: React.FC = () => {
     const terrainARef = useRef<Mesh>(null)
     const terrainBRef = useRef<Mesh>(null)
 
-    const FLOOR_TEXTURE_PATH = './assets/images/neonroad/grid_4096x8192-min.png'
-    const DISPLACEMENT_MAP_PATH = './assets/images/neonroad/displacement_32x64-min.png'
-    const SUN_TEXTURE_PATH = './assets/images/neonroad/sun_gradient-min.svg'
-    const CITY_TEXTURE_PATH = './assets/images/neonroad/city_texture-min.png'
+    const FLOOR_TEXTURE_PATH = '/assets/images/neonroad/grid_4096x8192-min.png'
+    const DISPLACEMENT_MAP_PATH = '/assets/images/neonroad/displacement_32x64-min.png'
+    const SUN_TEXTURE_PATH = '/assets/images/neonroad/sun_gradient-min.svg'
+    const CITY_TEXTURE_PATH = '/assets/images/neonroad/city_texture-min.png'
 
     const [floorTexture, displacementMap, sunTexture, cityTexture] = useTexture([
         FLOOR_TEXTURE_PATH,
