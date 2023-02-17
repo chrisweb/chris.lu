@@ -37,7 +37,7 @@ in october 2022 the next.js team released [Next.js 13](https://nextjs.org/blog/n
 
 converting images to AVIF and WEBP and thumbnails
 
-https://www.npmjs.com/package/sharp
+<https://www.npmjs.com/package/sharp>
 
 ## blog
 
@@ -423,6 +423,8 @@ layouts will apply to the segment they are in and all segments nested below that
 
 Server Components and Client Components:
 
+TODO: need to segment this main chapter into smaller sub chapters
+
 all files inside app directory are by default "React Server Components" and hence will be rendered on the server
 
 but you can also have files in the app directory that are client components
@@ -495,9 +497,11 @@ for sharing data between multiple server components you need to use a pattern li
 
 TODO: for this a good example is the database file we already share between files in the api routes
 
+TODO: explain why the package **server only** can be useful <https://beta.nextjs.org/docs/rendering/server-and-client-components#keeping-server-only-code-out-of-client-components-poisoning>
 
+TODO: optimization, explain it is important to only have client components in the leaves, the more server components the more pre-rendering will happen, the faster the page will load <https://beta.nextjs.org/docs/rendering/server-and-client-components#moving-client-components-to-the-leaves>
 
-
+TODO: explain that a common problem due to the new **'use client'** directive, is that lots of npm packages don't have it, the solution is to encapsulate those third party tools into a wrapper component of your own that has the **'use client'** directive and which imports and re-exports the third party component <https://beta.nextjs.org/docs/rendering/server-and-client-components#third-party-packages>
 
 
 data fetching:
@@ -529,16 +533,6 @@ so sharing data between server components, as mentioned in the previous chapter,
 
 
 
-caching:
-
-this page <https://beta.nextjs.org/docs/routing/fundamentals#server-centric-routing-with-client-side-navigation> mentions:
-
-> Additionally, as users navigate around the app, the router will store the result of the React Server Component payload in an in-memory client-side cache. The cache is split by route segments which allows invalidation at any level and ensures consistency across concurrent renders. This means that for certain cases, the cache of a previously fetched segment can be re-used, further improving performance.
-
-
-
-
-
 
 
 rendering:
@@ -562,7 +556,14 @@ Question(s): what is "prerendering", how does it differ from "rendering", how is
 TODO: can we analyze what is in next.js bundle files sent to the client, can we look at what a prerendered component looks like in terms of code, is for example the jsx already turned into html?... this next.js page <https://nextjs.org/learn/basics/data-fetching/pre-rendering> is for nextjs pages, but it explains what nextjs means by "prerendering" and it also explains how to check if prerendering happen, so this is worth reading before making an example that shows and explaisn prerendering
 
 
+TODO:
 
+check out these articles to better explain rendering especially SSR pre-rendering
+
+<https://nextjs.org/learn/foundations/how-nextjs-works/rendering>
+<https://nextjs.org/learn/basics/data-fetching/two-forms>
+<https://nextjs.org/learn/basics/data-fetching/pre-rendering>
+<https://nextjs.org/docs/basic-features/pages#pre-rendering>
 
 routes:
 
@@ -606,6 +607,18 @@ I for my part prefer a seperate components folder that acts as a library for all
 
 
 
+caching:
+
+TODO: <https://beta.nextjs.org/docs/data-fetching/fundamentals#caching-data>
+
+this page <https://beta.nextjs.org/docs/routing/fundamentals#server-centric-routing-with-client-side-navigation> mentions:
+
+> Additionally, as users navigate around the app, the router will store the result of the React Server Component payload in an in-memory client-side cache. The cache is split by route segments which allows invalidation at any level and ensures consistency across concurrent renders. This means that for certain cases, the cache of a previously fetched segment can be re-used, further improving performance.
+
+read more: <https://beta.nextjs.org/docs/data-fetching/caching>
+
+
+
 
 
 
@@ -616,6 +629,10 @@ from the ["next.js 13 blog post"](https://nextjs.org/blog/next-13):
 > the app/ directory introduces the ability to progressively render and incrementally stream rendered units of the UI to the client
 
 I let you check out the [next.js "what is Streaming?" documentation section](https://beta.nextjs.org/docs/data-fetching/streaming-and-suspense) it is very informative about what limitations SSR has and why streaming is good solution
+
+
+
+
 
 
 
@@ -743,6 +760,16 @@ wait for the deployment to finish
 
 if the deployment was successfull it will show you a preview image of the homepage, click on that image to visit your deployment
 
+### introduction to planetscale
+
+planetscale is a MySQL database platform for serverless apps
+
+it's databases are powered by [Vitess](https://github.com/vitessio/vitess) a MySQL cloud database that is today opensource and got developped by youtube in 2011 for their own needs and is being used there since then
+
+they offer a generous free tier for hobbyists and two paid plans for enterprise use
+
+
+
 ### setting up planetscale account
 
 planetscale website: <https://planetscale.com/>
@@ -799,9 +826,10 @@ Note: we earlier created a database, for that database planetscale has created a
 
 next click on **connect**
 
-
-
-
+<https://app.planetscale.com/chrisweb/chris-lu/console>
+<https://planetscale.com/docs/onboarding/create-a-database>
+<https://github.com/planetscale/docs/blob/main/docs/onboarding/create-a-database.md>
+<https://planetscale.com/docs/tutorials/planetscale-quick-start-guide#getting-started-%E2%80%94-planetscale-cli>
 
 ## vercel preview (staging environment)
 
@@ -853,7 +881,9 @@ Note: after the PR is done, if you listed your ticket(s) in the description of t
 
 now that the PR into the **main** branch is done, vercel will do a new production deployment for you
 
-## articles (pages) using MDX ()
+## articles (pages) using MDX (@next/mdx)
+
+### introduction
 
 the articles of our blog will be MDX files
 
@@ -864,6 +894,8 @@ one of the great features of MDX is that it lets you integrate react components 
 to create content using MDX we will use the [next.js @next/mdx package](https://beta.nextjs.org/docs/guides/mdx)
 
 @next/mdx uses [remark](https://www.npmjs.com/package/remark) and [rehype](https://www.npmjs.com/package/rehype) under the hood, but if you prefer to use them without @next/mdx, check out the example called **Deep Dive: How do you transform markdown into HTML?** in the next.js ["Markdown and MDX" documentation](https://beta.nextjs.org/docs/guides/mdx)
+
+### getting started
 
 first we will add a bunch of new depencies to our next.js project, execute the following command in your VSCode terminal:
 
@@ -890,19 +922,99 @@ const nextConfig = () => {
 export default nextConfig
 ```
 
+now we need to add two more files to make MDX work with server components
+
+add another file into the root of your project called `mdx-components.tsx` with the following content
+
+```tsx
+import type { MDXComponents } from 'mdx/types'
+
+// This file is required to use MDX in `app` directory.
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+    return {
+        // Allows customizing built-in components, e.g. to add styling.
+        // h1: ({ children }) => <h1 style={{ fontSize: "100px" }}>{children}</h1>,
+        ...components,
+    }
+}
+```
+
+and then in the root of the project create a folder called `types` and inside of it add a file called `` with the following content:
+
+```ts
+// types/mdx.d.ts
+declare module '*.mdx' {
+    let MDXComponent: (props) => JSX.Element
+    export default MDXComponent
+}
+```
+
+Note: it is important you add the `mdx-components.tsx` to your project for MDX files to work in the app directory, if you don't add it you will get this error:
+
+> TypeError: createContext only works in Client Components.
+
+Note: Also after adding this file or in the future after making changes to it, you always need to restart the dev server, as this is a configuration file like `next.config.mjs`
+
+
+
+
+
+
 TODO: in next config, do I need to configure pageExtensions for MDX to work in app directory, or is this just for pages directory???
 TODO: the `mdxRs: true` in next config that they tell you to add in the beta docs <https://beta.nextjs.org/docs/guides/mdx>, because in the regular docs they say to not use it in production, so is it mandatory for the app directory or not???
 TODO: in the regular docs they say you need to install @mdx-js/loader @mdx-js/react, but they don't mention those in the beta docs, so do I need to add them manually or not???
+
+### adding an article page
+
+in the /app directory, create a new folder called `articles` and then inside that another folder using a dynamic segment containing our article slug as name `[slug]`
+
+Glossary: a slug is a clean version of the article title, it is search engine-friendly so good for SEO and also serves as a unique identifier of the page
+
+then inside of `/app/articles/[slug]/` create a file called `page.js` with the following content
+
+```tsx
+interface IParams {
+    slug: string
+}
+
+export default function Article(params: IParams) {
+
+    return (
+        <>
+            
+        </>
+    )
+}
+```
+
+
+
+TODO: ensure all images in mdx files use next/image and all internal links use next/link
+
+to make slugs I found two libraries <https://www.npmjs.com/package/github-slugger> and <https://www.npmjs.com/package/@sindresorhus/slugify>
+
+for the code highlighting I plan to use <https://www.npmjs.com/package/highlight.js>
+
+**rehype pretty code** is a rehype plugin for vscode like syntax highlighting with support for themes: <https://rehype-pretty-code.netlify.app/>, here is the npm page <https://www.npmjs.com/package/rehype-pretty-code>, it uses shiki <https://shiki.matsu.io/>
+
+if code block titles for filenames are not supported out of the box by rehype pretty code then add this <https://www.npmjs.com/package/rehype-code-titles>
+
 
 read more:
 
 * MDX documentation: <https://mdxjs.com/docs/>
 * next.js MDX package documentation: <https://nextjs.org/docs/advanced-features/using-mdx>
-
+* app directory MDX pages next.js example: <https://github.com/vercel/next.js/tree/canary/examples/app-dir-mdx>
 
 ## planetscale staging environment
 
 > plantscale lets you branch your production database to create a staging environment for testing out schema changes
+
+## planetscale serverless javascript database driver
+
+<https://planetscale.com/blog/introducing-the-planetscale-serverless-driver-for-javascript>
+<https://github.com/planetscale/f1-championship-stats>
+<https://github.com/planetscale/database-js>
 
 ## vercel analytics
 
@@ -911,6 +1023,8 @@ next you can enable [vercel analytics](https://vercel.com/docs/concepts/analytic
 Note: apparently vercel analytics is GDPR compliant (without cookie banner requirement), read more on their [privacy policy explanation page in the documentation](https://vercel.com/docs/concepts/analytics/privacy)
 
 after enbabling vercel anayltics for your project you need to add their ([vercel analytics on github](https://github.com/vercel/analytics)) package to your project
+
+read more: <https://vercel.com/docs/concepts/analytics/audiences/quickstart>
 
 ## adding environment variables
 
@@ -923,15 +1037,52 @@ Note: if using vercel and also next.js, you don't need to use their cli command 
 
 
 
+## add authentification, sign up, activation, re-sending activation and lost password
+
+blitz is a framework on top of next.js, check out their login, sign up, lost password forms and pages, maybe they did things I missed or are better than my implementation: <https://github.com/blitz-js/blitz/commit/6ec020c6d67d18c074d4064c2a4d63bfa9c83d5c>
 
 
+## mui
 
+seems to have problems with next.js 13 <https://github.com/mui/material-ui/issues/34905>
+mostly because of CSS in JS <https://beta.nextjs.org/docs/styling/css-in-js> server side rendering with emotion <https://github.com/emotion-js/emotion/issues/2928>
 
+## layout / blog design
 
+scrollbar style:
+
+<https://css-tricks.com/almanac/properties/s/scrollbar-color/>
+<https://css-tricks.com/almanac/properties/s/scrollbar/>
+<https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Scrollbars>
+
+text neon glow:
+
+<https://css-tricks.com/how-to-create-neon-text-with-css/>
+<https://codepen.io/FelixRilling/pen/oNNLMb>
+<https://codepen.io/GeorgePark/pen/MrjbEr>
+
+## audio player for header animation
+
+either the files will be regular fetch requests or maybe use HLS
+
+<https://github.com/video-dev/hls.js/issues/1713>
+<https://github.com/video-dev/hls.js/issues/1713>
+<https://caniuse.com/mediasource>
+<https://caniuse.com/?search=hls>
+<https://www.npmjs.com/package/fluent-ffmpeg>
+<https://www.npmjs.com/package/hls.js/v/canary>
 
 ## TODOs
 
 * build authentification: <https://authjs.dev/>, can have a look at how 
-* add all sorts of meta data to head.tsx <https://github.com/whoisryosuke/r3f-next-starter/blob/main/src/components/dom/Header.tsx>, also check out <https://beta.nextjs.org/docs/guides/seo>, create a chapter "head.js: SEO and metadata"
+* add all sorts of meta data to head.tsx <https://github.com/whoisryosuke/r3f-next-starter/blob/main/src/components/dom/Header.tsx>, also check out <https://beta.nextjs.org/docs/guides/seo>, create a chapter "head.js: SEO and metadata", also check out <https://beta.nextjs.org/docs/api-reference/metadata#generatemetadata>
 * improve accessibility: <https://vercel.com/blog/improving-the-accessibility-of-our-nextjs-site>
-* 
+* add tests <https://2022.stateofjs.com/en-US/libraries/testing/>
+* optimize the images of the documentation (readme.md)
+
+
+## future articles
+
+* setup cronjobs on vercel <https://vercel.com/guides/how-to-setup-cron-jobs-on-vercel>
+* vercel rollback a deployment <https://vercel.com/docs/cli/rollback>
+* revert a schema change with planetscale <https://planetscale.com/blog/behind-the-scenes-how-schema-reverts-work>

@@ -14,7 +14,7 @@ const nextConfig = (/*phase*/) => {
         openAnalyzer: false,
     })*/
 
-    const withMDX = WithMDX({
+    const withMDX = WithMDX(/*{
         extension: /\.mdx?$/,
         options: {
             // If you use remark-gfm, you'll need to use next.config.mjs
@@ -25,7 +25,7 @@ const nextConfig = (/*phase*/) => {
             // If you use `MDXProvider`, uncomment the following line.
             // providerImportSource: "@mdx-js/react",
         },
-    })
+    }*/)
 
     /** @type {import('next').NextConfig} */
     const nextConfig = {
