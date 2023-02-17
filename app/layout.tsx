@@ -1,6 +1,6 @@
 import NeonRoadContainer from '../components/neonRoad/Container'
 import './global.css'
-import styles from './styles.module.css'
+//import styles from './styles.module.css'
 
 export default function RootLayout({
     children,
@@ -9,7 +9,7 @@ export default function RootLayout({
 }) {
 
     return (
-        <html>
+        <html lang="en">
             <head />
             <body>
                 <header style={{ width: '100vw', height: 'calc(100vh/2)', maxWidth:'100%', position: 'relative' }}>
