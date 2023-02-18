@@ -22,7 +22,12 @@
             {
                 "name": "next"
             }
-        ]
+        ],
+        "paths": {
+            "@interfaces/*": [
+                "./interfaces/*"
+            ],
+        },
     },
     "include": [
         "next-env.d.ts",

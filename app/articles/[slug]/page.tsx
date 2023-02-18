@@ -1,16 +1,13 @@
-import Test from './test.mdx'
+import { IPageSlug } from '@interfaces/page'
+import dynamic from 'next/dynamic'
 
-interface IParams {
-    slug: string
-}
+export default function Article({ params }: IPageSlug) {
 
-export default function Article(params: IParams) {
-
-    console.log(params.slug)
+    const MDXContent = dynamic(() => import(`./${params.slug}.mdx`))
 
     return (
         <>
-            <Test />
+            <MDXContent />
         </>
     )
 }
