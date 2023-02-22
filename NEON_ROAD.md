@@ -257,6 +257,8 @@ console.log('useDetectGPU: ', gpuInfo)
 * add post processing effects? <https://github.com/pmndrs/postprocessing>, if so then using performance monitor would be good <https://vercel.com/blog/building-an-interactive-webgl-experience-in-next-js#3.-optimize-performance>
 * loading animation?
 * if mouse over animation and mouse to right or left, make the camera move using OrbitControls? or maybe like in this example with onMouseMove: <https://codesandbox.io/embed/troika-3d-text-via-react-three-fiber-ntfx2?fontsize=14>, but restrict the zoom as well as movement to only go slight to left / right / top / bottom? make the map slightly turn to the right and left when moving to make it more 3d? useFrame has a **mouse** parameter see: <https://codesandbox.io/s/r3f-mouse-8d3ho>
+* add audio player <https://github.com/chrisweb/web-audio-api-player> and some creative commons or copyright free synthwave songs to animation
+* control animation speed based on peeks height using <https://github.com/chrisweb/waveform-data-generator>
 * in this article <https://www.gatsbyjs.com/blog/performance-optimization-for-three-js-web-animations/> I read about a feature called saveData, should try to use it `navigator?.connection?.saveData`
 * check for user preference for animation(s) should be low (via three fiber accessibility package > user preferences > <https://docs.pmnd.rs/a11y/access-user-preferences>), then set the framerate to very low value
 * based on the performance monitor <https://github.com/pmndrs/drei#performancemonitor> value, change the gl antialias value, decrease the animation speed and change the canvas dpr value? I think gl can be accessed in useframe: `useFrame(({ gl }) => { })`
