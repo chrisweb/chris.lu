@@ -699,11 +699,25 @@ our original image is a PNG image, so it's quite heavy, because modern browser s
 to add support for webp and avif we need to add the following code to our next.config.js:
 
 ```js
-module.exports = {
- images: {
-  formats: ['image/avif', 'image/webp']
- }
+const nextConfig = () => {
+
+    /** @type {import('next').NextConfig} */
+    const nextConfig = {
+        experimental: {
+            // experimental support for next.js > 13 app directory
+            appDir: true,
+        },
+        // file formats for next/image
+        images: {
+            formats: ['image/avif', 'image/webp']
+        },
+    }
+
+    return nextConfig
+
 }
+
+export default nextConfig
 ```
 
 no need to change any code of the `<Image>` component we added previously, next.js will handle the conversion to the different formats automatically now that we have added them to the configuration file and will store the different versions into `\.next\cache\images`
@@ -897,30 +911,62 @@ to create content using MDX we will use the [next.js @next/mdx package](https://
 
 ### getting started
 
-first we will add a bunch of new depencies to our next.js project, execute the following command in your VSCode terminal:
+first we will add the `@next/mdx` package our next.js project, this package will add support for mdx files to our next.js project, execute the following command in your VSCode terminal:
 
 ```shell
-npm install @next/mdx @mdx-js/loader @mdx-js/react --save-exact
+npm install @next/mdx --save-exact
 ```
+
+TODO: in the regular docs they say you need to install [@mdx-js/loader](https://www.npmjs.com/package/@mdx-js/loader) (an MDX loader for webpack) and [@mdx-js/react](https://www.npmjs.com/package/@mdx-js/react) as mentioned in the documentation you probably never need this: <https://mdxjs.com/docs/using-mdx/#mdx-provider>, but they don't mention to install those two in the beta docs anymore, so do I need to add them manually or not??? This PR seems to confirm they are optional: <https://github.com/vercel/next.js/pull/45440/files#diff-7b9eb4f98eac741f3a0f77cd2a82a19db9f6adaaf8805ca740d6bba439598ced>
 
 then we need to update the content our `next.config.mjs` file, to this:
 
 ```js
+import WithMDX from '@next/mdx'
+
 const nextConfig = () => {
+
+    const withMDX = WithMDX(/*{
+        extension: /\.mdx?$/,
+        options: {
+            // If you use remark-gfm, you'll need to use next.config.mjs
+            // as the package is ESM only
+            // https://github.com/remarkjs/remark-gfm#install
+            remarkPlugins: [
+                //remarkGfm,
+            ],
+            rehypePlugins: [],
+            // If you use `MDXProvider`, uncomment the following line.
+            // providerImportSource: "@mdx-js/react",
+        },
+    }*/)
 
     /** @type {import('next').NextConfig} */
     const nextConfig = {
         experimental: {
+            // experimental support for next.js > 13 app directory
             appDir: true,
+            // experimental use rust compiler for MDX
+            mdxRs: true,
         },
+        // file formats for next/image
+        images: {
+            formats: ['image/avif', 'image/webp']
+        },
+        // configure pageExtensions to include md and mdx
+        pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
     }
 
-    return nextConfig
+    return withMDX(nextConfig)
 
 }
 
 export default nextConfig
 ```
+
+TODO: in next config, do I need to configure pageExtensions for MDX to work in app directory, or is this just for pages directory???
+TODO: the `mdxRs: true` in next config that they tell you to add in the beta docs <https://beta.nextjs.org/docs/guides/mdx>, because in the regular docs they say to not use it in production, so is it mandatory for the app directory or not??? If I do not enable the experimental rust MDX compiler, I guess next/mdx will fallback to using webpack(?) if it does, do I need to install the @mdx-js/loader manually, see the TODO above
+TODO: check the withMDX options above, I currently have them commented as I'm not sure yet if they are needed and if they are what values I need to set, should come back later if a usecase requires me to use the options else get rid of them before publishing this tutorial
 
 now we need to add two more files to make MDX work with server components
 
@@ -960,17 +1006,34 @@ Note: Also after adding this file or in the future after making changes to it, y
 
 
 
-TODO: in next config, do I need to configure pageExtensions for MDX to work in app directory, or is this just for pages directory???
-TODO: the `mdxRs: true` in next config that they tell you to add in the beta docs <https://beta.nextjs.org/docs/guides/mdx>, because in the regular docs they say to not use it in production, so is it mandatory for the app directory or not???
-TODO: in the regular docs they say you need to install @mdx-js/loader @mdx-js/react, but they don't mention those in the beta docs, so do I need to add them manually or not???
-
 ### adding an article page
+
+you can chose between 3 ways of creating an **article page** to display MDX content, I will show you all these options and then it is up to you to decide which you like best or which suits your use case best
+
+* [option 1](#option-1-multiple-pagetsx-files-one-static-route-per-article): multiple page.tsx files, one static route per article
+* [option 2](#option-2-multiple-pagemdx-files-one-static-route-per-article): multiple page.mdx files, one static route per article
+* [option 3](#option-3-one-pagetsx-file-one-dynamic-route-segment-for-all-articles): one page.tsx file, one dynamic route segment for all articles
+
+#### option 1: multiple page.tsx files, one static route per article
+
+
+
+
+#### option 2: multiple page.mdx files, one static route per article
+
+
+
+
+
+
+
+#### option 3: one page.tsx file, one dynamic route segment for all articles
 
 in the /app directory, create a new folder called `articles` and then inside that another folder using a dynamic segment containing our article slug as name `[slug]`
 
 Glossary: a slug is a clean version of the article title, it is search engine-friendly so good for SEO and also serves as a unique identifier of the page
 
-then inside of `/app/articles/[slug]/` create a file called `page.js` with the following content
+then inside of `/app/articles/[slug]/` create a file called `page.tsx` with the following content
 
 ```tsx
 interface IParams {
@@ -986,6 +1049,22 @@ export default function Article(params: IParams) {
     )
 }
 ```
+
+
+
+[next.js generate static params documentation](https://beta.nextjs.org/docs/api-reference/generate-static-params)
+
+
+
+Read more:
+
+* [next.js page params and searchParams documentation](https://beta.nextjs.org/docs/api-reference/file-conventions/page#params-optional)
+* [next.js dynamic segments documentation](https://beta.nextjs.org/docs/routing/defining-routes#dynamic-segments)
+
+
+
+
+
 
 
 
@@ -1005,6 +1084,18 @@ read more:
 * MDX documentation: <https://mdxjs.com/docs/>
 * next.js MDX package documentation: <https://nextjs.org/docs/advanced-features/using-mdx>
 * app directory MDX pages next.js example: <https://github.com/vercel/next.js/tree/canary/examples/app-dir-mdx>
+
+## adding custom react components to MDX pages
+
+
+
+## adding the remark "remark-gfm" plugin
+
+[remark-gfm](https://www.npmjs.com/package/remark-gfm)
+
+## extending MDX, to transform code blocks using the 
+
+
 
 ## planetscale staging environment
 
