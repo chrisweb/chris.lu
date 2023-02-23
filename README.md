@@ -31,7 +31,7 @@ recap of the 1st and 2nd generation of data fetching in next.js:
 * the newer `getServerSideProps` (which first appeared in march 2020 with [Next.js 9.3](https://nextjs.org/blog/next-9-3)) and is an async function that fetches the data and populates the props object of your page function and works differently then getInitialProps, same as with getInitialProps for the first page the code gets executed on the server and the data is being returned directly to the code of the page, but if you visit a second page getInitialProps will again get executed on the server and the data it returns will get sent as JSON to the client where again it gets used by the page code, this means using getServerSideProps instead of getInitialProps eliminated two pain points, first you did not have to care about your imports anymore as next.js would exclude those packages for you from client code automatically and the second one being that you did not have to create an API for client side data fetching anymore as next.js would go and call getServerSideProps on the server and then fetch the data as JSON for you. read more: [next.js getServerSideProps documentation](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props)
 * `getStaticProps` appeared alongside getServerSideProps, the difference between the two is that getServerSideProps disables ["Automatic Static Optimization"](https://nextjs.org/docs/advanced-features/automatic-static-optimization) but getStaticProps does not, getStaticProps it is a method that you would use to fetch data not at "runtime" but at "build time", so when a user visits a page no data call is being made, all data got already fetched at build time (and the page props have been put in a static json file), which means for any request being made by a user your data won't change, this can be very interesting to build pages that load super fast as they use data that does not change between two builds, however getStaticProps has a feature so that you can "revalidate" data in the background, this is what gets used by "[Incremental Static Regeneration](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)" and allows you to update the static data you got at build time. read more: [next.js getStaticProps documentation](https://nextjs.org/docs/basic-features/data-fetching/get-static-props)
 
-in october 2022 the next.js team released [Next.js 13](https://nextjs.org/blog/next-13) which included the first version of the new `app` folder and two months later in december [Next.js 13.1](https://nextjs.org/blog/next-13-1)
+in october 2022 the next.js team released [Next.js 13](https://nextjs.org/blog/next-13) which included the first version of the new `app` directory and two months later in december [Next.js 13.1](https://nextjs.org/blog/next-13-1)
 
 ## image(s) manipulation
 
@@ -47,7 +47,7 @@ use github to create a new repository for your project
 
 also let github create a README.md a LICENSE as well as a default .gitignore file for you
 
-Note: if you chose "node" as template for the `.gitignore` it will create a quite large gitignore file that contains patterns for lots of common frameworks used when working with nodejs, one of them being next.js, which means the `.next` folder will get excluded if you use this gitignore, the other rules are less useful in our case but also do no harm, so you don't really need to touch that file, also in case you wonder, yes the .gitignore file should get commited
+Note: if you chose "node" as template for the `.gitignore` it will create a quite large gitignore file that contains patterns for lots of common frameworks used when working with nodejs, one of them being next.js, which means the `.next` directory will get excluded if you use this gitignore, the other rules are less useful in our case but also do no harm, so you don't really need to touch that file, also in case you wonder, yes the .gitignore file should get commited
 
 now you can check out your project locally, typing the following command into favorite command line tool / terminal:
 
@@ -57,7 +57,7 @@ git clone git@github.com:MY_GITHUB_USERNAME/MY_REPOSITORY_NAME.git
 
 ### initialize project
 
-Note: install nodejs: the next.js 13 "app directory features" require nodejs v16.8.0 or later
+Note: install nodejs: the **next.js 13** "app directory features" require nodejs v16.8.0 or later
 
 run the following command to have eslint guide you step by step through the creation of your `package.json` file:
 
@@ -106,7 +106,7 @@ module.exports = nextConfig
 
 not much in there right now, for the moment we only add one line in the experimental block to enable the app dir which is still experimental (in beta at the time 01.01.2003)
 
-Note: next,js 13 got released at the end of 2022 and even though it included a lot of improvements for existing features it also now includes the new `app` directory which is what we will use in this toturial, as the next.js team reminds as at several places this feature will evolve and get improved a lot over the coming months, the next.js team added it to next.js 13 so that developers can start playing with it and to hopefully gather a lot of good feedback from the community but they also made it clear that you probably shouldn't use this in production just yet and wait a little bit longer for it to mature
+Note: **next.js 13** got released at the end of 2022 and even though it included a lot of improvements for existing features it also now includes the new `app` directory which is what we will use in this toturial, as the next.js team reminds as at several places this feature will evolve and get improved a lot over the coming months, the next.js team added it to **next.js 13** so that developers can start playing with it and to hopefully gather a lot of good feedback from the community but they also made it clear that you probably shouldn't use this in production just yet and wait a little bit longer for it to mature
 
 #### convert the next.js configuration to an ES module
 
@@ -364,13 +364,13 @@ Note: also good to know is that starting with version 12 next.js typescript comp
 
 > info  - VS Code settings.json has been created for Next.js' automatic app types, this file can be added to .gitignore if desired
 
-this vscode "workspace settings" file got created in a folder called `.vscode` and the file is called `settings.js`, it contains workspace specific configuration instructions for your VSCode IDE, as next.js tells you, it is up to you if you add them to .gitignore to ensure they don't get shared with other people using your repository, I usually however share mine, I think it can be helpful if the entire team working on a project uses the same IDE configuration
+this vscode "workspace settings" file got created in a directory called `.vscode` and the file is called `settings.js`, it contains workspace specific configuration instructions for your VSCode IDE, as next.js tells you, it is up to you if you add them to .gitignore to ensure they don't get shared with other people using your repository, I usually however share mine, I think it can be helpful if the entire team working on a project uses the same IDE configuration
 
 * because of that new VSCode settings file next.js just created, a notification will appear in your VSCode, saying that it detected that you installed typescript in the current workspace and will ask you if you allow it to use that version instead of it's own typescript version that is bundled into vscode, so we click on "Allow"
 
 ![vscode notification typescript version](./documentation/assets/images/vscode_notification_typescript_version.png)
 
-this notification is related to a new typescript plugin the next.js team created and which is included in the release of next.js 13, here isc a little quote from their [next.js 13.1 blog post](https://nextjs.org/blog/next-13-1):
+this notification is related to a new typescript plugin the next.js team created and which is included in the release of **next.js 13**, here isc a little quote from their [next.js 13.1 blog post](https://nextjs.org/blog/next-13-1):
 
 > We've built a new TypeScript plugin that provides suggestions for page and layout configuration options and provides helpful usage hints around Server and Client Components
 
@@ -411,7 +411,7 @@ export default function RootLayout({
 
 layout:
 
-with the pages folder in previous next.js version, you had the possibility to wrap the children property of your _app.tsx with a layout component to then have that layout being applied to every page, but the disadvantage was that it would then be used by every single page in your pages folder, all other solutions involved writing more code, for example by adding custom code inside of your _app.tsx that would check which route you were on and based on that switch to another layout, or you could have imported different layouts in every page file and wrap you page into those layout components
+with the pages directory in previous next.js version, you had the possibility to wrap the `children` property of your `_app.tsx` with a layout component to then have that layout being applied to every page, but the disadvantage was that it would then be used by every single page in your pages directory, all other solutions involved writing more code, for example by adding custom code inside of your _app.tsx that would check which route you were on and based on that switch to another layout, or you could have imported different layouts in every page file and wrap you page into those layout components
 
 with the new layout system it is much easier to have different layouts for different segments of your website
 
@@ -449,7 +449,7 @@ TODO: show example of question above, where the component is in components direc
 
 as I mentioned above you can mix server and client components, for example if you explicitly state that component is a client component but then inside of it use a server component or vice versa
 
-so a component with no statement, a component located into a segment folder if loaded by a client component will also be considered being a client component without having to explicitly add the 'use client' statement on top
+so a component with no statement, a component located into a segment directory if loaded by a client component will also be considered being a client component without having to explicitly add the 'use client' statement on top
 
 TODO: show example of server component, show it printing a message in the terminal, then re-use it but his time being imported into a client component and it just works (no need to add 'use client' statement) and show that now the message appears in the browser console and not the server anymore
 
@@ -467,7 +467,7 @@ Note: to be honest I find all this quite complex, I don't like having to remembe
 
 to me this is not "Isomorphic" at all, I personally expect from a modern framework to be Isomorphic, you should be able to reuse most of your code on server side as well as the client side and only have a few files that function as adapters and do something different based on the environment, like having a getData function for both on the server and the client side, but inside getData you check the environemnt and based on the result you either do a browser fetch request using an API URL if you are in the client or if you are on the server you use the database adapter to make a direct database query without passing through an API, same would get done for caching, for example you would be able to cache data queries with a unique function that you can use the same way on the server side as well as the client, the cache function would use an adapter that caches data for example using the localstorage if you are in the client and if on server another adapter that caches or retrieves the data from for example a redis database
 
-can we solve this headache by using the new next.js fetch? if so, this would mean we need an API! I don't mind needing an API, we would need one anyway for POST, PUT, PATCH and DELETE methods that client side code would call to execute actions, what is also nice is that the features like being able to use the `loading.tsx` file in your segment folder is not lost and still gets used when making a server side fetch, but finally all this all means that we never make any component function async and also not use await inside of it, but instead always use the new react `use` hook, only if we do all of this then we come very close to a real Isomorphic experience where we don't need to think about the question is this a component I can import or a component I need to pass via the `children` prop
+can we solve this headache by using the new next.js fetch? if so, this would mean we need an API! I don't mind needing an API, we would need one anyway for POST, PUT, PATCH and DELETE methods that client side code would call to execute actions, what is also nice is that the features like being able to use the `loading.tsx` file in your segment directory is not lost and still gets used when making a server side fetch, but finally all this all means that we never make any component function async and also not use await inside of it, but instead always use the new react `use` hook, only if we do all of this then we come very close to a real Isomorphic experience where we don't need to think about the question is this a component I can import or a component I need to pass via the `children` prop
 
 the problem with fetching data in the client, is that after fetching the data from API, it is the client which needs to do the rendering job to produce the final html, so we lose the SSR benefit where the client gets the html pre-rendered and just needs to hydrate it, next.js in their documentation explicitly mentions that fetching in the client should get avoided: <https://beta.nextjs.org/docs/rendering/server-and-client-components#data-fetching>, you can compare this to have someone deliver to you you all the ingredients to cook your meal but you still need to do the cooking vs having someone deliver to you a pre-cooked meal that you just need to heat before you can eat it
 
@@ -541,7 +541,9 @@ there are two environments where your application code can be rendered, the clie
 
 read more: [BETA Next.js documentation: Rendering Fundamentals](https://beta.nextjs.org/docs/rendering/fundamentals)
 
-similar to what we were achieving getServerSideProps and getStaticProps, with next.js 13's app directory, you have two main options, "dynamic rendering" and optimized "static rendering"
+similar to what we were achieving getServerSideProps and getStaticProps, with **next.js 13's** app directory, you have two main options, **dynamic rendering** and optimized **static rendering**
+
+Note: next.js will try to make static rendering happen as much as possible, for example by default fetch requests will be cached (TODO: need to verify this, if using a fetch and not opt out of caching, will the page be static, meaning the fetch is done at build time???) (more about this in the TODO: link to **caching** chapter), but similar exceptions to what we have in the pages directory, there are things that will force next.js out of static rendering, one of these is if you use the hook **useSearchParams** (more about this in the TODO: link to **searchParams** chapter)
 
 weird, the [rendering](https://beta.nextjs.org/docs/rendering/fundamentals#dynamic-rendering) doc says:
 
@@ -549,7 +551,7 @@ weird, the [rendering](https://beta.nextjs.org/docs/rendering/fundamentals#dynam
 
 Question(s): I don't get it, why it says client side components are rendered on the server
 
-with dynamic rendering client components are prerendered on the server: <https://beta.nextjs.org/docs/rendering/static-and-dynamic-rendering<>
+with dynamic rendering client components are prerendered on the server: <https://beta.nextjs.org/docs/rendering/static-and-dynamic-rendering>
 
 Question(s): what is "prerendering", how does it differ from "rendering", how is it better than no prerendering at all
 
@@ -565,6 +567,11 @@ check out these articles to better explain rendering especially SSR pre-renderin
 <https://nextjs.org/learn/basics/data-fetching/pre-rendering>
 <https://nextjs.org/docs/basic-features/pages#pre-rendering>
 
+
+
+
+
+
 routes:
 
 you can create static route segments, like /users but same as with pages you can also create dynamic routes like [id], to get the dynamic value you use the "params" prop
@@ -575,7 +582,12 @@ next.js created a layout file for us in the root segment, but if inside of that 
 
 TODO: show an example with just "a href" links, which reload the entire page and then an example which uses next/link, explain that when I say **"navigate"** I mean by using **next/link** and NOT a conventinal **html anchor element**, show clearly that the data query in the layout is not being executed twice, just the main content (children of layout) are being updated
 
+
+
+
 loading:
+
+Note: next.js loading uses a react suspense boundary under the hood, meaning that loading.tsx is a suspense boundary wrapped around your page.tsx
 
 you can now create new loading files and these files have an error prop that contains details about the error
 
@@ -583,23 +595,53 @@ Question(s): are loading scripts also getting used by nested segments, like with
 
 TODO: create a small demo by creating a loading file and adding a setTimeout to our library/fetch that returns the dummy json
 
+read more:
+
+* [next.js loading UI documentation](https://beta.nextjs.org/docs/routing/loading-ui)
+* [next.js loading.js documentation](https://beta.nextjs.org/docs/api-reference/file-conventions/loading)
+* [react beta docs suspense documentation](https://beta.reactjs.org/reference/react/Suspense)
+
+
+
 error:
+
+Note: similar to loading.tsx which use react suspense boundaries under the hood, the error.tsx file uses react error boundaries under the hood
 
 similar as loading, you can create error files
 
 Question(s): error files can only be client components???
 
-components directory or not:
+TODO: also check out how error bounderies work: 
 
-prior to next.js 13's release or if you worked previously with create react app and did not use next.js at all, like me you might be used to put all components into a folder called `components`, but with next.js you can put all your components into the segment directories themself, you can even put your test files, like a jest test file to test your component into that folder too
+read more: 
 
-so now the question is do you store the components in the segment folder or a seperate components folder, you can do both, it is as you prefer, for the moment as next.js is very new there is not yet really a trend which shows as that most devs do it this or that way
+* [next.js error file convention documentation](https://beta.nextjs.org/docs/api-reference/file-conventions/error)
+* [next.js error handling documentation](https://beta.nextjs.org/docs/routing/error-handling)
+* [react error boundery documentation](https://reactjs.org/docs/error-boundaries.html)
+* [react beta docs catching rendering error with an error boundary documentation](https://beta.reactjs.org/reference/react/Component#catching-rendering-errors-with-an-error-boundary)
 
-I for my part prefer a seperate components folder that acts as a library for all my components, for several reasons:
 
-* because some components will be used by more than one segment
-* not sure about this? -> all components are handled as client side components by next.js and we don't need to add the "use client" statement explicitly
-* all files in the components folder will have react only code and no have any next.js specific code
+
+put your components into a seperate `components` directory or alongside the page files inside of the route segment directory:
+
+prior to next.js 13's release or if you worked previously with create react app and did not use next.js at all, like me you might be used to put all components into a directory called `components`
+
+Note: putting a compenentX.tsx file into the `pages` directory would not be wise as next.js will consider every .tsx file to be a page
+
+if you use the new next.js 13 however, you can now put all your components into segment directories, this means you can put all your UI components and even your test files into the same directory as your page.tsx, only the page.tsx file will be handled as page by next.js and every other file except those that have reserved names like loading.tsx or error.tsx will be considered being custom components
+
+so is a seperate components directory still needed and advisable or should you now get rid of the components directory and put all components into segment directories along with your page files?
+
+you could also do both, put some components that are being used by only one page into the pages segment directory and all other components that are being used by more than one page into the components directory
+
+it is as you prefer, for the moment as next.js is very new there is not yet really a trend which shows us which solution is the most popular
+
+I for my part prefer a seperate components directory that acts as a library for all my components, for several reasons:
+
+* because some components will be used by more than one page, so putting them into a segment directory alongside a page but getting imported by another page in another directory seems weird to me
+* you could argue that doing both, putting the components used by a page alongside the page into the same directory and all other components that are being used by more than just one page into a components directory, but the disadvantage I see here is that often you will create a component and at first it will be used by one page so you will put it alongside the page but then later on you discover that another page will benefit from using it too and then you need to move it and refactor the import pathes, this is something I want to avoid
+* TODO: not sure about this? -> all components that are in the app directory are considered being server components by default, so does that mean all components that are not in the app directory are considered being client components by default, meaning you don't have to explicitly add the 'use client' statement on top of each file? the other way around, if you have a component outside of the app directory and you want it to be a server component, how do you communicate that to next.js 13???
+* all files in the components directory will have react only code and no have any next.js specific code
 * it will hopefully be easier in the future to re-use or share the components
 
 
@@ -616,6 +658,19 @@ this page <https://beta.nextjs.org/docs/routing/fundamentals#server-centric-rout
 > Additionally, as users navigate around the app, the router will store the result of the React Server Component payload in an in-memory client-side cache. The cache is split by route segments which allows invalidation at any level and ensures consistency across concurrent renders. This means that for certain cases, the cache of a previously fetched segment can be re-used, further improving performance.
 
 read more: <https://beta.nextjs.org/docs/data-fetching/caching>
+
+// Generates statically like getStaticProps.
+fetch(URL, { cache: 'force-cache' });
+
+// Generates server-side upon every request like getServerSideProps.
+fetch(URL, { cache: 'no-store' });
+
+// Generates statically but revalidates every 20 seconds
+fetch(URL, { next: { revalidate: 20 } });
+
+Note: if you use fetch with no options, the default value for cache will be force-cache(?) TODO: need to confirm that
+
+TODO: need to verify this, if using a fetch and not opt out of caching, will the page be static, meaning the fetch is done at build time???, need to test this with some examples using a version deployed to vercel, to use a real prod build for testing / verification
 
 
 
@@ -670,11 +725,11 @@ jest seems to have the biggest user base right now if you look at the ["state of
 
 ### next/image
 
-images go into the public folder, but "public" is not part of the src path, only what comes after
+images go into the public directory, but `public` is not part of the src path, only what comes after
 
-so an image called "foo.jpg" located in "/public/images/" would have an src like this: "/images/foo.jpg"
+so an image called `foo.jpg` located in `/public/images/` would have an src like this: `/images/foo.jpg`
 
-Note: if you used next/image prior to next.js 13 you might want to check out the migration guide as there are some major changes as to how some options work: <https://nextjs.org/docs/messages/next-image-upgrade-to-13>
+Note: if you used next/image prior to **next.js 13** you might want to check out the migration guide as there are some major changes as to how some options work: <https://nextjs.org/docs/messages/next-image-upgrade-to-13>
 
 for the layout header, we will add a fallback image for the canvas element, the goal is to use the [css property object fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) to make it as large as the canvas container:
 
@@ -692,7 +747,7 @@ for the layout header, we will add a fallback image for the canvas element, the 
 
 if now open the page in your browser and inspect the html you will see that next.js add a lot of different srcset attributes to the img tag
 
-Note: when you start your server with `npm run dev`, next.js will automatically create files with different dimensions of your image and store them into the folder `\.next\cache\images`
+Note: when you start your server with `npm run dev`, next.js will automatically create files with different dimensions of your image and store them into the directory `\.next\cache\images`
 
 our original image is a PNG image, so it's quite heavy, because modern browser support formats like [AVIF](https://developer.mozilla.org/docs/Web/Media/Formats/Image_types#avif_image) or [WebP](https://developer.mozilla.org/docs/Web/Media/Formats/Image_types#webp_image) we want next.js to convert our original file into these formats and depending on what format the browser supports we want next.js to either ship .avif files to the user (best compression / smallest size) or else ship .webp files (good compression / smaller size) and only if none of those two is formats is supported it should ship .png files (worst compression / bigger size)
 
@@ -985,7 +1040,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 }
 ```
 
-and then in the root of the project create a folder called `types` and inside of it add a file called `` with the following content:
+and then in the root of the project create a directory called `types` and inside of it add a file called `` with the following content:
 
 ```ts
 // types/mdx.d.ts
@@ -1008,16 +1063,79 @@ Note: Also after adding this file or in the future after making changes to it, y
 
 ### adding an article page
 
-you can chose between 3 ways of creating an **article page** to display MDX content, I will show you all these options and then it is up to you to decide which you like best or which suits your use case best
+you can chose between 3 ways of creating an **article page** to display MDX content, a quick introduction to three techniques you can use to create pages with MDX content and then it will be up to you to decide which you like best
+
+Note: I think that every time you have to decide what framework you will use for your next project or what package to use to solve a problem or build a new feature, it is important that you take some time and do several prototypes using the different options you have, after that it will be much easier to decide which one suits your use case best
 
 * [option 1](#option-1-multiple-pagetsx-files-one-static-route-per-article): multiple page.tsx files, one static route per article
 * [option 2](#option-2-multiple-pagemdx-files-one-static-route-per-article): multiple page.mdx files, one static route per article
 * [option 3](#option-3-one-pagetsx-file-one-dynamic-route-segment-for-all-articles): one page.tsx file, one dynamic route segment for all articles
 
+Note: You might wonder, which of these three 3 options I personally prefer and you might want to skip the other two because you don't have time to check them all out, if that the case jump straight to option 3, this is the option that suits my needs best, but again be careful as it might not be the best for your use case
+
 #### option 1: multiple page.tsx files, one static route per article
 
+in the `app` directory, create a new directory called `articles` and then inside that another directory `2023-01-20_foo`
+
+```shell
+─ app
+├─ articles
+  ├─ 2023-01-20_foo
+```
+
+then inside of the `2023-01-20_foo` directory, we will create a file containing some MDX formatted content, so that we can then import it into our page, create a file called `article.mdx`
+
+```mdx
+# Hello, World!
+
+## sub title
+
+**bold**
+
+~~strikethrough~~
+
+> quote
+
+[link](https://chris.lu)
+
+![This is an octocat image](https://myoctocat.com/assets/images/base-octocat.svg)
+
+* foo
+* bar
+* baz
+
+[ ] checkbox
+```
+
+Note: as **naming convention** for our markdown files, we will use a format where the first part is the publication date, for the date we will use the YYYY-MM-DD format because according to the international ISO 8601 standard, this allows files to be sorted into chronological order and avoids confusion when national conventions vary, then after the date we will put a slugified (cleaned up) version of the article's title, where all spaces are replaced by underscores
+
+Note: I think I just inventied the adjective [**slugified**](https://www.google.com/search?q=%22slugified%22) /ˈslʌɡɪfʌɪd/ in the note above 😂
+
+next inside of the `2023-01-20_foo` directory, we will create our `page.tsx`
+
+```tsx
+import ArticleMDXContent from './article.mdx'
+
+export default function ArticlePage() {
+
+    return (
+        <>
+            <ArticleMDXContent />
+        </>
+    )
+}
+```
 
 
+
+
+
+
+TODO: add a note with my thoughts about this option, what are the pro and cons of doing it this way
+
+Note: this is an easy solution that is similar to option 3 but requires less code, one downside of this option is that you will end up having to create one page.tsx for each article, each of these page.tsx will be in a different directory but they all will contain the exact same code, if your blog is small and you write few articles a year this is not a problem, but if you use this technique for something that has hundreds of pages and then you need to update code in the page.tsx file then this will require a considerable effort (even if you use exclude some of the code into reusable components and even if the refactoring is done with a tool that does update the code for you in each of the page.tsx files)
+
+TODO: add a layout file, to be used by all of the pages, so that every article has the same layout
 
 #### option 2: multiple page.mdx files, one static route per article
 
@@ -1025,13 +1143,34 @@ you can chose between 3 ways of creating an **article page** to display MDX cont
 
 
 
-
+TODO: add a note with my thoughts about this option, what are the pro and cons of doing it this way
 
 #### option 3: one page.tsx file, one dynamic route segment for all articles
 
-in the /app directory, create a new folder called `articles` and then inside that another folder using a dynamic segment containing our article slug as name `[slug]`
+Note: this option is similar to option 1, but the main difference is that instead of multiple page.tsx and multiple static routes (one page and one route per article) we will only create one page.tsx and then add a dynamic route that will allow us to display an unlimited amount of articles, but this option needs more code as we will need a way to explain to next.js what the different articles are, so that when we do the production deployment it can create a static page on build time for each article
 
-Glossary: a slug is a clean version of the article title, it is search engine-friendly so good for SEO and also serves as a unique identifier of the page
+in the `app` directory, create a new directory called `articles` and then inside that another directory using the **dynamic segment** technique, with our article slug as name `[slug]`
+
+Glossary: a slug is a clean version of the article title, it is search engine-friendly so good for SEO and also serves as a unique identifier of the page, read more: [MDN slug definition and rules](https://developer.mozilla.org/en-US/docs/MDN/Writing_guidelines/Writing_style_guide#slugs)
+
+in the `/app/articles/[slug]/` directory, create a new directory called `(content)`
+
+this gives you the following structure
+
+```shell
+─ app
+├─ articles
+  ├─ [slug]
+    ├─ (content)
+```
+
+Note: did you notice the parenthesis around the content directory name, no this is mistake, this is what next.js calls [route groups](https://beta.nextjs.org/docs/routing/defining-routes#route-groups), in our use case we use this technique to add a directory to store our mdx files but because this is a route group it will not affect the URL structure as other directories without parenthesis would do, to test this you can go to <https://localhost:3000/(content)> and you will see that you get a 404 meaning no route got found for that URL
+
+Note: you have other options to store your MDX files of course, you could create a directory at the root of your project if you prefer and not use the route groups technique
+
+now inside of the `/app/articles/[slug]/(content)/` directory add 
+
+
 
 then inside of `/app/articles/[slug]/` create a file called `page.tsx` with the following content
 
@@ -1054,7 +1193,7 @@ export default function Article(params: IParams) {
 
 [next.js generate static params documentation](https://beta.nextjs.org/docs/api-reference/generate-static-params)
 
-
+TODO: add a note with my thoughts about this option, what are the pro and cons of doing it this way
 
 Read more:
 
@@ -1066,7 +1205,7 @@ Read more:
 
 
 
-
+TODO: benchmark performance of the 3 options above, are there any differencies??? some use the examples above to do benchmarks, using a version deployed to vercel, to use a real prod build for testing / verification and not a local dev build as the dev build will not have the pre-built static versions of pages
 
 TODO: ensure all images in mdx files use next/image and all internal links use next/link
 
@@ -1133,9 +1272,16 @@ Note: if using vercel and also next.js, you don't need to use their cli command 
 blitz is a framework on top of next.js, check out their login, sign up, lost password forms and pages, maybe they did things I missed or are better than my implementation: <https://github.com/blitz-js/blitz/commit/6ec020c6d67d18c074d4064c2a4d63bfa9c83d5c>
 
 
-## mui
 
-seems to have problems with next.js 13 <https://github.com/mui/material-ui/issues/34905>
+
+
+
+
+
+
+## mui styling
+
+seems to have problems with **next.js 13** <https://github.com/mui/material-ui/issues/34905>
 mostly because of CSS in JS <https://beta.nextjs.org/docs/styling/css-in-js> server side rendering with emotion <https://github.com/emotion-js/emotion/issues/2928>
 
 ## layout / blog design
