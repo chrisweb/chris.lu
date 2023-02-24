@@ -328,7 +328,7 @@ mkdir app
 
 inside of the `app` directory create a first page called `page.tsx` and put the following content into it:
 
-```typescript
+```tsx
 export default function Homepage() {
     return <main>Hello, World!</main>
 }
@@ -374,7 +374,10 @@ this notification is related to a new typescript plugin the next.js team created
 
 > We've built a new TypeScript plugin that provides suggestions for page and layout configuration options and provides helpful usage hints around Server and Client Components
 
-Note: check out the [youtube video "Next.js 13: Prevent Common Mistakes w/ New TypeScript Plugin"](https://www.youtube.com/watch?v=pqMqn9fKEf8) from [Delba](https://twitter.com/delba_oliveira) which is part of the next.js developer experience team giving more info about what the new plugin is and what it does
+Read more:
+
+* check out the [youtube video "Next.js 13: Prevent Common Mistakes w/ New TypeScript Plugin"](https://www.youtube.com/watch?v=pqMqn9fKEf8) from [Delba](https://twitter.com/delba_oliveira) which is part of the next.js developer experience team giving more info about what the new plugin is and what it does
+* [next.js "using the typeScript plugin" beta documentation](https://beta.nextjs.org/docs/configuring/typescript#using-the-typescript-plugin)
 
 * but this is not all next.js does for us, because now if you visit the your first page by using the URL `http://localhost:3000`, next.js will also create the two files, `head.tsx` and `layout.tsx`, that I mentioned ealier, inside of the `app` directory
 
@@ -582,6 +585,9 @@ next.js created a layout file for us in the root segment, but if inside of that 
 
 TODO: show an example with just "a href" links, which reload the entire page and then an example which uses next/link, explain that when I say **"navigate"** I mean by using **next/link** and NOT a conventinal **html anchor element**, show clearly that the data query in the layout is not being executed twice, just the main content (children of layout) are being updated
 
+TODO: add an extra sub-chapter to explain how **statically typed links** work: <https://nextjs.org/blog/next-13-2#statically-typed-links>
+
+
 
 
 
@@ -672,7 +678,14 @@ Note: if you use fetch with no options, the default value for cache will be forc
 
 TODO: need to verify this, if using a fetch and not opt out of caching, will the page be static, meaning the fetch is done at build time???, need to test this with some examples using a version deployed to vercel, to use a real prod build for testing / verification
 
+TODO: check out the next.js 13.2 improvements: <https://nextjs.org/blog/next-13-2#nextjs-cache>
 
+
+
+
+revalidating:
+
+<https://beta.nextjs.org/docs/data-fetching/revalidating>
 
 
 
@@ -723,7 +736,7 @@ jest seems to have the biggest user base right now if you look at the ["state of
 
 
 
-### next/image
+### optimizing images with next/image
 
 images go into the public directory, but `public` is not part of the src path, only what comes after
 
@@ -787,6 +800,14 @@ read more:
 
 * next.js next/image documentation: <https://beta.nextjs.org/docs/api-reference/components/image>
 * use avif in next.js: <https://avif.io/blog/tutorials/nextjs/>
+
+### optimizing fonts with next/font
+
+next.js 13.2 has some next/font improvements: <https://nextjs.org/blog/next-13-2#other-improvements>
+
+read more:
+
+[next.js next/font beta documentation](https://beta.nextjs.org/docs/optimizing/fonts)
 
 ### state management
 
@@ -1075,15 +1096,15 @@ Note: You might wonder, which of these three 3 options I personally prefer and y
 
 #### option 1: multiple page.tsx files, one static route per article
 
-in the `app` directory, create a new directory called `articles` and then inside that another directory `2023-01-20_foo`
+in the `app` directory, create a new directory called `articles` and then inside that another directory `option1`, to end up with the following structure:
 
 ```shell
 ─ app
 ├─ articles
-  ├─ 2023-01-20_foo
+  ├─ option1
 ```
 
-then inside of the `2023-01-20_foo` directory, we will create a file containing some MDX formatted content, so that we can then import it into our page, create a file called `article.mdx`
+then inside of the `option1` directory, we create a file that we call `foo.mdx`, which will contain some MDX formatted content, so that we can then import it into our page
 
 ```mdx
 # Hello, World!
@@ -1107,72 +1128,78 @@ then inside of the `2023-01-20_foo` directory, we will create a file containing 
 [ ] checkbox
 ```
 
-Note: as **naming convention** for our markdown files, we will use a format where the first part is the publication date, for the date we will use the YYYY-MM-DD format because according to the international ISO 8601 standard, this allows files to be sorted into chronological order and avoids confusion when national conventions vary, then after the date we will put a slugified (cleaned up) version of the article's title, where all spaces are replaced by underscores
-
-Note: I think I just inventied the adjective [**slugified**](https://www.google.com/search?q=%22slugified%22) /ˈslʌɡɪfʌɪd/ in the note above 😂
-
-next inside of the `2023-01-20_foo` directory, we will create our `page.tsx`
+next inside of that same `option1` directory, we will now create a regular `page.tsx` file that will import the `foo.mdx` file we just created
 
 ```tsx
-import ArticleMDXContent from './article.mdx'
+import ContentMDX from './foo.mdx'
 
-export default function ArticlePage() {
+export default function Article() {
 
     return (
         <>
-            <ArticleMDXContent />
+            <ContentMDX />
         </>
     )
 }
 ```
 
+Now in your browser navigate to <http://localhost:3000/articles/option1> and you should see our MDX page getting displayed, with **foo** as subtitle
 
-
-
-
-
-TODO: add a note with my thoughts about this option, what are the pro and cons of doing it this way
-
-Note: this is an easy solution that is similar to option 3 but requires less code, one downside of this option is that you will end up having to create one page.tsx for each article, each of these page.tsx will be in a different directory but they all will contain the exact same code, if your blog is small and you write few articles a year this is not a problem, but if you use this technique for something that has hundreds of pages and then you need to update code in the page.tsx file then this will require a considerable effort (even if you use exclude some of the code into reusable components and even if the refactoring is done with a tool that does update the code for you in each of the page.tsx files)
-
-TODO: add a layout file, to be used by all of the pages, so that every article has the same layout
+Note: this is an easy solution that is similar to option 3 but requires less code, one downside of this option is that you will end up having to create one page.tsx for each article, each of these page.tsx will be in a different directory but they all will contain the exact same code (except for the import path of the MDX content that will always point to a different file), if your blog is small and you write few articles a year this is not a problem, but if you use this technique for something that has hundreds of pages and then you need to update code in the page.tsx file for some reason, then this might require a considerable amount of effort (even if you use exclude some of the code into reusable components and even if the refactoring is done with a tool, that does update the code for you, in each of the page.tsx files)
 
 #### option 2: multiple page.mdx files, one static route per article
 
+what we did in previous **option 1** example, is what you will currently find in the [next.js MDX beta documentation](https://beta.nextjs.org/docs/guides/mdx), but in **option 2** we will create an even simpler version
 
+if you didn't already in the previous option, in the `app` directory, create a new directory called `articles`
 
-
-
-TODO: add a note with my thoughts about this option, what are the pro and cons of doing it this way
-
-#### option 3: one page.tsx file, one dynamic route segment for all articles
-
-Note: this option is similar to option 1, but the main difference is that instead of multiple page.tsx and multiple static routes (one page and one route per article) we will only create one page.tsx and then add a dynamic route that will allow us to display an unlimited amount of articles, but this option needs more code as we will need a way to explain to next.js what the different articles are, so that when we do the production deployment it can create a static page on build time for each article
-
-in the `app` directory, create a new directory called `articles` and then inside that another directory using the **dynamic segment** technique, with our article slug as name `[slug]`
-
-Glossary: a slug is a clean version of the article title, it is search engine-friendly so good for SEO and also serves as a unique identifier of the page, read more: [MDN slug definition and rules](https://developer.mozilla.org/en-US/docs/MDN/Writing_guidelines/Writing_style_guide#slugs)
-
-in the `/app/articles/[slug]/` directory, create a new directory called `(content)`
-
-this gives you the following structure
+in the `articles` directory, create a new directory called `option2`
 
 ```shell
 ─ app
 ├─ articles
-  ├─ [slug]
-    ├─ (content)
+  ├─ option2
 ```
 
-Note: did you notice the parenthesis around the content directory name, no this is mistake, this is what next.js calls [route groups](https://beta.nextjs.org/docs/routing/defining-routes#route-groups), in our use case we use this technique to add a directory to store our mdx files but because this is a route group it will not affect the URL structure as other directories without parenthesis would do, to test this you can go to <https://localhost:3000/(content)> and you will see that you get a 404 meaning no route got found for that URL
+inside of the `option2` directory, create a file called `page.mdx` and insert the following MDX content:
 
-Note: you have other options to store your MDX files of course, you could create a directory at the root of your project if you prefer and not use the route groups technique
+```mdx
+# Hello, World!
 
-now inside of the `/app/articles/[slug]/(content)/` directory add 
+## bar
 
+**bold**
 
+~~strikethrough~~
 
-then inside of `/app/articles/[slug]/` create a file called `page.tsx` with the following content
+> quote
+
+[link](https://chris.lu)
+
+![This is an octocat image](https://myoctocat.com/assets/images/base-octocat.svg)
+
+* foo
+* bar
+* baz
+
+[ ] checkbox
+```
+
+Now in your browser navigate to <http://localhost:3000/articles/option2> and you should see our MDX page getting displayed, with **bar** as subtitle
+
+Note: this is an even easier solution and one that requires even less code than what we just saw in option 1, then only downside to this solution is the same thing I mentioned in option 1, if you want to add a feature to your article pages, then you will need to do some refactoring in each page
+
+#### option 3: one page.tsx file, one dynamic route segment for all articles
+
+Note: this option is similar to option 1, but the main difference is that instead of multiple page.tsx (or multiple page.mdx as we had in option 2) and multiple static routes (one page and one route (segment directory) per article) we will only create one page.tsx and then add a dynamic route that will allow us to display an unlimited amount of articles, but this option needs more code as we will need a way to explain to next.js what the different articles are, so that when we do the production deployment it can create a static page on build time for each article
+
+if you didn't already in one of the previous options, in the `app` directory, create a new directory called `articles`
+
+inside of the `articles` directory, we will now create another directory using the **dynamic segment** technique, to do so create a directory and name it `[slug]`, the square parenthesis tell next.js this is a dynamic route and NOT a static segment
+
+Glossary: a slug is a clean version of the article title, it is search engine-friendly, which means it is good for SEO and also serves as a unique identifier of the page, if you want more details, check out the [MDN slug definition and rules](https://developer.mozilla.org/en-US/docs/MDN/Writing_guidelines/Writing_style_guide#slugs)
+
+now inside of the `[slug]/` directory create a new `page.tsx` file, with the following content:
 
 ```tsx
 interface IParams {
@@ -1189,6 +1216,7 @@ export default function Article(params: IParams) {
 }
 ```
 
+TODO: a developer advocate from vercel, says dynamic routes are useless: <https://github.com/vercel/next.js/discussions/12322>, but this was for next.js pages not app directory
 
 
 [next.js generate static params documentation](https://beta.nextjs.org/docs/api-reference/generate-static-params)
@@ -1199,6 +1227,10 @@ Read more:
 
 * [next.js page params and searchParams documentation](https://beta.nextjs.org/docs/api-reference/file-conventions/page#params-optional)
 * [next.js dynamic segments documentation](https://beta.nextjs.org/docs/routing/defining-routes#dynamic-segments)
+
+
+
+
 
 
 
@@ -1224,6 +1256,78 @@ read more:
 * next.js MDX package documentation: <https://nextjs.org/docs/advanced-features/using-mdx>
 * app directory MDX pages next.js example: <https://github.com/vercel/next.js/tree/canary/examples/app-dir-mdx>
 
+
+
+
+## mardown pages metadata
+
+### metadata using a YAML front-matter that we parse using gray-matter
+
+In a lot of examples you can find on the web, use a YAML front-matter to add metadata to their files
+
+Lets add a front-matter to our MDX file:
+
+```yaml
+---
+title: foo
+author: bar
+---
+```
+
+now we need to install a new dependency called [gray-matter](https://www.npmjs.com/package/gray-matter) to parse the front-matter metadata
+
+now in our page.tsx
+
+```tsx
+import matter from 'gray-matter';
+
+const docsDirectory = join(process.cwd(), 'docs');
+
+export function getDocBySlug(slug) {
+  const realSlug = slug.replace(/\.md$/, '');
+  const fullPath = join(docsDirectory, `${realSlug}.md`);
+  const fileContents = fs.readFileSync(fullPath, 'utf8');
+  const { data, content } = matter(fileContents);
+```
+
+### metadata using next/mdx
+
+next/mdx itself has no support YAML front-matter built in, but instead it supports 
+
+```tsx
+export const meta = {
+    title: 'foo'
+    author: 'bar'
+}
+```
+
+## (content) directory for all MDX files
+
+before we create the page, in the `/app/articles/[slug]/` directory, create a new directory called `(content)`, to end up with the following directories structure:
+
+```shell
+─ app
+├─ articles
+  ├─ [slug]
+    ├─ (content)
+```
+
+Note: did you notice the parenthesis around the content directory name, no this is mistake, this is what next.js calls [route groups](https://beta.nextjs.org/docs/routing/defining-routes#route-groups), in our use case we use this technique to add a directory to store our mdx files but because this is a route group it will not affect the URL structure as other directories without parenthesis would do, to test this you can go to <https://localhost:3000/(content)> and you will see that you get a 404 meaning no route got found for that URL
+
+Note: you have other options to store your MDX files of course, you could create a directory at the root of your project if you prefer and not use the route groups technique
+
+## add a layout for all our article page
+
+TODO: add a layout file, to be used by all of the pages, so that every article has the same layout
+
+## MDX directories naming convention
+
+Note: as **naming convention** for our markdown files, we will use a format where the first part is the publication date, for the date we will use the YYYY-MM-DD format because according to the international ISO 8601 standard, this allows files to be sorted into chronological order and avoids confusion when national conventions vary, then after the date we will put a slugified (cleaned up) version of the article's title, where all spaces are replaced by underscores
+
+Note: I think I just inventied the adjective [**slugified**](https://www.google.com/search?q=%22slugified%22) /ˈslʌɡɪfʌɪd/ in the note above 😂
+
+
+
 ## adding custom react components to MDX pages
 
 
@@ -1232,7 +1336,12 @@ read more:
 
 [remark-gfm](https://www.npmjs.com/package/remark-gfm)
 
-## extending MDX, to transform code blocks using the 
+## extending MDX, to transform code blocks using the xxx plugins
+
+## MDX VSCode plugin
+
+<https://github.com/mdx-js/vscode-mdx>
+<https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx>
 
 
 
@@ -1281,8 +1390,60 @@ blitz is a framework on top of next.js, check out their login, sign up, lost pas
 
 ## mui styling
 
-seems to have problems with **next.js 13** <https://github.com/mui/material-ui/issues/34905>
-mostly because of CSS in JS <https://beta.nextjs.org/docs/styling/css-in-js> server side rendering with emotion <https://github.com/emotion-js/emotion/issues/2928>
+seems to have problems with **next.js 13**: <https://github.com/mui/material-ui/issues/34905>
+mostly because of CSS in JS <https://beta.nextjs.org/docs/styling/css-in-js> server side rendering (SRR) with **emotion**: <https://github.com/emotion-js/emotion/issues/2928>, the biggest problem seems to be if your app uses streaming of components
+
+so right now MUI is a problem, because of their style engine **emotion** which has trouble to create the css on runtime when using streaming
+
+a former contributor of emotion explains why they moved away from emotion to use sass modules (css modules + sass): <https://dev.to/srmagura/why-were-breaking-up-wiht-css-in-js-4g9b>
+
+mui is discussing adding a new engine: <https://github.com/mui/material-ui/issues/34826>
+the author of mui thinks static extration would be best, but static extraction got removed from emotion: <https://github.com/emotion-js/emotion/blob/main/docs/extract-static.mdx>
+static css extraction explained: <https://andreipfeiffer.dev/blog/2021/css-in-js-styles-output>
+
+using tailwind css would be a solution, as it doesn't have the problems that css-in-js libraries have and there is a mui documentation page about using tailwind, but this does not mean tailwind is replacing emotion as a peer dependency of mui, you just have it alongside mui: <https://mui.com/material-ui/guides/interoperability/#tailwind-css>
+
+here is a very long, but interesting article about what kind of css experiments the author of tailwind did before he created tailwind: <>
+
+why I'm not a tailwind fan: <>
+
+## CSP (content security policy)
+
+CSP is very important
+
+TODO: mui 5 seems to have problems with CSP: <https://github.com/mui/material-ui/issues/19938>
+
+## github actions
+
+this seems to be an interesting github action, using lighthouse: <https://github.com/lfre/lightkeeper>
+
+use github codeql? <https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/about-code-scanning-with-codeql>, it is used by mui: <https://github.com/mui/material-ui/blob/master/.github/workflows/codeql.yml>
+
+github action to compare next.js bundle size: <https://jeffchen.dev/posts/Measuring-Bundle-Sizes-With-Next-js-And-Github-Actions-Part-2/>
+
+## metadata support and SEO optimization
+
+<https://nextjs.org/blog/next-13-2#built-in-seo-support-with-new-metadata-api>
+
+## app directory api routes
+
+TODO: is this really a full replacement for api routes?
+
+<https://beta.nextjs.org/docs/routing/route-handlers#static-and-dynamic-route-handlers>
+
+## turbopack
+
+TODO: chapter about [turbopack](https://turbo.build/pack) support
+
+Note: warning! turbopack is alpha, so not even beta yet, a lot of things will change until the first stable release, so things might break over time and some features might have bugs, be unstable or just slow
+
+TODO: sub chapter to explain how to use loaders with turbopack: <https://nextjs.org/blog/next-13-2#custom-file-transformation-with-webpack-loaders>, explore what loaders there are for things that we use like MDX, ...?
+
+TODO: benchamerk using the mdx loader compared to not using it, is it faster and how much faster is it
+
+Read more:
+
+* [next.js 13 turbopack documentation](https://beta.nextjs.org/docs/configuring/turbopack)
 
 ## layout / blog design
 
