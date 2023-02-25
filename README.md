@@ -1187,7 +1187,7 @@ inside of the `option2` directory, create a file called `page.mdx` and insert th
 
 Now in your browser navigate to <http://localhost:3000/articles/option2> and you should see our MDX page getting displayed, with **bar** as subtitle
 
-Note: this is an even easier solution and one that requires even less code than what we just saw in option 1, then only downside to this solution is the same thing I mentioned in option 1, if you want to add a feature to your article pages, then you will need to do some refactoring in each page
+Note: this is an even easier solution and one that requires even less code than what we just saw in option 1, one downside to this solution is the same thing I mentioned in option 1, if you want to add a feature to your article pages, then you will need to do some refactoring in each page, the second downside to this solution is that if you want to add metadata to your files, or already have existing MDX files using a YAML front-matter, then there is no way to parse that metadata, instead you need to use the next.js MDX metadata technique, more about [MDX content metadata](#mdx-content-metadata) in the next chapter
 
 #### option 3: one page.tsx file, one dynamic route segment for all articles
 
@@ -1259,9 +1259,9 @@ read more:
 
 
 
-## mardown pages metadata
+## MDX content metadata
 
-### metadata using a YAML front-matter that we parse using gray-matter
+### solution 1: metadata using a YAML front-matter that we parse using gray-matter
 
 In a lot of examples you can find on the web, use a YAML front-matter to add metadata to their files
 
@@ -1290,9 +1290,9 @@ export function getDocBySlug(slug) {
   const { data, content } = matter(fileContents);
 ```
 
-### metadata using next/mdx
+### solution 2: metadata using next/mdx
 
-next/mdx itself has no support YAML front-matter built in, but instead it supports 
+next/mdx itself has no support YAML front-matter built in, but instead it supports exporting a **meta** object that contains your metadata
 
 ```tsx
 export const meta = {

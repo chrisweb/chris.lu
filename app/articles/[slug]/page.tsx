@@ -1,24 +1,34 @@
 import { IPageSlug } from '@interfaces/page'
-import dynamic from 'next/dynamic'
 
-export default function Article({ params }: IPageSlug) {
+const getPost = async (slug: string) => {
 
-    //const { slug } = params
+    console.log('getPost, slug:', slug)
 
-    
+    return '# post'
 
-    return (
-        <>
-            {/*<MDXContent />*/}
-        </>
-    )
 }
 
 export async function generateStaticParams() {
 
-    /*const MDXContent = dynamic(() => import(`./${params.slug}.mdx`))
+    //const MDXContent = dynamic(() => import(`./${params.slug}.mdx`))
   
-    return posts.map((post) => ({
+    /*return posts.map((post) => ({
       slug: post.slug,
-    }));*/
+    }))*/
+
+    return [{ slug: 'foo' }, { slug: 'bar' } ]
+
   }
+
+export default async function Article({ params }: IPageSlug) {
+
+    const { slug } = params
+
+    const ArticleContent = await getPost(slug)
+
+    return (
+        <>
+            <ArticleContent />
+        </>
+    )
+}
