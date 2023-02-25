@@ -1,4 +1,4 @@
-import { IPageSlug } from '@interfaces/page'
+/*import { IPageSlug } from '@interfaces/page'
 
 const getPost = async (slug: string) => {
 
@@ -8,7 +8,7 @@ const getPost = async (slug: string) => {
 
 }
 
-export async function generateStaticParams() {
+export async function generateStaticParams() {*/
 
     //const MDXContent = dynamic(() => import(`./${params.slug}.mdx`))
   
@@ -16,7 +16,7 @@ export async function generateStaticParams() {
       slug: post.slug,
     }))*/
 
-    return [{ slug: 'foo' }, { slug: 'bar' } ]
+    /*return [{ slug: 'foo' }, { slug: 'bar' } ]
 
   }
 
@@ -29,6 +29,31 @@ export default async function Article({ params }: IPageSlug) {
     return (
         <>
             <ArticleContent />
+        </>
+    )
+}*/
+
+interface IPageProps {
+    params: {
+        slug: string
+    }
+}
+
+export const dynamicParams = false
+
+export async function generateStaticParams() {
+
+    return [{ slug: 'option3' }]
+
+}
+
+export default function Article(props: IPageProps) {
+
+    const { params: { slug } } = props
+
+    return (
+        <>
+            <span>{slug}</span>
         </>
     )
 }

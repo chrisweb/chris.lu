@@ -1191,8 +1191,6 @@ Note: this is an even easier solution and one that requires even less code than 
 
 #### option 3: one page.tsx file, one dynamic route segment for all articles
 
-Note: this option is similar to option 1, but the main difference is that instead of multiple page.tsx (or multiple page.mdx as we had in option 2) and multiple static routes (one page and one route (segment directory) per article) we will only create one page.tsx and then add a dynamic route that will allow us to display an unlimited amount of articles, but this option needs more code as we will need a way to explain to next.js what the different articles are, so that when we do the production deployment it can create a static page on build time for each article
-
 if you didn't already in one of the previous options, in the `app` directory, create a new directory called `articles`
 
 inside of the `articles` directory, we will now create another directory using the **dynamic segment** technique, to do so create a directory and name it `[slug]`, the square parenthesis tell next.js this is a dynamic route and NOT a static segment
@@ -1202,36 +1200,141 @@ Glossary: a slug is a clean version of the article title, it is search engine-fr
 now inside of the `[slug]/` directory create a new `page.tsx` file, with the following content:
 
 ```tsx
-interface IParams {
-    slug: string
+interface IProps {
+    params: {
+        slug: string
+    }
 }
 
-export default function Article(params: IParams) {
+export default function Article(props: IProps) {
+
+    const { params: { slug } } = props
 
     return (
         <>
-            
+            <span>{slug}</span>
         </>
     )
 }
 ```
 
-TODO: a developer advocate from vercel, says dynamic routes are useless: <https://github.com/vercel/next.js/discussions/12322>, but this was for next.js pages not app directory
+now in your browser navigate to <http://localhost:3000/articles/option3> and you should see **option3** getting displayed, this is good as it means our slug (dynamic route segment) works
+
+to test our slug we used **option3** as value in the URL, but you can replace that value by whatever you want and it will get displayed on the screen, meaning our slug can by anything
+
+the good thing about option 1 and 2 is that both are static pages as there is nothing dynamic in the code, the route is static and the content too, in this example however the slug segment is dynamic
+
+we are currently using `npm run dev` as we are developping locally, but the moment we want to deploy our blog in prod we will have to do a  build of our app using the command `npm run build` (or this is the command our CI/CD tool will use), lets stop the dev server for a moment and instead lets run the build command locally to see the output:
+
+```shell
+Route (app)                                Size     First Load JS
+┌ ○ /                                      0 B                0 B
+├ λ /articles/[slug]                       152 B          68.1 kB
+├ ○ /articles/option1                      152 B          68.1 kB
+└ ○ /articles/option2                      0 B                0 B
+```
+
+you will notice that in front of route /articles/[slug] there is this symbol **λ** but our previous two examples have the symbol **○** in front of their URL, this means that both pages, that we created in option 1 and 2 will be generated at build time using a technique called **static site generation (SSG)**, but NOT our slug page, which will get generated at runtime using a technique called **server side rendering (SSR)**, meaning it will get generated on each request
+
+next.js opted out of generation at build time and instead decided to use generation at runtime, because at build time it did not know what values for our slug would be, all next.js could see at build time was that slug was undefined, it did not know one potential value for our slug would be option3
+
+this is a problem, because we don't want the server to have to regenerate the page every time a user visits it, because this would harm the performance of our server especially if a lot of people visit the page at the same time, so what we want is getting back **static site generation (SSG)** so that the page can be built again at build time and then served very quickly to the user at runtime, hence keeping the performance of our server low even if the page gets visited a lot
+
+Note: if you have created a page in the past using react create app, you have created an app that was using **client side rendering (CSR)**, which means that for each on each request the client recieves the javascript code you wrote using react components, it then needs to parse and execute that javascript to then be able to build the page (the html code, css and client javascript) on the client side, if the browser runs on a device that is slow this will take some time, if instead of that you use **server side rendering (SSR)** then the javascript code will get parsed and executed on each request but on the server side by a powerful server and the resulting html (+ js + css) is then sent to the client which only has to display it, this usually results smaller page loading times **SSR > CSR**, but you are still doing a lot of work on each request on the server side, this is why **static site generation (SSG)** is even better, because with **static site generation (SSG)** you do the work only once at build time and then for on each request the server only has to send back the already generated html (+ js + css) to the client, meaning the server has less work to do and can deliver responses much faster, this is why **SSG > SRR**, you can then further increase the delivery by putting the static content that got created at build time onto a **content delivery network (CDN)**, meaning your server has even less work to do and because **CDNs** are optimised for fast static content delivery and because they consist of a group of geographically distributed servers that are closer to the user, this will result in yet another speed boost 🚀
+
+to do that we need to use a function called `generateStaticParams` that is provided by next.js 13, to be used in pages of the `app` directory and which will offer us a way to tell next.js during the build process, what the values of our slug are, meaning we will generate a static list of the values for our slug
+
+Note: if you used the `pages` directory before, you might have heard of / used a function called `getStaticPaths`, well `generateStaticParams` is the equivalent of it but for the `app` directory, if you want to learn more about their differencies, I recomend you check out the [migration guide](https://beta.nextjs.org/docs/upgrade-guide#dynamic-paths-getstaticpaths) which does a great job at explaining them
+
+let's update our page code and add the `generateStaticParams` function to it:
+
+```tsx
+interface IProps {
+    params: {
+        slug: string
+    }
+}
 
 
-[next.js generate static params documentation](https://beta.nextjs.org/docs/api-reference/generate-static-params)
 
-TODO: add a note with my thoughts about this option, what are the pro and cons of doing it this way
+export default function Article(props: IProps) {
+
+    const { params: { slug } } = props
+
+    return (
+        <>
+            <span>{slug}</span>
+        </>
+    )
+}
+```
+
+now let's run the build again to see what the output is this time:
+
+```shell
+Route (app)                                Size     First Load JS
+┌ ○ /                                      0 B                0 B
+├ ● /articles/[slug]                       152 B          68.1 kB
+├   └ /articles/option3
+├ ○ /articles/option1                      152 B          68.1 kB
+└ ○ /articles/option2                      0 B      
+```
+
+as you can see, we previously had the **λ** representing **server side generation (SSR)** but now we have a filled circle **●** symbol, that symbol is similar to the hollow circle **○** symbol we have for **static site generation (SSG)** like option 1 and option 2 but a bit different, the difference is that this symbol indicates that the **static site generation (SSG)** will be used for every slug that is know at build time (every slug that will get returned by generateStaticParams) but for every other slug that will only be known at runtime it will use **server side generation (SSR)**, this is because some apps might have a mix of both, some pages for which the slug was known at build time but also some other pages for which the slug will only exist at runtime
+
+we however don't want to use the default behavior where our page uses **SSR** as fallback for pages that couldn't get generated using **SSG**, in our case we prefer to always return a **404** page if a slug is not in the return value provided by `generateStaticParams`, to do that we need to modify our page.tsx and add a configuration option called [dynamicParams](https://beta.nextjs.org/docs/api-reference/segment-config#dynamicparams)
+
+```tsx
+interface IPageProps {
+    params: {
+        slug: string
+    }
+}
+
+export const dynamicParams = false
+
+export async function generateStaticParams() {
+
+    return [{ slug: 'option3' }]
+
+}
+
+export default function Article(props: IPageProps) {
+
+    const { params: { slug } } = props
+
+    return (
+        <>
+            <span>{slug}</span>
+        </>
+    )
+}
+```
+
+if you want to try this out, first set `dynamicParams` to `true` or comment it out because true is the default value anyway and then first use the command `npm run build` to rebuild your code and then the command `npm run start` to start a server locally (don't use `npm run dev` because the dev server uses SSR by default for every page), then in your browser navigate to <http://localhost:3000/articles/option4> and you will see that **option4** gets displayed because it got server side generated, now uncomment or set `dynamicParams` to `false` again, run `npm run build` and then `npm run start` and finally reload the page <http://localhost:3000/articles/option4> and you will see that now it displays the default `404` page
+
+
+
+Note: this option is similar to option 1, but the main difference is that instead of multiple page.tsx (or multiple page.mdx as we had in option 2) and multiple static routes (one segment directory for each page) in this option we end up having one page.tsx and then use a dynamic route which allows us to display an unlimited amount of articles, so on the one hand this option needs more code but on the other hand it needs less files (the benefit will be bigger the more articles your blog has)
 
 Read more:
 
 * [next.js page params and searchParams documentation](https://beta.nextjs.org/docs/api-reference/file-conventions/page#params-optional)
 * [next.js dynamic segments documentation](https://beta.nextjs.org/docs/routing/defining-routes#dynamic-segments)
+* [next.js generate static params documentation](https://beta.nextjs.org/docs/api-reference/generate-static-params)
+* [next.js "dynamicparams" segment configuration documentation](https://beta.nextjs.org/docs/api-reference/segment-config#dynamicparams)
 
 
 
+#### the option I prefer
 
+I prefer option 3, because ...
 
+we are now going to make the final version of our article page using option 3
+
+I like to make my types / interfaces to be reusable as much as possible, so first we are going to move the interface definition we have on top to an external file, create a new directory called 
+
+we had to create a utils/filesystem.ts that got used by generateStaticParams to tell next.js what the different articles URLs (route segments) are, for example when we do a production deployment or locally run `npm run build`, so that next.js can create a static page on build time for each article
 
 
 
@@ -1337,6 +1440,8 @@ Note: I think I just inventied the adjective [**slugified**](https://www.google.
 [remark-gfm](https://www.npmjs.com/package/remark-gfm)
 
 ## extending MDX, to transform code blocks using the xxx plugins
+
+**SynthWave '84** VSCode theme <https://github.com/robb0wen/synthwave-vscode>
 
 ## MDX VSCode plugin
 
