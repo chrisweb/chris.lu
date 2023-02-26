@@ -1143,7 +1143,13 @@ export default function Article() {
 }
 ```
 
-Now in your browser navigate to <http://localhost:3000/articles/option1> and you should see our MDX page getting displayed, with **foo** as subtitle
+if your dev server is not yet running, use the following command in the VSCode terminal (or use your preferred command line tool):
+
+```shell
+npm run dev
+```
+
+now in your browser navigate to <http://localhost:3000/articles/option1> and you should see our MDX page getting displayed, with **foo** as subtitle
 
 Note: this is an easy solution that is similar to option 3 but requires less code, one downside of this option is that you will end up having to create one page.tsx for each article, each of these page.tsx will be in a different directory but they all will contain the exact same code (except for the import path of the MDX content that will always point to a different file), if your blog is small and you write few articles a year this is not a problem, but if you use this technique for something that has hundreds of pages and then you need to update code in the page.tsx file for some reason, then this might require a considerable amount of effort (even if you use exclude some of the code into reusable components and even if the refactoring is done with a tool, that does update the code for you, in each of the page.tsx files)
 
@@ -1311,7 +1317,9 @@ export default function Article(props: IPageProps) {
 }
 ```
 
-if you want to try this out, first set `dynamicParams` to `true` or comment it out because true is the default value anyway and then first use the command `npm run build` to rebuild your code and then the command `npm run start` to start a server locally (don't use `npm run dev` because the dev server uses SSR by default for every page), then in your browser navigate to <http://localhost:3000/articles/option4> and you will see that **option4** gets displayed because it got server side generated, now uncomment or set `dynamicParams` to `false` again, run `npm run build` and then `npm run start` and finally reload the page <http://localhost:3000/articles/option4> and you will see that now it displays the default `404` page
+if you want to try this out, first set `dynamicParams` to `true` (or comment it out because true is the default value anyway) and then if your dev server is not yet running use the command `npm run build` in your VSCode terminal, then in your browser navigate to <http://localhost:3000/articles/option4> and you will see that **option4** gets displayed because it got server side generated, now uncomment or set `dynamicParams` to `false` again and finally reload the page <http://localhost:3000/articles/option4> and you will see that now it displays the default `404` page, because there is not **option4** slug in the array that gets returned by `generateStaticParams`
+
+now of course this is not quite the end yet, as we don't want to maintain the list of slugs manually, but instead want to use a script that will fetch the list of MDX files for us and then genrate a list of slugs for us
 
 
 
