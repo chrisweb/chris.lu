@@ -1,8 +1,8 @@
-import ContentMDX from './foo.mdx'
+import ContentMDX from './content.mdx'
 
 export default function Article() {
 
-    console.log('./foo.mdx')
+    console.log('./content.mdx')
 
     return (
         <>

@@ -27,7 +27,9 @@
     "@next/mdx": "13.2.0",
     "@react-three/drei": "9.56.26",
     "@react-three/fiber": "8.11.5",
+    "globby": "13.1.3",
     "next": "13.2.0",
+    "next-mdx-remote": "4.3.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "three": "0.150.0"

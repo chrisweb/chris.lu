@@ -1104,12 +1104,12 @@ in the `app` directory, create a new directory called `articles` and then inside
   ├─ option1
 ```
 
-then inside of the `option1` directory, we create a file that we call `foo.mdx`, which will contain some MDX formatted content, so that we can then import it into our page
+then inside of the `option1` directory, we create a file that we call `content.mdx`, which will contain some MDX formatted content, so that we can then import it into our page
 
 ```mdx
 # Hello, World!
 
-## sub title
+## option 1
 
 **bold**
 
@@ -1128,10 +1128,10 @@ then inside of the `option1` directory, we create a file that we call `foo.mdx`,
 [ ] checkbox
 ```
 
-next inside of that same `option1` directory, we will now create a regular `page.tsx` file that will import the `foo.mdx` file we just created
+next inside of that same `option1` directory, we will now create a regular `page.tsx` file that will import the `content.mdx` file we just created
 
 ```tsx
-import ContentMDX from './foo.mdx'
+import ContentMDX from './content.mdx'
 
 export default function Article() {
 
@@ -1149,7 +1149,7 @@ if your dev server is not yet running, use the following command in the VSCode t
 npm run dev
 ```
 
-now in your browser navigate to <http://localhost:3000/articles/option1> and you should see our MDX page getting displayed, with **foo** as subtitle
+now in your browser navigate to <http://localhost:3000/articles/option1> and you should see our MDX page getting displayed, with **option 1** as subtitle
 
 Note: this is an easy solution that is similar to option 3 but requires less code, one downside of this option is that you will end up having to create one page.tsx for each article, each of these page.tsx will be in a different directory but they all will contain the exact same code (except for the import path of the MDX content that will always point to a different file), if your blog is small and you write few articles a year this is not a problem, but if you use this technique for something that has hundreds of pages and then you need to update code in the page.tsx file for some reason, then this might require a considerable amount of effort (even if you use exclude some of the code into reusable components and even if the refactoring is done with a tool, that does update the code for you, in each of the page.tsx files)
 
@@ -1172,7 +1172,7 @@ inside of the `option2` directory, create a file called `page.mdx` and insert th
 ```mdx
 # Hello, World!
 
-## bar
+## option 2
 
 **bold**
 
@@ -1319,7 +1319,26 @@ export default function Article(props: IPageProps) {
 
 if you want to try this out, first set `dynamicParams` to `true` (or comment it out because true is the default value anyway) and then if your dev server is not yet running use the command `npm run build` in your VSCode terminal, then in your browser navigate to <http://localhost:3000/articles/option4> and you will see that **option4** gets displayed because it got server side generated, now uncomment or set `dynamicParams` to `false` again and finally reload the page <http://localhost:3000/articles/option4> and you will see that now it displays the default `404` page, because there is not **option4** slug in the array that gets returned by `generateStaticParams`
 
-now of course this is not quite the end yet, as we don't want to maintain the list of slugs manually, but instead want to use a script that will fetch the list of MDX files for us and then genrate a list of slugs for us
+now of course this is not quite the end yet, as we don't want to maintain the list of slugs manually, but instead want to use a script that will fetch the list of MDX files and then genrate a list of slugs
+
+first we are going to add [globby](https://www.npmjs.com/package/globby) as new dependency
+
+```shell
+npm i globby --save-exact
+```
+
+
+update the `generateStaticParams` function in `/app/articles/[slug]/page.tsx` file to be like this:
+
+```tsx
+export async function generateStaticParams() {
+
+
+
+    return [{ slug: 'option3' }]
+
+}
+```
 
 
 
