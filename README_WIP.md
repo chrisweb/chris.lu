@@ -1327,7 +1327,6 @@ first we are going to add [globby](https://www.npmjs.com/package/globby) as new 
 npm i globby --save-exact
 ```
 
-
 update the `generateStaticParams` function in `/app/articles/[slug]/page.tsx` file to be like this:
 
 ```tsx
@@ -1615,6 +1614,6 @@ either the files will be regular fetch requests or maybe use HLS
 
 ## future articles
 
-* setup cronjobs on vercel <https://vercel.com/guides/how-to-setup-cron-jobs-on-vercel>
+* setup cronjobs on vercel <https://vercel.com/docs/cron-jobs>
 * vercel rollback a deployment <https://vercel.com/docs/cli/rollback>
 * revert a schema change with planetscale <https://planetscale.com/blog/behind-the-scenes-how-schema-reverts-work>
