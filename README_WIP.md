@@ -1106,14 +1106,16 @@ in the `app` directory, create a new directory called `articles` and then inside
 
 then inside of the `option1` directory, we create a file that we call `content.mdx`, which will contain some MDX formatted content, so that we can then import it into our page
 
-```mdx
+```md
 # Hello, World!
 
 ## option 1
 
+*italic*
+
 **bold**
 
-~~strikethrough~~
+***bold and italic***
 
 > quote
 
@@ -1124,8 +1126,6 @@ then inside of the `option1` directory, we create a file that we call `content.m
 * foo
 * bar
 * baz
-
-[ ] checkbox
 ```
 
 next inside of that same `option1` directory, we will now create a regular `page.tsx` file that will import the `content.mdx` file we just created
@@ -1169,14 +1169,16 @@ in the `articles` directory, create a new directory called `option2`
 
 inside of the `option2` directory, create a file called `page.mdx` and insert the following MDX content:
 
-```mdx
+```md
 # Hello, World!
 
 ## option 2
 
+*italic*
+
 **bold**
 
-~~strikethrough~~
+***bold and italic***
 
 > quote
 
@@ -1187,11 +1189,9 @@ inside of the `option2` directory, create a file called `page.mdx` and insert th
 * foo
 * bar
 * baz
-
-[ ] checkbox
 ```
 
-Now in your browser navigate to <http://localhost:3000/articles/option2> and you should see our MDX page getting displayed, with **bar** as subtitle
+now in your browser navigate to <http://localhost:3000/articles/option2> and you should see our MDX page getting displayed, with **bar** as subtitle
 
 Note: this is an even easier solution and one that requires even less code than what we just saw in option 1, one downside to this solution is the same thing I mentioned in option 1, if you want to add a feature to your article pages, then you will need to do some refactoring in each page, the second downside to this solution is that if you want to add metadata to your files, or already have existing MDX files using a YAML front-matter, then there is no way to parse that metadata, instead you need to use the next.js MDX metadata technique, more about [MDX content metadata](#mdx-content-metadata) in the next chapter
 
@@ -1203,7 +1203,7 @@ inside of the `articles` directory, we will now create another directory using t
 
 Glossary: a slug is a clean version of the article title, it is search engine-friendly, which means it is good for SEO and also serves as a unique identifier of the page, if you want more details, check out the [MDN slug definition and rules](https://developer.mozilla.org/en-US/docs/MDN/Writing_guidelines/Writing_style_guide#slugs)
 
-now inside of the `[slug]/` directory create a new `page.tsx` file, with the following content:
+now inside of the `[slug]` directory create a new file called `page.tsx`, with the following content:
 
 ```tsx
 interface IProps {
@@ -1224,7 +1224,7 @@ export default function Article(props: IProps) {
 }
 ```
 
-now in your browser navigate to <http://localhost:3000/articles/option3> and you should see **option3** getting displayed, this is good as it means our slug (dynamic route segment) works
+now you can try it out for yourself, in your browser navigate to <http://localhost:3000/articles/option3> and you should see **option3** getting displayed, this is good as it means our slug (dynamic route segment) works
 
 to test our slug we used **option3** as value in the URL, but you can replace that value by whatever you want and it will get displayed on the screen, meaning our slug can by anything
 
@@ -1240,7 +1240,7 @@ Route (app)                                Size     First Load JS
 └ ○ /articles/option2                      0 B                0 B
 ```
 
-you will notice that in front of route /articles/[slug] there is this symbol **λ** but our previous two examples have the symbol **○** in front of their URL, this means that both pages, that we created in option 1 and 2 will be generated at build time using a technique called **static site generation (SSG)**, but NOT our slug page, which will get generated at runtime using a technique called **server side rendering (SSR)**, meaning it will get generated on each request
+you will notice that in front of route `/articles/[slug]` there is this symbol **λ** but our previous two examples have the symbol **○** in front of their URL, this means that both pages, that we created in option 1 and 2 will be generated at build time using a technique called **static site generation (SSG)**, but NOT our slug page, which will get generated at runtime using a technique called **server side rendering (SSR)**, meaning it will get generated on each request
 
 next.js opted out of generation at build time and instead decided to use generation at runtime, because at build time it did not know what values for our slug would be, all next.js could see at build time was that slug was undefined, it did not know one potential value for our slug would be option3
 
@@ -1260,8 +1260,6 @@ interface IProps {
         slug: string
     }
 }
-
-
 
 export default function Article(props: IProps) {
 
@@ -1327,17 +1325,83 @@ first we are going to add [globby](https://www.npmjs.com/package/globby) as new 
 npm i globby --save-exact
 ```
 
-update the `generateStaticParams` function in `/app/articles/[slug]/page.tsx` file to be like this:
+next we need to create a MDX file with some content, inside of the `[slug]` directory create a new file called `option3.mdx`, where it's name is equivalent to our slug, with the following content:
+
+```md
+# Hello, World!
+
+## option 3
+
+*italic*
+
+**bold**
+
+***bold and italic***
+
+> quote
+
+[link](https://chris.lu)
+
+![This is an octocat image](https://myoctocat.com/assets/images/base-octocat.svg)
+
+* foo
+* bar
+* baz
+```
+
+then we add 3 new imports and also update the `generateStaticParams` function in `/app/articles/[slug]/page.tsx` file to be like this:
 
 ```tsx
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
+import { globby } from 'globby'
+
+interface IPageProps {
+    params: {
+        slug: string
+    }
+}
+
+export const dynamicParams = false
+
 export async function generateStaticParams() {
 
+    const contentDirectory = dirname(fileURLToPath(import.meta.url))
 
+    const files = await globby('*.mdx', { cwd: contentDirectory })
 
-    return [{ slug: 'option3' }]
+    return files.map((file) => {
+        const slug = file.replace('.mdx', '')
+        return {
+            'slug': slug,
+        }
+    })
+
+}
+
+export default async function Article(props: IPageProps) {
+
+    const { params: { slug } } = props
+
+    return (
+        <>
+            <span>{slug}</span>
+        </>
+    )
 
 }
 ```
+
+the 2 first imports we do, `fileURLToPath` and `dirname` are node.js modules, the 3rd import is the globby package we just installed
+
+the code update we did in `generateStaticParams`, `import.meta.url` contains the full URL to the current file, `fileURLToPath` converts the URL to a path and finally `dirname` converts the full path to just the directory path without the filename itself, which in our case will produce something like `REPOSITORY_ROOT_PATH\app\articles\[slug]` on windows and `REPOSITORY_ROOT_PATH/app/articles/[slug]` on Mac and Linux (the only difference is that if you are windows the path will contain `\` **(backslashes)** and on Mac and Linux it will use the Posix format that uses `/` **(forward slashes)**)
+
+next we use `globby` which will return a list of all files that are in `contentDirectory` and match the `*.mdx` glob. the result is an array of filenames
+
+we finally iterate over the list of files to get our slug, which is equivalent to the filename without the file extension
+
+try it out in the browser, navigate to <http://localhost:3000/articles/option3> and you should again see option3 (the slug and mdx file name) getting displayed, which means we now successfully created a dynamic list of static pathes, you can add more `.mdx` files to the folder, each filename will be become a new slug
+
 
 
 
