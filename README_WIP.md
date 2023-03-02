@@ -1484,7 +1484,7 @@ here we have created a simple custom component for **h1 headers** inside of an `
 
 try it out for yourself, ensure the dev server is running and then in the browser navigate to <http://localhost:3000/articles/option3>, then use your browser developper tools inspect tool and you will see that the `<h1>` element now has a **class** attribute containing the value `foo`
 
-Note: this option is similar to option 1, but the main difference is that instead of multiple page.tsx (or multiple page.mdx as we had in option 2) and multiple static routes (one segment directory for each page) in this option we end up having one page.tsx and then use a dynamic route which allows us to display an unlimited amount of articles, so on the one hand this option needs more code but on the other hand it needs less files (the more files you have the bigger a difference this will make)
+Note: this option is similar to option 1, but the main difference is that instead of multiple page.tsx (or multiple page.mdx as we had in option 2) and multiple static routes (one segment directory for each page) in this option we end up having one page.tsx and then use a dynamic route which allows us to display an unlimited amount of articles, so on the one hand this option needs more code but on the other hand it needs less files (the more files you have the bigger a difference this will make), the biggest advantage of this option however, is as the name suggest it, that the MDX content can be remote, by that I mean the MDX content does not have to be located in the app directory (which is a limitation of option 1 & 2) but instead it can be located in a folder anywhere on your server or you could even replace the `readFileSync` function we used to get the content from a file by a call to a database and get the content from there
 
 Read more:
 
@@ -1498,6 +1498,10 @@ Read more:
 
 I prefer option XY, because ...
 
+
+TODO: "the hidden option 4" chapter about using a **remote source** (dynamic imports of mdx files via **react lazy** or **next/dynamic** or even getting MDX content from a database) and **dynamic routing** like in we did in option 3 but use **@next/mdx** for the rendering instead of **next-mdx-remote**
+TODO: a chapter about metadata for option 1 & 2 and an extra one for option 3
+TODO: a chapter where we create custom components to render our MDX, like a code block but also make use of the github mdx component
 
 
 
