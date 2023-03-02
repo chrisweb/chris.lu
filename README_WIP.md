@@ -981,11 +981,21 @@ Note: MDX extends the [markdown](https://en.wikipedia.org/wiki/Markdown) markup 
 
 one of the great features of MDX is that it lets you integrate react components into your markdown
 
-to create content using MDX we will use the [next.js @next/mdx package](https://beta.nextjs.org/docs/guides/mdx)
+Note: I think that every time you have to decide what framework you will use for your next project or what package to use to solve a problem or build a new feature, it is important that you take some time and do several prototypes using the different options you have, after that it will be much easier to decide which one suits your use case best and this is what we are about to do here, we will experiment with 3 ways of rendering MDX content and after that it will be easier to chose which one suits our use case best
+
+you can chose between 3 ways of creating an **article page** that will display MDX content:
+
+* [option 1](#option-1-multiple-pagetsx-files-one-static-route-per-article): multiple page.tsx files, one static route per article
+* [option 2](#option-2-multiple-pagemdx-files-one-static-route-per-article): multiple page.mdx files, one static route per article
+* [option 3](#option-3-one-pagetsx-file-one-dynamic-route-segment-for-all-articles): one page.tsx file, one dynamic route segment for all articles
+
+### getting started (only for option 1 and 2 NOT 3)
+
+Note: the prerequisites listed in this chapter are only for option 1 and 2, for option 3 we will use other packages and DON'T need the steps mentioned in this chapter
+
+to render our MDX content we will use the [next.js @next/mdx package](https://beta.nextjs.org/docs/guides/mdx)
 
 @next/mdx uses [remark](https://www.npmjs.com/package/remark) and [rehype](https://www.npmjs.com/package/rehype) under the hood, but if you prefer to use them without @next/mdx, check out the example called **Deep Dive: How do you transform markdown into HTML?** in the next.js ["Markdown and MDX" documentation](https://beta.nextjs.org/docs/guides/mdx)
-
-### getting started
 
 first we will add the `@next/mdx` package our next.js project, this package will add support for mdx files to our next.js project, execute the following command in your VSCode terminal:
 
@@ -1076,23 +1086,6 @@ Note: it is important you add the `mdx-components.tsx` to your project for MDX f
 > TypeError: createContext only works in Client Components.
 
 Note: Also after adding this file or in the future after making changes to it, you always need to restart the dev server, as this is a configuration file like `next.config.mjs`
-
-
-
-
-
-
-### adding an article page
-
-you can chose between 3 ways of creating an **article page** to display MDX content, a quick introduction to three techniques you can use to create pages with MDX content and then it will be up to you to decide which you like best
-
-Note: I think that every time you have to decide what framework you will use for your next project or what package to use to solve a problem or build a new feature, it is important that you take some time and do several prototypes using the different options you have, after that it will be much easier to decide which one suits your use case best
-
-* [option 1](#option-1-multiple-pagetsx-files-one-static-route-per-article): multiple page.tsx files, one static route per article
-* [option 2](#option-2-multiple-pagemdx-files-one-static-route-per-article): multiple page.mdx files, one static route per article
-* [option 3](#option-3-one-pagetsx-file-one-dynamic-route-segment-for-all-articles): one page.tsx file, one dynamic route segment for all articles
-
-Note: You might wonder, which of these three 3 options I personally prefer and you might want to skip the other two because you don't have time to check them all out, if that the case jump straight to option 3, this is the option that suits my needs best, but again be careful as it might not be the best for your use case
 
 #### option 1: multiple page.tsx files, one static route per article
 
@@ -1196,6 +1189,8 @@ now in your browser navigate to <http://localhost:3000/articles/option2> and you
 Note: this is an even easier solution and one that requires even less code than what we just saw in option 1, one downside to this solution is the same thing I mentioned in option 1, if you want to add a feature to your article pages, then you will need to do some refactoring in each page, the second downside to this solution is that if you want to add metadata to your files, or already have existing MDX files using a YAML front-matter, then there is no way to parse that metadata, instead you need to use the next.js MDX metadata technique, more about [MDX content metadata](#mdx-content-metadata) in the next chapter
 
 #### option 3: one page.tsx file, one dynamic route segment for all articles
+
+Note: for this option we will NOT need all the steps mentioned in the chapter [getting started (only for option 1 and 2 NOT 3)](#getting-started-only-for-option-1-and-2-not-3), so for option 3 there is NO need to install `@next/mdx` and also not need to change `next.config.mjs` or create a file called `mdx-components.tsx`
 
 if you didn't already in one of the previous options, in the `app` directory, create a new directory called `articles`
 
@@ -1349,21 +1344,19 @@ next we need to create a MDX file with some content, inside of the `[slug]` dire
 * baz
 ```
 
-then we add 3 new imports and also update the `generateStaticParams` function in `/app/articles/[slug]/page.tsx` file to be like this:
+then we add 3 new imports into our `/app/articles/[slug]/page.tsx` file:
 
 ```tsx
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
 import { globby } from 'globby'
+```
 
-interface IPageProps {
-    params: {
-        slug: string
-    }
-}
+the 2 first imports we do, `fileURLToPath` and `dirname` are node.js modules, the 3rd import is the globby package we just installed
 
-export const dynamicParams = false
+and finally we update the `generateStaticParams` function in `/app/articles/[slug]/page.tsx` file to be like this:
 
+```tsx
 export async function generateStaticParams() {
 
     const contentDirectory = dirname(fileURLToPath(import.meta.url))
@@ -1378,21 +1371,7 @@ export async function generateStaticParams() {
     })
 
 }
-
-export default async function Article(props: IPageProps) {
-
-    const { params: { slug } } = props
-
-    return (
-        <>
-            <span>{slug}</span>
-        </>
-    )
-
-}
 ```
-
-the 2 first imports we do, `fileURLToPath` and `dirname` are node.js modules, the 3rd import is the globby package we just installed
 
 the code update we did in `generateStaticParams`, `import.meta.url` contains the full URL to the current file, `fileURLToPath` converts the URL to a path and finally `dirname` converts the full path to just the directory path without the filename itself, which in our case will produce something like `REPOSITORY_ROOT_PATH\app\articles\[slug]` on windows and `REPOSITORY_ROOT_PATH/app/articles/[slug]` on Mac and Linux (the only difference is that if you are windows the path will contain `\` **(backslashes)** and on Mac and Linux it will use the Posix format that uses `/` **(forward slashes)**)
 
@@ -1402,8 +1381,55 @@ we finally iterate over the list of files to get our slug, which is equivalent t
 
 try it out in the browser, navigate to <http://localhost:3000/articles/option3> and you should again see option3 (the slug and mdx file name) getting displayed, which means we now successfully created a dynamic list of static pathes, you can add more `.mdx` files to the folder, each filename will be become a new slug
 
+we are almost done, hang in there a little bit more 😉
+
+next we want to load the file content and convert the MDX, to make the conversion we will use a package called [next-mdx-remote](https://www.npmjs.com/package/next-mdx-remote), so lets first install it using the following command:
+
+```shell
+npm i next-mdx-remote --save-exact
+```
+
+now we add two more imports into our `/app/articles/[slug]/page.tsx` file:
+
+```tsx
+import fs from 'fs'
+import { MDXRemote } from 'next-mdx-remote/rsc'
+```
+
+the first import is because we will use the **filesystem (fs)** native module from nodejs to get the file content and the second import is the **MDXRemote** function from the **next-mdx-remote** remote package, which is a react component that will render our file content in the client
+
+next we will edit the `Article` function to be like this:
+
+```tsx
+export default async function Article(props: IPageProps) {
+
+    const { params: { slug } } = props
+
+    const fileName = slug + '.mdx'
+
+    const directoryPath = dirname(fileURLToPath(import.meta.url))
+
+    const filePath = join(directoryPath, fileName)
+
+    const contentMDX = fs.readFileSync(filePath, 'utf8')
+
+    return (
+        <>
+            <MDXRemote source={contentMDX} />
+        </>
+    )
+}
+```
 
 
+
+
+
+```tsx
+<MDXRemote source={contentMDX} lazy />
+```
+
+Note: to defer hydration of the content (in the client) and immediately serve the static markup, we can use **MDXRemote** `lazy` prop, but be aware that because of the hydration delay, means that interactivity for any dynamic content within your MDX content will be delayed too, if you use few react components this might not be a problem at all, if you however use components that are heavy and take some time until they are hydrated then this optimization might not be a good idea
 
 Note: this option is similar to option 1, but the main difference is that instead of multiple page.tsx (or multiple page.mdx as we had in option 2) and multiple static routes (one segment directory for each page) in this option we end up having one page.tsx and then use a dynamic route which allows us to display an unlimited amount of articles, so on the one hand this option needs more code but on the other hand it needs less files (the benefit will be bigger the more articles your blog has)
 

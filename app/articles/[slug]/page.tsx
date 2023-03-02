@@ -1,9 +1,8 @@
 import { fileURLToPath } from 'url'
-import { dirname/*, join*/ } from 'path'
+import { dirname, join } from 'path'
+import fs from 'fs'
 import { globby } from 'globby'
-
-//import fs from 'fs'
-//import { MDXRemote, compileMDX } from 'next-mdx-remote/rsc'
+import { MDXRemote/*, compileMDX*/ } from 'next-mdx-remote/rsc'
 
 interface IPageProps {
     params: {
@@ -15,18 +14,13 @@ export const dynamicParams = false
 
 export async function generateStaticParams() {
 
-    const contentDirectory = dirname(fileURLToPath(import.meta.url))
-
-    console.log(contentDirectory)
+    //const directoryPath = dirname(fileURLToPath(import.meta.url))
 
     //const contentDirectory = join(directoryPath, '..', '(content)').replace(/\\/g, '/')
 
-    // convert to posix format as required by globby
-    //const contentDirectory = directoryPath.replace(/\\/g, '/')
+    const contentDirectory = dirname(fileURLToPath(import.meta.url))
 
     const files = await globby('*.mdx', { cwd: contentDirectory })
-
-    console.log(files)
 
     return files.map((file) => {
         const slug = file.replace('.mdx', '')
@@ -41,32 +35,33 @@ export default async function Article(props: IPageProps) {
 
     const { params: { slug } } = props
 
-    return (
+    /*return (
         <>
             <span>{slug}</span>
         </>
-    )
+    )*/
 
-    /*const fileName = slug + '.mdx'
+    const fileName = slug + '.mdx'
 
     const directoryPath = dirname(fileURLToPath(import.meta.url))
 
-    const filePath = join(directoryPath, '..', '(content)', fileName)
+    //const filePath = join(directoryPath, '..', '(content)', fileName)
+    const filePath = join(directoryPath, fileName)
 
     const contentMDX = fs.readFileSync(filePath, 'utf8')
 
-    const mdxOptions = {
+    /*const mdxOptions = {
         parseFrontmatter: true
-    }
+    }*/
 
-    const mdxComponents = {
+    /*const mdxComponents = {
         h1: (props) => (
             <h1 {...props} className="large-text">
                 {props.children}
             </h1>
         ),
-    }
-*/
+    }*/
+
     // there is a bug in the types for MDXRemoteProps
     // source replaces compiledSource from MDXRemoteSerializeResult
     // https://github.com/hashicorp/next-mdx-remote/issues/336
@@ -75,10 +70,12 @@ export default async function Article(props: IPageProps) {
 
     //console.log('frontmatter: ', frontmatter)
 
-    /*return (
+    return (
         <>
-            <MDXRemote source={contentMDX} components={mdxComponents}  />
-            {content}
+            {/* open next.js ticket for async components: https://github.com/vercel/next.js/issues/42292 */}
+            {/* @ts-expect-error Server Component */}
+            <MDXRemote source={contentMDX} /*components={mdxComponents}*/ lazy />
+            {/*{content}*/}
         </>
-    )*/
+    )
 }
