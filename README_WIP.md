@@ -1190,7 +1190,7 @@ Note: this is an even easier solution and one that requires even less code than 
 
 #### option 3: one page.tsx file, one dynamic route segment for all articles
 
-Note: for this option we will NOT need all the steps mentioned in the chapter [getting started (only for option 1 and 2 NOT 3)](#getting-started-only-for-option-1-and-2-not-3), so for option 3 there is NO need to install `@next/mdx` and also not need to change `next.config.mjs` or create a file called `mdx-components.tsx`
+Note: for this option we will NOT need all the steps mentioned in the chapter [getting started (only for option 1 and 2 NOT 3)](#getting-started-only-for-option-1-and-2-not-3), so for option 3 there is NO need to install `@next/mdx` and also not need to change `next.config.mjs` or create a file called `mdx-components.tsx`, for now if your goal is to compare the 3 options next to each other you don't need to remove those option 1 & 2 prerequisites, but if at some point you decide that your choice is option 3, then you can remove the `@next/mdx` package using `npm remove @next/mdx`, revert back the changes we did in `next.config.mjs` and also delete the file `mdx-components.tsx`
 
 if you didn't already in one of the previous options, in the `app` directory, create a new directory called `articles`
 
@@ -1379,9 +1379,7 @@ next we use `globby` which will return a list of all files that are in `contentD
 
 we finally iterate over the list of files to get our slug, which is equivalent to the filename without the file extension
 
-try it out in the browser, navigate to <http://localhost:3000/articles/option3> and you should again see option3 (the slug and mdx file name) getting displayed, which means we now successfully created a dynamic list of static pathes, you can add more `.mdx` files to the folder, each filename will be become a new slug
-
-we are almost done, hang in there a little bit more 😉
+try it out for yourself, ensure the dev server is running and then in the browser navigate to <http://localhost:3000/articles/option3> and you should again see option3 (the slug and mdx file name) getting displayed, which means we now successfully created a dynamic list of static pathes, you can add more `.mdx` files to the folder, each filename will be become a new slug
 
 next we want to load the file content and convert the MDX, to make the conversion we will use a package called [next-mdx-remote](https://www.npmjs.com/package/next-mdx-remote), so lets first install it using the following command:
 
@@ -1389,14 +1387,17 @@ next we want to load the file content and convert the MDX, to make the conversio
 npm i next-mdx-remote --save-exact
 ```
 
-now we add two more imports into our `/app/articles/[slug]/page.tsx` file:
+now in our `/app/articles/[slug]/page.tsx` file, we add two more imports and edit the second import to also get the join function from path module:
 
 ```tsx
+import { fileURLToPath } from 'url'
+import { dirname, join } from 'path'
 import fs from 'fs'
+import { globby } from 'globby'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 ```
 
-the first import is because we will use the **filesystem (fs)** native module from nodejs to get the file content and the second import is the **MDXRemote** function from the **next-mdx-remote** remote package, which is a react component that will render our file content in the client
+the first import we added (on line 3) is because we will use the **filesystem (fs)** native module from nodejs to get the file content and the second import we added (on line 5) is the **MDXRemote** function from the **next-mdx-remote** remote package, which is a react component that will render our file content and finally we will also get the **join** function from the **path** module to create the directory path 
 
 next we will edit the `Article` function to be like this:
 
@@ -1415,42 +1416,111 @@ export default async function Article(props: IPageProps) {
 
     return (
         <>
+            {/* @ts-expect-error Server Component */}
             <MDXRemote source={contentMDX} />
         </>
     )
 }
 ```
 
+the first part is unchanged, we take the `slug` that is in the page props
 
+then we convert the `slug` into a file name by adding the **mdx** extension
 
+then we create a variable containing the `directoryPath` (same as we did in the `generateStaticParams` function, which is why we could refactor this later on so that both functions use the same variable instead of creating it twice, but for now to better understand what the code does I like to keep it there as is)
 
+next we create `filePath` which is nothing else then combining the `directoryPath` and the `fileName`
+
+then we use the node.js filesystem module to fetch the content of the file (as our file is encoded in 'utf-8' we let node.js know that this is the encoding it should use)
+
+and finally the we use the `MDXRemote` component from the **next-mdx-remote** package to render the MDX content that we pass to it via the source prop
+
+above the `MDXRemote` component line I added a comment that tells typescript to ignore errors in the following line, this is because MDXRemote is a component that returns an async JSX Element and when used in a server component like we do here, typescript will throw an error:
+
+> 'MDXRemote' cannot be used as a JSX component.
+> Its return type is not a valid JSX element.
+
+there is a ticket currently open (as of 03.02.2023) in the next.js repository on github because of this problem: <https://github.com/vercel/next.js/issues/42292>, the problem is mentioned in the [next.js "async/await in Server Components" beta docs](https://beta.nextjs.org/docs/data-fetching/fetching#asyncawait-in-server-components) too, it is a types problem and the react and typescript teams are working on a solution, as soon as it is fixed this line will not be needed anymore
+
+try it out for yourself, ensure the dev server is running and then in the browser navigate to <http://localhost:3000/articles/option3>, you will now see the MDX content we have put in the `option3.mdx` file getting loaded and rendered
+
+we are almost done, hang in there a little bit more 😉
+
+Note: in prerequisites for option 1 & 2 we had created a file called `mdx-components.tsx` to set up custom components, with **next-mdx-remote** this is done differently
+
+we are again going to edit `Article` function in the file `/app/articles/[slug]/page.tsx`:
 
 ```tsx
-<MDXRemote source={contentMDX} lazy />
+export default async function Article(props: IPageProps) {
+
+    const { params: { slug } } = props
+
+    const fileName = slug + '.mdx'
+
+    const directoryPath = dirname(fileURLToPath(import.meta.url))
+
+    const filePath = join(directoryPath, fileName)
+
+    const contentMDX = fs.readFileSync(filePath, 'utf8')
+
+    const mdxComponents = {
+        h1: (props: React.PropsWithChildren) => (
+            <h1 {...props} className="foo">
+                {props.children}
+            </h1>
+        ),
+    }
+
+    return (
+        <>
+            {/* @ts-expect-error Server Component */}
+            <MDXRemote source={contentMDX} components={mdxComponents} />
+        </>
+    )
+}
 ```
 
-Note: to defer hydration of the content (in the client) and immediately serve the static markup, we can use **MDXRemote** `lazy` prop, but be aware that because of the hydration delay, means that interactivity for any dynamic content within your MDX content will be delayed too, if you use few react components this might not be a problem at all, if you however use components that are heavy and take some time until they are hydrated then this optimization might not be a good idea
+here we have created a simple custom component for **h1 headers** inside of an `mdxComponents` object, we tell it that for each h1 element we want to use our custom component, we then pass the `mdxComponents` object to the `MDXRemote` component, of course you can extend `mdxComponents` and add as much custom components as you wish to use to alter how your MDX will get rendered, you can of course also create external files for each component, import them and then use them in `mdxComponents`
 
-Note: this option is similar to option 1, but the main difference is that instead of multiple page.tsx (or multiple page.mdx as we had in option 2) and multiple static routes (one segment directory for each page) in this option we end up having one page.tsx and then use a dynamic route which allows us to display an unlimited amount of articles, so on the one hand this option needs more code but on the other hand it needs less files (the benefit will be bigger the more articles your blog has)
+try it out for yourself, ensure the dev server is running and then in the browser navigate to <http://localhost:3000/articles/option3>, then use your browser developper tools inspect tool and you will see that the `<h1>` element now has a **class** attribute containing the value `foo`
+
+Note: this option is similar to option 1, but the main difference is that instead of multiple page.tsx (or multiple page.mdx as we had in option 2) and multiple static routes (one segment directory for each page) in this option we end up having one page.tsx and then use a dynamic route which allows us to display an unlimited amount of articles, so on the one hand this option needs more code but on the other hand it needs less files (the more files you have the bigger a difference this will make)
 
 Read more:
 
+* [next-mdx-remote documentation](https://github.com/hashicorp/next-mdx-remote#readme)
 * [next.js page params and searchParams documentation](https://beta.nextjs.org/docs/api-reference/file-conventions/page#params-optional)
 * [next.js dynamic segments documentation](https://beta.nextjs.org/docs/routing/defining-routes#dynamic-segments)
 * [next.js generate static params documentation](https://beta.nextjs.org/docs/api-reference/generate-static-params)
 * [next.js "dynamicparams" segment configuration documentation](https://beta.nextjs.org/docs/api-reference/segment-config#dynamicparams)
 
-
-
 #### the option I prefer
 
-I prefer option 3, because ...
+I prefer option XY, because ...
+
+
+
+
 
 we are now going to make the final version of our article page using option 3
 
 I like to make my types / interfaces to be reusable as much as possible, so first we are going to move the interface definition we have on top to an external file, create a new directory called 
 
 we had to create a utils/filesystem.ts that got used by generateStaticParams to tell next.js what the different articles URLs (route segments) are, for example when we do a production deployment or locally run `npm run build`, so that next.js can create a static page on build time for each article
+
+
+
+
+
+
+#### defer hydration when using MDXRemote
+
+it is possible defer hydration of the content (in the client) and immediately serve the static markup, we can use **MDXRemote** `lazy` prop, but be aware that because of the hydration delay, means that interactivity for any dynamic content within your MDX content will be delayed too, if you use few react components this might not be a problem at all, if you however use components that are heavy and take some time until they are hydrated then this optimization might not be a good idea
+
+```tsx
+<MDXRemote source={contentMDX} lazy />
+```
+
 
 
 

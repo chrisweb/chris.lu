@@ -3,6 +3,8 @@
 //import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'*/
 // then uncomment the phase parameter
 
+import WithMDX from '@next/mdx'
+
 const nextConfig = (/*phase*/) => {
 
     // to use the bundle analyzer uncomment the following lines
@@ -12,13 +14,26 @@ const nextConfig = (/*phase*/) => {
         openAnalyzer: false,
     })*/
 
+    const withMDX = WithMDX(/*{
+        extension: /\.mdx?$/,
+        options: {
+            // If you use remark-gfm, you'll need to use next.config.mjs
+            // as the package is ESM only
+            // https://github.com/remarkjs/remark-gfm#install
+            remarkPlugins: [],
+            rehypePlugins: [],
+            // If you use `MDXProvider`, uncomment the following line.
+            // providerImportSource: "@mdx-js/react",
+        },
+    }*/)
 
     /** @type {import('next').NextConfig} */
     const nextConfig = {
         experimental: {
             // experimental support for next.js > 13 app directory
             appDir: true,
-
+            // experimental use rust compiler for MDX
+            mdxRs: true,
         },
         // file formats for next/image
         images: {
@@ -29,7 +44,7 @@ const nextConfig = (/*phase*/) => {
         pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
     }
 
-    return nextConfig
+    return withMDX(nextConfig)
     //return withBundleAnalyzer(withMDX(nextConfig))
 
 }

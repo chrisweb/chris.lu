@@ -54,13 +54,13 @@ export default async function Article(props: IPageProps) {
         parseFrontmatter: true
     }*/
 
-    /*const mdxComponents = {
-        h1: (props) => (
-            <h1 {...props} className="large-text">
+    const mdxComponents = {
+        h1: (props: React.PropsWithChildren) => (
+            <h1 {...props} className="foo">
                 {props.children}
             </h1>
         ),
-    }*/
+    }
 
     // there is a bug in the types for MDXRemoteProps
     // source replaces compiledSource from MDXRemoteSerializeResult
@@ -74,7 +74,7 @@ export default async function Article(props: IPageProps) {
         <>
             {/* open next.js ticket for async components: https://github.com/vercel/next.js/issues/42292 */}
             {/* @ts-expect-error Server Component */}
-            <MDXRemote source={contentMDX} /*components={mdxComponents}*/ lazy />
+            <MDXRemote source={contentMDX} components={mdxComponents} /*lazy*/ />
             {/*{content}*/}
         </>
     )
