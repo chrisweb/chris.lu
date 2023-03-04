@@ -2,12 +2,20 @@ import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 import fs from 'fs'
 import { globby } from 'globby'
-import { MDXRemote/*, compileMDX*/ } from 'next-mdx-remote/rsc'
+import { /*MDXRemote,*/ compileMDX } from 'next-mdx-remote/rsc'
+import type { Metadata } from 'next'
 
 interface IPageProps {
     params: {
         slug: string
     }
+}
+
+interface IFrontMatter {
+    title: string
+    author: string
+    publishDate: Date
+    lastUpdateDate: Date
 }
 
 export const dynamicParams = false
@@ -31,15 +39,7 @@ export async function generateStaticParams() {
 
 }
 
-export default async function Article(props: IPageProps) {
-
-    const { params: { slug } } = props
-
-    /*return (
-        <>
-            <span>{slug}</span>
-        </>
-    )*/
+const getArticle = async (slug: string) => {
 
     const fileName = slug + '.mdx'
 
@@ -50,9 +50,14 @@ export default async function Article(props: IPageProps) {
 
     const contentMDX = fs.readFileSync(filePath, 'utf8')
 
-    /*const mdxOptions = {
-        parseFrontmatter: true
-    }*/
+    // MDX's available options, see the MDX docs for more info.
+    // https://mdxjs.com/packages/mdx/#compilefile-options
+    const mdxOptions = {
+        //remarkPlugins: [],
+        //rehypePlugins: [],
+        //format: 'mdx',
+        parseFrontmatter: true,
+    }
 
     const mdxComponents = {
         h1: (props: React.PropsWithChildren) => (
@@ -62,20 +67,36 @@ export default async function Article(props: IPageProps) {
         ),
     }
 
-    // there is a bug in the types for MDXRemoteProps
-    // source replaces compiledSource from MDXRemoteSerializeResult
-    // https://github.com/hashicorp/next-mdx-remote/issues/336
-    // // @ts-expect-error will be fixed in next release of next-mdx-remote/rsc
-    //const { content, frontmatter } = await compileMDX({ source: contentMDX, options: mdxOptions, mdxComponents })
+    return await compileMDX<IFrontMatter>({ source: contentMDX, options: mdxOptions, components: mdxComponents })
 
-    //console.log('frontmatter: ', frontmatter)
+}
+
+export async function generateMetadata(props: IPageProps) {
+
+    const { params: { slug } } = props
+
+    const { frontmatter } = await getArticle(slug)
+
+    const metadata: Metadata = {
+        title: frontmatter.title,
+    }
+
+    return metadata
+
+}
+
+export default async function Article(props: IPageProps) {
+
+    const { params: { slug } } = props
+
+    const { content } = await getArticle(slug)
 
     return (
         <>
             {/* open next.js ticket for async components: https://github.com/vercel/next.js/issues/42292 */}
-            {/* @ts-expect-error Server Component */}
-            <MDXRemote source={contentMDX} components={mdxComponents} /*lazy*/ />
-            {/*{content}*/}
+            {/* //@ts-expect-error Server Component */}
+            {/*<MDXRemote source={contentMDX} components={mdxComponents} lazy />*/}
+            {content}
         </>
     )
 }

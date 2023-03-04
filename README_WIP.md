@@ -370,7 +370,7 @@ this vscode "workspace settings" file got created in a directory called `.vscode
 
 ![vscode notification typescript version](./documentation/assets/images/vscode_notification_typescript_version.png)
 
-this notification is related to a new typescript plugin the next.js team created and which is included in the release of **next.js 13**, here isc a little quote from their [next.js 13.1 blog post](https://nextjs.org/blog/next-13-1):
+this notification is related to a new typescript plugin the next.js team created and which is included in the release of **next.js 13**, here is a little quote from their [next.js 13.1 blog post](https://nextjs.org/blog/next-13-1):
 
 > We've built a new TypeScript plugin that provides suggestions for page and layout configuration options and provides helpful usage hints around Server and Client Components
 
@@ -1435,7 +1435,7 @@ then we use the node.js filesystem module to fetch the content of the file (as o
 
 and finally the we use the `MDXRemote` component from the **next-mdx-remote** package to render the MDX content that we pass to it via the source prop
 
-above the `MDXRemote` component line I added a comment that tells typescript to ignore errors in the following line, this is because MDXRemote is a component that returns an async JSX Element and when used in a server component like we do here, typescript will throw an error:
+above the `MDXRemote` component line I added a comment **@ts-expect-error Server Component** that tells typescript to ignore errors in the following line, this is because MDXRemote is a component that returns an async JSX Element and when used in a server component like we do here, typescript will throw an error:
 
 > 'MDXRemote' cannot be used as a JSX component.
 > Its return type is not a valid JSX element.
@@ -1444,9 +1444,21 @@ there is a ticket currently open (as of 03.02.2023) in the next.js repository on
 
 try it out for yourself, ensure the dev server is running and then in the browser navigate to <http://localhost:3000/articles/option3>, you will now see the MDX content we have put in the `option3.mdx` file getting loaded and rendered
 
-we are almost done, hang in there a little bit more 😉
+Note: this option is similar to option 1, but the main difference is that instead of multiple page.tsx (or multiple page.mdx as we had in option 2) and multiple static routes (one segment directory for each page) in this option we end up having one page.tsx and then use a dynamic route which allows us to display an unlimited amount of articles, so on the one hand this option needs more code but on the other hand it needs less files (the more files you have the bigger a difference this will make), the biggest advantage of this option however, is as the name suggest it, that the MDX content can be remote, by that I mean the MDX content does not have to be located in the app directory (which is a limitation of option 1 & 2) but instead it can be located in a folder anywhere on your server or you could even replace the `readFileSync` function we used to get the content from a file by a call to a database and get the content from there
+
+Read more:
+
+* [next-mdx-remote documentation](https://github.com/hashicorp/next-mdx-remote#readme)
+* [next.js page params and searchParams documentation](https://beta.nextjs.org/docs/api-reference/file-conventions/page#params-optional)
+* [next.js dynamic segments documentation](https://beta.nextjs.org/docs/routing/defining-routes#dynamic-segments)
+* [next.js generate static params documentation](https://beta.nextjs.org/docs/api-reference/generate-static-params)
+* [next.js "dynamicparams" segment configuration documentation](https://beta.nextjs.org/docs/api-reference/segment-config#dynamicparams)
+
+#### option 3: using costum components
 
 Note: in prerequisites for option 1 & 2 we had created a file called `mdx-components.tsx` to set up custom components, with **next-mdx-remote** this is done differently
+
+if you want to alter the way MDXRemote transforms MDX into HTML elements, you can use custom components to do so, here you will find a list of all HTML elements that can be replaced by a custom component: <https://mdxjs.com/table-of-components/>
 
 we are again going to edit `Article` function in the file `/app/articles/[slug]/page.tsx`:
 
@@ -1484,40 +1496,11 @@ here we have created a simple custom component for **h1 headers** inside of an `
 
 try it out for yourself, ensure the dev server is running and then in the browser navigate to <http://localhost:3000/articles/option3>, then use your browser developper tools inspect tool and you will see that the `<h1>` element now has a **class** attribute containing the value `foo`
 
-Note: this option is similar to option 1, but the main difference is that instead of multiple page.tsx (or multiple page.mdx as we had in option 2) and multiple static routes (one segment directory for each page) in this option we end up having one page.tsx and then use a dynamic route which allows us to display an unlimited amount of articles, so on the one hand this option needs more code but on the other hand it needs less files (the more files you have the bigger a difference this will make), the biggest advantage of this option however, is as the name suggest it, that the MDX content can be remote, by that I mean the MDX content does not have to be located in the app directory (which is a limitation of option 1 & 2) but instead it can be located in a folder anywhere on your server or you could even replace the `readFileSync` function we used to get the content from a file by a call to a database and get the content from there
-
 Read more:
 
-* [next-mdx-remote documentation](https://github.com/hashicorp/next-mdx-remote#readme)
-* [next.js page params and searchParams documentation](https://beta.nextjs.org/docs/api-reference/file-conventions/page#params-optional)
-* [next.js dynamic segments documentation](https://beta.nextjs.org/docs/routing/defining-routes#dynamic-segments)
-* [next.js generate static params documentation](https://beta.nextjs.org/docs/api-reference/generate-static-params)
-* [next.js "dynamicparams" segment configuration documentation](https://beta.nextjs.org/docs/api-reference/segment-config#dynamicparams)
+* [MDX HTML elements that can be replaced with custom components](https://mdxjs.com/table-of-components/)
 
-#### the option I prefer
-
-I prefer option XY, because ...
-
-
-TODO: "the hidden option 4" chapter about using a **remote source** (dynamic imports of mdx files via **react lazy** or **next/dynamic** or even getting MDX content from a database) and **dynamic routing** like in we did in option 3 but use **@next/mdx** for the rendering instead of **next-mdx-remote**
-TODO: a chapter about metadata for option 1 & 2 and an extra one for option 3
-TODO: a chapter where we create custom components to render our MDX, like a code block but also make use of the github mdx component
-
-
-
-
-we are now going to make the final version of our article page using option 3
-
-I like to make my types / interfaces to be reusable as much as possible, so first we are going to move the interface definition we have on top to an external file, create a new directory called 
-
-we had to create a utils/filesystem.ts that got used by generateStaticParams to tell next.js what the different articles URLs (route segments) are, for example when we do a production deployment or locally run `npm run build`, so that next.js can create a static page on build time for each article
-
-
-
-
-
-
-#### defer hydration when using MDXRemote
+#### option 3: defer hydration when using MDXRemote
 
 it is possible defer hydration of the content (in the client) and immediately serve the static markup, we can use **MDXRemote** `lazy` prop, but be aware that because of the hydration delay, means that interactivity for any dynamic content within your MDX content will be delayed too, if you use few react components this might not be a problem at all, if you however use components that are heavy and take some time until they are hydrated then this optimization might not be a good idea
 
@@ -1525,8 +1508,241 @@ it is possible defer hydration of the content (in the client) and immediately se
 <MDXRemote source={contentMDX} lazy />
 ```
 
+#### option 3: adding metadata (using front matter data)
+
+in the **option 3** exxample above we used the `<MDXRemote />` component, which is a quick and easy solution, but if you have YAML front-matter in your file and want to use that, then you need to use the `compileMDX` function instead
+
+first let's add some front-matter to our MDX file `/app/articles/[slug]/option3.mdx`
+
+```tsx
+---
+title: foo
+author: bar
+publishDate: 2023-01-20 18:00:00 +00:00
+lastUpdateDate: 2023-01-21 11:00:00 +00:00
+---
+
+# Hello, World!
+
+## option 3
+
+*italic*
+
+**bold**
+
+***bold and italic***
+
+> quote
+
+[link](https://chris.lu)
+
+![This is an octocat image](https://myoctocat.com/assets/images/base-octocat.svg)
+
+* foo
+* bar
+* baz
+```
+
+next we replace the import of the `MDXRemote` component with the import of the `compileMDX` function in our `/app/articles/[slug]/page.tsx` file:
+
+```tsx
+import { compileMDX } from 'next-mdx-remote/rsc'
+```
+
+below the import (in the same file), we add a new interface for out front-matter:
+
+```tsx
+interface IFrontMatter {
+    title: string
+    author: string
+    publishDate: Date
+    lastUpdateDate: Date
+}
+```
+
+then we need edit the `Article` function in the file `/app/articles/[slug]/page.tsx` once more:
+
+```tsx
+export default async function Article(props: IPageProps) {
+
+    const { params: { slug } } = props
+
+    const fileName = slug + '.mdx'
+
+    const directoryPath = dirname(fileURLToPath(import.meta.url))
+
+    const filePath = join(directoryPath, fileName)
+
+    const contentMDX = fs.readFileSync(filePath, 'utf8')
+
+    const mdxComponents = {
+        h1: (props: React.PropsWithChildren) => (
+            <h1 {...props} className="foo">
+                {props.children}
+            </h1>
+        ),
+    }
+
+    const mdxOptions = {
+        parseFrontmatter: true,
+    }
+
+    const { content, frontmatter } = await compileMDX<IFrontMatter>({ source: contentMDX, options: mdxOptions, components: mdxComponents })
+
+    console.log('frontmatter: ', frontmatter)
+
+    return (
+        <>
+            {content}
+        </>
+    )
+}
+```
+
+in this update we first added an `mdxOptions` object in which we set `parseFrontmatter` to **true** to enable front-matter parsing
+
+then we used the `compileMDX` function, to which we passed the `source` and `components` that we were already using as props for `<MDXRemote>`, but now we also pass our new `options` object, we also use our `IFrontMatter` interface to ensure the returned front-matter is typed
+
+finally we replaced `<MDXRemote>` with `{content}`, which is the react element that got returned from `compileMDX`
+
+ensure you saved the `page.tsx` and that the dev server is running, then check out your terminal and you will see a console log output that should look like this:
+
+```shell
+frontmatter:  {
+  title: 'foo',
+  author: 'bar',
+  publishDate: 2023-01-20T18:00:00.000Z,
+  lastUpdateDate: 2023-01-21T11:00:00.000Z
+}
+```
+
+this shows us that our front-matter is now getting parsed
+
+next we will use the new metadata API that got introduced in [next.js 13.2](https://nextjs.org/blog/next-13-2) at the end of february 2023, to pass some of our values we get from front-matter to next.js metadata
+
+Note: the new metadata API replaces the previous app directory **head.js** file that got introduced in next.js 13 but is now deprecated, if you used an earlier version of next.js prior to v13.2 then check out the [next.js "head.js" beta documentation](https://beta.nextjs.org/docs/api-reference/file-conventions/head) in which the next.js team has added a lot of migration examples
+
+first we are going to add a new import:
+
+```tsx
+import type { Metadata } from 'next'
+```
+
+the type we just imported is a next.js metadata interface to describe all the metadata fields that can be set
+
+next to tell next.js what a page (or layout) metadata is, you need to export an async function called `generateMetadata` and inside of it we need to fetch out front-matter using `compileMDX`, but we also use `compileMDX` inside of the page function called `Article`, this is why we refactor our code a bit and put a big chunk of the code that was in our `Article` function into a seperate function so that we can re-use it in both the `Article` function as well as the `generateMetadata` function
+
+```tsx
+const getArticle = async (slug: string) => {
+
+    const fileName = slug + '.mdx'
+
+    const directoryPath = dirname(fileURLToPath(import.meta.url))
+
+    const filePath = join(directoryPath, fileName)
+
+    const contentMDX = fs.readFileSync(filePath, 'utf8')
+
+    const mdxOptions = {
+        parseFrontmatter: true,
+    }
+
+    const mdxComponents = {
+        h1: (props: React.PropsWithChildren) => (
+            <h1 {...props} className="foo">
+                {props.children}
+            </h1>
+        ),
+    }
+
+    return await compileMDX<IFrontMatter>({ source: contentMDX, options: mdxOptions, components: mdxComponents })
+
+}
+```
+
+next we refactor our `Article` function to make use of the new `getArticle` function:
+
+```tsx
+export default async function Article(props: IPageProps) {
+
+    const { params: { slug } } = props
+
+    const { content } = await getArticle(slug)
+
+    return (
+        <>
+            {content}
+        </>
+    )
+}
+```
+
+and now we can finally add the `generateMetadata` function to our `/app/articles/[slug]/page.tsx` file:
+
+```tsx
+export async function generateMetadata(props: IPageProps) {
+
+    const { params: { slug } } = props
+
+    const { frontmatter } = await getArticle(slug)
+
+    const metadata: Metadata = {
+        title: frontmatter.title,
+    }
+
+    return metadata
+
+}
+```
+
+here we are using the title that is defined in our front-matter and pass it to the next.js metadata object
+
+if you now visit our option3 article page <http://localhost:3000/articles/option3> and use your browsers inspect tool, you will see that in the `<head>` of the HTML document there is now a title tag containing the title we set in front-matter
+
+because of the next.js metadata type we have imported we now have type safety and get nice tooltips in VSCode with lots of useful information, as you can see in the next screenshot:
+
+![next.js metadata type tooltip example](./documentation/assets/images/nextjs_metadata_type_example.png)
+
+Read more:
+
+* [next-mdx-remote "front-matter" documentation](https://github.com/hashicorp/next-mdx-remote#readme)
+* [next.js "metadata API" beta documentation](https://beta.nextjs.org/docs/api-reference/metadata)
+* [MDX options](https://mdxjs.com/packages/mdx/#compilefile-options)
 
 
+
+
+
+
+#### the option I prefer
+
+I prefer option XY, because ...
+
+
+TODO: at some point I could add a "the hidden option 4" chapter about using a **remote source** (dynamic imports of mdx files via **react lazy** or **next/dynamic** or even getting MDX content from a database) and **dynamic routing** like in we did in option 3 but use **@next/mdx** for the rendering instead of **next-mdx-remote**
+TODO: a chapter about metadata for option 1 & 2
+### option 1 & 2: metadata using next/mdx
+
+next/mdx itself has no support YAML front-matter built in, but instead it supports exporting a **meta** object that contains your metadata
+
+```tsx
+export const meta = {
+    title: 'foo'
+    author: 'bar'
+}
+```
+TODO: a chapter where we create custom components to render our MDX, like a code block but also make use of the github mdx component
+TODO: a chapter about remark and rehype plugins
+
+* [list of rehype plugins](https://github.com/rehypejs/rehype/blob/main/doc/plugins.md#list-of-plugins)
+* [list of remark plugins](https://github.com/remarkjs/remark/blob/main/doc/plugins.md#list-of-plugins)
+
+
+we are now going to make the final version of our article page using option 3
+
+I like to make my types / interfaces to be reusable as much as possible, so first we are going to move the interface definition we have on top to an external file, create a new directory called 
+
+we had to create a utils/filesystem.ts that got used by generateStaticParams to tell next.js what the different articles URLs (route segments) are, for example when we do a production deployment or locally run `npm run build`, so that next.js can create a static page on build time for each article
 
 
 
@@ -1543,56 +1759,10 @@ for the code highlighting I plan to use <https://www.npmjs.com/package/highlight
 if code block titles for filenames are not supported out of the box by rehype pretty code then add this <https://www.npmjs.com/package/rehype-code-titles>
 
 
-read more:
-
-* MDX documentation: <https://mdxjs.com/docs/>
-* next.js MDX package documentation: <https://nextjs.org/docs/advanced-features/using-mdx>
-* app directory MDX pages next.js example: <https://github.com/vercel/next.js/tree/canary/examples/app-dir-mdx>
 
 
 
 
-## MDX content metadata
-
-### solution 1: metadata using a YAML front-matter that we parse using gray-matter
-
-In a lot of examples you can find on the web, use a YAML front-matter to add metadata to their files
-
-Lets add a front-matter to our MDX file:
-
-```yaml
----
-title: foo
-author: bar
----
-```
-
-now we need to install a new dependency called [gray-matter](https://www.npmjs.com/package/gray-matter) to parse the front-matter metadata
-
-now in our page.tsx
-
-```tsx
-import matter from 'gray-matter';
-
-const docsDirectory = join(process.cwd(), 'docs');
-
-export function getDocBySlug(slug) {
-  const realSlug = slug.replace(/\.md$/, '');
-  const fullPath = join(docsDirectory, `${realSlug}.md`);
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
-  const { data, content } = matter(fileContents);
-```
-
-### solution 2: metadata using next/mdx
-
-next/mdx itself has no support YAML front-matter built in, but instead it supports exporting a **meta** object that contains your metadata
-
-```tsx
-export const meta = {
-    title: 'foo'
-    author: 'bar'
-}
-```
 
 ## (content) directory for all MDX files
 
@@ -1608,6 +1778,11 @@ before we create the page, in the `/app/articles/[slug]/` directory, create a ne
 Note: did you notice the parenthesis around the content directory name, no this is mistake, this is what next.js calls [route groups](https://beta.nextjs.org/docs/routing/defining-routes#route-groups), in our use case we use this technique to add a directory to store our mdx files but because this is a route group it will not affect the URL structure as other directories without parenthesis would do, to test this you can go to <https://localhost:3000/(content)> and you will see that you get a 404 meaning no route got found for that URL
 
 Note: you have other options to store your MDX files of course, you could create a directory at the root of your project if you prefer and not use the route groups technique
+
+
+
+
+
 
 ## add a layout for all our article page
 
