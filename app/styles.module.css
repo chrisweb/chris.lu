@@ -30,3 +30,34 @@
         font-size: 20vw;
     }
 }*/
+
+/* https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties */
+:root {
+    --main-background-color: black;
+    --main-text-color: white;
+    --main-font-family: 'Consolas, \'Courier New\', monospace';
+}
+
+html {
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth */
+    -webkit-font-smoothing: 'antialiased';
+    -moz-osx-font-smoothing: 'grayscale';
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-size-adjust */
+    -webkit-text-size-adjust: '100%';
+    text-size-adjust: '100%';
+}
+
+body {
+    /* remove any margin that browsers add to body */
+    margin: 0;
+    /* default values */
+    background-color: var(--main-background-color);
+    color: var(--main-text-color);
+    font-family: var(--main-font-family);
+}
+
+@media print {
+    body {
+        background-color: white;
+    }
+}

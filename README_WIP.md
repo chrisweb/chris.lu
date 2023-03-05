@@ -1777,11 +1777,7 @@ before we create the page, in the `/app/articles/[slug]/` directory, create a ne
 
 Note: did you notice the parenthesis around the content directory name, no this is mistake, this is what next.js calls [route groups](https://beta.nextjs.org/docs/routing/defining-routes#route-groups), in our use case we use this technique to add a directory to store our mdx files but because this is a route group it will not affect the URL structure as other directories without parenthesis would do, to test this you can go to <https://localhost:3000/(content)> and you will see that you get a 404 meaning no route got found for that URL
 
-Note: you have other options to store your MDX files of course, you could create a directory at the root of your project if you prefer and not use the route groups technique
-
-
-
-
+Note: you have other options to store your MDX files of course, you could create a directory at the root of your project if you prefer and not use the route groups techniqu
 
 
 ## add a layout for all our article page
@@ -1812,6 +1808,85 @@ Note: I think I just inventied the adjective [**slugified**](https://www.google.
 
 <https://github.com/mdx-js/vscode-mdx>
 <https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx>
+
+
+
+
+
+
+
+## styling
+
+### ui framework
+
+In my previous projects I have used [**material ui (mui)**](https://mui.com/material-ui/getting-started/overview/) which is a popular react UI framework, I have loved how quickly I could build interfaces and forms and how well documented the project is
+
+However as of right now, several css-in-js projects are not working out of the box with the new **server components**, which in documented in the [next.js 13 "css-in-js" beta docs](https://beta.nextjs.org/docs/styling/css-in-js)
+
+Material ui uses the css-in-js library called [emotion](https://emotion.sh/docs/introduction) which as of now (05.03.2023) does not fully work with server components and especially streaming
+
+this is why I have decided that for now I would use the [css modules](https://github.com/css-modules/css-modules), many frameworks have built-in support for css modules like [gatsby (css modules support)](https://www.gatsbyjs.com/docs/how-to/styling/css-modules/) or [remix (css modules support)](https://remix.run/docs/en/1.14.0/guides/styling#css-modules) and so does [next.js (css modules support)](https://beta.nextjs.org/docs/styling/css-modules)
+
+read more:
+
+* [next.js "css modules" beta documentation)](https://beta.nextjs.org/docs/styling/css-modules)
+* [next.js 13 "css-in-js" beta documentation](https://beta.nextjs.org/docs/styling/css-in-js)
+* [material ui ticket "Improve Next.js 13 support"](https://github.com/mui/material-ui/issues/34905)
+* [emotion ticket "Plans to support Next.js 13 - /app directory"](https://github.com/emotion-js/emotion/issues/2928)
+
+### css modules
+
+to get started we create a file `styles.module.css` in our `app` directory and add the following content:
+
+```css
+/* https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties */
+:root {
+    --main-background-color: black;
+    --main-text-color: white;
+    --main-font-family: 'Consolas, \'Courier New\', monospace';
+}
+
+html {
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth */
+    -webkit-font-smoothing: 'antialiased';
+    -moz-osx-font-smoothing: 'grayscale';
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-size-adjust */
+    -webkit-text-size-adjust: '100%';
+    text-size-adjust: '100%';
+}
+
+body {
+    /* remove any margin that browsers add to body */
+    margin: 0;
+    /* default values */
+    background-color: var(--main-background-color);
+    color: var(--main-text-color);
+    font-family: var(--main-font-family);
+}
+
+@media print {
+    body {
+        background-color: white;
+    }
+}
+```
+as you can see at the top of the file I have first defined some common values using [custom properties (css variables)](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) that I intend to re-use several times in different classes inside of the pseudo-class `:root` which is a container for global custom properties
+
+then in the css ruleset for the `body` element, I have used the `var()` function to set the value of some properties to the value of my [custom property (css variable)](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
+
+Note: using custom properties (css variables) will make it easier to change a value in the future in just one place, instead of having to go through the entire css file and find all the places I need to update that value
+
+as you can see those are just some default values for common things like text or background color, a default font family and some extra properties for the **html** element that you usually can find in base css (css reset) rulesets of ui frameworks
+
+read more:
+
+* [css modules github repository](https://github.com/css-modules/css-modules)
+* [next.js "css modules" beta documentation)](https://beta.nextjs.org/docs/styling/css-modules)
+* [MDN "Using CSS custom properties (variables)" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
+* [MDN "CSS" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS)
+
+### 
+
 
 
 
