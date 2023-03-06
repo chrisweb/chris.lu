@@ -1114,11 +1114,11 @@ then inside of the `option1` directory, we create a file that we call `content.m
 
 [link](https://chris.lu)
 
-![This is an octocat image](https://myoctocat.com/assets/images/base-octocat.svg)
-
 * foo
 * bar
 * baz
+
+![This is an octocat image](https://myoctocat.com/assets/images/base-octocat.svg)
 ```
 
 next inside of that same `option1` directory, we will now create a regular `page.tsx` file that will import the `content.mdx` file we just created
@@ -1177,11 +1177,11 @@ inside of the `option2` directory, create a file called `page.mdx` and insert th
 
 [link](https://chris.lu)
 
-![This is an octocat image](https://myoctocat.com/assets/images/base-octocat.svg)
-
 * foo
 * bar
 * baz
+
+![This is an octocat image](https://myoctocat.com/assets/images/base-octocat.svg)
 ```
 
 now in your browser navigate to <http://localhost:3000/articles/option2> and you should see our MDX page getting displayed, with **bar** as subtitle
@@ -1337,11 +1337,11 @@ next we need to create a MDX file with some content, inside of the `[slug]` dire
 
 [link](https://chris.lu)
 
-![This is an octocat image](https://myoctocat.com/assets/images/base-octocat.svg)
-
 * foo
 * bar
 * baz
+
+![This is an octocat image](https://myoctocat.com/assets/images/base-octocat.svg)
 ```
 
 then we add 3 new imports into our `/app/articles/[slug]/page.tsx` file:
@@ -1514,7 +1514,7 @@ in the **option 3** exxample above we used the `<MDXRemote />` component, which 
 
 first let's add some front-matter to our MDX file `/app/articles/[slug]/option3.mdx`
 
-```tsx
+```md
 ---
 title: foo
 author: bar
@@ -1536,11 +1536,11 @@ lastUpdateDate: 2023-01-21 11:00:00 +00:00
 
 [link](https://chris.lu)
 
-![This is an octocat image](https://myoctocat.com/assets/images/base-octocat.svg)
-
 * foo
 * bar
 * baz
+
+![This is an octocat image](https://myoctocat.com/assets/images/base-octocat.svg)
 ```
 
 next we replace the import of the `MDXRemote` component with the import of the `compileMDX` function in our `/app/articles/[slug]/page.tsx` file:
@@ -1827,6 +1827,8 @@ Material ui uses the css-in-js library called [emotion](https://emotion.sh/docs/
 
 this is why I have decided that for now I would use the [css modules](https://github.com/css-modules/css-modules), many frameworks have built-in support for css modules like [gatsby (css modules support)](https://www.gatsbyjs.com/docs/how-to/styling/css-modules/) or [remix (css modules support)](https://remix.run/docs/en/1.14.0/guides/styling#css-modules) and so does [next.js (css modules support)](https://beta.nextjs.org/docs/styling/css-modules)
 
+if you prefer to use something else than css modules, here is a comparison of some popular react UI frameworks (@blueprintjs/core vs @chakra-ui/react vs @mui/joy vs @mui/material vs @nextui-org/react vs antd vs react-bootstrap vs semantic-ui-react): <https://npmtrends.com/@blueprintjs/core-vs-@chakra-ui/react-vs-@mui/joy-vs-@mui/material-vs-@nextui-org/react-vs-antd-vs-react-bootstrap-vs-semantic-ui-react>, you might also want to have a look at tailwind UI (which is not a package so I can't compare it to the others in same way): <https://tailwindui.com/documentation>
+
 read more:
 
 * [next.js "css modules" beta documentation)](https://beta.nextjs.org/docs/styling/css-modules)
@@ -1834,9 +1836,15 @@ read more:
 * [material ui ticket "Improve Next.js 13 support"](https://github.com/mui/material-ui/issues/34905)
 * [emotion ticket "Plans to support Next.js 13 - /app directory"](https://github.com/emotion-js/emotion/issues/2928)
 
-### css modules
+### global styles
 
-to get started we create a file `styles.module.css` in our `app` directory and add the following content:
+you can not put global styles into css modules as css modules will locally scope CSS, so all your **gloabl** css should go into a global styles file, you can give that file whatever name you want
+
+if you try to use global css rules in css modules you will get the following error:
+
+> Syntax error: Selector "html" is not pure (pure selectors must contain at least one local class or id)
+
+first we create a global styles file `global.css` in our `app` directory and add the following content:
 
 ```css
 /* https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties */
@@ -1844,6 +1852,8 @@ to get started we create a file `styles.module.css` in our `app` directory and a
     --main-background-color: black;
     --main-text-color: white;
     --main-font-family: 'Consolas, \'Courier New\', monospace';
+    --box-background-color: '#19161a';
+    
 }
 
 html {
@@ -1870,6 +1880,7 @@ body {
     }
 }
 ```
+
 as you can see at the top of the file I have first defined some common values using [custom properties (css variables)](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) that I intend to re-use several times in different classes inside of the pseudo-class `:root` which is a container for global custom properties
 
 then in the css ruleset for the `body` element, I have used the `var()` function to set the value of some properties to the value of my [custom property (css variable)](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
@@ -1878,14 +1889,76 @@ Note: using custom properties (css variables) will make it easier to change a va
 
 as you can see those are just some default values for common things like text or background color, a default font family and some extra properties for the **html** element that you usually can find in base css (css reset) rulesets of ui frameworks
 
+next we will import that file into our main layout file `/app/layout.tsx`:
+
+```tsx
+import './global.css'
+```
+
 read more:
 
-* [css modules github repository](https://github.com/css-modules/css-modules)
-* [next.js "css modules" beta documentation)](https://beta.nextjs.org/docs/styling/css-modules)
+* [next.js "global styles" beta documentation](https://beta.nextjs.org/docs/styling/global-styles)
 * [MDN "Using CSS custom properties (variables)" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
 * [MDN "CSS" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS)
 
-### 
+### css modules
+
+Note: for [naming](https://github.com/css-modules/css-modules#naming) classes the css modules team recommends using camelcase, a class name with a hyphen (kebab-case) is possible but you will need to put the name into square braquests
+
+to get started we create a file `styles.module.css` in our `app` directory and add the following content:
+
+```css
+.layoutNavbar {
+    position: fixed;
+}
+
+.layoutHeader {
+    width: '100vw';
+    height: 'calc(100vh/2)';
+    max-width: '100%';
+    position: 'relative';
+}
+```
+
+next we will import our css module into our main layout file `/app/layout.tsx`:
+
+```tsx
+import styles from './styles.module.css'
+```
+
+and then we will use the layoutNavbar class from our css module by passing it to the className attribute of our nav element:
+
+```tsx
+import styles from './styles.module.css'
+
+export default function RootLayout({
+    children,
+}: {
+    children: React.ReactNode
+}) {
+
+    return (
+        <html lang="en">
+            <head />
+            <body>
+                <nav className={styles.layoutNavbar}>
+
+                </nav>
+                <main>{children}</main>
+            </body>
+        </html>
+    )
+}
+```
+
+read more:
+
+* [css modules github repository](https://github.com/css-modules/css-modules)
+* [css modules "naming" documentation](https://github.com/css-modules/css-modules#naming)
+* [next.js "css modules" beta documentation)](https://beta.nextjs.org/docs/styling/css-modules)
+
+
+
 
 
 

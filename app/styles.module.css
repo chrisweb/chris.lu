@@ -31,33 +31,21 @@
     }
 }*/
 
-/* https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties */
-:root {
-    --main-background-color: black;
-    --main-text-color: white;
-    --main-font-family: 'Consolas, \'Courier New\', monospace';
+.layoutNavbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    height: 50px;
+    width: 100%;
 }
 
-html {
-    /* https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth */
-    -webkit-font-smoothing: 'antialiased';
-    -moz-osx-font-smoothing: 'grayscale';
-    /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-size-adjust */
-    -webkit-text-size-adjust: '100%';
-    text-size-adjust: '100%';
-}
+.layoutHeader {
+    width: 100vw;
+    height: calc(100vh/2);
+    max-width: 100%;
+    position: relative;
+    /* to compensate for the fixed navbar */
+    margin-top: 50px;
 
-body {
-    /* remove any margin that browsers add to body */
-    margin: 0;
-    /* default values */
-    background-color: var(--main-background-color);
-    color: var(--main-text-color);
-    font-family: var(--main-font-family);
-}
-
-@media print {
-    body {
-        background-color: white;
-    }
 }

@@ -1,6 +1,7 @@
 import NeonRoadContainer from '../components/neonRoad/Container'
 import './global.css'
-//import styles from './styles.module.css'
+import styles from './styles.module.css'
+import Link from 'next/link'
 
 export default function RootLayout({
     children,
@@ -12,9 +13,14 @@ export default function RootLayout({
         <html lang="en">
             <head />
             <body>
-                <header style={{ width: '100vw', height: 'calc(100vh/2)', maxWidth:'100%', position: 'relative' }}>
-                    {/*<h1 className={styles.eighties}>Chris.lu</h1>*/}
-                    {/*<NeonRoadContainer />*/}
+                <nav className={styles.layoutNavbar}>
+                    <Link href="/">Home</Link>
+                    <Link href="/dev">Web development</Link>
+                    <Link href="/lego">Lego bricks</Link>
+                    <Link href="/music">Music</Link>
+                </nav>
+                <header className={styles.layoutHeader}>
+                    <NeonRoadContainer />
                 </header>
                 <main>{children}</main>
             </body>
