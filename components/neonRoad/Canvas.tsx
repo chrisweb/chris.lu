@@ -1,9 +1,9 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { PerspectiveCamera, PCFSoftShadowMap, Matrix4 } from 'three'
 import { Canvas } from '@react-three/fiber'
-import { /*OrbitControls, useDetectGPU,*/ Text, GradientTexture, Hud, Sparkles } from '@react-three/drei'
+import { /*OrbitControls, useDetectGPU, Stats,*/ Text, GradientTexture, Hud, Sparkles } from '@react-three/drei'
 import Meshes from './Meshes'
 import Image from 'next/image'
 
@@ -30,6 +30,17 @@ const NeonRoadCanvas: React.FC = () => {
     //const gpuInfo = useDetectGPU()
     //console.log('useDetectGPU: ', gpuInfo)
 
+    const [isMounted, setIsMounted] = useState(false)
+
+    useEffect(() => {
+        // this avoids running the code on the server
+        // where window is not defined
+        // it is a replacement for next/dynamic -> ssr: false
+        // as we now use react lazy
+        setIsMounted(true)
+        sceneSetup()
+    }, [])
+
     const cameraRef = useRef<PerspectiveCamera>(null)
 
     const sceneSetup = () => {
@@ -45,8 +56,6 @@ const NeonRoadCanvas: React.FC = () => {
 
     }
 
-    sceneSetup()
-    
     function Sunshine() {
 
         // uncomment the next lines to use the spotlight helper
@@ -97,48 +106,52 @@ const NeonRoadCanvas: React.FC = () => {
     return (
         // TODO: add the accessibility package: https://docs.pmnd.rs/a11y/introduction
         <>
-            <Canvas
-                camera={cameraRef.current}
-                // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#new-pixel-ratio-default
-                //dpr={Math.min(window.devicePixelRatio, 2)} // pixel ratio, should be 1 or 2
-                // https://docs.pmnd.rs/react-three-fiber/api/canvas#render-defaults
-                //shadows={{ type: BasicShadowMap }} 
-                shadows={{ type: PCFSoftShadowMap }}
-                fallback={<FallbackImage />}
-                aria-label={'canvas:' + altText}
-                role="img"
-                gl={{ antialias: false }}
-            >
-                <color attach="background" args={['#2f0f30']} />
-                <Sparkles count={400} size={2} position={[0, 1, -2.1]} scale={[30, 5, 1]} speed={0} />
-                {/*<axesHelper />*/}{/*enable for development*/}
-                { }{/*enable for development*/}
-                <ambientLight color={'#ffffff'} intensity={40} />
-                <Meshes />
-                <Sunshine />
-                <Hud>
-                    <Text
-                        fontSize={window.innerWidth / window.innerHeight > 1 ? 0.5 : 0.3}
-                        lineHeight={1}
-                        font='/assets/fonts/PermanentMarker-Regular.ttf'
-                        matrixAutoUpdate={false}
-                        matrix={chrisTextMatrix}
-                    >
-                        <meshBasicMaterial
-                            transparent
-                            opacity={1}
-                            toneMapped={false}
+            {!isMounted ? null : (
+                <Canvas
+                    camera={cameraRef.current}
+                    // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#new-pixel-ratio-default
+                    //dpr={Math.min(window.devicePixelRatio, 2)} // pixel ratio, should be 1 or 2
+                    // https://docs.pmnd.rs/react-three-fiber/api/canvas#render-defaults
+                    //shadows={{ type: BasicShadowMap }} 
+                    shadows={{ type: PCFSoftShadowMap }}
+                    fallback={<FallbackImage />}
+                    aria-label={'canvas:' + altText}
+                    role="img"
+                    gl={{ antialias: false }}
+                >
+                    <color attach="background" args={['#2f0f30']} />
+                    <Sparkles count={400} size={2} position={[0, 1, -2.1]} scale={[30, 5, 1]} speed={0} />
+                    {/*<axesHelper />*/}{/*enable for development*/}
+                    {/*<OrbitControls camera={cameraRef.current} />*/}{/*enable for development*/}
+                    {/*<Stats />*/}{/*enable for development*/}
+                    <ambientLight color={'#ffffff'} intensity={40} />
+                    <Meshes />
+                    <Sunshine />
+                    <Hud>
+                        <Text
+                            fontSize={window.innerWidth / window.innerHeight > 1 ? 0.5 : 0.3}
+                            lineHeight={1}
+                            font='/assets/fonts/PermanentMarker-Regular.ttf'
+                            matrixAutoUpdate={false}
+                            matrix={chrisTextMatrix}
                         >
-                            <GradientTexture
-                                stops={[0, 1]}
-                                colors={['#00feff', '#ff00aa']}
-                            />
-                        </meshBasicMaterial>
-                        Chris.lu
-                    </Text>
-                </Hud>
-            </Canvas>
+                            <meshBasicMaterial
+                                transparent
+                                opacity={1}
+                                toneMapped={false}
+                            >
+                                <GradientTexture
+                                    stops={[0, 1]}
+                                    colors={['#00feff', '#ff00aa']}
+                                />
+                            </meshBasicMaterial>
+                            Chris.lu
+                        </Text>
+                    </Hud>
+                </Canvas>
+            )}
         </>
+
     )
 }
 
