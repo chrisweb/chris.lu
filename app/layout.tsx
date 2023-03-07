@@ -13,13 +13,13 @@ export default function RootLayout({
         <html lang="en">
             <head />
             <body>
-                <nav className={styles.layoutNavbar}>
-                    <Link href="/">Home</Link>
-                    <Link href="/dev">Web development</Link>
-                    <Link href="/lego">Lego bricks</Link>
-                    <Link href="/music">Music</Link>
-                </nav>
                 <header className={styles.layoutHeader}>
+                    <nav className={styles.layoutNavbar}>
+                        <Link href="/">Home</Link>
+                        <Link href="/dev">Web development</Link>
+                        <Link href="/lego">Lego bricks</Link>
+                        <Link href="/music">Music</Link>
+                    </nav>
                     <NeonRoadContainer />
                 </header>
                 <main>{children}</main>

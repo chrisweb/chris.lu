@@ -1,16 +1,22 @@
 /* https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties */
 :root {
-    --main-background-color: black;
+    --main-background-color: #10070c;
     --main-text-color: white;
-    --main-font-family: 'Consolas, \'Courier New\', monospace';
-    --box-background-color: '#19161a';
-    
+    --main-font-family: Consolas, 'Courier New', monospace;
+    --main-fontSize-default: 1rem;
+    --main-fontSize-big1: 1.125rem;
+    --main-fontSize-big2: 1.25rem;
+    --main-fontSize-big3: 1.5rem;
+    --main-fontSize-big4: 1.875rem;
+    --main-fontSize-big5: 2.25rem;
+    --main-fontSize-big6: 3rem;
+    --box-background-color: #19161a;
 }
 
 html {
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth */
-    -webkit-font-smoothing: 'antialiased';
-    -moz-osx-font-smoothing: 'grayscale';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-size-adjust */
     -webkit-text-size-adjust: '100%';
     text-size-adjust: '100%';
@@ -23,10 +29,65 @@ body {
     background-color: var(--main-background-color);
     color: var(--main-text-color);
     font-family: var(--main-font-family);
+    font-size: var(--main-fontSize-default);
 }
 
 @media print {
     body {
         background-color: white;
     }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    background-image: linear-gradient(#ff6145 0%, #FF0096 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+h1 {
+    font-size: var(--main-fontSize-big6);
+}
+
+h2 {
+    font-size: var(--main-fontSize-big5);
+}
+
+h3 {
+    font-size: var(--main-fontSize-big4);
+}
+
+h4 {
+    font-size: var(--main-fontSize-big3);
+}
+
+h5 {
+    font-size: var(--main-fontSize-big2);
+}
+
+h6 {
+    font-size: var(--main-fontSize-big1);
+}
+
+a {
+    outline: none;
+    text-decoration: none;
+    color: #ff198e;
+    /* underline animation */
+    /* https://nickymeuleman.netlify.app/blog/css-animated-wrapping-underline */
+    background-image: linear-gradient(#FF0096 0%, #FF0096 100%);
+    background-size: 0% 1px;
+    background-position-y: 100%;
+    background-position-x: 0%;
+    background-repeat: no-repeat;
+    transition: background-size 0.2s ease-in-out;
+}
+
+a:hover {
+    background-size: 100% 1px;
 }
