@@ -171,25 +171,20 @@ we then use [next/dynamic](dynamic) which is the next.js of [react lazy](https:/
 ```ts
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
 import dynamic from 'next/dynamic'
-const NeonRoadCanvas = dynamic(() => import('./Canvas'), { ssr: false })
+// in this dynamic import case it is important to set "ssr: false"
+// as in the NeonRoadCanvas component we use window
+// else you get "window is not defined"
+const NeonRoadCanvas = dynamic(() => import('./Canvas'), {
+    ssr: false,
+    loading: () => <span style={{ color: 'white', fontSize: '30px' }}>Loading...</span>,
+})
 
 const Container: React.FC = () => {
 
-    const [isMounted, setIsMounted] = useState(false)
-
-    useEffect(() => {
-        setIsMounted(true)
-    }, [])
-
     return (
         <>
-            {!isMounted ? null : (
-                <Suspense fallback={null}>
-                    <NeonRoadCanvas />
-                </Suspense>
-            )}
+            <NeonRoadCanvas />
         </>
     )
 }
