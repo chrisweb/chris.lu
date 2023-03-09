@@ -1957,7 +1957,10 @@ read more:
 * [css modules "naming" documentation](https://github.com/css-modules/css-modules#naming)
 * [next.js "css modules" beta documentation)](https://beta.nextjs.org/docs/styling/css-modules)
 
+### hex to rgb and rgb to hex
 
+here is a nice website I found in case you need to transform hex color codes to rgb: <https://www.rapidtables.com/convert/color/hex-to-rgb.html>
+and here is there other page to convert rgb to hex color codes: <https://www.rapidtables.com/convert/color/rgb-to-hex.html>
 
 
 
