@@ -1007,7 +1007,7 @@ TODO: in the regular docs they say you need to install [@mdx-js/loader](https://
 
 then we need to update the content our `next.config.mjs` file, to this:
 
-```js
+```mjs
 import WithMDX from '@next/mdx'
 
 const nextConfig = () => {
@@ -1187,6 +1187,240 @@ inside of the `option2` directory, create a file called `page.mdx` and insert th
 now in your browser navigate to <http://localhost:3000/articles/option2> and you should see our MDX page getting displayed, with **bar** as subtitle
 
 Note: this is an even easier solution and one that requires even less code than what we just saw in option 1, one downside to this solution is the same thing I mentioned in option 1, if you want to add a feature to your article pages, then you will need to do some refactoring in each page, the second downside to this solution is that if you want to add metadata to your files, or already have existing MDX files using a YAML front-matter, then there is no way to parse that metadata, instead you need to use the next.js MDX metadata technique, more about [MDX content metadata](#mdx-content-metadata) in the next chapter
+
+#### disabling the experimental mdx rust compiler (mdxRs)
+
+in the [getting started chapter](#getting-started-only-for-option-1-and-2-not-3) we enabled the new SWC rust compiler for MDX in `next.config.mjs` by setting the experimental option `mdxRs` to `true`
+
+if however you run into a bug (remember that compiler is not stable yet) then you might want to disable it and use webpack instead
+
+to disable the mdx rust compiler, in `next.config.mjs` you need to remove the option `mdxRs` or set its value to `false`:
+
+```mjs
+    const nextConfig = {
+        experimental: {
+            // experimental use rust compiler for MDX
+            mdxRs: false,
+        },
+    }
+```
+
+after you saved the file and if the dev server was running, next.js will of course tell you that:
+
+> Found a change in next.config.mjs. Restart the server to see the changes in effect.
+
+so we restart the dev server:
+
+```shell
+npm run dev
+```
+
+however if you disable `mdxRs` so that next.js does not use the rust based SWC compiler, then next.js will silently fail, this is because if you don't use SWC for compilation then next.js will use webpack, but there is no webpack loader plugin installed for MDX, to do so run the following command:
+
+`npm i @mdx-js/loader --save-exact`
+
+then we try to start the dev server again:
+
+```shell
+npm run dev
+```
+
+and this time the dev server should start without any problem
+
+read more:
+
+* [@mdx-js/loader documentation](https://www.npmjs.com/package/@mdx-js/loader)
+
+#### using costum components (only for option 1 and 2 NOT 3)
+
+we are going to modify the `mdx-components.tsx` we created earlier, to add a simple custom component, which will be a custom h1 tag with a custom css class
+
+```tsx
+import type { MDXComponents } from 'mdx/types'
+
+// This file is required to use MDX in `app` directory.
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+    return {
+        // Allows customizing built-in components, e.g. to add styling.
+        // h1: ({ children }) => <h1 style={{ fontSize: "100px" }}>{children}</h1>,
+        ...components,
+    }
+}
+```
+
+#### code box styling using components (only for option 1 and 2 NOT 3)
+
+#### option 1: meta data (@nextjs/mdx alternative to front-matter)
+
+next we will use the new metadata API that got introduced in [next.js 13.2](https://nextjs.org/blog/next-13-2) at the end of february 2023, to pass some of our values we get from front-matter to next.js metadata
+
+Note: the new metadata API replaces the previous app directory **head.js** file that got introduced in next.js 13 but is now deprecated, if you used an earlier version of next.js prior to v13.2 then check out the [next.js "head.js" beta documentation](https://beta.nextjs.org/docs/api-reference/file-conventions/head) in which the next.js team has added a lot of migration examples
+
+first we are going to add a new import:
+
+```tsx
+import type { Metadata } from 'next'
+```
+
+the type we just imported is a next.js metadata interface to describe all the metadata fields that can be set, it will add [type safety for metadata](https://beta.nextjs.org/docs/api-reference/metadata#types) to our typescript code
+
+next to tell next.js what a page (or layout) metadata is, you need to export an async function called `generateMetadata` and inside of it we need to fetch out front-matter using `compileMDX`, but we also use `compileMDX` inside of the page function called `Article`, this is why we refactor our code a bit and put a big chunk of the code that was in our `Article` function into a seperate function so that we can re-use it in both the `Article` function as well as the `generateMetadata` function
+
+```tsx
+const getArticle = async (slug: string) => {
+
+    const fileName = slug + '.mdx'
+
+    const directoryPath = dirname(fileURLToPath(import.meta.url))
+
+    const filePath = join(directoryPath, fileName)
+
+    const contentMDX = fs.readFileSync(filePath, 'utf8')
+
+    const mdxOptions = {
+        parseFrontmatter: true,
+    }
+
+    const mdxComponents = {
+        h1: (props: React.PropsWithChildren) => (
+            <h1 {...props} className="foo">
+                {props.children}
+            </h1>
+        ),
+    }
+
+    return await compileMDX<IFrontMatter>({ source: contentMDX, options: mdxOptions, components: mdxComponents })
+
+}
+```
+
+next we refactor our `Article` function to make use of the new `getArticle` function:
+
+```tsx
+export default async function Article(props: IPageProps) {
+
+    const { params: { slug } } = props
+
+    const { content } = await getArticle(slug)
+
+    return (
+        <>
+            {content}
+        </>
+    )
+}
+```
+
+and now we can finally add the `generateMetadata` function to our `/app/articles/[slug]/page.tsx` file:
+
+```tsx
+export async function generateMetadata(props: IPageProps) {
+
+    const { params: { slug } } = props
+
+    const { frontmatter } = await getArticle(slug)
+
+    const metadata: Metadata = {
+        title: frontmatter.title,
+    }
+
+    return metadata
+
+}
+```
+
+read more:
+
+* [next.js 12 documentation "mdx page metadata"](https://nextjs.org/docs/advanced-features/using-mdx#frontmatter)
+
+#### option 1: head element metadata
+
+#### option 2: head element metadata
+
+Note: in option 1 we imported the Metadata type for type safety, but in option 2 we only have mdx file and no typescript file, so we don't import it (MDX is **markdown + jsx (javascript)** and not **markdown + typescript**)
+
+you can add an export of a **metadata** object to mdx pages, similar to what we did in option 1 when we added it to our tsx page
+
+let's edit our `/app/articles/option2/page.mdx` and add the metdata object:
+
+```md
+export const metadata: Metadata = {
+    title: 'foo',
+    description: 'bar',
+    openGraph: {
+        type: 'article',
+        title: 'foo',
+        description: 'bar',
+        url: 'https://article.url',
+        images: [
+            {
+                url: 'https://article.url/image',
+                width: 800,
+                height: 600,
+            },
+        ],
+        publishedTime: '2023-01-01T00:00:00.000Z',
+        modifiedTime: '2023-01-02T00:00:00.000Z',
+        locale: 'en-US',
+        tags: ['tag1', 'tag2', 'tag3']
+    },
+}
+
+# Hello, World!
+
+## option 2
+
+*italic*
+
+**bold**
+
+***bold and italic***
+
+> quote
+
+[link](https://chris.lu)
+
+* foo
+* bar
+* baz
+
+![This is an octocat image](https://myoctocat.com/assets/images/base-octocat.svg)
+```
+
+now in your browser navigate to <http://localhost:3000/articles/option2> then use the inspect tool of your browsers developer tools to have a look at the HTML code and you see the following **title** and **meta tags** in the `<head>` element of the page:
+
+```html
+<title>foo</title>
+<meta name="description" content="bar"/>
+<meta property="og:title" content="foo"/>
+<meta property="og:description" content="bar"/>
+<meta property="og:url" content="https://article.url/"/>
+<meta property="og:locale" content="en-US"/>
+<meta property="og:image" content="https://article.url/image"/>
+<meta property="og:image:width" content="800"/>
+<meta property="og:image:height" content="600"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2023-01-01T00:00:00.000Z"/>
+<meta property="article:modified_time" content="2023-01-02T00:00:00.000Z"/>
+<meta property="article:tag" content="tag1"/>
+<meta property="article:tag" content="tag2"/>
+<meta property="article:tag" content="tag3"/>
+```
+
+read more:
+
+* [opengraph protocol website](https://ogp.me/)
+* [online opengraph generator for some types](https://webcode.tools/generators/open-graph/article)
+* [next.js "metadata API" beta documentation](https://beta.nextjs.org/docs/api-reference/metadata)
+
+#### custom components inside of MDX files (only for option 1 and 2 NOT 3)
+
+
+
+read more:
+
+* [next.js 12 documentation "using components in mdx files"](https://nextjs.org/docs/advanced-features/using-mdx#using-components-layouts-and-custom-elements)
+
 
 #### option 3: one page.tsx file, one dynamic route segment for all articles
 

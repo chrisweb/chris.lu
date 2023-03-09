@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/chrisweb/chris.lu#readme",
   "dependencies": {
+    "@mdx-js/loader": "2.3.0",
     "@next/mdx": "13.2.3",
     "@react-three/drei": "9.57.0",
     "@react-three/fiber": "8.11.5",

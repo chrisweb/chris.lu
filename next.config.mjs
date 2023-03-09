@@ -33,7 +33,7 @@ const nextConfig = (/*phase*/) => {
             // experimental support for next.js > 13 app directory
             appDir: true,
             // experimental use rust compiler for MDX
-            mdxRs: true,
+            mdxRs: false,
         },
         // file formats for next/image
         images: {
