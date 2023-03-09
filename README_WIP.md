@@ -1410,7 +1410,7 @@ now in your browser navigate to <http://localhost:3000/articles/option2> then us
 read more:
 
 * [opengraph protocol website](https://ogp.me/)
-* [online opengraph generator for some types](https://webcode.tools/generators/open-graph/article)
+* [online opengraph generator for some types](https://webcode.tools/generators/open-graph)
 * [next.js "metadata API" beta documentation](https://beta.nextjs.org/docs/api-reference/metadata)
 
 #### custom components inside of MDX files (only for option 1 and 2 NOT 3)
