@@ -1,8 +1,8 @@
 /* https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties */
 :root {
-    --main-background-color: #10070c;
+    --main-background-color: #060406;
     --main-text-color: white;
-    --main-font-family: Consolas, 'Courier New', monospace;
+    --main-frontFamily-default: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
     --main-fontSize-default: 1rem;
     --main-fontSize-big1: 1.125rem;
     --main-fontSize-big2: 1.25rem;
@@ -10,7 +10,12 @@
     --main-fontSize-big4: 1.875rem;
     --main-fontSize-big5: 2.25rem;
     --main-fontSize-big6: 3rem;
+    --main-fontWeight-default: 400;
+    --main-fontWeight-big: 600;
     --box-background-color: #19161a;
+    --primary-light-color: rgb(255 0 170);
+    --primary-dark-color: rgb(90 0 90);
+    --codebloc-font-family: Consolas, 'Courier New', monospace;
 }
 
 html {
@@ -28,8 +33,9 @@ body {
     /* default values */
     background-color: var(--main-background-color);
     color: var(--main-text-color);
-    font-family: var(--main-font-family);
+    font-family: var(--main-frontFamily-default);
     font-size: var(--main-fontSize-default);
+    font-weight: var(--main-fontWeight-default);
 }
 
 @media print {
@@ -44,7 +50,8 @@ h3,
 h4,
 h5,
 h6 {
-    background-image: linear-gradient(#ff6145 0%, #FF0096 100%);
+    font-weight: var(--main-fontWeight-big);
+    background-image: linear-gradient(var(--primary-light-color) 25%, var(--primary-dark-color) 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -77,10 +84,11 @@ h6 {
 a {
     outline: none;
     text-decoration: none;
-    color: #ff198e;
+    color: var(--primary-light-color);
+    font-weight: var(--main-fontWeight-big);
     /* underline animation */
     /* https://nickymeuleman.netlify.app/blog/css-animated-wrapping-underline */
-    background-image: linear-gradient(#FF0096 0%, #FF0096 100%);
+    background-image: linear-gradient(var(--primary-light-color) 0%, var(--primary-light-color) 100%);
     background-size: 0% 1px;
     background-position-y: 100%;
     background-position-x: 0%;
@@ -90,4 +98,10 @@ a {
 
 a:hover {
     background-size: 100% 1px;
+}
+
+main {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 56rem;
 }

@@ -39,24 +39,36 @@
     margin-top: 50px;
 }
 
-.layoutNavbar {
+.layoutNavbarContainer {
     position: fixed;
     top: 0;
     left: 0;
     z-index: 9999;
-    height: 50px;
     width: 100%;
-    background-color: rgba(255, 0, 150, 0.8);
+    background-color: rgba(255, 0, 170, 0.9);
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter */
     backdrop-filter: saturate(200%) blur(5px);
     -webkit-backdrop-filter: saturate(200%) blur(5px);
 }
 
+.layoutNavbar {
+    font-size: var(--main-fontSize-big2);
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    grid-gap: 26px;
+    gap: 26px;
+    padding-left: 26px;
+    height: 50px;
+    margin: 0 auto;
+    max-width: 1440px;
+}
+
 .layoutNavbar a {
-    font-size: var(--main-fontSize-big4);
     background-image: linear-gradient(#ffffff 0%, #ffffff 100%);
     background-size: 0% 2px;
     color: #ffffff;
+    padding-bottom: 3px;
 }
 
 .layoutNavbar a:hover {
