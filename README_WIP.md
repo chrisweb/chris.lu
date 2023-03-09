@@ -1312,7 +1312,14 @@ export default function Article(props: IPageProps) {
 
 if you want to try this out, first set `dynamicParams` to `true` (or comment it out because true is the default value anyway) and then if your dev server is not yet running use the command `npm run build` in your VSCode terminal, then in your browser navigate to <http://localhost:3000/articles/option4> and you will see that **option4** gets displayed because it got server side generated, now uncomment or set `dynamicParams` to `false` again and finally reload the page <http://localhost:3000/articles/option4> and you will see that now it displays the default `404` page, because there is not **option4** slug in the array that gets returned by `generateStaticParams`
 
+#### generate a list of MDX files
+
 now of course this is not quite the end yet, as we don't want to maintain the list of slugs manually, but instead want to use a script that will fetch the list of MDX files and then genrate a list of slugs
+
+Note: I compared 3 glob libraries, [fast-glob](https://www.npmjs.com/package/fast-glob) vs [glob](https://www.npmjs.com/package/glob) vs [globby](https://www.npmjs.com/package/globby), I checked out other projects like [docusaurus](https://github.com/facebook/docusaurus) which uses globby, [astro](https://github.com/withastro/astro) uses fast-glob, [gatsby](https://github.com/gatsbyjs/gatsby) seems to use both glob and globby depending on where you look and finally [remix](https://github.com/remix-run/remix) seems to use either fast-glob or glob depending at where you look at, so I think you can't really go wrong whatever of these 3 libraries you chose to use, I decided I would use globby for this project, you can check out the following two comparison I did using npmtrends and npmcompare and if you want feel free to chose another library:
+
+* [npmtrends.com: fast-glob vs glob vs globby](https://npmtrends.com/fast-glob-vs-glob-vs-globby)
+* [npmcompare.com: fast-glob vs. glob vs. globby](https://npmcompare.com/compare/fast-glob,glob,globby)
 
 first we are going to add [globby](https://www.npmjs.com/package/globby) as new dependency
 
@@ -1380,6 +1387,8 @@ next we use `globby` which will return a list of all files that are in `contentD
 we finally iterate over the list of files to get our slug, which is equivalent to the filename without the file extension
 
 try it out for yourself, ensure the dev server is running and then in the browser navigate to <http://localhost:3000/articles/option3> and you should again see option3 (the slug and mdx file name) getting displayed, which means we now successfully created a dynamic list of static pathes, you can add more `.mdx` files to the folder, each filename will be become a new slug
+
+#### loading the MDX file content and converting it
 
 next we want to load the file content and convert the MDX, to make the conversion we will use a package called [next-mdx-remote](https://www.npmjs.com/package/next-mdx-remote), so lets first install it using the following command:
 
@@ -1779,16 +1788,17 @@ Note: did you notice the parenthesis around the content directory name, no this 
 
 Note: you have other options to store your MDX files of course, you could create a directory at the root of your project if you prefer and not use the route groups techniqu
 
-
-## add a layout for all our article page
-
-TODO: add a layout file, to be used by all of the pages, so that every article has the same layout
-
 ## MDX directories naming convention
 
 Note: as **naming convention** for our markdown files, we will use a format where the first part is the publication date, for the date we will use the YYYY-MM-DD format because according to the international ISO 8601 standard, this allows files to be sorted into chronological order and avoids confusion when national conventions vary, then after the date we will put a slugified (cleaned up) version of the article's title, where all spaces are replaced by underscores
 
 Note: I think I just inventied the adjective [**slugified**](https://www.google.com/search?q=%22slugified%22) /ˈslʌɡɪfʌɪd/ in the note above 😂
+
+## add a layout for all our article page
+
+TODO: add a layout file, to be used by all of the pages, so that every article has the same layout
+
+
 
 
 
