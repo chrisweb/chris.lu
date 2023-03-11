@@ -1,35 +1,5 @@
-/*@import url(https://fonts.googleapis.com/css?family=Permanent+Marker);
+@import url(https://fonts.googleapis.com/css?family=Permanent+Marker);
 
-.eighties {
-    position: absolute;
-    text-align: center;
-    width:100vw;
-    max-width: 97%;
-    z-index: 1;
-    -webkit-transform: skew(335deg, 350deg);
-    transform: skew(345deg, 345deg);
-    font-family: 'Permanent Marker', cursive;
-    background-image: -webkit-linear-gradient(0.25turn, #00feff 0%, #ff00aa 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -webkit-filter: drop-shadow(2px 2px 20px #1b0008);
-    filter: drop-shadow(4px 4px 10px #1b0008);
-}
-
-@media screen and (orientation:landscape) {
-    .eighties {
-        bottom: -5vh;
-        font-size: 6vw;
-    }
-}
-
-@media screen and (orientation:portrait) {
-    .eighties {
-        bottom: 0vh;
-        font-size: 20vw;
-    }
-}*/
 .layoutHeader {
     width: 100vw;
     height: calc(100vh/2);
@@ -75,3 +45,33 @@
     background-size: 100% 2px;
 }
 
+.eighties {
+    position: absolute;
+    text-align: center;
+    width:100vw;
+    max-width: 97%;
+    z-index: 10;
+    -webkit-transform: skew(335deg, 350deg);
+    transform: skew(345deg, 345deg);
+    font-family: 'Permanent Marker', cursive;
+    background-image: -webkit-linear-gradient(0.25turn, #00feff 0%, #ff00aa 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-filter: drop-shadow(2px 2px 20px #1b0008);
+    filter: drop-shadow(4px 4px 10px #1b0008);
+}
+
+@media screen and (orientation:landscape) {
+    .eighties {
+        bottom: -5vh;
+        font-size: 6vw;
+    }
+}
+
+@media screen and (orientation:portrait) {
+    .eighties {
+        bottom: 0vh;
+        font-size: 20vw;
+    }
+}

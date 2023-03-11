@@ -22,6 +22,7 @@ export default function RootLayout({
                             <Link href="/music">Music</Link>
                         </nav>
                     </div>
+                    <h1 className={styles.eighties}>Chris.lu</h1>
                     <NeonRoadContainer />
                 </header>
                 <main>{children}</main>
