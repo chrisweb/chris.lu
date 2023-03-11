@@ -3,14 +3,20 @@ import './global.css'
 import styles from './styles.module.css'
 import Link from 'next/link'
 
-export default function RootLayout({
-    children,
-}: {
+import { Permanent_Marker } from 'next/font/google'
+
+const permanentMarkerFont = Permanent_Marker({
+    subsets: ['latin'],
+    weight: ['400'],
+    display: 'swap',
+})
+
+export default function RootLayout({ children }: {
     children: React.ReactNode
 }) {
 
     return (
-        <html lang="en">
+        <html lang="en" className={permanentMarkerFont.className}>
             <head />
             <body>
                 <header className={styles.layoutHeader}>
