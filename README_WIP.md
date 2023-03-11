@@ -2044,9 +2044,29 @@ TODO: add a layout file, to be used by all of the pages, so that every article h
 
 [remark-gfm](https://www.npmjs.com/package/remark-gfm)
 
+add to mdx document:
+
+```md
+~~strikethrough~~
+
+[ ] checkbox
+```
+
 ## extending MDX, to transform code blocks using the xxx plugins
 
 **SynthWave '84** VSCode theme <https://github.com/robb0wen/synthwave-vscode>
+
+## table of contents plugin
+
+is there a plugin that takes all headers of document and turns them into a table of contents?
+
+## use next/image
+
+a plugin (or via custom component) that allows you to use next/image for images
+
+also it should allow to set image height and width (next to the alt text) via a markdown style image, instead of having to use the html img element
+
+<https://www.codeconcisely.com/posts/nextjs-image-in-markdown/>
 
 ## MDX VSCode plugin
 
