@@ -20,18 +20,18 @@ const PlayButton: React.FC<IProps> = (props) => {
                 onClick={clickPlayHandler}
                 style={{
                     display: 'flex',
-                    alignItems: 'center',
                     justifyContent: 'center',
                     width: '100%',
                     height: '100%',
                     position: 'relative',
+                    top: '10%',
                 }}
             >
                 <PlayIcon
-                    fill='#fff'
+                    fill='#fff400'
                     fillOpacity='0.8'
                     style={{
-                        height: '25%',
+                        height: '50%',
                         width: 'auto',
                     }}
                 />
