@@ -5,26 +5,13 @@ import { PerspectiveCamera, PCFSoftShadowMap, Matrix4 } from 'three'
 import { Canvas } from '@react-three/fiber'
 import { /*OrbitControls, useDetectGPU, Stats,*/ Text, GradientTexture, Hud, Sparkles } from '@react-three/drei'
 import Meshes from './Meshes'
-import Image from 'next/image'
+import StaticImage from './StaticImage'
 
-const altText = 'Chris.lu header image, displaying an 80s style landscape and sunset'
-
-const FallbackImage: React.FC = () => {
-
-    return (
-        <Image
-            src="/assets/images/neonroad/fallback-min.png"
-            alt={altText}
-            fill
-            style={{ objectFit: 'cover' }}
-            sizes="100vw"
-            priority
-            quality={80}
-        />
-    )
+interface IProps {
+    altText: string
 }
 
-const NeonRoadCanvas: React.FC = () => {
+const NeonRoadCanvas: React.FC<IProps> = (props) => {
 
     // uncomment if you want to see what useDetectGPU returns
     //const gpuInfo = useDetectGPU()
@@ -92,7 +79,9 @@ const NeonRoadCanvas: React.FC = () => {
     // "skew" like transform for the text
     const chrisTextMatrix = new Matrix4()
     chrisTextMatrix.makeShear(0.2, 0, 0.4, 0, 0, 0)
-    chrisTextMatrix.setPosition(-0.1, -0.3, 0)
+    chrisTextMatrix.setPosition(-0.01, -0.5, 0)
+
+    const { altText } = props
 
     return (
         <>
@@ -103,7 +92,7 @@ const NeonRoadCanvas: React.FC = () => {
                 // https://docs.pmnd.rs/react-three-fiber/api/canvas#render-defaults
                 //shadows={{ type: BasicShadowMap }} 
                 shadows={{ type: PCFSoftShadowMap }}
-                fallback={<FallbackImage />}
+                fallback={<StaticImage altText={altText} />}
                 aria-label={'canvas:' + altText}
                 role="img"
                 gl={{ antialias: false }}
@@ -117,7 +106,7 @@ const NeonRoadCanvas: React.FC = () => {
                 <Meshes />
                 <Sunshine />
                 <Hud>
-                    <Text
+                    {/*<Text
                         fontSize={window.innerWidth / window.innerHeight > 1 ? 0.5 : 0.3}
                         lineHeight={1}
                         font='/assets/fonts/PermanentMarker-Regular.ttf'
@@ -135,7 +124,7 @@ const NeonRoadCanvas: React.FC = () => {
                             />
                         </meshBasicMaterial>
                         Chris.lu
-                    </Text>
+                    </Text>*/}
                 </Hud>
             </Canvas>
         </>
