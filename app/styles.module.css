@@ -52,7 +52,7 @@
 }
 
 .layoutNavbar {
-    font-size: var(--main-fontSize-big2);
+    font-size: var(--main-fontSize-big1);
     font-weight: 400;
     display: flex;
     align-items: center;
