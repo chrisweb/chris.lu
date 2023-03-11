@@ -29,7 +29,7 @@ const PlayButton: React.FC<IProps> = (props) => {
             >
                 <PlayIcon
                     fill='#fff'
-                    fill-opacity='0.8'
+                    fillOpacity='0.8'
                     style={{
                         height: '25%',
                         width: 'auto',
