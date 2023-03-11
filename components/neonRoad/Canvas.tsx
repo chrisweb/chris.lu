@@ -3,7 +3,7 @@
 import { useRef } from 'react'
 import { PerspectiveCamera, PCFSoftShadowMap, Matrix4 } from 'three'
 import { Canvas } from '@react-three/fiber'
-import { /*OrbitControls, useDetectGPU, Stats,*/ Text, GradientTexture, Hud, Sparkles } from '@react-three/drei'
+import { /*OrbitControls, useDetectGPU, Stats,*/ /*Text, GradientTexture,*/ Hud, Sparkles } from '@react-three/drei'
 import Meshes from './Meshes'
 import StaticImage from './StaticImage'
 
