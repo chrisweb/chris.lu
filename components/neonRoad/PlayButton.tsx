@@ -8,8 +8,8 @@ interface IProps {
 
 const PlayButton: React.FC<IProps> = (props) => {
 
-    const clickPlayHandler = (event: React.MouseEvent) => {
-        console.log(event)
+    const clickPlayHandler = (/*event: React.MouseEvent*/) => {
+        //console.log(event)
         const { clickPlayCallback } = props
         clickPlayCallback()
     }
