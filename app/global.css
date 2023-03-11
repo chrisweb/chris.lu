@@ -54,34 +54,15 @@ h3,
 h4,
 h5,
 h6 {
-    /*font-weight: var(--main-fontWeight-big);
-    background-image: linear-gradient(var(--primary-light-color) 25%, var(--primary-dark-color) 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;*/
-
     font-weight: var(--main-fontWeight-big);
-
     background-clip: text;
     -webkit-background-clip: text;
-
     -webkit-text-fill-color: transparent;
-
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
-
     animation: colorwave 20s infinite linear;
     -webkit-animation: colorwave 20s infinite linear;
-
     background-size: 200% 100%;
-
-    /*--tw-gradient-to: #db469f;
-    --tw-gradient-stops: var(--tw-gradient-from),#7891d5,var(--tw-gradient-to,rgba(120,145,213,0));
-    --tw-gradient-from: #db469f;
-    --tw-gradient-stops: var(--tw-gradient-from),var(--tw-gradient-to,rgba(219,70,159,0));
-    background-image: linear-gradient(90deg,var(--tw-gradient-stops));*/
-
-    /*background-image: linear-gradient(90deg, rgba(255,233,21,1) 0%, rgba(252,167,25,1) 17%, rgba(249,85,48,1) 34%, rgba(255,0,170,1) 50%, rgba(249,85,48,1) 68%, rgba(252,167,25,1) 85%, rgba(255,233,21,1) 100%);*/
     background-image: linear-gradient(90deg, rgba(255,0,170,1) 15%, rgba(249,85,48,1) 50%, rgba(255,0,170,1) 85%);
 
 }
