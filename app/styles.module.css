@@ -48,7 +48,7 @@
     text-align: center;
     width:100vw;
     max-width: 97%;
-    z-index: 10;
+    z-index: -20;
     -webkit-transform: skew(335deg, 350deg);
     transform: skew(345deg, 345deg);
     font-family: 'Permanent Marker', cursive;

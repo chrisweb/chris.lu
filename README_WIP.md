@@ -2344,6 +2344,16 @@ text neon glow:
 <https://codepen.io/FelixRilling/pen/oNNLMb>
 <https://codepen.io/GeorgePark/pen/MrjbEr>
 
+
+## music player
+
+```shell
+npm i web-audio-api-player --save-exact
+```
+
+
+
+
 ## audio player for header animation
 
 either the files will be regular fetch requests or maybe use HLS

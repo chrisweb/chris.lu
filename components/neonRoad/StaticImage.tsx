@@ -13,7 +13,10 @@ const StaticImage: React.FC<IProps> = (props) => {
             src="/assets/images/neonroad/fallback-min.png"
             alt={altText}
             fill
-            style={{ objectFit: 'cover' }}
+            style={{
+                objectFit: 'cover',
+                zIndex: -30
+            }}
             sizes="100vw"
             priority
             quality={80}

@@ -4,6 +4,8 @@ import { useState } from 'react'
 import StaticImage from './StaticImage'
 import PlayButton from './PlayButton'
 import dynamic from 'next/dynamic'
+import Player from './player/UI'
+
 // in this dynamic import case it is important to set "ssr: false"
 // as in the NeonRoadCanvas component we use window
 // else you get "window is not defined"
@@ -39,7 +41,10 @@ const Container: React.FC = () => {
                 </>
             }
             {showAnimationState &&
-                <NeonRoadCanvas altText={altText} />
+                <>
+                    <NeonRoadCanvas altText={altText} />
+                    <Player />
+                </>
             }
         </>
     )

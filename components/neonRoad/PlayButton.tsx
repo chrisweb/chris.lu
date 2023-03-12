@@ -25,7 +25,7 @@ const PlayButton: React.FC<IProps> = (props) => {
                     height: '100%',
                     position: 'absolute',
                     top: '10%',
-                    zIndex: '20',
+                    zIndex: '1',
                 }}
             >
                 <PlayIcon
