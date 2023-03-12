@@ -51,7 +51,7 @@
     z-index: -20;
     -webkit-transform: skew(335deg, 350deg);
     transform: skew(345deg, 345deg);
-    font-family: 'Permanent Marker', sans-serif;
+    font-family: 'Permanent Marker';
     font-weight: 400; 
     font-style: normal;
     font-display: swap;
