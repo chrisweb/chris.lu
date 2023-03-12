@@ -65,14 +65,14 @@
 
 @media screen and (orientation:landscape) {
     .eighties {
-        bottom: -5vh;
-        font-size: 6vw;
+        bottom: -3vh;
+        font-size: 10vw;
     }
 }
 
 @media screen and (orientation:portrait) {
     .eighties {
-        bottom: 0vh;
+        bottom: -5vh;
         font-size: 20vw;
     }
 }
