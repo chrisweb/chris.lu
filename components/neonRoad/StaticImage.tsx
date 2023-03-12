@@ -15,7 +15,7 @@ const StaticImage: React.FC<IProps> = (props) => {
             fill
             style={{
                 objectFit: 'cover',
-                zIndex: -30
+                zIndex: -30,
             }}
             sizes="100vw"
             priority

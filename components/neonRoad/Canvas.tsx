@@ -96,6 +96,9 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 aria-label={'canvas:' + altText}
                 role="img"
                 gl={{ antialias: false }}
+                style={{
+                    zIndex: -30,
+                }}
             >
                 <color attach="background" args={['#2f0f30']} />
                 <Sparkles count={400} size={2} position={[0, 1, -2.1]} scale={[30, 5, 1]} speed={0} />
