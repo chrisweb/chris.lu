@@ -2220,6 +2220,7 @@ read more:
 * [css modules github repository](https://github.com/css-modules/css-modules)
 * [css modules "naming" documentation](https://github.com/css-modules/css-modules#naming)
 * [next.js "css modules" beta documentation)](https://beta.nextjs.org/docs/styling/css-modules)
+* [normalize.css (a good css reset example)](https://github.com/necolas/normalize.css)
 
 ### hex to rgb and rgb to hex
 
