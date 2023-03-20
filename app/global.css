@@ -22,8 +22,10 @@
     --codebloc-font-family: Consolas, 'Courier New', monospace;
 }
 
-* {
-    box-sizing: border-box;
+*,
+*::after,
+*::before {
+	box-sizing: border-box;
 }
 
 html {
