@@ -18,6 +18,7 @@
     --box-background-color: #19161a;
     --primary-light-color: rgb(255 0 170);
     --secondary-light-color: rgb(249 85 48);
+    --extra-light-color: rgb(0, 254, 255);
     --primary-dark-color: rgb(90 0 90);
     --codebloc-font-family: Consolas, 'Courier New', monospace;
 }
