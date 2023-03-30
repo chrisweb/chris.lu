@@ -2337,6 +2337,9 @@ scrollbar style:
 
 <https://css-tricks.com/almanac/properties/s/scrollbar-color/>
 <https://css-tricks.com/almanac/properties/s/scrollbar/>
+<https://css-tricks.com/classy-and-cool-custom-css-scrollbars-a-showcase/>
+<https://css-tricks.com/the-current-state-of-styling-scrollbars-in-css/>
+<https://css-tricks.com/custom-scrollbars-in-webkit/>
 <https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Scrollbars>
 
 text neon glow:
@@ -2345,14 +2348,35 @@ text neon glow:
 <https://codepen.io/FelixRilling/pen/oNNLMb>
 <https://codepen.io/GeorgePark/pen/MrjbEr>
 
+lots of text effect example: <https://www.designyourway.net/blog/yes-you-can-actually-make-these-text-effects-in-css/>
+
+animated headline text + intro chapter about me on homepage:
+
+<https://codyhouse.co/demo/animated-headlines/index.html>
+
+boxes with cut off corners (90deg):
+
+example, cyberpunk website: <https://www.cyberpunk.net/lu/en/>
+
+custom cursor:
+
+<https://developer.mozilla.org/en-US/docs/Web/CSS/cursor>
+<https://css-tricks.com/using-css-cursors/>
+<https://blog.logrocket.com/creating-custom-mouse-cursor-css/>
+
+
+
 
 ## music player
+
+<https://github.com/chrisweb/web-audio-api-player/>
 
 ```shell
 npm i web-audio-api-player --save-exact
 ```
 
-
+TODO: finish audio player ui
+TODO: fix problem that on mobile no sound plays until user interaction, the play for the animation needs to have a direct impact on the play of the player
 
 
 ## audio player for header animation
