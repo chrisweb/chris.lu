@@ -2295,7 +2295,9 @@ why I'm not a tailwind fan: <>
 
 ## CSP (content security policy)
 
-CSP is very important
+TODO: CSP is very important
+
+[MDN: CSP (Content Security Policy) documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)
 
 TODO: mui 5 seems to have problems with CSP: <https://github.com/mui/material-ui/issues/19938>
 
