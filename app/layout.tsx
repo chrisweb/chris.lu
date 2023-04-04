@@ -2,7 +2,6 @@ import NeonRoadContainer from '../components/neonRoad/Container'
 import './global.css'
 import styles from './styles.module.css'
 import Link from 'next/link'
-
 import { Permanent_Marker } from 'next/font/google'
 
 const permanentMarkerFont = Permanent_Marker({

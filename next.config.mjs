@@ -5,6 +5,10 @@
 
 import WithMDX from '@next/mdx'
 
+const ContentSecurityPolicy = `
+  default-src 'self';
+`
+
 const nextConfig = (/*phase*/) => {
 
     // to use the bundle analyzer uncomment the following lines
@@ -42,6 +46,11 @@ const nextConfig = (/*phase*/) => {
         // TODO: is this needed for app directory
         // Configure pageExtensions to include md and mdx
         pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+        ContentSecurityPolicy: {
+            //key: 'Content-Security-Policy',
+            key: 'Content-Security-Policy-Report-Only',
+            value: ContentSecurityPolicy.replace(/\s{2,}/g, ' ').trim()
+        }
     }
 
     return withMDX(nextConfig)

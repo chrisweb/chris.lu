@@ -2295,11 +2295,38 @@ why I'm not a tailwind fan: <>
 
 ## CSP (content security policy)
 
-TODO: CSP is very important
+Note: I expected that I had to add the CSP rules via the metadata object into for example the main layout.tsx file, but this is not the case in next.js, if you want to add a CSP policy you do it via the next.config file:
 
-[MDN: CSP (Content Security Policy) documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)
+```tsx
+const ContentSecurityPolicy = `
+  default-src 'self';
+`
+
+const nextConfig = (/*phase*/) => {
+
+    const nextConfig = {
+        ContentSecurityPolicy: {
+            //key: 'Content-Security-Policy',
+            key: 'Content-Security-Policy-Report-Only',
+            value: ContentSecurityPolicy.replace(/\s{2,}/g, ' ').trim()
+        }
+    }
+
+    return nextConfig
+
+}
+
+export default nextConfig
+```
+
+Note: as you might have noticed, I used **Content-Security-Policy-Report-Only** instead of just **Content-Security-Policy**, this is because for now I don't want to enforce any rules, I just want to test the rules, later when I have verified that the rules are correct, I will switch to **Content-Security-Policy** to enforce them
 
 TODO: mui 5 seems to have problems with CSP: <https://github.com/mui/material-ui/issues/19938>
+
+read more:
+
+* [next.js documentation "advenced features: security headers"](https://nextjs.org/docs/advanced-features/security-headers)
+* [MDN: CSP (Content Security Policy) documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)
 
 ## github actions
 
