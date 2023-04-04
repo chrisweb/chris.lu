@@ -46,10 +46,19 @@ const nextConfig = (/*phase*/) => {
         // TODO: is this needed for app directory
         // Configure pageExtensions to include md and mdx
         pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
-        ContentSecurityPolicy: {
-            //key: 'Content-Security-Policy',
-            key: 'Content-Security-Policy-Report-Only',
-            value: ContentSecurityPolicy.replace(/\s{2,}/g, ' ').trim()
+        headers: async () => {
+            return [
+                {
+                    source: '/:path*',
+                    headers: [
+                        {
+                            //key: 'Content-Security-Policy',
+                            key: 'Content-Security-Policy-Report-Only',
+                            value: ContentSecurityPolicy.replace(/\s{2,}/g, ' ').trim()
+                        },
+                    ]
+                }
+            ]
         }
     }
 

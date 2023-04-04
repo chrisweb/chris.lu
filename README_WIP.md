@@ -2295,7 +2295,7 @@ why I'm not a tailwind fan: <>
 
 ## CSP (content security policy)
 
-Note: I expected that I had to add the CSP rules via the metadata object into for example the main layout.tsx file, but this is not the case in next.js, if you want to add a CSP policy you do it via the next.config file:
+Note: I expected that I could add the CSP rules via the metadata object, for example via the main layout.tsx file in the root of the `app` directory, but this does not seem to be the case in next.js, if you want to add a CSP policy you do it via the next.config file, which means the CSP rule will not use an html `<meta>` element, but instead will be added to the **HTTP response headers**:
 
 ```tsx
 const ContentSecurityPolicy = `
@@ -2319,7 +2319,40 @@ const nextConfig = (/*phase*/) => {
 export default nextConfig
 ```
 
+the CSP rule `default-src 'self'` we have defined for now is very simple and very restrictive, it will block every request for files not hosted on the same domain as our main page itself
+
 Note: as you might have noticed, I used **Content-Security-Policy-Report-Only** instead of just **Content-Security-Policy**, this is because for now I don't want to enforce any rules, I just want to test the rules, later when I have verified that the rules are correct, I will switch to **Content-Security-Policy** to enforce them
+
+Warning: as this is a configuration change, don't forget to stop and re-start the dev server after saving the config file, actually you will see the following message in your terminal as a reminder to do so:
+
+> Found a change in next.config.mjs. Restart the server to see the changes in effect.
+
+so lets stop and start our development server again and then visit the URL of our project in the browser
+
+after restarting the dev server, if you look at **network tab in the developer tools** of your browser, you will see that in the "localhost" page response there is our new header:
+
+![vscode notification typescript version](./documentation/assets/images/content_security_policy_http_response_headers.png)
+
+if you then take a look at the **console tab in the developers tools** of your browser, you will notice a bunch of errors that all start with **[Report Only]**:
+
+![vscode notification typescript version](./documentation/assets/images/content_security_policy_console_log_error.png)
+
+> [Report Only] Refused to apply inline style because it violates the following Content Security Policy directive: "default-src 'self'". Either the 'unsafe-inline' keyword, a hash ('sha256-4wlRC2TOnsW3Xin5lbw+ySsI8bemY+fAjGHKM2j9GMM='), or a nonce ('nonce-...') is required to enable inline execution. Note that hashes do not apply to event handlers, style attributes and javascript: navigations unless the 'unsafe-hashes' keyword is present. Note also that 'style-src' was not explicitly set, so 'default-src' is used as a fallback.
+
+this error tells us that our **inline style(s)** violate our CSP, to lift the ban on **inline style(s)** we have several options, we the rule use **unsafe-inline** but this would allow all inline styles and hence reduce the security increase we gained by using a CSP, so it is better to online allow the inline styles we know are safe and which have been created by us and not another source, this is done by using a **nonce**
+
+Note: it is important that we **nonce** we use is dynamic and hence change for every page request, if we use a static one (by for example creating one and then store it in an env file for use in every request), then an attacker could steal our nonce and use it in his own inline styles that he is injecting in our code
+
+TODO: continue this chapter
+<https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/style-src#unsafe_inline_styles>
+<https://github.com/vercel/next.js/commit/c1b2b3f91fd8b858e76353a631c7890a95db6875#diff-3861ba614175e73a7d699fdec42765310799a4416a44597a78da5d2d2e066aec>
+<https://stackoverflow.com/questions/67001167/add-nonce-to-style-inline>
+<https://github.com/vercel/next.js/discussions/18451>
+<https://mui.com/material-ui/guides/content-security-policy/>
+
+
+TODO: here is an interesting example that shows how to configure CSP on local dev, make an example using the phase in next.config: <https://github.com/vercel/next.js/commit/c1b2b3f91fd8b858e76353a631c7890a95db6875#diff-3861ba614175e73a7d699fdec42765310799a4416a44597a78da5d2d2e066aec>
+TODO: next.js seems to have a built in test for malformed CSP strings, make an example that triggers this error: <https://github.com/vercel/next.js/commit/c6ef857d5792bc201c85e73ebaea8f6b83cdf643>
 
 TODO: mui 5 seems to have problems with CSP: <https://github.com/mui/material-ui/issues/19938>
 
@@ -2327,6 +2360,7 @@ read more:
 
 * [next.js documentation "advenced features: security headers"](https://nextjs.org/docs/advanced-features/security-headers)
 * [MDN: CSP (Content Security Policy) documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)
+* [MND "CSP: style-src: Unsafe inline styles"](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/style-src#unsafe_inline_styles)
 
 ## github actions
 
