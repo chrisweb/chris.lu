@@ -24,31 +24,29 @@
   },
   "homepage": "https://github.com/chrisweb/chris.lu#readme",
   "dependencies": {
-    "@mdx-js/loader": "2.3.0",
     "@next/mdx": "13.2.4",
-    "@react-three/drei": "9.58.4",
+    "@react-three/drei": "9.64.0",
     "@react-three/fiber": "8.12.0",
     "globby": "13.1.3",
     "next": "13.2.4",
-    "next-mdx-remote": "4.4.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "three": "0.150.1",
+    "three": "0.151.3",
     "web-audio-api-player": "4.0.2"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "13.2.4",
-    "@types/node": "18.15.9",
-    "@types/react": "18.0.29",
+    "@types/node": "18.15.11",
+    "@types/react": "18.0.33",
     "@types/react-dom": "18.0.11",
-    "@typescript-eslint/eslint-plugin": "5.56.0",
-    "@typescript-eslint/parser": "5.56.0",
-    "eslint": "8.36.0",
+    "@typescript-eslint/eslint-plugin": "5.57.1",
+    "@typescript-eslint/parser": "5.57.1",
+    "eslint": "8.37.0",
     "eslint-config-next": "13.2.4",
     "eslint-plugin-import": "2.27.5",
     "eslint-plugin-jsx-a11y": "6.7.1",
     "eslint-plugin-react": "7.32.2",
     "eslint-plugin-react-hooks": "4.6.0",
-    "typescript": "5.0.2"
+    "typescript": "5.0.3"
   }
 }
