@@ -1003,8 +1003,6 @@ first we will add the `@next/mdx` package our next.js project, this package will
 npm install @next/mdx --save-exact
 ```
 
-TODO: in the regular docs they say you need to install [@mdx-js/loader](https://www.npmjs.com/package/@mdx-js/loader) (an MDX loader for webpack) and [@mdx-js/react](https://www.npmjs.com/package/@mdx-js/react) as mentioned in the documentation you probably never need this: <https://mdxjs.com/docs/using-mdx/#mdx-provider>, but they don't mention to install those two in the beta docs anymore, so do I need to add them manually or not??? This PR seems to confirm they are optional: <https://github.com/vercel/next.js/pull/45440/files#diff-7b9eb4f98eac741f3a0f77cd2a82a19db9f6adaaf8805ca740d6bba439598ced>
-
 then we need to update the content our `next.config.mjs` file, to this:
 
 ```mjs
@@ -1050,8 +1048,9 @@ const nextConfig = () => {
 export default nextConfig
 ```
 
+Note: as you can see in this configuration we have not only enabled the new but still experimental `app` directory but we have also added `mdxRs: true`, this tells next.js that we would like to use the new but also still experimental rust compiler for our MDX content, you can disable this if you prefer, if you wish to do so you might want to read my post about ["disabling the experimental rust compiler for MDX content"](#disabling-the-experimental-mdx-rust-compiler-mdxrs)
+
 TODO: in next config, do I need to configure pageExtensions for MDX to work in app directory, or is this just for pages directory???
-TODO: the `mdxRs: true` in next config that they tell you to add in the beta docs <https://beta.nextjs.org/docs/guides/mdx>, because in the regular docs they say to not use it in production, so is it mandatory for the app directory or not??? If I do not enable the experimental rust MDX compiler, I guess next/mdx will fallback to using webpack(?) if it does, do I need to install the @mdx-js/loader manually, see the TODO above
 TODO: check the withMDX options above, I currently have them commented as I'm not sure yet if they are needed and if they are what values I need to set, should come back later if a usecase requires me to use the options else get rid of them before publishing this tutorial
 
 now we need to add two more files to make MDX work with server components
@@ -1961,9 +1960,10 @@ Read more:
 
 I prefer option XY, because ...
 
-
 TODO: at some point I could add a "the hidden option 4" chapter about using a **remote source** (dynamic imports of mdx files via **react lazy** or **next/dynamic** or even getting MDX content from a database) and **dynamic routing** like in we did in option 3 but use **@next/mdx** for the rendering instead of **next-mdx-remote**
+
 TODO: a chapter about metadata for option 1 & 2
+
 ### option 1 & 2: metadata using next/mdx
 
 next/mdx itself has no support YAML front-matter built in, but instead it supports exporting a **meta** object that contains your metadata
@@ -1974,6 +1974,7 @@ export const meta = {
     author: 'bar'
 }
 ```
+
 TODO: a chapter where we create custom components to render our MDX, like a code block but also make use of the github mdx component
 TODO: a chapter about remark and rehype plugins
 
@@ -1995,7 +1996,9 @@ TODO: ensure all images in mdx files use next/image and all internal links use n
 
 to make slugs I found two libraries <https://www.npmjs.com/package/github-slugger> and <https://www.npmjs.com/package/@sindresorhus/slugify>
 
-for the code highlighting I plan to use <https://www.npmjs.com/package/highlight.js>
+for the code highlighting one option is <https://www.npmjs.com/package/highlight.js>
+
+### MDX code blocks
 
 **rehype pretty code** is a rehype plugin for vscode like syntax highlighting with support for themes: <https://rehype-pretty-code.netlify.app/>, here is the npm page <https://www.npmjs.com/package/rehype-pretty-code>, it uses shiki <https://shiki.matsu.io/>
 
