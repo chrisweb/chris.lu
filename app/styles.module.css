@@ -20,7 +20,7 @@
 }
 
 .layoutNavbar {
-    font-size: var(--main-fontSize-big1);
+    font-size: var(--main-fontSize-big5);
     font-weight: 400;
     display: flex;
     align-items: center;
@@ -49,6 +49,7 @@
     width:100vw;
     max-width: 97%;
     z-index: -20;
+    margin: 0;
     -webkit-transform: skew(335deg, 350deg);
     transform: skew(345deg, 345deg);
     font-family: 'Permanent Marker';
@@ -65,14 +66,14 @@
 
 @media screen and (orientation:landscape) {
     .eighties {
-        bottom: -3vh;
+        bottom: 10%;
         font-size: 8vw;
     }
 }
 
 @media screen and (orientation:portrait) {
     .eighties {
-        bottom: -5vh;
+        bottom: 10%;
         font-size: 20vw;
     }
 }
