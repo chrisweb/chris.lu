@@ -3,7 +3,7 @@
 import { useRef } from 'react'
 import { PerspectiveCamera, PCFSoftShadowMap, Matrix4 } from 'three'
 import { Canvas } from '@react-three/fiber'
-import { /*OrbitControls, useDetectGPU, Stats,*/ /*Text, GradientTexture,*/ Hud, Sparkles } from '@react-three/drei'
+import { /*OrbitControls, useDetectGPU, Stats,*/ /*Text, GradientTexture, Hud,*/ Sparkles } from '@react-three/drei'
 import Meshes from './Meshes'
 import StaticImage from './StaticImage'
 
@@ -108,8 +108,8 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 <ambientLight color={'#ffffff'} intensity={40} />
                 <Meshes />
                 <Sunshine />
-                <Hud>
-                    {/*<Text
+                {/*<Hud>
+                    <Text
                         fontSize={window.innerWidth / window.innerHeight > 1 ? 0.5 : 0.3}
                         lineHeight={1}
                         font='/assets/fonts/PermanentMarker-Regular.ttf'
@@ -127,8 +127,8 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                             />
                         </meshBasicMaterial>
                         Chris.lu
-                    </Text>*/}
-                </Hud>
+                    </Text>
+                </Hud>*/}
             </Canvas>
         </>
 
