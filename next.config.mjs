@@ -46,7 +46,7 @@ const nextConfig = (/*phase*/) => {
         // TODO: is this needed for app directory
         // Configure pageExtensions to include md and mdx
         pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
-        headers: async () => {
+        /*headers: async () => {
             return [
                 {
                     source: '/:path*',
@@ -59,7 +59,7 @@ const nextConfig = (/*phase*/) => {
                     ]
                 }
             ]
-        }
+        },*/
     }
 
     return withMDX(nextConfig)

@@ -1,0 +1,20 @@
+.blinkingCarret {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.blinkingCarret::after {
+    content: "";
+    width: 2px;
+    height: 14px;
+    background: rgb(0, 254, 255);
+    display: inline-block;
+    animation: blinkingCarretAnimation 1.5s steps(2) infinite;
+}
+
+@keyframes blinkingCarretAnimation {
+    0% {
+        opacity: 0;
+    }
+}
