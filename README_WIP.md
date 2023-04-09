@@ -2084,7 +2084,9 @@ also it should allow to set image height and width (next to the alt text) via a 
 
 ## styling
 
-### ui framework
+### ui / styling framework choice
+
+#### material ui
 
 In my previous projects I have used [**material ui (mui)**](https://mui.com/material-ui/getting-started/overview/) which is a popular react UI framework, I have loved how quickly I could build interfaces and forms and how well documented the project is
 
@@ -2092,18 +2094,25 @@ However as of right now, several css-in-js projects are not working out of the b
 
 Material ui uses the css-in-js library called [emotion](https://emotion.sh/docs/introduction) which as of now (05.03.2023) does not fully work with server components and especially streaming
 
-this is why I have decided that for now I would use the [css modules](https://github.com/css-modules/css-modules), many frameworks have built-in support for css modules like [gatsby (css modules support)](https://www.gatsbyjs.com/docs/how-to/styling/css-modules/) or [remix (css modules support)](https://remix.run/docs/en/1.14.0/guides/styling#css-modules) and so does [next.js (css modules support)](https://beta.nextjs.org/docs/styling/css-modules)
+* [material ui ticket "Improve Next.js 13 support"](https://github.com/mui/material-ui/issues/34905)
+* [emotion ticket "Plans to support Next.js 13 - /app directory"](https://github.com/emotion-js/emotion/issues/2928)
+
+#### css modules (my current choice)
+
+this is why I have decided that for now I would use the [css modules](https://github.com/css-modules/css-modules), many frameworks have built-in support for css modules like [Create React App](https://create-react-app.dev/docs/adding-a-css-modules-stylesheet/), [Gatsby (css modules support)](https://www.gatsbyjs.com/docs/how-to/styling/css-modules/) or [Remix (css modules support)](https://remix.run/docs/en/1.14.0/guides/styling#css-modules) and so does [Next.js (css modules support)](https://beta.nextjs.org/docs/styling/css-modules)
+
+in one of the following chapters I will do a deeper dive into how to use css modules with examples
+
+#### other UI frameworks comparison
 
 if you prefer to use something else than css modules, here is a comparison of some popular react UI frameworks (@blueprintjs/core vs @chakra-ui/react vs @mui/joy vs @mui/material vs @nextui-org/react vs antd vs react-bootstrap vs semantic-ui-react): <https://npmtrends.com/@blueprintjs/core-vs-@chakra-ui/react-vs-@mui/joy-vs-@mui/material-vs-@nextui-org/react-vs-antd-vs-react-bootstrap-vs-semantic-ui-react>, you might also want to have a look at tailwind UI (which is not a package so I can't compare it to the others in same way): <https://tailwindui.com/documentation>
 
 read more:
 
-* [next.js "css modules" beta documentation)](https://beta.nextjs.org/docs/styling/css-modules)
 * [next.js 13 "css-in-js" beta documentation](https://beta.nextjs.org/docs/styling/css-in-js)
-* [material ui ticket "Improve Next.js 13 support"](https://github.com/mui/material-ui/issues/34905)
-* [emotion ticket "Plans to support Next.js 13 - /app directory"](https://github.com/emotion-js/emotion/issues/2928)
 
-### global styles
+
+#### global styles
 
 you can not put global styles into css modules as css modules will locally scope CSS, so all your **gloabl** css should go into a global styles file, you can give that file whatever name you want
 
@@ -2167,8 +2176,9 @@ read more:
 * [next.js "global styles" beta documentation](https://beta.nextjs.org/docs/styling/global-styles)
 * [MDN "Using CSS custom properties (variables)" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
 * [MDN "CSS" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS)
+* [normalize.css (a good css reset example)](https://github.com/necolas/normalize.css)
 
-### css modules
+#### css modules
 
 Note: for [naming](https://github.com/css-modules/css-modules#naming) classes the css modules team recommends using camelcase, a class name with a hyphen (kebab-case) is possible but you will need to put the name into square braquests
 
@@ -2223,7 +2233,19 @@ read more:
 * [css modules github repository](https://github.com/css-modules/css-modules)
 * [css modules "naming" documentation](https://github.com/css-modules/css-modules#naming)
 * [next.js "css modules" beta documentation)](https://beta.nextjs.org/docs/styling/css-modules)
-* [normalize.css (a good css reset example)](https://github.com/necolas/normalize.css)
+
+#### css modules features
+
+* the most important feature of css modules is that it will automatically create unnique class names for you, for even if you have two modules that each uses a different css module but have the same class names, there will be no clashes because css modules has converted the class name to something unique for us, the format it will use is as follows: `[filename]\_[classname]\_\_[hash]`
+* if you don't want the css modules to create unique class names for you, you have the option to set a **stable** class name: <https://www.gatsbyjs.com/docs/how-to/styling/css-modules/#enabling-user-stylesheets-with-a-stable-class-name>
+* css modules allow you to do composition by using the compose keyword, this works like an import in javascript and allows you to include one css module into another css module
+* you don't have to call your css module styles.module.css, this is just an example, you can replace the first part **styles** by whatever you want
+* you can use css modules everywhere, they are not just for pages and work outside of the app or pages directories too, which means that each component in your components directory can have their own css module, for example if you have a component in /components/UI/Button.tsx then next to it you can have a corresponding css module /components/UI/button.module.css
+
+read more:
+
+[css modules documentation about "composition"](https://github.com/css-modules/css-modules#composition)
+
 
 ### hex to rgb and rgb to hex
 
