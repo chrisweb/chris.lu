@@ -2249,10 +2249,7 @@ read more:
 
 ### hex to rgb and rgb to hex
 
-here is a nice website I found in case you need to transform hex color codes to rgb: <https://www.rapidtables.com/convert/color/hex-to-rgb.html>
-and here is there other page to convert rgb to hex color codes: <https://www.rapidtables.com/convert/color/rgb-to-hex.html>
-
-
+I found this [google search color convertor widget](https://g.co/kgs/EaqMkb), you might want to bookmark it too, it allows you to convert colors from formats like rgb to hex and vice versa (and other formats), which can be useful for working with colors in stylesheets and for example needing to quickly convert a hex color to a rgba value
 
 
 
@@ -2477,9 +2474,19 @@ read more:
 
 ### custom cursor image(s)
 
-<https://developer.mozilla.org/en-US/docs/Web/CSS/cursor>
-<https://css-tricks.com/using-css-cursors/>
-<https://blog.logrocket.com/creating-custom-mouse-cursor-css/>
+edit the global.css file and add the following css to it:
+
+```css
+/* cursor styling */
+html {
+    
+}
+```
+
+read more:
+
+* [MDN "cursor" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/cursor)
+* [can I use "cursor"](https://caniuse.com/?search=cursor)
 
 text neon glow:
 

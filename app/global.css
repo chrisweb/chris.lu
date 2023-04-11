@@ -43,6 +43,8 @@ html {
     scrollbar-width: .5rem;
     /* scrollbar-color: the first color is for the thumb of the scrollbar and the second color for the track */
     scrollbar-color: var(--primary-light-color) var(--main-background-color);
+    /* custom cursor */
+    cursor: url(/assets/cursors/chris_mouse_pointer.cur), default;
 }
 
 body {
