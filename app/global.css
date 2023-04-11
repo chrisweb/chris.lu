@@ -28,7 +28,7 @@
 *,
 *::after,
 *::before {
-	box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html {
@@ -39,6 +39,10 @@ html {
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-size-adjust */
     -webkit-text-size-adjust: '100%';
     text-size-adjust: '100%';
+    /* scrollbar styling (w3c standard) */
+    scrollbar-width: .5rem;
+    /* scrollbar-color: the first color is for the thumb of the scrollbar and the second color for the track */
+    scrollbar-color: var(--primary-light-color) var(--main-background-color);
 }
 
 body {
@@ -50,6 +54,15 @@ body {
     font-family: var(--main-frontFamily-default);
     font-size: var(--main-fontSize-default);
     font-weight: var(--main-fontWeight-default);
+}
+
+/* scrollbar styling (webkit vendor prefix) */
+html::-webkit-scrollbar {
+    width: 1rem;
+}
+
+html::-webkit-scrollbar-thumb {
+    background: linear-gradient(var(--primary-light-color) 0%, var(--secondary-light-color) 100%);
 }
 
 @media print {
@@ -87,12 +100,12 @@ p {
     margin: 0 0 0.35em 0;
 }
 
-h1 > .emoji,
-h2 > .emoji,
-h3 > .emoji,
-h4 > .emoji,
-h5 > .emoji,
-h6 > .emoji {
+h1>.emoji,
+h2>.emoji,
+h3>.emoji,
+h4>.emoji,
+h5>.emoji,
+h6>.emoji {
     -webkit-text-fill-color: white;
 }
 

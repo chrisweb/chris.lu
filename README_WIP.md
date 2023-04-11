@@ -2421,14 +2421,55 @@ Read more:
 
 ## layout / blog design
 
-scrollbar style:
+### the w3c standard way
 
-<https://css-tricks.com/almanac/properties/s/scrollbar-color/>
-<https://css-tricks.com/almanac/properties/s/scrollbar/>
-<https://css-tricks.com/classy-and-cool-custom-css-scrollbars-a-showcase/>
-<https://css-tricks.com/the-current-state-of-styling-scrollbars-in-css/>
-<https://css-tricks.com/custom-scrollbars-in-webkit/>
-<https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Scrollbars>
+scrollbar style the w3c standard way:
+
+edit the global.css file and add the following css to the styles of the html element:
+
+```css
+html {
+    /* scrollbar styling (w3c standard) */
+    scrollbar-width: auto;
+    /* scrollbar-color: the first color is for the thumb of the scrollbar and the second color for the track */
+    scrollbar-color: var(--primary-light-color) var(--main-background-color);
+}
+```
+
+Note: by default the scrollbar color and width needs to added to **html** element, not the **body**
+Note: if you just a first color for the **thumb** and no second color for the **track** of the scrollbar, the scrollbar will not be styled at all
+Note: setting a **width** in **pixel** or **rem** had **no effect** on the width and firefox reported that it is an **invalid value**, only the values **auto, thin and none** seem to be valid and useful, however firefox also lists the following values **inherit, initial, revert, revert-layer and unset** as valid too
+Note: as mentioned in the w3c document, setting the scrollbar width value to thin can cause accessibility issues, so be careful if you intend to set the width to that value
+Note: previously it was valid to use as values **dark** or **light** for the scrollbar-color, which was a sort of **auto** bad based on the OS user preference for light or dark mode, but this option got removed and firefox for example reports that this is  an **invalid value**
+
+* [w3c: CSS Scrollbars Styling Module Level 1](https://www.w3.org/TR/css-scrollbars-1/)
+* [MDN "CSS Scrollbars" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Scrollbars)
+* [MDN "scrollbar width" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-width)
+* [can I use "scrollbar width"](https://caniuse.com/?search=scrollbar-width)
+* [MDN "scrollbar color" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-color)
+* [can I use "scrollbar color"](https://caniuse.com/?search=scrollbar-color)
+
+### the webkit prefix way
+
+styling the scrollbar for browsers that support the webkit prefix is done using the pseudo classes **::-webkit-scrollbar**
+
+edit the global.css file and add the following css to it:
+
+```css
+/* scrollbar styling (webkit vendor prefix) */
+html::-webkit-scrollbar {
+    width: .5rem;
+}
+
+html::-webkit-scrollbar-thumb {
+    background: linear-gradient(var(--primary-light-color) 0%, var(--secondary-light-color) 100%);
+}
+```
+
+read more:
+
+* [MDN "::-webkit-scrollbar" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/::-webkit-scrollbar)
+* [can I use "scrollbar color"](https://caniuse.com/?search=webkit-scrollbar)
 
 text neon glow:
 
