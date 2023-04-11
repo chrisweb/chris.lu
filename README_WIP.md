@@ -2421,7 +2421,9 @@ Read more:
 
 ## layout / blog design
 
-### the w3c standard way
+### scrollbar styling
+
+#### the w3c standard way
 
 scrollbar style the w3c standard way:
 
@@ -2449,7 +2451,7 @@ Note: previously it was valid to use as values **dark** or **light** for the scr
 * [MDN "scrollbar color" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-color)
 * [can I use "scrollbar color"](https://caniuse.com/?search=scrollbar-color)
 
-### the webkit prefix way
+#### the webkit prefix way
 
 styling the scrollbar for browsers that support the webkit prefix is done using the pseudo classes **::-webkit-scrollbar**
 
@@ -2466,10 +2468,18 @@ html::-webkit-scrollbar-thumb {
 }
 ```
 
+Note: you can really crazy things by playing around with the webkit-scrollbar options, for example check out this [nyan nyan car scrollbar codepen](https://codepen.io/chriscoyier/pen/wQgXPV), which is an example from the corresponding article ["The Current State of Styling Scrollbars in CSS (2022 Update)"](https://css-tricks.com/the-current-state-of-styling-scrollbars-in-css/) by Chris Coyier from css tricks
+
 read more:
 
 * [MDN "::-webkit-scrollbar" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/::-webkit-scrollbar)
 * [can I use "scrollbar color"](https://caniuse.com/?search=webkit-scrollbar)
+
+### custom cursor image(s)
+
+<https://developer.mozilla.org/en-US/docs/Web/CSS/cursor>
+<https://css-tricks.com/using-css-cursors/>
+<https://blog.logrocket.com/creating-custom-mouse-cursor-css/>
 
 text neon glow:
 
@@ -2479,19 +2489,11 @@ text neon glow:
 
 lots of text effect example: <https://www.designyourway.net/blog/yes-you-can-actually-make-these-text-effects-in-css/>
 
-animated headline text + intro chapter about me on homepage:
-
-<https://codyhouse.co/demo/animated-headlines/index.html>
-
 boxes with cut off corners (90deg):
 
 example, cyberpunk website: <https://www.cyberpunk.net/lu/en/>
 
-custom cursor:
 
-<https://developer.mozilla.org/en-US/docs/Web/CSS/cursor>
-<https://css-tricks.com/using-css-cursors/>
-<https://blog.logrocket.com/creating-custom-mouse-cursor-css/>
 
 
 
