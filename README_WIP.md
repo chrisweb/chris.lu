@@ -2479,9 +2479,25 @@ edit the global.css file and add the following css to it:
 ```css
 /* cursor styling */
 html {
-    
+    cursor: url(/assets/cursors/secondary_mouse_default.cur), default;
+}
+
+a {
+    cursor: url(/assets/cursors/secondary_mouse_pointer.cur), pointer;
 }
 ```
+
+colors used for the cursors located in `/public/assets/cursors/`:
+
+primary cursor:
+border: FF00E7
+fill: FF00E7 (opacity 0.5)
+shadow: FF92F5
+
+secondary cursor:
+border: 00FEFF
+fill: 00FEFF (opacity 0.5)
+shadow: 00B4B5
 
 read more:
 

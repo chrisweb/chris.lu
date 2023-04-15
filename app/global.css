@@ -44,7 +44,7 @@ html {
     /* scrollbar-color: the first color is for the thumb of the scrollbar and the second color for the track */
     scrollbar-color: var(--primary-light-color) var(--main-background-color);
     /* custom cursor */
-    cursor: url(/assets/cursors/chris_mouse_pointer.cur), default;
+    cursor: url(/assets/cursors/secondary_mouse_default.cur), default;
 }
 
 body {
@@ -160,6 +160,7 @@ a {
     background-position-x: 0%;
     background-repeat: no-repeat;
     transition: background-size 0.2s ease-in-out;
+    cursor: url(/assets/cursors/secondary_mouse_pointer.cur), pointer;
 }
 
 a:hover {
