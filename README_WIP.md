@@ -2504,6 +2504,69 @@ read more:
 * [MDN "cursor" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/cursor)
 * [can I use "cursor"](https://caniuse.com/?search=cursor)
 
+### futuristic / scifi boxes and buttons with notches
+
+there are a multitude of ways to achieve boxes or buttons with a notch of 45, 135, 225 or 315 degrees:
+
+1) using a SVG as background image, works especially well for buttons with a fixed size
+
+you can use SVG images that are just a few 100 bytes heavy, for example the [cyberounk website](https://www.cyberpunk.net/) uses that technique for some of their buttons
+
+they also use another clever technique, which is to set the SVG as data URLs, which means there is no extra request to fetch the image as it is bundled with the original html
+
+#### create an SVG background with a notched corner
+
+to create an SVG rectangle with a corner that is cut off (at an 45 degree angle on the bottom right side), I used an opensource vector image design tool called [inkscape](https://inkscape.org/), if you want to do this too but don't know inkscape yet, here are the steps:
+
+* open inkscape, by default a new **document** will be opened
+* now use the **create rectangles and squares** tool on the right side of inkscape (shortcut key: `R`) to create a rectangle (after selecting the rectangle tool, but before drawing the rectangle, you can chose a color at the bottom, but it doesn't really matter which fill color you use because you can change it later in the html file manually too using any css color you like), for more details about this step check out the [inkscape "squares and rectangles" documentation](https://inkscape-manuals.readthedocs.io/en/latest/squares-and-rectangles.html)
+* then we use the **Draw Bezier curves and straight lines** tool (shortcut key: `B`) to create a triangle for the corner you want to cut off, the get a 45 degrees angle, click on document to start the line, then hold the `ctrl` key to move in 15 degrees steps, now look at the bottom of inkscape and you will see it displays the current angle (line segment: 45 degrees), then click a second time to draw the 45 degrees line, then close the triangle, you can now also chose a color, chose what ever color you want by it is best to use one that is different to the one you used for your square to better differentiate both shapes
+* now use the **select and transform objects** tool (shortcut key: `S`), to move the triangle over the rectangle (don't bother positioning it exactly yet)
+* now to position the triangle inside of the rectangle, first use the **select and transform objects** tool (shortcut key: `S`) again and select both shapes, now in the inkscape top navigation open **Object** menu and then click on **Align and distribute** (shortcut: `shift + ctrl + A`), then on the right side of inkscape you will have a new tab with alignment options, chose the ones you want to align the triangle inside of the rectangle to where you want to have it, I used **Align right edges** to put it on the right and then also **Align bottom edges** to move it to the bottom (bottom right)
+* next in the inkscape top navigation open **Path** and then click on **Division** (shortcut: `ctrl + /`)
+* next use the **select and transform objects** tool (shortcut key: `S`) tool again and move the reactangle away from triangle, you will see that the triangle got cut out of the rectangle
+* delete the triangle by selecting it and then pressing the `delete` key on your keyboard
+* next in the inkscape top navigation open **Edit** and then click on **Resize Page to Selection** (shortcut: `shift + ctrl + R`) so that you have a viewbox that is exactle the size of your rectangle
+* finally click in the inkscape top navigation open **File** and then click on **Save As** (shortcut: `shift + ctrl + S`)
+
+#### css background image data url
+
+
+
+```css
+.btn {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 339 85'%3E%3Cpath d='M315 85v-8h-27v8H21.77L2 65.23V0h337v85z' fill-rule='evenodd' fill='%2302d8f3' opacity='.45'/%3E%3Cpath d='M313 85v-8h-27v8H19.77L0 65.23V0h337v85z' fill='%23ff003c' fill-rule='evenodd'/%3E%3C/svg%3E");
+    height: 85px;
+    width: 337px;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    font-size: 26px;
+    font-weight: 700;
+    justify-content: center;
+    letter-spacing: 2px;
+    line-height: 1;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+```
+
+```html
+<a class="btn" href="/">Button text</a>
+```
+
+read more:
+
+* [MDN "data URLs" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URLs)
+* [inkscape "a beginners guide" documentation](https://inkscape-manuals.readthedocs.io/en/latest/index.html)
+
+
+
+
 text neon glow:
 
 <https://css-tricks.com/how-to-create-neon-text-with-css/>
@@ -2512,9 +2575,7 @@ text neon glow:
 
 lots of text effect example: <https://www.designyourway.net/blog/yes-you-can-actually-make-these-text-effects-in-css/>
 
-boxes with cut off corners (90deg):
 
-example, cyberpunk website: <https://www.cyberpunk.net/lu/en/>
 
 
 

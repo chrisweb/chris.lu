@@ -77,3 +77,23 @@
         font-size: 20vw;
     }
 }
+
+.cyberButton {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 339 85'%3E%3Cpath d='M315 85v-8h-27v8H21.77L2 65.23V0h337v85z' fill-rule='evenodd' fill='%2302d8f3' opacity='.45'/%3E%3Cpath d='M313 85v-8h-27v8H19.77L0 65.23V0h337v85z' fill='%23ff003c' fill-rule='evenodd'/%3E%3C/svg%3E");
+    height: 85px;
+    width: 337px;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    font-size: 26px;
+    font-weight: 700;
+    justify-content: center;
+    letter-spacing: 2px;
+    line-height: 1;
+    text-decoration: none;
+    text-transform: uppercase;
+}
