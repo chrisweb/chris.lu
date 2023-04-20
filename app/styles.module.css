@@ -79,9 +79,9 @@
 }
 
 .cyberButton {
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 339 85'%3E%3Cpath d='M315 85v-8h-27v8H21.77L2 65.23V0h337v85z' fill-rule='evenodd' fill='%2302d8f3' opacity='.45'/%3E%3Cpath d='M313 85v-8h-27v8H19.77L0 65.23V0h337v85z' fill='%23ff003c' fill-rule='evenodd'/%3E%3C/svg%3E");
-    height: 85px;
-    width: 337px;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%2240%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23f0f%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E");
+    height: 40px;
+    width: 400px;
     background-position: 50%;
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -89,7 +89,7 @@
     display: flex;
     align-items: center;
     color: #fff;
-    font-size: 26px;
+    font-size: 16px;
     font-weight: 700;
     justify-content: center;
     letter-spacing: 2px;

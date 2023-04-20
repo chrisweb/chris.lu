@@ -2508,6 +2508,8 @@ read more:
 
 there are a multitude of ways to achieve boxes or buttons with a notch of 45, 135, 225 or 315 degrees:
 
+#### notched button using an SVG as background-image
+
 1) using a SVG as background image, works especially well for buttons with a fixed size
 
 you can use SVG images that are just a few 100 bytes heavy, for example the [cyberounk website](https://www.cyberpunk.net/) uses that technique for some of their buttons
@@ -2519,25 +2521,140 @@ they also use another clever technique, which is to set the SVG as data URLs, wh
 to create an SVG rectangle with a corner that is cut off (at an 45 degree angle on the bottom right side), I used an opensource vector image design tool called [inkscape](https://inkscape.org/), if you want to do this too but don't know inkscape yet, here are the steps:
 
 * open inkscape, by default a new **document** will be opened
-* now use the **create rectangles and squares** tool on the right side of inkscape (shortcut key: `R`) to create a rectangle (after selecting the rectangle tool, but before drawing the rectangle, you can chose a color at the bottom, but it doesn't really matter which fill color you use because you can change it later in the html file manually too using any css color you like), for more details about this step check out the [inkscape "squares and rectangles" documentation](https://inkscape-manuals.readthedocs.io/en/latest/squares-and-rectangles.html)
-* then we use the **Draw Bezier curves and straight lines** tool (shortcut key: `B`) to create a triangle for the corner you want to cut off, the get a 45 degrees angle, click on document to start the line, then hold the `ctrl` key to move in 15 degrees steps, now look at the bottom of inkscape and you will see it displays the current angle (line segment: 45 degrees), then click a second time to draw the 45 degrees line, then close the triangle, you can now also chose a color, chose what ever color you want by it is best to use one that is different to the one you used for your square to better differentiate both shapes
-* now use the **select and transform objects** tool (shortcut key: `S`), to move the triangle over the rectangle (don't bother positioning it exactly yet)
-* now to position the triangle inside of the rectangle, first use the **select and transform objects** tool (shortcut key: `S`) again and select both shapes, now in the inkscape top navigation open **Object** menu and then click on **Align and distribute** (shortcut: `shift + ctrl + A`), then on the right side of inkscape you will have a new tab with alignment options, chose the ones you want to align the triangle inside of the rectangle to where you want to have it, I used **Align right edges** to put it on the right and then also **Align bottom edges** to move it to the bottom (bottom right)
+* now use the **create rectangles and squares** tool on the right side of inkscape (shortcut key: `R`) to create a rectangle (after selecting the rectangle tool, but before drawing the rectangle, you can chose a **color** at the bottom, but it doesn't really matter which fill color you use because you can change it later in the html file manually too using any css color you like), for more details about this step check out the [inkscape "squares and rectangles" documentation](https://inkscape-manuals.readthedocs.io/en/latest/squares-and-rectangles.html), after drawing the rectangle you can adjust the **width** and **height** on top by setting the values manually where it says "Change W: H:", but before you do you probably want to change the "units" from "mm" (millimeter) to "px" (pixel), for this example I will set the size to 200 px width and 40 px height
+* then we need to create a triangle to the corner we want to cut out, the easiest way I have found is to create a square, so let's use the use agian the**create rectangles and squares** tool from the right side of inkscape (shortcut key: `R`), to draw a perfect square press the `ctrl` key and then start drawing, it doesn't matter what size it is yet, we will adjust that in a bit anyway, but you might want to chose a color at the bottom of inkscape that is different then the color you used for the rectangle to make it easier to better differentiate both shapes from each other, now use the **select and transform objects** tool (shortcut key: `S`) and click on your triangle to select it, then on top on inkscape in the navigation open **Path** and click on **Object to path**,  next on the right side of inkscape select the **Edit paths by nodes** tool (shortcut key: `N`) and if the rectangle is not selected yet click on it, you will see 4 nodes on each corner of the sqaure, first step is to click on the node you want to delete, then press the keys `ctrl + delete` (hold `ctrl` and press `delete`), the last thing we need to do is set the size of our triangle, to do so on the right of inkscape use the **select and transform objects** tool (shortcut key: `S`) and click on the triangle, then on top of inkscape you will see that you can change the X and Y position as well as the H (height) and W (width) dimensions of the selected object, first change change the "units" from "mm" (millimeter) to "px" (pixel), then use the input field **W:** to set the width (I set it to 20 px for mine) and **H:** to set the height (I set mine to 20 px)
+* another way to draw a triangle is to use the **Draw Bezier curves and straight lines** tool (shortcut key: `B`) to create a triangle for the corner you want to cut off, to get a 45 degrees angle, click somewhere inside of the document to start drawing the line, then hold the `ctrl` key to move in 15 degrees steps, now look at the bottom of inkscape and you will see it displays the current angle (line segment: 45 degrees), then click a second time to draw the 45 degrees line, then close the triangle, this part is a bit tricky as you need to draw two perfect sides, an horizontal (adjacent side) and one vertical (opposite side), to do so make sure you are pressing the `ctrl` key while drawing, you can now also chose a color, chose what ever color you want by it is best to use one that is different to the one you used for your rectangle to better differentiate both shapes from each other
+* now use the **select and transform objects** tool (shortcut key: `S`) and click on the triangle, then move the triangle over the rectangle (don't bother positioning it exactly yet)
+* now to position the triangle perfectly inside of the rectangle, first use the **select and transform objects** tool (shortcut key: `S`) and use it to select both shapes, now in the inkscape top navigation open **Object** menu and then click on **Align and distribute** (shortcut: `shift + ctrl + A`), then on the right side of inkscape you will have a new tab with alignment options, chose the ones you want to align the triangle inside of the rectangle to where you want to have it, I used **Align right edges** to put it on the right and then also **Align bottom edges** to move it to the bottom (bottom right)
 * next in the inkscape top navigation open **Path** and then click on **Division** (shortcut: `ctrl + /`)
-* next use the **select and transform objects** tool (shortcut key: `S`) tool again and move the reactangle away from triangle, you will see that the triangle got cut out of the rectangle
-* delete the triangle by selecting it and then pressing the `delete` key on your keyboard
+* next use the **select and transform objects** tool (shortcut key: `S`) tool again, first click somewhere on the document, then click onto the reactangle, then move the reactangle away from triangle, you will see that the triangle got cut out of the rectangle
+* now click on the triangle and then press the `delete` key on your keyboard to delete it
 * next in the inkscape top navigation open **Edit** and then click on **Resize Page to Selection** (shortcut: `shift + ctrl + R`) so that you have a viewbox that is exactle the size of your rectangle
 * finally click in the inkscape top navigation open **File** and then click on **Save As** (shortcut: `shift + ctrl + S`)
 
+read more:
+
+* [inkscape "a beginners guide" documentation](https://inkscape-manuals.readthedocs.io/en/latest/index.html)
+
+#### optimize SVG file
+
+after creating an SVG file using inkscape (or any other tool you prefer) we get an SVG like the following:
+
+```xml
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="52.916668mm"
+   height="10.583333mm"
+   viewBox="0 0 52.916668 10.583333"
+   version="1.1"
+   id="svg10708"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   sodipodi:docname="cyberButton.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview10710"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.914906"
+     inkscape:cx="291.83326"
+     inkscape:cy="207.67161"
+     inkscape:window-width="2560"
+     inkscape:window-height="1377"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs10705" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-27.762354,-93.409087)">
+    <path
+       id="path10938"
+       style="fill:#ff00ff;fill-rule:evenodd;stroke-width:0"
+       d="m 27.762354,93.409087 v 10.583333 h 47.625 l 5.291667,-5.291667 v -5.291666 z" />
+  </g>
+</svg>
+```
+
+there is a lot of markup in here that is probably useful for inkscape but not for us
+
+to optimize the SVG that is currently > 700 bytes, we can use a tool like the very good [SVGO: SVG optimizer](https://github.com/svg/svgo), you can use it as command line tool but there also an ["SVGO's Missing GUI" online version hosted on github pages](https://jakearchibald.github.io/svgomg/)
+
+after opening our SVG in SVGOMG online, we can see in the bottom right that the optimization will bring the 700 bytes file down to just a bit over 200 bytes (which is quite an optimization as it is now 3 times smaller), finally save the optimized file locally by clicking on the download button in the bottom right
+
+if you now open the file again you will see that the markup has been reduced to almost a bare minimum:
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="40" viewBox="0 0 52.917 10.583"><path d="M27.762 93.41v10.582h47.625l5.292-5.291v-5.292z" style="fill:#f0f;fill-rule:evenodd;stroke-width:0" transform="translate(-27.762 -93.41)"/></svg>
+```
+
+there is just one small adjustement you can do manually, which is to remove the 2 attributes **width** , **height** from the SVG tag, because we won't need them as we will set the size in our css, which gives us something like this:
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52.917 10.583"><path d="M27.762 93.41v10.582h47.625l5.292-5.291v-5.292z" style="fill:#f0f;fill-rule:evenodd;stroke-width:0" transform="translate(-27.762 -93.41)"/></svg>
+```
+
+TODO: explain how to install SVGO as dev dependency and then use it on command line (maybe as part of a CI/CD process)
+
+read more:
+
+* [SVGO: Node.js-based (command line) tool for optimizing SVG vector graphics](https://github.com/svg/svgo)
+* ["SVGO's Missing GUI" online version hosted on github pages](https://jakearchibald.github.io/svgomg/)
+
+#### URL encode the SVG markup
+
+next we have to URL encode the SVG markup so that we can use it in our css file
+
+to encode the SVG markup, open the optimized version from the previous chapter and then use a tool like [Eric Meyer's online URL encode](https://meyerweb.com/eric/tools/dencoder/) to encode it, the result should be something like this:
+
+```xml
+%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%2240%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23f0f%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E
+```
+
+read more:
+
+* [Eric Meyer's online URL encode](https://meyerweb.com/eric/tools/dencoder/)
+
 #### css background image data url
 
-
+next step we can finally do the css for our button, the first thing we do is create the **background-image** property, which should look like this:
 
 ```css
 .btn {
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 339 85'%3E%3Cpath d='M315 85v-8h-27v8H21.77L2 65.23V0h337v85z' fill-rule='evenodd' fill='%2302d8f3' opacity='.45'/%3E%3Cpath d='M313 85v-8h-27v8H19.77L0 65.23V0h337v85z' fill='%23ff003c' fill-rule='evenodd'/%3E%3C/svg%3E");
-    height: 85px;
-    width: 337px;
+    background-image: url("data:image/svg+xml;charset=utf-8,URL_ENCODED_SVG_MARKUP");
+}
+```
+
+now take the URL encoded SVG markup and replace the placeholder **URL_ENCODED_SVG_MARKUP** with it, so that you end up with this:
+
+```css
+.btn {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%2240%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23f0f%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E");
+}
+```
+
+next we add some more properties to fully style our button
+
+```css
+.btn {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%2240%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23f0f%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E");
+    height: 40px;
+    width: 400px;
     background-position: 50%;
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -2545,7 +2662,7 @@ to create an SVG rectangle with a corner that is cut off (at an 45 degree angle 
     display: flex;
     align-items: center;
     color: #fff;
-    font-size: 26px;
+    font-size: 16px;
     font-weight: 700;
     justify-content: center;
     letter-spacing: 2px;
@@ -2555,14 +2672,21 @@ to create an SVG rectangle with a corner that is cut off (at an 45 degree angle 
 }
 ```
 
+read more:
+
+* [MDN "data URLs" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URLs)
+
+#### button html markup
+
+the markup for our button will be fairly simple, lets use something like this:
+
 ```html
 <a class="btn" href="/">Button text</a>
 ```
 
-read more:
+#### notched button using an SVG as background-image
 
-* [MDN "data URLs" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URLs)
-* [inkscape "a beginners guide" documentation](https://inkscape-manuals.readthedocs.io/en/latest/index.html)
+2) 
 
 
 
