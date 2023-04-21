@@ -2444,9 +2444,9 @@ Note: previously it was valid to use as values **dark** or **light** for the scr
 * [w3c: CSS Scrollbars Styling Module Level 1](https://www.w3.org/TR/css-scrollbars-1/)
 * [MDN "CSS Scrollbars" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Scrollbars)
 * [MDN "scrollbar width" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-width)
-* [can I use "scrollbar width"](https://caniuse.com/?search=scrollbar-width)
+* [can I use "scrollbar width"](https://caniuse.com/mdn-css_properties_scrollbar-width)
 * [MDN "scrollbar color" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-color)
-* [can I use "scrollbar color"](https://caniuse.com/?search=scrollbar-color)
+* [can I use "scrollbar color"](https://caniuse.com/mdn-css_properties_scrollbar-color)
 
 #### the webkit prefix way
 
@@ -2470,7 +2470,7 @@ Note: you can really crazy things by playing around with the webkit-scrollbar op
 read more:
 
 * [MDN "::-webkit-scrollbar" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/::-webkit-scrollbar)
-* [can I use "scrollbar color"](https://caniuse.com/?search=webkit-scrollbar)
+* [can I use "webkit scrollbar"](https://caniuse.com/mdn-css_selectors_-webkit-scrollbar)
 
 ### custom cursor image(s)
 
@@ -2502,7 +2502,7 @@ shadow: 00B4B5
 read more:
 
 * [MDN "cursor" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/cursor)
-* [can I use "cursor"](https://caniuse.com/?search=cursor)
+* [can I use "css3 cursor"](https://caniuse.com/css3-cursors)
 
 ### futuristic / scifi boxes and buttons with notches
 
@@ -2512,9 +2512,16 @@ there are a multitude of ways to achieve boxes or buttons with a notch of 45, 13
 
 1) using a SVG as background image, works especially well for buttons with a fixed size
 
-you can use SVG images that are just a few 100 bytes heavy, for example the [cyberounk website](https://www.cyberpunk.net/) uses that technique for some of their buttons
+Note: this technique is quite complex and will require some time to get it done, so it is for sure not the easiest and fastest solution, but one big advantage is that your SVG image can have an as complex shape as you wish, in this example we will just cut out one corner of the rectangle but you could create an SVG with a much more complex shape, the second advantage of this technique is that it will always work even in older browser (yes even IE 9) as long as the browser or webview has support for the css property **background-image** and the css file scheme **data URL**
+
+this solution is also quite lightweight, as you can use SVG images that are just a few 100 bytes heavy, for example the [cyberounk website](https://www.cyberpunk.net/) uses that technique for some of their buttons
 
 they also use another clever technique, which is to set the SVG as data URLs, which means there is no extra request to fetch the image as it is bundled with the original html
+
+read more:
+
+* [can i use "background-image"](https://caniuse.com/mdn-css_properties_background-image)
+* [can i use "data URL (scheme: CSS files)"](https://caniuse.com/mdn-http_data-url_css_files)
 
 #### create an SVG background with a notched corner
 
@@ -2648,6 +2655,13 @@ now take the URL encoded SVG markup and replace the placeholder **URL_ENCODED_SV
 }
 ```
 
+read more:
+
+* [MDN "data URLs (scheme: CSS files)" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URLs)
+* [can i use "data URL (scheme: CSS files)"](https://caniuse.com/mdn-http_data-url_css_files)
+
+#### final button styles (css)
+
 next we add some more properties to fully style our button
 
 ```css
@@ -2672,10 +2686,6 @@ next we add some more properties to fully style our button
 }
 ```
 
-read more:
-
-* [MDN "data URLs" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URLs)
-
 #### button html markup
 
 the markup for our button will be fairly simple, lets use something like this:
@@ -2684,9 +2694,9 @@ the markup for our button will be fairly simple, lets use something like this:
 <a class="btn" href="/">Button text</a>
 ```
 
-#### notched button using an SVG as background-image
 
-2) 
+
+
 
 
 
