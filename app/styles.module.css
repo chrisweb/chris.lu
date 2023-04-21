@@ -46,14 +46,14 @@
 .eighties {
     position: absolute;
     text-align: center;
-    width:100vw;
+    width: 100vw;
     max-width: 97%;
     z-index: -20;
     margin: 0;
     -webkit-transform: skew(335deg, 350deg);
     transform: skew(345deg, 345deg);
     font-family: 'Permanent Marker';
-    font-weight: 400; 
+    font-weight: 400;
     font-style: normal;
     font-display: swap;
     background-image: -webkit-linear-gradient(0.25turn, #00feff 0%, #ff00aa 100%);
@@ -79,12 +79,40 @@
 }
 
 .cyberButton {
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%2240%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23f0f%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E");
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%2240%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23ff00aa%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E");
     height: 40px;
-    width: 400px;
+    width: 200px;
     background-position: 50%;
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    justify-content: center;
+    letter-spacing: 2px;
+    line-height: 1;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.cyberButton2 {
+    --notchSize: 20px;
+
+    clip-path:
+        polygon(
+            0 0,
+            100% 0,
+            100% calc(100% - var(--notchSize)),
+            calc(100% - var(--notchSize)) 100%,
+            0 100%
+        );
+
+    background-color: #ff00aa;
+    height: 40px;
+    width: 200px;
     position: relative;
     display: flex;
     align-items: center;

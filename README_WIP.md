@@ -2520,8 +2520,8 @@ they also use another clever technique, which is to set the SVG as data URLs, wh
 
 read more:
 
-* [can i use "background-image"](https://caniuse.com/mdn-css_properties_background-image)
-* [can i use "data URL (scheme: CSS files)"](https://caniuse.com/mdn-http_data-url_css_files)
+* [can I use "background-image"](https://caniuse.com/mdn-css_properties_background-image)
+* [can I use "data URL (scheme: CSS files)"](https://caniuse.com/mdn-http_data-url_css_files)
 
 #### create an SVG background with a notched corner
 
@@ -2623,6 +2623,18 @@ read more:
 * [SVGO: Node.js-based (command line) tool for optimizing SVG vector graphics](https://github.com/svg/svgo)
 * ["SVGO's Missing GUI" online version hosted on github pages](https://jakearchibald.github.io/svgomg/)
 
+#### change the fill color of the SVG background image
+
+as I mentioned earlier it doesn't matter what color you use in inkscape or whatever tool you have used to create the SVG shape, because it is very easy to set that color to something else manually
+
+check out the SVG markup and you will see there is a `style` attribute, inside of it you have a `fill` property with the value `#f0f`, this is a hex color code for the color we chose in the design tool
+
+all we to do is replace the current hex color code `#f0f` with our new color code `#ff00aa`
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="40" viewBox="0 0 52.917 10.583"><path d="M27.762 93.41v10.582h47.625l5.292-5.291v-5.292z" style="fill:#ff00aa;fill-rule:evenodd;stroke-width:0" transform="translate(-27.762 -93.41)"/></svg>
+```
+
 #### URL encode the SVG markup
 
 next we have to URL encode the SVG markup so that we can use it in our css file
@@ -2630,7 +2642,7 @@ next we have to URL encode the SVG markup so that we can use it in our css file
 to encode the SVG markup, open the optimized version from the previous chapter and then use a tool like [Eric Meyer's online URL encode](https://meyerweb.com/eric/tools/dencoder/) to encode it, the result should be something like this:
 
 ```xml
-%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%2240%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23f0f%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E
+%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%2240%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23ff00aa%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E
 ```
 
 read more:
@@ -2651,14 +2663,14 @@ now take the URL encoded SVG markup and replace the placeholder **URL_ENCODED_SV
 
 ```css
 .btn {
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%2240%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23f0f%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E");
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%2240%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23ff00aa%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E");
 }
 ```
 
 read more:
 
 * [MDN "data URLs (scheme: CSS files)" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URLs)
-* [can i use "data URL (scheme: CSS files)"](https://caniuse.com/mdn-http_data-url_css_files)
+* [can I use "data URL (scheme: CSS files)"](https://caniuse.com/mdn-http_data-url_css_files)
 
 #### final button styles (css)
 
@@ -2666,7 +2678,7 @@ next we add some more properties to fully style our button
 
 ```css
 .btn {
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%2240%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23f0f%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E");
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%2240%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23ff00aa%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E");
     height: 40px;
     width: 400px;
     background-position: 50%;
@@ -2694,10 +2706,70 @@ the markup for our button will be fairly simple, lets use something like this:
 <a class="btn" href="/">Button text</a>
 ```
 
+#### notched boxes or buttons with css only
 
+2) this technique uses only css features to create a box or a button with "notched" (45 degrees cut off edges)
 
+Note: this technique is quite is very easy compared to any other solution, it is very lightweight as you just need to add a few lines of css to your project, a small disadvantage is that it will not work in IE (internet explorer) but it will work in any modern browser
 
+first we need to create a polygon shape and this is the tricky part, a very easy way to create a css polygon shape is to use this great tool by **Bennett Feely** called **Clippy**, there is an [online version of Clippy](https://bennettfeely.com/clippy/) and the source code of the project can be found in the [clippy repository on github](https://github.com/bennettfeely/Clippy), but you can of course read the [MDN "css polygon()" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/basic-shape/polygon) and do it manually if you prefer
 
+to create the shape you want, I recommend you visit the online version of clippy and then follow the following few steps:
+
+* first click on the right side where all the example shapes are listed on the one at the bottom called **Custom Polygon**
+* then click in the middle of the screen to add a first dot
+* now add more dots, you need to add at least 3 but you can add more if you want (just put the dots roughly where you want them, don't try to move them yet though, for now just place them)
+* when you have the shape you wanted hover over the first dot you added, it will display a **checkmark** icon, click the checkmark icon to leave the current "creation" mode and go into "edit" mode
+* when in "edit" mode you can move the dots around to ajoust their position to fit your needs, hover over a dot and you cursor will turn into a hand, click it and drag the dot to where you want to have it
+* you can delete dots if your polygon consits of more than 3 dots, to do so click on the dot and then click on the **X** icon to delete that dot (you can delete dots until you reach the minimum of 3 dots)
+* finally copy the result `clip-path: polygon(YOUR_VALUES);` that is displayed on the bottom of the page and paste it into the following css example to replace the polygon I created for myself:
+
+```css
+.btn {
+    --notchSize: 20px;
+
+    clip-path:
+        polygon(
+            0 0,
+            100% 0,
+            100% calc(100% - var(--notchSize)),
+            calc(100% - var(--notchSize)) 100%,
+            0 100%
+        );
+
+    background-color: #ff00aa;
+    height: 40px;
+    width: 200px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    justify-content: center;
+    letter-spacing: 2px;
+    line-height: 1;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+```
+
+next we just need to create an html button (you can use a div or a real button element, I will use a link element for this example):
+
+```html
+<a class="btn" href="/">Button text</a>
+```
+
+read more:
+
+* [online CSS clip-path maker tool: "Clippy"](https://bennettfeely.com/clippy/)
+* ["Clippy" repository on github](https://github.com/bennettfeely/Clippy)
+* [MDN "css property: clip-path" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path)
+* [MDN "css polygon()" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/basic-shape/polygon)
+* [MDN "css calc()" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/calc)
+* [can I use "css property: clip-path"](https://caniuse.com/mdn-css_properties_clip-path_basic_shape)
+* [can I use "css polygon()"](https://caniuse.com/mdn-css_types_basic-shape_polygon)
+* [can I use "css calc()"](https://caniuse.com/calc)
 
 
 
