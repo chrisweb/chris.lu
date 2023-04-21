@@ -2706,11 +2706,11 @@ the markup for our button will be fairly simple, lets use something like this:
 <a class="btn" href="/">Button text</a>
 ```
 
-#### notched boxes or buttons with css only
+#### notched boxes or buttons using css only (no border)
 
 2) this technique uses only css features to create a box or a button with "notched" (45 degrees cut off edges)
 
-Note: this technique is quite is very easy compared to any other solution, it is very lightweight as you just need to add a few lines of css to your project, a small disadvantage is that it will not work in IE (internet explorer) but it will work in any modern browser
+Note: this technique is quite is very easy compared to any other solution, it is very lightweight as you just need to add a few lines of css to your project, a small disadvantage is that it will not work in IE (internet explorer) but it will work in any modern browser, the biggest disadvantage of this solution is that your box or button can not have a border, if you add a css border property you will see that the border will be a rectangle (or square), it will not be applied to the clipped path you have created (there is however a trick to make this work, which we will see in the next example after this one)
 
 first we need to create a polygon shape and this is the tricky part, a very easy way to create a css polygon shape is to use this great tool by **Bennett Feely** called **Clippy**, there is an [online version of Clippy](https://bennettfeely.com/clippy/) and the source code of the project can be found in the [clippy repository on github](https://github.com/bennettfeely/Clippy), but you can of course read the [MDN "css polygon()" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/basic-shape/polygon) and do it manually if you prefer
 
@@ -2770,6 +2770,19 @@ read more:
 * [can I use "css property: clip-path"](https://caniuse.com/mdn-css_properties_clip-path_basic_shape)
 * [can I use "css polygon()"](https://caniuse.com/mdn-css_types_basic-shape_polygon)
 * [can I use "css calc()"](https://caniuse.com/calc)
+
+#### notched boxes or buttons using css only (with fake border)
+
+3) 
+<https://codepen.io/bennettfeely/pen/azJWWX>
+<https://stackoverflow.com/questions/31854185/how-to-add-border-in-my-clip-path-polygon-css-style>
+
+read more:
+
+
+
+
+
 
 
 
