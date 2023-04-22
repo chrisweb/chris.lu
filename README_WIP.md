@@ -2773,7 +2773,10 @@ read more:
 
 #### notched boxes or buttons using css only (with fake border)
 
-3) 
+
+3) this technique is very similar to the previous one, the only difference is that we will use 2 html elements, one inside of the other and the one inside will be slightly smaller than the one that is the container, this way we create a fake border, this is a nice technique to add a border to an element that uses the `clip-path` css property, the only thing this solution lacks is support for shadows, so if you want a border and a shadow around the shape itself too, then this solution will not be enough
+
+
 <https://codepen.io/bennettfeely/pen/azJWWX>
 <https://stackoverflow.com/questions/31854185/how-to-add-border-in-my-clip-path-polygon-css-style>
 
