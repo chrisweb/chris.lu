@@ -2774,7 +2774,7 @@ read more:
 #### notched boxes or buttons using css only (with fake border)
 
 
-3) this technique is very similar to the previous one, the only difference is that we will use 2 html elements, one inside of the other and the one inside will be slightly smaller than the one that is the container, this way we create a fake border, this is a nice technique to add a border to an element that uses the `clip-path` css property, the only thing this solution lacks is support for shadows, so if you want a border and a shadow around the shape itself too, then this solution will not be enough
+3) this technique is very similar to the previous one, the only difference is that we will use 2 html elements, one inside of the other and the one inside will be slightly smaller than the one that is the container, this way we create a fake border, this is a nice technique to add a border to an element that uses the `clip-path` css property, the only thing this solution lacks is support for shadows, so if you want a border and a shadow around the shape itself too, then this solution will not be enough but the next chapter will show you how to also add shadow
 
 
 <https://codepen.io/bennettfeely/pen/azJWWX>
@@ -2784,6 +2784,18 @@ read more:
 
 
 
+4) this technique is very similar to thwo previous one, the only difference is that we will use 3 html elements, the difference with this solution is that we add a shadow (or glow effect) to the border we added in the previous chapter, the border can be inside as well as outside of the clip-path and will follow the shape have you defined, this technique uses a filter do so, as well as the drop-shadow() function, so as long as the browser or webview supports those two (as well as the things mentioned in the two previous chapters) then there will be no problem, this however means it will not work in IE (internet explorer) but it will work in any modern browser
+
+
+<https://css-tricks.com/using-box-shadows-and-clip-path-together/>
+<https://stackoverflow.com/questions/31854185/how-to-add-border-in-my-clip-path-polygon-css-style>
+
+read more:
+
+* [MDN "css filter property" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/filter)
+* [MDN "drop-shadow() css function" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function/drop-shadow)
+* [can I use "css property: filter"](https://caniuse.com/mdn-css_properties_filter)
+* [can I use "filter-function: drop-shadow()"](https://caniuse.com/mdn-css_types_filter-function_drop-shadow)
 
 
 
