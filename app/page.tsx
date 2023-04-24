@@ -10,7 +10,10 @@ export default function Homepage() {
             I like <Typing>Web development, Lego bricks, Music, Games, Cooking, Movies & TV shows, Memes</Typing>
             <p></p>
             <a className={styles.cyberButton} href="/">Button text</a>
-            <a className={styles.cyberButton2} href="/">Button text</a>
+            <br /><br />
+            <a className={styles.cyberButton2Container} href="/">
+                <div className={styles.cyberButton2}>Button text</div>
+            </a>
         </>
     )
 }

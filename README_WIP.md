@@ -2632,7 +2632,7 @@ check out the SVG markup and you will see there is a `style` attribute, inside o
 all we to do is replace the current hex color code `#f0f` with our new color code `#ff00aa`
 
 ```xml
-<svg xmlns="http://www.w3.org/2000/svg" width="200" height="40" viewBox="0 0 52.917 10.583"><path d="M27.762 93.41v10.582h47.625l5.292-5.291v-5.292z" style="fill:#ff00aa;fill-rule:evenodd;stroke-width:0" transform="translate(-27.762 -93.41)"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52.917 10.583"><path d="M27.762 93.41v10.582h47.625l5.292-5.291v-5.292z" style="fill:#ff00aa;fill-rule:evenodd;stroke-width:0" transform="translate(-27.762 -93.41)"/></svg>
 ```
 
 #### URL encode the SVG markup
@@ -2642,7 +2642,7 @@ next we have to URL encode the SVG markup so that we can use it in our css file
 to encode the SVG markup, open the optimized version from the previous chapter and then use a tool like [Eric Meyer's online URL encode](https://meyerweb.com/eric/tools/dencoder/) to encode it, the result should be something like this:
 
 ```xml
-%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%2240%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23ff00aa%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E
+%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23ff00aa%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E
 ```
 
 read more:
@@ -2663,7 +2663,7 @@ now take the URL encoded SVG markup and replace the placeholder **URL_ENCODED_SV
 
 ```css
 .btn {
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%2240%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23ff00aa%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E");
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23ff00aa%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E");
 }
 ```
 
@@ -2672,13 +2672,13 @@ read more:
 * [MDN "data URLs (scheme: CSS files)" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URLs)
 * [can I use "data URL (scheme: CSS files)"](https://caniuse.com/mdn-http_data-url_css_files)
 
-#### final button styles (css)
+#### button styles (css)
 
 next we add some more properties to fully style our button
 
 ```css
 .btn {
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%2240%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23ff00aa%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E");
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23ff00aa%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E");
     height: 40px;
     width: 400px;
     background-position: 50%;
@@ -2687,10 +2687,10 @@ next we add some more properties to fully style our button
     position: relative;
     display: flex;
     align-items: center;
+    justify-content: center;
     color: #fff;
     font-size: 16px;
     font-weight: 700;
-    justify-content: center;
     letter-spacing: 2px;
     line-height: 1;
     text-decoration: none;
@@ -2706,15 +2706,79 @@ the markup for our button will be fairly simple, lets use something like this:
 <a class="btn" href="/">Button text</a>
 ```
 
+#### button on mouse hover effect
+
+to add a hover effect to the button we are going to use the `:hover` css pseudo-class
+
+but to achieve the color change there are several options
+
+the problem with our current use of css property `background-image` makes it impossible to alter the `fill` color of the SVG image with css, what we can however do is replace the `background-image` on hover with the same SVG image but switch it's fill color to another color, here is the SVG we previously created but I replaced the fill color another color:
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52.917 10.583"><path d="M27.762 93.41v10.582h47.625l5.292-5.291v-5.292z" style="fill:#fc2a6e;fill-rule:evenodd;stroke-width:0" transform="translate(-27.762 -93.41)"/></svg>
+```
+
+option A: we URL encode our SVG image markup again and then add it as background-image but this timne using the css pseudo class :hover:
+
+```css
+.btn:hover {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23fc2a6e%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate%28-27.762%20-93.41%29%22%2F%3E%3C%2Fsvg%3E");
+}
+```
+
+because in this case the image is very small in size (200 bytes), this solution is acceptable, for SVGs that are much bigger this solution does not seem ideal as most of the SVG markup is duplicated and only the SVG fill color changes
+
+option B: solves the problem of having the SVG twice in our css styles, by using a different technique to add the SVG to our button (or box), instead of using the css property `background-image`, we use the css property `mask-image`, the catch here is that you lose support for older browsers (like internet explorer) and some mobile browsers, you can have a look at the compatibility on the [can I use "css property: mask-image"](https://caniuse.com/mdn-css_properties_mask-image) website
+
+when using a **mask-image** instead of a **background-image**, the advantage is that we can set the background-color to whatever we want, because our SVG is just being used as a mask and not an image, hence we can change the background color on hover to whatever we want, the result is the same as with option A but we are using less code to achieve it
+
+the css code we will use is almost identical to option A, but we replaced `background-image` with `mask-image`:
+
+```css
+.btn {
+    mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23ff00aa%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E");
+    height: 40px;
+    width: 400px;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    line-height: 1;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+```
+
+for the hover effect, all we need to do is set the background color to something else (no need to repeat the mask line), which gives us the following css:
+
+```css
+.btn:hover {
+    background-color: #fc2a6e;
+}
+```
+
+read more:
+
+* [MDN ":hover css pseudo-class" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/:hover)
+* [MDN "css property: mask-image" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/mask-image)
+* [can I use "css property: mask-image"](https://caniuse.com/mdn-css_properties_mask-image)
+
 #### notched boxes or buttons using css only (no border)
 
-2) this technique uses only css features to create a box or a button with "notched" (45 degrees cut off edges)
+2) this technique uses only css features to create a box or a "notched" button (45 degrees cut off edges)
 
-Note: this technique is quite is very easy compared to any other solution, it is very lightweight as you just need to add a few lines of css to your project, a small disadvantage is that it will not work in IE (internet explorer) but it will work in any modern browser, the biggest disadvantage of this solution is that your box or button can not have a border, if you add a css border property you will see that the border will be a rectangle (or square), it will not be applied to the clipped path you have created (there is however a trick to make this work, which we will see in the next example after this one)
+Note: this technique is quite easy compared to any other solution, it is very lightweight as you just need to add a few lines of css to your project, a small disadvantage is that it will not work in IE (internet explorer) but it will work in any modern browser, the biggest disadvantage of this solution is that your box or button can not have a border, if you add a css border property you will see that the border will be a rectangle (or square), it will not be applied to the clipped path you have created (there is however a trick to make this work, which we will see in the next example after this one)
 
 first we need to create a polygon shape and this is the tricky part, a very easy way to create a css polygon shape is to use this great tool by **Bennett Feely** called **Clippy**, there is an [online version of Clippy](https://bennettfeely.com/clippy/) and the source code of the project can be found in the [clippy repository on github](https://github.com/bennettfeely/Clippy), but you can of course read the [MDN "css polygon()" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/basic-shape/polygon) and do it manually if you prefer
 
-to create the shape you want, I recommend you visit the online version of clippy and then follow the following few steps:
+to create the shape you want using clippy follow the following few steps:
 
 * first click on the right side where all the example shapes are listed on the one at the bottom called **Custom Polygon**
 * then click in the middle of the screen to add a first dot
@@ -2743,10 +2807,10 @@ to create the shape you want, I recommend you visit the online version of clippy
     position: relative;
     display: flex;
     align-items: center;
+    justify-content: center;
     color: #fff;
     font-size: 16px;
     font-weight: 700;
-    justify-content: center;
     letter-spacing: 2px;
     line-height: 1;
     text-decoration: none;
@@ -2774,21 +2838,83 @@ read more:
 #### notched boxes or buttons using css only (with fake border)
 
 
-3) this technique is very similar to the previous one, the only difference is that we will use 2 html elements, one inside of the other and the one inside will be slightly smaller than the one that is the container, this way we create a fake border, this is a nice technique to add a border to an element that uses the `clip-path` css property, the only thing this solution lacks is support for shadows, so if you want a border and a shadow around the shape itself too, then this solution will not be enough but the next chapter will show you how to also add shadow
+3) this technique is very similar to the previous one, the only difference is that we will use **2 html elements**, one inside of the other and the one inside will be slightly smaller than the one that is the **container**, this way we create a fake border, this is a nice technique to add a border to an element that uses the `clip-path` css property
 
+Note: the only thing this solution lacks is support for shadows, so if you want a border and a shadow around the shape itself too, then this solution will not be enough but the next chapter will show you how to also add shadow
 
-<https://codepen.io/bennettfeely/pen/azJWWX>
-<https://stackoverflow.com/questions/31854185/how-to-add-border-in-my-clip-path-polygon-css-style>
+first we add new class for our button container:
 
-read more:
+```css
+.btn-container {
+    --notchSize: 20px;
 
+    clip-path:
+        polygon(
+            0 0,
+            100% 0,
+            100% calc(100% - var(--notchSize)),
+            calc(100% - var(--notchSize)) 100%,
+            0 100%
+        );
 
+    background-color: #ff00aa;
+    height: 40px;
+    width: 200px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    line-height: 1;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+```
+
+then we add the class for the second element, here we reduce the height and width by 2px each, because the element is centered inside of the container this will result in a border of 1px on the top, bottom, left and right:
+
+```css
+.btn {
+    --notchSize: 20px;
+
+    clip-path:
+        polygon(
+            0 0,
+            100% 0,
+            100% calc(100% - var(--notchSize)),
+            calc(100% - var(--notchSize)) 100%,
+            0 100%
+        );
+
+    background-color: #ff00aa;
+    height: 38px;
+    width: 198px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+```
+
+and here is the html markup, the link element becomes the container and inside of it we add a div:
+
+```html
+<a class="btn-container" href="/">
+    <div class="btn">Button text</div>
+</a>
+```
 
 4) this technique is very similar to thwo previous one, the only difference is that we will use 3 html elements, the difference with this solution is that we add a shadow (or glow effect) to the border we added in the previous chapter, the border can be inside as well as outside of the clip-path and will follow the shape have you defined, this technique uses a filter do so, as well as the drop-shadow() function, so as long as the browser or webview supports those two (as well as the things mentioned in the two previous chapters) then there will be no problem, this however means it will not work in IE (internet explorer) but it will work in any modern browser
 
 
+
 <https://css-tricks.com/using-box-shadows-and-clip-path-together/>
 <https://stackoverflow.com/questions/31854185/how-to-add-border-in-my-clip-path-polygon-css-style>
+
+
 
 read more:
 
