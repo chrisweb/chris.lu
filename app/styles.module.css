@@ -117,7 +117,7 @@ background-color: #fc2a6e;
             0 100%
         );
 
-    background-color: #ff00aa;
+    background-color: #060406;
     height: 38px;
     width: 198px;
     position: relative;
@@ -126,7 +126,7 @@ background-color: #fc2a6e;
     justify-content: center;
 }
 
-.cyberButton2Container {
+.cyberButton2Border {
     --notchSize: 20px;
 
     clip-path:
@@ -138,13 +138,17 @@ background-color: #fc2a6e;
             0 100%
         );
 
-    background-color: #fff;
+    background-color: #ff00aa;
     height: 40px;
     width: 200px;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.cyberButton2Shadow {
+    filter: drop-shadow(0px 0px 6px #ff00aa);
     color: #fff;
     font-size: 16px;
     font-weight: 700;

@@ -2837,7 +2837,6 @@ read more:
 
 #### notched boxes or buttons using css only (with fake border)
 
-
 3) this technique is very similar to the previous one, the only difference is that we will use **2 html elements**, one inside of the other and the one inside will be slightly smaller than the one that is the **container**, this way we create a fake border, this is a nice technique to add a border to an element that uses the `clip-path` css property
 
 Note: the only thing this solution lacks is support for shadows, so if you want a border and a shadow around the shape itself too, then this solution will not be enough but the next chapter will show you how to also add shadow
@@ -2907,14 +2906,76 @@ and here is the html markup, the link element becomes the container and inside o
 </a>
 ```
 
-4) this technique is very similar to thwo previous one, the only difference is that we will use 3 html elements, the difference with this solution is that we add a shadow (or glow effect) to the border we added in the previous chapter, the border can be inside as well as outside of the clip-path and will follow the shape have you defined, this technique uses a filter do so, as well as the drop-shadow() function, so as long as the browser or webview supports those two (as well as the things mentioned in the two previous chapters) then there will be no problem, this however means it will not work in IE (internet explorer) but it will work in any modern browser
+#### notched boxes or buttons using css only (with fake border and shadow on the outside)
 
+4) this technique is very similar to thwo previous one, the only difference is that we will use 3 html elements, the difference with this solution is that we add a shadow (or glow effect) on the outside of the border that just we added in the previous chapter, the shadow will follow the shape of clip-path and not the rectangular shape of the html element you are using
 
+Note: if you would try to use the css [box-shadow](https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow), then you would not get the result you want, this is because box-shadow will be applied to the rectangular (or square) shape of your html element, we however want to apply a shadow to the shape we have crated using clip-path, this is why we can **NOT** use box-shadow but instead will use a **filter** called **drop-shadow**
 
-<https://css-tricks.com/using-box-shadows-and-clip-path-together/>
-<https://stackoverflow.com/questions/31854185/how-to-add-border-in-my-clip-path-polygon-css-style>
+the technique to add a shadow (or glow effect) in this example uses a css filter as well as the css drop-shadow() function, so as long as the browser or webview supports those two (as well as the things mentioned in the two previous chapters) then there will be no problem, this however means it will not work in IE (internet explorer) but it will work in any modern browser or webview
 
+```css
+.btn {
+    --notchSize: 20px;
 
+    clip-path:
+        polygon(
+            0 0,
+            100% 0,
+            100% calc(100% - var(--notchSize)),
+            calc(100% - var(--notchSize)) 100%,
+            0 100%
+        );
+
+    background-color: #060406;
+    height: 38px;
+    width: 198px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-border {
+    --notchSize: 20px;
+
+    clip-path:
+        polygon(
+            0 0,
+            100% 0,
+            100% calc(100% - var(--notchSize)),
+            calc(100% - var(--notchSize)) 100%,
+            0 100%
+        );
+
+    background-color: #ff00aa;
+    height: 40px;
+    width: 200px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-shadow {
+    filter: drop-shadow(0px 0px 6px #ff00aa);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    line-height: 1;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+```
+
+```html
+<a class="btn-shadow" href="/">
+    <div class="btn-border">
+        <div class="btn">Button text</div>
+    </div>
+</a>
+```
 
 read more:
 
@@ -2922,6 +2983,7 @@ read more:
 * [MDN "drop-shadow() css function" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function/drop-shadow)
 * [can I use "css property: filter"](https://caniuse.com/mdn-css_properties_filter)
 * [can I use "filter-function: drop-shadow()"](https://caniuse.com/mdn-css_types_filter-function_drop-shadow)
+
 
 
 

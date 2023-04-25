@@ -11,8 +11,11 @@ export default function Homepage() {
             <p></p>
             <a className={styles.cyberButton} href="/">Button text</a>
             <br /><br />
-            <a className={styles.cyberButton2Container} href="/">
-                <div className={styles.cyberButton2}>Button text</div>
+            
+            <a className={styles.cyberButton2Shadow} href="/">
+                <div className={styles.cyberButton2Border}>
+                    <div className={styles.cyberButton2}>Button text</div>
+                </div>
             </a>
         </>
     )
