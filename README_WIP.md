@@ -2998,6 +2998,76 @@ text neon glow:
 lots of text effect example: <https://www.designyourway.net/blog/yes-you-can-actually-make-these-text-effects-in-css/>
 
 
+#### notched boxes or buttons using css only (with fake border and shadow on the outside as well as the inside)
+
+5) this is again an evolution of what you saw in the previous examples but this time we want to add a shadow on the outside as well as the inside to make it look like the border is glowing on both sides
+
+Note: unfortunately we can not use the css filter-function **drop-shadow** we used in the previous example, css **box-shadow** which we mentioned in the previous example but which we can't use as the shadow follows the shape of the element and NOT the clip path, can produce a shadow on the outside as well as on the inside if you use **inset** keyword, however the **drop-shadow** filter-function we have used has no such **inset** keyword or any other replacement for it
+
+the technique to add a shadow (or glow effect) in this example uses 1 css filter and 2 SVG filters, SVG filters are something we have not covered yet, they are amazing to create very complex effects that go beyond what the few default css filter funtions can do, but to be able to use such filters you need to create an SVG and inside of it define those two filters, when that is done you can use the css url function to link to those 2 SVG filters from with your css
+
+```css
+.btn {
+    --notchSize: 20px;
+
+    clip-path:
+        polygon(
+            0 0,
+            100% 0,
+            100% calc(100% - var(--notchSize)),
+            calc(100% - var(--notchSize)) 100%,
+            0 100%
+        );
+
+    background-color: #060406;
+    height: 38px;
+    width: 198px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-border {
+    --notchSize: 20px;
+
+    clip-path:
+        polygon(
+            0 0,
+            100% 0,
+            100% calc(100% - var(--notchSize)),
+            calc(100% - var(--notchSize)) 100%,
+            0 100%
+        );
+
+    background-color: #ff00aa;
+    height: 40px;
+    width: 200px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-shadow {
+    filter: drop-shadow(0px 0px 6px #ff00aa);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    line-height: 1;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+```
+
+```html
+<a class="btn-shadow" href="/">
+    <div class="btn-border">
+        <div class="btn">Button text</div>
+    </div>
+</a>
+```
 
 
 
