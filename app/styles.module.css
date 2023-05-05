@@ -78,77 +78,14 @@
     }
 }
 
-.cyberButton {
-    mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23ff00aa%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E");
-    height: 40px;
-    width: 200px;
-    background-position: 50%;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    position: relative;
-    display: flex;
-    align-items: center;
-    color: #fff;
-    font-size: 16px;
-    font-weight: 700;
-    justify-content: center;
-    letter-spacing: 2px;
-    line-height: 1;
-    text-decoration: none;
-    text-transform: uppercase;
-}
 
-.cyberButton:hover {
-    /*
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23fc2a6e%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate%28-27.762%20-93.41%29%22%2F%3E%3C%2Fsvg%3E");
-*/
-background-color: #fc2a6e;
-}
-
-.cyberButton2 {
-    --notchSize: 20px;
-
-    clip-path:
-        polygon(
-            0 0,
-            100% 0,
-            100% calc(100% - var(--notchSize)),
-            calc(100% - var(--notchSize)) 100%,
-            0 100%
-        );
-
-    background-color: #060406;
-    height: 38px;
-    width: 198px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.cyberButton2Border {
-    --notchSize: 20px;
-
-    clip-path:
-        polygon(
-            0 0,
-            100% 0,
-            100% calc(100% - var(--notchSize)),
-            calc(100% - var(--notchSize)) 100%,
-            0 100%
-        );
-
-    background-color: #ff00aa;
+.btn {
     height: 40px;
     width: 200px;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.cyberButton2Shadow {
-    filter: drop-shadow(0px 0px 6px #ff00aa);
     color: #fff;
     font-size: 16px;
     font-weight: 700;
@@ -156,4 +93,19 @@ background-color: #fc2a6e;
     line-height: 1;
     text-decoration: none;
     text-transform: uppercase;
+}
+
+.btnText {
+    position: absolute;
+}
+
+.btn svg path {
+    fill: #ff00aa;
+    fill-rule: evenodd;
+    stroke-width: 0;
+}
+
+.btn:hover svg path {
+    fill: #fc2a6e;
+    transition: all ease 0.3s;
 }
