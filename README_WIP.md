@@ -3465,6 +3465,11 @@ either the files will be regular fetch requests or maybe use HLS
 
 ## future articles
 
+* view transitions:
+<https://developer.chrome.com/docs/web-platform/view-transitions/>
+<https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API>
+<https://www.w3.org/TR/css-view-transitions-1/>
+<https://caniuse.com/mdn-api_viewtransition>
 * setup cronjobs on vercel <https://vercel.com/docs/cron-jobs>
 * vercel rollback a deployment <https://vercel.com/docs/cli/rollback>
 * revert a schema change with planetscale <https://planetscale.com/blog/behind-the-scenes-how-schema-reverts-work>
