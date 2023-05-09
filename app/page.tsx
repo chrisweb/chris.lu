@@ -9,10 +9,49 @@ export default function Homepage() {
             <h3>Welcome to my blog, my name is Chris Weber (aka chrisweb)</h3>
             I like <Typing>Web development, Lego bricks, Music, Games, Cooking, Movies & TV shows, Memes</Typing>
             <p></p>
-            <a className={styles.btn} href="/">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52.917 10.583"><path d="M27.762 93.41v10.582h47.625l5.292-5.291v-5.292z" transform="translate(-27.762 -93.41)" id="svgPath" /></svg>
-                <span className={styles.btnText}>Button text</span>
-            </a>
+            <svg xmlns="http://www.w3.org/2000/svg">
+      <filter id="svg-filter-inner-shadow">
+        <feOffset></feOffset>
+        <feGaussianBlur result="offset-blur" stdDeviation="1"></feGaussianBlur>
+        <feComposite
+          in="SourceGraphic"
+          in2="offset-blur"
+          operator="out"
+          result="inverse"
+        ></feComposite>
+        <feFlood floodColor="#ff00aa" floodOpacity="0.95" result="color"></feFlood>
+        <feComposite
+          in="color"
+          in2="inverse"
+          operator="in"
+          result="shadow"
+        ></feComposite>
+        <feComposite in="shadow" in2="SourceGraphic"></feComposite>
+      </filter>
+      <filter id="svg-filter-outer-shadow">
+        <feOffset></feOffset>
+        <feGaussianBlur result="offset-blur" stdDeviation="1"></feGaussianBlur>
+        <feComposite
+          in="SourceGraphic"
+          in2="offset-blur"
+          operator="out"
+          result="inverse"
+        ></feComposite>
+        <feFlood floodColor="#ff00aa" floodOpacity="0.95" result="color"></feFlood>
+        <feComposite
+          in="color"
+          in2="inverse"
+          operator="in"
+          result="shadow"
+        ></feComposite>
+        <feComposite in="shadow" in2="SourceGraphic"></feComposite>
+      </filter>
+    </svg>
+<a className={styles.btnOuterShadow} href="/">
+    <div className={styles.btnBorder}>
+        <div className={styles.btn}>Button text</div>
+    </div>
+</a>
         </>
     )
 }

@@ -2522,7 +2522,7 @@ read more:
 
 #### button or box with angled corner(s) using pure css
 
-1) this first technique does not work for every situation, for example if the background behind the box or button is not a solid color but for example an image
+1) this first technique does not work for every situation, for example if the background behind the box (or button) is not a solid color but for example an image
 
 the second major disadvantage is that you can only use this technique if you want a button or box that has 1 or 2 **angled corners**, you can use the **pseudo element ::after** for one corner and then the **pseudo element ::before** for the second corner, but there is NO pseudo element to do the third of fourth corner
 
@@ -2568,7 +2568,7 @@ and this is the html for our button (or box)
 <a class="btn" href="/">Button text</a>
 ```
 
-this technique uses a css **pseudo element** called [::after](https://developer.mozilla.org/en-US/docs/Web/CSS/::after), we will style that pseudo element so that it creates a triangle that will have as background color the same color as the container in which our button is located, this way it will look like the corner is cut off even though it is not, it just has a triangle that is the same color as the background
+this technique uses a css **pseudo element** called [::after](https://developer.mozilla.org/en-US/docs/Web/CSS/::after), we will style that pseudo element so that it creates a triangle that will have as background color the same color as the container in which our button is located, this is why it looks like the corner is cut off even though it is just a triangle with the same color as the container background
 
 read more:
 
@@ -2587,7 +2587,7 @@ read more:
 
 * [MDN ":hover" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/:hover)
 
-we can also use an image as background instead of just a solid color, by replacing the [background-color](https://developer.mozilla.org/en-US/docs/Web/CSS/background-color) with [background-image](https://developer.mozilla.org/en-US/docs/Web/CSS/background-image):
+we can also use an image as background for our box (or button) instead of just a solid color, by replacing the [background-color](https://developer.mozilla.org/en-US/docs/Web/CSS/background-color) with [background-image](https://developer.mozilla.org/en-US/docs/Web/CSS/background-image):
 
 ```css
 .btn {
@@ -3032,9 +3032,9 @@ read more:
 
 3.1) this technique uses only css features to create a box or button with corners at an angle of 45 degrees
 
-Note: this technique is quite easy compared to any other solution, it is very lightweight as you just need to add a few lines of css to your project, a small disadvantage is that it will not work in IE (internet explorer) but it will work in any modern browser, the biggest disadvantage of this solution is that your box or button can not have a border, if you add a css border property you will see that the border will be a rectangle (or square), it will not be applied to the clipped path you have created (there is however a trick to make this work, which we will see in the next example after this one)
+Note: this technique is quite easy compared to any other solution, it is very lightweight as you just need to add a few lines of css to your project, a small disadvantage is that it will not work in IE (internet explorer) but it will work in any modern browser, the biggest disadvantage of this solution is that your box (or button) can not have a css border (there is however a trick to make this work, which we will see in the next example after this one), if you add a css border property you will see that the border will be a rectangle (or square) because it gets applied to the shape of the html element, this means the css border is not following our angled corner
 
-first we need to create a polygon shape and this is the tricky part, a very easy way to create a css polygon shape is to use this great tool by **Bennett Feely** called **Clippy**, there is an [online version of Clippy](https://bennettfeely.com/clippy/) and the source code of the project can be found in the [clippy repository on github](https://github.com/bennettfeely/Clippy), but you can of course read the [MDN "css polygon()" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/basic-shape/polygon) and do it manually if you prefer
+first we need to create a polygon shape and this is the tricky part, a very easy way to create a css polygon shape is to use this great tool by Bennett Feely called **Clippy**, there is an [online version of Clippy](https://bennettfeely.com/clippy/) and the source code of the project can be found in the [clippy repository on github](https://github.com/bennettfeely/Clippy), but you can of course read the [MDN "css polygon()" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/basic-shape/polygon) and do it manually if you prefer
 
 to create the shape you want using clippy follow the following few steps:
 
@@ -3044,18 +3044,40 @@ to create the shape you want using clippy follow the following few steps:
 * when you have the shape you wanted hover over the first dot you added, it will display a **checkmark** icon, click the checkmark icon to leave the current "creation" mode and go into "edit" mode
 * when in "edit" mode you can move the dots around to ajoust their position to fit your needs, hover over a dot and you cursor will turn into a hand, click it and drag the dot to where you want to have it
 * you can delete dots if your polygon consits of more than 3 dots, to do so click on the dot and then click on the **X** icon to delete that dot (you can delete dots until you reach the minimum of 3 dots)
-* finally copy the result `clip-path: polygon(YOUR_VALUES);` that is displayed on the bottom of the page and paste it into the following css example to replace the polygon I created for myself:
+* finally copy the result `clip-path: polygon(YOUR_VALUES);` that is displayed on the bottom of the page
+
+there is just one detail I didn't like, which is that my triangle was not a perfect triangle with two equal sides because I had clicked it together manually, the polygon I did was like this:
+
+```css
+clip-path: polygon(0% 0%, 100% 0%, 100% 72%, 76% 100%, 0% 100%);
+```
+
+as you can see one side starts at `72%` and the other at `76%`, this is why after doing your polygon using **clippy** you might want to manually adjust the values, in my case I could set both to `75%` to make them equal like this:
+
+```css
+clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 75% 100%, 0% 100%);
+```
+
+the drawback is that when using percentages and setting both points to 75%, this will only result in a triangle if the shape is a square, I however wanted to apply it to a rectangle, also in my use case I wanted the triangle to always be the same size no matter what the width of the button (or box) is
+
+this is why I decided to replace the percentage values with a static value for the two equal sides of my triangle, in my case the desired result is a triangle where the **opposite** and **adjacent** sides are both 20px, meaning I needed the point to be at 100% minus 20px, I used the css calc function to do the math for me:
+
+```css
+clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - var(--cornerSideLength)), calc(100% - var(--cornerSideLength)) 100% 100%, 0% 100%);
+```
+
+I then added my clip path polygon to the css of the button:
 
 ```css
 .btn {
-    --notchSize: 20px;
+    --cornerSideLength: 20px;
 
     clip-path:
         polygon(
             0 0,
             100% 0,
-            100% calc(100% - var(--notchSize)),
-            calc(100% - var(--notchSize)) 100%,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
             0 100%
         );
 
@@ -3075,6 +3097,8 @@ to create the shape you want using clippy follow the following few steps:
     text-transform: uppercase;
 }
 ```
+
+
 
 next we just need to create an html button (you can use a div or a real button element, I will use a link element for this example):
 
@@ -3103,14 +3127,14 @@ first we add new class for our button container:
 
 ```css
 .btn-container {
-    --notchSize: 20px;
+    --cornerSideLength: 20px;
 
     clip-path:
         polygon(
             0 0,
             100% 0,
-            100% calc(100% - var(--notchSize)),
-            calc(100% - var(--notchSize)) 100%,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
             0 100%
         );
 
@@ -3135,14 +3159,14 @@ then we add the class for the second element, here we reduce the height and widt
 
 ```css
 .btn {
-    --notchSize: 20px;
+    --cornerSideLength: 20px;
 
     clip-path:
         polygon(
             0 0,
             100% 0,
-            100% calc(100% - var(--notchSize)),
-            calc(100% - var(--notchSize)) 100%,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
             0 100%
         );
 
@@ -3174,14 +3198,14 @@ the technique to add a shadow (or glow effect) in this example uses a css filter
 
 ```css
 .btn {
-    --notchSize: 20px;
+    --cornerSideLength: 20px;
 
     clip-path:
         polygon(
             0 0,
             100% 0,
-            100% calc(100% - var(--notchSize)),
-            calc(100% - var(--notchSize)) 100%,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
             0 100%
         );
 
@@ -3195,14 +3219,14 @@ the technique to add a shadow (or glow effect) in this example uses a css filter
 }
 
 .btn-border {
-    --notchSize: 20px;
+    --cornerSideLength: 20px;
 
     clip-path:
         polygon(
             0 0,
             100% 0,
-            100% calc(100% - var(--notchSize)),
-            calc(100% - var(--notchSize)) 100%,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
             0 100%
         );
 
@@ -3264,50 +3288,13 @@ Note: as we already saw in the previous example, we unfortunately can NOT use th
 
 in this example we will see yet another technique to add a shadow (or glow effect), we will make use of **SVG filters** for both the inner and outer shadow, those **SVG filters** are amazing to create very complex effects that go beyond what the few default css filter funtions can do, but to be able to use such filters you need to create an SVG and inside of it define any **SVG filters** you want to use in your css, to use the **SVG filters** from the SVG we need to make use of the css **url()** function to link to those **SVG filters** from within our css rules
 
+
+
 first we add our SVG containing two filters just before out html for the button, one for the outer shadow and a second filter for the outer shadow:
 
-```html
-<filter id='inset-shadow'>
-  <!-- Shadow offset -->
-  <feOffset
-    dx='0'
-    dy='0'
-  />
-
-  <!-- Shadow blur -->
-  <feGaussianBlur
-    stdDeviation='1'
-    result='offset-blur'
-  />
-
-  <!-- Invert drop shadow to make an inset shadow -->
-  <feComposite
-    operator='out'
-    in='SourceGraphic'
-    in2='offset-blur'
-    result='inverse'
-  />
-  
-  <!-- Cut color inside shadow -->
-  <feFlood
-    flood-color='black'
-    flood-opacity='.95'
-    result='color'
-  />
-  <feComposite
-    operator='in'
-    in='color'
-    in2='inverse'
-    result='shadow'
-  />
-
-  <!-- Placing shadow over element -->
-  <feComposite
-    operator='over'
-    in='shadow'
-    in2='SourceGraphic'
-  />
-</filter><filter id='inset-shadow'>
+```xml
+<svg xmlns="http://www.w3.org/2000/svg">
+<filter id='svg-filter-inner-shadow'>
   <!-- Shadow offset -->
   <feOffset
     dx='0'
@@ -3348,20 +3335,62 @@ first we add our SVG containing two filters just before out html for the button,
     in2='SourceGraphic'
   />
 </filter>
+<filter id='svg-filter-outer-shadow'>
+  <!-- Shadow offset -->
+  <feOffset
+    dx='0'
+    dy='0'
+  />
+
+  <!-- Shadow blur -->
+  <feGaussianBlur
+    stdDeviation='1'
+    result='offset-blur'
+  />
+
+  <!-- Invert drop shadow to make an inset shadow -->
+  <feComposite
+    operator='out'
+    in='SourceGraphic'
+    in2='offset-blur'
+    result='inverse'
+  />
+  
+  <!-- Cut color inside shadow -->
+  <feFlood
+    flood-color='black'
+    flood-opacity='.95'
+    result='color'
+  />
+  <feComposite
+    operator='in'
+    in='color'
+    in2='inverse'
+    result='shadow'
+  />
+
+  <!-- Placing shadow over element -->
+  <feComposite
+    operator='over'
+    in='shadow'
+    in2='SourceGraphic'
+  />
+</filter>
+</svg>
 ```
 
-the two filters have an ID, this ID is what we will use in the css rules to apply those filters to the html elements of our button
+the two filters have an ID, this ID is what we will use in the css rules to apply those filters to the html elements of our button:
 
 ```css
 .btn {
-    --notchSize: 20px;
+    --cornerSideLength: 20px;
 
     clip-path:
         polygon(
             0 0,
             100% 0,
-            100% calc(100% - var(--notchSize)),
-            calc(100% - var(--notchSize)) 100%,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
             0 100%
         );
 
@@ -3375,14 +3404,14 @@ the two filters have an ID, this ID is what we will use in the css rules to appl
 }
 
 .btn-border {
-    --notchSize: 20px;
+    --cornerSideLength: 20px;
 
     clip-path:
         polygon(
             0 0,
             100% 0,
-            100% calc(100% - var(--notchSize)),
-            calc(100% - var(--notchSize)) 100%,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
             0 100%
         );
 
@@ -3396,6 +3425,7 @@ the two filters have an ID, this ID is what we will use in the css rules to appl
 }
 
 .btn-outer-shadow {
+    filter: url(#svg-filter-inner-shadow);
     color: #fff;
     font-size: 16px;
     font-weight: 700;
@@ -3406,6 +3436,7 @@ the two filters have an ID, this ID is what we will use in the css rules to appl
 }
 
 .btn-inner-shadow {
+    filter: url(#svg-filter-outer-shadow);
     color: #fff;
     font-size: 16px;
     font-weight: 700;
@@ -3416,8 +3447,10 @@ the two filters have an ID, this ID is what we will use in the css rules to appl
 }
 ```
 
+this is the html code for the button itself, put it below the SVG:
+
 ```html
-<a class="btn-shadow" href="/">
+<a class="btn-outer-shadow" href="/">
     <div class="btn-border">
         <div class="btn">Button text</div>
     </div>
