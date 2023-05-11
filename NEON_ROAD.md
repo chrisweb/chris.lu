@@ -2,9 +2,21 @@
 
 ## inspiration
 
+80s 3D scenes inspiration (with code):
+
 this is the first retrowave scene I found while googling for inspiration to build a 3d 80s scene using three.js: <https://github.com/Moukrea/retrowave-scene>
 later I found another good example (with code) of what I wanted to achieve: <https://codepen.io/prisoner849/pen/PvdEMP>
-and finally this is the blog post I took the code from to make the first version of the animation as it was the closest to what I wanted to achieve, three.js vaporware scene tutorial: <https://blog.maximeheckel.com/posts/vaporwave-3d-scene-with-threejs/>
+and finally this is the blog post I took a lot of inspiration from, by looking at his code line by line, I used a similar codebase to make the first version of the animation as it was the closest to what I wanted to achieve, three.js vaporware scene tutorial: <https://blog.maximeheckel.com/posts/vaporwave-3d-scene-with-threejs/>
+too late for me (but maybe not for me), after I had finished my animation, I found another great example done with three fiber: <https://betterprogramming.pub/synthwave-scene-my-coolest-three-js-project-yet-6359c38dfd08>
+
+80s style and more inspiration (visual):
+
+here is animation done in html and css (no webgl) by [Jane Ori](https://github.com/JaneOri): <https://codepen.io/propjockey/pen/VwKQENg>
+80s art by James White: <https://signalnoise.com/>
+80s art by Romain Trystram: <https://romaintrystram.myportfolio.com/projects>
+VSCode Synthwave theme: <https://github.com/robb0wen/synthwave-vscode>
+Synthwave Music by Karl Casey aka "White Bat" on Bandcamp: <https://karlcasey.bandcamp.com/>
+Github skyline website: <https://skyline.github.com/>
 
 ## must read
 
