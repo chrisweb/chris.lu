@@ -1,0 +1,57 @@
+<html>
+
+<head>
+    <style>
+        *,
+        *:before,
+        *:after {
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 400px;
+            background-color: black;
+        }
+
+        #svgFilters {}
+
+        #svgBox {}
+
+        #svgBox path {
+            filter: url(#inner-glow) drop-shadow(0px 0px 6px #ff00aa);
+        }
+    </style>
+</head>
+
+<body>
+    <svg xmlns="http://www.w3.org/2000/svg" id="svgFilters" width="0" height="0">
+        <defs>
+            <filter id='inner-glow'>
+                <!-- Shadow offset -->
+                <feOffset dx='0' dy='0' />
+
+                <!-- Shadow blur -->
+                <feGaussianBlur stdDeviation='3' result='blur' />
+
+                <!-- Invert drop shadow to make an inset shadow -->
+                <feComposite operator='out' in='SourceGraphic' in2='blur' result='inverse' />
+
+                <!-- Cut color inside shadow -->
+                <feFlood flood-color='#ff00aa' flood-opacity='0.95' result='color' />
+                <feComposite operator='in' in='color' in2='inverse' result='shadow' />
+
+                <!-- Placing shadow over element -->
+                <feComposite operator='over' in='shadow' in2='SourceGraphic' />
+
+            </filter>
+        </defs>
+    </svg>
+    <div class="container">
+        <svg xmlns="http://www.w3.org/2000/svg" id="svgBox" viewbox="0 0 212 52">
+            <path d="M6,6 206,6 206,26 186,46 6,46z" stroke="#ff00aa" stroke-width="1" />
+        </svg>
+    </div>
+</body>
+
+</html>
