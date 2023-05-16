@@ -2508,9 +2508,9 @@ read more:
 
 by default any css element like a box or button will have "square" corners which consist of 2 lines at a "right angle" (90 degrees), to make a square corner round is fairly easy, using the css property [border-radius](border-radius) we can create button or box with rounded (circular or even elliptical) corners, but it is much harder to make corners that are made out of more complex shapes
 
-during my research on the web I found a lot of articles in blogs and stackoverflow, describing a multitude of ways to create html boxes or buttons which have their edges cut off at an angle of 45 degrees, in the following examples we will see 3 techniques achieve that effect and a few more chapters will describe how to add an optional border as well as shadow (glow) on the outside and also inside
+during my research on the web I found a lot of articles in blogs and stackoverflow, describing a multitude of ways to create html boxes or buttons which have their edges cut off at an angle of 45 degrees, in the following examples we will see 3 techniques achieve that effect and a few more chapters will describe how to add an optional border as well as a glow effect on the outside and also inside
 
-because there are a lot of different techniques to create buttons or boxes which have one or more of their corners "cut off" at an angle of 45 degrees, it is important to understand their pros and cons, because some are more modern then others so it is important to look at what features they use and check if those features are available in the browsers you intend to support, some can only be used for one or two corners but not all four corners, some techniques use an image so they might have an impact on loading times (because of the size of the image and eventually because they add a request), some will not yield nice results if you want to add shadow or a border... this is why I tried to explain the pros and cons of each technique I chose and also often link to <https://caniuse.com/> pages to check out the browser compatibility of the features that are being used
+because there are a lot of different techniques to create buttons or boxes which have one or more of their corners "cut off" at an angle of 45 degrees, it is important to understand their pros and cons, because some are more modern then others so it is important to look at what features they use and check if those features are available in the browsers you intend to support, some can only be used for one or two corners but not all four corners, some techniques use an image so they might have an impact on loading times (because of the size of the image and eventually because they add a request), some will not yield nice results if you want to add shadow (for the glow effect) or a border... this is why I tried to explain the pros and cons of each technique I chose and also often link to <https://caniuse.com/> pages to check out the browser compatibility of the features that are being used
 
 I'm not sure what term to use to describe the shape of those corners that are cut off at an angle of 45 degrees, I saw a lot of names being used while doing my research, some call those corners **notched** corners like [Chris Coyier in his article at css-tricks.com](https://css-tricks.com/notched-boxes/), but I also saw the term **bevelled** corners or even **slanted** corners in questions on [stackoverflow.com](https://stackoverflow.com/)... I decided to call them "angled corners" because the [W3C CSS4 "Backgrounds and Borders" document](https://drafts.csswg.org/css-backgrounds-4/#corner-shaping) has a section about a new **css "corner-shape" property** (that will hopefully be part of CSS4 sometime in the future) in which they use the term **angle**, this is why in the following chapters I will call them **angled corners**
 
@@ -2778,14 +2778,17 @@ read more:
 
 next we have to URL encode the SVG markup so that we can use it in our css file
 
-to encode the SVG markup, open the optimized version from the previous chapter and then use a tool like [Eric Meyer's online URL encode](https://meyerweb.com/eric/tools/dencoder/) to encode it, the result should be something like this:
+to encode the SVG markup, open the optimized version from the previous chapter and then use a tool called ["URL-encoder for SVG" online](https://yoksel.github.io/url-encoder/) which is hosted on github pages and it's source is in this github repository ["URL-encoder for SVG" repository](https://github.com/yoksel/url-encoder)
+
+Note: you could also use any url encode tool instead, like "Eric Meyers URL Decoder/Encoder" [Eric Meyer's online URL encode](https://meyerweb.com/eric/tools/dencoder/) but the tool mentioned above does a bit more then just url encoding your SVG, it will for example replace double quotes with single quotes before encoding, which will result in a slightly smaller result (as single quotes don't need to get encoded, compared to double quotes wo do need), the is also a bit more readable which is something I like
 
 ```xml
-%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23ff00aa%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E
+%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52.917 10.583'%3E%3Cpath d='M27.762 93.41v10.582h47.625l5.292-5.291v-5.292z' style='fill:%23ff00aa;fill-rule:evenodd;stroke-width:0' transform='translate(-27.762 -93.41)'/%3E%3C/svg%3E
 ```
 
 read more:
 
+* ["URL-encoder for SVG" online](https://yoksel.github.io/url-encoder/)
 * [Eric Meyer's online URL encode](https://meyerweb.com/eric/tools/dencoder/)
 
 #### css background image data url
@@ -2802,7 +2805,7 @@ now take the URL encoded SVG markup and replace the placeholder **URL_ENCODED_SV
 
 ```css
 .btn {
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23ff00aa%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E");
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52.917 10.583'%3E%3Cpath d='M27.762 93.41v10.582h47.625l5.292-5.291v-5.292z' style='fill:%23ff00aa;fill-rule:evenodd;stroke-width:0' transform='translate(-27.762 -93.41)'/%3E%3C/svg%3E");
 }
 ```
 
@@ -2853,11 +2856,13 @@ but to achieve the color change there are several options
 
 the problem with our current use of css property `background-image` makes it impossible to alter the `fill` color of the SVG image with css, because the SVG itself is already inlined in our css, here are some solutions to still change the color on hover:
 
-option A: the second option to change the SVG color on hover, is to use **css filters** instead of trying to change the SVG fill color, ...
+option A: in first option to change the SVG color on hover, we will use **css filters** to achieve the same result as if we would have changed the SVG fill color
 
-hex code for our background color is: `#fc2a6e`
+the hex code for the background color that we want to have when hovering over the button is: `#fc2a6e`
 
-now we use an online tool called [css color filter generator](https://angel-rs.github.io/css-color-filter-generator/) that will transform our hex color code into a series of filters, the result is the following:
+Note: you can apply css filters to an element using two properties, the first one is simply called **filter** and applies the filter effect to the element itself, the other property used to apply filters is callled **backdrop-filter** and will apply the filter to what is behind your element but only within your elements bounding box, in the following examples we will only make use of the **filter** property but it is good to know **backdrop-filter** exists as it can come in handy in some other situations
+
+in this example we will use an online tool called [css color filter generator](https://angel-rs.github.io/css-color-filter-generator/) that will transform our hex color code into a series of filters, the result that we will get by combining multiple filters will be equivalent or at least very similar to our hex color, I used the color `#fc2a6e` as input and the result was the following:
 
 ```css
 .btn:hover {
@@ -2865,22 +2870,23 @@ now we use an online tool called [css color filter generator](https://angel-rs.g
 }
 ```
 
-what is not ideal with this solution, is that the color that's gets generated by mixing several filters might not be 100% accurate, as you can see when using the **css color filter generator** is that **loss** value on the bottom, this indicates how much the color produced by the filters is deviating from your original colors, the color we use when NOT in hover mode for example (`#ff00aa`) has zero loss when transformed into filters, same is true for example if your color is black (`#000`) or white (`#fff`), but it is not be the case for any color, the color we chose for the hover effect (`#fc2a6e`) has a slight loss, it means it is not perfect but also not that bad so it won't be noticable to the human eye, for example try out this the color `#923737` and you will see that you get a quite high loss value, meaning the result is not perfect, in that case hit the **Get Filter!** button again and you will see that it generates new variants using different values for the filters, it you hit the button several times you might end up with a version that is quite good, but for some colors it just is impossible to reach get a zero loss
+what is not ideal with this solution, is that the color that's gets generated by mixing several filters might not be 100% accurate, as you can see when using the **css color filter generator** is that **loss** value on the bottom, this indicates how much the color produced by the filters is deviating from your original colors, the color we use when NOT in hover mode for example (`#ff00aa`) has zero loss when transformed into filters, same is true for example if your color is black (`#000`) or white (`#fff`), but it is not be the case for any color, the color we chose for the hover effect (`#fc2a6e`) has a slight loss, it means it is not perfect but also not that bad so it won't be noticable to the human eye
 
+to give you another example, try out this the color `#923737` and you will have a high chance that the result you get has quite a high loss value, meaning the result is far from perfect, in that case hit the **Get Filter!** button again and you will see that it generates new variants using different values for the filters, it you hit the button several times you might end up with a version that is quite good, but for some colors it just is impossible to get a combination of filters that will result in something that has zero loss
 
 option B: we URL encode our SVG image markup again and then add it as background-image but this timne using the css pseudo class :hover:
 
-we replace the `background-image` on hover with the same SVG image but switch it's fill color to another color, here is the SVG we previously created but I replaced the fill color another color:
+we replace the `background-image` on hover with the same SVG image but switch it's fill color set to another color, here is the SVG we previously created but I replaced the fill color another color:
 
 ```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52.917 10.583"><path d="M27.762 93.41v10.582h47.625l5.292-5.291v-5.292z" style="fill:#fc2a6e;fill-rule:evenodd;stroke-width:0" transform="translate(-27.762 -93.41)"/></svg>
 ```
 
-then we urlencode our SVG, same as we did the first time using [Eric Meyer's online URL encode](https://meyerweb.com/eric/tools/dencoder/) and put it into our **on hover** css rule:
+then we urlencode our SVG, same as we did the first time using a tool called ["URL-encoder for SVG" online](https://yoksel.github.io/url-encoder/) and put it into our **on hover** css rule:
 
 ```css
 .btn:hover {
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23fc2a6e%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate%28-27.762%20-93.41%29%22%2F%3E%3C%2Fsvg%3E");
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52.917 10.583'%3E%3Cpath d='M27.762 93.41v10.582h47.625l5.292-5.291v-5.292z' style='fill:%23fc2a6e;fill-rule:evenodd;stroke-width:0' transform='translate(-27.762 -93.41)'/%3E%3C/svg%3E");
 }
 ```
 
@@ -2894,7 +2900,7 @@ the css code we will use is almost identical to option A, but we replaced `backg
 
 ```css
 .btn {
-    mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2052.917%2010.583%22%3E%3Cpath%20d%3D%22M27.762%2093.41v10.582h47.625l5.292-5.291v-5.292z%22%20style%3D%22fill%3A%23ff00aa%3Bfill-rule%3Aevenodd%3Bstroke-width%3A0%22%20transform%3D%22translate(-27.762%20-93.41)%22%2F%3E%3C%2Fsvg%3E");
+    mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52.917 10.583'%3E%3Cpath d='M27.762 93.41v10.582h47.625l5.292-5.291v-5.292z' style='fill:%23fc2a6e;fill-rule:evenodd;stroke-width:0' transform='translate(-27.762 -93.41)'/%3E%3C/svg%3E");
     height: 40px;
     width: 200px;
     background-position: 50%;
@@ -3032,7 +3038,7 @@ read more:
 
 3.1) this technique uses only css features to create a box or button with corners at an angle of 45 degrees
 
-Note: this technique is quite easy compared to any other solution, it is very lightweight as you just need to add a few lines of css to your project, a small disadvantage is that it will not work in IE (internet explorer) but it will work in any modern browser, the biggest disadvantage of this solution is that your box (or button) can not have a css border (there is however a trick to make this work, which we will see in the next example after this one), if you add a css border property you will see that the border will be a rectangle (or square) because it gets applied to the shape of the html element, this means the css border is not following our angled corner
+Note: this technique is quite easy compared to any other solution, it is very lightweight as you just need to add a few lines of css to your project, a small disadvantage is that it will not work in IE (internet explorer) but it will work in any modern browser, the biggest disadvantage of this solution is that your box (or button) can not have a css border (there is however a trick to make this work, which we will see in the next example after this one), if you add a css border property you will see that the borders shape will be a rectangle (or square) because it gets applied to the shape of the html element, this means the css border is not following our angled corner
 
 first we need to create a polygon shape and this is the tricky part, a very easy way to create a css polygon shape is to use this great tool by Bennett Feely called **Clippy**, there is an [online version of Clippy](https://bennettfeely.com/clippy/) and the source code of the project can be found in the [clippy repository on github](https://github.com/bennettfeely/Clippy), but you can of course read the [MDN "css polygon()" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/basic-shape/polygon) and do it manually if you prefer
 
@@ -3121,7 +3127,7 @@ read more:
 
 3.2) this technique is very similar to the previous one, the only difference is that we will use **2 html elements**, one inside of the other and the one inside will be slightly smaller than the one that is the **container**, this way we create a fake border, this is a nice technique to add a border to an element that uses the `clip-path` css property
 
-Note: the only thing this solution lacks is support for shadows, so if you want a border and a shadow around the shape itself too, then this solution will not be enough but the next chapter will show you how to also add shadow
+Note: the only thing this solution lacks is support for the glow effect, so if you want a border and a glow effect around the shape itself too, then this solution will not be enough but the next chapter will show you how to also add a glow effect
 
 first we add new class for our button container:
 
@@ -3188,13 +3194,13 @@ and here is the html markup, the link element becomes the container and inside o
 </a>
 ```
 
-#### boxes or buttons with angled corners using css only (with fake border and shadow on the outside)
+#### boxes or buttons with angled corners using css only (with fake border and a glow effect on the outside)
 
-3.3) this technique is very similar to thwo previous one, the only difference is that we will use 3 html elements, the difference with this solution is that we add a shadow (or glow effect) on the outside of the border that just we added in the previous chapter, the shadow will follow the shape of clip-path and not the rectangular shape of the html element you are using
+3.3) this technique is very similar to both previous ones, the only difference is that we will use 3 html elements and we will add a glow effect on the outside of the border (that just we added in the previous chapter), the glow effect will follow the shape of clip-path and not the rectangular shape of the html element you are using
 
-Note: if you would try to use the css [box-shadow](https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow), then you would not get the result you want, this is because box-shadow will be applied to the rectangular (or square) shape of your html element, we however want to apply a shadow to the shape we have crated using clip-path, this is why we can **NOT** use box-shadow but instead will use a **filter** called **drop-shadow**
+Note: if you would try to use the css [box-shadow](https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow) to create the glow effect, then you would not get the result you want, this is because **box-shadow** will be applied to the rectangular shape of your html element, we however want to apply a glow effect to the shape we have crated using **clip-path**, this is why we can NOT use **box-shadow** but instead will use a **filter** called **drop-shadow**
 
-the technique to add a shadow (or glow effect) in this example uses a css filter as well as the css drop-shadow() function, so as long as the browser or webview supports those two (as well as the things mentioned in the two previous chapters) then there will be no problem, this however means it will not work in IE (internet explorer) but it will work in any modern browser or webview
+the technique to add a glow effect in this example uses a **css filter** property to apply the **css drop-shadow()** to the element, so as long as the browser or webview supports those two (as well as the things mentioned in the two previous chapters) then there will be no problem, this however means it will not work in IE (internet explorer) but it will work in any modern browser or webview
 
 ```css
 .btn {
@@ -3280,187 +3286,61 @@ text neon glow:
 lots of text effect example: <https://www.designyourway.net/blog/yes-you-can-actually-make-these-text-effects-in-css/>
 
 
-#### boxes or buttons with angled corners using css and SVG filter(s) (with fake border and shadow on the outside as well as the inside)
+#### boxes or buttons with angled corners using css and SVG filter(s) (with fake border and a glow effect on the outside as well as the inside)
 
-3.4) this is again an evolution of what you saw in the previous examples but this time we want to add a shadow on the outside as well as the inside to make it look like the border is glowing on both sides
+3.4) this is again an evolution of what you saw in the previous examples, we are again going to have a border and a glow effect on the outside, but this time we add a second glow effect on the inside, to make it look like the border is glowing on both sides
 
-Note: as we already saw in the previous example, we unfortunately can NOT use the css property **box-shadow**, even though css **box-shadow** can produce a shadow on the outside as well as on the inside if you use the **inset** keyword, we can't use the **box-shadow** property because it gets applied to the rectangular (or square) shape of the element itself and does NOT follow the clip path we have defined, this is why in the previous example we used the css filter function called **drop-shadow()** which has the advantage that it follows the clip path, unfortunately with **drop-shadow()** the drawback is that it has no support for **inset** (only **box-shadow** supports **inset**), this makes it unsuitable for this example where we want to have both a shadow on the outside as well as the inside and not just one on the outside
+Note: as we already saw in the previous example, we unfortunately can NOT use the css property **box-shadow**, even though css **box-shadow** can produce a shadow (or in our case a glow effect) on the outside as well as on the inside (if you use the **inset** keyword to make the shadow appear inside of the element), we can't use the **box-shadow** property because it gets applied to the rectangular shape of the element itself and does NOT follow the shape that we defined using clip path, this is why in the previous example we used the css filter function called **drop-shadow()** which has the advantage that it follows the shape defined by the clip path, unfortunately with **drop-shadow()** the drawback is that it has no support for **inset** (only **box-shadow** supports **inset**), this makes it unsuitable for this example where we want to have both a glow effect on the outside as well as the inside (and not just on the outside)
 
-in this example we will see yet another technique to add a shadow (or glow effect), we will make use of **SVG filters** for both the inner and outer shadow, those **SVG filters** are amazing to create very complex effects that go beyond what the few default css filter funtions can do, but to be able to use such filters you need to create an SVG and inside of it define any **SVG filters** you want to use in your css, to use the **SVG filters** from the SVG we need to make use of the css **url()** function to link to those **SVG filters** from within our css rules
+this is why in this example we will see yet another technique to add a glow effect, we will make use of **SVG filter** for the inner glow, **SVG filters** are amazing to create very complex effects that go beyond what the few default css filter funtions can do, because inside of an SVG filter you can combine several so called **filter primitives** together to create really spectacular effects 🤩
 
+SVG filters can be used inside of SVG images but the best part is that they can also be used in your css and get applied to html elements 🔥
 
+because the SVG filter can be complex to understand, I will create it step by step and try to explain what each step does until we have a complete filter
 
-first we add our SVG containing two filters just before out html for the button, one for the outer shadow and a second filter for the outer shadow:
-
-```xml
-<svg xmlns="http://www.w3.org/2000/svg">
-<filter id='svg-filter-inner-shadow'>
-  <!-- Shadow offset -->
-  <feOffset
-    dx='0'
-    dy='0'
-  />
-
-  <!-- Shadow blur -->
-  <feGaussianBlur
-    stdDeviation='1'
-    result='offset-blur'
-  />
-
-  <!-- Invert drop shadow to make an inset shadow -->
-  <feComposite
-    operator='out'
-    in='SourceGraphic'
-    in2='offset-blur'
-    result='inverse'
-  />
-  
-  <!-- Cut color inside shadow -->
-  <feFlood
-    flood-color='black'
-    flood-opacity='.95'
-    result='color'
-  />
-  <feComposite
-    operator='in'
-    in='color'
-    in2='inverse'
-    result='shadow'
-  />
-
-  <!-- Placing shadow over element -->
-  <feComposite
-    operator='over'
-    in='shadow'
-    in2='SourceGraphic'
-  />
-</filter>
-<filter id='svg-filter-outer-shadow'>
-  <!-- Shadow offset -->
-  <feOffset
-    dx='0'
-    dy='0'
-  />
-
-  <!-- Shadow blur -->
-  <feGaussianBlur
-    stdDeviation='1'
-    result='offset-blur'
-  />
-
-  <!-- Invert drop shadow to make an inset shadow -->
-  <feComposite
-    operator='out'
-    in='SourceGraphic'
-    in2='offset-blur'
-    result='inverse'
-  />
-  
-  <!-- Cut color inside shadow -->
-  <feFlood
-    flood-color='black'
-    flood-opacity='.95'
-    result='color'
-  />
-  <feComposite
-    operator='in'
-    in='color'
-    in2='inverse'
-    result='shadow'
-  />
-
-  <!-- Placing shadow over element -->
-  <feComposite
-    operator='over'
-    in='shadow'
-    in2='SourceGraphic'
-  />
-</filter>
-</svg>
-```
-
-the two filters have an ID, this ID is what we will use in the css rules to apply those filters to the html elements of our button:
+step1: I create a simple html document with an SVG containing a **green** rectangle with a width and height of 100 pixel as well as a **blue** div that has a width and height of 100px too
 
 ```css
-.btn {
-    --cornerSideLength: 20px;
-
-    clip-path:
-        polygon(
-            0 0,
-            100% 0,
-            100% calc(100% - var(--cornerSideLength)),
-            calc(100% - var(--cornerSideLength)) 100%,
-            0 100%
-        );
-
-    background-color: #060406;
-    height: 38px;
-    width: 198px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-border {
-    --cornerSideLength: 20px;
-
-    clip-path:
-        polygon(
-            0 0,
-            100% 0,
-            100% calc(100% - var(--cornerSideLength)),
-            calc(100% - var(--cornerSideLength)) 100%,
-            0 100%
-        );
-
-    background-color: #ff00aa;
-    height: 40px;
-    width: 200px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-outer-shadow {
-    filter: url(#svg-filter-inner-shadow);
-    color: #fff;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    line-height: 1;
-    text-decoration: none;
-    text-transform: uppercase;
-}
-
-.btn-inner-shadow {
-    filter: url(#svg-filter-outer-shadow);
-    color: #fff;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    line-height: 1;
-    text-decoration: none;
-    text-transform: uppercase;
+svg {
+  width: 150px;
+  height: 150px;
 }
 ```
-
-this is the html code for the button itself, put it below the SVG:
 
 ```html
-<a class="btn-outer-shadow" href="/">
-    <div class="btn-border">
-        <div class="btn">Button text</div>
-    </div>
-</a>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
+  <rect width="100" height="100" fill="green" />
+</svg>
+<div style="width: 100px; height: 100px; border-radius: 0px; background-color: blue;"></div>
+```
+
+Note: The SVG rectangle is the same size as the div, but I made the viewbox a bit bigger so that later we can see something gets painted outside of the rectangle, if the rectangle and the viewbox were the same size you could miss some details
+
+step2: add a basic SVG filter with an [feFlood](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feFlood) filter primitive inside and apply it to both the SVG rectangle and the div element
+
+```html
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
+  <rect width="100" height="100" fill="green" />
+</svg>
+<div style="width: 100px; height: 100px; border-radius: 0px; background-color: blue;"></div>
 ```
 
 
 
+https://www.w3.org/TR/filter-effects-1/#FilterEffectsRegion
 
 
+, to be able to use such filters you need to create an SVG and then inside of it define any **SVG filter(s)** you want to use in your css, you assign an ID to every SVG filter you create, then to use the **SVG filters** you use the **css filter** property and as value you use the css **url()** function to link to the **SVG filter(s)**
+
+
+
+
+
+read more:
+
+* ["SVG Filters 101" blog post by Tan Li Hau](https://lihautan.com/notes/svg-filters/)
+* [w3c "Filter Effects Module Level 1" working draft](https://www.w3.org/TR/filter-effects-1/)
+* [MDN "SVG element reference"](https://developer.mozilla.org/en-US/docs/Web/SVG/Element)
 
 ## music player
 
