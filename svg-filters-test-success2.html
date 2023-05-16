@@ -68,47 +68,16 @@
 <body>
     <svg xmlns="http://www.w3.org/2000/svg" id="svgFilters" width="0" height="0">
         <defs>
-            <filter id='inner-glow-1'>
-                <!-- Shadow offset -->
-                <feOffset dx='0' dy='0' />
-
-                <!-- Shadow blur -->
-                <feGaussianBlur stdDeviation='12' result='blur' />
-
-                <!-- Invert drop shadow to make an inset shadow -->
-                <feComposite operator='out' in='SourceGraphic' in2='blur' result='inverse' />
-
-                <!-- Cut color inside shadow -->
-                <feFlood flood-color='#ff00aa' flood-opacity='0.99' result='color' />
-                <feComposite operator='in' in='color' in2='inverse' result='shadow' />
-
-                <!-- Placing shadow over element -->
-                <feComposite operator='over' in='shadow' in2='SourceGraphic' />
-
-            </filter>
             <filter id="inner-glow-2">
+                <!-- fill the filter region with a color -->
                 <feFlood flood-color="#ff00aa" />
-
-                <!-- This next operation subtracts the original shape from the red color 
-      field filling the filter region - which will give you a big color border 
-      surrounding the original shape -->
+                <!--  -->
                 <feComposite operator="out" in2="SourceGraphic" />
-
-                <!-- Next we want to expand the red border so it overlaps the space of the 
-      original shape - the radius 4 below will expand it by 4 pixels -->
-
-                
+                <!-- next we use gaussian blur to mimic a shadow (or glow) effect around the shape -->
                 <feGaussianBlur stdDeviation="8" />
-
-                <!-- After blurring it, we want to select just the parts of the blurred, 
-      expanded border that overlap the original shape - which we can do by using 
-      the 'atop' operator -->
-
+                <!-- we only keep what is outside of the shape, because it is inverted, it acutally
+                only keeps what is inside -->
                 <feComposite operator="out" in="SourceGraphic" />
-            </filter>
-            <filter id="outer">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="DROP"></feGaussianBlur>
-
             </filter>
         </defs>
     </svg>
