@@ -1,0 +1,86 @@
+<html>
+
+<head>
+    <style>
+        *,
+        *:before,
+        *:after {
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            --cornerSideLength: 40px;
+
+            clip-path:
+                polygon(0 0,
+                    100% 0,
+                    100% calc(100% - var(--cornerSideLength)),
+                    calc(100% - var(--cornerSideLength)) 100%,
+                    0 100%);
+
+            background-color: #fff;
+            height: 72px;
+            width: 392px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-border {
+            --cornerSideLength: 43px;
+
+            clip-path:
+                polygon(0 0,
+                    100% 0,
+                    100% calc(100% - var(--cornerSideLength)),
+                    calc(100% - var(--cornerSideLength)) 100%,
+                    0 100%);
+
+            background-color: #ff00aa;
+            height: 80px;
+            width: 400px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-outer-shadow {
+            filter: drop-shadow(0px 0px 12px #ff00aa);
+            color: #000;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            line-height: 1;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-family: sans-serif;
+        }
+
+        .btn-inner-shadow {
+            filter: url(#inner-glow);
+        }
+    </style>
+</head>
+
+<body>
+    <svg xmlns="http://www.w3.org/2000/svg" id="svgFilters" width="0" height="0">
+        <defs>
+            <filter id="inner-glow">
+                <feGaussianBlur stdDeviation="12" result="blurFilterPrimitive" />
+                <feComposite operator="in" in="SourceGraphic" in2="blurFilterPrimitive" />
+            </filter>
+        </defs>
+    </svg>
+    <a class="btn-outer-shadow href=" /">
+        <div class="btn-border">
+            <div class="btn-inner-shadow">
+                <div class="btn">Button text</div>
+            </div>
+        </div>
+    </a>
+</body>
+
+</html>
