@@ -3291,7 +3291,7 @@ read more:
 
 ##### step by step guide to create an SVG filter, that can be used as css filter, to produce an inner shadow (or glow effect) that follows the shape defined in clip path
 
-step1: I create a simple html document with an SVG containing a **green** rectangle with a width and height of 100 pixel as well as a **blue** div that has a width and height of 100px too
+step1: I create a simple html document with an SVG containing a **green** rectangle with a width and height of 100 pixel as well as a **blue** div that has a width and height of 100px too:
 
 ```css
 svg {
@@ -3304,145 +3304,149 @@ svg {
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
     <rect width="100" height="100" fill="green" />
 </svg>
-<div style="width: 100px; height: 100px; border-radius: 0px; background-color: blue;"></div>
+<div style="width: 100px; height: 100px; background-color: blue;"></div>
 ```
 
 Note: The SVG rectangle is the same size as the div, but I made the **viewbox** a bit bigger so that later we can see when something gets painted outside of the rectangle (for example if your shape and the svg itself are the same size and you add a shadow then you won't see the shadow), if the rectangle and the viewbox were the same size you could miss some details, this is why I always start with a big viewbox and adjust the size at the end as one of my last steps
 
-Note: SVGs as the name suggests are scalable, this means that even if you double the size of an SVG it will still be sharp and not get all blurry like other types of images, this is because SVG images are not composed of pixels but of shapes that have coordinates and dimensions, you might have noticed that on the svg element itself we have defined a [viewbox](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/viewBox) with 4 values, the first 2 values are the coordinates of the top left position of your viewport (min-x and min-y) and the other 2 values are the width and height of the viewport, every shape you will draw inside of the SVG will have coordinates and dimensions too, the units used by those coordinates and dimensions are not automatically equal to pixels or millimeters, how big a unit is depends on the size at which you display the SVG, this means that if you have an SVG with a viewbox that is a height of 100 units and a width of 100 units but the height and width attributes of the SVG element (or the width and height of the SVG that you define in your css rules) are 200px by 200px, then 1 unit in your SVG will be 2 pixel, if then you increase the height and width of the SVG to be 500x500 pixels then each unit of your SVG (with a viewbox or 100x100) will be euqal to 5 pixel
+Note: SVGs (as the name suggests) are scalable, this means that even if you double the size of an SVG it will still be sharp and not get all blurry like other types of images, this is because SVG images are not composed of pixels but of shapes that have coordinates and dimensions, you might have noticed that on the svg element itself we have defined a [viewbox](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/viewBox) with 4 values, the first 2 values are the coordinates of the top left position of your viewport (min-x and min-y) and the other 2 values are the width and height of the viewport, every shape you will draw inside of the SVG will have coordinates and dimensions too, the units used by those coordinates and dimensions are not automatically equal to pixels or millimeters, how big a unit is depends on the size at which you display the SVG, this means that if you have an SVG with a viewbox that is a height of 100 units and a width of 100 units but the height and width attributes of the SVG element (or the width and height of the SVG that you define in your css rules) are 200px by 200px, then 1 unit in your SVG will be 2 pixel, if then you increase the height and width of the SVG to be 500x500 pixels then each unit of your SVG (with a viewbox or 100x100) will be euqal to 5 pixel
 
 read more:
 
 * [MDN "SVG viewbox" documentation](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/viewBox)
 
-step2: add a basic **SVG filter** with an [feFlood](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feFlood) **filter primitive** inside and apply it to both the SVG rectangle and the div element
+step2: next we add [defs](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/defs) element inside our SVG and inside the defs we add a basic SVG [filter](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/filter) element, inside of the **filter** element we add an [feGaussianBlur](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feGaussianBlur) **filter primitive**:
 
 ```html
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
     <defs>
         <filter id="mySVGFilter">
-            <feFlood flood-color="red" flood-opacity="0.5" />
+            <feGaussianBlur stdDeviation="12" />
         </filter>
     </defs>
-    <rect width="100" height="100" fill="green" filter="url(#mySVGFilter)" />
+    <rect width="100" height="100" fill="green" />
 </svg>
-<div style="width: 100px; height: 100px; border-radius: 0px; background-color: blue; filter: url(#mySVGFilter);"></div>
+<div style="width: 100px; height: 100px; background-color: blue;"></div>
 ```
 
-we have added our `<filter>` to the SVG and inside our **SVG filter** we have used the `<feFlood>` **filter primitive**
+we have added a `<defs>` element to our SVG, the **defs** element is used by SVGs to store graphical objects that get added at a later time, which means they don't get rendered instantly, this is why even though we added the filter it does not yet get rendered
 
-then we have and set the filter ID to `mySVGFilter`
+inside of the **defs** element we have added a `<filter>` element, we have also given our **SVG filter** an ID `mySVGFilter` so that we can reference it later on
 
-and finally we have used our new filter inside of the rectangle using the filter attribute `filter="url(#mySVGFilter)"` and we also used it for our div by using the **css filter property** like so `filter: url(#mySVGFilter);`, as value we use the css **url()** function to "link" to the **SVG filter**, this is the trick to use **SVG filters** within your **css** and apply them to **html elements**
-
-if you now look at the result you might be a bit surprised by the result, both the SVG rectangle and the div have increased in size, the SVG rectangle only got bigger on the right side and the bottom, while the div got bigger on all 4 sides
-
-you can see this very well if using the inspect tool of your browsers dev tools:
-
-![SVG inspect dimensions and coordinates of filter](./documentation/assets/images/svg_inspect_default_dimensions_coordinates_filter.png)
-
-the size has increased because every SVG filter has a [filter region](https://www.w3.org/TR/filter-effects-1/#FilterEffectsRegion) and as we can see that **filter region** is not equal to the size of our rectangle or our div, this is because in the specifications the filter region is said to have a **width and a height** that are **120%** of the width and the height of our rectangle and the bounding box of our div, for the div this means the filter region is on each side 10% bigger than the div itself, for the SVG rectangle this is a bit more complex as two other values come into play, those 2 other values are the x and y coordinates of the **filter region**, the w3c specifications say that the default values for **x and y** are **-10%**, this is why you can see the flood effect on left side as well as the top of the rectangle, because that part is outside of the **viewbox**
-
-Note: you might also have noticed a second strange behavior, we have used a flood effect with an opacity of `0.5`, meaning that the red color should be semi transparent, however it is not transparent at all, we will come back to this in a bit, but let's first adjust the dimensions of the filter region to match the size of our rectangle as well as our div
-
-read more:
-
-* [MDN "SVG filter element" documentation](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/filter)
-* [MDN "css filter property" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/filter)
-* [w3c "filter effects region" specification](https://www.w3.org/TR/filter-effects-1/#FilterEffectsRegion)
-
-step 3: merge the layers of the source image with the layer of the filter
-
-as you may know from using image editors like [Gimp](https://www.gimp.org/), images can have layers and this is what happens when you create an SVG (or use an SVG filter on a div), the source image and the filter are on two different layers
-
-to merge both layers, we use a second **filter effect** called [feMerge](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feMerge), there are other **filter effect** that can be used to merge layers (we will also see feComposite in a bit) but for now I will use **feMerge** as it is easy to understand, the updated code looks like this:
-
-```html
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
-    <defs>
-        <filter id="mySVGFilter">
-            <feFlood flood-color="red" flood-opacity="0.5" result="floodFilterPrimitive" />
-            <feMerge>
-                <feMergeNode in="SourceGraphic" />
-                <feMergeNode in="floodFilterPrimitive" />
-            </feMerge>
-        </filter>
-    </defs>
-    <rect width="100" height="100" fill="green" filter="url(#mySVGFilter)" />
-</svg>
-<div style="width: 100px; height: 100px; border-radius: 0px; background-color: blue; filter: url(#mySVGFilter);"></div>
-```
-
-as you can see we used the filter effect **feMerge** and inside of it we used two [feMergeNode](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feMergeNode) children, to tell feMerge which layers we want to merge, the first **feMergeNode** is for the **SourceGraphic**, which is something different based on where the filter gets used, in our SVG SourceGraphic is the rectangle to which we apply the filter, in our html markup the **SourceGraphic** is the div to which we apply the filter, the second **feMergeNode** is for the **flood filter primitive**, we have used the [result](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/result) on the flood filter primitive to give the primitive an explicit name and then we use that name to reference it in our second **feMergeNode**
-
-now that we have used **feMerge** to merge both layers, you can see that our SVG rectangle which was green, is now orange because the red flood primitive got added (the area outside is just light red as there we only have the red flood with an opacity of 50%) and our blue div is now magenta because of the red flood primitive (the 10% outside are light red too, because of the red flood with an opacity of 50%)
-
-read more:
-
-* [MDN "feMerge" documentation](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feMerge)
-* [MDN "feMergeNode" documentation](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feMergeNode)
-* [MDN "result" documentation](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/result)
-
-step 4: replace the feMerge filter primitive with the feComposite primitive to only have the flood color outside of the element
-
-our goal is to create a glow effect that is emited from the element and not change the color of the entire element, for this reason we will use a more complex primitive to merge both layers, this filter primitive is called [feComposite](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feComposite), **feComposite** can be used to combine 2 layers too, but has an additional attribute called [operator](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/operator) which is used to define how to merge the two inputs (**in** and **in2**), feMerge can merge two or more layers but feComposite can only merge two layers at a time
-
-we replace our **feMergeNode** with **feComposite** and we set the **operator** to **out**, like so:
-
-```html
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
-    <defs>
-        <filter id="mySVGFilter">
-            <feFlood flood-color="red" result="floodFilterPrimitive" />
-            <feComposite operator="out" in="floodFilterPrimitive" in2="SourceGraphic" />
-        </filter>
-    </defs>
-    <rect width="100" height="100" fill="green" filter="url(#mySVGFilter)" />
-</svg>
-<div style="width: 100px; height: 100px; border-radius: 0px; background-color: blue; filter: url(#mySVGFilter);"></div>
-```
-
-Note: I also removed the `flood-opacity="0.5"` we had added earlier, as it was only there for the purpose of showing you the elements beneath the flood primitive but it is not needed anymore
-
-due to the use of the **operator** that we have set to be **out**, everything that is inside of the **SourceGraphic** gets disregarded and only what is outside gets displayed
-
-read more:
-
-* [MDN "feComposite" documentation](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feComposite)
-* [MDN "operator attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/operator)
-
-step 5: transform the flood color into something that looks more like a glow effect (or shadow)
-
-for now our flood color just fills the entire area with color, however our goal is to have something that looks like a shadow, so something that is more like a gradiant that goes gradually from opacity 1 (not transparent at all) to opacity 0 (fully transparent), to achive this we will add another filter primitive called [feGaussianBlur](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feGaussianBlur)
-
-we add the **feGaussianBlur** filter primitive to our filter, like so:
-
-```html
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
-    <defs>
-        <filter id="mySVGFilter">
-            <feFlood flood-color="red" result="floodFilterPrimitive" />
-            <feComposite operator="out" in="floodFilterPrimitive" in2="SourceGraphic" />
-            <feGaussianBlur stdDeviation="9" />
-        </filter>
-    </defs>
-    <rect width="100" height="100" fill="green" filter="url(#mySVGFilter)" />
-</svg>
-<div style="width: 100px; height: 100px; border-radius: 0px; background-color: blue; filter: url(#mySVGFilter);"></div>
-```
+inside of the **filter** element we have used the `<feGaussianBlur>` **filter primitive**, this primitive is used to blur an image, which is what we are using here to create a "fake" glow effect
 
 as you can see we also used an attribute in our **feGaussianBlur** filter primitive called [stdDeviation](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/stdDeviation), which is used to define the amount of deviation we want our blur effect to have, the higher the number the more blurry the result will be
 
+Note: another attribute you can use to change what the **feGaussianBlur** filter will produce, is the [in](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/in) attribute, I didn't explicitly set it here because by default it will be set to **SourceGraphic** which is exactly what we want in this case, it can however be set to other values like for example **SourceAlpha** or **BackgroundImage**, ... **in** accepts as value the result of a previous filter, which can lead to very interesting result, but as we don't need it in our case I will not dive depper, if however you want to know more about it I recommend you read the [MDN "in attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/in) and change the values to to something else to see how it impacts the filter result
+
 read more:
 
-* [MDN "feGaussianBlur" documentation](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feGaussianBlur)
+* [MDN "SVG defs element" documentation](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/defs)
+* [MDN "SVG filter element" documentation](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/filter)
+* [MDN "SVG feGaussianBlur filter primitive" documentation](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feGaussianBlur)
 * [MDN "stdDeviation attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/stdDeviation)
+* [MDN "in attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/in)
+
+step 3: we now apply the **filter** (`mySVGFilter`) to both the SVG rectangle and the div element:
+
+```html
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
+    <defs>
+        <filter id="mySVGFilter">
+            <feGaussianBlur stdDeviation="12" />
+        </filter>
+    </defs>
+    <rect width="100" height="100" fill="green" filter="url(#mySVGFilter)" />
+</svg>
+<div style="width: 100px; height: 100px; background-color: blue; filter: url(#mySVGFilter);"></div>
+```
+
+we have used our new filter inside of the rectangle using the filter attribute `filter="url(#mySVGFilter)"` and we also used it for our div by using the **css filter property** like so `filter: url(#mySVGFilter);`, as value we use the css **url()** function to "link" to the **SVG filter**, this is the trick to use **SVG filters** within your **css** and apply them to **html elements**
+
+Note: if you now look at the result you might be a bit surprised by the result, both the SVG rectangle and the div have increased in size, we will fix this in the next step
+
+read more:
+
+* [MDN "SVG filter attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/filter)
+* [MDN "css filter property" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/filter)
+* [MDN "css url function" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/url)
+
+step 4: ajust the size of the filter to match the dimensions of the graphic it gets applied to:
+
+if we use the inspect tool from our browser dev tools, we can see very well that the the SVG rectangle only got bigger on the right side and the bottom, while the div got bigger on all 4 sides:
+
+![SVG inspect dimensions and coordinates of filter](./documentation/assets/images/svg_inspect_default_dimensions_coordinates_filter.png)
+
+the size has increased because every SVG filter has a [filter region](https://www.w3.org/TR/filter-effects-1/#FilterEffectsRegion) and as we can see that **filter region** is not equal to the size of our rectangle or our div, this is because in the specifications the filter region is said to have a **width and a height** that are **120%** of the width and the height of the element it gets applied to, the specs also mention that the default values for the **x** and **y** coordinates of the filter region are **-10%**
+
+if the filter region has a width and height of **120%**, this means that for our div the filter region is on each side **10%** bigger than the **bounding box** of our div (blue rectangle)
+
+for the SVG (green rectangle) this is a bit more complex as two other values come into play, those 2 other values are the x and y coordinates of the **filter region**, the w3c specifications says that the default values for **x and y** are **-10%**, this is why you can only see the blur effect partially on left side as well as the top of the rectangle, because half of it is outside of the **viewbox**
+
+this means if you don't set the values, the **filter** will have these default values:
+
+`x="-10%" y="-10%" width="120%" height="120%"`
+
+Note: the **feGaussianBlur** filter we used, will blur the edge of the shape, half the blue effect will be outside of the bounding box of the element to which the filter got applied and the other half of the blue effect will be inside of the bounding box, for our purpose we only need the inner part of the blur, this is what will result in something that looks like a glow effect, the part outside of the bounding box is not usefull for our use case so we will get rid of it, by changing the default values of the filter region dimensions and coordinates
+
+next we change the filter dimensions and coordinates, like so:
+
+```html
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
+    <defs>
+        <filter id="mySVGFilter" x="0%" y="0%" width="100%" height="100%">
+            <feGaussianBlur stdDeviation="12" />
+        </filter>
+    </defs>
+    <rect width="100" height="100" fill="green" filter="url(#mySVGFilter)" />
+</svg>
+<div style="width: 100px; height: 100px; background-color: blue; filter: url(#mySVGFilter);"></div>
+```
+
+now both our rectangles have again their original dimensions of 100x100 pixels, the blur effect outside of the elements bounding box is now hidden and what is left is the glow inside of the bounding box
+
+read more:
+
+* [w3c "filter effects region" specification](https://www.w3.org/TR/filter-effects-1/#FilterEffectsRegion)
+
+step 5: add a border and change the color of the glow effect
+
+first we will add a **red** border to both our rectangles, there are lots of different techniques you can use, the most obvious maybe would be to use the stroke attribute for the SVG rectangle and border attribute for the div rectangle
+
+there is however another solution, which is to create a fake border by placing a slightly bigger rectangle around our initial rectangle, this solution has the advantage that because we use another element (surrounding our rectangle) the gaussian blur will be using the background color of that element, lets give it a try:
+
+```html
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
+    <defs>
+        <filter id="mySVGFilter" x="0%" y="0%" width="100%" height="100%">
+            <feGaussianBlur stdDeviation="12" />
+        </filter>
+    </defs>
+    <rect width="120" height="120" fill="red" />
+    <rect width="100" height="100" fill="green" x="10" y="10" filter="url(#mySVGFilter)" />
+</svg>
+<div style="width: 100px; height: 100px; padding: 10px; background-color: red">
+  <div style="width: 100px; height: 100px; background-color: blue; filter: url(#mySVGFilter);"></div>
+</div>
+```
+
+for the green SVG rectangle, we have put another red rectangle before (SVG shapes are being drawn in the order in which they are defined) that is 10 pixel larger on each side and we had to adjust the position of the green rectangle by 10 pixel on the top and left accordingly to center it
+
+for the blue div rectangle we used a second red div as parent and used a padding to center it
+
+before our glow was using the white background color of the body element of our html document, now by placing another element around our rectangle(s) and setting it's color to red, we have achieved to have a glow effect that goes from red to the color of our rectangle and have created a fake border at the same time
+
+Note: if you would want to just change the color of the glow but not have a border you would just make both rectangle the exact same size
+
+Note: I saw other example on the web that didn't use a second rectangle but instead used the [feFlood](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feFlood) SVG filter primitive to alter the color of what is surrounding the graphic and hence alter the color of glow (or shadow), which is a great idea as you don't have to add an extra element and do everything inside of the filter, however my tests showed that very often the color of the flood would get discolored by the blur, for example the a red flood would produce a very orange looking glow instead of a red glow like intended, this is why I chose to not use that technique and instead have one more element
 
 step 6: increase the intensity of the glow effect
 
-what we have now is already very close to what our end result has to look like, we want to have the same glow we achieved earlier using the css filter function **drop-shadow()**, to reach the same glow intensity we need to increase the amount of glow our filter produces, to make that happen we will add yet another filter primitive called [feMorphology](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feMorphology)
+what we have now is already very close to what our end result has to look like, however because we cut half of the blur off, we have lost a bit of intensity, if we want to have the same glow we achieved earlier using the css filter function **drop-shadow()**, this means we need to increase the amount of glow our filter produces, to make that happen we will add another filter primitive called [feMorphology](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feMorphology) to our filter
 
-**feMorphology** is a filter primitive that you can use to erode or dilate an image, we will add that primitive just before the **feGaussianBlur** because we want to **dilate** the blurred color glow we achieved to create using **feGaussianBlur**, this will give our blur effect a slight boost, like so:
+**feMorphology** is a filter primitive that you can use to erode or dilate the source
+
+we will add that primitive just before the **feGaussianBlur** because we want to **dilate** the blurred color glow we achieved to create using **feGaussianBlur**, this will give our blur effect a slight boost, like so:
 
 ```html
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
@@ -3466,36 +3470,14 @@ as you can see we also used an attribute in our **feMorphology** filter primitiv
 read more:
 
 * [MDN "feMorphology" documentation](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feMorphology)
-* [MDN "radius attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/radius)
 * [MDN "operator attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/operator)
+* [MDN "radius attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/radius)
 
-step 7: merge the blur effect layer with our SourceGraphic but only keep what is 
 
-we are going to use the **feComposite** we already used once a second time, this time to **combine** the **gaussian blur** with our **SourceGraphic** and while doing so we will get rid of everything that is outside of the bounding box of our element
 
-this time the **in** attribute of our **feComposite** filter primitive will be the result of feGaussianBlur that we will call **blurFilterPrimitive** and the **in2** attribute is again the **SourceGraphic**, the **operator** however this time will be **atop**, like so:
 
-```html
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
-    <defs>
-        <filter id="mySVGFilter">
-            <feFlood flood-color="red" result="floodFilterPrimitive" />
-            <feComposite operator="out" in="floodFilterPrimitive" in2="SourceGraphic" />
-            <feMorphology operator="dilate" radius="1" />
-            <feGaussianBlur stdDeviation="9" in="blurFilterPrimitive" />
-            <feComposite operator="out" in="SourceGraphic" in2="blurFilterPrimitive" />
-        </filter>
-    </defs>
-    <rect width="100" height="100" fill="green" filter="url(#mySVGFilter)" />
-</svg>
-<div style="width: 100px; height: 100px; border-radius: 0px; background-color: blue; filter: url(#mySVGFilter);"></div>
-```
 
-by setting the **operator** to **atop** we will replace the parts of the SourceGraphic where there is an overlap of the the blur filter (in) and the SourceGraphic (in2), meaning that everything outside of the bounding box of the SourceGraphic is not being displayed and also everything inside the SourceGraphic which is not covered by the blur is omited too, only the parts where both exist at the same time are being kept and used to replace the original SourceGraphic
 
-Understanding **atop** is not easy, I hope seeing the result helps you understand what it does and I will quote the definition from MDN here as I doubt that I can explain it better:
-
-> [When the operator attribute value is set to atop, then] this value indicates that the parts of the source graphic defined in the "in" attribute, which overlap the destination graphic defined in the "in2" attribute, replace the destination graphic. The parts of the destination graphic that do not overlap with the source graphic stay untouched.
 
 #### boxes or buttons with angled corners using css and SVG filter(s) (with fake border and a glow effect on the outside as well as the inside) (part2)
 
