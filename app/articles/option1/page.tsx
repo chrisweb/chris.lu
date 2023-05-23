@@ -1,4 +1,4 @@
-import ContentMDX from './content.mdx'
+/*import ContentMDX from './content.mdx'
 
 import type { Metadata } from 'next'
 
@@ -31,4 +31,4 @@ export default function Article() {
             <ContentMDX />
         </>
     )
-}
+}*/
