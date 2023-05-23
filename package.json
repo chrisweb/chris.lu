@@ -32,7 +32,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "three": "0.152.2",
-    "web-audio-api-player": "4.0.2"
+    "web-audio-api-player": "4.0.2",
+    "next-mdx-remote": "4.4.1"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "13.4.3",
