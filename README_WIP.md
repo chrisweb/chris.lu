@@ -2116,9 +2116,11 @@ read more:
 
 you can not put global styles into css modules as css modules will locally scope CSS, so all your **gloabl** css should go into a global styles file, you can give that file whatever name you want
 
-if you try to use global css rules in css modules you will get the following error:
+if you try to use an element name as selector in css modules you will get the following error:
 
 > Syntax error: Selector "html" is not pure (pure selectors must contain at least one local class or id)
+
+Note: the other way arround works however, meaning you can put class or ID selectors in global.css, for example if you define a class for all links in your app, you can do so in global.css
 
 first we create a global styles file `global.css` in our `app` directory and add the following content:
 

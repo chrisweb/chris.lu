@@ -9,23 +9,20 @@
             box-sizing: border-box;
         }
 
-        .btn {
-            --cornerSideLength: 40px;
 
-            clip-path:
-                polygon(0 0,
-                    100% 0,
-                    100% calc(100% - var(--cornerSideLength)),
-                    calc(100% - var(--cornerSideLength)) 100%,
-                    0 100%);
 
-            background-color: #fff;
-            height: 72px;
-            width: 392px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+
+
+        .btn-outer-shadow {
+            filter: drop-shadow(0px 0px 12px #ff00aa);
+            color: #000;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            line-height: 1;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-family: sans-serif;
         }
 
         .btn-border {
@@ -47,20 +44,27 @@
             justify-content: center;
         }
 
-        .btn-outer-shadow {
-            filter: drop-shadow(0px 0px 12px #ff00aa);
-            color: #000;
-            font-size: 16px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            line-height: 1;
-            text-decoration: none;
-            text-transform: uppercase;
-            font-family: sans-serif;
-        }
-
         .btn-inner-shadow {
             filter: url(#inner-glow);
+        }
+
+        .btn {
+            --cornerSideLength: 40px;
+
+            clip-path:
+                polygon(0 0,
+                    100% 0,
+                    100% calc(100% - var(--cornerSideLength)),
+                    calc(100% - var(--cornerSideLength)) 100%,
+                    0 100%);
+
+            background-color: #fff;
+            height: 72px;
+            width: 392px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
@@ -75,7 +79,7 @@
             </filter>
         </defs>
     </svg>
-    <a class="btn-outer-shadow href=" /">
+    <a class="btn-outer-shadow" href="">
         <div class="btn-border">
             <div class="btn-inner-shadow">
                 <div class="btn">Button text</div>

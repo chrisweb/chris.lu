@@ -1,6 +1,6 @@
 import NeonRoadContainer from '../components/neonRoad/Container'
 import './global.css'
-import styles from './styles.module.css'
+//import styles from './styles.module.css'
 import Link from 'next/link'
 import { Permanent_Marker } from 'next/font/google'
 
@@ -18,9 +18,9 @@ export default function RootLayout({ children }: {
         <html lang="en" className={permanentMarkerFont.className}>
             <head />
             <body>
-                <header className={styles.layoutHeader}>
-                    <div className={styles.layoutNavbarContainer}>
-                        <nav className={styles.layoutNavbar}>
+                <header className="layoutHeader">
+                    <div className="layoutNavbarContainer">
+                        <nav className="layoutNavbar">
                             <Link href="/">Home</Link>
                             <Link href="/web_development">Web development</Link>
                             {/*<Link href="/lego">Lego</Link>
@@ -31,7 +31,7 @@ export default function RootLayout({ children }: {
                             <Link href="/memes">Memes</Link>*/}
                         </nav>
                     </div>
-                    <h1 className={styles.eighties}>Chris.lu</h1>
+                    <h1 className="eighties">Chris.lu</h1>
                     <NeonRoadContainer />
                 </header>
                 <main>{children}</main>
