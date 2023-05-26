@@ -4,9 +4,9 @@ import styles from './styles.module.css'
 export default function Homepage() {
 
     return (
-        <main>
-            <h1>Hello, World! <span className="emoji">👋</span></h1>
-            <h3>Welcome to my blog, my name is Chris Weber (aka chrisweb)</h3>
+        <>
+            <h1 className="h1">Hello, World! <span className="emoji">👋</span></h1>
+            <h3 className="h3">Welcome to my blog, my name is Chris Weber (aka chrisweb)</h3>
             I like <Typing>Web development, Lego bricks, Music, Games, Cooking, Movies & TV shows, Memes</Typing>
             <section className={styles.portalsGrid}>
                 <div className={styles.cyberPortalOuterGlow} id="web_development">
@@ -73,6 +73,6 @@ export default function Homepage() {
                     </div>
                 </div>
             </section>
-        </main>
+        </>
     )
 }

@@ -56,14 +56,14 @@
             calc(100% - var(--cornerSideLength)) 100%,
             0 100%);
 
-    background-color: #fff;
+    background-color: var(--main-background-color);
     position: relative;
     display: flex;
     align-items: flex-start;
     justify-content: center;
     height: 100%;
     width: 100%;
-    color: #000;
+    color: #fff;
     padding: 16px;
 
 
