@@ -31,43 +31,7 @@ export default function Homepage() {
                     <div className={styles.cyberPortalBorder}>
                         <div className={styles.cyberPortalInnerGlow}>
                             <div className={styles.cyberPortalCore}>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className={styles.cyberPortalOuterGlow} id="cooking">
-                    <div className={styles.cyberPortalBorder}>
-                        <div className={styles.cyberPortalInnerGlow}>
-                            <div className={styles.cyberPortalCore}>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className={styles.cyberPortalOuterGlow} id="music">
-                    <div className={styles.cyberPortalBorder}>
-                        <div className={styles.cyberPortalInnerGlow}>
-                            <div className={styles.cyberPortalCore}>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className={styles.cyberPortalOuterGlow} id="memes">
-                    <div className={styles.cyberPortalBorder}>
-                        <div className={styles.cyberPortalInnerGlow}>
-                            <div className={styles.cyberPortalCore}>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className={styles.cyberPortalOuterGlow} id="movies_and_tv_shows">
-                    <div className={styles.cyberPortalBorder}>
-                        <div className={styles.cyberPortalInnerGlow}>
-                            <div className={styles.cyberPortalCore}>
-
+                                Coming soon...
                             </div>
                         </div>
                     </div>

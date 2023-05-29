@@ -104,7 +104,7 @@ body {
     animation: colorwave 20s infinite linear;
     -webkit-animation: colorwave 20s infinite linear;
     background-size: 200% 100%;
-    background-image: linear-gradient(90deg, var(--primary-light-color) 15%, var(--secondary-light-color) 50%, var(--primary-light-color) 85%);
+    background-image: linear-gradient(90deg, var(--primary-light-color) 10%, var(--secondary-light-color) 50%, var(--primary-light-color) 90%);
 }
 
 h1,
@@ -160,6 +160,7 @@ a {
     outline: none;
     text-decoration: none;
     color: var(--primary-light-color);
+    backface-visibility: hidden;
     font-weight: var(--main-fontWeight-big);
     cursor: url(/assets/cursors/secondary_mouse_pointer.cur), pointer;
 }
