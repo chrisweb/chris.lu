@@ -70,6 +70,8 @@ body {
     font-family: var(--main-frontFamily-default);
     font-size: var(--main-fontSize-default);
     font-weight: var(--main-fontWeight-default);
+    /* always scrollbar on right */
+    overflow-y: scroll;
 }
 
 @media print {
