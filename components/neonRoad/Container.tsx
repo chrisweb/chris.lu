@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import StaticImage from './StaticImage'
 import PlayButton from './PlayButton'
 import dynamic from 'next/dynamic'
-import Player from './player/UI'
+import PlayerUI from './player/UI'
+import { PlayerCore } from 'web-audio-api-player'
 
 // in this dynamic import case it is important to set "ssr: false"
 // as in the NeonRoadCanvas component we use window
@@ -26,8 +27,11 @@ const Container: React.FC = () => {
 
     const [showAnimationState, setShowAnimationState] = useState(false)
 
+    const playerRef = useRef<PlayerCore>(null)
+
     const clickPlayCallback = () => {
         setShowAnimationState(true)
+        playerRef.current.play()
     }
 
     const altText = 'Chris.lu header image, displaying an 80s style landscape and sunset'
@@ -43,9 +47,9 @@ const Container: React.FC = () => {
             {showAnimationState &&
                 <>
                     <NeonRoadCanvas altText={altText} />
-                    <Player />
                 </>
             }
+            <PlayerUI isPlaying={false} ref={playerRef} />
         </>
     )
 }

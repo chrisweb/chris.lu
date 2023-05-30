@@ -1,16 +1,20 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
-
+import { useRef, useEffect, useState, forwardRef, useCallback } from 'react'
 import { PlayerCore, ISoundAttributes, ICoreOptions } from 'web-audio-api-player'
 
-const PlayerUI: React.FC = () => {
+interface IProps {
+    isPlaying: boolean
+}
 
-    const playerRef = useRef<PlayerCore>()
+const PlayerUI = forwardRef(({ isPlaying }: IProps, playerRef: React.MutableRefObject<PlayerCore>) => {
+
     const rangeRef = useRef<HTMLInputElement>()
     const volumeRef = useRef<HTMLInputElement>()
 
-    const initializePlayer = () => {
+    const [isPlayingState, setIsPlayingState] = useState(isPlaying)
+
+    const initializePlayer = useCallback(() => {
 
         const options: ICoreOptions = {
             soundsBaseUrl: '/assets/songs/',
@@ -37,9 +41,9 @@ const PlayerUI: React.FC = () => {
                 console.log('loading: ', loadingProgress, maximumValue, currentValue)
             },
             onPlaying: (playingProgress, maximumValue, currentValue) => {
-                console.log('playing: ', playingProgress, maximumValue, currentValue)
-                console.log(song1)
-                console.log('firstSound.duration: ', song1.duration)
+                //console.log('playing: ', playingProgress, maximumValue, currentValue)
+                //console.log(song1)
+                //console.log('song1.duration: ', song1.duration)
                 if (typeof rangeRef.current !== 'undefined') {
                     rangeRef.current.value = playingProgress.toString()
                 }
@@ -73,9 +77,9 @@ const PlayerUI: React.FC = () => {
                 console.log('loading: ', loadingProgress, maximumValue, currentValue)
             },
             onPlaying: (playingProgress, maximumValue, currentValue) => {
-                console.log('playing: ', playingProgress, maximumValue, currentValue)
-                console.log(song1)
-                console.log('firstSound.duration: ', song1.duration)
+                //console.log('playing: ', playingProgress, maximumValue, currentValue)
+                //console.log(song2)
+                //console.log('song2.duration: ', song2.duration)
                 if (typeof rangeRef.current !== 'undefined') {
                     rangeRef.current.value = playingProgress.toString()
                 }
@@ -100,16 +104,16 @@ const PlayerUI: React.FC = () => {
         playerRef.current.addSoundToQueue({ soundAttributes: song1 })
         playerRef.current.addSoundToQueue({ soundAttributes: song2 })
 
-        playerRef.current.play()
-
-    }
+    }, [playerRef])
 
     const onClickPlayHandler = () => {
         playerRef.current.play()
+        /*setIsPlayingState(true)*/
     }
 
     const onClickPauseHandler = () => {
         playerRef.current.pause()
+        /*setIsPlayingState(false)*/
     }
 
     const onClickNextHandler = () => {
@@ -123,9 +127,16 @@ const PlayerUI: React.FC = () => {
         }
     }
 
+    const onChangeRangeHandler = () => {
+        if (typeof rangeRef.current !== 'undefined') {
+            const rangeInPercent = rangeRef.current.value
+            playerRef.current.setPosition(parseInt(rangeInPercent))
+        }
+    }
+
     useEffect(() => {
         initializePlayer()
-    }, [])
+    }, [initializePlayer])
 
     return (
         <>
@@ -135,11 +146,13 @@ const PlayerUI: React.FC = () => {
                 <button onClick={onClickPlayHandler}>Play audio</button>
                 <button onClick={onClickPauseHandler}>Plause audio</button>
                 <button onClick={onClickNextHandler}>Next audio</button>
-                <input type="range" min="0" max="100" value="0" step="1" ref={rangeRef} />
-                <input type="range" min="0" max="100" value="0" step="1" ref={volumeRef} onChange={onChangeVolumeHandler} />
+                <input type="range" min="0" max="100" defaultValue="0" step="1" ref={rangeRef} onChange={onChangeRangeHandler} />
+                <input type="range" min="0" max="100" step="1" ref={volumeRef} onChange={onChangeVolumeHandler} />
             </div>
         </>
     )
-}
+})
+
+PlayerUI.displayName = 'PlayerUI'
 
 export default PlayerUI
