@@ -40,7 +40,7 @@ const PlayerUI = forwardRef(({ isPlaying }: IProps, playerRef: React.MutableRefO
             onLoading: (loadingProgress, maximumValue, currentValue) => {
                 console.log('loading: ', loadingProgress, maximumValue, currentValue)
             },
-            onPlaying: (playingProgress, maximumValue, currentValue) => {
+            onPlaying: (playingProgress/*, maximumValue, currentValue*/) => {
                 //console.log('playing: ', playingProgress, maximumValue, currentValue)
                 //console.log(song1)
                 //console.log('song1.duration: ', song1.duration)
@@ -76,7 +76,7 @@ const PlayerUI = forwardRef(({ isPlaying }: IProps, playerRef: React.MutableRefO
             onLoading: (loadingProgress, maximumValue, currentValue) => {
                 console.log('loading: ', loadingProgress, maximumValue, currentValue)
             },
-            onPlaying: (playingProgress, maximumValue, currentValue) => {
+            onPlaying: (playingProgress/*, maximumValue, currentValue*/) => {
                 //console.log('playing: ', playingProgress, maximumValue, currentValue)
                 //console.log(song2)
                 //console.log('song2.duration: ', song2.duration)
