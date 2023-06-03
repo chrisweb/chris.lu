@@ -27,7 +27,7 @@ const Container: React.FC = () => {
 
     const [showAnimationState, setShowAnimationState] = useState(false)
 
-    const playerRef = useRef<PlayerCore>(null)
+    const playerRef = useRef<PlayerCore>()
 
     const clickPlayCallback = () => {
         setShowAnimationState(true)
@@ -49,7 +49,7 @@ const Container: React.FC = () => {
                     <NeonRoadCanvas altText={altText} />
                 </>
             }
-            <PlayerUI isPlaying={false} ref={playerRef} />
+            <PlayerUI /*isPlaying={false}*/ ref={playerRef} />
         </>
     )
 }

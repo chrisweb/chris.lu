@@ -1,18 +1,19 @@
 'use client'
 
-import { useRef, useEffect, useState, forwardRef, useCallback } from 'react'
+import { useRef, useEffect, /*useState,*/ forwardRef, useCallback } from 'react'
 import { PlayerCore, ISoundAttributes, ICoreOptions } from 'web-audio-api-player'
 
-interface IProps {
+/*interface IProps {
     isPlaying: boolean
-}
+}*/
 
-const PlayerUI = forwardRef(({ isPlaying }: IProps, playerRef: React.MutableRefObject<PlayerCore>) => {
+//const PlayerUI = forwardRef(({ isPlaying }: IProps, playerRef: React.MutableRefObject<PlayerCore>) => {
+const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<PlayerCore>) => {
 
     const rangeRef = useRef<HTMLInputElement>()
     const volumeRef = useRef<HTMLInputElement>()
 
-    const [isPlayingState, setIsPlayingState] = useState(isPlaying)
+    /*const [isPlayingState, setIsPlayingState] = useState(isPlaying)*/
 
     const initializePlayer = useCallback(() => {
 
