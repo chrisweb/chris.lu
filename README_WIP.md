@@ -1232,7 +1232,10 @@ read more:
 
 #### using costum components (only for option 1 and 2 NOT 3)
 
-we are going to modify the `mdx-components.tsx` we created earlier, to add a simple custom component, which will be a custom h1 tag with a custom css class
+we are going to modify the `mdx-components.tsx` we created earlier, to add a simple custom component, which will just a simple ... 
+
+TODO: finish this chapter
+TODO: how to differentiate both, because there are two types of "custom components", defining them here in the config file, which are replacements for existing html tags and real custom react components you can just use in the mdx file as you would in a react component
 
 ```tsx
 import type { MDXComponents } from 'mdx/types'
@@ -1250,6 +1253,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 #### code box styling using components (only for option 1 and 2 NOT 3)
 
 #### option 1: meta data (@nextjs/mdx alternative to front-matter)
+
+TODO: we need to differentiate between static and dynamic meta data
 
 next we will use the new metadata API that got introduced in [next.js 13.2](https://nextjs.org/blog/next-13-2) at the end of february 2023, to pass some of our values we get from front-matter to next.js metadata
 
@@ -1998,19 +2003,8 @@ to make slugs I found two libraries <https://www.npmjs.com/package/github-slugge
 
 for the code highlighting one option is <https://www.npmjs.com/package/highlight.js>
 
-### MDX code blocks
 
-**rehype pretty code** is a rehype plugin for vscode like syntax highlighting with support for themes: <https://rehype-pretty-code.netlify.app/>, here is the npm page <https://www.npmjs.com/package/rehype-pretty-code>, it uses shiki <https://shiki.matsu.io/>
-
-if code block titles for filenames are not supported out of the box by rehype pretty code then add this <https://www.npmjs.com/package/rehype-code-titles>
-
-
-
-
-
-
-
-## (content) directory for all MDX files
+## (content) directory for all MDX files (for option 1/2/3 ???)
 
 before we create the page, in the `/app/articles/[slug]/` directory, create a new directory called `(content)`, to end up with the following directories structure:
 
@@ -2045,9 +2039,71 @@ TODO: add a layout file, to be used by all of the pages, so that every article h
 
 ## adding the remark "remark-gfm" plugin
 
-[remark-gfm](https://www.npmjs.com/package/remark-gfm)
 
-add to mdx document:
+
+by adding the [remark "GitHub Flavored Markdown" (GFM) plugin](https://www.npmjs.com/package/remark-gfm) we extend the syntax features provided by the original markdown with the extensions (for autolink literals, footnotes, strikethrough, tables, tasklists) to markdown that you may know from github (for example when writing an issue or a discussion post on github)
+
+Note: if you use **remark-gfm** and if you haven't already transformed your next.config.js to a next.config.mjs (ESM version) you will need to do so now, because as mentioned in their [install instrcutions](https://github.com/remarkjs/remark-gfm#install) the **remark-gfm** package is ESM only
+
+first let's install the **rehype pretty code** package, by using this command:
+
+```shell
+npm i remark-gfm --save-exact
+```
+
+next we edit our next.config.mjs file to add the plugin to the next/mdx configuration, like so:
+
+```js
+import remarkGfm from 'remark-gfm'
+
+const nextConfig = (/*phase*/) => {
+
+    // to use the bundle analyzer uncomment the following lines
+    // then uncomment the return to use withBundleAnalyzer
+    /*const withBundleAnalyzer = WithBundleAnalyzer({
+        enabled: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        openAnalyzer: false,
+    })*/
+
+    const withMDX = WithMDX({
+        extension: /\.mdx?$/,
+        options: {
+            // If you use remark-gfm, you'll need to use next.config.mjs
+            // as the package is ESM only
+            // https://github.com/remarkjs/remark-gfm#install
+            remarkPlugins: [remarkGfm],
+            rehypePlugins: [],
+            // If you use `MDXProvider`, uncomment the following line.
+            // providerImportSource: "@mdx-js/react",
+        },
+    })
+
+    /** @type {import('next').NextConfig} */
+    const nextConfig = {
+        experimental: {
+            // experimental support for next.js > 13 app directory
+            appDir: true,
+            // experimental use rust compiler for MDX
+            mdxRs: false,
+        },
+        // file formats for next/image
+        images: {
+            formats: ['image/avif', 'image/webp']
+        },
+        pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+    }
+
+    return withMDX(nextConfig)
+    //return withBundleAnalyzer(withMDX(nextConfig))
+
+}
+
+export default nextConfig
+```
+
+TODO: to be continued
+
+let's add some "GitHub Flavored Markdown" (GFM) examples to mdx document:
 
 ```md
 ~~strikethrough~~
@@ -2055,9 +2111,107 @@ add to mdx document:
 [ ] checkbox
 ```
 
-## extending MDX, to transform code blocks using the xxx plugins
 
-**SynthWave '84** VSCode theme <https://github.com/robb0wen/synthwave-vscode>
+
+### MDX code blocks
+
+[rehype pretty code](https://www.npmjs.com/package/rehype-pretty-code) is a rehype plugin for markdown that adds "VSCode like" code highlighting to your code blocs and the best part is it has support support for VSCode themes
+
+in this example we will use the great VSCode theme [SynthWave '84](https://github.com/robb0wen/synthwave-vscode)
+
+Note: **rehype pretty code** uses shiki <https://shiki.matsu.io/> under the hood
+
+first let's create a demo page, with the following markdown content:
+
+```md
+    # first article
+
+    this is the code block:
+    
+    ```js
+    function helloWorld() {
+        // this is a comment
+        console.log('Hello World!')
+    }
+    ```
+```
+
+now run the dev server and look at the code block, you will see that the markdown code block syntax got converted into an html &lt;pre&gt; tag with an &lt;code class="language-js"&gt; html tag inside, but there is no syntax colored highlighting ye, this is why we will now add the *rehype pretty code** plugin
+
+let's install the **rehype pretty code** package, by using this command:
+
+```shell
+npm i rehype-pretty-code --save-exact
+```
+
+next we edit our next.config.mjs file to add the plugin to the next/mdx configuration, like so:
+
+```js
+import rehypePrettyCode from 'rehype-pretty-code'
+
+const nextConfig = (/*phase*/) => {
+
+    // to use the bundle analyzer uncomment the following lines
+    // then uncomment the return to use withBundleAnalyzer
+    /*const withBundleAnalyzer = WithBundleAnalyzer({
+        enabled: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        openAnalyzer: false,
+    })*/
+
+    const withMDX = WithMDX({
+        extension: /\.mdx?$/,
+        options: {
+            // If you use remark-gfm, you'll need to use next.config.mjs
+            // as the package is ESM only
+            // https://github.com/remarkjs/remark-gfm#install
+            remarkPlugins: [],
+            rehypePlugins: [rehypePrettyCode],
+            // If you use `MDXProvider`, uncomment the following line.
+            // providerImportSource: "@mdx-js/react",
+        },
+    })
+
+    /** @type {import('next').NextConfig} */
+    const nextConfig = {
+        experimental: {
+            // experimental support for next.js > 13 app directory
+            appDir: true,
+            // experimental use rust compiler for MDX
+            mdxRs: false,
+        },
+        // file formats for next/image
+        images: {
+            formats: ['image/avif', 'image/webp']
+        },
+        pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+    }
+
+    return withMDX(nextConfig)
+    //return withBundleAnalyzer(withMDX(nextConfig))
+
+}
+
+export default nextConfig
+```
+
+Note: as we did changes to next.js config file we need to restart the dev server
+
+now run the dev server again and look at the what got generated this time, you will see that the same html &lt;pre&gt; tag and html &lt;code class="language-js"&gt; tag are there (with an attribute that defines which theme is being used) but inside of those two we now have a bunch of span tags with style attribute for the text color
+
+
+
+
+
+read more:
+
+[rehype "pretty code plugin" npm page](https://www.npmjs.com/package/rehype-pretty-code)
+[rehype "pretty code plugin" project website & documentation](https://rehype-pretty-code.netlify.app/)
+["shiki" project website](https://shiki.matsu.io/)
+["SynthWave '84" VSCode theme github repository](https://github.com/robb0wen/synthwave-vscode)
+
+TODO: if code block titles for filenames are not supported out of the box by **rehype pretty code** then add this <https://www.npmjs.com/package/rehype-code-titles>
+
+
 
 ## table of contents plugin
 

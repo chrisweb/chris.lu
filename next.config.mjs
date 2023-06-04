@@ -4,10 +4,11 @@
 // then uncomment the phase parameter
 
 import WithMDX from '@next/mdx'
+import rehypePrettyCode from 'rehype-pretty-code'
 
-const ContentSecurityPolicy = `
+/*const ContentSecurityPolicy = `
   default-src 'self';
-`
+`*/
 
 const nextConfig = (/*phase*/) => {
 
@@ -18,18 +19,18 @@ const nextConfig = (/*phase*/) => {
         openAnalyzer: false,
     })*/
 
-    const withMDX = WithMDX(/*{
+    const withMDX = WithMDX({
         extension: /\.mdx?$/,
         options: {
             // If you use remark-gfm, you'll need to use next.config.mjs
             // as the package is ESM only
             // https://github.com/remarkjs/remark-gfm#install
             remarkPlugins: [],
-            rehypePlugins: [],
+            rehypePlugins: [rehypePrettyCode],
             // If you use `MDXProvider`, uncomment the following line.
             // providerImportSource: "@mdx-js/react",
         },
-    }*/)
+    })
 
     /** @type {import('next').NextConfig} */
     const nextConfig = {
