@@ -2141,33 +2141,80 @@ now run the dev server and look at the code block, you will see that the markdow
 let's install the **rehype pretty code** package, by using this command:
 
 ```shell
-npm i rehype-pretty-code --save-exact
+npm i rehype-pretty-code shiki --save-exact
+```
+
+Note: now we need to get the **VSCode "SynthWave '84" theme** from their github repository, we could either download it manually and put the theme json file into a folder, but what works too is to use npm to get it for us and put it into our `node_modules` directory
+
+next we run the following command to add the repository **VSCode "SynthWave '84" theme** to our package.json dependencies list:
+
+```shell
+npm i https://github.com/robb0wen/synthwave-vscode.git
+```
+
+this will add the theme to our `node_modules` directory and create the following entry in our package.json:
+
+```shell
+  "dependencies": {
+    "synthwave-vscode": "github:robb0wen/synthwave-vscode",
+  },
+```
+
+unfortunatly as of now the json file of the VSCode "SynthWave '84" theme has some errors (the errors are a few extra commas at the end of lines which make the JSON invalid), this is why we add a package called [jsonrepair](https://www.npmjs.com/package/jsonrepair) to fix the errors:
+
+```shell
+npm i jsonrepair --save-exact
 ```
 
 next we edit our next.config.mjs file to add the plugin to the next/mdx configuration, like so:
 
 ```js
+import WithMDX from '@next/mdx'
 import rehypePrettyCode from 'rehype-pretty-code'
+import { readFileSync } from 'fs'
+import { jsonrepair } from 'jsonrepair'
 
 const nextConfig = (/*phase*/) => {
 
-    // to use the bundle analyzer uncomment the following lines
-    // then uncomment the return to use withBundleAnalyzer
-    /*const withBundleAnalyzer = WithBundleAnalyzer({
-        enabled: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
-        openAnalyzer: false,
-    })*/
+    const themeJsonPath = new URL('./node_modules/synthwave-vscode/themes/synthwave-color-theme.json', import.meta.url)
+    //const themeJsonPath = new URL('./synthwave84.json', import.meta.url)
+
+    // get the json theme
+    const themeJsonContent = readFileSync(themeJsonPath, 'utf-8')
+
+    // fix errors in the json
+    const themeJsonContentFixed = jsonrepair(themeJsonContent)
+
+    const rehypePrettyCodeOptions = {
+        // VSCode "SynthWave '84" theme
+        theme: JSON.parse(themeJsonContentFixed),
+
+        // keep the SynthWave '84 background or use a custom background color?
+        keepBackground: true,
+
+        // callback hooks to add custom logic to nodes when visiting them
+        onVisitLine(node) {
+            // prevent lines from collapsing in `display: grid` mode, and
+            // allow empty lines to be copy/pasted
+            if (node.children.length === 0) {
+                node.children = [{ type: 'text', value: ' ' }]
+            }
+        },
+        onVisitHighlightedLine(node) {
+            // Each line node by default has `class="line"`.
+            node.properties.className.push('highlighted')
+        },
+        onVisitHighlightedWord(node) {
+            // Each word node has no className by default.
+            node.properties.className = ['word']
+        },
+    }
 
     const withMDX = WithMDX({
         extension: /\.mdx?$/,
         options: {
-            // If you use remark-gfm, you'll need to use next.config.mjs
-            // as the package is ESM only
-            // https://github.com/remarkjs/remark-gfm#install
             remarkPlugins: [],
-            rehypePlugins: [rehypePrettyCode],
-            // If you use `MDXProvider`, uncomment the following line.
-            // providerImportSource: "@mdx-js/react",
+            rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions]],
         },
     })
 
@@ -2183,6 +2230,8 @@ const nextConfig = (/*phase*/) => {
         images: {
             formats: ['image/avif', 'image/webp']
         },
+        // TODO: is this needed for app directory
+        // Configure pageExtensions to include md and mdx
         pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
     }
 
@@ -2194,13 +2243,46 @@ const nextConfig = (/*phase*/) => {
 export default nextConfig
 ```
 
+next we add the following css to our `global.css` file:
+
+```css
+pre {
+    padding: calc(var(--main-spacing) / 2);
+}
+
+/* recommended by https://rehype-pretty-code.netlify.app/ */
+pre>code {
+    display: grid;
+}
+
+code {
+    counter-reset: line;
+}
+
+code>.line::before {
+    counter-increment: line;
+    content: counter(line);
+
+    /* Other styling */
+    display: inline-block;
+    width: 1rem;
+    margin-right: 2rem;
+    text-align: right;
+    color: gray;
+}
+
+code[data-line-numbers-max-digits='2']>.line::before {
+    width: 2rem;
+}
+
+code[data-line-numbers-max-digits='3']>.line::before {
+    width: 3rem;
+}
+```
+
 Note: as we did changes to next.js config file we need to restart the dev server
 
 now run the dev server again and look at the what got generated this time, you will see that the same html &lt;pre&gt; tag and html &lt;code class="language-js"&gt; tag are there (with an attribute that defines which theme is being used) but inside of those two we now have a bunch of span tags with style attribute for the text color
-
-
-
-
 
 read more:
 
