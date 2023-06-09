@@ -1145,6 +1145,8 @@ now in your browser navigate to <http://localhost:3000/articles/option1> and you
 
 Note: this is an easy solution that is similar to option 3 but requires less code, one downside of this option is that you will end up having to create one page.tsx for each article, each of these page.tsx will be in a different directory but they all will contain the exact same code (except for the import path of the MDX content that will always point to a different file), if your blog is small and you write few articles a year this is not a problem, but if you use this technique for something that has hundreds of pages and then you need to update code in the page.tsx file for some reason, then this might require a considerable amount of effort (even if you use exclude some of the code into reusable components and even if the refactoring is done with a tool, that does update the code for you, in each of the page.tsx files)
 
+TODO: actually there might be an "option 4", to use a dynamic route and only one page.tsx, if the route is dynamic we can not "import" like in option 2, also dynamic imports don't seem to work and next dynamic also doesn't work (create examples to show why it doesn't work / maybe open next/mdx ticket to ask why next/dynamic doesn't work), but what about using a dynamic route and then read the md content using readFileSync from nodejs??? 
+
 #### option 2: multiple page.mdx files, one static route per article
 
 what we did in previous **option 1** example, is what you will currently find in the [next.js MDX beta documentation](https://beta.nextjs.org/docs/guides/mdx), but in **option 2** we will create an even simpler version
@@ -2297,7 +2299,15 @@ TODO: if code block titles for filenames are not supported out of the box by **r
 
 ## table of contents plugin
 
-is there a plugin that takes all headers of document and turns them into a table of contents?
+[remark-toc](https://www.npmjs.com/package/remark-toc) is a remark plugin that takes all headers of a markdown document and turns them into a "table of contents" (TOC)
+
+install the plugin using this command to install the **remark-toc** package:
+
+```shell
+npm i remark-toc --save-exact
+```
+
+
 
 ## use next/image
 
