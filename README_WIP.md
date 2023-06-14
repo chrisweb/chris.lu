@@ -3778,13 +3778,15 @@ this will add the fontawesome SVG icons core which is required for all versions 
 npm i @fortawesome/fontawesome-svg-core --save-exact
 ```
 
-then this is the "free regular" icons package:
+then this is the "free solid" icons package:
 
 ```shell
-npm i @fortawesome/free-regular-svg-icons --save-exact
+npm i @fortawesome/free-solid-svg-icons --save-exact
 ```
 
-you can check out which other styles they have and search for icons on the [dig deeper](https://fontawesome.com/v6/docs/web/dig-deeper/styles) page of their documentation
+you can search for icons using the tags ["free" + "solid"](https://fontawesome.com/v6/search?o=r&m=free&s=solid) on the fontawesome search page
+
+to check out the different styles just change the tags used above
 
 and finally the fontawesome react component:
 
@@ -3793,6 +3795,23 @@ npm i @fortawesome/react-fontawesome --save-exact
 ```
 
 Note: I read that their react component has support for react forwardRef, which is great as it might be useful in the future
+
+to use fontawesome in our project we first edit the main layout.tsx file and add the following lines to include the fontawesome css:
+
+```ts
+import '@fortawesome/fontawesome-svg-core/styles.css'
+import { config } from '@fortawesome/fontawesome-svg-core'
+// disable the fontawesome feature which adds a style tag with the css inside to a page
+// this is not needed as we also import the css into our project and next.js will bundle it
+config.autoAddCss = false
+```
+
+then in our component we add the following code to use an icon:
+
+```ts
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlay, faPause, faForwardStep } from '@fortawesome/free-solid-svg-icons'
+```
 
 read more:
 

@@ -4,6 +4,12 @@ import styles from './layout.module.css'
 import Link from 'next/link'
 import { Permanent_Marker } from 'next/font/google'
 
+import '@fortawesome/fontawesome-svg-core/styles.css'
+import { config } from '@fortawesome/fontawesome-svg-core'
+// disable the fontawesome feature which adds a style tag with the css inside to a page
+// this is not needed as we also import the css into our project and next.js will bundle it
+config.autoAddCss = false
+
 const permanentMarkerFont = Permanent_Marker({
     subsets: ['latin'],
     weight: ['400'],

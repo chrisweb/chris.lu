@@ -4,8 +4,8 @@ import { useRef, useEffect, /*useState,*/ forwardRef, useCallback } from 'react'
 import { PlayerCore, ISoundAttributes, ICoreOptions } from 'web-audio-api-player'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCirclePlay } from '@fortawesome/free-regular-svg-icons'
-import '@fortawesome/fontawesome-svg-core/styles.css'
+import { faPlay, faPause, faForwardStep } from '@fortawesome/free-solid-svg-icons'
+
 
 /*interface IProps {
     isPlaying: boolean
@@ -148,10 +148,9 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
             <div style={{
                 zIndex: 1,
             }}>
-                <button ><FontAwesomeIcon icon={faCirclePlay} /></button>
-                <FontAwesomeIcon icon={faCirclePlay} onClick={onClickPlayHandler} />
-                <button onClick={onClickPauseHandler}>Plause audio</button>
-                <button onClick={onClickNextHandler}>Next audio</button>
+                <FontAwesomeIcon icon={faPlay} size="2x" color='white' onClick={onClickPlayHandler} />
+                <FontAwesomeIcon icon={faPause} size="2x" color='white' onClick={onClickPauseHandler} />
+                <FontAwesomeIcon icon={faForwardStep} size="2x" color='white' onClick={onClickNextHandler} />
                 <input type="range" min="0" max="100" defaultValue="0" step="1" ref={rangeRef} onChange={onChangeRangeHandler} />
                 <input type="range" min="0" max="100" step="1" ref={volumeRef} onChange={onChangeVolumeHandler} />
             </div>
