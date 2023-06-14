@@ -3759,7 +3759,6 @@ npm i web-audio-api-player --save-exact
 TODO: finish audio player ui
 TODO: fix problem that on mobile no sound plays until user interaction, the play for the animation needs to have a direct impact on the play of the player
 
-
 ## audio player for header animation
 
 either the files will be regular fetch requests or maybe use HLS
@@ -3770,6 +3769,35 @@ either the files will be regular fetch requests or maybe use HLS
 <https://caniuse.com/?search=hls>
 <https://www.npmjs.com/package/fluent-ffmpeg>
 <https://www.npmjs.com/package/hls.js/v/canary>
+
+## adding Icon pack (free fontawesome regular)
+
+this will add the fontawesome SVG icons core which is required for all versions of fontawesome:
+
+```shell
+npm i @fortawesome/fontawesome-svg-core --save-exact
+```
+
+then this is the "free regular" icons package:
+
+```shell
+npm i @fortawesome/free-regular-svg-icons --save-exact
+```
+
+you can check out which other styles they have and search for icons on the [dig deeper](https://fontawesome.com/v6/docs/web/dig-deeper/styles) page of their documentation
+
+and finally the fontawesome react component:
+
+```shell
+npm i @fortawesome/react-fontawesome --save-exact
+```
+
+Note: I read that their react component has support for react forwardRef, which is great as it might be useful in the future
+
+read more:
+
+[fontawesome add icons with react documentation](https://fontawesome.com/v6/docs/web/use-with/react/add-icons)
+
 
 ## TODOs
 

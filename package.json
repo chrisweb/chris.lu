@@ -24,6 +24,9 @@
   },
   "homepage": "https://github.com/chrisweb/chris.lu#readme",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "6.4.0",
+    "@fortawesome/free-regular-svg-icons": "6.4.0",
+    "@fortawesome/react-fontawesome": "0.2.0",
     "@next/mdx": "13.4.5",
     "@react-three/drei": "9.74.13",
     "@react-three/fiber": "8.13.3",
