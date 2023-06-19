@@ -1,0 +1,27 @@
+{
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ],
+    "compilerOptions": {
+        "declaration": true,
+        "emitDeclarationOnly": true,
+        "exactOptionalPropertyTypes": true,
+        "forceConsistentCasingInFileNames": true,
+        "lib": [
+            "ES2020"
+        ],
+        "module": "NodeNext",
+        "esModuleInterop": true,
+        "strict": true,
+        "target": "ESNext",
+        "jsx": "preserve",
+        "outDir": "./dist",
+        "moduleResolution": "nodenext",
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "strictPropertyInitialization": true
+    }
+}
