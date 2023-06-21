@@ -27,6 +27,7 @@
     "@fortawesome/fontawesome-svg-core": "6.4.0",
     "@fortawesome/free-solid-svg-icons": "6.4.0",
     "@fortawesome/react-fontawesome": "0.2.0",
+    "@mdx-js/loader": "2.3.0",
     "@next/mdx": "13.4.6",
     "@react-three/drei": "9.75.0",
     "@react-three/fiber": "8.13.3",
@@ -35,12 +36,12 @@
     "next": "13.4.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "mdast-util-to-string": "3.2.0",
-    "unist-util-visit": "4.1.2",
-    "remark-mdx-toc": "0.3.1",
+    "rehype-pretty-code": "0.9.9",
+    "remark-table-of-contents": "0.0.1",
     "shiki": "0.14.2",
     "synthwave-vscode": "github:robb0wen/synthwave-vscode",
     "three": "0.153.0",
+    "unified": "10.1.2",
     "web-audio-api-player": "4.0.2"
   },
   "devDependencies": {

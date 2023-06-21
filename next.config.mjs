@@ -7,8 +7,7 @@ import WithMDX from '@next/mdx'
 import rehypePrettyCode from 'rehype-pretty-code'
 import { readFileSync } from 'fs'
 import { jsonrepair } from 'jsonrepair'
-//import { remarkMdxToc } from 'remark-mdx-toc'
-//import remarkPluginToc from './remark/plugin/toc'
+import { remarkTableOfContents } from 'remark-table-of-contents'
 
 /*const ContentSecurityPolicy = `
   default-src 'self';
@@ -65,7 +64,7 @@ const nextConfig = (/*phase*/) => {
             // as the package is ESM only
             // https://github.com/remarkjs/remark-gfm#install
             // should I also use: remark-slug remark-autolink-headings ???
-            remarkPlugins: [/*remarkMdxToc*/],
+            remarkPlugins: [remarkTableOfContents],
             rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions]],
             // If you use `MDXProvider`, uncomment the following line.
             // providerImportSource: "@mdx-js/react",
