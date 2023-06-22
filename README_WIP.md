@@ -722,9 +722,7 @@ https://nextjs.org/docs/advanced-features/turbopack
 Question(s): is turbo also used for build command? I mean prod build, same as for dev?
 
 
-add mui to our project
 
-install mui but also the mui eslint plugin, then edit the eslint configuration to activate it
 
 
 add authentification using next-auth
@@ -2332,7 +2330,7 @@ also it should allow to set image height and width (next to the alt text) via a 
 
 ### ui / styling framework choice
 
-#### material ui
+#### mui (react material ui styled components) (evaluation)
 
 In my previous projects I have used [**material ui (mui)**](https://mui.com/material-ui/getting-started/overview/) which is a popular react UI framework, I have loved how quickly I could build interfaces and forms and how well documented the project is
 
@@ -2342,6 +2340,28 @@ Material ui uses the css-in-js library called [emotion](https://emotion.sh/docs/
 
 * [material ui ticket "Improve Next.js 13 support"](https://github.com/mui/material-ui/issues/34905)
 * [emotion ticket "Plans to support Next.js 13 - /app directory"](https://github.com/emotion-js/emotion/issues/2928)
+
+seems to have problems with **next.js 13**: <https://github.com/mui/material-ui/issues/34905>
+mostly because of CSS in JS <https://beta.nextjs.org/docs/styling/css-in-js> server side rendering (SRR) with **emotion**: <https://github.com/emotion-js/emotion/issues/2928>, the biggest problem seems to be if your app uses streaming of components
+
+so right now MUI is a problem, because of their style engine **emotion** which has trouble to create the css on runtime when using streaming
+
+a former contributor of emotion explains why they moved away from emotion to use sass modules (css modules + sass): <https://dev.to/srmagura/why-were-breaking-up-wiht-css-in-js-4g9b>
+
+mui is discussing adding a new engine: <https://github.com/mui/material-ui/issues/34826>
+the author of mui thinks static extration would be best, but static extraction got removed from emotion: <https://github.com/emotion-js/emotion/blob/main/docs/extract-static.mdx>
+static css extraction explained: <https://andreipfeiffer.dev/blog/2021/css-in-js-styles-output>
+
+using tailwind css would be a solution, as it doesn't have the problems that css-in-js libraries have and there is a mui documentation page about using tailwind, but this does not mean tailwind is replacing emotion as a peer dependency of mui, you just have it alongside mui: <https://mui.com/material-ui/guides/interoperability/#tailwind-css>
+
+here is a very long, but interesting article about what kind of css experiments the author of tailwind did before he created tailwind: <>
+
+why I'm not a tailwind fan because I don't like class composition, if I look at tailwind ui and I see that to style a button they add like 15 classes which you need to know exactly which one does what (so have a good understanding or each class) then this makes me feel like a team using this would not be hyper productive
+
+as the author of mui mentioned in a [comment](https://github.com/mui/material-ui/issues/34826#issuecomment-1284567364), mui needs a package that supports css static generation, to be able to move away from the emotion css in js generated at runtime (or emotion adds static css generation to their library, but as far I as I know the latest info I have is that they don't plan on adding static generation as a feature in emtion), the feature for static generation in mui got added to the list of TODOs in the [mui 6 discussion on github](https://github.com/mui/material-ui/issues/30660), one such css package which supports static generation and much more is [panda css](https://panda-css.com/), panda css is from the [chakra ui](https://chakra-ui.com/) team as you can see on the [panda css github repository](https://github.com/chakra-ui/panda) which is under the [chakra ui organisation](https://github.com/chakra-ui), so maybe chakra ui would be an alternative to mui today, because mui 6 is not going to be released anytime soon
+
+The PR with an [example of mui with nextjs 13 app directory](https://github.com/mui/material-ui/pull/37315) has been merged, but I did not check it out yet, questions I'm asking myself are the ones mentioned above, so is this client components only or also server components, does this solve the problems of runtime generated css in combination with streaming, does this mean we do not have to wait for a static genrated solution (mui 6) and can use this today? meaning this solution works today but static generation could still be an improvement in terms of loading speeds
+
 
 #### css modules (my current choice)
 
@@ -2544,24 +2564,7 @@ blitz is a framework on top of next.js, check out their login, sign up, lost pas
 
 
 
-## mui styling
 
-seems to have problems with **next.js 13**: <https://github.com/mui/material-ui/issues/34905>
-mostly because of CSS in JS <https://beta.nextjs.org/docs/styling/css-in-js> server side rendering (SRR) with **emotion**: <https://github.com/emotion-js/emotion/issues/2928>, the biggest problem seems to be if your app uses streaming of components
-
-so right now MUI is a problem, because of their style engine **emotion** which has trouble to create the css on runtime when using streaming
-
-a former contributor of emotion explains why they moved away from emotion to use sass modules (css modules + sass): <https://dev.to/srmagura/why-were-breaking-up-wiht-css-in-js-4g9b>
-
-mui is discussing adding a new engine: <https://github.com/mui/material-ui/issues/34826>
-the author of mui thinks static extration would be best, but static extraction got removed from emotion: <https://github.com/emotion-js/emotion/blob/main/docs/extract-static.mdx>
-static css extraction explained: <https://andreipfeiffer.dev/blog/2021/css-in-js-styles-output>
-
-using tailwind css would be a solution, as it doesn't have the problems that css-in-js libraries have and there is a mui documentation page about using tailwind, but this does not mean tailwind is replacing emotion as a peer dependency of mui, you just have it alongside mui: <https://mui.com/material-ui/guides/interoperability/#tailwind-css>
-
-here is a very long, but interesting article about what kind of css experiments the author of tailwind did before he created tailwind: <>
-
-why I'm not a tailwind fan: <>
 
 ## CSP (content security policy)
 
