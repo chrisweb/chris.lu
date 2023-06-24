@@ -64,7 +64,7 @@ const nextConfig = (/*phase*/) => {
             // as the package is ESM only
             // https://github.com/remarkjs/remark-gfm#install
             // should I also use: remark-slug remark-autolink-headings ???
-            remarkPlugins: [remarkTableOfContents],
+            remarkPlugins: [[remarkTableOfContents, { tight: true }]],
             rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions]],
             // If you use `MDXProvider`, uncomment the following line.
             // providerImportSource: "@mdx-js/react",

@@ -37,7 +37,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "rehype-pretty-code": "0.9.9",
-    "remark-table-of-contents": "0.0.1",
+    "remark-table-of-contents": "1.0.0",
     "shiki": "0.14.2",
     "synthwave-vscode": "github:robb0wen/synthwave-vscode",
     "three": "0.153.0",
