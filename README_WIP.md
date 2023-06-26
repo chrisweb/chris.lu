@@ -2297,14 +2297,43 @@ TODO: if code block titles for filenames are not supported out of the box by **r
 
 ## table of contents plugin
 
-[remark-toc](https://www.npmjs.com/package/remark-toc) is a remark plugin that takes all headers of a markdown document and turns them into a "table of contents" (TOC)
+we are going to add a plugin to automatically turn our headings (h1, h2, h3, h4, h5, h6 elements) into a table of contents for each of our mdx pages (articles)
 
-install the plugin using this command to install the **remark-toc** package:
+I tried out several remark and rehype toc plugins, none of which were suitable for my use case, I will still list them here maybe they are good for your use case and you want to use them, I will also explain a bit why I chose not to use them:
+
+[remark-toc](https://www.npmjs.com/package/remark-toc), I disliked that the only way to insert the toc was by placing a heading into the page, I did not what to have a heading over my toc as my toc will be placed aside the article, also this is a markdown plugin and when I placed the toc placeholder after some jsx it would not find the placeholder to insert the toc
+[remark-mdx-toc](https://www.npmjs.com/package/remark-mdx-toc), it will output the toc result, but as I want to use mdx pages as is and are not importing the mdx page into a typescript page where I can interact which the result of a plugin, this solution was not suitable for my use case
+[@jsdevtools/rehype-toc](https://www.npmjs.com/package/@jsdevtools/rehype-toc), this plugin is not a remark but a rehype plugin, which is not a problem, as long as it does why I need it to do, unfortunatly this plugin does not use a placeholder to let you decide where to place the toc, it only allows you to use configuration options to place the toc relative to the position of your body element or a main element in your document, both options did not work for me as I wanted my toc to be inside of an aside element that itself is inside of an article element
+
+I also checked out what solution that frameworks like [docusaurus](https://docusaurus.io/) and [gatsby](https://www.gatsbyjs.com/) use to create a table of contents (toc)
+
+As I wasn't able to find a plugin that was suitable for my use case, I decided it was time for me to learn how to create remark plugins and build one myself, my remark plugin is called [remark-table-of-contents](https://www.npmjs.com/package/remark-table-of-contents) and can be found on [npmjs.com](https://www.npmjs.com/), you can check out the source code in it's [repository on github](https://github.com/chrisweb/remark-table-of-contents), it is a remark plugin that takes all headers of a markdown document and turns them into a "table of contents" (TOC)
+
+install the plugin using this command to install the **remark-table-of-contents** package:
 
 ```shell
-npm i remark-toc --save-exact
+npm i remark-table-of-contents --save-exact
 ```
 
+then I added two more rehype plugins
+
+the first one is called [rehype-slug](https://www.npmjs.com/package/rehype-slug) and is used to add ids to headings, to install it use the following command:
+
+```shell
+npm i rehype-slug --save-exact
+```
+
+the second one is called [rehype-autolink-headings](https://www.npmjs.com/package/rehype-autolink-headings) and is used to add links from headings back to themselves, to install it use the following command:
+
+```shell
+npm i rehype-autolink-headings --save-exact
+```
+
+Note: the order in which you add those two plugins to your configuration matters, rehype-slug needs to come first because it adds IDs to the headings and then you can add rehype-autolink-headings which will use those IDs and turn the headings in autolinked headings
+
+TODO: improve next sentences to explain autolinking headings:
+this means that with some css we can now allow the user to click on the heading which then changes the URL in the browser so that when shared that URL will scroll down to the section
+it also improves accessibility because rehype-autolink-headings has headed aria tabindex users that use the keyboard can use the tab key to move quickly between sections
 
 
 ## use next/image

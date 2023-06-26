@@ -8,6 +8,8 @@ import rehypePrettyCode from 'rehype-pretty-code'
 import { readFileSync } from 'fs'
 import { jsonrepair } from 'jsonrepair'
 import { remarkTableOfContents } from 'remark-table-of-contents'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeSlug from 'rehype-slug'
 
 /*const ContentSecurityPolicy = `
   default-src 'self';
@@ -65,7 +67,7 @@ const nextConfig = (/*phase*/) => {
             // https://github.com/remarkjs/remark-gfm#install
             // should I also use: remark-slug remark-autolink-headings ???
             remarkPlugins: [[remarkTableOfContents, { tight: true }]],
-            rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions]],
+            rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings, [rehypePrettyCode, rehypePrettyCodeOptions]],
             // If you use `MDXProvider`, uncomment the following line.
             // providerImportSource: "@mdx-js/react",
         },
