@@ -1068,7 +1068,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 }
 ```
 
-and then in the root of the project create a directory called `types` and inside of it add a file called `` with the following content:
+Note: it is important you add the `mdx-components.tsx` to your project for MDX files to work in the app directory, if you don't add it you will get this error:
+
+> Module not found: Can't resolve 'next-mdx-import-source-file'
+
+Note: Also after adding this file or in the future after making changes to it, you always need to restart the dev server, as this is a configuration file like `next.config.mjs`
+
+(??? is this still needed, it is not in the nextjs documentation anymore) and then in the root of the project create a directory called `types` and inside of it add a file called `mdx.d.ts` with the following content:
 
 ```ts
 // types/mdx.d.ts
@@ -1077,12 +1083,6 @@ declare module '*.mdx' {
     export default MDXComponent
 }
 ```
-
-Note: it is important you add the `mdx-components.tsx` to your project for MDX files to work in the app directory, if you don't add it you will get this error:
-
-> TypeError: createContext only works in Client Components.
-
-Note: Also after adding this file or in the future after making changes to it, you always need to restart the dev server, as this is a configuration file like `next.config.mjs`
 
 #### option 1: multiple page.tsx files, one static route per article
 
