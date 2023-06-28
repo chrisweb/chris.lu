@@ -634,7 +634,7 @@ prior to next.js 13's release or if you worked previously with create react app 
 
 Note: putting a compenentX.tsx file into the `pages` directory would not be wise as next.js will consider every .tsx file to be a page
 
-if you use the new next.js 13 however, you can now put all your components into segment directories, this means you can put all your UI components and even your test files into the same directory as your page.tsx, only the page.tsx file will be handled as page by next.js and every other file except those that have reserved names like loading.tsx or error.tsx will be considered being custom components
+if you use the new next.js 13 however, you can now put all your components into segment directories, this means you can put all your UI components and even your test files into the same directory as your page.tsx, only the page.tsx file will be handled as page by next.js and every other file except those that have reserved names like loading.tsx or error.tsx will be considered being components
 
 so is a seperate components directory still needed and advisable or should you now get rid of the components directory and put all components into segment directories along with your page files?
 
@@ -975,13 +975,19 @@ now that the PR into the **main** branch is done, vercel will do a new productio
 
 the articles of our blog will be MDX files
 
-Note: MDX extends the [markdown](https://en.wikipedia.org/wiki/Markdown) markup language
-
-one of the great features of MDX is that it lets you integrate react components into your markdown
+MDX means [markdown](https://en.wikipedia.org/wiki/Markdown) + JSX, which means it can do everything markdown can but additionally you can use any react component in your markdown content as well, for example add a react component that is a comment section at the end of each article, or create a 3D animation using react three fiber and insert that react component in one of your articles, ...
 
 Note: I think that every time you have to decide what framework you will use for your next project or what package to use to solve a problem or build a new feature, it is important that you take some time and do several prototypes using the different options you have, after that it will be much easier to decide which one suits your use case best and this is what we are about to do here, we will experiment with 3 ways of rendering MDX content and after that it will be easier to chose which one suits our use case best
 
-you can chose between 3 ways of creating an **article page** that will display MDX content:
+In my examples I will focus on showing you how to handle MDX content in next.js but other frameworks have their own MDX integrations
+
+Note: when I talk about MDX here I always mean version 2 of MDX
+
+There are a lot of different MDX packages available for next.js, no matter if you use [@next/mdx](https://www.npmjs.com/package/@next/mdx), [next-mdx-remote](https://www.npmjs.com/package/next-mdx-remote) or [contentlayer](https://www.npmjs.com/package/contentlayer) by using the next.js specific package called [next-contentlayer](https://www.npmjs.com/package/next-contentlayer), they all have in common that they are based on [@mdx-js/mdx](https://www.npmjs.com/package/@mdx-js/mdx)
+
+Of course you don't need to use any of those packages, I recommended you do as they are well engineered and will save you a lot of time, but if for some reason you want to create your own solution then you can do this too, a little introduction to how to do that can be found in the **Deep Dive: How do you transform markdown into HTML?** section of the [next.js "Markdown and MDX" documentation](https://nextjs.org/docs/app/building-your-application/configuring/mdx#deep-dive-how-do-you-transform-markdown-into-html)
+
+I have created tutorials that show 3 different ways of creating an **article page** that will display MDX content:
 
 * [option 1](#option-1-multiple-pagetsx-files-one-static-route-per-article): multiple page.tsx files, one static route per article
 * [option 2](#option-2-multiple-pagemdx-files-one-static-route-per-article): multiple page.mdx files, one static route per article
@@ -992,8 +998,6 @@ you can chose between 3 ways of creating an **article page** that will display M
 Note: the prerequisites listed in this chapter are only for option 1 and 2, for option 3 we will use other packages and DON'T need the steps mentioned in this chapter
 
 to render our MDX content we will use the [next.js @next/mdx package](https://beta.nextjs.org/docs/guides/mdx)
-
-@next/mdx uses [remark](https://www.npmjs.com/package/remark) and [rehype](https://www.npmjs.com/package/rehype) under the hood, but if you prefer to use them without @next/mdx, check out the example called **Deep Dive: How do you transform markdown into HTML?** in the next.js ["Markdown and MDX" documentation](https://beta.nextjs.org/docs/guides/mdx)
 
 first we will add the `@next/mdx` package our next.js project, this package will add support for mdx files to our next.js project, execute the following command in your VSCode terminal:
 
@@ -1057,6 +1061,11 @@ add another file into the root of your project called `mdx-components.tsx` with 
 
 ```tsx
 import type { MDXComponents } from 'mdx/types'
+
+// This file allows you to provide custom React components
+// to be used in MDX files. You can import and use any
+// React component you want, including components from
+// other libraries.
 
 // This file is required to use MDX in `app` directory.
 export function useMDXComponents(components: MDXComponents): MDXComponents {
@@ -1230,25 +1239,7 @@ read more:
 
 * [@mdx-js/loader documentation](https://www.npmjs.com/package/@mdx-js/loader)
 
-#### using costum components (only for option 1 and 2 NOT 3)
 
-we are going to modify the `mdx-components.tsx` we created earlier, to add a simple custom component, which will just a simple ... 
-
-TODO: finish this chapter
-TODO: how to differentiate both, because there are two types of "custom components", defining them here in the config file, which are replacements for existing html tags and real custom react components you can just use in the mdx file as you would in a react component
-
-```tsx
-import type { MDXComponents } from 'mdx/types'
-
-// This file is required to use MDX in `app` directory.
-export function useMDXComponents(components: MDXComponents): MDXComponents {
-    return {
-        // Allows customizing built-in components, e.g. to add styling.
-        // h1: ({ children }) => <h1 style={{ fontSize: "100px" }}>{children}</h1>,
-        ...components,
-    }
-}
-```
 
 #### code box styling using components (only for option 1 and 2 NOT 3)
 
@@ -1416,15 +1407,6 @@ read more:
 * [opengraph protocol website](https://ogp.me/)
 * [online opengraph generator for some types](https://webcode.tools/generators/open-graph)
 * [next.js "metadata API" beta documentation](https://beta.nextjs.org/docs/api-reference/metadata)
-
-#### custom components inside of MDX files (only for option 1 and 2 NOT 3)
-
-
-
-read more:
-
-* [next.js 12 documentation "using components in mdx files"](https://nextjs.org/docs/advanced-features/using-mdx#using-components-layouts-and-custom-elements)
-
 
 #### option 3: one page.tsx file, one dynamic route segment for all articles
 
@@ -1701,51 +1683,7 @@ Read more:
 * [next.js generate static params documentation](https://beta.nextjs.org/docs/api-reference/generate-static-params)
 * [next.js "dynamicparams" segment configuration documentation](https://beta.nextjs.org/docs/api-reference/segment-config#dynamicparams)
 
-#### option 3: using costum components
 
-Note: in prerequisites for option 1 & 2 we had created a file called `mdx-components.tsx` to set up custom components, with **next-mdx-remote** this is done differently
-
-if you want to alter the way MDXRemote transforms MDX into HTML elements, you can use custom components to do so, here you will find a list of all HTML elements that can be replaced by a custom component: <https://mdxjs.com/table-of-components/>
-
-we are again going to edit `Article` function in the file `/app/articles/[slug]/page.tsx`:
-
-```tsx
-export default async function Article(props: IPageProps) {
-
-    const { params: { slug } } = props
-
-    const fileName = slug + '.mdx'
-
-    const directoryPath = dirname(fileURLToPath(import.meta.url))
-
-    const filePath = join(directoryPath, fileName)
-
-    const contentMDX = fs.readFileSync(filePath, 'utf8')
-
-    const mdxComponents = {
-        h1: (props: React.PropsWithChildren) => (
-            <h1 {...props} className="foo">
-                {props.children}
-            </h1>
-        ),
-    }
-
-    return (
-        <>
-            {/* @ts-expect-error Server Component */}
-            <MDXRemote source={contentMDX} components={mdxComponents} />
-        </>
-    )
-}
-```
-
-here we have created a simple custom component for **h1 headers** inside of an `mdxComponents` object, we tell it that for each h1 element we want to use our custom component, we then pass the `mdxComponents` object to the `MDXRemote` component, of course you can extend `mdxComponents` and add as much custom components as you wish to use to alter how your MDX will get rendered, you can of course also create external files for each component, import them and then use them in `mdxComponents`
-
-try it out for yourself, ensure the dev server is running and then in the browser navigate to <http://localhost:3000/articles/option3>, then use your browser developper tools inspect tool and you will see that the `<h1>` element now has a **class** attribute containing the value `foo`
-
-Read more:
-
-* [MDX HTML elements that can be replaced with custom components](https://mdxjs.com/table-of-components/)
 
 #### option 3: defer hydration when using MDXRemote
 
@@ -1980,20 +1918,14 @@ export const meta = {
 }
 ```
 
-TODO: a chapter where we create custom components to render our MDX, like a code block but also make use of the github mdx component
-TODO: a chapter about remark and rehype plugins
-
-* [list of rehype plugins](https://github.com/rehypejs/rehype/blob/main/doc/plugins.md#list-of-plugins)
-* [list of remark plugins](https://github.com/remarkjs/remark/blob/main/doc/plugins.md#list-of-plugins)
 
 
-we are now going to make the final version of our article page using option 3
 
-I like to make my types / interfaces to be reusable as much as possible, so first we are going to move the interface definition we have on top to an external file, create a new directory called 
+
+
+
 
 we had to create a utils/filesystem.ts that got used by generateStaticParams to tell next.js what the different articles URLs (route segments) are, for example when we do a production deployment or locally run `npm run build`, so that next.js can create a static page on build time for each article
-
-
 
 TODO: benchmark performance of the 3 options above, are there any differencies??? some use the examples above to do benchmarks, using a version deployed to vercel, to use a real prod build for testing / verification and not a local dev build as the dev build will not have the pre-built static versions of pages
 
@@ -2033,19 +1965,35 @@ TODO: add a layout file, to be used by all of the pages, so that every article h
 
 
 
-## adding custom react components to MDX pages
 
+## using plugins to extend MDX
 
+The two mains flawors of plugins supported by MDX are [remark](https://www.npmjs.com/package/remark) plugins and [rehype](https://www.npmjs.com/package/rehype) plugins
+
+the difference between the two is that:
+
+quote from the remark readme:
+
+> remark is a tool that transforms markdown with plugins. These plugins can inspect and change your markup
+
+quote from the rehype readme:
+
+> rehype is a tool that transforms HTML with plugins. These plugins can inspect and change the HTML
+
+read more:
+
+* [list of rehype plugins](https://github.com/rehypejs/rehype/blob/main/doc/plugins.md#list-of-plugins)
+* [list of remark plugins](https://github.com/remarkjs/remark/blob/main/doc/plugins.md#list-of-plugins)
 
 ## adding the remark "remark-gfm" plugin
 
-
-
 by adding the [remark "GitHub Flavored Markdown" (GFM) plugin](https://www.npmjs.com/package/remark-gfm) we extend the syntax features provided by the original markdown with the extensions (for autolink literals, footnotes, strikethrough, tables, tasklists) to markdown that you may know from github (for example when writing an issue or a discussion post on github)
 
-Note: if you use **remark-gfm** and if you haven't already transformed your next.config.js to a next.config.mjs (ESM version) you will need to do so now, because as mentioned in their [install instrcutions](https://github.com/remarkjs/remark-gfm#install) the **remark-gfm** package is ESM only
+Note: if you use **remark-gfm** and if you haven't already transformed your next.config.js to a next.config.mjs (ESM version) you will need to do so now, because as mentioned in their [install instrcutions](https://github.com/remarkjs/remark-gfm#install)
 
-first let's install the **rehype pretty code** package, by using this command:
+Note: the **remark-gfm** package is ESM only, meaning that (if you haven't already done so) you must convert your next.config.js to an ESM module by changing it's extension to next.config.mjs
+
+first let's install the **remark-gfm** package, by using this command:
 
 ```shell
 npm i remark-gfm --save-exact
@@ -2305,7 +2253,7 @@ I tried out several remark and rehype toc plugins, none of which were suitable f
 [remark-mdx-toc](https://www.npmjs.com/package/remark-mdx-toc), it will output the toc result, but as I want to use mdx pages as is and are not importing the mdx page into a typescript page where I can interact which the result of a plugin, this solution was not suitable for my use case
 [@jsdevtools/rehype-toc](https://www.npmjs.com/package/@jsdevtools/rehype-toc), this plugin is not a remark but a rehype plugin, which is not a problem, as long as it does why I need it to do, unfortunatly this plugin does not use a placeholder to let you decide where to place the toc, it only allows you to use configuration options to place the toc relative to the position of your body element or a main element in your document, both options did not work for me as I wanted my toc to be inside of an aside element that itself is inside of an article element
 
-I also checked out what solution that frameworks like [docusaurus](https://docusaurus.io/) and [gatsby](https://www.gatsbyjs.com/) use to create a table of contents (toc)
+I also checked out what solution that frameworks like [docusaurus](https://docusaurus.io/docs/next/markdown-features/toc) and [gatsby](https://www.gatsbyjs.com/plugins/gatsby-remark-table-of-contents/) use to create a table of contents (toc)
 
 As I wasn't able to find a plugin that was suitable for my use case, I decided it was time for me to learn how to create remark plugins and build one myself, my remark plugin is called [remark-table-of-contents](https://www.npmjs.com/package/remark-table-of-contents) and can be found on [npmjs.com](https://www.npmjs.com/), you can check out the source code in it's [repository on github](https://github.com/chrisweb/remark-table-of-contents), it is a remark plugin that takes all headers of a markdown document and turns them into a "table of contents" (TOC)
 
@@ -2335,14 +2283,114 @@ TODO: improve next sentences to explain autolinking headings:
 this means that with some css we can now allow the user to click on the heading which then changes the URL in the browser so that when shared that URL will scroll down to the section
 it also improves accessibility because rehype-autolink-headings has headed aria tabindex users that use the keyboard can use the tab key to move quickly between sections
 
+read more:
 
-## use next/image
+[unified documentation "creating a plugin with unified (remark / rehype plugins)"](https://unifiedjs.com/learn/guide/create-a-plugin/)
+
+### MDX custom components introduction
+
+in MDX every HTML-like tag is a JSX compoennt, so even a `<div>` or `<h1>` heading is a JSX component
+
+you can tell MDX to use one of your custom components for the HTML-like tags you use in your content, a list of which tags are supported can be found in the [MDX "table of components" documentation](https://mdxjs.com/table-of-components/)
+
+in a previous chapter we added the **remark GFM** plugin, if you did this in your project too, then there are even more HTML-like tags you can replace with custom components, the list is at the end of the [MDX "table of components" documentation](https://mdxjs.com/table-of-components/) page
+
+of course besides the HTML-like tags supported by MDX you can add any other custom tag you want to the custom components configuration and assign it any custom component you want
+
+#### custom components when using @next/mdx
+
+We are now going to explore what custom components are, MDX is markdown + JSX which means you can import any react (custom) component and then use it in your content
+
+with @next/mdx there are two ways of using custom components in MDX content:
+
+* the first one is to simply import a react component inside an mdx page, same as you would do in a typescript (javascript) page, this solution is good if you have a very specific component that you only want to use in one page, if you want to re-use a component over and over again (for example in all or most of your pages) than the second option is probably better
+* the second option is to use a file called `mdx-components.tsx` which needs to be at the root of your project, this means that if you want to use a component in every page it is best to add it to your `mdx-components.tsx` because then you will not have to import it in every page, just add your component to the mdx-components file and it will be available in every mdx page of your project
+
+Note: we already created the `mdx-components.tsx` earlier, because if you don't create it but run the dev server to compile an mdx page then next.js will complain the file is missing, in that file you specify which tags will get replaced by what components
+
+let's edit our `mdx-components.tsx` and change the code to this:
+
+```tsx
+import type { MDXComponents } from 'mdx/types'
+
+// This file is required to use MDX in `app` directory.
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+    return {
+        // Allows customizing built-in components, e.g. to add styling.
+        h1: (props) => (
+            <h1 className="foo" {...props}>
+                {props.children}
+            </h1>
+        ),
+        ...components,
+    }
+}
+```
+
+here we have created a simple custom component for **h1 headers**, now every h1 HTML-like tag that we will use in our MDX content will have a class called foo
+
+of course you can extend `MDXComponents` and add as much custom components as you wish to alter how your content will get rendered, you can of course also create external files for each component, import them and then use them in `MDXComponents`
+
+try it out for yourself, ensure the dev server is running and then in the browser navigate to <http://localhost:3000/articles/option3>, then use your browser developper tools inspect tool and you will see that the `<h1>` element now has a **class** attribute containing the value `foo`
+
+#### custom components when using next-mdx-remote
+
+Note: in next.js a file called `mdx-components.tsx` is being used to manage custom components in MDX content, when using **next-mdx-remote** however this is done creating an `mdxComponents` object and then passing it to the `MDXRemote` component
+
+we are again going to edit `Article` function in the file `/app/articles/[slug]/page.tsx`:
+
+```tsx
+export default async function Article(props: IPageProps) {
+
+    const { params: { slug } } = props
+
+    const fileName = slug + '.mdx'
+
+    const directoryPath = dirname(fileURLToPath(import.meta.url))
+
+    const filePath = join(directoryPath, fileName)
+
+    const contentMDX = fs.readFileSync(filePath, 'utf8')
+
+    const mdxComponents = {
+        h1: (props: React.PropsWithChildren) => (
+            <h1 className="foo" {...props} >
+                {props.children}
+            </h1>
+        ),
+    }
+
+    return (
+        <>
+            {/* @ts-expect-error Server Component */}
+            <MDXRemote source={contentMDX} components={mdxComponents} />
+        </>
+    )
+}
+```
+
+here we have created a simple custom component for **h1 headers** inside of an `mdxComponents` object, now every h1 HTML-like tag that we will use in our MDX content will have a class called foo
+
+we then pass the `mdxComponents` object to the `MDXRemote` component
+
+of course you can extend `mdxComponents` and add as much custom components as you wish to alter how your content will get rendered, you can of course also create external files for each component, import them and then use them in `mdxComponents`
+
+try it out for yourself, ensure the dev server is running and then in the browser navigate to <http://localhost:3000/articles/option3>, then use your browser developper tools inspect tool and you will see that the `<h1>` element now has a **class** attribute containing the value `foo`
+
+Read more:
+
+* [MDX HTML elements that can be replaced with custom components](https://mdxjs.com/table-of-components/)
+
+## custom component for images using next/image
 
 a plugin (or via custom component) that allows you to use next/image for images
 
 also it should allow to set image height and width (next to the alt text) via a markdown style image, instead of having to use the html img element
 
 <https://www.codeconcisely.com/posts/nextjs-image-in-markdown/>
+
+
+
 
 ## MDX VSCode plugin
 

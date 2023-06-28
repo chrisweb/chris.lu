@@ -67,7 +67,7 @@ const nextConfig = (/*phase*/) => {
             // https://github.com/remarkjs/remark-gfm#install
             // should I also use: remark-slug remark-autolink-headings ???
             remarkPlugins: [[remarkTableOfContents, { tight: true }]],
-            rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings, [rehypePrettyCode, rehypePrettyCodeOptions]],
+            rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions], rehypeSlug, rehypeAutolinkHeadings],
             // If you use `MDXProvider`, uncomment the following line.
             // providerImportSource: "@mdx-js/react",
         },
