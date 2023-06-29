@@ -1,14 +1,15 @@
+interface IProps {
+    children?: React.ReactNode
+}
 
-/*interface IProps {
-    
-}*/
-
-const Test: React.FC<unknown> = (props) => {
+const Test: React.FC<IProps> = (props): JSX.Element => {
 
     console.log(props)
 
     return (
-        <></>
+        <>
+            <p>{props.children}</p>
+        </>
     )
 }
 

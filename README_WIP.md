@@ -27,11 +27,11 @@ Note: this series of articles will focues on the new `app` directory and server 
 
 recap of the 1st and 2nd generation of data fetching in next.js:
 
-* first there was `getInitialProps`, with getInitialProps the first page would render on the server and so getInitialProps would be called on the server, then if visiting another page using next/link or next/router that page would get build in the client, so any code in getInitialProps would get executed on the client side, this meant that you had to be aware if you were currently on the server and could use server side code to make a direct data fetch call to the database or if you were in the client and hence fetch the data via an ajax call to an API endpoint you would also need to code, besides that it was also important to be careful about how and what packages you were importing as you might use a package when getInitialProps is executed on the server but then that code would also be bundled into the client to be imported too when getInitialProps runs in the client, to avoid that you would need to exclude packages from the client by either using dynamic imports encapsulated into conditions that check if the code is being executed on the server or client or by using plugins that exclude those "server only" packages at build time. read more: [next.js getInitialProps documentation](https://nextjs.org/docs/api-reference/data-fetching/get-initial-props)
-* the newer `getServerSideProps` (which first appeared in march 2020 with [Next.js 9.3](https://nextjs.org/blog/next-9-3)) and is an async function that fetches the data and populates the props object of your page function and works differently then getInitialProps, same as with getInitialProps for the first page the code gets executed on the server and the data is being returned directly to the code of the page, but if you visit a second page getInitialProps will again get executed on the server and the data it returns will get sent as JSON to the client where again it gets used by the page code, this means using getServerSideProps instead of getInitialProps eliminated two pain points, first you did not have to care about your imports anymore as next.js would exclude those packages for you from client code automatically and the second one being that you did not have to create an API for client side data fetching anymore as next.js would go and call getServerSideProps on the server and then fetch the data as JSON for you. read more: [next.js getServerSideProps documentation](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props)
-* `getStaticProps` appeared alongside getServerSideProps, the difference between the two is that getServerSideProps disables ["Automatic Static Optimization"](https://nextjs.org/docs/advanced-features/automatic-static-optimization) but getStaticProps does not, getStaticProps it is a method that you would use to fetch data not at "runtime" but at "build time", so when a user visits a page no data call is being made, all data got already fetched at build time (and the page props have been put in a static json file), which means for any request being made by a user your data won't change, this can be very interesting to build pages that load super fast as they use data that does not change between two builds, however getStaticProps has a feature so that you can "revalidate" data in the background, this is what gets used by "[Incremental Static Regeneration](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)" and allows you to update the static data you got at build time. read more: [next.js getStaticProps documentation](https://nextjs.org/docs/basic-features/data-fetching/get-static-props)
+* first there was `getInitialProps`, with **getInitialProps** the first page would render on the server and so getInitialProps would be called on the server, then if visiting another page using next/link or next/router that page would get build in the client, so any code in getInitialProps would get executed on the client side, this meant that you had to be aware if you were currently on the server and could use server side code to make a direct data fetch call to the database or if you were in the client and hence fetch the data via an ajax call to an API endpoint you would also need to code, besides that it was also important to be careful about how and what packages you were importing as you might use a package when getInitialProps is executed on the server but then that code would also be bundled into the client to be imported too when getInitialProps runs in the client, to avoid that you would need to exclude packages from the client by either using dynamic imports encapsulated into conditions that check if the code is being executed on the server or client or by using plugins that exclude those "server only" packages at build time. read more: [next.js getInitialProps documentation](https://nextjs.org/docs/pages/api-reference/functions/get-initial-props)
+* the newer `getServerSideProps` (which first appeared in march 2020 with [Next.js 9.3](https://nextjs.org/blog/next-9-3)) and is an async function that fetches the data and populates the props object of your page function and works differently then getInitialProps, same as with getInitialProps for the first page the code gets executed on the server and the data is being returned directly to the code of the page, but if you visit a second page getInitialProps will again get executed on the server and the data it returns will get sent as JSON to the client where again it gets used by the page code, this means using getServerSideProps instead of getInitialProps eliminated two pain points, first you did not have to care about your imports anymore as next.js would exclude those packages for you from client code automatically and the second one being that you did not have to create an API for client side data fetching anymore as next.js would go and call getServerSideProps on the server and then fetch the data as JSON for you. read more: [next.js getServerSideProps documentation](https://nextjs.org/docs/pages/building-your-application/data-fetching/get-server-side-props)
+* `getStaticProps` appeared alongside getServerSideProps, the difference between the two is that getServerSideProps disables ["Automatic Static Optimization"](https://nextjs.org/docs/pages/building-your-application/rendering/automatic-static-optimization) but getStaticProps does not, getStaticProps it is a method that you would use to fetch data not at "runtime" but at "build time", so when a user visits a page no data call is being made, all data got already fetched at build time (and the page props have been put in a static json file), which means for any request being made by a user your data won't change, this can be very interesting to build pages that load super fast as they use data that does not change between two builds, however getStaticProps has a feature so that you can "revalidate" data in the background, this is what gets used by "[Incremental Static Regeneration](https://nextjs.org/docs/pages/building-your-application/data-fetching/incremental-static-regeneration)" and allows you to update the static data you got at build time. read more: [next.js getStaticProps documentation](https://nextjs.org/docs/pages/building-your-application/data-fetching/get-static-props)
 
-in october 2022 the next.js team released [Next.js 13](https://nextjs.org/blog/next-13) which included the first version of the new `app` directory and two months later in december [Next.js 13.1](https://nextjs.org/blog/next-13-1)
+in october 2022 the next.js team released [Next.js 13](https://nextjs.org/blog/next-13) which included the first version of the new `app` directory and two months later in december 2022 [Next.js 13.1](https://nextjs.org/blog/next-13-1) which brought a lot of improvements for the new app directory but also for middlewares and next.js memory consumption, then in february 2023 we got [Next.js 13.2](https://nextjs.org/blog/next-13-2) which brought the new Metadata API for built SEO support and MDX support, in april 2023 we got [Next.js 13.3](https://nextjs.org/blog/next-13-3) which brought improvements for SEO tools like the [Metadata Files API](https://nextjs.org/docs/app/api-reference/file-conventions/metadata) and automatically generated OpenGraph Images, in may 203 we got [Next.js 13.4](https://nextjs.org/blog/next-13-4) which was the first version of next.js 13 version in which the **App Router** is considered being **stable** (meaning it has left beta)
 
 ## image(s) manipulation
 
@@ -985,6 +985,8 @@ Note: when I talk about MDX here I always mean version 2 of MDX
 
 There are a lot of different MDX packages available for next.js, no matter if you use [@next/mdx](https://www.npmjs.com/package/@next/mdx), [next-mdx-remote](https://www.npmjs.com/package/next-mdx-remote) or [contentlayer](https://www.npmjs.com/package/contentlayer) by using the next.js specific package called [next-contentlayer](https://www.npmjs.com/package/next-contentlayer), they all have in common that they are based on [@mdx-js/mdx](https://www.npmjs.com/package/@mdx-js/mdx)
 
+Other frameworks have MDX packages too, for example Astro has [@astrojs/mdx](https://github.com/withastro/astro/tree/main/packages/integrations/mdx/) and Remix devs often use [mdx-bundler](https://www.npmjs.com/package/mdx-bundler) and Gatsby has [gatsby-plugin-mdx](https://www.npmjs.com/package/gatsby-plugin-mdx)
+
 Of course you don't need to use any of those packages, I recommended you do as they are well engineered and will save you a lot of time, but if for some reason you want to create your own solution then you can do this too, a little introduction to how to do that can be found in the **Deep Dive: How do you transform markdown into HTML?** section of the [next.js "Markdown and MDX" documentation](https://nextjs.org/docs/app/building-your-application/configuring/mdx#deep-dive-how-do-you-transform-markdown-into-html)
 
 I have created tutorials that show 3 different ways of creating an **article page** that will display MDX content:
@@ -1068,7 +1070,7 @@ import type { MDXComponents } from 'mdx/types'
 // other libraries.
 
 // This file is required to use MDX in `app` directory.
-export function useMDXComponents(components: MDXComponents): MDXComponents {
+export function useMDXComponents(components: MDXComponents) {
     return {
         // Allows customizing built-in components, e.g. to add styling.
         // h1: ({ children }) => <h1 style={{ fontSize: "100px" }}>{children}</h1>,
@@ -1980,6 +1982,12 @@ quote from the rehype readme:
 
 > rehype is a tool that transforms HTML with plugins. These plugins can inspect and change the HTML
 
+this means that **remark** plugins will transform your markdown (mdx) before it gets compiled into HTML, while **rehype** plugins will transform the compiled HTML before it gets rendered in the browser
+
+you will sometimes find plugins for **remark** and  that do the same thing, for example a plugin that would make a table of contents by listing all headings in your content, if it is a **remark** plugin it would search for headings `# foo`, `## bar`, `### baz`, while a similar **rehype** plugin would look for headings `<h1>foo</h1>`, `<h2>bar</h2>`, `<h3>baz</h3>`
+
+Note: not all **remark** plugins will work with MDX, because MDX is not just markdown, for example one difference is that HTML tags in markdown are just HTML, but in MDX they are not HTML, they look like HTML but are actually JSX, this means that if the remark plugin finds for example a `<div>` tag and the content is markdown then the type will be 'html', if however the content is MDX then the type would be 'mdxJsxFlowElement'
+
 read more:
 
 * [list of rehype plugins](https://github.com/rehypejs/rehype/blob/main/doc/plugins.md#list-of-plugins)
@@ -2293,9 +2301,45 @@ in MDX every HTML-like tag is a JSX compoennt, so even a `<div>` or `<h1>` headi
 
 you can tell MDX to use one of your custom components for the HTML-like tags you use in your content, a list of which tags are supported can be found in the [MDX "table of components" documentation](https://mdxjs.com/table-of-components/)
 
+here is the quick example of a custom components for all our h1 elements (more on this in the following chapter(s)):
+
+```tsx
+    const mdxComponents = {
+        h1: (props) => (
+            <h1 className="foo" {...props}>
+                {props.children}
+            </h1>
+        ),
+    }
+```
+
 in a previous chapter we added the **remark GFM** plugin, if you did this in your project too, then there are even more HTML-like tags you can replace with custom components, the list is at the end of the [MDX "table of components" documentation](https://mdxjs.com/table-of-components/) page
 
-of course besides the HTML-like tags supported by MDX you can add any other custom tag you want to the custom components configuration and assign it any custom component you want
+of course besides the HTML-like tags supported by MDX (or remark GFM) you can add any other custom tag you want to the custom components configuration and assign it any custom component you want
+
+```tsx
+    import type { MyComponent } from 'components/MyComponent'
+
+    const mdxComponents = {
+        MyComponent: MyComponent
+    }
+```
+
+or you can use a variant of the previous example called [shortcodes](https://mdxjs.com/blog/shortcodes/), the difference is that you don't assign your component to a tag, but just import the component, add it to the custom components object and then you use it as is in your content
+
+```tsx
+    import type { MyComponent } from 'components/MyComponent'
+
+    const mdxComponents = {
+        MyComponent
+    }
+```
+
+and then in your MDX content you use it like this:
+
+```md
+    <MyComponent />
+```
 
 #### custom components when using @next/mdx
 
@@ -2314,7 +2358,7 @@ let's edit our `mdx-components.tsx` and change the code to this:
 import type { MDXComponents } from 'mdx/types'
 
 // This file is required to use MDX in `app` directory.
-export function useMDXComponents(components: MDXComponents): MDXComponents {
+export function useMDXComponents(components: MDXComponents) {
     return {
         // Allows customizing built-in components, e.g. to add styling.
         h1: (props) => (
@@ -2381,7 +2425,44 @@ Read more:
 
 * [MDX HTML elements that can be replaced with custom components](https://mdxjs.com/table-of-components/)
 
-## custom component for images using next/image
+#### custom component to highlight the currently active heading in the table of contents
+
+In a previous post we added a remark plugin that generates a toc, now we are going to create a custom component that will use the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) to check which heading is currently visible in our viewport (screen) and then mark it as active in the table of contents
+
+First add an observer to our headings we will create a custom react hook at `hooks/useObserver.tsx`, with the following code:
+
+```tsx
+useEffect(() => {
+  const handleObsever = (entries) => {
+    entries.forEach((entry) => {
+      if (entry?.isIntersecting) {
+        setActiveId(entry.target.id)
+      }
+    })
+  }
+
+  observer.current = new IntersectionObserver(handleObsever, {
+    rootMargin: "-20% 0% -35% 0px"}
+  )
+
+  const elements = document.querySelectorAll("h2, h3", "h4")
+  elements.forEach((elem) => observer.current.observe(elem))
+  return () => observer.current?.disconnect()
+}, [])
+```
+
+now that we have our custom hook lets create our custom component at `hooks/useObserver.ts`, with the following code:
+
+```tsx
+
+```
+
+read more:
+
+* [react "custom hooks" documentation](https://react.dev/learn/reusing-logic-with-custom-hooks)
+
+
+#### custom component for images using next/image
 
 a plugin (or via custom component) that allows you to use next/image for images
 
@@ -2452,7 +2533,7 @@ if you prefer to use something else than css modules, here is a comparison of so
 
 read more:
 
-* [next.js 13 "css-in-js" beta documentation](https://beta.nextjs.org/docs/styling/css-in-js)
+* [next.js 13 "css-in-js" beta documentation](https://nextjs.org/docs/app/building-your-application/styling/css-in-js)
 
 
 #### global styles
