@@ -118,6 +118,10 @@ h6 {
     font-weight: var(--main-fontWeight-big);
     line-height: var(--main-lineHeight-big);
     margin: 0 0 0.35em 0;
+    /* add a scroll margin because of the top navbar */
+    /* fixes the scrollIntoView position */
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-margin-top */
+    scroll-margin-top: 60px;
 }
 
 p {
@@ -218,6 +222,7 @@ progress {
 
 pre {
     padding: calc(var(--main-spacing) / 2);
+    margin: var(--main-spacing) 0;
 }
 
 /* recommended by https://rehype-pretty-code.netlify.app/ */
@@ -252,4 +257,9 @@ code[data-line-numbers-max-digits='3']>.line::before {
 .alignRight {
     text-align: right;
     width: 100%;
+}
+
+.sticky {
+    position: -webkit-sticky;
+    position: sticky
 }
