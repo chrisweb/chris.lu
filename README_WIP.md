@@ -1070,7 +1070,7 @@ import type { MDXComponents } from 'mdx/types'
 // other libraries.
 
 // This file is required to use MDX in `app` directory.
-export function useMDXComponents(components: MDXComponents) {
+export function useMDXComponents(components: MDXComponents): MDXComponents {
     return {
         // Allows customizing built-in components, e.g. to add styling.
         // h1: ({ children }) => <h1 style={{ fontSize: "100px" }}>{children}</h1>,
@@ -2315,6 +2315,8 @@ here is the quick example of a custom components for all our h1 elements (more o
 
 in a previous chapter we added the **remark GFM** plugin, if you did this in your project too, then there are even more HTML-like tags you can replace with custom components, the list is at the end of the [MDX "table of components" documentation](https://mdxjs.com/table-of-components/) page
 
+TODO: need to verify if the next example even works
+
 of course besides the HTML-like tags supported by MDX (or remark GFM) you can add any other custom tag you want to the custom components configuration and assign it any custom component you want
 
 ```tsx
@@ -2340,6 +2342,59 @@ and then in your MDX content you use it like this:
 ```md
     <MyComponent />
 ```
+
+TODO: hmmmm I have a problem, if I create a simple test component:
+
+```tsx
+interface IProps {
+    children?: React.ReactNode
+}
+
+const Test: React.FC<IProps> = (props): JSX.Element => {
+
+    console.log(props)
+
+    return (
+        <>
+            <p>{props.children}</p>
+        </>
+    )
+}
+
+export default Test
+```
+
+and then add it to the mdxComponents as shortcode:
+
+```tsx
+import Test from './components/test/Test'
+
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+    return {
+        // Allows customizing built-in components, e.g. to add styling.
+        Test,
+        ...components,
+    }
+}
+```
+
+then I have a type error:
+
+```shell
+Type 'FC<IProps>' is not assignable to type 'NestedMDXComponents | Component<any>'.
+  Type 'FunctionComponent<IProps>' is not assignable to type 'FunctionComponent<any>'.
+    Type 'ReactNode' is not assignable to type 'Element'.
+      Type 'string' is not assignable to type 'ReactElement<any, any>'.ts(2322)
+types.d.ts(11, 5): The expected type comes from this index signature.
+```
+
+removing the return type for useMDXComponents is the only solution I found so far (but it is obviously not a real solution)
+
+```tsx
+export function useMDXComponents(components: MDXComponents) {
+```
+
+TODO: need to investigate why React.FC and MDXComponents seem to be incompatible
 
 #### custom components when using @next/mdx
 
@@ -2464,12 +2519,23 @@ read more:
 
 #### custom component for images using next/image
 
-a plugin (or via custom component) that allows you to use next/image for images
+a plugin (or via custom component) that allows you to use [next/image](https://nextjs.org/docs/app/api-reference/components/image) for images
 
 also it should allow to set image height and width (next to the alt text) via a markdown style image, instead of having to use the html img element
 
 <https://www.codeconcisely.com/posts/nextjs-image-in-markdown/>
 
+read more:
+
+* [next.js "next/image" documentation](https://nextjs.org/docs/app/api-reference/components/image)
+
+#### custom component for links using next/link
+
+
+
+read more:
+
+* [next.js "next/link" documentation](https://nextjs.org/docs/app/api-reference/components/link)
 
 
 

@@ -7,9 +7,11 @@ export function useObserver(elementsToObserve: string, rootMargin: string) {
 
     useEffect(() => {
 
-        const handleObsever = (entries) => {
+        const handleObsever = (entries: IntersectionObserverEntry[]) => {
+
             entries.forEach((entry) => {
                 if (entry?.isIntersecting) {
+                    
                     setActiveIdState(entry.target.id)
                 }
             })
@@ -28,7 +30,7 @@ export function useObserver(elementsToObserve: string, rootMargin: string) {
         return () => {
             observerRef.current?.disconnect()
         }
-    }, [elementsToObserve])
+    }, [elementsToObserve, rootMargin])
 
     return { activeIdState }
 

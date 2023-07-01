@@ -59,6 +59,13 @@ const nextConfig = (/*phase*/) => {
         },
     }
 
+    const remarkTableOfContentsOptions = {
+        tight: true,
+        containerAttributes: {
+            id: 'tocContainer'
+        }
+    }
+
     const withMDX = WithMDX({
         extension: /\.mdx?$/,
         options: {
@@ -66,7 +73,7 @@ const nextConfig = (/*phase*/) => {
             // as the package is ESM only
             // https://github.com/remarkjs/remark-gfm#install
             // should I also use: remark-slug remark-autolink-headings ???
-            remarkPlugins: [[remarkTableOfContents, { tight: true }]],
+            remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions]],
             rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions], rehypeSlug, rehypeAutolinkHeadings],
             // If you use `MDXProvider`, uncomment the following line.
             // providerImportSource: "@mdx-js/react",
