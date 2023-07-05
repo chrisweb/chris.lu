@@ -44,11 +44,11 @@ const onClickLinkHandler = (event: MouseEvent<HTMLAnchorElement>) => {
     const targetId = targetUrl.slice(targetUrl.indexOf('#'))
     const heading = document.querySelector(targetId)
 
-    setTimeout(() => {
+    if (heading) {
         heading.scrollIntoView({
             behavior: 'smooth',
         })
-    }, 1)
+    }
 }
 
 const findAndTransformRows = (children: ReactNode, activeIdState: string, level = 0): ReactNode => {
