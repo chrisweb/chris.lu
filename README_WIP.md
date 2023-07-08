@@ -971,17 +971,54 @@ now that the PR into the **main** branch is done, vercel will do a new productio
 
 ## articles (pages) using MDX (@next/mdx)
 
-### introduction
+### what is MDX (behind the scenes)
 
-the articles of our blog will be MDX files
+[markdown](https://en.wikipedia.org/wiki/Markdown) is a markup language that can be used to format raw text, it was developed in 2004 by John Gruber in collaboration with Aaron Swartz, [MDX](https://mdxjs.com/) is an extension of **markdown**, MDX means [markdown](https://daringfireball.net/projects/markdown/syntax) + [JSX](https://react.dev/learn/writing-markup-with-jsx)
 
-MDX means [markdown](https://en.wikipedia.org/wiki/Markdown) + JSX, which means it can do everything markdown can but additionally you can use any react component in your markdown content as well, for example add a react component that is a comment section at the end of each article, or create a 3D animation using react three fiber and insert that react component in one of your articles, ...
+MDX supports all markdown formatting elements that are also supported markdown and even more formatting elements are available if you use plugins that add new elements like for example [GFM (github flavored markdown)](https://github.github.com/gfm/) plugins
+
+The big difference between **markdown** and **MDX**, is that **MDX** allows you to use [JSX](https://react.dev/learn/writing-markup-with-jsx) in your **markdown** content, meaning you can import and add JSX components (in our case React components) in your MDX content, for example add a react component that is a comment section at the end of each article, or create a 3D animation using react three fiber and insert that react component in one of your articles, ...
+
+Note: when I mention MDX in the following pages, I'm referring to MDX 2 the current version of MDX being implemented / used everywhere
+
+All transformations happen thanks to utilities built on top of [unified](https://unifiedjs.com/), it is the core project used to transforms content with ASTs, the [unified github repository](https://github.com/unifiedjs/unified) gives us the following description:
+
+> unified is an interface for parsing, inspecting, transforming, and serializing content through syntax trees
+
+The specifications are all managed by the [syntax-tree organisation on github](https://github.com/syntax-tree) which is part of the **unified** collective, this is the home for several **syntax tree** specifications, the base syntax tree is called [unist](https://github.com/syntax-tree/unist), **unist** is a universal syntax tree specification, it is part of the family of syntax trees called **Abstract Syntax Trees**s hence the abreviation **AST**s, on top of unist you have the other syntax trees that we are interested in, the first one is called [MDAST](https://github.com/syntax-tree/mdast) this is the specification that represents markdown in a syntax tree and the second one is called [HAST](https://github.com/syntax-tree/hast) which is the specification that represents HTML in a syntax tree, but because we use MDX and not pure markdown, the two systax trees **MDAST** and **HAST** have supersets, the superset of **MDAST** is called [MDXAST](https://github.com/mdx-js/specification#mdxast) and the superset of **HAST** is called [MDXHAST](https://github.com/mdx-js/specification#mdxhast)
+
+**MDAST** and **HAST** are the syntax tree specifications, but the actual tools are [remnark](https://github.com/remarkjs/remark) which is a tool that transforms markdown with plugins and [rehype](https://github.com/rehypejs/rehype) which is a tool that transforms HTML with plugins
+
+MDX supports both **remark** and **rehype** plugins, more about plugins in the ["using plugins to extend MDX" chapter](#using-plugins-to-extend-mdx)
+
+Note: if you want to experiment with MDX content there is a great tool called [MDX playground](https://mdx-git-renovate-babel-monorepo-mdx.vercel.app/playground/), you can experiment with MDX content and it will help you visualize how MDX content gets 
+transformed from MDAST (markdown AST) to HAST (HTML AST) to JSX
+
+read more:
+
+* [markdown website by its author John Gruber (aka daringfireball)](https://daringfireball.net/projects/markdown/syntax)
+* [MDX website](https://mdxjs.com/)
+* [markdown wikipedia page](https://en.wikipedia.org/wiki/Markdown)
+* [react.dev "Writing Markup with JSX" documentation](https://react.dev/learn/writing-markup-with-jsx)
+* [GFM (GitHub Flavored Markdown) specification](https://github.github.com/gfm/)
+* [unified (js) website](https://unifiedjs.com/)
+* [unified github repository](https://github.com/unifiedjs/unified)
+* [syntax-tree organisation on github](https://github.com/syntax-tree)
+* [unist specification github repository](https://github.com/syntax-tree/unist)
+* [MDAST specification github repository](https://github.com/syntax-tree/mdast)
+* [HAST specification github repository](https://github.com/syntax-tree/hast)
+* [MDX specification (mdx-js) github repository](https://github.com/mdx-js/specification)
+* [MDXAST chapter in the mdx-js specification](https://github.com/mdx-js/specification#mdxast)
+* [MDXHAST chapter in the mdx-js specification](https://github.com/mdx-js/specification#mdxhast)
+* [remnark github repository](https://github.com/remarkjs/remark)
+* [rehype github repository](https://github.com/rehypejs/rehype)
+* [MDX playground](https://mdx-git-renovate-babel-monorepo-mdx.vercel.app/playground/)
+
+### MDX packages
 
 Note: I think that every time you have to decide what framework you will use for your next project or what package to use to solve a problem or build a new feature, it is important that you take some time and do several prototypes using the different options you have, after that it will be much easier to decide which one suits your use case best and this is what we are about to do here, we will experiment with 3 ways of rendering MDX content and after that it will be easier to chose which one suits our use case best
 
 In my examples I will focus on showing you how to handle MDX content in next.js but other frameworks have their own MDX integrations
-
-Note: when I talk about MDX here I always mean version 2 of MDX
 
 There are a lot of different MDX packages available for next.js, no matter if you use [@next/mdx](https://www.npmjs.com/package/@next/mdx), [next-mdx-remote](https://www.npmjs.com/package/next-mdx-remote) or [contentlayer](https://www.npmjs.com/package/contentlayer) by using the next.js specific package called [next-contentlayer](https://www.npmjs.com/package/next-contentlayer), they all have in common that they are based on [@mdx-js/mdx](https://www.npmjs.com/package/@mdx-js/mdx)
 
