@@ -991,8 +991,7 @@ The specifications are all managed by the [syntax-tree organisation on github](h
 
 MDX supports both **remark** and **rehype** plugins, more about plugins in the ["using plugins to extend MDX" chapter](#using-plugins-to-extend-mdx)
 
-Note: if you want to experiment with MDX content there is a great tool called [MDX playground](https://mdx-git-renovate-babel-monorepo-mdx.vercel.app/playground/), you can experiment with MDX content and it will help you visualize how MDX content gets 
-transformed from MDAST (markdown AST) to HAST (HTML AST) to JSX
+Note: if you want to experiment with MDX content there is a great tool called [MDX playground](https://mdxjs.com/playground/), you can experiment with MDX content and it will help you visualize how MDX content gets transformed from MDAST (markdown AST) to HAST (HTML AST) to ESAST (javascript / JSX)
 
 read more:
 
@@ -1012,7 +1011,7 @@ read more:
 * [MDXHAST chapter in the mdx-js specification](https://github.com/mdx-js/specification#mdxhast)
 * [remnark github repository](https://github.com/remarkjs/remark)
 * [rehype github repository](https://github.com/rehypejs/rehype)
-* [MDX playground](https://mdx-git-renovate-babel-monorepo-mdx.vercel.app/playground/)
+* [MDX playground](https://mdxjs.com/playground/)
 
 ### MDX packages
 
