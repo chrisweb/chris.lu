@@ -1,36 +1,39 @@
 module.exports = {
-    'env': {
-        'browser': true,
-        'es2021': true,
-        'node': true
+    env: {
+        browser: true,
+        es2021: true,
+        node: true,
     },
-    'extends': [
+    extends: [
         'eslint:recommended',
         'plugin:react/recommended',
         'plugin:@typescript-eslint/recommended',
         'next/core-web-vitals',
     ],
-    'overrides': [
+    overrides: [
     ],
-    'parser': '@typescript-eslint/parser',
-    'parserOptions': {
-        'ecmaVersion': 'latest',
-        'sourceType': 'module'
+    parser: '@typescript-eslint/parser',
+    parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
     },
-    'plugins': [
+    plugins: [
         'react',
-        '@typescript-eslint'
+        '@typescript-eslint',
     ],
-    'rules': {
-        /*'indent': [
+    root: true,
+    rules: {
+        // Indentation BUG: https://github.com/eslint/eslint/issues/16385
+        /*
+        indent: [
             'error',
             4,
         ],*/
-        'quotes': [
+        quotes: [
             'error',
             'single',
         ],
-        'semi': [
+        semi: [
             'error',
             'never',
         ],
@@ -39,11 +42,11 @@ module.exports = {
             {
                 'selector': 'interface',
                 'format': [
-                    'PascalCase'
+                    'PascalCase',
                 ],
                 'custom': {
                     'regex': '^I[A-Z]',
-                    'match': true
+                    'match': true,
                 },
             }
         ],
