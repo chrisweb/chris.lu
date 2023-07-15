@@ -21,7 +21,7 @@ const Button: React.FC<IProps> = ({ children }) => {
     const [wordState, setWordState] = useState('')
 
     const updatePartIndex = useCallback(() => {
-        if (partIndexRef.current < parts.length-1) {
+        if (partIndexRef.current < parts.length - 1) {
             partIndexRef.current++
         } else {
             partIndexRef.current = 0
@@ -32,7 +32,7 @@ const Button: React.FC<IProps> = ({ children }) => {
         const part = parts[partIndexRef.current]
         const charactersArray = [...part]
         const character = charactersArray[characterIndexRef.current]
-        if (characterIndexRef.current < charactersArray.length-1) {
+        if (characterIndexRef.current < charactersArray.length - 1) {
             // we have NOT reached the end of the characters array
             characterIndexRef.current++
         } else {
