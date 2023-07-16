@@ -49,13 +49,17 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                 {children}
             </NavigationLink>
         ),
-        aside: ({ children, id, ...props }) => (
+        aside: ({ children, ...props }) => (
             <>
-                {id === 'tocContainer' &&
+                {props.id === 'articleToc' ? (
                     <HeadingsObserver {...props}>
                         {children}
                     </HeadingsObserver>
-                }
+                ) : (
+                    <aside {...props}>
+                        {children}
+                    </aside>
+                )}
             </>
         ),
         ...components,

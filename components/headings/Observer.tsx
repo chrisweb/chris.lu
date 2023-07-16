@@ -5,7 +5,8 @@ import { useObserver } from '../../hooks/useObserver'
 import { ReactNode, ReactElement, Children, isValidElement, cloneElement, MouseEvent } from 'react'
 
 interface IProps {
-    children?: ReactNode
+    id?: string
+    children?: ReactNode | ReactNode[]
 }
 
 const findFirstNodeThatMatchesType = (children: ReactNode, type: string): ReactElement => {
@@ -109,11 +110,19 @@ const HeadingsObserver: React.FC<IProps> = (props): JSX.Element => {
     const { activeIdState } = useObserver('h1, h2, h3, h4, h5, h6', '-20% 0% -35% 0px')
     const navChild = findFirstNodeThatMatchesType(props.children, 'nav')
     const toc = findAndTransformRows(navChild.props.children, activeIdState)
+    // children can a ReactNode or an array of ReactNode
+    // ensure it is always an array
+    const childrenArray = [].concat(props.children)
+    const navProps = childrenArray[0].props
 
     return (
         <>
-            <ErrorBoundary fallback={<aside id="tocContainer"><div className="error">Toc error</div></aside>}>
-                <aside id="tocContainer">{toc}</aside>
+            <ErrorBoundary fallback={<aside {...props}><div className="error">Toc error</div></aside>}>
+                <aside {...props}>
+                    <nav {...navProps}>
+                        {toc}
+                    </nav>
+                </aside>
             </ErrorBoundary>
         </>
     )

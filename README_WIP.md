@@ -2523,34 +2523,214 @@ In a previous post we added a remark plugin that generates a toc, now we are goi
 First add an observer to our headings we will create a custom react hook at `hooks/useObserver.tsx`, with the following code:
 
 ```tsx
-useEffect(() => {
-  const handleObsever = (entries) => {
-    entries.forEach((entry) => {
-      if (entry?.isIntersecting) {
-        setActiveId(entry.target.id)
-      }
-    })
-  }
+import { useEffect, useState, useRef } from 'react'
 
-  observer.current = new IntersectionObserver(handleObsever, {
-    rootMargin: "-20% 0% -35% 0px"}
-  )
+export function useObserver(elementsToObserve: string, rootMargin: string) {
 
-  const elements = document.querySelectorAll("h2, h3", "h4")
-  elements.forEach((elem) => observer.current.observe(elem))
-  return () => observer.current?.disconnect()
-}, [])
+    const [activeIdState, setActiveIdState] = useState('')
+    const observerRef = useRef<IntersectionObserver>()
+
+    useEffect(() => {
+
+        const handleObsever = (entries: IntersectionObserverEntry[]) => {
+
+            entries.forEach((entry) => {
+                if (entry?.isIntersecting) {
+                    
+                    setActiveIdState(entry.target.id)
+                }
+            })
+        }
+
+        if (observerRef !== undefined) {
+            observerRef.current = new IntersectionObserver(handleObsever, {
+                rootMargin: rootMargin
+            })
+
+            const elements = document.querySelectorAll(elementsToObserve)
+
+            elements.forEach((elem) => observerRef.current.observe(elem))
+        }
+
+        return () => {
+            observerRef.current?.disconnect()
+        }
+    }, [elementsToObserve, rootMargin])
+
+    return { activeIdState }
+
+}
 ```
 
-now that we have our custom hook lets create our custom component at `hooks/useObserver.ts`, with the following code:
+now that we have our custom hook lets create our custom component at `components/headings/Observer.tsx`, with the following code:
 
 ```tsx
+'use client'
+
+import { ErrorBoundary } from 'react-error-boundary'
+import { useObserver } from '../../hooks/useObserver'
+import { ReactNode, ReactElement, Children, isValidElement, cloneElement, MouseEvent } from 'react'
+
+interface IProps {
+    id?: string
+    children?: ReactNode | ReactNode[]
+}
+
+const findFirstNodeThatMatchesType = (children: ReactNode, type: string): ReactElement => {
+
+    const childrenArray = Children.toArray(children)
+
+    for (const child of childrenArray) {
+        if (isValidElement(child)) {
+            if (child.type === type) {
+                return child
+            }
+        }
+    }
+
+}
+
+const findFirstNodeThatHasProp = (children: ReactNode, prop: string): ReactElement => {
+
+    const childrenArray = Children.toArray(children)
+
+    for (const child of childrenArray) {
+        if (isValidElement(child)) {
+            if (prop in child.props) {
+                return child
+            }
+        }
+    }
+
+}
+
+const onClickLinkHandler = (event: MouseEvent<HTMLAnchorElement>) => {
+
+    event.preventDefault()
+
+    const targetUrl = event.currentTarget.href
+    const targetId = targetUrl.slice(targetUrl.indexOf('#'))
+    const heading = document.querySelector(targetId)
+
+    if (heading) {
+        heading.scrollIntoView({
+            behavior: 'smooth',
+        })
+    }
+}
+
+const findAndTransformRows = (children: ReactNode, activeIdState: string, level = 0): ReactNode => {
+
+    const ulChildInput = findFirstNodeThatMatchesType(children, 'ul')
+
+    let ulChildOutput: ReactNode
+
+    if (ulChildInput !== undefined) {
+
+        level++
+
+        const liChildrenInput = ulChildInput.props.children
+
+        const liChildrenOutput = liChildrenInput.map((liChild: ReactNode, index: number) => {
+
+            if (isValidElement(liChild)) {
+                if (liChild.type === 'li') {
+
+                    const liChildLinkInput = findFirstNodeThatHasProp(liChild.props.children, 'href')
+                    const liChildLinkId = liChildLinkInput.props.href.slice(1)
+                    const moreRows = findAndTransformRows(liChild.props.children, activeIdState, level)
+
+                    const clonedLinkChild = cloneElement(liChildLinkInput, {
+                        ...liChildLinkInput.props,
+                        className: 'a',
+                        onClick: onClickLinkHandler,
+                    })
+
+                    const clonedLiChild = cloneElement(liChild, {
+                        ...liChild.props,
+                        key: liChild.key !== null ? liChild.key : level + '_' + index,
+                        className: activeIdState === liChildLinkId ? 'active' : 'not-active',
+                        children: moreRows ? [clonedLinkChild, moreRows] : clonedLinkChild
+                    })
+
+                    return clonedLiChild
+                }
+            }
+
+            return liChild
+
+        })
+
+        ulChildOutput = cloneElement(ulChildInput, {
+            ...ulChildInput.props,
+            children: liChildrenOutput
+        })
+
+    }
+
+    return ulChildOutput
+
+}
+
+const HeadingsObserver: React.FC<IProps> = (props): JSX.Element => {
+
+    const { activeIdState } = useObserver('h1, h2, h3, h4, h5, h6', '-20% 0% -35% 0px')
+    const navChild = findFirstNodeThatMatchesType(props.children, 'nav')
+    const toc = findAndTransformRows(navChild.props.children, activeIdState)
+
+    console.log(props)
+
+    return (
+        <>
+            <ErrorBoundary fallback={<aside {...props}><div className="error">Toc error</div></aside>}>
+                <aside {...props}>
+                    <nav {...props.children[0].props}>
+                        {toc}
+                    </nav>
+                </aside>
+            </ErrorBoundary>
+        </>
+    )
+}
+
+export default HeadingsObserver
+```
+
+next we need to edit the `mdx-components.tsx` file, like so:
+
+```tsx
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+    return {
+        aside: ({ children, id, ...props }) => (
+            <>
+                {props.id === 'articleToc' ? (
+                    <HeadingsObserver {...props}>
+                        {children}
+                    </HeadingsObserver>
+                ) : (
+                    <aside {...props}>
+                        {children}
+                    </aside>
+                )}
+            </>
+        ),
+        ...components,
+    }
+}
+```
+
+we have used [JSX conditanal rendering](https://react.dev/learn/conditional-rendering) to check if the aside is the one of the toc, if it is we use our component if it is not we render a basic aside
+
+now it time to modify the styling and placement of our **table of contents* by adding some css into `app/layout.module.css` file:
+
+```css
 
 ```
 
 read more:
 
 * [react "custom hooks" documentation](https://react.dev/learn/reusing-logic-with-custom-hooks)
+* [react "JSX conditanal rendering" documentation](https://react.dev/learn/conditional-rendering)
 
 
 #### custom component for images using next/image

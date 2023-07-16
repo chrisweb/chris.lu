@@ -60,9 +60,11 @@ const nextConfig = (/*phase*/) => {
     }
 
     const remarkTableOfContentsOptions = {
-        tight: true,
         containerAttributes: {
-            id: 'tocContainer'
+            id: 'articleToc',
+        },
+        navAttributes: {
+            'aria-label': 'table of contents'
         }
     }
 
