@@ -3,6 +3,7 @@ import './global.css'
 import styles from './layout.module.css'
 import Link from 'next/link'
 import { Permanent_Marker } from 'next/font/google'
+import HeaderTitle from '../components/header/Title'
 
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import { config } from '@fortawesome/fontawesome-svg-core'
@@ -38,7 +39,7 @@ export default function RootLayout({ children }: {
                             <Link href="/about_me">About Me</Link>
                         </nav>
                     </div>
-                    <h1 className={styles.eighties}>Chris.lu</h1>
+                    <HeaderTitle />
                     <NeonRoadContainer />
                 </header>
                 <main>{children}</main>

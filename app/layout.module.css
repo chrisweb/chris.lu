@@ -36,7 +36,6 @@
     outline: none;
     text-decoration: none;
     color: #fff;
-    text-shadow: 0 0 10px rgb(255, 165, 225); backface-visibility: hidden;
     font-weight: var(--main-fontWeight-big);
     background-image: linear-gradient(#ffffff 0%, #ffffff 100%);
     background-size: 0% 2px;
@@ -51,39 +50,3 @@
 .layoutNavbar a:hover {
     background-size: 100% 2px;
 }
-
-.eighties {
-    position: absolute;
-    text-align: center;
-    width: 100vw;
-    max-width: 97%;
-    z-index: -20;
-    margin: 0;
-    -webkit-transform: skew(335deg, 350deg);
-    transform: skew(345deg, 345deg);
-    font-family: 'Permanent Marker';
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-    background-image: -webkit-linear-gradient(0.25turn, #00feff 0%, #ff00aa 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -webkit-filter: drop-shadow(2px 2px 20px #1b0008);
-    filter: drop-shadow(4px 4px 10px #1b0008);
-}
-
-@media screen and (orientation:landscape) {
-    .eighties {
-        bottom: 10%;
-        font-size: 8vw;
-    }
-}
-
-@media screen and (orientation:portrait) {
-    .eighties {
-        bottom: 10%;
-        font-size: 20vw;
-    }
-}
-

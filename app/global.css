@@ -187,7 +187,8 @@ a {
 }
 
 main {
-    display: block;
+    display: flex;
+    flex-direction: row;
     margin-left: auto;
     margin-right: auto;
     max-width: 56rem;
@@ -226,7 +227,7 @@ pre {
 }
 
 /* recommended by https://rehype-pretty-code.netlify.app/ */
-pre>code {
+pre > code {
     display: grid;
 }
 
@@ -234,11 +235,9 @@ code {
     counter-reset: line;
 }
 
-code>.line::before {
+code > .line::before {
     counter-increment: line;
     content: counter(line);
-
-    /* Other styling */
     display: inline-block;
     width: 1rem;
     margin-right: 2rem;
@@ -246,12 +245,20 @@ code>.line::before {
     color: gray;
 }
 
-code[data-line-numbers-max-digits='2']>.line::before {
+code[data-line-numbers-max-digits='2'] > .line::before {
     width: 2rem;
 }
 
-code[data-line-numbers-max-digits='3']>.line::before {
+code[data-line-numbers-max-digits='3'] > .line::before {
     width: 3rem;
+}
+
+article,
+code,
+nav {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .alignRight {
