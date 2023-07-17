@@ -27,7 +27,7 @@
     grid-gap: 26px;
     gap: 26px;
     padding-left: 26px;
-    height: 50px;
+    height: var(--header-navbar-height);
     margin: 0 auto;
     max-width: 1440px;
 }

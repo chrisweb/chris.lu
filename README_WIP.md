@@ -2936,6 +2936,20 @@ export default function RootLayout({
 }
 ```
 
+if you want to use the element **id** instead of a **class** to style an element, do this:
+
+```tsx
+<nav id={styles.myIdStyle}>
+```
+
+and in the css module you add:
+
+```css
+#myIdStyle {
+    position: fixed;
+}
+```
+
 read more:
 
 * [css modules github repository](https://github.com/css-modules/css-modules)

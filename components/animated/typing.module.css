@@ -8,7 +8,7 @@
     content: "";
     width: 2px;
     height: 14px;
-    background: rgb(0, 247, 255);
+    background: var(--tertiary-light-color);
     display: inline-block;
     animation: blinkingCarretAnimation 1.5s steps(2) infinite;
 }

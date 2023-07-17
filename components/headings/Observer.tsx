@@ -3,6 +3,7 @@
 import { ErrorBoundary } from 'react-error-boundary'
 import { useObserver } from '../../hooks/useObserver'
 import { ReactNode, ReactElement, Children, isValidElement, cloneElement, MouseEvent } from 'react'
+import styles from './observer.module.css'
 
 interface IProps {
     id?: string
@@ -67,6 +68,7 @@ const findAndTransformRows = (children: ReactNode, activeIdState: string, level 
         const liChildrenOutput = liChildrenInput.map((liChild: ReactNode, index: number) => {
 
             if (isValidElement(liChild)) {
+
                 if (liChild.type === 'li') {
 
                     const liChildLinkInput = findFirstNodeThatHasProp(liChild.props.children, 'href')
@@ -82,11 +84,12 @@ const findAndTransformRows = (children: ReactNode, activeIdState: string, level 
                     const clonedLiChild = cloneElement(liChild, {
                         ...liChild.props,
                         key: liChild.key !== null ? liChild.key : level + '_' + index,
-                        className: activeIdState === liChildLinkId ? 'active' : 'not-active',
+                        className: activeIdState === liChildLinkId ? styles.active : styles.notActive,
                         children: moreRows ? [clonedLinkChild, moreRows] : clonedLinkChild
                     })
 
                     return clonedLiChild
+
                 }
             }
 
@@ -95,7 +98,8 @@ const findAndTransformRows = (children: ReactNode, activeIdState: string, level 
         })
 
         ulChildOutput = cloneElement(ulChildInput, {
-            ...ulChildInput.props,
+            // https://react.dev/reference/react/cloneElement#parameters
+            className: ulChildInput.props.className ? ulChildInput.props.className + styles.list : styles.list,
             children: liChildrenOutput
         })
 
@@ -110,15 +114,17 @@ const HeadingsObserver: React.FC<IProps> = (props): JSX.Element => {
     const { activeIdState } = useObserver('h1, h2, h3, h4, h5, h6', '-20% 0% -35% 0px')
     const navChild = findFirstNodeThatMatchesType(props.children, 'nav')
     const toc = findAndTransformRows(navChild.props.children, activeIdState)
-    // children can a ReactNode or an array of ReactNode
+    // children can be a ReactNode or an array of ReactNodes
     // ensure it is always an array
     const childrenArray = [].concat(props.children)
     const navProps = childrenArray[0].props
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const {id, ...asideProps} = props
 
     return (
         <>
             <ErrorBoundary fallback={<aside {...props}><div className="error">Toc error</div></aside>}>
-                <aside {...props}>
+                <aside id={styles.articleToc} {...asideProps}>
                     <nav {...navProps}>
                         {toc}
                     </nav>

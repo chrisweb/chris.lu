@@ -20,9 +20,9 @@
     --main-spacing: 24px;
     --primary-light-color: rgb(255 0 170);
     --secondary-light-color: rgb(249 85 48);
-    --extra-light-color: rgb(0, 254, 255);
-    --primary-dark-color: rgb(90 0 90);
+    --tertiary-light-color: rgb(0, 255, 255);
     --codebloc-font-family: Consolas, 'Courier New', monospace;
+    --header-navbar-height: 50px;
     line-height: var(--main-line-height);
 }
 
@@ -43,7 +43,7 @@ html {
     /* scrollbar styling (w3c standard) */
     scrollbar-width: .5rem;
     /* scrollbar-color: the first color is for the thumb of the scrollbar and the second color for the track */
-    scrollbar-color: #e60099 #111;
+    scrollbar-color: var(--tertiary-light-color) #111;
     /* custom cursor */
     cursor: url(/assets/cursors/secondary_mouse_default.cur), default;
 }
@@ -58,7 +58,7 @@ html::-webkit-scrollbar-track {
 }
 
 html::-webkit-scrollbar-thumb {
-    background: linear-gradient(#9d0069 0%, #e60099 100%);
+    background: linear-gradient(var(--primary-light-color) 0%, var(--tertiary-light-color) 100%);
 }
 
 body {
@@ -191,14 +191,18 @@ main {
     flex-direction: row;
     margin-left: auto;
     margin-right: auto;
-    max-width: 56rem;
+    max-width: 70rem;
     padding: var(--main-spacing) 0 var(--main-spacing) 0;
 }
 
-@media all and (max-width: 56rem) {
+@media all and (max-width: 70rem) {
     main {
         padding: var(--main-spacing);
     }
+}
+
+article {
+    max-width: 56rem;
 }
 
 b,

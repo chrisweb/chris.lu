@@ -11,13 +11,14 @@ export function useObserver(elementsToObserve: string, rootMargin: string) {
 
             entries.forEach((entry) => {
                 if (entry?.isIntersecting) {
-                    
                     setActiveIdState(entry.target.id)
                 }
             })
+            
         }
 
         if (observerRef !== undefined) {
+
             observerRef.current = new IntersectionObserver(handleObsever, {
                 rootMargin: rootMargin
             })
@@ -30,6 +31,7 @@ export function useObserver(elementsToObserve: string, rootMargin: string) {
         return () => {
             observerRef.current?.disconnect()
         }
+
     }, [elementsToObserve, rootMargin])
 
     return { activeIdState }
