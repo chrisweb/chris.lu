@@ -231,7 +231,7 @@ pre {
 }
 
 /* recommended by https://rehype-pretty-code.netlify.app/ */
-pre > code {
+pre>code {
     display: grid;
 }
 
@@ -239,7 +239,7 @@ code {
     counter-reset: line;
 }
 
-code > .line::before {
+code>.line::before {
     counter-increment: line;
     content: counter(line);
     display: inline-block;
@@ -249,11 +249,11 @@ code > .line::before {
     color: gray;
 }
 
-code[data-line-numbers-max-digits='2'] > .line::before {
+code[data-line-numbers-max-digits='2']>.line::before {
     width: 2rem;
 }
 
-code[data-line-numbers-max-digits='3'] > .line::before {
+code[data-line-numbers-max-digits='3']>.line::before {
     width: 3rem;
 }
 

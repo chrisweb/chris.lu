@@ -14,7 +14,7 @@ export function useObserver(elementsToObserve: string, rootMargin: string) {
                     setActiveIdState(entry.target.id)
                 }
             })
-            
+
         }
 
         if (observerRef !== undefined) {

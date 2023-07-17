@@ -4,6 +4,12 @@
     gap: var(--main-spacing);
 }
 
+@media all and (max-width: 56rem) {
+    .portalsGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .cyberPortalOuterGlow {
     --outerCornerSize: 40px;
 

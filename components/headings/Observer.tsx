@@ -119,7 +119,7 @@ const HeadingsObserver: React.FC<IProps> = (props): JSX.Element => {
     const childrenArray = [].concat(props.children)
     const navProps = childrenArray[0].props
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const {id, ...asideProps} = props
+    const { id, ...asideProps } = props
 
     return (
         <>
