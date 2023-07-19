@@ -1,0 +1,163 @@
+.layoutNavbarContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 100%;
+    background-color: rgba(255, 0, 170, 0.9);
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter */
+    backdrop-filter: saturate(200%) blur(5px);
+    -webkit-backdrop-filter: saturate(200%) blur(5px);
+}
+
+.layoutNavbar {
+    font-size: var(--main-fontSize-big5);
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    grid-gap: var(--main-spacing);
+    gap: var(--main-spacing);
+    padding-left: var(--main-spacing);
+    height: var(--header-navbar-height);
+    margin: 0 auto;
+    max-width: var(--main-maxwidth);
+}
+
+.layoutNavbar a {
+    outline: none;
+    text-decoration: none;
+    color: #fff;
+    font-weight: var(--main-fontWeight-big);
+    background-image: linear-gradient(#ffffff 0%, #ffffff 100%);
+    background-size: 0% 2px;
+    background-position-y: 100%;
+    background-position-x: 0%;
+    background-repeat: no-repeat;
+    transition: background-size 0.2s ease-in-out;
+    cursor: url(/assets/cursors/secondary_mouse_pointer.cur), pointer;
+    padding-bottom: 3px;
+}
+
+.layoutNavbar a:hover {
+    background-size: 100% 2px;
+}
+
+.menuButton {
+    display: block;
+}
+
+@media all and (max-width: 70rem) {
+    .menuButton {
+        display: none;
+    }
+}
+
+/* source for the css animation: https://github.com/jonsuh/hamburgers */
+.hamburger {
+    padding: 15px 15px;
+    display: inline-block;
+    cursor: pointer;
+    transition-property: opacity, filter;
+    transition-duration: 0.15s;
+    transition-timing-function: linear;
+    font: inherit;
+    color: inherit;
+    text-transform: none;
+    background-color: transparent;
+    border: 0;
+    margin: 0;
+    overflow: visible;
+}
+
+.hamburger:hover {
+    opacity: 0.7;
+}
+
+.hamburger.active:hover {
+    opacity: 0.7;
+}
+
+.hamburger.active .hamburgerInner,
+.hamburger.active .hamburgerInner::before,
+.hamburger.active .hamburgerInner::after {
+    background-color: #000;
+}
+
+.hamburgerBox {
+    width: 40px;
+    height: 24px;
+    display: inline-block;
+    position: relative;
+}
+
+.hamburgerInner {
+    display: block;
+    top: 50%;
+    margin-top: -2px;
+}
+
+.hamburgerInner,
+.hamburgerInner::before,
+.hamburgerInner::after {
+    width: 40px;
+    height: 4px;
+    background-color: #000;
+    border-radius: 4px;
+    position: absolute;
+    transition-property: transform;
+    transition-duration: 0.15s;
+    transition-timing-function: ease;
+}
+
+.hamburgerInner::before,
+.hamburgerInner::after {
+    content: "";
+    display: block;
+}
+
+.hamburgerInner::before {
+    top: -10px;
+}
+
+.hamburgerInner::after {
+    bottom: -10px;
+}
+
+.emphatic {
+    overflow: hidden;
+}
+
+.emphatic .hamburgerInner {
+    transition: background-color 0.125s 0.175s ease-in;
+}
+
+.emphatic .hamburgerInner::before {
+    left: 0;
+    transition: transform 0.125s cubic-bezier(0.6, 0.04, 0.98, 0.335), top 0.05s 0.125s linear, left 0.125s 0.175s ease-in;
+}
+
+.emphatic .hamburgerInner::after {
+    top: 10px;
+    right: 0;
+    transition: transform 0.125s cubic-bezier(0.6, 0.04, 0.98, 0.335), top 0.05s 0.125s linear, right 0.125s 0.175s ease-in;
+}
+
+.emphatic.active .hamburgerInner {
+    transition-delay: 0s;
+    transition-timing-function: ease-out;
+    background-color: transparent !important;
+}
+
+.emphatic.active .hamburgerInner::before {
+    left: -80px;
+    top: -80px;
+    transform: translate3d(80px, 80px, 0) rotate(45deg);
+    transition: left 0.125s ease-out, top 0.05s 0.125s linear, transform 0.125s 0.175s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.emphatic.active .hamburgerInner::after {
+    right: -80px;
+    top: -80px;
+    transform: translate3d(-80px, 80px, 0) rotate(-45deg);
+    transition: right 0.125s ease-out, top 0.05s 0.125s linear, transform 0.125s 0.175s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
