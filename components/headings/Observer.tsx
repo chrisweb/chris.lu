@@ -1,7 +1,7 @@
 'use client'
 
 import { ErrorBoundary } from 'react-error-boundary'
-import { useObserver } from '../../hooks/useObserver'
+import useObserver from '../../hooks/useObserver'
 import { ReactNode, ReactElement, Children, isValidElement, cloneElement, MouseEvent } from 'react'
 import styles from './observer.module.css'
 

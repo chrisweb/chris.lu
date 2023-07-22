@@ -4,5 +4,5 @@
     max-width: 100%;
     position: relative;
     /* to compensate for the fixed navbar */
-    margin-top: 50px;
+    margin-top: var(--header-navbar-height);
 }

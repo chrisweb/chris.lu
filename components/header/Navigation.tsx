@@ -3,28 +3,35 @@
 import { useState } from 'react'
 import styles from './navigation.module.css'
 import Link from 'next/link'
+import useClickOutside from '../../hooks/useClickOutside'
 
 const HeaderNavigation: React.FC = () => {
 
-    const [menuButtonIsActiveState, setMenuButtonIsActiveState] = useState(false)
+    const [menuButtonIsActiveState, setMenuButtonIsActiveState] = useState<null | boolean>(null)
 
     const onClickHandler = () => {
-
         setMenuButtonIsActiveState((previousState) => {
-            return previousState === true ? false : true
+            return previousState === (null || true) ? false : true
         })
-
     }
+
+    const onClickOutsideHandler = () => {
+        if (menuButtonIsActiveState === true) {
+            setMenuButtonIsActiveState(false)
+        }
+    }
+
+    const ref = useClickOutside(onClickOutsideHandler)
 
     return (
         <>
-            <button type="button" role="button" aria-haspopup="menu" aria-controls="navigation" aria-expanded className={`${styles.hamburger} ${styles.emphatic} ${styles.menuButton} ${menuButtonIsActiveState ? 'active' : ''}`} onClick={onClickHandler}>
+            <button type="button" role="button" aria-haspopup="menu" aria-controls="navigation" aria-expanded className={`${styles.hamburger} ${styles.emphatic} ${menuButtonIsActiveState ? styles.active : ''}`} onClick={onClickHandler}>
                 <span className={styles.hamburgerBox}>
                     <span className={styles.hamburgerInner}></span>
                 </span>
             </button>
-            <div className={styles.layoutNavbarContainer}>
-                <nav id="navigation" className={styles.layoutNavbar} >
+            <div ref={ref} className={`${styles.layoutNavbarContainer} ${menuButtonIsActiveState === null ? '' : (menuButtonIsActiveState ? styles.openNavbar : styles.closeNavbar)}`}>
+                <nav id="navigation" className={`${styles.layoutNavbar}`} >
                     <Link href="/">Home</Link>
                     <Link href="/web_development">Web development</Link>
                     <Link href="/lego">Lego</Link>

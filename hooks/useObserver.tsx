@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 
-export function useObserver(elementsToObserve: string, rootMargin: string) {
+const useObserver = (elementsToObserve: string, rootMargin: string) => {
 
     const [activeIdState, setActiveIdState] = useState('')
     const observerRef = useRef<IntersectionObserver>()
@@ -37,3 +37,5 @@ export function useObserver(elementsToObserve: string, rootMargin: string) {
     return { activeIdState }
 
 }
+
+export default useObserver
