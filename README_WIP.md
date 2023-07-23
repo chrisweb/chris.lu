@@ -2842,11 +2842,11 @@ first we create a global styles file `global.css` in our `app` directory and add
 
 html {
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth */
-    -webkit-font-smoothing: 'antialiased';
-    -moz-osx-font-smoothing: 'grayscale';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-size-adjust */
-    -webkit-text-size-adjust: '100%';
-    text-size-adjust: '100%';
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 body {
@@ -2887,6 +2887,20 @@ read more:
 * [normalize.css (a good css reset example)](https://github.com/necolas/normalize.css)
 
 #### css modules
+
+##### css modules features
+
+* the most important feature of css modules is that it will automatically create unnique class names for you, for even if you have two modules that each uses a different css module but have the same class names, there will be no clashes because css modules has converted the class name to something unique for us, the format it will use is as follows: `[filename]\_[classname]\_\_[hash]`
+* if you don't want the css modules to create unique class names for you, you have the option to set a **stable** class name: <https://www.gatsbyjs.com/docs/how-to/styling/css-modules/#enabling-user-stylesheets-with-a-stable-class-name>
+* css modules allow you to do composition by using the compose keyword, this works like an import in javascript and allows you to include one css module into another css module
+* you don't have to call your css module styles.module.css, this is just an example, you can replace the first part **styles** by whatever you want
+* you can use css modules everywhere, they are not just for pages and work outside of the app or pages directories too, which means that each component in your components directory can have their own css module, for example if you have a component in /components/UI/Button.tsx then next to it you can have a corresponding css module /components/UI/button.module.css
+
+read more:
+
+[css modules documentation about "composition"](https://github.com/css-modules/css-modules#composition)
+
+##### css modules in action
 
 Note: for [naming](https://github.com/css-modules/css-modules#naming) classes the css modules team recommends using camelcase, a class name with a hyphen (kebab-case) is possible but you will need to put the name into square braquests
 
@@ -2956,24 +2970,30 @@ read more:
 * [css modules "naming" documentation](https://github.com/css-modules/css-modules#naming)
 * [next.js "css modules" beta documentation)](https://beta.nextjs.org/docs/styling/css-modules)
 
-#### css modules features
-
-* the most important feature of css modules is that it will automatically create unnique class names for you, for even if you have two modules that each uses a different css module but have the same class names, there will be no clashes because css modules has converted the class name to something unique for us, the format it will use is as follows: `[filename]\_[classname]\_\_[hash]`
-* if you don't want the css modules to create unique class names for you, you have the option to set a **stable** class name: <https://www.gatsbyjs.com/docs/how-to/styling/css-modules/#enabling-user-stylesheets-with-a-stable-class-name>
-* css modules allow you to do composition by using the compose keyword, this works like an import in javascript and allows you to include one css module into another css module
-* you don't have to call your css module styles.module.css, this is just an example, you can replace the first part **styles** by whatever you want
-* you can use css modules everywhere, they are not just for pages and work outside of the app or pages directories too, which means that each component in your components directory can have their own css module, for example if you have a component in /components/UI/Button.tsx then next to it you can have a corresponding css module /components/UI/button.module.css
-
-read more:
-
-[css modules documentation about "composition"](https://github.com/css-modules/css-modules#composition)
-
-
 ### hex to rgb and rgb to hex
 
 I found this [google search color convertor widget](https://g.co/kgs/EaqMkb), you might want to bookmark it too, it allows you to convert colors from formats like rgb to hex and vice versa (and other formats), which can be useful for working with colors in stylesheets and for example needing to quickly convert a hex color to a rgba value
 
+### main blog navigation
 
+in this chapter we will create a react navigation component for our next.js blog
+
+#### navigation component features
+
+* we want it to be responsive
+  * on desktop:
+    * we want it to a regular navbar on top of every page inside our header element
+    * on mobile:
+      * we want to use a hamburger menu button that on click will toggle the open / close mode of our navigation panel
+      * on open we want the panel to slide in from top to bottom and on close we want it to slide back from bottom to top
+      * we want to leave a little bit of space on the bottom so that if the user clicks outside of the panel it gets closed
+      * we want the panel to be swipeable, so that when the user swipes up it closes the panel
+      * we want that on click on link that the page gets loaded and the navigation panel gets closed
+      * we want to use a css class to style a link differently if the link is the current page which is open
+
+TODO: add and explain the code as well as the new onClickOutside hook
+
+!important: this example is for the new next.js (>= 13) app router and not the pages router, https://nextjs.org/docs/app/building-your-application/routing#the-app-router, meaning that we will use 'next/navigation' (for /app) and NOT 'next/router' (for /pages)
 
 ## planetscale staging environment
 

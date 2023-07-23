@@ -41,8 +41,8 @@ html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-size-adjust */
-    -webkit-text-size-adjust: '100%';
-    text-size-adjust: '100%';
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
     /* scrollbar styling (w3c standard) */
     scrollbar-width: .5rem;
     /* scrollbar-color: the first color is for the thumb of the scrollbar and the second color for the track */
@@ -85,16 +85,9 @@ body {
     }
 }
 
-@-webkit-keyframes colorwave {
-    100% {
-        background-position: 200% 0
-    }
-}
-
-@keyframes colorwave {
-    100% {
-        background-position: 200% 0
-    }
+header,
+footer {
+    overflow: hidden;
 }
 
 .h1,
@@ -112,6 +105,18 @@ body {
     -webkit-animation: colorwave 20s infinite linear;
     background-size: 200% 100%;
     background-image: linear-gradient(90deg, var(--primary-light-color) 10%, var(--secondary-light-color) 50%, var(--primary-light-color) 90%);
+}
+
+@-webkit-keyframes colorwave {
+    100% {
+        background-position: 200% 0
+    }
+}
+
+@keyframes colorwave {
+    100% {
+        background-position: 200% 0
+    }
 }
 
 h1,

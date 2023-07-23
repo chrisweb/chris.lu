@@ -1,8 +1,8 @@
 import { useRef, useEffect } from 'react'
 
-export type ICallback = () => void
+export type TypeCallback = () => void
 
-const useClickOutside = (callback: ICallback) => {
+const useClickOutside = (callback: TypeCallback) => {
 
     const ref = useRef(null)
 

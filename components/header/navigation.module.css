@@ -1,34 +1,16 @@
-/*.layoutNavbarContainer {*/
-/*position: fixed;
-    top: 0;
-    left: 0;*/
-/*z-index: 9998;*/
-/*width: 100%;*/
-
-
-/*top: var(--header-navbar-height);
-    height: var(--header-navbar-height);
-    display: block;*/
-/*height: var(--header-navbar-height);
-}*/
-
 .layoutNavbarContainer {
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter */
     backdrop-filter: saturate(200%) blur(5px);
     -webkit-backdrop-filter: saturate(200%) blur(5px);
     background-color: rgba(255, 0, 170, 0.9);
-
     position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     z-index: 9998;
-
     height: var(--header-navbar-height);
 }
-
-
 
 .layoutNavbar {
     font-size: var(--main-fontSize-big5);
@@ -39,7 +21,6 @@
     gap: var(--main-spacing);
     margin: 0 auto;
     max-width: var(--main-maxwidth);
-
     height: var(--header-navbar-height);
 }
 
@@ -55,9 +36,6 @@
     .layoutNavbar {
         flex-flow: column;
     }
-
-
-
 
     @keyframes moveDown {
         from {
@@ -108,7 +86,15 @@
     background-size: 100% 2px;
 }
 
-/* source for the css animation: https://github.com/jonsuh/hamburgers */
+.layoutNavbar a.active {
+    background-image: linear-gradient(#ffffff 0%, #ffffff 100%);
+    background-size: 100% 2px;
+    background-position-y: 0%;
+    transition: none;
+    cursor: url(/assets/cursors/secondary_mouse_default.cur), default;
+}
+
+/* source for the hamburger css styling & animation: https://github.com/jonsuh/hamburgers */
 .hamburger {
     padding: 15px 15px;
     display: none;
@@ -122,8 +108,6 @@
     background-color: transparent;
     border: 0;
     margin: 0;
-
-
     position: fixed;
     top: 0;
     left: 0;
