@@ -2029,82 +2029,6 @@ read more:
 * [list of rehype plugins](https://github.com/rehypejs/rehype/blob/main/doc/plugins.md#list-of-plugins)
 * [list of remark plugins](https://github.com/remarkjs/remark/blob/main/doc/plugins.md#list-of-plugins)
 
-## adding the remark "remark-gfm" plugin
-
-by adding the [remark "GitHub Flavored Markdown" (GFM) plugin](https://www.npmjs.com/package/remark-gfm) we extend the syntax features provided by the original markdown with the extensions (for autolink literals, footnotes, strikethrough, tables, tasklists) to markdown that you may know from github (for example when writing an issue or a discussion post on github)
-
-Note: if you use **remark-gfm** and if you haven't already transformed your next.config.js to a next.config.mjs (ESM version) you will need to do so now, because as mentioned in their [install instrcutions](https://github.com/remarkjs/remark-gfm#install)
-
-Note: the **remark-gfm** package is ESM only, meaning that (if you haven't already done so) you must convert your next.config.js to an ESM module by changing it's extension to next.config.mjs
-
-first let's install the **remark-gfm** package, by using this command:
-
-```shell
-npm i remark-gfm --save-exact
-```
-
-next we edit our next.config.mjs file to add the plugin to the next/mdx configuration, like so:
-
-```js
-import remarkGfm from 'remark-gfm'
-
-const nextConfig = (/*phase*/) => {
-
-    // to use the bundle analyzer uncomment the following lines
-    // then uncomment the return to use withBundleAnalyzer
-    /*const withBundleAnalyzer = WithBundleAnalyzer({
-        enabled: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
-        openAnalyzer: false,
-    })*/
-
-    const withMDX = WithMDX({
-        extension: /\.mdx?$/,
-        options: {
-            // If you use remark-gfm, you'll need to use next.config.mjs
-            // as the package is ESM only
-            // https://github.com/remarkjs/remark-gfm#install
-            remarkPlugins: [remarkGfm],
-            rehypePlugins: [],
-            // If you use `MDXProvider`, uncomment the following line.
-            // providerImportSource: "@mdx-js/react",
-        },
-    })
-
-    /** @type {import('next').NextConfig} */
-    const nextConfig = {
-        experimental: {
-            // experimental support for next.js > 13 app directory
-            appDir: true,
-            // experimental use rust compiler for MDX
-            mdxRs: false,
-        },
-        // file formats for next/image
-        images: {
-            formats: ['image/avif', 'image/webp']
-        },
-        pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
-    }
-
-    return withMDX(nextConfig)
-    //return withBundleAnalyzer(withMDX(nextConfig))
-
-}
-
-export default nextConfig
-```
-
-TODO: to be continued
-
-let's add some "GitHub Flavored Markdown" (GFM) examples to mdx document:
-
-```md
-~~strikethrough~~
-
-[ ] checkbox
-```
-
-
-
 ### MDX code blocks
 
 [rehype pretty code](https://www.npmjs.com/package/rehype-pretty-code) is a rehype plugin for markdown that adds "VSCode like" code highlighting to your code blocs and the best part is it has support support for VSCode themes
@@ -2285,8 +2209,6 @@ read more:
 
 TODO: if code block titles for filenames are not supported out of the box by **rehype pretty code** then add this <https://www.npmjs.com/package/rehype-code-titles>
 
-
-
 ## table of contents plugin
 
 we are going to add a plugin to automatically turn our headings (h1, h2, h3, h4, h5, h6 elements) into a table of contents for each of our mdx pages (articles)
@@ -2329,7 +2251,146 @@ it also improves accessibility because rehype-autolink-headings has headed aria 
 
 read more:
 
-[unified documentation "creating a plugin with unified (remark / rehype plugins)"](https://unifiedjs.com/learn/guide/create-a-plugin/)
+* [remark-table-of-contents](https://www.npmjs.com/package/remark-table-of-contents)
+* [unified documentation "creating a plugin with unified (remark / rehype plugins)"](https://unifiedjs.com/learn/guide/create-a-plugin/)
+
+## rehypeSlug and rehypeAutolinkHeadings plugins
+
+To improve our headings even more we are going to add another two plugins, [rehype-slug](https://www.npmjs.com/package/rehype-slug) and [rehype-autolink-headings](https://www.npmjs.com/package/rehype-autolink-headings)
+
+**rehype-slug** will automatically generate IDs for each of our headings, if rehype-slug encounters headings with duplicate titles it will create unique IDs for us by appending a number at the end of the ID
+**rehype-autolink-headings** will add links to the heading itself inside of our heading elements, it will make our headings look like this `<h1 id="heading-id"><a href="#heading-id"></a></h1>`, meaning that rehype-autolink-headings provides similar functionality to what you may know from GitHub or npm, where an anchor is added to headings, when you hover over a heading you will see a link icon appear on the left, now when you move the the mouse cursor over that icon it will become a pointer indicating that you can click it, when you click on it the browser address bar will switch to the page URL and include the ID of the heading, if you then share the URL (containing the heading ID) with someone else and they navigate to that URL then their browser will point (scroll down) to the particular heading in the page
+
+here is an an image to show you how these bookmark links (anchor links) look like in a github readme:
+
+![bookmark link (anchor link) example](./documentation/assets/images/github_headings_link_icon.png)
+
+Note: the two plugins are rehype plugins meaning they will alter the HTML markup and not the markdown itself, to understand better what MDX plugins are and what the differencies between remark and rehype are, check out the chapter [what is MDX (behind the scenes](#what-is-mdx-behind-the-scenes) and [using plugins to extend MDX](#using-plugins-to-extend-mdx)
+
+modify the next.config.mjs file:
+
+```js
+import WithMDX from '@next/mdx'
+import { remarkTableOfContents } from 'remark-table-of-contents'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeSlug from 'rehype-slug'
+
+const nextConfig = (/*phase*/) => {
+
+    const remarkTableOfContentsOptions = {
+        containerAttributes: {
+            id: 'articleToc',
+        },
+        navAttributes: {
+            'aria-label': 'table of contents'
+        }
+    }
+
+    const withMDX = WithMDX({
+        extension: /\.mdx?$/,
+        options: {
+            remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions]],
+            rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
+        },
+    })
+
+    return withMDX(nextConfig)
+
+}
+
+export default nextConfig
+```
+
+Note: using rehype-autolink-headings options you can configure the behavior of the links it is creating, in this example we do not modify any of these options as the defaults are what we want
+
+because we use **rehype-autolink-headings** we already have the autolink in our heading tags, but what we need to do now is add a little bit of styling and the link (anchor) icon
+
+
+
+read more:
+
+* ["rehype-slug" npm page](https://www.npmjs.com/package/rehype-slug)
+* ["rehype-autolink-headings" npm page](https://www.npmjs.com/package/rehype-autolink-headings)
+
+## adding the remark "remark-gfm" plugin
+
+by adding the [remark "GitHub Flavored Markdown" (GFM) plugin](https://www.npmjs.com/package/remark-gfm) we extend the syntax features provided by the original markdown with the extensions (for autolink literals, footnotes, strikethrough, tables, tasklists) to markdown that you may know from github (for example when writing an issue or a discussion post on github)
+
+Note: if you use **remark-gfm** and if you haven't already transformed your next.config.js to a next.config.mjs (ESM version) you will need to do so now, because as mentioned in their [install instrcutions](https://github.com/remarkjs/remark-gfm#install)
+
+Note: the **remark-gfm** package is ESM only, meaning that (if you haven't already done so) you must convert your next.config.js to an ESM module by changing it's extension to next.config.mjs
+
+first let's install the **remark-gfm** package, by using this command:
+
+```shell
+npm i remark-gfm --save-exact
+```
+
+next we edit our next.config.mjs file to add the plugin to the next/mdx configuration, like so:
+
+```js
+import remarkGfm from 'remark-gfm'
+
+const nextConfig = (/*phase*/) => {
+
+    // to use the bundle analyzer uncomment the following lines
+    // then uncomment the return to use withBundleAnalyzer
+    /*const withBundleAnalyzer = WithBundleAnalyzer({
+        enabled: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        openAnalyzer: false,
+    })*/
+
+    const withMDX = WithMDX({
+        extension: /\.mdx?$/,
+        options: {
+            // If you use remark-gfm, you'll need to use next.config.mjs
+            // as the package is ESM only
+            // https://github.com/remarkjs/remark-gfm#install
+            remarkPlugins: [remarkGfm],
+            rehypePlugins: [],
+            // If you use `MDXProvider`, uncomment the following line.
+            // providerImportSource: "@mdx-js/react",
+        },
+    })
+
+    /** @type {import('next').NextConfig} */
+    const nextConfig = {
+        experimental: {
+            // experimental support for next.js > 13 app directory
+            appDir: true,
+            // experimental use rust compiler for MDX
+            mdxRs: false,
+        },
+        // file formats for next/image
+        images: {
+            formats: ['image/avif', 'image/webp']
+        },
+        pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+    }
+
+    return withMDX(nextConfig)
+    //return withBundleAnalyzer(withMDX(nextConfig))
+
+}
+
+export default nextConfig
+```
+
+TODO: to be continued
+
+let's add some "GitHub Flavored Markdown" (GFM) examples to mdx document:
+
+```md
+~~strikethrough~~
+
+[ ] checkbox
+```
+
+
+
+
+
+
 
 ### MDX custom components introduction
 
@@ -2733,6 +2794,8 @@ read more:
 * [react "JSX conditanal rendering" documentation](https://react.dev/learn/conditional-rendering)
 
 
+
+
 #### custom component for images using next/image
 
 a plugin (or via custom component) that allows you to use [next/image](https://nextjs.org/docs/app/api-reference/components/image) for images
@@ -2816,7 +2879,6 @@ if you prefer to use something else than css modules, here is a comparison of so
 read more:
 
 * [next.js 13 "css-in-js" beta documentation](https://nextjs.org/docs/app/building-your-application/styling/css-in-js)
-
 
 #### global styles
 
