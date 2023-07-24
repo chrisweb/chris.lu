@@ -85,8 +85,13 @@ const HeaderNavigation: React.FC = () => {
             <div className={`${styles.layoutNavbarContainer} ${navigationIsOpenState === null ? '' : (navigationIsOpenState ? styles.openNavbar : styles.closeNavbar)}`} {...swipeHandlers} ref={swipeableRefPassthrough}>
                 <nav id="navigation" className={`${styles.layoutNavbar}`} >
                     {mainMenuItems.map((mainMenuItem) => {
-                        const linkPathname = new URL(mainMenuItem.href, window.location.href).pathname
-                        const isActiveClass = linkPathname === currentPagePathname ? styles.active : ''
+                        let isActiveClass = ''
+                        if (typeof window !== 'undefined') {
+                            const linkPathname = new URL(mainMenuItem.href, window.location.href).pathname
+                            if (linkPathname === currentPagePathname) {
+                                isActiveClass = styles.active
+                            }
+                        }
                         return (<Link href={mainMenuItem.href} key={mainMenuItem.href} onClick={onClickLinkHandler} className={isActiveClass}>{mainMenuItem.text}</Link>)
                     })}
                 </nav>
