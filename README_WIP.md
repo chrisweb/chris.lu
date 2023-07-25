@@ -2229,25 +2229,8 @@ install the plugin using this command to install the **remark-table-of-contents*
 npm i remark-table-of-contents --save-exact
 ```
 
-then I added two more rehype plugins
-
-the first one is called [rehype-slug](https://www.npmjs.com/package/rehype-slug) and is used to add ids to headings, to install it use the following command:
-
-```shell
-npm i rehype-slug --save-exact
-```
-
-the second one is called [rehype-autolink-headings](https://www.npmjs.com/package/rehype-autolink-headings) and is used to add links from headings back to themselves, to install it use the following command:
-
-```shell
-npm i rehype-autolink-headings --save-exact
-```
-
-Note: the order in which you add those two plugins to your configuration matters, rehype-slug needs to come first because it adds IDs to the headings and then you can add rehype-autolink-headings which will use those IDs and turn the headings in autolinked headings
-
-TODO: improve next sentences to explain autolinking headings:
-this means that with some css we can now allow the user to click on the heading which then changes the URL in the browser so that when shared that URL will scroll down to the section
-it also improves accessibility because rehype-autolink-headings has headed aria tabindex users that use the keyboard can use the tab key to move quickly between sections
+TODO: add remark-table-of-contents configuration example (next.config.mjs)
+TODO: add example of how to use toc and maybe add a screenshot so that readers can visualize the result
 
 read more:
 
@@ -2267,7 +2250,17 @@ here is an an image to show you how these bookmark links (anchor links) look lik
 
 Note: the two plugins are rehype plugins meaning they will alter the HTML markup and not the markdown itself, to understand better what MDX plugins are and what the differencies between remark and rehype are, check out the chapter [what is MDX (behind the scenes](#what-is-mdx-behind-the-scenes) and [using plugins to extend MDX](#using-plugins-to-extend-mdx)
 
-modify the next.config.mjs file:
+first lets install the two new dependencies:
+
+```shell
+npm i rehype-slug --save-exact
+```
+
+```shell
+npm i rehype-autolink-headings --save-exact
+```
+
+next we will modify the next.config.mjs file to import both plugins and then add them to rehypePlugins array, like so:
 
 ```js
 import WithMDX from '@next/mdx'
@@ -2294,6 +2287,22 @@ const nextConfig = (/*phase*/) => {
         },
     })
 
+    /** @type {import('next').NextConfig} */
+    const nextConfig = {
+        experimental: {
+            // experimental support for next.js > 13 app directory
+            appDir: true,
+            // experimental use rust compiler for MDX
+            mdxRs: false,
+        },
+        // file formats for next/image
+        images: {
+            formats: ['image/avif', 'image/webp']
+        },
+        // Configure pageExtensions to include md and mdx
+        pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+    }
+
     return withMDX(nextConfig)
 
 }
@@ -2301,9 +2310,35 @@ const nextConfig = (/*phase*/) => {
 export default nextConfig
 ```
 
-Note: using rehype-autolink-headings options you can configure the behavior of the links it is creating, in this example we do not modify any of these options as the defaults are what we want
+Note: the order in which you add those two plugins to your configuration matters, rehype-slug needs to come first because it adds IDs to the headings and then you can add rehype-autolink-headings which will use those IDs and turn the headings in autolinked headings
 
-because we use **rehype-autolink-headings** we already have the autolink in our heading tags, but what we need to do now is add a little bit of styling and the link (anchor) icon
+Note: using rehype-autolink-headings options you can configure the behavior of the links it is creating, in this example we do not modify any of these options as the defaults are what we want, but it is never wrong to at least know which options are available, this is why I recommend to quickly check out the ["rehype-autolink-headings" readme](https://github.com/rehypejs/rehype-autolink-headings)
+
+when using the default options **rehype-autolink-headings** will add the following span `<span class="icon icon-link"></span>` inside of the link of each heading
+
+Note: the order in which you add those two plugins to your configuration matters, rehype-slug needs to come first because it adds IDs to the headings and then you can add rehype-autolink-headings which will use those IDs and turn the headings in autolinked headings
+
+now we are going to add a little bit of styling and the link (anchor) icon
+
+there are many ways that lead to rome, but here is my suggestion to add an link icon for the autolink heading:
+
+First I we need an SVG icon, when I need an icon I like to check out Google's [Material Symbols](https://fonts.google.com/icons) collection, the entire collection of icons is available as font on <https://fonts.google.com/icons> and there you can also visualize and search for icons, I found one called "Link" but as far as I could see you can't just get the SVG file from there, so I headed over to github, into the [material icons/symbols repository](https://github.com/google/material-design-icons/tree/master/symbols/web) and downloaded the SVG from there, here is the source of that file:
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M11 17H7q-2.075 0-3.537-1.463Q2 14.075 2 12t1.463-3.538Q4.925 7 7 7h4v2H7q-1.25 0-2.125.875T4 12q0 1.25.875 2.125T7 15h4Zm-3-4v-2h8v2Zm5 4v-2h4q1.25 0 2.125-.875T20 12q0-1.25-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.462Q22 9.925 22 12q0 2.075-1.462 3.537Q19.075 17 17 17Z" style="fill:#fff;"/></svg>
+```
+
+to be able to use the SVG in our css file we will urlencode it and for that we are going to use a tool called ["URL-encoder for SVG" online](https://yoksel.github.io/url-encoder/), insert the SVG source into the first box and then copy the content from the box that says "Ready for CSS"
+
+now we add the urlencoded SVG backround-image into our css:
+
+```css
+.icon::before {
+    display: inline-block;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24' width='24'%3E%3Cpath d='M11 17H7q-2.075 0-3.537-1.463Q2 14.075 2 12t1.463-3.538Q4.925 7 7 7h4v2H7q-1.25 0-2.125.875T4 12q0 1.25.875 2.125T7 15h4Zm-3-4v-2h8v2Zm5 4v-2h4q1.25 0 2.125-.875T20 12q0-1.25-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.462Q22 9.925 22 12q0 2.075-1.462 3.537Q19.075 17 17 17Z' style='fill:%23fff;'/%3E%3C/svg%3E");
+}
+```
+
 
 
 
@@ -4296,6 +4331,9 @@ npm i web-audio-api-player --save-exact
 ```
 
 TODO: finish audio player ui
+
+for the icons I have chosen to use the ones from <https://fontawesome.com/v6/docs/web/use-with/react/add-icons>
+
 TODO: fix problem that on mobile no sound plays until user interaction, the play for the animation needs to have a direct impact on the play of the player
 
 ## audio player for header animation
