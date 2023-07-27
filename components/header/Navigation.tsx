@@ -77,7 +77,7 @@ const HeaderNavigation: React.FC = () => {
 
     return (
         <>
-            <button type="button" role="button" aria-haspopup="menu" aria-controls="navigation" aria-expanded className={`${styles.hamburger} ${styles.emphatic} ${navigationIsOpenState ? styles.active : ''}`} onClick={onClickHamburgerHandler}>
+            <button type="button" aria-label="open global navigation menu" className={`${styles.hamburger} ${styles.emphatic} ${navigationIsOpenState ? styles.active : ''}`} onClick={onClickHamburgerHandler}>
                 <span className={styles.hamburgerBox}>
                     <span className={styles.hamburgerInner}></span>
                 </span>
@@ -92,7 +92,16 @@ const HeaderNavigation: React.FC = () => {
                                 isActiveClass = styles.active
                             }
                         }
-                        return (<Link href={mainMenuItem.href} key={mainMenuItem.href} onClick={onClickLinkHandler} className={isActiveClass}>{mainMenuItem.text}</Link>)
+                        return (
+                            <Link
+                                href={mainMenuItem.href}
+                                key={mainMenuItem.href}
+                                onClick={onClickLinkHandler}
+                                className={isActiveClass}
+                            >
+                                {mainMenuItem.text}
+                            </Link>
+                        )
                     })}
                 </nav>
             </div>

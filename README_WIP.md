@@ -3221,6 +3221,10 @@ TODO: add and explain the code as well as the new onClickOutside hook
 
 source for the hamburger css styling & animation: ["CSS-animated hamburger icons" github repository](https://github.com/jonsuh/hamburgers)
 
+share the ref from the navigation **useClickOutside** hook with **react swipeable**: <https://github.com/FormidableLabs/react-swipeable#how-to-share-ref-from-useswipeable>
+
+I read this article titled ["Don’t Use ARIA Menu Roles for Site Nav"](https://adrianroselli.com/2017/10/dont-use-aria-menu-roles-for-site-nav.html), which basically says that if you can not ensure you do all the aria things right then it is better to not add any aria at all, if you check out the [aria "Menu and Menubar Pattern" page](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) you will see that there are indeed a lot of rules to follow and if you do one or more wrong then you might do more harm than good, this is why as of now I decided not to add any aria, but if you think otherwise then please lets dicuss this using the [discussion board of the chris.lu repository on github](https://github.com/chrisweb/chris.lu/discussions)
+
 read more:
 
 * ["CSS-animated hamburger icons" github repository](https://github.com/jonsuh/hamburgers)
