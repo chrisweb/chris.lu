@@ -4,6 +4,7 @@
     gap: var(--main-spacing);
 }
 
+/* max-width: --main-article-maxWidth */
 @media all and (max-width: 56rem) {
     .portalsGrid {
         grid-template-columns: 1fr;

@@ -20,10 +20,11 @@
     grid-gap: var(--main-spacing);
     gap: var(--main-spacing);
     margin: 0 auto;
-    max-width: var(--main-maxwidth);
+    max-width: var(--main-maxWidth);
     height: var(--header-navbar-height);
 }
 
+/* max-width: --main-maxWidth */
 @media all and (max-width: 70rem) {
 
     .layoutNavbarContainer {
@@ -114,6 +115,7 @@
     z-index: 9999;
 }
 
+/* max-width: --main-maxWidth */
 @media all and (max-width: 70rem) {
     .hamburger {
         display: block;

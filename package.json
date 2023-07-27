@@ -32,6 +32,7 @@
         "@react-three/drei": "9.79.3",
         "@react-three/fiber": "8.13.5",
         "globby": "13.2.2",
+        "hast-util-from-html-isomorphic": "1.0.0",
         "jsonrepair": "3.2.0",
         "next": "13.4.12",
         "react": "18.2.0",

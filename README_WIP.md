@@ -2270,6 +2270,7 @@ import rehypeSlug from 'rehype-slug'
 
 const nextConfig = (/*phase*/) => {
 
+    // https://github.com/chrisweb/remark-table-of-contents#options
     const remarkTableOfContentsOptions = {
         containerAttributes: {
             id: 'articleToc',
@@ -2279,11 +2280,24 @@ const nextConfig = (/*phase*/) => {
         }
     }
 
+    // https://github.com/rehypejs/rehype-autolink-headings#api
+    const rehypeAutolinkHeadingsOptions = {
+        properties: {
+            ariaHidden: true,
+            tabIndex: -1,
+            class: 'headingAnchor',
+        },
+        content: fromHtmlIsomorphic(
+            '<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" class="icon iconLink"><path d="M11 17H7q-2.075 0-3.537-1.463Q2 14.075 2 12t1.463-3.538Q4.925 7 7 7h4v2H7q-1.25 0-2.125.875T4 12q0 1.25.875 2.125T7 15h4Zm-3-4v-2h8v2Zm5 4v-2h4q1.25 0 2.125-.875T20 12q0-1.25-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.462Q22 9.925 22 12q0 2.075-1.462 3.537Q19.075 17 17 17Z" style="fill:#fff;"/></svg></span>',
+            { fragment: true }
+        ).children,
+    }
+
     const withMDX = WithMDX({
         extension: /\.mdx?$/,
         options: {
             remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions]],
-            rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
+            rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, rehypeAutolinkHeadingsOptions]],
         },
     })
 
@@ -2312,40 +2326,153 @@ export default nextConfig
 
 Note: the order in which you add those two plugins to your configuration matters, rehype-slug needs to come first because it adds IDs to the headings and then you can add rehype-autolink-headings which will use those IDs and turn the headings in autolinked headings
 
-Note: using rehype-autolink-headings options you can configure the behavior of the links it is creating, in this example we do not modify any of these options as the defaults are what we want, but it is never wrong to at least know which options are available, this is why I recommend to quickly check out the ["rehype-autolink-headings" readme](https://github.com/rehypejs/rehype-autolink-headings)
+when using the default options **rehype-autolink-headings** will add the following span `<span class="icon icon-link"></span>` inside of the link of each heading, we want to do the same thing that github does for their readme headings, which means we are going to replace the span with an SVG
 
-when using the default options **rehype-autolink-headings** will add the following span `<span class="icon icon-link"></span>` inside of the link of each heading
-
-Note: the order in which you add those two plugins to your configuration matters, rehype-slug needs to come first because it adds IDs to the headings and then you can add rehype-autolink-headings which will use those IDs and turn the headings in autolinked headings
-
-now we are going to add a little bit of styling and the link (anchor) icon
+Note: using rehype-autolink-headings options you can configure the behavior of the links it is creating, in this example we only use two options but if want to know which options are available, I recommend to quickly check out the ["rehype-autolink-headings" readme](https://github.com/rehypejs/rehype-autolink-headings) to at least know which options are available
 
 there are many ways that lead to rome, but here is my suggestion to add an link icon for the autolink heading:
 
-First I we need an SVG icon, when I need an icon I like to check out Google's [Material Symbols](https://fonts.google.com/icons) collection, the entire collection of icons is available as font on <https://fonts.google.com/icons> and there you can also visualize and search for icons, I found one called "Link" but as far as I could see you can't just get the SVG file from there, so I headed over to github, into the [material icons/symbols repository](https://github.com/google/material-design-icons/tree/master/symbols/web) and downloaded the SVG from there, here is the source of that file:
+First I we need an SVG icon, when I need an icon I like to check out Google's [Material Symbols](https://fonts.google.com/icons) collection, the entire collection of icons is available as font on <https://fonts.google.com/icons> and there you can also visualize and search for material symbols, I found one called "Link" but as far as I could see you can't just get the SVG file from there, so I headed over to github, into the [material icons/symbols repository](https://github.com/google/material-design-icons/) directory, from there I opened the **symbols** directory, then **web**, here are all the material web symbols, I then downloaded the Link SVG ([/link/materialsymbolsoutlined/link_24px.svg](https://github.com/google/material-design-icons/blob/master/symbols/web/link/materialsymbolsoutlined/link_24px.svg)) and finally opened it in vscode, this is the original source of that file:
 
 ```xml
-<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M11 17H7q-2.075 0-3.537-1.463Q2 14.075 2 12t1.463-3.538Q4.925 7 7 7h4v2H7q-1.25 0-2.125.875T4 12q0 1.25.875 2.125T7 15h4Zm-3-4v-2h8v2Zm5 4v-2h4q1.25 0 2.125-.875T20 12q0-1.25-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.462Q22 9.925 22 12q0 2.075-1.462 3.537Q19.075 17 17 17Z" style="fill:#fff;"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M11 17H7q-2.075 0-3.537-1.463Q2 14.075 2 12t1.463-3.538Q4.925 7 7 7h4v2H7q-1.25 0-2.125.875T4 12q0 1.25.875 2.125T7 15h4Zm-3-4v-2h8v2Zm5 4v-2h4q1.25 0 2.125-.875T20 12q0-1.25-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.462Q22 9.925 22 12q0 2.075-1.462 3.537Q19.075 17 17 17Z"/></svg>
 ```
 
-to be able to use the SVG in our css file we will urlencode it and for that we are going to use a tool called ["URL-encoder for SVG" online](https://yoksel.github.io/url-encoder/), insert the SVG source into the first box and then copy the content from the box that says "Ready for CSS"
+I slightly changed the SVG code to this:
 
-now we add the urlencoded SVG backround-image into our css:
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" class="icon iconLink"><path d="M11 17H7q-2.075 0-3.537-1.463Q2 14.075 2 12t1.463-3.538Q4.925 7 7 7h4v2H7q-1.25 0-2.125.875T4 12q0 1.25.875 2.125T7 15h4Zm-3-4v-2h8v2Zm5 4v-2h4q1.25 0 2.125-.875T20 12q0-1.25-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.462Q22 9.925 22 12q0 2.075-1.462 3.537Q19.075 17 17 17Z"/></svg>
+```
+
+in the updated SVG I added the view box **0 0 24 24** attribte and a class attribute with our two classes **icon iconLink**
+
+because our SVG for the heading anchor is HTML we are going to add another package called [hast-util-from-html-isomorphic](https://www.npmjs.com/package/hast-util-from-html-isomorphic) to our project, which we will use to transform the HTML to a hast node before passing it to **rehype-autolink-headings** via the options
+
+next we add the some options for the **rehype-autolink-headings** plugin to our `next.config.mjs` file:
+
+```js
+import WithMDX from '@next/mdx'
+import { remarkTableOfContents } from 'remark-table-of-contents'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
+import rehypeSlug from 'rehype-slug'
+
+const nextConfig = (/*phase*/) => {
+
+    // https://github.com/chrisweb/remark-table-of-contents#options
+    const remarkTableOfContentsOptions = {
+        containerAttributes: {
+            id: 'articleToc',
+        },
+        navAttributes: {
+            'aria-label': 'table of contents'
+        }
+    }
+
+    // https://github.com/rehypejs/rehype-autolink-headings#api
+    const rehypeAutolinkHeadingsOptions = {
+        properties: {
+            ariaHidden: true,
+            tabIndex: -1,
+            class: 'headingAnchor',
+        },
+        content: fromHtmlIsomorphic(
+            '<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" class="icon iconLink"><path d="M11 17H7q-2.075 0-3.537-1.463Q2 14.075 2 12t1.463-3.538Q4.925 7 7 7h4v2H7q-1.25 0-2.125.875T4 12q0 1.25.875 2.125T7 15h4Zm-3-4v-2h8v2Zm5 4v-2h4q1.25 0 2.125-.875T20 12q0-1.25-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.462Q22 9.925 22 12q0 2.075-1.462 3.537Q19.075 17 17 17Z" style="fill:#fff;"/></svg></span>',
+            { fragment: true }
+        ).children,
+    }
+
+    // https://github.com/rehypejs/rehype-autolink-headings#api
+    const rehypeAutolinkHeadingsOptions = {
+        properties: {
+            ariaHidden: true,
+            tabIndex: -1,
+            class: 'headingAnchor',
+        },
+        content: fromHtmlIsomorphic(
+            '<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" class="icon iconLink"><path d="M11 17H7q-2.075 0-3.537-1.463Q2 14.075 2 12t1.463-3.538Q4.925 7 7 7h4v2H7q-1.25 0-2.125.875T4 12q0 1.25.875 2.125T7 15h4Zm-3-4v-2h8v2Zm5 4v-2h4q1.25 0 2.125-.875T20 12q0-1.25-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.462Q22 9.925 22 12q0 2.075-1.462 3.537Q19.075 17 17 17Z"/></svg>',
+            { fragment: true }
+        ).children,
+    }
+
+    const withMDX = WithMDX({
+        extension: /\.mdx?$/,
+        options: {
+            remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions]],
+            rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, rehypeAutolinkHeadingsOptions]],
+        },
+    })
+
+    /** @type {import('next').NextConfig} */
+    const nextConfig = {
+        experimental: {
+            // experimental support for next.js > 13 app directory
+            appDir: true,
+            // experimental use rust compiler for MDX
+            mdxRs: false,
+        },
+        // file formats for next/image
+        images: {
+            formats: ['image/avif', 'image/webp']
+        },
+        // Configure pageExtensions to include md and mdx
+        pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+    }
+
+    return withMDX(nextConfig)
+
+}
+
+export default nextConfig
+```
+
+first we have added an import for the **fromHtmlIsomorphic** function from the **hast-util-from-html-isomorphic** package and then we used the **properties** option add **headingAnchor** class to the anchor itself, we use it in the next step to position the anchor and we used the **content** option to replace the default span with our Link SVG we downloaded in the previous step, to transform the HTML of our SVG into a hast node we use **fromHtmlIsomorphic** function from the **hast-util-from-html-isomorphic** package
+
+now we are going to edit our `global.css` file, most of it is needed to currectly position the heading anchor icon on the left of the heading(s), I took a lot of inspiration from github (yeah ok I just copied their css, but hey why re-invent the wheel):
 
 ```css
-.icon::before {
+.headingAnchor {
+    float: left;
+    padding-right: 4px;
+    margin-left: -28px;
+    line-height: 1;
+}
+
+.icon {
     display: inline-block;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24' width='24'%3E%3Cpath d='M11 17H7q-2.075 0-3.537-1.463Q2 14.075 2 12t1.463-3.538Q4.925 7 7 7h4v2H7q-1.25 0-2.125.875T4 12q0 1.25.875 2.125T7 15h4Zm-3-4v-2h8v2Zm5 4v-2h4q1.25 0 2.125-.875T20 12q0-1.25-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.462Q22 9.925 22 12q0 2.075-1.462 3.537Q19.075 17 17 17Z' style='fill:%23fff;'/%3E%3C/svg%3E");
+    overflow: visible;
+    fill: #fff;
+}
+
+.iconLink {
+    vertical-align: middle;
+    visibility: hidden;
+}
+
+@media (hover: none) {
+    .iconLink {
+        visibility: visible;
+    }
+}
+
+h1:hover .headingAnchor .iconLink,
+h2:hover .headingAnchor .iconLink,
+h3:hover .headingAnchor .iconLink,
+h4:hover .headingAnchor .iconLink,
+h5:hover .headingAnchor .iconLink,
+h6:hover .headingAnchor .iconLink {
+    visibility: visible;
 }
 ```
 
-
+Note: as you can see we added a special media query **hover: none**, this is for mobile, where hover is not possible, so if it is a mobile device we always show the anchor, on desktop it is only visible when you hover over the heading itself
 
 
 read more:
 
 * ["rehype-slug" npm page](https://www.npmjs.com/package/rehype-slug)
 * ["rehype-autolink-headings" npm page](https://www.npmjs.com/package/rehype-autolink-headings)
+* ["hast-util-from-html-isomorphic" npm page](https://www.npmjs.com/package/hast-util-from-html-isomorphic)
 
 ## adding the remark "remark-gfm" plugin
 
@@ -3090,7 +3217,13 @@ in this chapter we will create a react navigation component for our next.js blog
 
 TODO: add and explain the code as well as the new onClickOutside hook
 
-!important: this example is for the new next.js (>= 13) app router and not the pages router, https://nextjs.org/docs/app/building-your-application/routing#the-app-router, meaning that we will use 'next/navigation' (for /app) and NOT 'next/router' (for /pages)
+!important: this example is for the new next.js (>= 13) app router and not the pages router, <https://nextjs.org/docs/app/building-your-application/routing#the-app-router>, meaning that we will use 'next/navigation' (for /app) and NOT 'next/router' (for /pages)
+
+source for the hamburger css styling & animation: ["CSS-animated hamburger icons" github repository](https://github.com/jonsuh/hamburgers)
+
+read more:
+
+* ["CSS-animated hamburger icons" github repository](https://github.com/jonsuh/hamburgers)
 
 ## planetscale staging environment
 

@@ -1,9 +1,10 @@
 #articleToc {
-    width: 14rem;
+    width: var(--main-aside-maxWidth);
     order: 9999;
     display: block;
 }
 
+/* max-width: --main-article-maxWidth */
 @media all and (max-width: 56rem) {
     #articleToc {
         display: none;
