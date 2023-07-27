@@ -69,7 +69,6 @@
 }
 
 .layoutNavbar a {
-    outline: none;
     text-decoration: none;
     color: #fff;
     font-weight: var(--main-fontWeight-big);
@@ -85,6 +84,13 @@
 
 .layoutNavbar a:hover {
     background-size: 100% 2px;
+}
+
+.layoutNavbar a:focus {
+    outline-style: dashed;
+    outline-offset: 5px;
+    outline-color: white;
+    outline-width: 1px;
 }
 
 .layoutNavbar a.active {
@@ -113,6 +119,13 @@
     top: 0;
     left: 0;
     z-index: 9999;
+}
+
+.hamburger:focus {
+    outline-style: dashed;
+    outline-offset: -4px;
+    outline-color: white;
+    outline-width: 2px;
 }
 
 /* max-width: --main-maxWidth */

@@ -175,7 +175,6 @@ h6 {
 }
 
 a {
-    outline: none;
     text-decoration: none;
     color: var(--primary-light-color);
     backface-visibility: hidden;
@@ -196,6 +195,13 @@ a {
 
 .a:hover {
     background-size: 100% 1px;
+}
+
+.a:focus {
+    outline-style: dashed;
+    outline-offset: 5px;
+    outline-color: white;
+    outline-width: 1px;
 }
 
 main {
