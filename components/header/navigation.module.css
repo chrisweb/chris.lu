@@ -71,8 +71,8 @@
 .layoutNavbar a {
     text-decoration: none;
     color: #fff;
-    font-weight: var(--main-fontWeight-big);
-    line-height: var(--main-lineHeight-big);
+    font-weight: 600;
+    line-height: 1.3;
     background-image: linear-gradient(#ffffff 0%, #ffffff 100%);
     background-size: 0% 2px;
     background-position-y: 100%;

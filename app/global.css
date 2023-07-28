@@ -14,10 +14,10 @@
     --main-fontSize-big5: 1.375rem; /* 22px */
     --main-fontSize-big6: 1.25rem; /* 20 px */
     --main-fontWeight-default: 400;
-    --main-fontWeight-big: 700;
+    --main-fontWeight-headline: 700;
     --main-fontWeight-links: 600;
     --main-lineHeight-default: 1.75;
-    --main-lineHeight-big: 1.3;
+    --main-lineHeight-headline: 1.3;
     --main-spacing: 1.5rem;
     --main-maxWidth: 70rem;
     --main-article-maxWidth: 50rem;
@@ -127,8 +127,8 @@ h3,
 h4,
 h5,
 h6 {
-    font-weight: var(--main-fontWeight-big);
-    line-height: var(--main-lineHeight-big);
+    font-weight: var(--main-fontWeight-headline);
+    line-height: var(--main-lineHeight-headline);
     margin: 0 0 0.35em 0;
     /* add a scroll margin because of the top navbar */
     /* fixes the scrollIntoView position */
