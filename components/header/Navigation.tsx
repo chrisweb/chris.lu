@@ -65,7 +65,7 @@ const HeaderNavigation: React.FC = () => {
 
     const mainMenuItems: IMainMenuItem[] = [
         { href: '/', text: 'Home' },
-        { href: '/web_development', text: 'Web development' },
+        { href: '/web_development?lang=fr', text: 'Web development' },
         { href: '/lego', text: 'Lego' },
         /*{ href: '/music', text: 'Music' },
         { href: '/games', text: 'Games' },
@@ -87,7 +87,14 @@ const HeaderNavigation: React.FC = () => {
                     {mainMenuItems.map((mainMenuItem) => {
                         let isActiveClass = ''
                         if (typeof window !== 'undefined') {
+                            // window existd, we are in client
                             const linkPathname = new URL(mainMenuItem.href, window.location.href).pathname
+                            if (linkPathname === currentPagePathname) {
+                                isActiveClass = styles.active
+                            }
+                        } else {
+                            // window does NOT exist, we are on server
+                            const linkPathname = new URL(mainMenuItem.href, 'http://localhost:3000').pathname
                             if (linkPathname === currentPagePathname) {
                                 isActiveClass = styles.active
                             }

@@ -77,7 +77,7 @@ const findAndTransformRows = (children: ReactNode, activeIdState: string, level 
 
                     const clonedLinkChild = cloneElement(liChildLinkInput, {
                         ...liChildLinkInput.props,
-                        className: 'a',
+                        className: 'animatedUnderline noUnderline',
                         onClick: onClickLinkHandler,
                     })
 

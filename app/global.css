@@ -2,11 +2,11 @@
 
 /* https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties */
 :root {
-    --main-background-color: #050505;
+    --main-background-color: #000108;
     --main-text-color: white;
     /* https://bitsofco.de/the-new-system-font-stack/ */
     --main-frontFamily-default: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
-    --main-fontSize-default: 16px;
+    --main-fontSize-default: 1.2rem;
     --main-fontSize-big1: 3rem;
     --main-fontSize-big2: 2.25rem;
     --main-fontSize-big3: 1.875rem;
@@ -15,12 +15,13 @@
     --main-fontSize-big6: 1.125rem;
     --main-fontWeight-default: 400;
     --main-fontWeight-big: 600;
+    --main-fontWeight-links: 600;
     --main-lineHeight-default: 1.75;
     --main-lineHeight-big: 1.3;
     --main-spacing: 1.5rem;
     --main-maxWidth: 70rem;
-    --main-article-maxWidth: 56rem;
-    --main-aside-maxWidth: 14rem;
+    --main-article-maxWidth: 50rem;
+    --main-aside-maxWidth: 20rem;
     --primary-light-color: rgb(255 0 170);
     --secondary-light-color: rgb(249 85 48);
     --tertiary-light-color: rgb(0, 255, 255);
@@ -73,12 +74,11 @@ body {
     background-color: var(--main-background-color);
     color: var(--main-text-color);
     font-family: var(--main-frontFamily-default);
-    font-size: var(--main-fontSize-default);
+    /* font size is 16 px so that 1rem = 16px */
+    font-size: 16px;
     font-weight: var(--main-fontWeight-default);
     /* always scrollbar on right */
     overflow-y: scroll;
-
-    z-index: 1;
 }
 
 @media print {
@@ -103,10 +103,10 @@ footer {
     -webkit-text-fill-color: transparent;
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
-    animation: colorwave 20s infinite linear;
-    -webkit-animation: colorwave 20s infinite linear;
+    animation: colorwave 10s infinite linear;
+    -webkit-animation: colorwave 10s infinite linear;
     background-size: 200% 100%;
-    background-image: linear-gradient(90deg, var(--primary-light-color) 10%, var(--secondary-light-color) 50%, var(--primary-light-color) 90%);
+    background-image: linear-gradient(90deg, var(--primary-light-color) 5%, var(--secondary-light-color) 50%, var(--primary-light-color) 95%);
 }
 
 @-webkit-keyframes colorwave {
@@ -175,14 +175,14 @@ h6 {
 }
 
 a {
-    text-decoration: none;
+    /*text-decoration: none;*/
     color: var(--primary-light-color);
     backface-visibility: hidden;
-    font-weight: var(--main-fontWeight-big);
+    font-weight: var(--main-fontWeight-links);
     cursor: var(--cursor-pointer);
 }
 
-.a {
+.animatedUnderline {
     /* underline animation */
     /* https://nickymeuleman.netlify.app/blog/css-animated-wrapping-underline */
     background-image: linear-gradient(var(--primary-light-color) 0%, var(--primary-light-color) 100%);
@@ -193,11 +193,31 @@ a {
     transition: background-size 0.2s ease-in-out;
 }
 
-.a:hover {
+.animatedUnderline:hover {
     background-size: 100% 1px;
 }
 
-.a:focus {
+/* if using background clip underline disappears in chrome */
+/* https://github.com/w3c/csswg-drafts/issues/900 */
+/* https://github.com/w3c/csswg-drafts/issues/7394 */
+/* I just found another bug in chrome 114, if background rule it won't do the text clip */
+.hyperLink {
+    font-weight: 800;
+    text-decoration: underline;
+    text-decoration-color: var(--primary-light-color);
+    text-decoration-thickness: 1px;
+    background: -webkit-linear-gradient(left, var(--primary-light-color), var(--tertiary-light-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hyperLink:hover {
+    text-decoration-thickness: 2px;
+    text-decoration-color: var(--tertiary-light-color);
+}
+
+.hyperLink:focus {
     outline-style: dashed;
     outline-offset: 5px;
     outline-color: white;
@@ -205,6 +225,7 @@ a {
 }
 
 main {
+    font-size: var(--main-fontSize-default);
     display: flex;
     flex-direction: row;
     margin-left: auto;
@@ -285,6 +306,10 @@ nav {
 .sticky {
     position: -webkit-sticky;
     position: sticky
+}
+
+.noUnderline {
+    text-decoration: none;
 }
 
 .headingAnchor {

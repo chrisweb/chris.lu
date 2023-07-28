@@ -5,7 +5,7 @@
 }
 
 /* max-width: --main-article-maxWidth */
-@media all and (max-width: 56rem) {
+@media all and (max-width: 50rem) {
     #articleToc {
         display: none;
     }

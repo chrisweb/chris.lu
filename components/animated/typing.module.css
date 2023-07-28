@@ -7,14 +7,17 @@
 .blinkingCarret::after {
     content: "";
     width: 2px;
-    height: 14px;
+    height: var(--main-fontSize-default);
     background: var(--tertiary-light-color);
     display: inline-block;
-    animation: blinkingCarretAnimation 1.5s steps(2) infinite;
+    animation: blinkingCarretAnimation 1s steps(2) infinite;
 }
 
 @keyframes blinkingCarretAnimation {
     0% {
         opacity: 0;
+    }
+    90% {
+        opacity: 1;
     }
 }

@@ -72,6 +72,7 @@
     text-decoration: none;
     color: #fff;
     font-weight: var(--main-fontWeight-big);
+    line-height: var(--main-lineHeight-big);
     background-image: linear-gradient(#ffffff 0%, #ffffff 100%);
     background-size: 0% 2px;
     background-position-y: 100%;
