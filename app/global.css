@@ -7,14 +7,14 @@
     /* https://bitsofco.de/the-new-system-font-stack/ */
     --main-frontFamily-default: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
     --main-fontSize-default: 1.2rem;
-    --main-fontSize-big1: 3rem;
-    --main-fontSize-big2: 2.25rem;
-    --main-fontSize-big3: 1.875rem;
-    --main-fontSize-big4: 1.5rem;
-    --main-fontSize-big5: 1.25rem;
-    --main-fontSize-big6: 1.125rem;
+    --main-fontSize-big1: 2.5rem; /* 40px */
+    --main-fontSize-big2: 2rem; /* 32px */
+    --main-fontSize-big3: 1.75rem; /* 28px */
+    --main-fontSize-big4: 1.5rem; /* 24px */
+    --main-fontSize-big5: 1.375rem; /* 22px */
+    --main-fontSize-big6: 1.25rem; /* 20 px */
     --main-fontWeight-default: 400;
-    --main-fontWeight-big: 600;
+    --main-fontWeight-big: 700;
     --main-fontWeight-links: 600;
     --main-lineHeight-default: 1.75;
     --main-lineHeight-big: 1.3;
@@ -259,8 +259,13 @@ progress {
 }
 
 pre {
+    /* max width = 100vw - (2 x main padding) */
+    max-width: calc(100vw - (2 * 2rem));
+    overflow: auto;
     padding: calc(var(--main-spacing) / 2);
     margin: var(--main-spacing) 0;
+    white-space-collapse: preserve;
+    text-wrap: nowrap;
 }
 
 /* recommended by https://rehype-pretty-code.netlify.app/ */

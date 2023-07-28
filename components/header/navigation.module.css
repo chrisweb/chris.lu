@@ -104,6 +104,7 @@
 
 /* source for the hamburger css styling & animation: https://github.com/jonsuh/hamburgers */
 .hamburger {
+    outline: none;
     padding: 15px 15px;
     display: none;
     cursor: var(--cursor-pointer);
@@ -122,11 +123,13 @@
     z-index: 9999;
 }
 
-.hamburger:focus {
-    outline-style: dashed;
-    outline-offset: -4px;
-    outline-color: white;
-    outline-width: 2px;
+@media (prefers-contrast: more) {
+    .hamburger:focus {
+        outline-style: dashed;
+        outline-offset: -4px;
+        outline-color: white;
+        outline-width: 2px;
+    }
 }
 
 /* max-width: --main-maxWidth */
