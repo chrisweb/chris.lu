@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react'
 import StaticImage from './StaticImage'
-import PlayButton from './PlayButton'
+import PlayBox from './play/Box'
 import dynamic from 'next/dynamic'
 import PlayerUI from './player/UI'
 import { PlayerCore } from 'web-audio-api-player'
@@ -41,7 +41,7 @@ const Container: React.FC = () => {
             {!showAnimationState &&
                 <>
                     <StaticImage altText={altText} />
-                    <PlayButton clickPlayCallback={clickPlayCallback} />
+                    <PlayBox clickPlayCallback={clickPlayCallback} />
                 </>
             }
             {showAnimationState &&
@@ -49,7 +49,7 @@ const Container: React.FC = () => {
                     <NeonRoadCanvas altText={altText} />
                 </>
             }
-            <PlayerUI /*isPlaying={false}*/ ref={playerRef} />
+            <PlayerUI ref={playerRef} />
         </>
     )
 }

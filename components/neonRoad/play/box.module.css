@@ -1,0 +1,50 @@
+.playContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: absolute;
+    top: 5%;
+    z-index: 1;
+}
+
+.playBox {
+    backdrop-filter: saturate(100%) blur(5px);
+    -webkit-backdrop-filter: saturate(100%) blur(5px);
+    border-radius: var(--main-spacing);
+    padding: var(--main-spacing);
+    width: 230px;
+}
+
+.playButton {
+    width: 100%;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.playIcon {
+    height: auto;
+    width: 100%;
+}
+
+.withMusicRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--tertiary-light-color);
+    font-weight: 700;
+}
+
+.withMusicQuestion {
+    display: inline-block;
+    margin-right: var(--main-spacing);
+}
+
+.withMusicSwitchContainer {
+    display: inline-block;
+}
+
+.pressStart {
+    font-family: var(--font-vt323);
+}

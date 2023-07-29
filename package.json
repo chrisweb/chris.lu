@@ -39,6 +39,7 @@
         "react-dom": "18.2.0",
         "react-error-boundary": "4.0.10",
         "react-swipeable": "7.0.1",
+        "react-switch": "7.0.0",
         "rehype-autolink-headings": "6.1.1",
         "rehype-pretty-code": "0.10.0",
         "rehype-slug": "5.1.0",
