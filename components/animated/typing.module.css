@@ -14,10 +14,7 @@
 }
 
 @keyframes blinkingCarretAnimation {
-    0% {
+    50% {
         opacity: 0;
-    }
-    90% {
-        opacity: 1;
     }
 }

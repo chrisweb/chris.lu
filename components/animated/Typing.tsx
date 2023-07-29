@@ -15,7 +15,7 @@ const Button: React.FC<IProps> = ({ children }) => {
     const animationTimestampRef = useRef(0)
     const partIndexRef = useRef(0)
     const characterIndexRef = useRef(0)
-    const pauseIndexRef = useRef(10)
+    const pauseIndexRef = useRef(15)
     const actionRef = useRef('type')
 
     const [wordState, setWordState] = useState('')
@@ -54,7 +54,7 @@ const Button: React.FC<IProps> = ({ children }) => {
             // change the action, to "type" again
             actionRef.current = 'undo'
             // reset the pause index
-            pauseIndexRef.current = 10
+            pauseIndexRef.current = 15
         }
     }, [])
 
