@@ -1,59 +1,79 @@
 'use client'
 
-import { useState, useCallback } from 'react'
-import PlayIcon from './Icon'
+import { useState } from 'react'
 import styles from './box.module.css'
-import Switch from 'react-switch'
 
 interface IProps {
-    clickPlayCallback: () => void
+    clickPlayCallback: (playMusic: boolean) => void
 }
 
 const PlayBox: React.FC<IProps> = (props) => {
 
     const [withSoundState, setWidthSoundState] = useState(true)
 
-    const clickPlayCallback = useCallback((/*event: React.MouseEvent<SVGSVGElement>*/) => {
+    const withMusicClickHandler = (/*event: React.MouseEvent<HTMLButtonElement>*/) => {
+        //console.log(event)
+        setWidthSoundState(true)
+    }
+
+    const withMusicKeyPressHandler = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+        //console.log(event)
+        if (event.code === '13') {
+            setWidthSoundState(true)
+        }
+    }
+
+    const withoutMusicClickHandler = (/*event: React.MouseEvent<HTMLButtonElement>*/) => {
+        //console.log(event)
+        setWidthSoundState(false)
+    }
+
+    const withoutMusicKeyPressHandler = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+        //console.log(event)
+        if (event.code === '13') {
+            setWidthSoundState(false)
+        }
+    }
+
+    const pressStartClickHandler = (/*event: React.MouseEvent<HTMLButtonElement>*/) => {
         //console.log(event)
         const { clickPlayCallback } = props
-        clickPlayCallback()
-    }, [props])
+        clickPlayCallback(withSoundState)
+    }
 
-    const checkboxChangeHandler = (/*checked: boolean, event: React.SyntheticEvent<MouseEvent | KeyboardEvent> | MouseEvent*/) => {
-        //console.log(checked, event)
-        setWidthSoundState((previousState) => {
-            console.log(previousState ? false : true)
-            return previousState ? false : true
-        })
+    const pressStartKeyPressHandler = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+        //console.log(event)
+        if (event.code === '13') {
+            const { clickPlayCallback } = props
+            clickPlayCallback(withSoundState)
+        }
     }
 
     return (
         <>
             <div className={styles.playContainer}>
                 <div className={styles.playBox}>
+                <button
+                        onClick={withMusicClickHandler}
+                        onKeyDown={withMusicKeyPressHandler}
+                        className={styles.withMusicButton}
+                    >
+                        <span className={styles.withMusic}>Music ON</span>
+                    </button>
                     <button
-                        onClick={clickPlayCallback}
+                        onClick={withoutMusicClickHandler}
+                        onKeyDown={withoutMusicKeyPressHandler}
+                        className={styles.withoutMusicButton}
+                    >
+                        <span className={styles.withoutMusic}>Music OFF</span>
+                    </button>
+                    <button
+                        onClick={pressStartClickHandler}
+                        onKeyDown={pressStartKeyPressHandler}
                         className={styles.playButton}
                     >
-                        <PlayIcon
-                            fill='#fff400'
-                            fillOpacity='0.8'
-                            className={styles.playIcon}
-                        />
+                        <span className={`${styles.pressStart} ${styles.blink}`}>press start</span>
                     </button>
-                    <div className={styles.withMusicRow}>
-                        <span className={styles.withMusicQuestion}>With Music?</span>
-                        <div className={styles.withMusicSwitchContainer}>
-                            <Switch
-                                onChange={checkboxChangeHandler}
-                                checked={withSoundState}
-                                offColor="#ff2600"
-                                onColor="#5bff00"
-                                borderRadius={6}
-                                activeBoxShadow="0px 0px 1px 2px #fff"
-                            />
-                        </div>
-                    </div>
                 </div>
             </div >
         </>

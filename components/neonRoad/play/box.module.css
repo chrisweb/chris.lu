@@ -10,41 +10,66 @@
 }
 
 .playBox {
-    backdrop-filter: saturate(100%) blur(5px);
-    -webkit-backdrop-filter: saturate(100%) blur(5px);
-    border-radius: var(--main-spacing);
+    display: flex;
+    flex-direction: column;
     padding: var(--main-spacing);
-    width: 230px;
+    width: 360px;
 }
 
+.withMusicButton,
+.withoutMusicButton,
 .playButton {
     width: 100%;
     background-color: transparent;
     border-color: transparent;
+    padding: 0;
+    border: none;
 }
 
-.playIcon {
-    height: auto;
-    width: 100%;
+.withMusicButton:focus,
+.withoutMusicButton:focus,
+.playButton:focus {
+    outline-style: dashed;
+    outline-offset: 5px;
+    outline-color: white;
+    outline-width: 1px;
 }
 
-.withMusicRow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.withMusic, .withoutMusic {
+    font-family: var(--font-vt323);
+    font-size: 2rem;
     color: var(--tertiary-light-color);
-    font-weight: 700;
-}
-
-.withMusicQuestion {
-    display: inline-block;
-    margin-right: var(--main-spacing);
-}
-
-.withMusicSwitchContainer {
-    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    cursor: var(--cursor-pointer);
+    text-shadow: var(--primary-light-color) 1px 0 10px;
 }
 
 .pressStart {
+    /* https://fonts.google.com/specimen/VT323 */
     font-family: var(--font-vt323);
+    text-transform: capitalize;
+    font-size: 4.2rem;
+    color: var(--tertiary-light-color);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    cursor: var(--cursor-pointer);
+    text-shadow: var(--primary-light-color) 1px 0 10px;
+}
+
+.blink {
+    animation: blink-animation 1s steps(5, start) infinite;
+    -webkit-animation: blink-animation 1s steps(5, start) infinite;
+}
+
+@keyframes blink-animation {
+    to {
+        visibility: hidden;
+    }
+}
+
+@-webkit-keyframes blink-animation {
+    to {
+        visibility: hidden;
+    }
 }

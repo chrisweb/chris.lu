@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import StaticImage from './StaticImage'
 import PlayBox from './play/Box'
 import dynamic from 'next/dynamic'
@@ -29,10 +29,12 @@ const Container: React.FC = () => {
 
     const playerRef = useRef<PlayerCore>()
 
-    const clickPlayCallback = () => {
+    const clickPlayCallback = useCallback((playMusic) => {
         setShowAnimationState(true)
-        playerRef.current.play()
-    }
+        if (playMusic) {
+            playerRef.current.play()
+        }
+    }, [])
 
     const altText = 'Chris.lu header image, displaying an 80s style landscape and sunset'
 
