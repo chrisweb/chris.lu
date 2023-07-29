@@ -1,7 +1,7 @@
 import NeonRoadContainer from '../components/neonRoad/Container'
 import './global.css'
 import styles from './layout.module.css'
-import { Permanent_Marker } from 'next/font/google'
+import { Permanent_Marker, VT323 } from 'next/font/google'
 import HeaderTitle from '../components/header/Title'
 import HeaderNavigation from '../components/header/Navigation'
 
@@ -13,6 +13,14 @@ config.autoAddCss = false
 
 const permanentMarkerFont = Permanent_Marker({
     subsets: ['latin'],
+    variable: '--font-permanent_marker',
+    weight: ['400'],
+    display: 'swap',
+})
+
+const vt323 = VT323({
+    subsets: ['latin'],
+    variable: '--font-vt323',
     weight: ['400'],
     display: 'swap',
 })
@@ -22,7 +30,7 @@ export default function RootLayout({ children }: {
 }) {
 
     return (
-        <html lang="en" className={permanentMarkerFont.className}>
+        <html lang="en" className={`${permanentMarkerFont.variable} ${vt323.variable}`}>
             <head />
             <body>
                 <header className={styles.layoutHeader}>
