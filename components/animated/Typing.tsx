@@ -15,7 +15,7 @@ const Button: React.FC<IProps> = ({ children }) => {
     const animationTimestampRef = useRef(0)
     const partIndexRef = useRef(0)
     const characterIndexRef = useRef(0)
-    const pauseIndexRef = useRef(15)
+    const pauseIndexRef = useRef(20)
     const actionRef = useRef('type')
 
     const [wordState, setWordState] = useState('')
@@ -54,7 +54,7 @@ const Button: React.FC<IProps> = ({ children }) => {
             // change the action, to "type" again
             actionRef.current = 'undo'
             // reset the pause index
-            pauseIndexRef.current = 15
+            pauseIndexRef.current = 20
         }
     }, [])
 
@@ -72,9 +72,9 @@ const Button: React.FC<IProps> = ({ children }) => {
     }, [])
 
     const animate = useCallback((timeStamp: number) => {
-        // only once every 200ms
+        // only once every 120ms
         // increase to slow animation down
-        if (timeStamp - animationTimestampRef.current >= 2 * 100) {
+        if (timeStamp - animationTimestampRef.current >= 1 * 130) {
             switch (actionRef.current) {
                 case 'type':
                     type()
