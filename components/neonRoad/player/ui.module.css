@@ -1,0 +1,27 @@
+.playerUI {
+    z-index: 9999;
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+
+.play,
+.pause,
+.next {
+    background-color: transparent;
+    border-color: transparent;
+    padding: 0;
+    border: none;
+    cursor: var(--cursor-pointer);
+    padding: 5px;
+}
+
+.largeScreenOnly {
+    display: block;
+}
+
+@media all and (max-width: 50rem) {
+    .largeScreenOnly {
+        display: none;
+    }
+}

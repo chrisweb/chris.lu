@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, /*useState,*/ forwardRef, useCallback } from 'react'
 import { PlayerCore, ISoundAttributes, ICoreOptions } from 'web-audio-api-player'
-
+import styles from './ui.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause, faForwardStep } from '@fortawesome/free-solid-svg-icons'
 
@@ -145,14 +145,20 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
 
     return (
         <>
-            <div style={{
-                zIndex: 1,
-            }}>
-                <FontAwesomeIcon icon={faPlay} size="2x" color='white' onClick={onClickPlayHandler} />
-                <FontAwesomeIcon icon={faPause} size="2x" color='white' onClick={onClickPauseHandler} />
-                <FontAwesomeIcon icon={faForwardStep} size="2x" color='white' onClick={onClickNextHandler} />
-                <input type="range" min="0" max="100" defaultValue="0" step="1" ref={rangeRef} onChange={onChangeRangeHandler} />
-                <input type="range" min="0" max="100" step="1" ref={volumeRef} onChange={onChangeVolumeHandler} />
+            <div className={styles.playerUI}>
+                <button onClick={onClickPlayHandler} className={styles.play}>
+                    <FontAwesomeIcon icon={faPlay} size="2x" color='white' />
+                </button>
+                <button onClick={onClickPauseHandler} className={styles.pause}>
+                    <FontAwesomeIcon icon={faPause} size="2x" color='white' />
+                </button>
+                <button onClick={onClickNextHandler} className={styles.next}>
+                    <FontAwesomeIcon icon={faForwardStep} size="2x" color='white' />
+                </button>
+                <div className={styles.largeScreenOnly}>
+                    <input type="range" min="0" max="100" defaultValue="0" step="1" ref={rangeRef} onChange={onChangeRangeHandler} />
+                    <input type="range" min="0" max="100" step="1" ref={volumeRef} onChange={onChangeVolumeHandler} />
+                </div>
             </div>
         </>
     )
