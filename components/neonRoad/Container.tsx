@@ -19,7 +19,7 @@ const NeonRoadCanvas = dynamic(() => import('./Canvas'), {
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
-        height: '100%',
+        height: '60%',
     }}>Loading...</div>,
 })
 
