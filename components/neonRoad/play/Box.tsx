@@ -58,14 +58,14 @@ const PlayBox: React.FC<IProps> = (props) => {
                         onKeyDown={withMusicKeyPressHandler}
                         className={styles.withMusicButton}
                     >
-                        <span className={styles.withMusic}>Music ON</span>
+                        <span className={`${styles.withMusic} ${withSoundState ? styles.selected : styles.notSelected}`}>Music ON</span>
                     </button>
                     <button
                         onClick={withoutMusicClickHandler}
                         onKeyDown={withoutMusicKeyPressHandler}
                         className={styles.withoutMusicButton}
                     >
-                        <span className={styles.withoutMusic}>Music OFF</span>
+                        <span className={`${styles.withoutMusic} ${!withSoundState ? styles.selected : styles.notSelected}`}>Music OFF</span>
                     </button>
                     <button
                         onClick={pressStartClickHandler}

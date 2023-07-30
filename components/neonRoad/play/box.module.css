@@ -16,10 +16,17 @@
     width: 360px;
 }
 
+.playBox button span {
+    /* https://fonts.google.com/specimen/VT323 */
+    font-family: var(--font-vt323);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    cursor: var(--cursor-pointer);
+}
+
 .withMusicButton,
 .withoutMusicButton,
 .playButton {
-    width: 100%;
     background-color: transparent;
     border-color: transparent;
     padding: 0;
@@ -30,29 +37,37 @@
 .withoutMusicButton:focus,
 .playButton:focus {
     outline-style: dashed;
-    outline-offset: 5px;
     outline-color: white;
     outline-width: 1px;
 }
 
-.withMusic, .withoutMusic {
-    font-family: var(--font-vt323);
+.withMusic,
+.withoutMusic {
     font-size: 2rem;
     color: var(--tertiary-light-color);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    cursor: var(--cursor-pointer);
     text-shadow: var(--primary-light-color) 1px 0 10px;
 }
 
+.withMusic:before,
+.withoutMusic:before {
+    content: "";
+    width: 20px;
+    display: inline-block;
+}
+
+.selected:before {
+    content: ">";
+    font-size: 2rem;
+    color: #fcff00;
+    text-shadow: var(--primary-light-color) 1px 0 10px;
+    width: 20px;
+    display: inline-block;
+}
+
 .pressStart {
-    /* https://fonts.google.com/specimen/VT323 */
-    font-family: var(--font-vt323);
     text-transform: capitalize;
     font-size: 4.2rem;
     color: var(--tertiary-light-color);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     cursor: var(--cursor-pointer);
     text-shadow: var(--primary-light-color) 1px 0 10px;
 }
