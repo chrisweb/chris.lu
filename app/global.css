@@ -4,13 +4,20 @@
     --main-text-color: white;
     /* https://bitsofco.de/the-new-system-font-stack/ */
     --main-frontFamily-default: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
-    --main-fontSize-default: 1.2rem;
-    --main-fontSize-big1: 2.5rem; /* 40px */
-    --main-fontSize-big2: 2rem; /* 32px */
-    --main-fontSize-big3: 1.75rem; /* 28px */
-    --main-fontSize-big4: 1.5rem; /* 24px */
-    --main-fontSize-big5: 1.375rem; /* 22px */
-    --main-fontSize-big6: 1.25rem; /* 20 px */
+    /* 18px */
+    --main-fontSize-default: 1.125rem;
+    /* 40px */
+    --main-fontSize-big1: 2.5rem;
+    /* 32px */
+    --main-fontSize-big2: 2rem;
+    /* 28px */
+    --main-fontSize-big3: 1.75rem;
+    /* 24px */
+    --main-fontSize-big4: 1.5rem;
+    /* 22px */
+    --main-fontSize-big5: 1.375rem;
+    /* 20 px */
+    --main-fontSize-big6: 1.25rem;
     --main-fontWeight-default: 400;
     --main-fontWeight-headline: 700;
     --main-fontWeight-links: 600;
