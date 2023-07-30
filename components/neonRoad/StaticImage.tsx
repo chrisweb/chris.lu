@@ -10,7 +10,7 @@ const StaticImage: React.FC<IProps> = (props) => {
 
     return (
         <Image
-            src="/assets/images/neonroad/fallback-min.png"
+            src="/assets/images/neonroad/fallback.png"
             alt={altText}
             fill
             style={{

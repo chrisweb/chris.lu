@@ -1,6 +1,6 @@
 .layoutHeader {
     width: 100vw;
-    height: calc(100vh/2);
+    height: calc(100vh/2.5);
     max-width: 100%;
     position: relative;
     /* to compensate for the fixed navbar */

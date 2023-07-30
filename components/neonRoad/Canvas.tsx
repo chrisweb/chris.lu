@@ -47,11 +47,11 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
         useHelper(spotLightRef, SpotLightHelper, '#fff400')*/
         return (
             <spotLight
-                color="#ffa700"
-                intensity={10}
+                color="#f79b00"
+                intensity={400}
                 position={[0, 2, -4]}
                 distance={20}
-                angle={Math.PI / 8} // default is Math.PI/3
+                angle={Math.PI / 9} // default is Math.PI/3
                 //ref={spotLightRef}
                 castShadow={true} // default is false
                 shadow-mapSize-width={2048}
@@ -105,7 +105,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 {/*<axesHelper />*/}{/*enable for development*/}
                 {/*<OrbitControls camera={cameraRef.current} />*/}{/*enable for development*/}
                 {/*<Stats />*/}{/*enable for development*/}
-                <ambientLight color={'#ffffff'} intensity={40} />
+                <ambientLight color={'#ffffff'} intensity={50} />
                 <Meshes />
                 <Sunshine />
                 {/*<Hud>
