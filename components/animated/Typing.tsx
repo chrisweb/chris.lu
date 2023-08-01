@@ -72,7 +72,7 @@ const Button: React.FC<IProps> = ({ children }) => {
     }, [])
 
     const animate = useCallback((timeStamp: number) => {
-        // only once every 120ms
+        // only once every 130ms
         // increase to slow animation down
         if (timeStamp - animationTimestampRef.current >= 1 * 130) {
             switch (actionRef.current) {
