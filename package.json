@@ -46,7 +46,7 @@
         "shiki": "0.14.3",
         "synthwave-vscode": "github:robb0wen/synthwave-vscode",
         "three": "0.155.0",
-        "web-audio-api-player": "4.0.2"
+        "web-audio-api-player": "4.1.0"
     },
     "devDependencies": {
         "@next/bundle-analyzer": "13.4.12",
