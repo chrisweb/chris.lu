@@ -6,18 +6,10 @@ import styles from './ui.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause, faForwardStep } from '@fortawesome/free-solid-svg-icons'
 
-
-/*interface IProps {
-    isPlaying: boolean
-}*/
-
-//const PlayerUI = forwardRef(({ isPlaying }: IProps, playerRef: React.MutableRefObject<PlayerCore>) => {
 const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<PlayerCore>) => {
 
     const rangeRef = useRef<HTMLInputElement>()
     const volumeRef = useRef<HTMLInputElement>()
-
-    /*const [isPlayingState, setIsPlayingState] = useState(isPlaying)*/
 
     const initializePlayer = useCallback(() => {
 
@@ -25,6 +17,7 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
             soundsBaseUrl: '/assets/songs/',
             playingProgressIntervalTime: 500,
             loadPlayerMode: PlayerCore.PLAYER_MODE_AUDIO,
+            loopQueue: true,
         }
 
         playerRef.current = new PlayerCore(options)
