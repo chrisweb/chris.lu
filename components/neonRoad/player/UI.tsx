@@ -15,8 +15,6 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
 
         const options: ICoreOptions = {
             soundsBaseUrl: '/assets/songs/',
-            playingProgressIntervalTime: 500,
-            loadPlayerMode: PlayerCore.PLAYER_MODE_AUDIO,
             loopQueue: true,
         }
 
@@ -70,7 +68,7 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                     codec: 'mp3',
                 }
             ],
-            id: 1,
+            id: 2,
             onLoading: (loadingProgress, maximumValue, currentValue) => {
                 console.log('loading: ', loadingProgress, maximumValue, currentValue)
             },
@@ -118,14 +116,14 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
         playerRef.current.next()
     }
 
-    const onChangeVolumeHandler = () => {
+    const onInputVolumeHandler = () => {
         if (typeof volumeRef.current !== 'undefined') {
             const volume = volumeRef.current.value
             playerRef.current.setVolume(parseInt(volume))
         }
     }
 
-    const onChangeRangeHandler = () => {
+    const onInputRangeHandler = () => {
         if (typeof rangeRef.current !== 'undefined') {
             const rangeInPercent = rangeRef.current.value
             playerRef.current.setPosition(parseInt(rangeInPercent))
@@ -149,8 +147,8 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                     <FontAwesomeIcon icon={faForwardStep} size="2x" color='white' />
                 </button>
                 <div className={styles.largeScreenOnly}>
-                    <input type="range" min="0" max="100" defaultValue="0" step="1" ref={rangeRef} onChange={onChangeRangeHandler} />
-                    <input type="range" min="0" max="100" step="1" ref={volumeRef} onChange={onChangeVolumeHandler} />
+                    <input type="range" min="0" max="100" defaultValue="0" step="1" ref={rangeRef} onInput={onInputRangeHandler} />
+                    <input type="range" min="0" max="100" step="1" ref={volumeRef} onInput={onInputVolumeHandler} />
                 </div>
             </div>
         </>
