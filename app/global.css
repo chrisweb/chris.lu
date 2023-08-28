@@ -178,6 +178,13 @@ h6 {
     font-size: var(--main-fontSize-big6);
 }
 
+/* max-width: --main-maxWidth */
+@media all and (max-width: 70rem) {
+    h1 {
+        font-size: calc(var(--main-fontSize-big1) - 0.25rem);
+    }
+}
+
 .h1>.emoji,
 .h2>.emoji,
 .h3>.emoji,
@@ -289,7 +296,9 @@ pre {
     overflow: auto;
     padding: calc(var(--main-spacing) / 2);
     margin: var(--main-spacing) 0;
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/white-space-collapse */
     white-space-collapse: preserve;
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap */
     text-wrap: nowrap;
 }
 
