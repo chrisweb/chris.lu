@@ -33,12 +33,15 @@
     border: none;
 }
 
-.withMusicButton:focus,
-.withoutMusicButton:focus,
-.playButton:focus {
-    outline-style: dashed;
-    outline-color: white;
-    outline-width: 1px;
+/* only on higher contrast mode */
+@media (prefers-contrast: more) {
+    .withMusicButton:focus,
+    .withoutMusicButton:focus,
+    .playButton:focus {
+        outline-style: dashed;
+        outline-color: white;
+        outline-width: 1px;
+    }
 }
 
 .withMusic,

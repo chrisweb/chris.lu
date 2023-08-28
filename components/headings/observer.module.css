@@ -23,10 +23,19 @@
 
 .active>a {
     color: var(--tertiary-light-color);
-    background-image: linear-gradient(var(--tertiary-light-color) 0%, var(--tertiary-light-color) 100%);
 }
 
 .notActive>a {
     color: var(--primary-light-color);
-    background-image: linear-gradient(var(--primary-light-color) 0%, var(--primary-light-color) 100%);
+}
+
+/* not on mobile */
+@media (hover: hover) {
+    .active>a {
+        background-image: linear-gradient(var(--tertiary-light-color) 0%, var(--tertiary-light-color) 100%);
+    }
+    
+    .notActive>a {
+        background-image: linear-gradient(var(--primary-light-color) 0%, var(--primary-light-color) 100%);
+    }
 }

@@ -57,6 +57,8 @@ html {
     scrollbar-color: var(--tertiary-light-color) #111;
     /* custom cursor */
     cursor: var(--cursor-default);
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/tab-size */
+    tab-size: 4;
 }
 
 /* scrollbar styling (webkit vendor prefix) */
@@ -82,7 +84,9 @@ body {
     /* font size is 16 px so that 1rem = 16px */
     font-size: 16px;
     font-weight: var(--main-fontWeight-default);
-    /* always scrollbar on right */
+    /* always have scrollbar on the right */
+    /* if this is not set, the page content will move when
+    going from a page with scrollbar to a page without */
     overflow-y: scroll;
 }
 
@@ -95,6 +99,10 @@ body {
 header,
 footer {
     overflow: hidden;
+}
+
+header {
+    margin-bottom: var(--main-spacing);
 }
 
 .h1,
@@ -138,7 +146,7 @@ h6 {
     /* add a scroll margin because of the top navbar */
     /* fixes the scrollIntoView position */
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-margin-top */
-    scroll-margin-top: 60px;
+    scroll-margin-top: 80px;
 }
 
 p {
@@ -185,21 +193,26 @@ a {
     backface-visibility: hidden;
     font-weight: var(--main-fontWeight-links);
     cursor: var(--cursor-pointer);
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action */
+    touch-action: pan-y;
 }
 
-.animatedUnderline {
-    /* underline animation */
-    /* https://nickymeuleman.netlify.app/blog/css-animated-wrapping-underline */
-    background-image: linear-gradient(var(--primary-light-color) 0%, var(--primary-light-color) 100%);
-    background-size: 0% 1px;
-    background-position-y: 100%;
-    background-position-x: 0%;
-    background-repeat: no-repeat;
-    transition: background-size 0.2s ease-in-out;
-}
+/* not on mobile */
+@media (hover: hover) {
+    .animatedUnderline {
+        /* underline animation */
+        /* https://nickymeuleman.netlify.app/blog/css-animated-wrapping-underline */
+        background-image: linear-gradient(var(--primary-light-color) 0%, var(--primary-light-color) 100%);
+        background-size: 0% 1px;
+        background-position-y: 100%;
+        background-position-x: 0%;
+        background-repeat: no-repeat;
+        transition: background-size 0.2s ease-in-out;
+    }
 
-.animatedUnderline:hover {
-    background-size: 100% 1px;
+    .animatedUnderline:hover {
+        background-size: 100% 1px;
+    }
 }
 
 /* if using background clip underline disappears in chrome */
@@ -211,22 +224,29 @@ a {
     text-decoration: underline;
     text-decoration-color: var(--primary-light-color);
     text-decoration-thickness: 1px;
-    background: -webkit-linear-gradient(left, var(--primary-light-color), var(--tertiary-light-color));
+    background: -webkit-linear-gradient(45deg, var(--primary-light-color), var(--tertiary-light-color));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    text-underline-offset: 3px;
 }
 
-.hyperLink:hover {
-    text-decoration-thickness: 2px;
-    text-decoration-color: var(--tertiary-light-color);
+/* not on mobile */
+@media (hover: hover) {
+    .hyperLink:hover {
+        text-decoration-thickness: 2px;
+        text-decoration-color: var(--tertiary-light-color);
+    }
 }
 
-.hyperLink:focus {
-    outline-style: dashed;
-    outline-offset: 5px;
-    outline-color: white;
-    outline-width: 1px;
+/* only on higher contrast mode */
+@media (prefers-contrast: more) {
+    .hyperLink:focus {
+        outline-style: dashed;
+        outline-offset: 5px;
+        outline-color: white;
+        outline-width: 1px;
+    }
 }
 
 main {
