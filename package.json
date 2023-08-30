@@ -29,7 +29,7 @@
         "@fortawesome/react-fontawesome": "0.2.0",
         "@mdx-js/loader": "2.3.0",
         "@next/mdx": "13.4.19",
-        "@react-three/drei": "9.80.6",
+        "@react-three/drei": "9.80.9",
         "@react-three/fiber": "8.13.7",
         "globby": "13.2.2",
         "hast-util-from-html-isomorphic": "2.0.0",
@@ -46,11 +46,11 @@
         "shiki": "0.14.3",
         "synthwave-vscode": "github:robb0wen/synthwave-vscode",
         "three": "0.155.0",
-        "web-audio-api-player": "4.3.1"
+        "web-audio-api-player": "5.0.0"
     },
     "devDependencies": {
         "@next/bundle-analyzer": "13.4.19",
-        "@types/node": "20.5.6",
+        "@types/node": "20.5.7",
         "@types/react": "18.2.21",
         "@types/react-dom": "18.2.7",
         "@typescript-eslint/eslint-plugin": "5.61.0",
