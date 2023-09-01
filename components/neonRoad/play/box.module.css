@@ -13,14 +13,17 @@
     display: flex;
     flex-direction: column;
     padding: var(--main-spacing);
-    width: 360px;
+    width: 380px;
 }
 
 .playBox button span {
     /* https://fonts.google.com/specimen/VT323 */
     font-family: var(--font-vt323);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: subpixel-antialiased;
     cursor: var(--cursor-pointer);
 }
 
@@ -35,6 +38,7 @@
 
 /* only on higher contrast mode */
 @media (prefers-contrast: more) {
+
     .withMusicButton:focus,
     .withoutMusicButton:focus,
     .playButton:focus {
@@ -48,7 +52,8 @@
 .withoutMusic {
     font-size: 2rem;
     color: var(--tertiary-light-color);
-    text-shadow: var(--primary-light-color) 1px 0 10px;
+    /* offset-x | offset-y | blur-radius | color */
+    text-shadow: 0px 0px 2px var(--primary-light-color), 0px 0px 4px var(--primary-light-color);
 }
 
 .withMusic:before,
@@ -62,17 +67,16 @@
     content: ">";
     font-size: 2rem;
     color: #fcff00;
-    text-shadow: var(--primary-light-color) 1px 0 10px;
     width: 20px;
     display: inline-block;
 }
 
 .pressStart {
     text-transform: capitalize;
-    font-size: 4.2rem;
+    font-size: 4.5rem;
     color: var(--tertiary-light-color);
-    cursor: var(--cursor-pointer);
-    text-shadow: var(--primary-light-color) 1px 0 10px;
+    /* offset-x | offset-y | blur-radius | color */
+    text-shadow: 0px 0px 2px var(--primary-light-color), 0px 0px 8px var(--primary-light-color);
 }
 
 .blink {

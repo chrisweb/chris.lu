@@ -229,13 +229,16 @@ a {
 .hyperLink {
     font-weight: 800;
     text-decoration: underline;
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-color */
     text-decoration-color: var(--primary-light-color);
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-thickness */
     text-decoration-thickness: 1px;
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-thickness */
+    text-underline-offset: 3px;
     background: -webkit-linear-gradient(45deg, var(--primary-light-color), var(--tertiary-light-color));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-underline-offset: 3px;
 }
 
 /* not on mobile */

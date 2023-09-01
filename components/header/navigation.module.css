@@ -15,6 +15,9 @@
 .layoutNavbar {
     font-size: var(--main-fontSize-big5);
     font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    font-optical-sizing: auto;
     display: flex;
     align-items: center;
     grid-gap: var(--main-spacing);
