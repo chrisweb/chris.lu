@@ -705,7 +705,7 @@ I let you check out the [next.js "what is Streaming?" documentation section](htt
 
 
 TODO: Web fetch() API ???
-https://beta.nextjs.org/docs/data-fetching/fundamentals
+https://beta.nextjs.org/docs/data-fetching/fundamentals, also interesting the new server actions: https://nextjs.org/docs/app/building-your-application/data-fetching/forms-and-mutations
 TODO: client components
 TODO: list all reserved next.js file names:
 layout.tsx
