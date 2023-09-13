@@ -7,10 +7,9 @@
     margin: 0;
     -webkit-transform: skew(345deg, 345deg);
     transform: skew(345deg, 345deg);
-    font-family: var(--font-permanent_marker);
+    font-family: var(--font-permanentMarker);
     font-weight: 400;
     font-style: normal;
-    font-display: swap;
     background-image: -webkit-linear-gradient(0.25turn, var(--tertiary-light-color) 0%, var(--primary-light-color) 100%);
     -webkit-background-clip: text;
     background-clip: text;

@@ -75,9 +75,17 @@
     text-transform: capitalize;
     font-size: 4.5rem;
     color: var(--tertiary-light-color);
-    /* offset-x | offset-y | blur-radius | color */
-    text-shadow: 1px 1px 0 rgb(0, 145, 255), 2px 2px 0 rgb(0, 170, 255), 3px 3px 0 rgb(0, 195, 255);
     text-transform: uppercase;
+}
+
+.press {
+        /* offset-x | offset-y | blur-radius | color */
+        text-shadow: 1px 1px 0 rgb(0, 145, 255), 2px 2px 0 rgb(0, 170, 255), 3px 3px 0 rgb(0, 195, 255);
+}
+
+.start {
+        /* offset-x | offset-y | blur-radius | color */
+        text-shadow: -1px 1px 0 rgb(0, 145, 255), -2px 2px 0 rgb(0, 170, 255), -3px 3px 0 rgb(0, 195, 255);
 }
 
 .blink {

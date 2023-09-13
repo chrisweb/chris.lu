@@ -33,12 +33,11 @@
     .layoutNavbarContainer {
         height: 85vh;
         top: calc(-85vh + var(--header-navbar-height));
-        padding-top: var(--main-spacing);
     }
-
 
     .layoutNavbar {
         flex-flow: column;
+        margin-top: calc(var(--header-navbar-height) + var(--main-spacing));
     }
 
     @keyframes moveDown {
@@ -76,7 +75,7 @@
     color: #fff;
     font-weight: 600;
     line-height: 1.3;
-    cursor: url(/assets/cursors/secondary_mouse_pointer.cur), pointer;
+    cursor: var(--cursor-pointer);
     padding-bottom: 3px;
     /* default off */
     transition: none;

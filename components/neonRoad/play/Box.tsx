@@ -72,7 +72,7 @@ const PlayBox: React.FC<IProps> = (props) => {
                         onKeyDown={pressStartKeyPressHandler}
                         className={styles.playButton}
                     >
-                        <span className={`${styles.pressStart} ${styles.blink}`}>press start</span>
+                        <span className={`${styles.pressStart} ${styles.blink}`}><span className={styles.press}>press</span> <span className={styles.start}>start</span></span>
                     </button>
                 </div>
             </div >
