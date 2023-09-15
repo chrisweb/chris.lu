@@ -29,7 +29,7 @@ const Container: React.FC = () => {
 
     const playerRef = useRef<PlayerCore>()
 
-    const clickPlayCallback = useCallback((playMusic) => {
+    const clickPlayCallback = useCallback((playMusic: boolean) => {
         setShowAnimationState(true)
         if (playMusic) {
             playerRef.current.play()
