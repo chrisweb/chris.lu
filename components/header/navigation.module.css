@@ -31,8 +31,8 @@
 @media all and (max-width: 70rem) {
 
     .layoutNavbarContainer {
-        height: 85vh;
-        top: calc(-85vh + var(--header-navbar-height));
+        height: 100vh;
+        top: calc(-100vh + var(--header-navbar-height));
     }
 
     .layoutNavbar {
@@ -42,7 +42,7 @@
 
     @keyframes moveDown {
         from {
-            top: calc(-85vh + var(--header-navbar-height));
+            top: calc(-100vh + var(--header-navbar-height));
         }
 
         to {
@@ -51,6 +51,7 @@
     }
 
     .openNavbar {
+        transform: translateZ(0);
         animation: moveDown 1s ease forwards;
     }
 
@@ -60,11 +61,12 @@
         }
 
         to {
-            top: calc(-85vh + var(--header-navbar-height));
+            top: calc(-100vh + var(--header-navbar-height));
         }
     }
 
     .closeNavbar {
+        transform: translateZ(0);
         animation: moveUp 1s ease forwards;
     }
 
@@ -97,16 +99,6 @@
     }
 }
 
-/* only on higher contrast mode */
-@media (prefers-contrast: more) {
-    .layoutNavbar a:focus {
-        outline-style: dashed;
-        outline-offset: 5px;
-        outline-color: white;
-        outline-width: 1px;
-    }
-}
-
 .layoutNavbar a.active {
     background-image: linear-gradient(#ffffff 0%, #ffffff 100%);
     background-size: 100% 2px;
@@ -136,15 +128,6 @@
     top: 0;
     left: 0;
     z-index: 9999;
-}
-
-@media (prefers-contrast: more) {
-    .hamburger:focus {
-        outline-style: dashed;
-        outline-offset: -4px;
-        outline-color: white;
-        outline-width: 2px;
-    }
 }
 
 /* max-width: --main-maxWidth */
