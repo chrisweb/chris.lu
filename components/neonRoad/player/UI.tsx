@@ -4,8 +4,9 @@ import { useRef, useEffect, useState, forwardRef, useCallback } from 'react'
 import { PlayerCore, ISoundAttributes, ICoreOptions } from 'web-audio-api-player'
 import styles from './ui.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay, faPause, faForwardStep, faEject, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
+import { faPlay, faPause, faForwardStep, faEject, faArrowUpRightFromSquare, faVolumeHigh, faVolumeXmark } from '@fortawesome/free-solid-svg-icons'
 import { Waveform, IWaveLayoutOptions, IWaveCoreOptions, IWaveClickCallback } from 'waveform-visualizer'
+import RippleButton from './ripple/Button'
 
 interface ICredits {
     songName: string
@@ -21,6 +22,7 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
 
     const [isPlayingState, setIsPlayingState] = useState(false)
     const [isEjectedState, setIsEjectedState] = useState(false)
+    const [isVolumeModalOpenState, setIsVolumeModalOpenState] = useState(false)
     const [creditsState, setCreditsState] = useState<ICredits>({
         songName: 'Athena',
         artistName: 'Karl Casey aka "White Bat Audio"',
@@ -118,7 +120,7 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                 waveformRef.current.setWaveData([82, 90, 84, 85, 89, 85, 87, 86, 81, 83, 86, 86, 86, 85, 90, 87, 90, 97, 100, 99, 91, 91, 80, 64, 62, 77, 80, 81, 83, 84, 84, 87, 85, 82, 80, 80, 82, 83, 81, 85, 89, 86, 86, 85, 86, 88, 88, 74, 31, 5])
                 setIsPlayingState(true)
                 setCreditsState({
-                    songName: 'City Streets 1 (Double Dragon 1 - Mission 1)',
+                    songName: 'City Streets 1 (Double Dragon 1)',
                     artistName: 'Jake Kaufman aka "Virt"',
                     website: 'https://virt.bandcamp.com/',
                 })
@@ -259,13 +261,13 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
 
     }, [onWaveClickHandler])
 
-    const onClickTogglePlayPauseHandler = () => {
+    const onClickTogglePlayPauseCallback = useCallback(() => {
         if (isPlayingState) {
             playerRef.current.pause()
         } else {
             playerRef.current.play()
         }
-    }
+    }, [isPlayingState, playerRef])
 
     const onClickNextHandler = () => {
         playerRef.current.next()
@@ -279,14 +281,26 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
         }
     }
 
+    const onClickVolumeHandler = () => {
+        if (!isVolumeModalOpenState) {
+            setIsVolumeModalOpenState(true)
+        } else {
+            setIsVolumeModalOpenState(false)
+        }
+    }
+
     useEffect(() => {
         initializePlayer()
         initializeWaveform()
         return () => {
-            // tell the player to remove it's listeners
-            playerRef.current.disconnect()
-            // tell the waveform to remove it's listeners
-            waveformRef.current.destroy()
+            if (playerRef.current !== null) {
+                // tell the player to remove it's listeners
+                playerRef.current.disconnect()
+            }
+            if (waveformRef.current !== null) {
+                // tell the waveform to remove it's listeners
+                waveformRef.current.destroy()
+            }
         }
     }, [initializePlayer, initializeWaveform, playerRef, waveformRef])
 
@@ -296,21 +310,24 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                 <div className={styles.audioWaveForm}>
                     <canvas ref={waveCanvasRef} width="200px" height="60px" />
                 </div>
-                <button onClick={onClickTogglePlayPauseHandler} className={styles.togglePlayPause}>
+                <RippleButton clickCallback={onClickTogglePlayPauseCallback}>
                     <FontAwesomeIcon icon={isPlayingState ? faPause : faPlay} size="2x" color='white' />
-                </button>
-                <button onClick={onClickNextHandler} className={styles.next}>
+                </RippleButton>
+                <RippleButton clickCallback={onClickNextHandler}>
                     <FontAwesomeIcon icon={faForwardStep} size="2x" color='white' />
-                </button>
-                <button onClick={onClickEjectHandler} className={styles.eject}>
+                </RippleButton>
+                <RippleButton clickCallback={onClickVolumeHandler}>
+                    <FontAwesomeIcon icon={faVolumeHigh} size="2x" color='white' />
+                </RippleButton>
+                <RippleButton clickCallback={onClickEjectHandler}>
                     <FontAwesomeIcon icon={faEject} size="2x" color='white' />
-                </button>
+                </RippleButton>
             </div>
             <div className={`${styles.walkman} ${isEjectedState ? styles.ejected : styles.inserted}`}>
                 <div className={`${styles.cassette} ${isEjectedState ? styles.slideIn : styles.slideOut}`}>
                     <div className={`${styles.face} ${styles.front}`}>
-                        <a href={creditsState !== null ? creditsState.website : ''} target="_blank" rel="noreferrer" className={styles.songTitle}>{creditsState !== null ? creditsState.songName : ''} <FontAwesomeIcon icon={faArrowUpRightFromSquare} color='white' /></a>
-                        <a href={creditsState !== null ? creditsState.website : ''} target="_blank" rel="noreferrer" className={styles.artistName}>{creditsState !== null ? creditsState.artistName : ''} <FontAwesomeIcon icon={faArrowUpRightFromSquare} color='white' /></a>
+                        <a href={creditsState !== null ? creditsState.website : ''} target="_blank" rel="noreferrer" tabIndex={-1} className={styles.songTitle}>{creditsState !== null ? creditsState.songName : ''} <FontAwesomeIcon icon={faArrowUpRightFromSquare} color='white' /></a>
+                        <a href={creditsState !== null ? creditsState.website : ''} target="_blank" rel="noreferrer" tabIndex={-1} className={styles.artistName}>{creditsState !== null ? creditsState.artistName : ''} <FontAwesomeIcon icon={faArrowUpRightFromSquare} color='white' /></a>
                         <div className={styles.spoolLeft}></div>
                         <div className={styles.spoolRight}></div>
                         <div className={styles.shield}></div>
@@ -321,6 +338,9 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                     <div className={`${styles.face} ${styles.top}`}></div>
                     <div className={`${styles.face} ${styles.bottom}`}></div>
                 </div>
+            </div>
+            <div className={`${styles.volumeModal} ${isVolumeModalOpenState ? styles.openVolume : styles.closeVolume}`}>
+                <input type="range" id="volume" name="volume" min="0" max="100" className={styles.volumeSlider} />
             </div>
         </>
     )

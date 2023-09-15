@@ -1,0 +1,14 @@
+
+.button {
+    background-color: transparent;
+    border-color: transparent;
+    padding: 0;
+    border: none;
+    cursor: var(--cursor-pointer);
+    width: 48px;
+    height: 48px;
+}
+
+.button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
