@@ -2,10 +2,17 @@
     z-index: 9999;
     position: fixed;
     top: 0;
+    bottom: auto;
     right: var(--main-spacing);
     display: flex;
     height: 58px;
     align-items: center;
+    flex-direction: row;
+}
+
+.playerButtons {
+    display: flex;
+    flex-direction: row;
 }
 
 .audioWaveForm {
@@ -14,13 +21,8 @@
 
 /* max-width: --main-maxWidth */
 @media all and (max-width: 70rem) {
-    .volume {
-        display: none;
-    }
-
     .audioWaveForm {
-        margin-right: auto;
-
+        display: none;
     }
 }
 
@@ -34,6 +36,15 @@
     top: -300px;
     /*border: 1px solid #CCC;*/
     margin: 40px auto;
+}
+
+/* max-width: --main-maxWidth */
+@media all and (max-width: 70rem) {
+    .walkman {
+        transform: scale(0.8);
+        right: calc(calc(100vw - 386px) / 2);
+        background-color: rgba(0, 0, 0, 0.7)
+    }
 }
 
 .ejected {
@@ -163,7 +174,7 @@
 }
 
 .front {
-    background: rgba(255, 0, 255, 0.6);
+    background: rgba(255, 0, 255, 0.5);
     transform: rotateY(0deg) translateZ(24px);
     mask-image: radial-gradient(circle 20px at 115px 110px,
             transparent 30px,
@@ -206,8 +217,8 @@
 
 .volumeModal {
     position: fixed;
-    box-shadow: var(--primary-light-color) 0px 54px 55px, var(--primary-light-color) 0px -12px 30px, var(--primary-light-color) 0px 4px 6px, var(--primary-light-color) 0px 12px 13px, var(--primary-light-color) 0px -3px 5px;
-    background-color: rgba(255, 0, 170, 0.7);
+    box-shadow: 0 0 10px 5px var(--primary-light-color);
+    background: rgba(255, 0, 170, 0.3);
     width: 40px;
     height: 170px;
     top: calc(var(--main-spacing) + var(--header-navbar-height));

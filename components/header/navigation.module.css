@@ -31,18 +31,20 @@
 @media all and (max-width: 70rem) {
 
     .layoutNavbarContainer {
-        height: 100vh;
-        top: calc(-100vh + var(--header-navbar-height));
+        height: 85vh;
+        top: calc(-85vh + var(--header-navbar-height));
+        padding-top: var(--main-spacing);
     }
+
 
     .layoutNavbar {
         flex-flow: column;
-        margin-top: calc(var(--header-navbar-height) + var(--main-spacing));
+        margin: var(--header-navbar-height) auto 0 auto;
     }
 
     @keyframes moveDown {
         from {
-            top: calc(-100vh + var(--header-navbar-height));
+            top: calc(-85vh + var(--header-navbar-height));
         }
 
         to {
@@ -51,7 +53,6 @@
     }
 
     .openNavbar {
-        transform: translateZ(0);
         animation: moveDown 1s ease forwards;
     }
 
@@ -61,12 +62,11 @@
         }
 
         to {
-            top: calc(-100vh + var(--header-navbar-height));
+            top: calc(-85vh + var(--header-navbar-height));
         }
     }
 
     .closeNavbar {
-        transform: translateZ(0);
         animation: moveUp 1s ease forwards;
     }
 

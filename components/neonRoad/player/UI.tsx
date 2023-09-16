@@ -310,18 +310,20 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                 <div className={styles.audioWaveForm}>
                     <canvas ref={waveCanvasRef} width="200px" height="60px" />
                 </div>
-                <RippleButton clickCallback={onClickTogglePlayPauseCallback}>
-                    <FontAwesomeIcon icon={isPlayingState ? faPause : faPlay} size="2x" color='white' />
-                </RippleButton>
-                <RippleButton clickCallback={onClickNextHandler}>
-                    <FontAwesomeIcon icon={faForwardStep} size="2x" color='white' />
-                </RippleButton>
-                <RippleButton clickCallback={onClickVolumeHandler}>
-                    <FontAwesomeIcon icon={faVolumeHigh} size="2x" color='white' />
-                </RippleButton>
-                <RippleButton clickCallback={onClickEjectHandler}>
-                    <FontAwesomeIcon icon={faEject} size="2x" color='white' />
-                </RippleButton>
+                <div className={styles.playerButtons}>
+                    <RippleButton clickCallback={onClickTogglePlayPauseCallback}>
+                        <FontAwesomeIcon icon={isPlayingState ? faPause : faPlay} size="2x" color='white' />
+                    </RippleButton>
+                    <RippleButton clickCallback={onClickNextHandler}>
+                        <FontAwesomeIcon icon={faForwardStep} size="2x" color='white' />
+                    </RippleButton>
+                    <RippleButton clickCallback={onClickVolumeHandler} className="volume">
+                        <FontAwesomeIcon icon={faVolumeHigh} size="2x" color='white' />
+                    </RippleButton>
+                    <RippleButton clickCallback={onClickEjectHandler}>
+                        <FontAwesomeIcon icon={faEject} size="2x" color='white' />
+                    </RippleButton>
+                </div>
             </div>
             <div className={`${styles.walkman} ${isEjectedState ? styles.ejected : styles.inserted}`}>
                 <div className={`${styles.cassette} ${isEjectedState ? styles.slideIn : styles.slideOut}`}>

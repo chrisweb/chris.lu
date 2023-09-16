@@ -5,6 +5,7 @@ import styles from './button.module.css'
 
 interface IProps {
     clickCallback?: () => void
+    className?: string
 }
 
 const RippleButton: React.FC<React.PropsWithChildren<IProps>> = (props) => {
@@ -27,7 +28,7 @@ const RippleButton: React.FC<React.PropsWithChildren<IProps>> = (props) => {
     }
 
     return (
-        <button onAnimationEnd={handleOnAnimationEndHandler} onClick={onClickHandler} className={`${styles.button} ${rippleState ? 'ripple' : ''}`}>
+        <button onAnimationEnd={handleOnAnimationEndHandler} onClick={onClickHandler} className={`${styles.button}${typeof props.className !== 'undefined' ? ' ' + styles[props.className] : ''}${rippleState ? ' ripple' : ''}`}>
             {props.children}
         </button>
     )
