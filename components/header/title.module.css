@@ -10,7 +10,7 @@
     font-family: var(--font-permanentMarker);
     font-weight: 400;
     font-style: normal;
-    background-image: -webkit-linear-gradient(0.25turn, var(--tertiary-light-color) 0%, var(--primary-light-color) 100%);
+    background-image: -webkit-linear-gradient(0.25turn, var(--primary-light-color) 20%, var(--tertiary-light-color) 80%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
