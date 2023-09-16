@@ -16,7 +16,7 @@ interface ICredits {
 
 const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<PlayerCore>) => {
 
-    const volumeRef = useRef<HTMLInputElement>()
+    const volumeSliderRef = useRef<HTMLInputElement>()
     const waveCanvasRef = useRef<HTMLCanvasElement>()
     const waveformRef = useRef<Waveform | null>(null)
 
@@ -38,9 +38,9 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
 
         playerRef.current = new PlayerCore(options)
 
-        if (typeof volumeRef.current !== 'undefined') {
+        if (typeof volumeSliderRef.current !== 'undefined') {
             console.log('#### playerRef.current.getVolume().toString()')
-            volumeRef.current.value = playerRef.current.getVolume().toString()
+            volumeSliderRef.current.value = playerRef.current.getVolume().toString()
         }
 
         const song1: ISoundAttributes = {
@@ -275,6 +275,10 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
 
     const onClickEjectHandler = () => {
         if (!isEjectedState) {
+            // if the volume modal is open, close it first
+            if (isVolumeModalOpenState) {
+                setIsVolumeModalOpenState(false)
+            }
             setIsEjectedState(true)
         } else {
             setIsEjectedState(false)
@@ -283,9 +287,20 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
 
     const onClickVolumeHandler = () => {
         if (!isVolumeModalOpenState) {
+            // if the casette is open, close it first
+            if (isEjectedState) {
+                setIsEjectedState(false)
+            }
             setIsVolumeModalOpenState(true)
         } else {
             setIsVolumeModalOpenState(false)
+        }
+    }
+
+    const onInputVolumeHandler = () => {
+        if (typeof volumeSliderRef.current !== 'undefined') {
+            const volume = volumeSliderRef.current.value
+            playerRef.current.setVolume(parseInt(volume))
         }
     }
 
@@ -342,7 +357,7 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                 </div>
             </div>
             <div className={`${styles.volumeModal} ${isVolumeModalOpenState ? styles.openVolume : styles.closeVolume}`}>
-                <input type="range" id="volume" name="volume" min="0" max="100" className={styles.volumeSlider} />
+                <input type="range" id="volume" name="volume" min="0" max="100" className={styles.volumeSlider} ref={volumeSliderRef} onInput={onInputVolumeHandler} />
             </div>
         </>
     )
