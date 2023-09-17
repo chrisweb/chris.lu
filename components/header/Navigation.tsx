@@ -65,7 +65,7 @@ const HeaderNavigation: React.FC = () => {
 
     const mainMenuItems: IMainMenuItem[] = [
         { href: '/', text: 'Home' },
-        { href: '/web_development?lang=fr', text: 'Web development' },
+        { href: '/web_development', text: 'Web development' },
         { href: '/lego', text: 'Lego' },
         /*{ href: '/music', text: 'Music' },
         { href: '/games', text: 'Games' },
