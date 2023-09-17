@@ -88,7 +88,7 @@ const Button: React.FC<IProps> = ({ children }) => {
             }
             animationTimestampRef.current = timeStamp
         }
-        requestAnimationFrame(animate)
+        requestAnimationFrameRef.current = requestAnimationFrame(animate)
     }, [type, undo, pause])
 
     useEffect(() => {
