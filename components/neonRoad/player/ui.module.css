@@ -227,6 +227,7 @@
     top: 300px;
 }
 
+
 .volumeSlider {
     cursor: var(--cursor-pointer);
     position: absolute;
@@ -234,9 +235,7 @@
     left: 20px;
     appearance: none;
     -webkit-appearance: none;
-    /* "slider-vertical" does not work in firefox */
-    /*appearance: slider-vertical;
-    -webkit-appearance: slider-vertical;*/
+    /* I tried "appearance slider-vertical" but it does not work in firefox and chrome adds a console log message that it is not a standard and will get removed, so instead we will use a "tranform rotate" */
     transform: rotate(270deg);
     transform-origin: center left;
     -webkit-transform: rotate(270deg);

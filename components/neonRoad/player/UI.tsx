@@ -39,7 +39,6 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
         playerRef.current = new PlayerCore(options)
 
         if (typeof volumeSliderRef.current !== 'undefined') {
-            console.log('#### playerRef.current.getVolume().toString()')
             volumeSliderRef.current.value = playerRef.current.getVolume().toString()
         }
 
