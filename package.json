@@ -47,7 +47,7 @@
         "synthwave-vscode": "github:robb0wen/synthwave-vscode",
         "three": "0.156.1",
         "waveform-visualizer": "4.1.1",
-        "web-audio-api-player": "5.0.3"
+        "web-audio-api-player": "5.0.4"
     },
     "devDependencies": {
         "@next/bundle-analyzer": "13.4.19",
