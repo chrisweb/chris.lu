@@ -73,8 +73,8 @@
 
 .songTitle,
 .artistName {
-    font-size: 17px;
-    line-height: 17px;
+    font-size: 16px;
+    line-height: 16px;
     margin-bottom: 0px;
     width: 335px;
     margin-left: 28px;
@@ -226,7 +226,6 @@
     z-index: 11;
     top: 300px;
 }
-
 
 .volumeSlider {
     cursor: var(--cursor-pointer);
