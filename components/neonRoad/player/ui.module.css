@@ -177,10 +177,10 @@
     background: rgba(255, 0, 255, 0.5);
     transform: rotateY(0deg) translateZ(24px);
     mask-image: radial-gradient(circle 20px at 115px 110px,
-            transparent 30px,
+            transparent 19px,
             #000 0),
         radial-gradient(circle 20px at 270px 110px,
-            transparent 30px,
+            transparent 19px,
             #000 0);
     mask-repeat: no-repeat;
     mask-size: 100% 100%;
