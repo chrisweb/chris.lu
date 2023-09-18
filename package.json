@@ -63,5 +63,6 @@
         "eslint-plugin-react": "7.33.2",
         "eslint-plugin-react-hooks": "4.6.0",
         "typescript": "5.2.2"
-    }
+    },
+    "browserlist": [">0.1%, not dead, not Opera < 100, not op_mini all, not and_uc < 15, not samsung < 21, not android > 0, not and_ff < 117, not and_qq < 13, not ie <= 11"]
 }
