@@ -101,8 +101,6 @@ const nextConfig = (/*phase*/) => {
     /** @type {import('next').NextConfig} */
     const nextConfig = {
         experimental: {
-            // experimental support for next.js > 13 app directory
-            appDir: true,
             // experimental use rust compiler for MDX
             mdxRs: false,
         },
