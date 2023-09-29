@@ -4,7 +4,7 @@ import { useRef, useEffect, useState, forwardRef, useCallback } from 'react'
 import { PlayerCore, ISoundAttributes, ICoreOptions } from 'web-audio-api-player'
 import styles from './ui.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay, faPause, faForwardStep, faEject, faArrowUpRightFromSquare, faVolumeHigh, faVolumeXmark } from '@fortawesome/free-solid-svg-icons'
+import { faPlay, faPause, faForwardStep, faEject, faArrowUpRightFromSquare, faVolumeHigh } from '@fortawesome/free-solid-svg-icons'
 import { Waveform, IWaveLayoutOptions, IWaveCoreOptions, IWaveClickCallback } from 'waveform-visualizer'
 import RippleButton from './ripple/Button'
 
