@@ -73,19 +73,16 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                     website: 'https://whitebataudio.com',
                 })
             },
-            onPaused: (playTimeOffset) => {
-                console.log('paused', playTimeOffset)
-
+            onPaused: (playTime) => {
+                console.log('paused', playTime)
                 setIsPlayingState(false)
             },
-            onStopped: (playTimeOffset) => {
-                console.log('stopped', playTimeOffset)
-
+            onStopped: (playTime) => {
+                console.log('stopped', playTime)
                 setIsPlayingState(false)
             },
-            onResumed: (playTimeOffset) => {
-                console.log('resumed', playTimeOffset)
-
+            onResumed: (playTime) => {
+                console.log('resumed', playTime)
                 setIsPlayingState(true)
             },
             onEnded: (willPlayNext) => {
@@ -124,19 +121,16 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                     website: 'https://virt.bandcamp.com/',
                 })
             },
-            onPaused: (playTimeOffset) => {
-                console.log('paused', playTimeOffset)
-
+            onPaused: (playTime) => {
+                console.log('paused', playTime)
                 setIsPlayingState(false)
             },
-            onStopped: (playTimeOffset) => {
-                console.log('stopped', playTimeOffset)
-
+            onStopped: (playTime) => {
+                console.log('stopped', playTime)
                 setIsPlayingState(false)
             },
-            onResumed: (playTimeOffset) => {
-                console.log('resumed', playTimeOffset)
-
+            onResumed: (playTime) => {
+                console.log('resumed', playTime)
                 setIsPlayingState(true)
             },
             onEnded: (willPlayNext) => {
@@ -175,19 +169,16 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                     website: 'https://whitebataudio.com',
                 })
             },
-            onPaused: (playTimeOffset) => {
-                console.log('paused', playTimeOffset)
-
+            onPaused: (playTime) => {
+                console.log('paused', playTime)
                 setIsPlayingState(false)
             },
-            onStopped: (playTimeOffset) => {
-                console.log('stopped', playTimeOffset)
-
+            onStopped: (playTime) => {
+                console.log('stopped', playTime)
                 setIsPlayingState(false)
             },
-            onResumed: (playTimeOffset) => {
-                console.log('resumed', playTimeOffset)
-
+            onResumed: (playTime) => {
+                console.log('resumed', playTime)
                 setIsPlayingState(true)
             },
             onEnded: (willPlayNext) => {
@@ -260,17 +251,17 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
 
     }, [onWaveClickHandler])
 
-    const onClickTogglePlayPauseCallback = useCallback(() => {
+    const onClickTogglePlayPauseCallback = useCallback(async () => {
         if (isPlayingState) {
-            playerRef.current.pause()
+            await playerRef.current.pause()
         } else {
-            playerRef.current.play()
+            await playerRef.current.play()
         }
     }, [isPlayingState, playerRef])
 
-    const onClickNextHandler = () => {
-        playerRef.current.next()
-    }
+    const onClickNextHandler = useCallback(async () => {
+        await playerRef.current.next()
+    }, [playerRef])
 
     const onClickEjectHandler = () => {
         if (!isEjectedState) {

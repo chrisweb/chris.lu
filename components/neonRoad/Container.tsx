@@ -29,10 +29,10 @@ const Container: React.FC = () => {
 
     const playerRef = useRef<PlayerCore>()
 
-    const clickPlayCallback = useCallback((playMusic: boolean) => {
+    const clickPlayCallback = useCallback(async (playMusic: boolean) => {
         setShowAnimationState(true)
         if (playMusic) {
-            playerRef.current.play()
+            await playerRef.current.play()
         }
     }, [])
 
