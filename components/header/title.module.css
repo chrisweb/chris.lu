@@ -1,8 +1,7 @@
 .eighties {
     position: absolute;
+    left: 38%;
     text-align: center;
-    width: 100vw;
-    max-width: 97%;
     z-index: -20;
     margin: 0;
     -webkit-transform: skew(345deg, 345deg);
@@ -28,6 +27,7 @@
 
 @media screen and (orientation:portrait) {
     .eighties {
+        left: 11%;
         bottom: 10%;
         font-size: 20vw;
     }
