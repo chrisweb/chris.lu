@@ -251,13 +251,13 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
 
     }, [onWaveClickHandler])
 
-    const onClickTogglePlayPauseCallback = useCallback(async () => {
+    const onClickTogglePlayPauseCallback = () => {
         if (isPlayingState) {
-            await playerRef.current.pause()
+            playerRef.current.pause()
         } else {
-            await playerRef.current.play()
+            playerRef.current.play()
         }
-    }, [isPlayingState, playerRef])
+    }
 
     const onClickNextHandler = useCallback(async () => {
         await playerRef.current.next()
