@@ -42,156 +42,112 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
             volumeSliderRef.current.value = playerRef.current.getVolume().toString()
         }
 
-        const song1: ISoundAttributes = {
-            source: [
-                {
-                    url: 'Athena_-_Karl_Casey.ogg',
-                    codec: 'ogg',
-                    isPreferred: true,
+        const mixTape = getMixTape()
+
+        mixTape.forEach((song) => {
+
+            const soundAttributes: ISoundAttributes = {
+                source: song.source,
+                onLoading: (loadingProgress, maximumValue, currentValue) => {
+                    console.log('loading: ', loadingProgress, maximumValue, currentValue)
                 },
-                {
-                    url: 'Athena_-_Karl_Casey.mp3',
-                    codec: 'mp3',
-                }
-            ],
-            id: 1,
-            onLoading: (loadingProgress, maximumValue, currentValue) => {
-                console.log('loading: ', loadingProgress, maximumValue, currentValue)
-            },
-            onPlaying: (playingProgress/*, maximumValue, currentValue*/) => {
-                if (waveformRef.current !== null) {
-                    waveformRef.current.draw(playingProgress)
-                }
-            },
-            onStarted: (playTimeOffset) => {
-                console.log('started', playTimeOffset)
-                waveformRef.current.setWaveData([22, 26, 26, 24, 32, 35, 43, 89, 92, 96, 96, 94, 93, 98, 94, 94, 95, 85, 83, 84, 91, 91, 94, 100, 91, 94, 95, 49, 12, 12, 14, 31, 32, 34, 34, 36, 35, 61, 93, 90, 98, 92, 91, 90, 56, 13, 13, 14, 1, 0])
-                setIsPlayingState(true)
-                setCreditsState({
-                    songName: 'Athena',
-                    artistName: 'Karl Casey aka "White Bat Audio"',
-                    website: 'https://whitebataudio.com',
-                })
-            },
-            onPaused: (playTime) => {
-                console.log('paused', playTime)
-                setIsPlayingState(false)
-            },
-            onStopped: (playTime) => {
-                console.log('stopped', playTime)
-                setIsPlayingState(false)
-            },
-            onResumed: (playTime) => {
-                console.log('resumed', playTime)
-                setIsPlayingState(true)
-            },
-            onEnded: (willPlayNext) => {
-                console.log('ended', willPlayNext)
-            }
-        }
-
-        const song2: ISoundAttributes = {
-            source: [
-                {
-                    url: 'Double_Dragon_Neon_City_Streets_1_-_Jake_Kaufman.ogg',
-                    codec: 'ogg',
-                    isPreferred: true,
+                onPlaying: (playingProgress/*, maximumValue, currentValue*/) => {
+                    if (waveformRef.current !== null) {
+                        waveformRef.current.draw(playingProgress)
+                    }
                 },
-                {
-                    url: 'Double_Dragon_Neon_City_Streets_1_-_Jake_Kaufman.mp3',
-                    codec: 'mp3',
-                }
-            ],
-            id: 2,
-            onLoading: (loadingProgress, maximumValue, currentValue) => {
-                console.log('loading: ', loadingProgress, maximumValue, currentValue)
-            },
-            onPlaying: (playingProgress/*, maximumValue, currentValue*/) => {
-                if (waveformRef.current !== null) {
-                    waveformRef.current.draw(playingProgress)
-                }
-            },
-            onStarted: (playTimeOffset) => {
-                console.log('started', playTimeOffset)
-                waveformRef.current.setWaveData([82, 90, 84, 85, 89, 85, 87, 86, 81, 83, 86, 86, 86, 85, 90, 87, 90, 97, 100, 99, 91, 91, 80, 64, 62, 77, 80, 81, 83, 84, 84, 87, 85, 82, 80, 80, 82, 83, 81, 85, 89, 86, 86, 85, 86, 88, 88, 74, 31, 5])
-                setIsPlayingState(true)
-                setCreditsState({
-                    songName: 'City Streets 1 (Double Dragon 1)',
-                    artistName: 'Jake Kaufman aka "Virt"',
-                    website: 'https://virt.bandcamp.com/',
-                })
-            },
-            onPaused: (playTime) => {
-                console.log('paused', playTime)
-                setIsPlayingState(false)
-            },
-            onStopped: (playTime) => {
-                console.log('stopped', playTime)
-                setIsPlayingState(false)
-            },
-            onResumed: (playTime) => {
-                console.log('resumed', playTime)
-                setIsPlayingState(true)
-            },
-            onEnded: (willPlayNext) => {
-                console.log('ended', willPlayNext)
-            }
-        }
-
-        const song3: ISoundAttributes = {
-            source: [
-                {
-                    url: '50_Million_Year_Trip_-_Karl_Casey.ogg',
-                    codec: 'ogg',
-                    isPreferred: true,
+                onStarted: (playTimeOffset) => {
+                    console.log('started', playTimeOffset)
+                    waveformRef.current.setWaveData(song.wave)
+                    setIsPlayingState(true)
+                    setCreditsState({
+                        songName: song.name,
+                        artistName: song.artistName,
+                        website: song.artistWebsite,
+                    })
                 },
-                {
-                    url: '50_Million_Year_Trip_-_Karl_Casey.mp3',
-                    codec: 'mp3',
+                onPaused: (playTime) => {
+                    console.log('paused', playTime)
+                    setIsPlayingState(false)
+                },
+                onStopped: (playTime) => {
+                    console.log('stopped', playTime)
+                    setIsPlayingState(false)
+                },
+                onResumed: (playTime) => {
+                    console.log('resumed', playTime)
+                    setIsPlayingState(true)
+                },
+                onEnded: (willPlayNext) => {
+                    console.log('ended', willPlayNext)
                 }
-            ],
-            id: 3,
-            onLoading: (loadingProgress, maximumValue, currentValue) => {
-                console.log('loading: ', loadingProgress, maximumValue, currentValue)
-            },
-            onPlaying: (playingProgress/*, maximumValue, currentValue*/) => {
-                if (waveformRef.current !== null) {
-                    waveformRef.current.draw(playingProgress)
-                }
-            },
-            onStarted: (playTimeOffset) => {
-                console.log('started', playTimeOffset)
-                waveformRef.current.setWaveData([16, 20, 32, 76, 81, 80, 69, 46, 75, 76, 78, 55, 40, 39, 41, 65, 75, 85, 100, 81, 76, 75, 79, 37, 73, 76, 79, 68, 39, 48, 78, 79, 90, 82, 80, 76, 86, 59, 52, 73, 75, 76, 76, 74, 77, 76, 32, 25, 30, 26])
-                setIsPlayingState(true)
-                setCreditsState({
-                    songName: '50 Million Year Trip',
-                    artistName: 'Karl Casey aka "White Bat Audio"',
-                    website: 'https://whitebataudio.com',
-                })
-            },
-            onPaused: (playTime) => {
-                console.log('paused', playTime)
-                setIsPlayingState(false)
-            },
-            onStopped: (playTime) => {
-                console.log('stopped', playTime)
-                setIsPlayingState(false)
-            },
-            onResumed: (playTime) => {
-                console.log('resumed', playTime)
-                setIsPlayingState(true)
-            },
-            onEnded: (willPlayNext) => {
-                console.log('ended', willPlayNext)
             }
-        }
 
-        playerRef.current.addSoundToQueue({ soundAttributes: song1 })
-        playerRef.current.addSoundToQueue({ soundAttributes: song2 })
-        playerRef.current.addSoundToQueue({ soundAttributes: song3 })
+            playerRef.current.addSoundToQueue({ soundAttributes: soundAttributes })
 
-    }, [playerRef])
+        })
 
+    }, [playerRef, waveformRef])
+
+    const getMixTape = () => {
+
+        const mixTape = [
+            {
+                source: [
+                    {
+                        url: 'Athena_-_Karl_Casey.ogg',
+                        codec: 'ogg',
+                        isPreferred: true,
+                    },
+                    {
+                        url: 'Athena_-_Karl_Casey.mp3',
+                        codec: 'mp3',
+                    }
+                ],
+                wave: [22, 26, 26, 24, 32, 35, 43, 89, 92, 96, 96, 94, 93, 98, 94, 94, 95, 85, 83, 84, 91, 91, 94, 100, 91, 94, 95, 49, 12, 12, 14, 31, 32, 34, 34, 36, 35, 61, 93, 90, 98, 92, 91, 90, 56, 13, 13, 14, 1, 0],
+                name: 'Athena',
+                artistName: 'Karl Casey aka "White Bat Audio"',
+                artistWebsite: 'https://whitebataudio.com',
+            },
+            {
+                source: [
+                    {
+                        url: 'Double_Dragon_Neon_City_Streets_1_-_Jake_Kaufman.ogg',
+                        codec: 'ogg',
+                        isPreferred: true,
+                    },
+                    {
+                        url: 'Double_Dragon_Neon_City_Streets_1_-_Jake_Kaufman.mp3',
+                        codec: 'mp3',
+                    }
+                ],
+                wave: [82, 90, 84, 85, 89, 85, 87, 86, 81, 83, 86, 86, 86, 85, 90, 87, 90, 97, 100, 99, 91, 91, 80, 64, 62, 77, 80, 81, 83, 84, 84, 87, 85, 82, 80, 80, 82, 83, 81, 85, 89, 86, 86, 85, 86, 88, 88, 74, 31, 5],
+                name: 'City Streets 1 (Double Dragon 1)',
+                artistName: 'Jake Kaufman aka "Virt"',
+                artistWebsite: 'https://virt.bandcamp.com/',
+            },
+            {
+                source: [
+                    {
+                        url: '50_Million_Year_Trip_-_Karl_Casey.ogg',
+                        codec: 'ogg',
+                        isPreferred: true,
+                    },
+                    {
+                        url: '50_Million_Year_Trip_-_Karl_Casey.mp3',
+                        codec: 'mp3',
+                    }
+                ],
+                wave: [16, 20, 32, 76, 81, 80, 69, 46, 75, 76, 78, 55, 40, 39, 41, 65, 75, 85, 100, 81, 76, 75, 79, 37, 73, 76, 79, 68, 39, 48, 78, 79, 90, 82, 80, 76, 86, 59, 52, 73, 75, 76, 76, 74, 77, 76, 32, 25, 30, 26],
+                name: '50 Million Year Trip',
+                artistName: 'Karl Casey aka "White Bat Audio"',
+                artistWebsite: 'https://whitebataudio.com',
+            }
+        ]
+
+        return mixTape
+
+    }
 
     const onWaveClickHandler: IWaveClickCallback = useCallback((clickHorizontalPositionInPercent) => {
 
@@ -208,7 +164,7 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
 
         const waveCoreOptions: IWaveCoreOptions = {
             layout: waveLayoutOptions,
-            data: [22, 26, 26, 24, 32, 35, 43, 89, 92, 96, 96, 94, 93, 98, 94, 94, 95, 85, 83, 84, 91, 91, 94, 100, 91, 94, 95, 49, 12, 12, 14, 31, 32, 34, 34, 36, 35, 61, 93, 90, 98, 92, 91, 90, 56, 13, 13, 14, 1, 0],
+            data: getMixTape()[0].wave,
             waveformClickCallback: onWaveClickHandler,
         }
 
