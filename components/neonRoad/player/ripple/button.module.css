@@ -1,4 +1,3 @@
-
 .button {
     background-color: transparent;
     border-color: transparent;
@@ -17,6 +16,5 @@
 @media all and (max-width: 70rem) {
     .volume {
         display: none;
-
     }
 }

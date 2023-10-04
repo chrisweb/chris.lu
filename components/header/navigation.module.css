@@ -75,19 +75,29 @@
 .layoutNavbar a {
     text-decoration: none;
     color: #fff;
-    font-weight: 600;
+    font-weight: 400;
     line-height: 1.3;
     cursor: var(--cursor-pointer);
     padding-bottom: 3px;
+    white-space: nowrap;
     /* default off */
     transition: none;
+}
+
+.layoutNavbar a::before {
+    display: block;
+    content: attr(title);
+    font-weight: 600;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
 }
 
 /* not on mobile */
 @media (hover: hover) {
     .layoutNavbar a {
         background-image: linear-gradient(#ffffff 0%, #ffffff 100%);
-        background-size: 0% 2px;
+        background-size: 0% 1px;
         background-position-y: 100%;
         background-position-x: 0%;
         background-repeat: no-repeat;
@@ -95,17 +105,14 @@
     }
 
     .layoutNavbar a:hover {
-        background-size: 100% 2px;
+        background-size: 100% 1px;
     }
 }
 
 .layoutNavbar a.active {
-    background-image: linear-gradient(#ffffff 0%, #ffffff 100%);
-    background-size: 100% 2px;
-    background-position-y: 0%;
-    background-position-x: 0%;
-    background-repeat: no-repeat;
+    font-weight: 600;
     transition: none;
+    background: none;
     cursor: url(/assets/cursors/secondary_mouse_default.cur), default;
 }
 

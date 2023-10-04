@@ -105,6 +105,7 @@ const HeaderNavigation: React.FC = () => {
                                 key={mainMenuItem.href}
                                 onClick={onClickLinkHandler}
                                 className={isActiveClass}
+                                title={mainMenuItem.text}
                             >
                                 {mainMenuItem.text}
                             </Link>
