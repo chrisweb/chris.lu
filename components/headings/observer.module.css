@@ -31,11 +31,13 @@
 
 /* not on mobile */
 @media (hover: hover) {
+
     .active>a {
         background-image: linear-gradient(var(--tertiary-light-color) 0%, var(--tertiary-light-color) 100%);
     }
-    
+
     .notActive>a {
         background-image: linear-gradient(var(--primary-light-color) 0%, var(--primary-light-color) 100%);
     }
+
 }
