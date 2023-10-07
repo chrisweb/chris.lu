@@ -67,18 +67,36 @@
 }
 
 .press {
-        /* offset-x | offset-y | blur-radius | color */
-        text-shadow: 1px 1px 0 rgb(0, 145, 255), 2px 2px 0 rgb(0, 170, 255), 3px 3px 0 rgb(0, 195, 255);
+    /* offset-x | offset-y | blur-radius | color */
+    text-shadow: 1px 1px 0 rgb(0, 145, 255), 2px 2px 0 rgb(0, 170, 255), 3px 3px 0 rgb(0, 195, 255);
 }
 
 .start {
-        /* offset-x | offset-y | blur-radius | color */
-        text-shadow: -1px 1px 0 rgb(0, 145, 255), -2px 2px 0 rgb(0, 170, 255), -3px 3px 0 rgb(0, 195, 255);
+    /* offset-x | offset-y | blur-radius | color */
+    text-shadow: -1px 1px 0 rgb(0, 145, 255), -2px 2px 0 rgb(0, 170, 255), -3px 3px 0 rgb(0, 195, 255);
 }
 
 .blink {
     animation: blink-animation 2s steps(5, start) infinite;
     -webkit-animation: blink-animation 2s steps(5, start) infinite;
+}
+
+/* max-width: --main-maxWidth */
+@media all and (max-width: 70rem) {
+
+    .playContainer {
+        top: 3%;
+    }
+
+    .withMusic,
+    .withoutMusic {
+        font-size: 1.8rem;
+    }
+
+    .pressStart {
+        font-size: 3rem;
+    }
+
 }
 
 @keyframes blink-animation {
