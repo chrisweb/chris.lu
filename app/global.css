@@ -21,8 +21,8 @@
     --main-fontWeight-default: 400;
     --main-fontWeight-headline: 700;
     --main-fontWeight-links: 600;
-    --main-lineHeight-default: 1.75;
-    --main-lineHeight-headline: 1.3;
+    --main-lineHeight-default: 1.5;
+    --main-lineHeight-headline: 1.75;
     --main-spacing: 1.5rem;
     --main-maxWidth: 70rem;
     --main-article-maxWidth: 50rem;
@@ -34,7 +34,6 @@
     --header-navbar-height: 58px;
     --cursor-default: url(/assets/cursors/secondary_mouse_default.cur), default;
     --cursor-pointer: url(/assets/cursors/secondary_mouse_pointer.cur), pointer;
-    line-height: var(--main-line-height);
 }
 
 *,
@@ -44,7 +43,6 @@
 }
 
 html {
-    line-height: 1.15;
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -83,7 +81,8 @@ body {
     font-family: var(--main-frontFamily-default);
     /* font size is 16 px so that 1rem = 16px */
     font-size: 16px;
-    font-weight: var(--main-fontWeight-default);
+    font-weight: 400;
+    line-height: normal;
     /* always have scrollbar on the right */
     /* if this is not set, the page content will move when
     going from a page with scrollbar to a page without */
@@ -96,6 +95,14 @@ body {
     }
 }
 
+main,
+header,
+footer {
+    font-size: var(--main-fontSize-default);
+    font-weight: var(--main-fontWeight-default);
+    line-height: var(--main-lineHeight-default);
+}
+
 header,
 footer {
     overflow: hidden;
@@ -103,6 +110,15 @@ footer {
 
 header {
     margin-bottom: var(--main-spacing);
+}
+
+main {
+    display: flex;
+    flex-direction: row;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: var(--main-maxWidth);
+    padding: 1rem 2rem;
 }
 
 .h1,
@@ -150,7 +166,6 @@ h6 {
 }
 
 p {
-    line-height: var(--main-lineHeight-default);
     margin: var(--main-spacing) 0;
 }
 
@@ -249,16 +264,6 @@ a {
     }
 }
 
-main {
-    font-size: var(--main-fontSize-default);
-    display: flex;
-    flex-direction: row;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: var(--main-maxWidth);
-    padding: 1rem 2rem;
-}
-
 article {
     max-width: var(--main-article-maxWidth);
 }
@@ -287,12 +292,16 @@ progress {
     vertical-align: baseline;
 }
 
+[data-rehype-pretty-code-fragment] {
+    margin: var(--main-spacing) 0;
+}
+
 pre {
+    margin: 0;
+    padding: calc(var(--main-spacing) / 2) 0;
     /* max width = 100vw - (2 x main padding) */
     max-width: calc(100vw - (2 * 2rem));
     overflow: auto;
-    padding: calc(var(--main-spacing) / 2);
-    margin: var(--main-spacing) 0;
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/white-space-collapse */
     white-space-collapse: preserve;
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap */
@@ -305,25 +314,79 @@ pre>code {
 }
 
 code {
+    font-family: var(--codebloc-font-family);
     counter-reset: line;
 }
 
-code>.line::before {
+[data-line-numbers]>[data-line]::before {
     counter-increment: line;
     content: counter(line);
     display: inline-block;
     width: 1rem;
     margin-right: 2rem;
     text-align: right;
-    color: gray;
+    color: #999999;
 }
 
-code[data-line-numbers-max-digits='2']>.line::before {
+[data-line-numbers-max-digits='2']>[data-line]::before {
     width: 2rem;
 }
 
-code[data-line-numbers-max-digits='3']>.line::before {
+[data-line-numbers-max-digits='3']>[data-line]::before {
     width: 3rem;
+}
+
+[data-line] {
+    padding: 0 calc(var(--main-spacing) / 2);
+    line-height: 1.4;
+    border-left-width: 2px;
+    border-left-style: solid;
+    border-left-color: transparent;
+}
+
+.highlightedLine {
+    background-color: #494365;
+    border-left-color: var(--primary-light-color);
+}
+
+.highlightedWord {
+    background-color: #493c86;
+}
+
+.highlightedChars {
+    background-color: #6f5886;
+    border-radius: 4px;
+    padding: 0px 4px;
+}
+
+.highlightedChars[data-chars-id="special"] {
+    background-color: #623c86;
+}
+
+.codeBlockTitle {
+    background-color: #262335;
+    padding: calc(var(--main-spacing) / 3) calc(var(--main-spacing) / 2);
+    --cornerSideLength: 25px;
+    clip-path:
+        polygon(0 0,
+            calc(100% - var(--cornerSideLength)) 0,
+            100% var(--cornerSideLength),
+            100% 100%,
+            0 100%);
+}
+
+.codeBlockCaption {
+    background-color: #262335;
+    padding: calc(var(--main-spacing) / 3) calc(var(--main-spacing) / 2);
+    --cornerSideLength: 25px;
+    text-align: end;
+    font-size: medium;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% 100%,
+            var(--cornerSideLength) 100%,
+            0 calc(100% - var(--cornerSideLength)));
 }
 
 article,
@@ -389,10 +452,10 @@ h6:hover .headingAnchor .iconLink {
 
 @keyframes rippleAnimation {
     0% {
-        box-shadow: 0 0 0 0 rgba(255,255,255,1);
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 1);
     }
 
     100% {
-        box-shadow: 0 0 0 10px rgba(255,255,255,0);
+        box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
     }
 }

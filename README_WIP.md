@@ -1119,7 +1119,7 @@ Note: it is important you add the `mdx-components.tsx` to your project for MDX f
 
 > Module not found: Can't resolve 'next-mdx-import-source-file'
 
-Note: Also after adding this file or in the future after making changes to it, you always need to restart the dev server, as this is a configuration file like `next.config.mjs`
+Note: Also after adding this file or in the future after making changes to it, you always need to restart the dev server for the changes to take effect (next.config.mjs changes will trigger a server reload in the latest next.js versions but this file will not)
 
 (??? is this still needed, it is not in the nextjs documentation anymore) and then in the root of the project create a directory called `types` and inside of it add a file called `mdx.d.ts` with the following content:
 
@@ -1251,15 +1251,15 @@ to disable the mdx rust compiler, in `next.config.mjs` you need to remove the op
     }
 ```
 
-after you saved the file and if the dev server was running, next.js will of course tell you that:
+Warning: ~~as this is a configuration change, don't forget to stop and re-start the dev server after saving the config file, if you look at the terminal you will see the following message in your terminal as a reminder to do so~~:
 
 > Found a change in next.config.mjs. Restart the server to see the changes in effect.
 
-so we restart the dev server:
+As of now there is apparently no need anymore to restart the server manually, which is great 🙂, it will now restart automatically, the line in the terminal now says:
 
-```shell
-npm run dev
-```
+> Found a change in next.config.mjs. Restarting the server to apply the changes...
+
+TODO: the failing if no loader is installed, I need to verify this, I wrote this a long time ago, this might be fixed in new versions:
 
 however if you disable `mdxRs` so that next.js does not use the rust based SWC compiler, then next.js will silently fail, this is because if you don't use SWC for compilation then next.js will use webpack, but there is no webpack loader plugin installed for MDX, to do so run the following command:
 
@@ -2108,21 +2108,44 @@ const nextConfig = (/*phase*/) => {
         // keep the SynthWave '84 background or use a custom background color?
         keepBackground: true,
 
-        // callback hooks to add custom logic to nodes when visiting them
-        onVisitLine(node) {
+        // "visitor" hooks to customize the html output
+        onVisitLine(element) {
             // prevent lines from collapsing in `display: grid` mode, and
             // allow empty lines to be copy/pasted
-            if (node.children.length === 0) {
-                node.children = [{ type: 'text', value: ' ' }]
+            if (element.children.length === 0) {
+                element.children = [{ type: 'text', value: ' ' }]
             }
         },
-        onVisitHighlightedLine(node) {
-            // Each line node by default has `class="line"`.
-            node.properties.className.push('highlighted')
+        onVisitHighlightedLine(element) {
+            if (typeof element.properties.className === 'undefined') {
+                element.properties.className = []
+            }
+            element.properties.className.push('highlightedLine')
         },
-        onVisitHighlightedWord(node) {
-            // Each word node has no className by default.
-            node.properties.className = ['word']
+        onVisitHighlightedWord(element) {
+            if (typeof element.properties.className === 'undefined') {
+                element.properties.className = []
+            }
+            element.properties.className.push('highlightedWord')
+        },
+        onVisitHighlightedChars(element) {
+            if (typeof element.properties.className === 'undefined') {
+                element.properties.className = []
+            }
+            element.properties.className.push('highlightedChars')
+        },
+        onVisitTitle(element) {
+            if (typeof element.properties.className === 'undefined') {
+                element.properties.className = []
+            }
+            element.properties.className.push('codeBlockTitle')
+
+        },
+        onVisitCaption(element) {
+            if (typeof element.properties.className === 'undefined') {
+                element.properties.className = []
+            }
+            element.properties.className.push('codeBlockCaption')
         },
     }
 
@@ -2159,11 +2182,25 @@ const nextConfig = (/*phase*/) => {
 export default nextConfig
 ```
 
+Note: all "visitor" hooks you see in the **rehypePrettyCodeOptions** have been added so that we have classNames when one of those features is present, for example if you highlight a row the hook will ensure that the line has a class named **highlightedLine** which will help us to style the features in the next step
+
 next we add the following css to our `global.css` file:
 
 ```css
+[data-rehype-pretty-code-fragment] {
+    margin: var(--main-spacing) 0;
+}
+
 pre {
-    padding: calc(var(--main-spacing) / 2);
+    margin: 0;
+    padding: calc(var(--main-spacing) / 2) 0;
+    /* max width = 100vw - (2 x main padding) */
+    max-width: calc(100vw - (2 * 2rem));
+    overflow: auto;
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/white-space-collapse */
+    white-space-collapse: preserve;
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap */
+    text-wrap: nowrap;
 }
 
 /* recommended by https://rehype-pretty-code.netlify.app/ */
@@ -2172,33 +2209,179 @@ pre>code {
 }
 
 code {
+    font-family: var(--codebloc-font-family);
     counter-reset: line;
 }
 
-code>.line::before {
+[data-line-numbers]>[data-line]::before {
     counter-increment: line;
     content: counter(line);
-
-    /* Other styling */
     display: inline-block;
     width: 1rem;
     margin-right: 2rem;
     text-align: right;
-    color: gray;
+    color: #999999;
 }
 
-code[data-line-numbers-max-digits='2']>.line::before {
+[data-line-numbers-max-digits='2']>[data-line]::before {
     width: 2rem;
 }
 
-code[data-line-numbers-max-digits='3']>.line::before {
+[data-line-numbers-max-digits='3']>[data-line]::before {
     width: 3rem;
+}
+
+[data-line] {
+    padding: 0 calc(var(--main-spacing) / 2);
+    line-height: 1.4;
+    border-left-width: 2px;
+    border-left-style: solid;
+    border-left-color: transparent;
 }
 ```
 
-Note: as we did changes to next.js config file we need to restart the dev server
+this is the base css for our code blocks, some css is to style the **pre** and **code** elements, the rest is to style the data attributes that rehype pretty code will add by default
+
+next we add even more css, but this time the css we add is to style the custom css classes we added in the next config file, in the rehype pretty code options
+
+```css
+.highlightedLine {
+    background-color: #494365;
+    border-left-color: var(--primary-light-color);
+}
+
+.highlightedWord {
+    background-color: #493c86;
+}
+
+.highlightedChars {
+    background-color: #6f5886;
+    border-radius: 4px;
+    padding: 0px 4px;
+}
+
+.highlightedChars[data-chars-id="special"] {
+    background-color: #623c86;
+}
+
+.codeBlockTitle {
+    background-color: #262335;
+    padding: calc(var(--main-spacing) / 3) calc(var(--main-spacing) / 2);
+    --cornerSideLength: 25px;
+    clip-path:
+        polygon(0 0,
+            calc(100% - var(--cornerSideLength)) 0,
+            100% var(--cornerSideLength),
+            100% 100%,
+            0 100%);
+}
+
+.codeBlockCaption {
+    background-color: #262335;
+    padding: calc(var(--main-spacing) / 3) calc(var(--main-spacing) / 2);
+    --cornerSideLength: 25px;
+    text-align: end;
+    font-size: medium;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% 100%,
+            var(--cornerSideLength) 100%,
+            0 calc(100% - var(--cornerSideLength)));
+}
+```
+
+Note: that for the code element I use the attribute selector [data-line-numbers], this ensures that we only display line numbers for code blocks where you used **showLineNumbers**, if showLineNumbers is set rehype pretty code will add the data attribute **data-line-numbers** else it won't
 
 now run the dev server again and look at the what got generated this time, you will see that the same html &lt;pre&gt; tag and html &lt;code class="language-js"&gt; tag are there (with an attribute that defines which theme is being used) but inside of those two we now have a bunch of span tags with style attribute for the text color
+
+now what can you do with all this:
+
+take this code for example
+
+```js title="./test.js" showLineNumbers /console/
+function helloWorld() {
+    // this is a comment
+    let greeting = 'Hello World!'
+    console.log(greeting)
+}
+```
+
+here we define several things, of course we start by setting the language, in this case our code is written in javascript so we set it to **js**, for typescript code we would use **ts**, for typescript with jsx (react) **tsx** and for javascript + jsx (react) **jsx**, of course there are a ton of other languages that are supported too
+
+next we set a title and as title we use the path to the file (from which we took the code that is in the code block)
+
+then we use the option showLineNumbers which turns the line numbers on the right on
+
+and finally we tell it to highlight the characters "console" in our code
+
+here is another code block example:
+
+```tsx {3} /helloWorld/#special caption="tsx"
+function helloWorld() {
+    // this is a comment
+    let greeting = 'Hello World!'
+    console.log(greeting)
+}
+```
+
+this time we set the language to tsx (typescript + jsx)
+
+next we tell it to hightlight the entire 3 row, you could also use {2-3} to highlight the rows from 2 to 3, or to highlight several rows you could use {1,3,5} to highlight the first, third and fifth row
+
+then we tell it to highlight the characters "helloWorld" but we also tell it to use the css class "special", if you look at the css we added earlier:
+
+```css
+.highlightedChars {
+    background-color: #6f5886;
+    border-radius: 4px;
+    padding: 0px 4px;
+}
+
+.highlightedChars[data-chars-id="special"] {
+    background-color: #623c86;
+}
+```
+
+we have the base class **highlightedChars** for every characters we highlight, but we also have an additional entry where we use an additional data attribute selector and say that if the id equals special we want to use another background color
+
+then in our code block options we also used the id **special**, this way you can create an infinite amount of css variations for your character highlights
+
+next we used the caption option, this is the similar to the title with the difference that it is under the code block instead of above, as the caption text we set tsx to indicate in what language the code in the code block is using, but of course you can use the caption part for what ever you want
+
+now we are done with the code blocks, but there is one last thing we can do use rehype pretty code and that is style inline code, so code inside of our article text, to do that we need to append the language inside of curly brackets at the end of our inline code, like so:
+
+```html
+Lorem ipsum dolor sit amet, `helloWorld(){:tsx}`. Praesent vehicula sem ac erat sagittis, eget dapibus eros cursus.
+```
+
+as you can see this works, our inline code has been highlighted and the colors are correct, but what if instead of **helloworld()** we use **helleworld** so just the function name without the brackets at the end:
+
+```html
+Lorem ipsum dolor sit amet, `helloWorld{:tsx}`. Praesent vehicula sem ac erat sagittis, eget dapibus eros cursus.
+```
+
+now even though we specified the language, the color is wrong, this is because based on the little bit of code the highlighter can not now that it is actually a function and instead assumes it is a variable
+
+to fix this and tell the highlighter explicitly that this is a function, we need to use a **.token** instead of the language, like so:
+
+```html
+Lorem ipsum dolor sit amet, `helloWorld{:.entity.name.function}`. Praesent vehicula sem ac erat sagittis, eget dapibus eros cursus.
+```
+
+and the color is fixed.
+
+Now you might wonder how do you know what each and every token is, well at the top of this chapter we included a vscode json theme, in that json file there is a section called **tokenColors** and in that list are all the tokens and their color settings
+
+I will make a short list here with the most common token (for javascript / typescript), if you need one that is not listed here you need to look it up in your theme json file:
+
+* function: .entity.name.function
+* comment: .comment
+* string: .string.quoted
+* variable: .variable
+* number: .constant.numeric.decimal.js
+* Object property: .meta.object-literal.key
+
 
 read more:
 
@@ -3300,17 +3483,11 @@ const nextConfig = (/*phase*/) => {
 export default nextConfig
 ```
 
-the CSP rule `default-src 'self'` we have defined for now is very simple and very restrictive, it will block every request for files not hosted on the same domain as our main page itself
+the CSP rule `default-src 'self'` that we have defined for now is very simple and very restrictive, it will block every request for files not hosted on the same domain as our main page itself
 
 Note: as you might have noticed, I used **Content-Security-Policy-Report-Only** instead of just **Content-Security-Policy**, this is because for now I don't want to enforce any rules, I just want to test the rules, later when I have verified that the rules are correct, I will switch to **Content-Security-Policy** to enforce them
 
-Warning: as this is a configuration change, don't forget to stop and re-start the dev server after saving the config file, actually you will see the following message in your terminal as a reminder to do so:
-
-> Found a change in next.config.mjs. Restart the server to see the changes in effect.
-
-so lets stop and start our development server again and then visit the URL of our project in the browser
-
-after restarting the dev server, if you look at **network tab in the developer tools** of your browser, you will see that in the "localhost" page response there is our new header:
+now if you look at **network tab in the developer tools** of your browser, you will see that in the "localhost" page response there is our new header:
 
 ![vscode notification typescript version](./documentation/assets/images/content_security_policy_http_response_headers.png)
 
@@ -4038,13 +4215,11 @@ I then added my clip path polygon to the css of the button:
     --cornerSideLength: 20px;
 
     clip-path:
-        polygon(
-            0 0,
+        polygon(0 0,
             100% 0,
             100% calc(100% - var(--cornerSideLength)),
             calc(100% - var(--cornerSideLength)) 100%,
-            0 100%
-        );
+            0 100%);
 
     background-color: #ff00aa;
     height: 40px;
@@ -4063,12 +4238,84 @@ I then added my clip path polygon to the css of the button:
 }
 ```
 
-
-
 next we just need to create an html button (you can use a div or a real button element, I will use a link element for this example):
 
 ```html
 <a class="btn" href="/">Button text</a>
+```
+
+the above clip path we used, was to cut out the **bottom / right** corner, this is the css we used:
+
+```css
+.btn {
+    --cornerSideLength: 20px;
+
+    clip-path:
+        polygon(0 0,
+            calc(100% - var(--cornerSideLength)) 0,
+            100% var(--cornerSideLength),
+            100% 100%,
+            0 100%);
+}
+```
+
+as you can see our polygon has 5 points, each point consists of two coordinates **X** and **Y**
+
+the first point 0 0 means we start at the top left, which is X = 0px and Y = 0px
+
+now for the second point, we go to 100% of the width of the element minus the length of the corner we want to cut out, which we set to 20px via the **cornerSideLength** css variable and down 0px from the top, so for the second point X = 100% - 20px and Y = 0
+
+then we go to the third point, we draw to 100% of the width but 20px down from the top, which is X = 100% and Y = 20px
+
+for the fourth point we go to bottom right, which is X = 100% and Y = 100%
+
+then the last point, the fifth one, we go to the bottom left, which is X = 0px and Y = 100%
+
+from the fifth point the clip path will automatically go back to the first one, no need to specity a sixth point as the polygon will automatically get closed
+
+if instead of cutting out the bottom / right, you prefer to cut out the **top / right** corner you would use this clip-path instead:
+
+```css
+.btn {
+    --cornerSideLength: 20px;
+
+    clip-path:
+        polygon(0 0,
+            calc(100% - var(--cornerSideLength)) 0,
+            100% var(--cornerSideLength),
+            100% 100%,
+            0 100%);
+}
+```
+
+to cut out the **bottom / left** corner you would use this clip-path:
+
+```css
+.btn {
+    --cornerSideLength: 20px;
+
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% 100%,
+            var(--cornerSideLength) 100%,
+            0 calc(100% - var(--cornerSideLength)));
+}
+```
+
+and to cut out the **top / left** corner you would use this clip-path:
+
+```css
+.btn {
+    --cornerSideLength: 20px;
+
+    clip-path:
+        polygon(var(--cornerSideLength) 0,
+            100% 0,
+            100% 100%,
+            0 100%,
+            0 var(--cornerSideLength));
+}
 ```
 
 read more:

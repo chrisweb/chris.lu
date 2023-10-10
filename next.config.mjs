@@ -11,6 +11,7 @@ import { remarkTableOfContents } from 'remark-table-of-contents'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
 import rehypeSlug from 'rehype-slug'
+//import remarkGfm from 'remark-gfm'
 
 /*const ContentSecurityPolicy = `
   default-src 'self';
@@ -42,22 +43,44 @@ const nextConfig = (/*phase*/) => {
         // Keep the background or use a custom background color?
         keepBackground: true,
 
-        // Callback hooks to add custom logic to nodes when visiting
-        // them.
-        onVisitLine(node) {
-            // Prevent lines from collapsing in `display: grid` mode, and
+        // "visitor" hooks to customize the html output
+        onVisitLine(element) {
+            // prevent lines from collapsing in `display: grid` mode, and
             // allow empty lines to be copy/pasted
-            if (node.children.length === 0) {
-                node.children = [{ type: 'text', value: ' ' }]
+            if (element.children.length === 0) {
+                element.children = [{ type: 'text', value: ' ' }]
             }
         },
-        onVisitHighlightedLine(node) {
-            // Each line node by default has `class="line"`.
-            node.properties.className.push('highlighted')
+        onVisitHighlightedLine(element) {
+            if (typeof element.properties.className === 'undefined') {
+                element.properties.className = []
+            }
+            element.properties.className.push('highlightedLine')
         },
-        onVisitHighlightedWord(node) {
-            // Each word node has no className by default.
-            node.properties.className = ['word']
+        onVisitHighlightedWord(element) {
+            if (typeof element.properties.className === 'undefined') {
+                element.properties.className = []
+            }
+            element.properties.className.push('highlightedWord')
+        },
+        onVisitHighlightedChars(element) {
+            if (typeof element.properties.className === 'undefined') {
+                element.properties.className = []
+            }
+            element.properties.className.push('highlightedChars')
+        },
+        onVisitTitle(element) {
+            if (typeof element.properties.className === 'undefined') {
+                element.properties.className = []
+            }
+            element.properties.className.push('codeBlockTitle')
+
+        },
+        onVisitCaption(element) {
+            if (typeof element.properties.className === 'undefined') {
+                element.properties.className = []
+            }
+            element.properties.className.push('codeBlockCaption')
         },
     }
 
@@ -84,13 +107,17 @@ const nextConfig = (/*phase*/) => {
         ).children,
     }
 
+    // https://github.com/remarkjs/remark-gfm
+    // If you use remark-gfm, you'll need to use next.config.mjs
+    // as the package is ESM only
+    /*const remarkGfmOptions = {
+        singleTilde: false,
+    }*/
+
     const withMDX = WithMDX({
         extension: /\.mdx?$/,
         options: {
-            // If you use remark-gfm, you'll need to use next.config.mjs
-            // as the package is ESM only
-            // https://github.com/remarkjs/remark-gfm#install
-            // should I also use: remark-slug remark-autolink-headings ???
+            //remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions], [remarkGfm, remarkGfmOptions]],
             remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions]],
             rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions], rehypeSlug, [rehypeAutolinkHeadings, rehypeAutolinkHeadingsOptions]],
             // If you use `MDXProvider`, uncomment the following line.
@@ -102,6 +129,8 @@ const nextConfig = (/*phase*/) => {
     const nextConfig = {
         experimental: {
             // experimental use rust compiler for MDX
+            // as of now (07.10.2023) there is no support for rehype plugins
+            // this is why it is currently disabled
             mdxRs: false,
         },
         // file formats for next/image

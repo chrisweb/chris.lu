@@ -24,14 +24,25 @@ Sed sed venenatis sapien. Suspendisse ac placerat ex, eu venenatis odio. Nam max
 
 Nunc gravida ante sit amet est fermentum maximus. Suspendisse blandit sagittis lorem sollicitudin facilisis. Phasellus quis felis eget massa porta fringilla vitae id felis. Aenean non ipsum sed ligula malesuada ultrices eget a justo. Nam dictum et lectus sed posuere. Praesent id dictum lectus. Mauris euismod mollis tincidunt. Vestibulum aliquam convallis tellus at cursus. Etiam tempus purus sed semper laoreet. Nulla eu blandit urna, dignissim commodo dui.
 
-Proin vestibulum metus placerat libero eleifend pharetra. Sed vehicula rhoncus justo. Ut eget felis euismod, tempus ante a, lacinia lectus. Integer facilisis id ex in vehicula. Nunc nec bibendum diam. Duis vehicula lectus tortor, vel suscipit nisi hendrerit et. Pellentesque laoreet pulvinar laoreet. Nulla nec turpis tristique, varius lacus eu, consectetur arcu. Sed fermentum dolor vitae mollis gravida. Vestibulum auctor risus at metus pretium, non consequat quam mattis. Vivamus hendrerit gravida elementum. Mauris convallis massa quam.
+`helloWorld(){:tsx}` Proin `helloWorld{:tsx}` vestibulum `helloWorld{:.entity.name.function}` metus `helloWorld{:.comment}` placerat `helloWorld{:.string.quoted}` libero `helloWorld{:.variable}` eleifend `helloWorld{:.constant.numeric.decimal.js}` lectus `helloWorld{:pharetra meta.object-literal.key}`. Sed vehicula rhoncus justo. Ut eget felis euismod, tempus ante a, lacinia lectus. Integer facilisis id ex in vehicula. Nunc nec bibendum diam. Duis vehicula lectus tortor, vel suscipit nisi hendrerit et. Pellentesque laoreet pulvinar laoreet. Nulla nec turpis tristique, varius lacus eu, consectetur arcu. Sed fermentum dolor vitae mollis gravida. Vestibulum auctor risus at metus pretium, non consequat quam mattis. Vivamus hendrerit gravida elementum. Mauris convallis massa quam.
 
 this is the code block:
 
-```js title="./test.js" showLineNumbers
+```js title="./test.js" showLineNumbers /console/
 function helloWorld() {
     // this is a comment
-    console.log('Hello World!')
+    let greeting = 'Hello World!'
+    console.log(greeting)
+}
+```
+
+second code block:
+
+```tsx {3} /helloWorld/#special caption="tsx"
+function helloWorld() {
+    // this is a comment
+    let greeting = 'Hello World!'
+    console.log(greeting)
 }
 ```
 
