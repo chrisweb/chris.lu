@@ -156,6 +156,7 @@ h3,
 h4,
 h5,
 h6 {
+    display: flex;
     font-weight: var(--main-fontWeight-headline);
     line-height: var(--main-lineHeight-headline);
     margin: 0 0 0.35em 0;
@@ -412,10 +413,10 @@ nav {
 }
 
 .headingAnchor {
-    float: left;
-    padding-right: 4px;
+    display: flex;
+    align-items: center;
     margin-left: -28px;
-    line-height: 1;
+    margin-right: 4px;
 }
 
 .icon {
@@ -425,7 +426,6 @@ nav {
 }
 
 .iconLink {
-    vertical-align: middle;
     visibility: hidden;
 }
 

@@ -2615,10 +2615,10 @@ now we are going to edit our `global.css` file, most of it is needed to currectl
 
 ```css
 .headingAnchor {
-    float: left;
-    padding-right: 4px;
+    display: flex;
+    align-items: center;
     margin-left: -28px;
-    line-height: 1;
+    margin-right: 4px;
 }
 
 .icon {
@@ -2628,7 +2628,6 @@ now we are going to edit our `global.css` file, most of it is needed to currectl
 }
 
 .iconLink {
-    vertical-align: middle;
     visibility: hidden;
 }
 
@@ -2650,6 +2649,26 @@ h6:hover .headingAnchor .iconLink {
 
 Note: as you can see we added a special media query **hover: none**, this is for mobile, where hover is not possible, so if it is a mobile device we always show the anchor, on desktop it is only visible when you hover over the heading itself
 
+also make sure your heading are set to **display: flex** (same as the .headingAnchor class):
+
+```css
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    display: flex;
+    font-weight: var(--main-fontWeight-headline);
+    line-height: var(--main-lineHeight-headline);
+    margin: 0 0 0.35em 0;
+    /* add a scroll margin because of the top navbar */
+    /* fixes the scrollIntoView position */
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-margin-top */
+    scroll-margin-top: 80px;
+}
+```
+
 
 read more:
 
@@ -2658,6 +2677,8 @@ read more:
 * ["hast-util-from-html-isomorphic" npm page](https://www.npmjs.com/package/hast-util-from-html-isomorphic)
 
 ## adding the remark "remark-gfm" plugin
+
+warning: 
 
 by adding the [remark "GitHub Flavored Markdown" (GFM) plugin](https://www.npmjs.com/package/remark-gfm) we extend the syntax features provided by the original markdown with the extensions (for autolink literals, footnotes, strikethrough, tables, tasklists) to markdown that you may know from github (for example when writing an issue or a discussion post on github)
 
