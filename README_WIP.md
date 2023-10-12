@@ -1263,7 +1263,9 @@ TODO: the failing if no loader is installed, I need to verify this, I wrote this
 
 however if you disable `mdxRs` so that next.js does not use the rust based SWC compiler, then next.js will silently fail, this is because if you don't use SWC for compilation then next.js will use webpack, but there is no webpack loader plugin installed for MDX, to do so run the following command:
 
-`npm i @mdx-js/loader --save-exact`
+```shell
+npm i @mdx-js/loader --save-exact
+```
 
 then we try to start the dev server again:
 
@@ -2678,7 +2680,9 @@ read more:
 
 ## adding the remark "remark-gfm" plugin
 
-warning: 
+warning: the latest version of remark-gfm is version 4.0.0 but that version is as of now (11.10.2023) not compatible with the latest version of @next/mdx which currently is 13.5.4, the only solution at the moment is to downgrade remark-gfm which means you should use remark-gfm 3.0.1, if you use remark-gfm v4 you will see the following error:
+
+> TypeError: page.mdx:TypeError: Cannot read properties of undefined (reading 'inTable')
 
 by adding the [remark "GitHub Flavored Markdown" (GFM) plugin](https://www.npmjs.com/package/remark-gfm) we extend the syntax features provided by the original markdown with the extensions (for autolink literals, footnotes, strikethrough, tables, tasklists) to markdown that you may know from github (for example when writing an issue or a discussion post on github)
 

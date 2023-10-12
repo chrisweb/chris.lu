@@ -11,7 +11,7 @@ import { remarkTableOfContents } from 'remark-table-of-contents'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
 import rehypeSlug from 'rehype-slug'
-//import remarkGfm from 'remark-gfm'
+import remarkGfm from 'remark-gfm'
 
 /*const ContentSecurityPolicy = `
   default-src 'self';
@@ -110,15 +110,15 @@ const nextConfig = (/*phase*/) => {
     // https://github.com/remarkjs/remark-gfm
     // If you use remark-gfm, you'll need to use next.config.mjs
     // as the package is ESM only
-    /*const remarkGfmOptions = {
+    const remarkGfmOptions = {
         singleTilde: false,
-    }*/
+    }
 
     const withMDX = WithMDX({
         extension: /\.mdx?$/,
         options: {
             //remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions], [remarkGfm, remarkGfmOptions]],
-            remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions]],
+            remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions], [remarkGfm, remarkGfmOptions]],
             rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions], rehypeSlug, [rehypeAutolinkHeadings, rehypeAutolinkHeadingsOptions]],
             // If you use `MDXProvider`, uncomment the following line.
             // providerImportSource: "@mdx-js/react",
