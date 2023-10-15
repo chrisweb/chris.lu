@@ -4,14 +4,7 @@ module.exports = {
         es2021: true,
         node: true,
     },
-    extends: [
-        'eslint:recommended',
-        'plugin:react/recommended',
-        'plugin:@typescript-eslint/recommended',
-        'next/core-web-vitals',
-    ],
-    overrides: [
-    ],
+    root: true,
     parser: '@typescript-eslint/parser',
     parserOptions: {
         ecmaVersion: 'latest',
@@ -21,7 +14,6 @@ module.exports = {
         'react',
         '@typescript-eslint',
     ],
-    root: true,
     rules: {
         // Indentation BUG: https://github.com/eslint/eslint/issues/16385
         /*
@@ -51,4 +43,23 @@ module.exports = {
             }
         ],
     },
+    overrides: [
+        {
+            files: ['app/**/*.ts, app/**/*.tsx, components/**/*.ts, components/**/*.tsx, lib/**/*.ts, lib/**/*.tsx'],
+            extends: [
+                'eslint:recommended',
+                'plugin:react/recommended',
+                'plugin:@typescript-eslint/recommended',
+                'next/core-web-vitals',
+            ],
+        },
+        {
+            files: ['app/**/*.mdx, *.md'],
+            extends: 'plugin:mdx/recommended',
+            settings: {
+                'mdx/code-blocks': true,
+            },
+            parser: 'eslint-mdx',
+        },
+    ],
 }

@@ -165,7 +165,7 @@ npm i typescript@latest @types/react @types/react-dom @types/node --save-dev --s
 of course if you prefer to use [pNpM](https://pnpm.io/) or [Yarn](https://yarnpkg.com/) as your package managers to install the dependencies above, feel free to do so they are great tools too, I for my part prefer to use npm so this is what you will see in this tutorial but the install commands of [pNpM install](https://pnpm.io/cli/install) or [yarn install](https://yarnpkg.com/getting-started/usage) are very similar
 
 
-## eslint setup
+## eslint installation and setup
 
 you have 3 options, when it comes to configuring eslint, option 1 is to use the eslint init command, this in my opinion good as you get to see what eslint thinks are "best practices" when it comes to setting it up, option 2 is to use the next.js eslint init command (when you have no eslint configuration file yet, just run `npm run lint` and the next.js eslint configuration will start) which again is good because you get to see what next.js thinks is a good eslint setup and finally option 3 is that you create an eslint configuration manually and add configure it as you pleases
 
@@ -317,6 +317,48 @@ npm run lint --fix
 ```
 
 Note: if you look at the code of linting cli from the next.js package, you can see which eslint options next.js supports ["cli/next-lint.ts"](https://github.com/vercel/next.js/blob/canary/packages/next/src/cli/next-lint.ts#L63)
+
+### VSCode eslint extension
+
+<https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint>
+
+to check if eslint is running, press `Ctrl` + `Shift` + `P` to open the command palette, then type **eslint** and chose "ESLint: Show Output Channel", which will open the output channel and show you a message like
+
+> [Info  - 8:41:03 PM] ESLint server is running.
+
+if you see that line you it means the ESLint server is running in your workspace
+
+to change the eslint extension settings, click on "Extensions" icon on the right or press `Ctrl` + `Shift` + `X` and then click on the gear icon (⚙️) and then in the menu select **Extension Settings**
+
+Note: when you edit settings you can do it on a **User** level or **Workspace** level, user level means the settings will get applied to whatever project is open in VSCode (which can be interesting if all your projects are written in the same programming language and you only want to configure extensions for all of them at once), workspace level means the settings will only apply to the current workspace (the current project that is open), I like to set the options on a workspace level because this creates a settings.json file inside a **.vscode** directory in the root of my project, I can then commit that directory alongside my project files, so that when someone else does a checkout the will have the settings for vscode too, but you could also add a note about the settings and what extensions should get installed in your project README for example
+
+this is what my `.vscode/settings.json` looks like for the nextjs / mdx blog:
+
+```json
+{
+    "eslint.debug": true,
+    "eslint.options": {
+        "extensions": [
+            ".js",
+            ".jsx",
+            ".md",
+            ".mdx",
+            ".ts",
+            ".tsx"
+        ]
+    },
+    "eslint.validate": [
+        "markdown",
+        "mdx",
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ]
+}
+```
+
+
 
 ### our first page
 
@@ -2030,6 +2072,52 @@ read more:
 
 * [list of rehype plugins](https://github.com/rehypejs/rehype/blob/main/doc/plugins.md#list-of-plugins)
 * [list of remark plugins](https://github.com/remarkjs/remark/blob/main/doc/plugins.md#list-of-plugins)
+
+### eslint-plugin-mdx
+
+#### installation
+
+Note: I have a chapter about [installing & setting up eslint](#eslint-installation-and-setup) for the project and vscode, if you skipped that earlier you might want to read it now before adding the eslint mdx plugin
+
+There is an eslint mdx plugin called [eslint-plugin-mdx](https://www.npmjs.com/package/eslint-plugin-mdx) that I recommend installing first, as it will help us write find and fix problems in our mdx content
+
+Note: if you go to the [eslint mdx github repository](https://github.com/mdx-js/eslint-mdx), you will see they have two packages, **eslint-mdx** which is the parser and **eslint-plugin-mdx** which is the actual eslint plugin, you don't need to install the parser manually, so it is in the plugins package json and will be installed when you install the plugin
+
+to install the mdx plugin we use this command:
+
+```shell
+npm i eslint-plugin-mdx --save-dev --save-exact
+```
+
+#### setup
+
+when using the MDX eslint plugin we want it to only check mdx files, so as stated in the [eslint-plugin-mdx readme](https://github.com/mdx-js/eslint-mdx#notice) it is very important to use the overrides feature of eslint, if you want to know more about the parsing issues you might have if not using overrides check out the [eslint-plugin-mdx github issue #251](https://github.com/mdx-js/eslint-mdx/issues/251#issuecomment-736139224)
+
+```json
+{
+    overrides: [
+        {
+            files: ['*.mdx'],
+            extends: 'plugin:mdx/recommended',
+            settings: {
+                'mdx/code-blocks': true,
+            },
+        },
+    ],
+}
+```
+
+read more:
+
+* [eslint documentation: how eslint overrides work](https://eslint.org/docs/latest/use/configure/configuration-files#how-do-overrides-work)
+
+### VSCode language support extension for MDX
+
+Note: I have a chapter about the [VSCode eslint extension](#vscode-eslint-extension), if you skipped it earlier you might want to read it now before adding the VSCode MDX extension
+
+I recommend installing [VSCode language support extension for MDX](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx) when working with MDX content as this extension will add IntelliSense support for MDX files to VSCode
+
+Note: this extension is still experimental, but I had no problems when using it
 
 ### MDX code blocks
 
