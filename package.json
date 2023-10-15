@@ -7,6 +7,7 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
+        "next-lint": "next lint",
         "lint": "next lint"
     },
     "repository": {
@@ -29,7 +30,7 @@
         "@fortawesome/react-fontawesome": "0.2.0",
         "@mdx-js/loader": "2.3.0",
         "@next/mdx": "13.5.4",
-        "@react-three/drei": "9.88.0",
+        "@react-three/drei": "9.88.2",
         "@react-three/fiber": "8.14.5",
         "globby": "13.2.2",
         "hast-util-from-html-isomorphic": "2.0.0",
@@ -42,8 +43,8 @@
         "rehype-autolink-headings": "7.0.0",
         "rehype-pretty-code": "0.10.1",
         "rehype-slug": "6.0.0",
-        "remark-table-of-contents": "2.0.2",
         "remark-gfm": "3.0.1",
+        "remark-table-of-contents": "2.0.2",
         "shiki": "0.14.5",
         "synthwave-vscode": "github:robb0wen/synthwave-vscode",
         "three": "0.157.0",
@@ -52,7 +53,7 @@
     },
     "devDependencies": {
         "@next/bundle-analyzer": "13.5.4",
-        "@types/node": "20.8.4",
+        "@types/node": "20.8.6",
         "@types/react": "18.2.28",
         "@types/react-dom": "18.2.13",
         "@typescript-eslint/eslint-plugin": "6.7.5",
@@ -61,9 +62,12 @@
         "eslint-config-next": "13.5.4",
         "eslint-plugin-import": "2.28.1",
         "eslint-plugin-jsx-a11y": "6.7.1",
+        "eslint-plugin-mdx": "2.2.0",
         "eslint-plugin-react": "7.33.2",
         "eslint-plugin-react-hooks": "4.6.0",
         "typescript": "5.2.2"
     },
-    "browserslist": [">0.1%, not dead, not Opera < 100, not op_mini all, not and_uc < 15, not samsung < 21, not android > 0, not and_ff < 117, not and_qq < 13, not ie <= 11"]
+    "browserslist": [
+        ">0.1%, not dead, not Opera < 100, not op_mini all, not and_uc < 15, not samsung < 21, not android > 0, not and_ff < 117, not and_qq < 13, not ie <= 11"
+    ]
 }
