@@ -165,7 +165,83 @@ npm i typescript@latest @types/react @types/react-dom @types/node --save-dev --s
 of course if you prefer to use [pNpM](https://pnpm.io/) or [Yarn](https://yarnpkg.com/) as your package managers to install the dependencies above, feel free to do so they are great tools too, I for my part prefer to use npm so this is what you will see in this tutorial but the install commands of [pNpM install](https://pnpm.io/cli/install) or [yarn install](https://yarnpkg.com/getting-started/usage) are very similar
 
 
-## eslint installation and setup
+## eslint installation and setup (NEW: TODO update and finish this chapter + do testing to ensure everything works as described)
+
+eslint 
+
+install the nextjs eslint plugin
+
+nextjs has two packages that are related to eslint:
+
+* [eslint-config-next](https://www.npmjs.com/package/eslint-config-next)
+* [eslint-plugin-next](https://www.npmjs.com/package/@next/eslint-plugin-next)
+
+**eslint-config-next** is a package that bundles multiple plugins, it intends to make it easier to get started with eslint, it will install the following 3 plugins for you:
+
+* [eslint-plugin-react](https://www.npmjs.com/package/eslint-plugin-react)
+* [eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks)
+* [eslint-plugin-next](https://www.npmjs.com/package/@next/eslint-plugin-next)
+
+**eslint-plugin-next** is the actual eslint plugin for nextjs (called **@next/eslint-plugin-next** on npmjs), it aims to catch common issues and problems in a nextjs application
+
+for a full list of rules that the eslint plugin will add check out the [nextjs "eslint rules" documentation](https://nextjs.org/docs/app/building-your-application/configuring/eslint#eslint-plugin) or have a look at the [eslint-plugin-next rules directory on github](https://github.com/vercel/next.js/tree/canary/packages/eslint-plugin-next/src/rules)
+
+this means you have 4 options when it comes to using eslint in a nextjs project:
+
+* option 1: you use [create-next-app](https://www.npmjs.com/package/create-next-app) and when asked about installing eslint you select **YES** to install eslint
+  * use the following command `npx create-next-app@latest` to run create-next-app
+  * when you get asked "Would you like to use ESLint?" choose "YES"
+  * **create-next-app** will install **eslint-config-next** (as seen above eslint-config-next will install the 3 plugins eslint-plugin-react, eslint-plugin-react-hooks and eslint-plugin-next)
+  * then create-next-app will create an `.eslintrc.json` file in the root of the project, create-next-app will automatically use the "strict" mode, which means it that will **extend** next/core-web-vitals, which is a rule-set containing stricter "core web vitals" rules
+  * create-next-app will also add the following line `"lint": "next lint"` to your package.json `scripts`, which means if that you now can use the command `npm run lint` it will execute `next lint` which is the nextjs cli command for linting
+* option 2: you use **create-next-app** but when asked about installing eslint you select **NO**, but later use npm run lint to install eslint via the nextjs cli
+  * use the following command `npx create-next-app@latest` to run create-next-app
+  * when you get asked "Would you like to use ESLint?" choose "NO"
+  * even if you chose to not install eslint via create-next-app, it will still add the following line `"lint": "next lint"` to your package.json `scripts`, which means if that you now can use the command `npm run lint` it will execute `next lint` which is the nextjs cli command for linting, because it is the first time you run this command and it can't find an eslint configuration file it will suggest you to create one
+  * when using npm run lint, you will get asked if you want to use the **strict** mode (which includes the "core web vitals" rule-set) or the **base** eslint rule-sets, after that **eslint** and **eslint-config-next** will get installed for you
+  * the script should also create a eslintrc file for you, but currently (16.10.2023) doesn't due to a bug: [nextjs github isssue #55102 (next eslint .eslintrc.json file not being created)](https://github.com/vercel/next.js/issues/55102)
+* option 3: you install **eslint-config-next** manually, which will automatically install the 3 plugins (eslint-plugin-react, eslint-plugin-react-hooks and eslint-plugin-next) for us, but we then need to manually create an eslint configuration file
+  * run the following command to install **eslint-config-next** manually `npm i eslint eslint-config-next --save-dev --save-exact`
+  * now you need to also create an `.eslintrc.json` file (if you don't already created one manually before) in the root of the project, if you wish to use the eslint-config-next **strict** mode (including the "core web vitals" rule-set) add this to your eslint configuration file `"extends": "next/core-web-vitals"` or if you prefer to use the **base** mode add this to your eslint configuration file `"extends": "next"`, make sure the extends for nextjs is always last (after other configurations you might have)
+  * the package.json will not have a linting command, so we need add the following line `"lint": "next lint"` to our package.json `scripts`
+* option 4: you don't install **eslint-config-next** at all, but instead you install the 3 plugins manually (eslint-plugin-react, eslint-plugin-react-hooks and eslint-plugin-next) yourself and then manually create an eslint configuration file
+  * run the following command to install **eslint-plugin-next** and the other plugins manually `npm i eslint eslint-plugin-react eslint-plugin-react-hooks @next/eslint-plugin-next --save-dev --save-exact`
+  * now need to also create an `.eslintrc.json` file in the root of the project and add the recommended rule-sets for each plugin via extends, adding `plugin:react/recommended` will add the recommended rule-set for the eslint-plugin-react, adding `plugin:@next/next/recommended` will add the base rule-set for eslint-plugin-react and adding `plugin:@next/next/core-web-vitals` will additionnally also add some more rules related to "core-web-vitals"
+  * if you use this option there is a lot more fine tuning you might want to apply to the eslint configuration file, for example the eslint-plugin-react recommends you set the `"ecmaFeatures": { "jsx": true }` in the `parserOptions` and in `settings` you should set `"react": { "version": "detect" },` (you can also check in the package.json what react version you are using and set it to that instead of using "detect"), ... I will not further explain each an every tweak that can be made as this would go far beyong the goals of this tutorual, but I highly recommend you check out the [eslint-plugin-react readme](https://github.com/jsx-eslint/eslint-plugin-react#readme) and [eslint-plugin-react-hooks readme](https://github.com/facebook/react/blob/main/packages/eslint-plugin-react-hooks/README.md) if you want to learn more
+  
+  
+next we need to add a linting command to our package.json, here again we have two options, either we use the nextjs cli (which will call the eslint cli for us) or the eslint cli:
+
+* option A: use the **next cli** to start the linting process, if we use **next lint** it will lint the default nextjs directories, but you can manually change that list using the `--dir` flag, to specify which files should get linted you can use the `--file` flag, you can also use the next lint option `--no-cache` to discable caching files into the directory `.next/cache`
+* option B: create our own linting command using the **eslint cli**, npx eslint <baseDir> [options]
+
+
+if you don't specify a baseDir eslint will not find any files
+if you specify the baseDir as just `/`, eslint will start at the root of your drive which is probably not what you want
+so instead as baseDir we use `./` which is the root of our project
+  
+
+Note: option 4 gives you full control over what gets installed, what version of each plugin gets used and you can configure each plugin how you want, but this is also clearly more work (and will probably increase your maintenance costs), so if you don't need to configure every detail of every plugin manually then I recommend using one of the first 3 options instead (if you use option 1, 2 or 3 you can still extend add plugins manually or change the eslint configuration at a later point in time)
+
+For this project I will chose option 3, it can be used when creating a new project and works well if you intend to upgrade a project using an older version of nextjs where you already have an eslint configuration file
+
+
+the installation and configuration are now done, you can use the command `npm run lint` to start the linting process
+
+
+
+TODO: if you want to disable specific rules
+
+
+
+
+read more:
+
+* [nextjs "configuring eslint" documentation](https://nextjs.org/docs/pages/building-your-application/configuring/eslint)
+
+TODO: adding the eslint plugins typescript, jsx-a11y and mdx
+
+## eslint installation and setup (OLD: need to merge this with previous chapter)
 
 you have 3 options, when it comes to configuring eslint, option 1 is to use the eslint init command, this in my opinion good as you get to see what eslint thinks are "best practices" when it comes to setting it up, option 2 is to use the next.js eslint init command (when you have no eslint configuration file yet, just run `npm run lint` and the next.js eslint configuration will start) which again is good because you get to see what next.js thinks is a good eslint setup and finally option 3 is that you create an eslint configuration manually and add configure it as you pleases
 
