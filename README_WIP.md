@@ -205,6 +205,16 @@ Note: you have 4 options when it comes to using eslint in a nextjs project, I wi
   * now also need to create an `.eslintrc.json` file (if you don't already created one manually before) in the root of the project, if you wish to use the eslint-config-next **strict** mode (including the "core web vitals" rule-set) add this to your eslint configuration file `"extends": "next/core-web-vitals"` or if you prefer to use the **base** mode add this to your eslint configuration file `"extends": "next"`, make sure the extends for nextjs is always last (after other configurations that you might be have added in your eslint extends)
   * the package.json will not have a linting command (because we did not use create-next-app), so we need add the following line `"lint": "next lint"` to our package.json `scripts` to enable linting via the next cli, if we use **next lint** it will lint the default nextjs directories (as of now ESLINT_DEFAULT_DIRS = ['app', 'pages', 'components', 'lib', 'src']), but you can manually change that list using the `--dir` flag, to specify which files should get linted you can use the `--file` flag, you can also use the next lint option `--no-cache` to discable caching files into the directory `.next/cache`
 
+### option 4
+
+TODOs:
+nextjs on build probably uses next lint directly (bypassing the command in package.json), so to ensure linting is dune when building, I need to use next.config.mjs to disable linting on build (<https://nextjs.org/docs/pages/api-reference/next-config-js/eslint>), then readd the linting to the package.json build script command
+because we dont use next lint, node_modules directory is probably going to be linted, so the node_modules directory needs to get excluded (to check this add .js extension to eslint cli command)
+need to tell eslint to use the nextjs cache directory and cache eslint
+
+to enable eslint cache we need to use the option `--cache` (caching is disabled by default) and then we tell eslint to use the same cache directory that next lint would use `--cache-location .next/cache/eslint`
+
+npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache-location .next/cache/eslint
 
 
 * option 4: you don't install **eslint-config-next** at all, but instead you install the 3 plugins manually (eslint-plugin-react, eslint-plugin-react-hooks and eslint-plugin-next) yourself and then manually create an eslint configuration file
