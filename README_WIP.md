@@ -59,13 +59,19 @@ git clone git@github.com:MY_GITHUB_USERNAME/MY_REPOSITORY_NAME.git
 
 Note: install nodejs: the **next.js 13** "app directory features" require nodejs v16.8.0 or later
 
-run the following command to have eslint guide you step by step through the creation of your `package.json` file:
+
+run the following command to have npm guide you step by step through the creation of your `package.json` file:
 
 ```shell
 npm init
 ```
 
 anser the question that get displayed in your command line, when this is done npm will create a `package.json` in the root of your project for you
+
+
+#### use create next app to create a basic project
+
+TODO: ...
 
 #### next.js npm scripts
 
@@ -81,6 +87,8 @@ add the next.js scripts to the `package.json` file, which is in the root of the 
   }
 }
 ```
+
+TODO: do I really need to add those manually, I mean create next app should be handling this 
 
 those 4 scripts are the npm commands we will later in this tutorial use to execute different task, like:
 
@@ -146,16 +154,6 @@ install react and next.js
 npm i react@latest react-dom@latest next@latest --save-exact
 ```
 
-install eslint and some plugins like the next.js eslint configuration
-
-```shell
-npm i eslint-config-next@latest eslint-plugin-react@latest eslint-plugin-react-hooks@latest eslint-plugin-jsx-a11y@latest eslint-plugin-import@latest @typescript-eslint/eslint-plugin@latest @typescript-eslint/parser@latest eslint@latest --save-dev --save-exact
-```
-
-Question(s): some plugins like import, react-hooks, jsx-a11y, ... get already added by next.js https://github.com/vercel/next.js/blob/canary/packages/eslint-config-next/package.json ... so it might be overkill to add them, not sure if it is good to add them so that you can create custom rules for those later on in your eslint configuration!?
-
-TODO: when I found a bug mentioned later in the configuration chapter, that next lint was not going into the "app" directory, I however noticed that in vscode linting errors in files from the app directory were being displayed, so I wonder if this impacts other things related to next lint, for example I wonder if plugins added by eslint get actually used by the configuration used in vscode, to answer that question I should extend "next/config" in my eslint configuration but not yet install the "eslint import plugin" or "eslint react hooks plugin" via npm install (clear the node_modules directory and do a fresh install without them to be sure) and do some mistakes that those plugins are supposed to catch in any of my files to see if they get catched, I'm sure next lint will catch them but I wonder if they also get catched in vscode as those are not directly in my config but only in the nextjs eslint that I extend, then as mentioned in the question above, I also wonder if I extend nextjs eslint if I then can add custom rules that are based on plugins that nextjs lint calls but that are not explicitly in my own configuration
-
 install typescript and types:
 
 ```shell
@@ -163,264 +161,6 @@ npm i typescript@latest @types/react @types/react-dom @types/node --save-dev --s
 ```
 
 of course if you prefer to use [pNpM](https://pnpm.io/) or [Yarn](https://yarnpkg.com/) as your package managers to install the dependencies above, feel free to do so they are great tools too, I for my part prefer to use npm so this is what you will see in this tutorial but the install commands of [pNpM install](https://pnpm.io/cli/install) or [yarn install](https://yarnpkg.com/getting-started/usage) are very similar
-
-
-## eslint installation and setup
-
-eslint 
-
-install the nextjs eslint plugin
-
-nextjs has two packages that are related to eslint:
-
-* [eslint-config-next](https://www.npmjs.com/package/eslint-config-next)
-* [eslint-plugin-next](https://www.npmjs.com/package/@next/eslint-plugin-next)
-
-**eslint-config-next** is a package that bundles multiple plugins, it intends to make it easier to get started with eslint, it will install the following 3 plugins for you:
-
-* [eslint-plugin-react](https://www.npmjs.com/package/eslint-plugin-react)
-* [eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks)
-* [eslint-plugin-next](https://www.npmjs.com/package/@next/eslint-plugin-next)
-
-**eslint-plugin-next** is the actual eslint plugin for nextjs (called **@next/eslint-plugin-next** on npmjs), it aims to catch common issues and problems in a nextjs application
-
-for a full list of rules that the eslint plugin will add check out the [nextjs "eslint rules" documentation](https://nextjs.org/docs/app/building-your-application/configuring/eslint#eslint-plugin) or have a look at the [eslint-plugin-next rules directory on github](https://github.com/vercel/next.js/tree/canary/packages/eslint-plugin-next/src/rules)
-
-Note: you have 4 options when it comes to using eslint in a nextjs project, I will quickly go through the 3 first options, spoiler alert I will use option 4 for this project
-
-* option 1: you use [create-next-app](https://www.npmjs.com/package/create-next-app) and when asked about installing eslint you select **YES** to install eslint
-  * use the following command `npx create-next-app@latest` to run create-next-app
-  * when you get asked "Would you like to use ESLint?" choose "YES"
-  * **create-next-app** will install **eslint-config-next** (as seen above eslint-config-next will install the 3 plugins eslint-plugin-react, eslint-plugin-react-hooks and eslint-plugin-next)
-  * then create-next-app will create an `.eslintrc.json` file in the root of the project, create-next-app will automatically use the "strict" mode, which means it that will **extend** next/core-web-vitals, which is a rule-set containing stricter "core web vitals" rules
-  * create-next-app will also add the following line `"lint": "next lint"` to your package.json `scripts`, which means if that you now can use the command `npm run lint` it will execute `next lint` which is the nextjs cli command for linting
-* option 2: you use **create-next-app** but when asked about installing eslint you select **NO**, but later use npm run lint to install eslint via the nextjs cli
-  * use the following command `npx create-next-app@latest` to run create-next-app
-  * when you get asked "Would you like to use ESLint?" choose "NO"
-  * even if you chose to NOT install eslint via create-next-app, it will still add the following line `"lint": "next lint"` to your package.json `scripts`, which means that if you now can use the command `npm run lint` it will execute `next lint` which is the nextjs cli command for linting, because it is the first time you run this command and it can't find an eslint configuration file it will suggest you to create one
-  * when using npm run lint, you will get asked if you want to use the **strict** mode (which includes the "core web vitals" rule-set) or the **base** eslint rule-sets, after that **eslint** and **eslint-config-next** will get installed for you
-  * the script should also create a eslintrc file for you, but currently (16.10.2023) doesn't due to a bug: [nextjs github isssue #55102 (next eslint .eslintrc.json file not being created)](https://github.com/vercel/next.js/issues/55102)
-* option 3: we will not use **create-next-app** at all, instead we will manually create an eslint configuration file and install **eslint-config-next** manually, which will automatically install the 3 plugins (eslint-plugin-react, eslint-plugin-react-hooks and eslint-plugin-next) for us
-  * run the following command to install **eslint-config-next** manually `npm i eslint eslint-config-next --save-dev --save-exact`
-  * now also need to create an `.eslintrc.json` file (if you don't already created one manually before) in the root of the project, if you wish to use the eslint-config-next **strict** mode (including the "core web vitals" rule-set) add this to your eslint configuration file `"extends": "next/core-web-vitals"` or if you prefer to use the **base** mode add this to your eslint configuration file `"extends": "next"`, make sure the extends for nextjs is always last (after other configurations that you might be have added in your eslint extends)
-  * the package.json will not have a linting command (because we did not use create-next-app), so we need add the following line `"lint": "next lint"` to our package.json `scripts` to enable linting via the next cli, if we use **next lint** it will lint the default nextjs directories (as of now ESLINT_DEFAULT_DIRS = ['app', 'pages', 'components', 'lib', 'src']), but you can manually change that list using the `--dir` flag, to specify which files should get linted you can use the `--file` flag, you can also use the next lint option `--no-cache` to discable caching files into the directory `.next/cache`
-
-### option 4
-
-TODOs:
-nextjs on build probably uses next lint directly (bypassing the command in package.json), so to ensure linting is dune when building, I need to use next.config.mjs to disable linting on build (<https://nextjs.org/docs/pages/api-reference/next-config-js/eslint>), then readd the linting to the package.json build script command
-because we dont use next lint, node_modules directory is probably going to be linted, so the node_modules directory needs to get excluded (to check this add .js extension to eslint cli command)
-need to tell eslint to use the nextjs cache directory and cache eslint
-
-to enable eslint cache we need to use the option `--cache` (caching is disabled by default) and then we tell eslint to use the same cache directory that next lint would use `--cache-location .next/cache/eslint`
-
-npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache-location .next/cache/eslint
-
-
-* option 4: you don't install **eslint-config-next** at all, but instead you install the 3 plugins manually (eslint-plugin-react, eslint-plugin-react-hooks and eslint-plugin-next) yourself and then manually create an eslint configuration file
-  * run the following command to install **eslint-plugin-next** and the other plugins manually `npm i eslint eslint-plugin-react eslint-plugin-react-hooks @next/eslint-plugin-next --save-dev --save-exact`
-  * now need to also create an `.eslintrc.json` file in the root of the project and add the recommended rule-sets for each plugin via extends, adding `plugin:react/recommended` will add the recommended rule-set for the eslint-plugin-react, adding `plugin:@next/next/recommended` will add the base rule-set for eslint-plugin-react and adding `plugin:@next/next/core-web-vitals` will additionnally also add some more rules related to "core-web-vitals"
-  * if you use this option there is a lot more fine tuning you might want to apply to the eslint configuration file, for example the eslint-plugin-react recommends you set the `"ecmaFeatures": { "jsx": true }` in the `parserOptions` and in `settings` you should set `"react": { "version": "detect" },` (you can also check in the package.json what react version you are using and set it to that instead of using "detect"), ... I will not further explain each an every tweak that can be made as this would go far beyong the goals of this tutorual, but I highly recommend you check out the [eslint-plugin-react readme](https://github.com/jsx-eslint/eslint-plugin-react#readme) and [eslint-plugin-react-hooks readme](https://github.com/facebook/react/blob/main/packages/eslint-plugin-react-hooks/README.md) if you want to learn more
-  * the package.json will not have a linting command (because we did not use create-next-app), so we need add the following line `"lint": "next lint"` to our package.json `scripts` to enable linting via the next cli, if we use **next lint** it will lint the default nextjs directories (as of now ESLINT_DEFAULT_DIRS = ['app', 'pages', 'components', 'lib', 'src']), but you can manually change that list using the `--dir` flag, to specify which files should get linted you can use the `--file` flag, you can also use the next lint option `--no-cache` to discable caching files into the directory `.next/cache`, an alternative if you need more control over the lint command, is to create our own linting command using the **eslint cli**, using the command `npx eslint <baseDir> [options]` lets you for example set the `--debug` flag to get a verbose output of what eslint does, the scripts section in your package.json would be something like this `"lint": "next lint"`
-
-Note: option 4 gives you full control over what gets installed, what version of each plugin gets used and you can configure each plugin how you want, but this is also clearly more work (and will probably increase your maintenance costs), so if you don't need to configure every detail of every plugin manually and if you don't use custom overrides then I recommend using one of the first 3 options instead (if you use option 1, 2 or 3 you can still extend add plugins manually or change the eslint configuration at a later point in time)
-
-For this project I will chose option 4, it can be used when creating a new project and works well if you intend to upgrade a project using an older version of nextjs where you already have an eslint configuration file, it also has the benefit (as we will see in the next chapter) that it can be used when you need to create a custom override, because as of now next lint will not use the overrides you set in your custom eslint (here is open ticket [next lint command doesn't support overrides #35228](https://github.com/vercel/next.js/issues/35228) for that feature)
-
-read more:
-
-* [nextjs "configuring eslint" documentation](https://nextjs.org/docs/pages/building-your-application/configuring/eslint)
-
-TODO: adding the eslint plugins typescript, jsx-a11y and mdx
-TODO: if you want to disable specific rules
-
-## eslint installation and setup (OLD: need to merge this with previous chapter)
-
-first we configure eslint using their own configuration tool, using this command:
-
-```shell
-npm init @eslint/config
-```
-
-chose the options you like best, I for my part chose the following:
-
-* how would you like to use eslint: check syntax, find problems and enforce code style
-* what type of modules does your project use: javascript (import / export)
-* which framework does your project use: react
-* does your project use typescript: yes
-* where does your project run: press the "a" key to have both selected, "browser" and "node"
-* how would you like to define a style for your project: you can select "use a popular style guide", eslint will let you chose between ["standard"](https://www.npmjs.com/package/eslint-config-standard-with-typescript) and ["XO"](https://www.npmjs.com/package/eslint-config-xo), check out their repositories if you want to know more about what configuration they apply, I for my part prefer to answer some questions to set my own rules and also because in the next step we will extend the next.js elint configuration
-* what format do you want your config to be in: I like to use javascript configuration files over json as it allows me to leave comments for myself and other developers that might come after me, if I wish to do so, so I chose "javascript"
-* what style of indentation do you use: I have always used 4 spaces, so I will stick to this, some prefer 2 spaces others prefer tabs these days, there is no right or wrong here, chose what you like best
-* what quotes do you use for strings: I always use single quotes, double quotes make me think of html attributes
-* what line endings do you use: I chose windows as I'm on windows, I don't think it doesn't matter much, because when you commit to github they will get converted anyway, ["for compatibility, line endings are converted to Unix style when you commit files"](https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings#about-line-endings), also if you want to know more about line endings I recommend reading this article ["Dealing with line endings in Windows with Git and ESLint"](https://markoskon.com/line-endings-in-vscode-with-git-and-eslint/)
-* do you require semicolons: I don't anymore, less to code is a win for me, but I know it can cause problems as there are some places where they are mandatory, like between statements in a **for loop**, but in all these years spoting those has not been a problem
-
-now eslint init has created a `.eslintrc.js` configuration file for us
-
-next step we will extend the ["next.js eslint configuration"](https://nextjs.org/docs/basic-features/eslint#additional-configurations) in our own `.eslintrc.js`
-
-```js
-'extends': [
-    'next/core-web-vitals',
-],
-```
-
-Note: as nextjs says in their documentation, it is very important that "next" is last in the list of extended configurations to ensure none of their configurations get overwritten
-
-
-
-### eslint custom configuration
-
-a plugin I like to add to my eslint configurations is the ["react-hooks eslint plugin"](https://www.npmjs.com/package/eslint-plugin-react-hooks), the package itself we installed it earlier as it was part of the eslint dependencies in our npm install command that we used when we installed all our dependencies in the chapter ["install first dependencies"](#install-first-dependencies), now we just need add it to our configuration for it:
-
-```js
-'extends': [
-    'plugin:react-hooks/recommended',
-],
-```
-
-finally you can now add your own custom rules to the eslint configuration, I for example always like to add a custom rule, to ensure all my typescript interfaces start with a big "i", I find this helpful when they get imported later on, to distinguish them from regular functions and variables, if you wish to do so, add the following code in the "rules" section of your `.eslintrc.js`:
-
-```js
-'rules': {
-    '@typescript-eslint/naming-convention': [
-        'error',
-        {
-            'selector': 'interface',
-            'format": [
-                'PascalCase'
-            ],
-            'custom': {
-                'regex': '^I[A-Z]',
-                'match': true
-            }
-        }
-    ],
-}
-```
-
-the completed eslint `.eslintrc.js` configuration file should now look something like this:
-
-```js
-module.exports = {
-    'env': {
-        'browser': true,
-        'es2021': true,
-        'node': true
-    },
-    'extends': [
-        'eslint:recommended',
-        'plugin:react/recommended',
-        'plugin:@typescript-eslint/recommended',
-        'next/core-web-vitals',
-    ],
-    'overrides': [
-    ],
-    'parser': '@typescript-eslint/parser',
-    'parserOptions': {
-        'ecmaVersion': 'latest',
-        'sourceType': 'module'
-    },
-    'plugins': [
-        'react',
-        '@typescript-eslint'
-    ],
-    'rules': {
-        'indent': [
-            'error',
-            4,
-        ],
-        'quotes': [
-            'error',
-            'single',
-        ],
-        'semi': [
-            'error',
-            'never',
-        ],
-        '@typescript-eslint/naming-convention': [
-            'error',
-            {
-                'selector': 'interface',
-                'format': [
-                    'PascalCase'
-                ],
-                'custom': {
-                    'regex': '^I[A-Z]',
-                    'match': true
-                },
-            }
-        ],
-    },
-}
-
-```
-
-### using eslint
-
-if you now want to lint your code, just run the following command
-
-```shell
-npm run lint
-```
-
-if you used eslint before you might have used [eslint cli options](https://eslint.org/docs/latest/user-guide/command-line-interface), next lint supports some of these too
-
-which means that if in the past you did, something like this:
-
-```shell
-npx eslint ./ --fix
-```
-
-then you can still do the same with next lint, like so:
-
-```shell
-npm run lint --fix
-```
-
-Note: if you look at the code of linting cli from the next.js package, you can see which eslint options next.js supports ["cli/next-lint.ts"](https://github.com/vercel/next.js/blob/canary/packages/next/src/cli/next-lint.ts#L63)
-
-### VSCode eslint extension
-
-<https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint>
-
-to check if eslint is running, press `Ctrl` + `Shift` + `P` to open the command palette, then type **eslint** and chose "ESLint: Show Output Channel", which will open the output channel and show you a message like
-
-> [Info  - 8:41:03 PM] ESLint server is running.
-
-if you see that line you it means the ESLint server is running in your workspace
-
-to change the eslint extension settings, click on "Extensions" icon on the right or press `Ctrl` + `Shift` + `X` and then click on the gear icon (⚙️) and then in the menu select **Extension Settings**
-
-Note: when you edit settings you can do it on a **User** level or **Workspace** level, user level means the settings will get applied to whatever project is open in VSCode (which can be interesting if all your projects are written in the same programming language and you only want to configure extensions for all of them at once), workspace level means the settings will only apply to the current workspace (the current project that is open), I like to set the options on a workspace level because this creates a settings.json file inside a **.vscode** directory in the root of my project, I can then commit that directory alongside my project files, so that when someone else does a checkout the will have the settings for vscode too, but you could also add a note about the settings and what extensions should get installed in your project README for example
-
-this is what my `.vscode/settings.json` looks like for the nextjs / mdx blog:
-
-```json
-{
-    "eslint.debug": true,
-    "eslint.options": {
-        "extensions": [
-            ".js",
-            ".jsx",
-            ".md",
-            ".mdx",
-            ".ts",
-            ".tsx"
-        ]
-    },
-    "eslint.validate": [
-        "markdown",
-        "mdx",
-        "javascript",
-        "javascriptreact",
-        "typescript",
-        "typescriptreact"
-    ]
-}
-```
-
 
 
 ### our first page
@@ -1075,6 +815,10 @@ Note: after the PR is done, if you listed your ticket(s) in the description of t
 now that the PR into the **main** branch is done, vercel will do a new production deployment for you
 
 ## articles (pages) using MDX (@next/mdx)
+
+As a developer using markdown to format content makes sense, as most of are probably used to using it when formatting our project readmes, or when writing comments or documentation, this is why I chose to use mdx for my nextjs blog project
+
+Most things worked as intended and I was able to quickly set up a working prototype, but there are some [open MDX tickets in the nextjs issues list on github](https://github.com/vercel/next.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22area%3A+MDX%22), I recommend checking them out briefly to have an idea of what might not work or just have a look at the list when you have the feeling something is not working as it should
 
 ### what is MDX (behind the scenes)
 
@@ -2136,51 +1880,7 @@ read more:
 * [list of rehype plugins](https://github.com/rehypejs/rehype/blob/main/doc/plugins.md#list-of-plugins)
 * [list of remark plugins](https://github.com/remarkjs/remark/blob/main/doc/plugins.md#list-of-plugins)
 
-### eslint-plugin-mdx
 
-#### installation
-
-Note: I have a chapter about [installing & setting up eslint](#eslint-installation-and-setup) for the project and vscode, if you skipped that earlier you might want to read it now before adding the eslint mdx plugin
-
-There is an eslint mdx plugin called [eslint-plugin-mdx](https://www.npmjs.com/package/eslint-plugin-mdx) that I recommend installing first, as it will help us write find and fix problems in our mdx content
-
-Note: if you go to the [eslint mdx github repository](https://github.com/mdx-js/eslint-mdx), you will see they have two packages, **eslint-mdx** which is the parser and **eslint-plugin-mdx** which is the actual eslint plugin, you don't need to install the parser manually, so it is in the plugins package json and will be installed when you install the plugin
-
-to install the mdx plugin we use this command:
-
-```shell
-npm i eslint-plugin-mdx --save-dev --save-exact
-```
-
-#### setup
-
-when using the MDX eslint plugin we want it to only check mdx files, so as stated in the [eslint-plugin-mdx readme](https://github.com/mdx-js/eslint-mdx#notice) it is very important to use the overrides feature of eslint, if you want to know more about the parsing issues you might have if not using overrides check out the [eslint-plugin-mdx github issue #251](https://github.com/mdx-js/eslint-mdx/issues/251#issuecomment-736139224)
-
-```json
-{
-    overrides: [
-        {
-            files: ['*.mdx'],
-            extends: 'plugin:mdx/recommended',
-            settings: {
-                'mdx/code-blocks': true,
-            },
-        },
-    ],
-}
-```
-
-read more:
-
-* [eslint documentation: how eslint overrides work](https://eslint.org/docs/latest/use/configure/configuration-files#how-do-overrides-work)
-
-### VSCode language support extension for MDX
-
-Note: I have a chapter about the [VSCode eslint extension](#vscode-eslint-extension), if you skipped it earlier you might want to read it now before adding the VSCode MDX extension
-
-I recommend installing [VSCode language support extension for MDX](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx) when working with MDX content as this extension will add IntelliSense support for MDX files to VSCode
-
-Note: this extension is still experimental, but I had no problems when using it
 
 ### MDX code blocks
 
@@ -2566,7 +2266,64 @@ npm i remark-table-of-contents --save-exact
 ```
 
 TODO: add remark-table-of-contents configuration example (next.config.mjs)
+
+```mjs
+import WithMDX from '@next/mdx'
+import { remarkTableOfContents } from 'remark-table-of-contents'
+
+const nextConfig = (/*phase*/) => {
+
+    // https://github.com/chrisweb/remark-table-of-contents#options
+    const remarkTableOfContentsOptions = {
+        placeholder: '[!TOC]',
+        containerAttributes: {
+            id: 'articleToc',
+        },
+        navAttributes: {
+            'aria-label': 'table of contents'
+        }
+    }
+
+    const withMDX = WithMDX({
+        extension: /\.mdx?$/,
+        options: {
+            remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions]],
+            rehypePlugins: [],
+        },
+    })
+
+    /** @type {import('next').NextConfig} */
+    const nextConfig = {
+        experimental: {
+            mdxRs: false,
+        },
+        pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+    }
+
+    return withMDX(nextConfig)
+
+}
+
+export default nextConfig
+```
+
 TODO: add example of how to use toc and maybe add a screenshot so that readers can visualize the result
+
+```mdx
+[!TOC]
+
+<article>
+
+# 1
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+## 1.1
+
+Phasellus egestas vitae ligula sed mattis. 
+
+</article>
+```
 
 read more:
 
@@ -2831,7 +2588,7 @@ read more:
 
 ## adding the remark "remark-gfm" plugin
 
-warning: the latest version of remark-gfm is version 4.0.0 but that version is as of now (11.10.2023) not compatible with the latest version of @next/mdx which currently is 13.5.4, the only solution at the moment is to downgrade remark-gfm which means you should use remark-gfm 3.0.1, if you use remark-gfm v4 you will see the following error:
+warning: the latest version of remark-gfm is version 4.0.0 but that version is as of now (11.10.2023) not compatible with the latest version of @next/mdx which currently is 13.5.4, the only solution at the moment is to downgrade remark-gfm which means you should use remark-gfm 3.0.1 (as mentioned in this [github remark-gfm ticket #57](https://github.com/remarkjs/remark-gfm/issues/57)), if you use remark-gfm v4 you will see the following error:
 
 > TypeError: page.mdx:TypeError: Cannot read properties of undefined (reading 'inTable')
 
@@ -4963,7 +4720,7 @@ read more:
 * add tests <https://2022.stateofjs.com/en-US/libraries/testing/>
 * optimize the images of the documentation (readme.md)
 * add "protect main branch" instructions to github chapter
-* add mdx support to eslint
+
 
 
 ## future articles

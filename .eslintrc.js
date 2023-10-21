@@ -1,65 +1,85 @@
 module.exports = {
-    env: {
-        browser: true,
-        es2021: true,
-        node: true,
-    },
     root: true,
-    parser: '@typescript-eslint/parser',
     parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
     },
+    'env': {
+        browser: true,
+        es2021: true,
+        node: true,
+    },
+    settings: {
+        'mdx/code-blocks': true,
+        'mdx/remark': true,
+    },
+    ignorePatterns: [
+        'node_modules/',
+        '.next/',
+        '.vscode/',
+        'public/',
+    ],
     plugins: [
         'react',
         '@typescript-eslint',
     ],
-    rules: {
-        // Indentation BUG: https://github.com/eslint/eslint/issues/16385
-        /*
-        indent: [
-            'error',
-            4,
-        ],*/
-        quotes: [
-            'error',
-            'single',
-        ],
-        semi: [
-            'error',
-            'never',
-        ],
-        '@typescript-eslint/naming-convention': [
-            'error',
-            {
-                'selector': 'interface',
-                'format': [
-                    'PascalCase',
-                ],
-                'custom': {
-                    'regex': '^I[A-Z]',
-                    'match': true,
-                },
-            }
-        ],
-    },
+    reportUnusedDisableDirectives: true,
     overrides: [
         {
-            files: ['app/**/*.ts, app/**/*.tsx, components/**/*.ts, components/**/*.tsx, lib/**/*.ts, lib/**/*.tsx'],
+            files: ['**/*.ts?(x)'],
             extends: [
                 'eslint:recommended',
-                'plugin:react/recommended',
                 'plugin:@typescript-eslint/recommended',
-                'next/core-web-vitals',
+                'plugin:@next/next/recommended',
             ],
+            parser: '@typescript-eslint/parser',
+            parserOptions: {
+                sourceType: 'module',
+                ecmaFeatures: {
+                    jsx: true,
+                },
+                warnOnUnsupportedTypeScriptVersion: true,
+            },
+            rules: {
+                // Indentation BUG: https://github.com/eslint/eslint/issues/16385
+                /*
+                indent: [
+                    'error',
+                    4,
+                ],*/
+                quotes: [
+                    'error',
+                    'single',
+                ],
+                semi: [
+                    'error',
+                    'never',
+                ],
+                '@typescript-eslint/naming-convention': [
+                    'error',
+                    {
+                        'selector': 'interface',
+                        'format': [
+                            'PascalCase',
+                        ],
+                        'custom': {
+                            'regex': '^I[A-Z]',
+                            'match': true,
+                        },
+                    }
+                ],
+            },
         },
         {
-            files: ['app/**/*.mdx, *.md'],
-            extends: 'plugin:mdx/recommended',
-            settings: {
-                'mdx/code-blocks': true,
-            },
+            files: ['**/*.md?(x)'],
+            extends: [
+                'plugin:mdx/recommended',
+            ],
             parser: 'eslint-mdx',
+            parserOptions: {
+                markdownExtensions: ['*.md, *.mdx'],
+            },
+            // rules get configured in remarkrc.mjs
         },
     ],
 }
