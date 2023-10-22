@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "dev": "next dev",
-        "build": "next build",
+        "build": "npm run lint && next build",
         "start": "next start",
         "next-lint": "next lint",
         "lint": "npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint"

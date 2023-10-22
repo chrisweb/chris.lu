@@ -22,6 +22,7 @@ module.exports = {
     plugins: [
         'react',
         '@typescript-eslint',
+        '@next/next',
     ],
     reportUnusedDisableDirectives: true,
     overrides: [
