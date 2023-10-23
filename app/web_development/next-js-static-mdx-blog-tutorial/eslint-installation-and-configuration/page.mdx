@@ -115,6 +115,8 @@ now nextjs will not automatically lint during builds, but we still want linting 
 
 this will execute our lint script and if there is an error it will stop there, if there is no linting error it will go on and also build the project
 
+Note: platforms like Vercel will use the package.json build script by executing the command `npm run build`, which means that if your linting fails then the deployment on vercel will get aborted
+
 because we don't use next lint, the node_modules directory is probably going to be linted, so the node_modules directory needs to get excluded (to check this add .js extension to eslint cli command)
 need to tell eslint to use the nextjs cache directory and cache eslint
 
@@ -359,6 +361,21 @@ read more:
 ##### remark-lint configuration
 
 Note: after changing values in the remarkrc file, you need to manually restart the eslint server as eslint will NOT automatically detect and reload after you made changes in the remarkrc file
+
+##### remark-lint customizing warnings
+
+to disable a remark-lint rule just set it to false (which I did for the first two rules)
+
+rules can be customized via options, for the third rule **remark-lint-maximum-heading-length** I set the maximum length to be 48 characters, meaning that if one of my headings is 49 or more characters long then remark will warn me about it
+
+```mjs
+// https://www.npmjs.com/package/remark-lint-maximum-line-length
+['remark-lint-maximum-line-length', false],
+// https://www.npmjs.com/package/remark-lint-list-item-spacing
+['remark-lint-list-item-spacing', false],
+// https://www.npmjs.com/package/remark-lint-maximum-heading-length
+['remark-lint-maximum-heading-length', [1, 48]],
+```
 
 ##### restart the eslint server in VSCode
 

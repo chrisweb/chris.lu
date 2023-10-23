@@ -15,7 +15,7 @@ const config = {
         // https://www.npmjs.com/package/remark-lint-list-item-spacing
         ['remark-lint-list-item-spacing', false],
         // https://www.npmjs.com/package/remark-lint-maximum-heading-length
-        ['remark-lint-maximum-heading-length', false],
+        ['remark-lint-maximum-heading-length', [1, 48]],
 
         //remarkGfm,
         //remarkGithub,
