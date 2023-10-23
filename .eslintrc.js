@@ -25,6 +25,9 @@ module.exports = {
         '@next/next',
     ],
     reportUnusedDisableDirectives: true,
+    // ignore all by default
+    // we re-eanble each by using overrides
+    ignorePatterns: ['**/*.ts?(x)', '**/*.md?(x)'],
     overrides: [
         {
             files: ['**/*.ts?(x)'],
@@ -73,9 +76,9 @@ module.exports = {
         },
         {
             files: ['**/*.md?(x)'],
-            extends: [
+            /*extends: [
                 'plugin:mdx/recommended',
-            ],
+            ],*/
             parser: 'eslint-mdx',
             parserOptions: {
                 markdownExtensions: ['*.md, *.mdx'],
