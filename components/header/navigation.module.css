@@ -13,11 +13,6 @@
 }
 
 .layoutNavbar {
-    font-size: var(--main-fontSize-big5);
-    font-weight: 400;
-    font-style: normal;
-    font-stretch: normal;
-    font-optical-sizing: auto;
     display: flex;
     align-items: center;
     grid-gap: var(--main-spacing);
@@ -75,7 +70,11 @@
 .layoutNavbar a {
     text-decoration: none;
     color: #fff;
-    font-weight: 400;
+    font-size: var(--main-fontSize-big5);
+    font-weight: var(--main-fontWeight-links);
+    font-style: normal;
+    font-stretch: condensed;
+    font-optical-sizing: auto;
     line-height: 1.3;
     cursor: var(--cursor-pointer);
     padding-bottom: 3px;
@@ -110,7 +109,7 @@
 }
 
 .layoutNavbar a.active {
-    font-weight: 600;
+    font-weight: var(--main-fontWeight-activeLinks);
     transition: none;
     background: none;
     cursor: url(/assets/cursors/secondary_mouse_default.cur), default;

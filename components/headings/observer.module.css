@@ -21,12 +21,19 @@
     padding-inline-start: 2ch;
 }
 
+.list li a {
+    font-size: var(--main-fontSize-smaller);
+    margin-bottom: 0.5rem;
+}
+
 .active>a {
     color: var(--tertiary-light-color);
+    font-weight: var(--main-fontWeight-activeLinks);
 }
 
 .notActive>a {
     color: var(--primary-light-color);
+    font-weight: var(--main-fontWeight-activeLinks);
 }
 
 /* not on mobile */

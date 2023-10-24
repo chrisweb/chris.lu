@@ -4,8 +4,6 @@
     --main-text-color: white;
     /* https://bitsofco.de/the-new-system-font-stack/ */
     --main-frontFamily-default: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
-    /* 18px */
-    --main-fontSize-default: 1.125rem;
     /* 40px */
     --main-fontSize-big1: 2.5rem;
     /* 32px */
@@ -18,9 +16,19 @@
     --main-fontSize-big5: 1.375rem;
     /* 20 px */
     --main-fontSize-big6: 1.25rem;
+    /* 18px */
+    --main-fontSize-default: 1.125rem;
+    /* 16px */
+    --main-fontSize-small: 1rem;
+    /* 14px */
+    --main-fontSize-smaller: 0.875rem;
     --main-fontWeight-default: 400;
+    --main-fontWeight-bold: 600;
+    --main-fontWeight-bolder: 700;
     --main-fontWeight-headline: 700;
-    --main-fontWeight-links: 600;
+    --main-fontWeight-links: 400;
+    --main-fontWeight-activeLinks: 600;
+    --main-textUnderlineOffset-links: 0.2rem;
     --main-lineHeight-default: 1.5;
     --main-lineHeight-headline: 1.75;
     --main-spacing: 1.5rem;
@@ -122,7 +130,6 @@ main {
     margin-left: auto;
     margin-right: auto;
     max-width: var(--main-maxWidth);
-    padding: 1rem 2rem;
 }
 
 .h1,
@@ -160,7 +167,7 @@ h3,
 h4,
 h5,
 h6 {
-    display: flex;
+    display: block;
     font-weight: var(--main-fontWeight-headline);
     line-height: var(--main-lineHeight-headline);
     margin: 0 0 0.35em 0;
@@ -219,6 +226,7 @@ a {
     color: var(--primary-light-color);
     backface-visibility: hidden;
     font-weight: var(--main-fontWeight-links);
+    text-underline-offset: var(--main-textUnderlineOffset-links);
     cursor: var(--cursor-pointer);
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action */
     touch-action: pan-y;
@@ -254,7 +262,7 @@ a {
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-thickness */
     text-decoration-thickness: 1px;
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-thickness */
-    text-underline-offset: 3px;
+    text-underline-offset: var(--main-textUnderlineOffset-links);
     background: -webkit-linear-gradient(45deg, var(--primary-light-color), var(--tertiary-light-color));
     -webkit-background-clip: text;
     background-clip: text;
@@ -275,7 +283,7 @@ article {
 
 b,
 strong {
-    font-weight: bolder;
+    font-weight: var(--main-fontWeight-bold);
 }
 
 button,
@@ -417,35 +425,13 @@ nav {
 }
 
 .headingAnchor {
-    display: flex;
-    align-items: center;
-    margin-left: -28px;
-    margin-right: 4px;
+    padding-left: 0.5rem;
 }
 
 .icon {
     display: inline-block;
     overflow: visible;
     fill: #fff;
-}
-
-.iconLink {
-    visibility: hidden;
-}
-
-@media (hover: none) {
-    .iconLink {
-        visibility: visible;
-    }
-}
-
-h1:hover .headingAnchor .iconLink,
-h2:hover .headingAnchor .iconLink,
-h3:hover .headingAnchor .iconLink,
-h4:hover .headingAnchor .iconLink,
-h5:hover .headingAnchor .iconLink,
-h6:hover .headingAnchor .iconLink {
-    visibility: visible;
 }
 
 .ripple {

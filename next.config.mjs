@@ -96,9 +96,8 @@ const nextConfig = (/*phase*/) => {
 
     // https://github.com/rehypejs/rehype-autolink-headings#api
     const rehypeAutolinkHeadingsOptions = {
+        behavior: 'append',
         properties: {
-            ariaHidden: true,
-            tabIndex: -1,
             class: 'headingAnchor',
         },
         content: fromHtmlIsomorphic(
