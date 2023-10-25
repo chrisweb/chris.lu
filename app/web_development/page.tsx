@@ -11,7 +11,9 @@ export default function WebDevelopmentPage() {
     return (
         <>
             <br /><br />
-            <Link href="/web_development/04.06.2023_first_article" className="a">04.06.2023 first article</Link>
+            <Link href="/web_development/test" className="a">04.06.2023 first article</Link>
+            <br /><br />
+            <Link href="/web_development/next-js-static-mdx-blog" className="a">ESLint</Link>
         </>
     )
 }
