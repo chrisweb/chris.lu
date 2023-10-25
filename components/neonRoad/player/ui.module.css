@@ -75,10 +75,7 @@
 .artistName {
     font-size: 16px;
     line-height: 16px;
-    margin-bottom: 0px;
     width: 335px;
-    margin-left: 28px;
-    border-bottom: 1px solid magenta;
     font-family: var(--font-architectsDaughter), cursive;
     color: white;
     text-decoration: none;
@@ -86,6 +83,10 @@
     cursor: var(--cursor-pointer);
     outline: none;
     letter-spacing: 1px;
+    background-color: rgba(255,255,255,0.3);
+    border-radius: 7px;
+    padding: 3px 0;
+    margin: 0 auto;
 }
 
 .songTitle {
