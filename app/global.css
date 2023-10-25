@@ -42,7 +42,6 @@
     --primary-light-color: rgb(255 0 170);
     --secondary-light-color: rgb(249 85 48);
     --tertiary-light-color: rgb(0, 255, 255);
-    --primary-darker-color: rgb(230 0 155);
     --codebloc-font-family: Consolas, 'Courier New', monospace;
     --header-navbar-height: 58px;
     --cursor-default: url(/assets/cursors/secondary_mouse_default.cur), default;
@@ -132,7 +131,7 @@ footer {
 main {
     display: flex;
     flex-direction: row;
-    align-items: top;
+    align-items: flex-start;
     justify-content: center;
     margin-left: auto;
     margin-right: auto;
