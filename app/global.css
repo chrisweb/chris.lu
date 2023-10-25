@@ -142,8 +142,6 @@ main {
     margin-left: auto;
     margin-right: auto;
     max-width: var(--main-maxWidth);
-    /* width fix for mobile when word is extremly long */
-    overflow-x: hidden;
 }
 
 /* max-width: 70rem / 1120px (mobile breakpoint) */
@@ -433,6 +431,8 @@ aside {
 
 article {
     max-width: var(--main-article-maxWidth);
+    /* width fix for mobile when word is extremly long */
+    overflow-x: hidden;
 }
 
 /* max-width: 70rem / 1120px (mobile breakpoint) */
