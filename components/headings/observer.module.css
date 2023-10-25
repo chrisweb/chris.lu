@@ -4,8 +4,8 @@
     display: block;
 }
 
-/* max-width: --main-article-maxWidth */
-@media all and (max-width: 50rem) {
+/* max-width: 70rem / 1120px (mobile breakpoint) */
+@media all and (max-width: 70rem) {
     #articleToc {
         display: none;
     }
@@ -32,7 +32,7 @@
 }
 
 .notActive>a {
-    color: var(--primary-light-color);
+    color: var(--primary-darker-color);
     font-weight: var(--main-fontWeight-activeLinks);
 }
 

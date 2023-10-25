@@ -14,6 +14,7 @@
 
 .layoutNavbar {
     display: flex;
+    flex-flow: row;
     align-items: center;
     grid-gap: var(--main-spacing);
     gap: var(--main-spacing);
@@ -22,7 +23,7 @@
     height: var(--header-navbar-height);
 }
 
-/* max-width: --main-maxWidth */
+/* max-width: 70rem / 1120px (mobile breakpoint) */
 @media all and (max-width: 70rem) {
 
     .layoutNavbarContainer {
@@ -136,7 +137,7 @@
     z-index: 9999;
 }
 
-/* max-width: --main-maxWidth */
+/* max-width: 70rem / 1120px (mobile breakpoint) */
 @media all and (max-width: 70rem) {
     .hamburger {
         display: block;

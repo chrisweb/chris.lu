@@ -4,8 +4,8 @@
     gap: var(--main-spacing);
 }
 
-/* max-width: --main-article-maxWidth */
-@media all and (max-width: 50rem) {
+/* max-width: 70rem / 1120px (mobile breakpoint) */
+@media all and (min-width: 70rem) {
     .portalsGrid {
         grid-template-columns: 1fr;
     }
