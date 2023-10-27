@@ -111,7 +111,9 @@ const findAndTransformRows = (children: ReactNode, activeIdState: string, level 
 
 const HeadingsObserver: React.FC<IProps> = (props): JSX.Element => {
 
-    const { activeIdState } = useObserver('h1, h2, h3, h4, h5, h6', '-20% 0% -35% 0px')
+    // remarkTableOfContents maxDepth option is set to 3, so only observe h1, h2 & h3
+    //const { activeIdState } = useObserver('h1, h2, h3, h4, h5, h6', '-20% 0% -35% 0px')
+    const { activeIdState } = useObserver('h1, h2, h3', '-20% 0% -35% 0px')
     const navChild = findFirstNodeThatMatchesType(props.children, 'nav')
     const toc = findAndTransformRows(navChild.props.children, activeIdState)
     // children can be a ReactNode or an array of ReactNodes

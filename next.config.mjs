@@ -94,6 +94,7 @@ const nextConfig = (/*phase*/) => {
         navAttributes: {
             'aria-label': 'table of contents'
         },
+        maxDepth: 3,
     }
 
     // https://github.com/rehypejs/rehype-autolink-headings#api
