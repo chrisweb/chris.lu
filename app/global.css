@@ -93,7 +93,6 @@ body {
     font-family: var(--main-frontFamily-default);
     /* font size is 16 px so that 1rem = 16px */
     font-size: 16px;
-    font-weight: 400;
     line-height: normal;
 }
 
@@ -117,7 +116,6 @@ main,
 header,
 footer {
     font-size: var(--main-fontSize-default);
-    font-weight: var(--main-fontWeight-default);
     line-height: var(--main-lineHeight-default);
 }
 
@@ -299,7 +297,7 @@ a {
 
 b,
 strong {
-    font-weight: var(--main-fontWeight-bold);
+    font-weight: var(--main-fontWeight-bolder);
 }
 
 button,
@@ -462,6 +460,11 @@ aside {
     width: 100%;
 }
 
+.alignLeft {
+    text-align: left;
+    width: 100%;
+}
+
 .sticky {
     position: -webkit-sticky;
     position: sticky
@@ -471,14 +474,18 @@ aside {
     text-decoration: none;
 }
 
-.headingAnchor {
-    padding-left: 0.5rem;
+.externalLinkIcon {
+    color: var(--primary-light-color);
+    margin-left: 3px;
 }
 
-.icon {
-    display: inline-block;
-    overflow: visible;
+.headingAnchor {
+    font-weight: inherit;
     fill: #fff;
+}
+
+.headingAnchor>svg {
+    margin-left: calc(var(--main-spacing) / 2);
 }
 
 .ripple {

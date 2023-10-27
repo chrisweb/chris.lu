@@ -10,6 +10,8 @@ import { jsonrepair } from 'jsonrepair'
 import { remarkTableOfContents } from 'remark-table-of-contents'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
+import {toString} from 'hast-util-to-string'
+import { h } from 'hastscript'
 import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
 
@@ -91,19 +93,25 @@ const nextConfig = (/*phase*/) => {
         },
         navAttributes: {
             'aria-label': 'table of contents'
-        }
+        },
     }
 
     // https://github.com/rehypejs/rehype-autolink-headings#api
     const rehypeAutolinkHeadingsOptions = {
-        behavior: 'append',
+        behavior: 'substitute',
         properties: {
             class: 'headingAnchor',
         },
-        content: fromHtmlIsomorphic(
-            '<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" class="icon iconLink"><path d="M11 17H7q-2.075 0-3.537-1.463Q2 14.075 2 12t1.463-3.538Q4.925 7 7 7h4v2H7q-1.25 0-2.125.875T4 12q0 1.25.875 2.125T7 15h4Zm-3-4v-2h8v2Zm5 4v-2h4q1.25 0 2.125-.875T20 12q0-1.25-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.462Q22 9.925 22 12q0 2.075-1.462 3.537Q19.075 17 17 17Z"/></svg>',
-            { fragment: true }
-        ).children,
+        content: (node) => {
+            const svgIcon = fromHtmlIsomorphic(
+                '<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 17H7q-2.075 0-3.537-1.463Q2 14.075 2 12t1.463-3.538Q4.925 7 7 7h4v2H7q-1.25 0-2.125.875T4 12q0 1.25.875 2.125T7 15h4Zm-3-4v-2h8v2Zm5 4v-2h4q1.25 0 2.125-.875T20 12q0-1.25-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.462Q22 9.925 22 12q0 2.075-1.462 3.537Q19.075 17 17 17Z"/></svg>',
+                { fragment: true }
+            )
+            return [
+                h(null, toString(node)),
+                svgIcon
+            ]
+        }
     }
 
     // https://github.com/remarkjs/remark-gfm
@@ -116,7 +124,6 @@ const nextConfig = (/*phase*/) => {
     const withMDX = WithMDX({
         extension: /\.mdx?$/,
         options: {
-            //remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions], [remarkGfm, remarkGfmOptions]],
             remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions], [remarkGfm, remarkGfmOptions]],
             rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions], rehypeSlug, [rehypeAutolinkHeadings, rehypeAutolinkHeadingsOptions]],
             // If you use `MDXProvider`, uncomment the following line.
