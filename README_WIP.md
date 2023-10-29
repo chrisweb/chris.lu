@@ -4712,6 +4712,11 @@ read more:
 [fontawesome add icons with react documentation](https://fontawesome.com/v6/docs/web/use-with/react/add-icons)
 
 
+## waveform command
+
+node cli ./downloads Double_Dragon_Neon_City_Streets_1_-_Jake_Kaufman mp3 50 local json false
+
+
 ## TODOs
 
 * build authentification: <https://authjs.dev/>, can have a look at how 
