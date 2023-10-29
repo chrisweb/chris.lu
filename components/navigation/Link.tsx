@@ -1,11 +1,13 @@
-import { ReactNode } from 'react'
+import { PropsWithChildren } from 'react'
 import Link from 'next/link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 
-export interface INavigationLinkProps {
+export interface INavigationLinkProps extends PropsWithChildren {
     href: string
-    children: ReactNode
+    target?: string
+    rel?: string
+    className?: string
 }
 
 const isExternalUrl = (url: string, domain: string): boolean => {
@@ -34,15 +36,39 @@ const isExternalUrl = (url: string, domain: string): boolean => {
 
 }
 
+const isUrlMe = (url: string): boolean => {
+
+    const urlLowerCase = url.toLowerCase()
+
+    const urlNoProtocol = urlLowerCase.replace('http://','').replace('https://','')
+    
+    if (urlNoProtocol.startsWith('github.com/chrisweb')) {
+        return true
+    }
+
+    return false
+
+}
+
 const NavigationLink: React.FC<INavigationLinkProps> = (props): JSX.Element => {
 
-    const { href, children, ...rest } = props
+    const { href, children, ...linkProps } = props
 
     const isExternal = isExternalUrl(href, 'chris.lu')
+    const isMe = isUrlMe(href)
+
+    if (isExternal) {
+        linkProps.rel = 'nofollow noopener noreferrer'
+        linkProps.target = '_blank'
+    }
+
+    if (isMe) {
+        linkProps.rel += ' me'
+    }
 
     return (
         <>
-            <Link href={href} {...rest}>
+            <Link href={href} {...linkProps}>
                 {children}
             </Link>
             {isExternal && <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="sm" className='externalLinkIcon' />}
