@@ -1,7 +1,7 @@
 import type { MDXComponents } from 'mdx/types'
 import { PropsWithChildren } from 'react'
-import HeadingsObserver from './components/headings/Observer'
-import NavigationLink from './components/navigation/Link'
+import HeadingsObserver from '@components/headings/Observer'
+import NavigationLink from '@components/navigation/Link'
 
 // This file allows you to provide custom React components
 // to be used in MDX files. You can import and use any
