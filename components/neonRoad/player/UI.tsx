@@ -5,13 +5,15 @@ import { PlayerCore, ISoundAttributes, ICoreOptions } from 'web-audio-api-player
 import styles from './ui.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause, faForwardStep, faEject, faArrowUpRightFromSquare, faVolumeHigh } from '@fortawesome/free-solid-svg-icons'
+import { faCreativeCommons } from '@fortawesome/free-brands-svg-icons'
 import { Waveform, IWaveLayoutOptions, IWaveCoreOptions, IWaveClickCallback } from 'waveform-visualizer'
 import RippleButton from './ripple/Button'
 
 interface ICredits {
-    songName: string
+    name: string
     artistName: string
-    website: string
+    artistWebsite: string
+    license: string
 }
 
 const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<PlayerCore>) => {
@@ -24,9 +26,10 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
     const [isEjectedState, setIsEjectedState] = useState(false)
     const [isVolumeModalOpenState, setIsVolumeModalOpenState] = useState(false)
     const [creditsState, setCreditsState] = useState<ICredits>({
-        songName: 'Athena',
-        artistName: 'Karl Casey aka "White Bat Audio"',
-        website: 'https://whitebataudio.com',
+        name: '',
+        artistName: '',
+        artistWebsite: '',
+        license: '',
     })
 
     const initializePlayer = useCallback(() => {
@@ -61,9 +64,10 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                     waveformRef.current.setWaveData(song.wave)
                     setIsPlayingState(true)
                     setCreditsState({
-                        songName: song.name,
+                        name: song.name,
                         artistName: song.artistName,
-                        website: song.artistWebsite,
+                        artistWebsite: song.artistWebsite,
+                        license: song.license,
                     })
                 },
                 onPaused: (playTime) => {
@@ -95,6 +99,42 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
             {
                 source: [
                     {
+                        url: 'Hackers_-_Karl_Casey.ogg',
+                        codec: 'ogg',
+                        isPreferred: true,
+                    },
+                    {
+                        url: 'Hackers_-_Karl_Casey.mp3',
+                        codec: 'mp3',
+                    }
+                ],
+                wave: [11, 16, 55, 92, 97, 93, 96, 93, 100, 96, 93, 95, 77, 56, 95, 96, 94, 97, 94, 94, 97, 94, 96, 92, 31, 28, 26, 27, 27, 30, 88, 89, 87, 95, 79, 56, 96, 95, 96, 97, 95, 98, 91, 93, 96, 81, 62, 58, 30, 0],
+                name: 'Hackers',
+                artistName: 'Karl Casey aka "White Bat Audio"',
+                artistWebsite: 'https://whitebataudio.com',
+                license: 'https://creativecommons.org/licenses/by/3.0/',
+            },
+            {
+                source: [
+                    {
+                        url: 'Sunset_-_LukHash.ogg',
+                        codec: 'ogg',
+                        isPreferred: true,
+                    },
+                    {
+                        url: 'Sunset_-_LukHash.mp3',
+                        codec: 'mp3',
+                    }
+                ],
+                wave: [41, 87, 88, 87, 88, 89, 88, 89, 49, 64, 80, 82, 79, 84, 79, 81, 69, 95, 92, 96, 94, 91, 93, 93, 92, 96, 85, 70, 75, 86, 83, 90, 87, 77, 75, 79, 87, 80, 82, 73, 94, 92, 97, 93, 93, 91, 92, 97, 100, 37],
+                name: 'Athena',
+                artistName: 'LukHash',
+                artistWebsite: 'https://www.lukhash.com/',
+                license: 'https://creativecommons.org/licenses/by-nc-nd/4.0/',
+            },
+            {
+                source: [
+                    {
                         url: 'Athena_-_Karl_Casey.ogg',
                         codec: 'ogg',
                         isPreferred: true,
@@ -108,6 +148,7 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                 name: 'Athena',
                 artistName: 'Karl Casey aka "White Bat Audio"',
                 artistWebsite: 'https://whitebataudio.com',
+                license: 'https://creativecommons.org/licenses/by/3.0/',
             },
             {
                 source: [
@@ -125,6 +166,7 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                 name: 'City Streets 1 (Double Dragon 1)',
                 artistName: 'Jake Kaufman aka "Virt"',
                 artistWebsite: 'https://virt.bandcamp.com/',
+                license: 'https://creativecommons.org/licenses/by-nc-sa/3.0/',
             },
             {
                 source: [
@@ -142,8 +184,11 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                 name: '50 Million Year Trip',
                 artistName: 'Karl Casey aka "White Bat Audio"',
                 artistWebsite: 'https://whitebataudio.com',
+                license: 'https://creativecommons.org/licenses/by/3.0/',
             }
         ]
+
+        setCreditsState(mixTape[0])
 
         return mixTape
 
@@ -289,8 +334,8 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
             <div className={`${styles.walkman} ${isEjectedState ? styles.ejected : styles.inserted}`}>
                 <div className={`${styles.cassette} ${isEjectedState ? styles.slideIn : styles.slideOut}`}>
                     <div className={`${styles.face} ${styles.front}`}>
-                        <a href={creditsState !== null ? creditsState.website : ''} target="_blank" rel="noreferrer" tabIndex={-1} className={styles.songTitle}>{creditsState !== null ? creditsState.songName : ''} <FontAwesomeIcon icon={faArrowUpRightFromSquare} color='white' /></a>
-                        <a href={creditsState !== null ? creditsState.website : ''} target="_blank" rel="noreferrer" tabIndex={-1} className={styles.artistName}>{creditsState !== null ? creditsState.artistName : ''} <FontAwesomeIcon icon={faArrowUpRightFromSquare} color='white' /></a>
+                        <a href={creditsState !== null ? creditsState.license : ''} target="_blank" rel="noreferrer" tabIndex={-1} className={styles.songTitle}>{creditsState !== null ? creditsState.name : ''} <FontAwesomeIcon icon={faCreativeCommons} color='white' /></a>
+                        <a href={creditsState !== null ? creditsState.artistWebsite : ''} target="_blank" rel="noreferrer" tabIndex={-1} className={styles.artistName}>{creditsState !== null ? creditsState.artistName : ''} <FontAwesomeIcon icon={faArrowUpRightFromSquare} color='white' /></a>
                         <div className={styles.spoolLeft}></div>
                         <div className={styles.spoolRight}></div>
                         <div className={styles.shield}></div>
