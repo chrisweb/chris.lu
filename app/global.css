@@ -431,7 +431,7 @@ aside {
 }
 
 article,
-.content {
+.posts {
     width: var(--main-article-maxWidth);
     max-width: var(--main-article-maxWidth);
     /* width fix for mobile when word is extremly long */
