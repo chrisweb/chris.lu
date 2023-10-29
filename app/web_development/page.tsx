@@ -19,12 +19,15 @@ export default function WebDevelopmentPage() {
                     </li>
                 </ul>
             </aside>
-            <section id="web_development" className="content">
-                <h1 className="h1">My Posts:</h1>
-                <br /><br />
-                <NavigationLink href="/web_development/test" className="a">04.06.2023 first article</NavigationLink>
-                <br /><br />
-                <NavigationLink href="/web_development/next-js-static-mdx-blog/eslint" className="a">ESLint</NavigationLink>
+            <section id="web_development" className="posts">
+                <h1 className="h1">Web Development Posts</h1>
+                <h2 className="h2">Next.js static MDX Blog</h2>
+                <p>A personal blog tutorial. Fully static pages using Next.js (13 / 14) app directory and @next/mdx. Automatic table of contents generation in posts. Code blocks styling based on VSCode template.</p>
+                <ul>
+                    <li>
+                        <NavigationLink href="/web_development/next-js-static-mdx-blog/eslint" className="a">ESLint</NavigationLink>
+                    </li>
+                </ul>
             </section>
         </>
     )
