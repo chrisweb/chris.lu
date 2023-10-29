@@ -219,6 +219,33 @@ this notification is related to a new typescript plugin the next.js team created
 
 > We've built a new TypeScript plugin that provides suggestions for page and layout configuration options and provides helpful usage hints around Server and Client Components
 
+## customizing the tsconfig.json
+
+### path alias for our components
+
+there is a nice feature in typescript that lets you create aliases for pathes that you often
+
+in tsconfig.json
+
+```json
+{
+    "compilerOptions": {
+        "paths": {
+            "@components/*": [
+                "./components/*"
+            ],
+        },
+    },
+}
+```
+
+this allows you to import your components that are located in /PROJECT_ROOT/components using the new alias (no need to know the exact relative path anymore)
+
+```ts
+import NavigationLink from '@components/navigation/Link'
+```
+
+
 Read more:
 
 * check out the [youtube video "Next.js 13: Prevent Common Mistakes w/ New TypeScript Plugin"](https://www.youtube.com/watch?v=pqMqn9fKEf8) from [Delba](https://twitter.com/delba_oliveira) which is part of the next.js developer experience team giving more info about what the new plugin is and what it does
