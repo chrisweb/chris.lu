@@ -240,7 +240,6 @@ h6 {
 }
 
 a {
-    /*text-decoration: none;*/
     color: var(--primary-light-color);
     backface-visibility: hidden;
     font-weight: var(--main-fontWeight-links);
@@ -248,6 +247,10 @@ a {
     cursor: var(--cursor-pointer);
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action */
     touch-action: pan-y;
+}
+
+a:hover {
+    color: var(--tertiary-light-color);
 }
 
 /* not on mobile */
@@ -427,7 +430,9 @@ aside {
     -moz-osx-font-smoothing: grayscale;
 }
 
-article {
+article,
+.content {
+    width: var(--main-article-maxWidth);
     max-width: var(--main-article-maxWidth);
     /* width fix for mobile when word is extremly long */
     overflow-x: hidden;
@@ -476,7 +481,7 @@ aside {
 
 .externalLinkIcon {
     color: var(--primary-light-color);
-    margin-left: 3px;
+    margin-left: calc(var(--main-spacing) / 3);
 }
 
 .headingAnchor {
@@ -493,6 +498,18 @@ aside {
     animation-name: rippleAnimation;
 }
 
+.linksList {
+    list-style-type: none;
+}
+
+.linksList li {
+    display: flex;
+    align-items: center;
+}
+
+.linksList .social {
+    margin-right: calc(var(--main-spacing) / 2);
+}
 
 @keyframes rippleAnimation {
     0% {
