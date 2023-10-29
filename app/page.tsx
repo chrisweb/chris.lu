@@ -1,4 +1,4 @@
-import Typing from '../components/animated/Typing'
+import Typing from '@components/animated/Typing'
 import styles from './page.module.css'
 import Link from 'next/link'
 
