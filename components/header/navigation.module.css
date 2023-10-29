@@ -105,6 +105,7 @@
     }
 
     .layoutNavbar a:hover {
+        color: #fff;
         background-size: 100% 1px;
     }
 }
