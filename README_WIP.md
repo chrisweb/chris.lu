@@ -2613,7 +2613,20 @@ read more:
 * ["rehype-autolink-headings" npm page](https://www.npmjs.com/package/rehype-autolink-headings)
 * ["hast-util-from-html-isomorphic" npm page](https://www.npmjs.com/package/hast-util-from-html-isomorphic)
 
-## adding the remark "remark-gfm" plugin
+## GitHub markdown plugins
+
+there is more than just one plugin related to GitHub markdown:
+
+- [remark-gfm plugin](https://www.npmjs.com/package/remark-gfm)
+- [rehype "GitHub" plugins repository](https://github.com/rehypejs/rehype-github)
+
+the **remark-gfm plugin** transforms GitHub Flavored Markdown (GFM) into HTML, the remark-gfm plugin will add the same features to your MDX pages that GitHub has introduced in their own GitHub Flavored Markdown (GFM), it has support for **autolink literals**, **footnotes**, **strikethrough**, **markdown tables**, **tasklists**, ...
+
+Note: if you are cusrious to know what github uses on their own website checkout the GitHub [cmark-gfm repository](https://github.com/github/cmark-gfm) repository, which is a fork of the CommonMark reference implementation
+
+**rehype "GitHub" plugins repository** is a collection of plugins, some are remark plugins but most are rehype plugins, this repository for example contains **rehype-github-color** which will add a color preview rectangle to your hex color codes, check out the repository for a full list of plugins it has to offer
+
+### "remark-gfm" plugin
 
 warning: the latest version of remark-gfm is version 4.0.0 but that version is as of now (11.10.2023) not compatible with the latest version of @next/mdx which currently is 13.5.4, the only solution at the moment is to downgrade remark-gfm which means you should use remark-gfm 3.0.1 (as mentioned in this [github remark-gfm ticket #57](https://github.com/remarkjs/remark-gfm/issues/57)), if you use remark-gfm v4 you will see the following error:
 
@@ -2621,9 +2634,7 @@ warning: the latest version of remark-gfm is version 4.0.0 but that version is a
 
 by adding the [remark "GitHub Flavored Markdown" (GFM) plugin](https://www.npmjs.com/package/remark-gfm) we extend the syntax features provided by the original markdown with the extensions (for autolink literals, footnotes, strikethrough, tables, tasklists) to markdown that you may know from github (for example when writing an issue or a discussion post on github)
 
-Note: if you use **remark-gfm** and if you haven't already transformed your next.config.js to a next.config.mjs (ESM version) you will need to do so now, because as mentioned in their [install instrcutions](https://github.com/remarkjs/remark-gfm#install)
-
-Note: the **remark-gfm** package is ESM only, meaning that (if you haven't already done so) you must convert your next.config.js to an ESM module by changing it's extension to next.config.mjs
+Note: if you use **remark-gfm** and if you haven't already transformed your next.config.js to a next.config.mjs (ESM version) you will need to do so now, because as mentioned in their [install instrcutions](https://github.com/remarkjs/remark-gfm#install) the **remark-gfm** package is ESM only
 
 first let's install the **remark-gfm** package, by using this command:
 
@@ -2691,7 +2702,12 @@ let's add some "GitHub Flavored Markdown" (GFM) examples to mdx document:
 [ ] checkbox
 ```
 
+## remark emoji
 
+should I use https://www.npmjs.com/package/remark-emoji
+OR use https://github.com/rehypejs/rehype-github/tree/main/packages/emoji
+
+emoji cheat sheet: https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md
 
 
 
