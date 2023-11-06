@@ -291,7 +291,7 @@ Note: I have a chapter about [installing & setting up eslint](#eslint-installati
 
 There is an eslint mdx plugin called [eslint-plugin-mdx](https://www.npmjs.com/package/eslint-plugin-mdx) that I recommend installing first, as it will help us write find and fix problems in our mdx content
 
-Note: if you go to the [eslint mdx GitHub repository](https://github.com/mdx-js/eslint-mdx), you will see they have two packages, **eslint-mdx** which is the parser and **eslint-plugin-mdx** which is the actual eslint plugin, you don't need to install the parser manually, so it is in the plugins package json and will be installed when you install the plugin
+Note: if you go to the [ESLint MDX GitHub repository](https://github.com/mdx-js/eslint-mdx), you will see they have two packages, **eslint-mdx** which is the parser and **eslint-plugin-mdx** which is the actual eslint plugin, you don't need to install the parser manually, so it is in the plugins package json and will be installed when you install the plugin
 
 to install the mdx plugin we use this command:
 
@@ -490,3 +490,29 @@ read more:
 - [remark lint "ignore warnings" documentation](https://github.com/remarkjs/remark-lint#ignore-warnings)
 
 </article>
+
+## transitioning to flat config files
+
+as of now (06.11.2023) you can still use eslintrc configuration files, but it will be deprecated in ESLint >= 9.0.0, as ESLint mentions in their documentation:
+
+> We are transitioning to a new config system in ESLint v9.0.0. The config system shared on this page is currently the default but will be deprecated in v9.0.0. You can opt-in to the new config system by following the instructions in the documentation.
+
+support for [eslintrc configuration files will be removed in version 10.0.0](https://eslint.org/blog/2023/10/flat-config-rollout-plans/#eslintrc-removed-in-eslint-v10.0.0)
+
+### flat config files
+
+the new config system called ESLint **flat config files** is the future of configuring eslint
+
+Note: in early 2019 ESLint released an [RFC for flat config files](https://github.com/eslint/rfcs/tree/main/designs/2019-config-simplification), it is a fresh start for how ESLint gets configured, that hopefully to simplify the ESLint configuration process, for example today there is only one configuration in an eslintrc and hence only one **files** pattern can be defined, if you need more you have to use overrides, the new system however gets rid of overrides and instead allows you to create multiple configurations, each one having it's own **files** pattern and each own plugins, rules, ...
+
+**flat config files** will be [the new default configuration system](https://eslint.org/blog/2023/10/flat-config-rollout-plans/#main) starting with version 9.0.0
+
+the first ESLint version that has support for [flat config files is ESLint v8.21.0](https://eslint.org/blog/2022/08/eslint-v8.21.0-released/) but newer versions got released since that have brought fixes and improvements
+
+
+
+read more:
+
+- [new ESLint config system documentation](https://eslint.org/docs/head/use/configure/configuration-files-new)
+- [new ESLint config system blog post: part 1](https://eslint.org/blog/2022/08/new-config-system-part-1/)
+- [new ESLint config system blog post: part 2](https://eslint.org/blog/2022/08/new-config-system-part-2/)
