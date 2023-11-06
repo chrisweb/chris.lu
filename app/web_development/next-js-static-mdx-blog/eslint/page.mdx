@@ -331,17 +331,34 @@ read more:
 
 Note: after changing values in the remarkrc file, you need to manually restart the eslint server as eslint will NOT automatically detect and reload after you made changes in the remarkrc file
 
-### remark-lint customizing warnings
+### remark-lint disabling warnings
 
-to disable a remark-lint rule just set it to false (which I did for the first two rules)
-
-rules can be customized via options, for the third rule **remark-lint-maximum-heading-length** I set the maximum length to be 48 characters, meaning that if one of my headings is 49 or more characters long then remark will warn me about it
+to disable a remark-lint rule just set it to false (which I did for the first two rules):
 
 ```mjs
 // https://www.npmjs.com/package/remark-lint-maximum-line-length
 ['remark-lint-maximum-line-length', false],
 // https://www.npmjs.com/package/remark-lint-list-item-spacing
 ['remark-lint-list-item-spacing', false],
+```
+
+another warning I got was:
+
+> MD028/no-blanks-blockquote: Blank line inside blockquotemarkdownlintMD028
+
+as stated in the documentation, this rule exists because:
+
+> Some Markdown parsers will treat two blockquotes separated by one or more blank lines as the same blockquote
+
+I checked if this is the case with **@next/mdx** ...
+
+TODO: finish this part
+
+### remark-eslint customizing warnings
+
+rules can be customized via options, for the third rule **remark-lint-maximum-heading-length** I set the maximum length to be 48 characters, meaning that if one of my headings is 49 or more characters long then remark will warn me about it
+
+```mjs
 // https://www.npmjs.com/package/remark-lint-maximum-heading-length
 ['remark-lint-maximum-heading-length', [1, 48]],
 ```
