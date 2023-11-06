@@ -8,7 +8,8 @@
         "build": "npm run lint && next build",
         "start": "next start",
         "next-lint": "next lint",
-        "lint": "npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint"
+        "lint": "npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint",
+        "lint-debug": "npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint --debug"
     },
     "repository": {
         "type": "git",
