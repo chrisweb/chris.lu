@@ -855,7 +855,7 @@ MDX supports all markdown formatting elements that are also supported markdown a
 
 The big difference between **markdown** and **MDX**, is that **MDX** allows you to use [JSX](https://react.dev/learn/writing-markup-with-jsx) in your **markdown** content, meaning you can import and add JSX components (in our case React components) in your MDX content, for example add a react component that is a comment section at the end of each article, or create a 3D animation using react three fiber and insert that react component in one of your articles, ...
 
-Note: when I mention MDX in the following pages, I'm referring to MDX 2 the current version of MDX being implemented / used everywhere
+Note: when I mention MDX in the following pages, I'm referring to MDX 3 the current version of MDX, the latest major release is MDX3 (october 24 2023), the [MDX v3 release blog post](https://mdxjs.com/blog/v3/) contains an overview of the few breaking changes and improvements, you can check the full [MDX 3.0.0 changelog](https://github.com/mdx-js/mdx/releases/tag/3.0.0) on the github releases page and if you are migrating from the previous version you may want to have a look at the [MDX v2 to v3 migration guide](https://mdxjs.com/migrating/v3/)
 
 All transformations happen thanks to utilities built on top of [unified](https://unifiedjs.com/), it is the core project used to transforms content with ASTs, the [unified github repository](https://github.com/unifiedjs/unified) gives us the following description:
 
