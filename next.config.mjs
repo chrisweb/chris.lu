@@ -99,7 +99,7 @@ const nextConfig = (/*phase*/) => {
 
     // https://github.com/rehypejs/rehype-autolink-headings#api
     const rehypeAutolinkHeadingsOptions = {
-        behavior: 'substitute',
+        behavior: 'wrap',
         properties: {
             class: 'headingAnchor',
         },
