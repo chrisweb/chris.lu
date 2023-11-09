@@ -3,6 +3,10 @@
 //import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'*/
 // then uncomment the phase parameter
 
+/**
+ * @typedef {import('rehype-github-alerts').IOptions} IOptions
+ */
+
 import WithMDX from '@next/mdx'
 import rehypePrettyCode from 'rehype-pretty-code'
 import { readFileSync } from 'fs'
@@ -14,6 +18,9 @@ import {toString} from 'hast-util-to-string'
 import { h } from 'hastscript'
 import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
+import { rehypeGithubAlerts }  from 'rehype-github-alerts'
+
+
 
 /*const ContentSecurityPolicy = `
   default-src 'self';
@@ -122,11 +129,17 @@ const nextConfig = (/*phase*/) => {
         singleTilde: false,
     }
 
+    // https://github.com/chrisweb/rehype-github-alerts
+    /** @type { IOptions } */
+    const rehypeGithubAlertsOptions = {
+        supportLegacy: false,
+    }
+
     const withMDX = WithMDX({
         extension: /\.mdx?$/,
         options: {
             remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions], [remarkGfm, remarkGfmOptions]],
-            rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions], rehypeSlug, [rehypeAutolinkHeadings, rehypeAutolinkHeadingsOptions]],
+            rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions], rehypeSlug, [rehypeAutolinkHeadings, rehypeAutolinkHeadingsOptions], [rehypeGithubAlerts, rehypeGithubAlertsOptions]],
             // If you use `MDXProvider`, uncomment the following line.
             // providerImportSource: "@mdx-js/react",
         },
