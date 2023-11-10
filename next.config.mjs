@@ -5,6 +5,7 @@
 
 /**
  * @typedef {import('rehype-github-alerts').IOptions} IOptions
+ * @typedef {import('rehype-github-alerts').DefaultBuildType} DefaultBuildType
  */
 
 import WithMDX from '@next/mdx'
@@ -14,11 +15,11 @@ import { jsonrepair } from 'jsonrepair'
 import { remarkTableOfContents } from 'remark-table-of-contents'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
-import {toString} from 'hast-util-to-string'
+import { toString } from 'hast-util-to-string'
 import { h } from 'hastscript'
 import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
-import { rehypeGithubAlerts }  from 'rehype-github-alerts'
+import { rehypeGithubAlerts } from 'rehype-github-alerts'
 
 
 
@@ -130,9 +131,29 @@ const nextConfig = (/*phase*/) => {
     }
 
     // https://github.com/chrisweb/rehype-github-alerts
+    /** @type { DefaultBuildType } */
+    /*const myGithubAlertBuild = (alertOptions, originalChildren) => {
+        const alert = {
+            type: 'element',
+            tagName: 'div',
+            properties: {
+                className: [
+                    `markdown-alert-${alertOptions.keyword.toLowerCase()}`,
+                ],
+                style: 'color: ' + alertOptions.color + ';'
+            },
+            children: [
+                ...originalChildren
+            ]
+        }
+
+        return alert
+    }*/
+
     /** @type { IOptions } */
     const rehypeGithubAlertsOptions = {
         supportLegacy: false,
+        //build: myGithubAlertBuild
     }
 
     const withMDX = WithMDX({
