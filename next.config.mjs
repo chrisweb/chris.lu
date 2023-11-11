@@ -8,7 +8,7 @@
  * @typedef {import('rehype-github-alerts').DefaultBuildType} DefaultBuildType
  */
 
-import WithMDX from '@next/mdx'
+import createMdx from '@next/mdx'
 import rehypePrettyCode from 'rehype-pretty-code'
 import { readFileSync } from 'fs'
 import { jsonrepair } from 'jsonrepair'
@@ -156,7 +156,7 @@ const nextConfig = (/*phase*/) => {
         //build: myGithubAlertBuild
     }
 
-    const withMDX = WithMDX({
+    const withMDX = createMdx({
         extension: /\.mdx?$/,
         options: {
             remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions], [remarkGfm, remarkGfmOptions]],
