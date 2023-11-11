@@ -922,11 +922,11 @@ npm install @next/mdx --save-exact
 then we need to update the content our `next.config.mjs` file, to this:
 
 ```mjs
-import WithMDX from '@next/mdx'
+import createMdx from '@next/mdx'
 
 const nextConfig = () => {
 
-    const withMDX = WithMDX(/*{
+    const withMDX = createMdx(/*{
         extension: /\.mdx?$/,
         options: {
             // If you use remark-gfm, you'll need to use next.config.mjs
@@ -967,7 +967,6 @@ export default nextConfig
 Note: as you can see in this configuration we have not only enabled the new but still experimental `app` directory but we have also added `mdxRs: true`, this tells next.js that we would like to use the new but also still experimental rust compiler for our MDX content, you can disable this if you prefer, if you wish to do so you might want to read my post about ["disabling the experimental rust compiler for MDX content"](#disabling-the-experimental-mdx-rust-compiler-mdxrs)
 
 TODO: in next config, do I need to configure pageExtensions for MDX to work in app directory, or is this just for pages directory???
-TODO: check the withMDX options above, I currently have them commented as I'm not sure yet if they are needed and if they are what values I need to set, should come back later if a usecase requires me to use the options else get rid of them before publishing this tutorial
 
 now we need to add two more files to make MDX work with server components
 
@@ -1965,7 +1964,7 @@ npm i jsonrepair --save-exact
 next we edit our next.config.mjs file to add the plugin to the next/mdx configuration, like so:
 
 ```js
-import WithMDX from '@next/mdx'
+import createMdx from '@next/mdx'
 import rehypePrettyCode from 'rehype-pretty-code'
 import { readFileSync } from 'fs'
 import { jsonrepair } from 'jsonrepair'
@@ -2029,7 +2028,7 @@ const nextConfig = (/*phase*/) => {
         },
     }
 
-    const withMDX = WithMDX({
+    const withMDX = createMdx({
         extension: /\.mdx?$/,
         options: {
             remarkPlugins: [],
@@ -2295,7 +2294,7 @@ npm i remark-table-of-contents --save-exact
 TODO: add remark-table-of-contents configuration example (next.config.mjs)
 
 ```mjs
-import WithMDX from '@next/mdx'
+import createMdx from '@next/mdx'
 import { remarkTableOfContents } from 'remark-table-of-contents'
 
 const nextConfig = (/*phase*/) => {
@@ -2311,7 +2310,7 @@ const nextConfig = (/*phase*/) => {
         }
     }
 
-    const withMDX = WithMDX({
+    const withMDX = createMdx({
         extension: /\.mdx?$/,
         options: {
             remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions]],
@@ -2383,7 +2382,7 @@ npm i rehype-autolink-headings --save-exact
 next we will modify the next.config.mjs file to import both plugins and then add them to rehypePlugins array, like so:
 
 ```js
-import WithMDX from '@next/mdx'
+import createMdx from '@next/mdx'
 import { remarkTableOfContents } from 'remark-table-of-contents'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeSlug from 'rehype-slug'
@@ -2413,7 +2412,7 @@ const nextConfig = (/*phase*/) => {
         ).children,
     }
 
-    const withMDX = WithMDX({
+    const withMDX = createMdx({
         extension: /\.mdx?$/,
         options: {
             remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions]],
@@ -2471,7 +2470,7 @@ because our SVG for the heading anchor is HTML we are going to add another packa
 next we add the some options for the **rehype-autolink-headings** plugin to our `next.config.mjs` file:
 
 ```js
-import WithMDX from '@next/mdx'
+import createMdx from '@next/mdx'
 import { remarkTableOfContents } from 'remark-table-of-contents'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
@@ -2515,7 +2514,7 @@ const nextConfig = (/*phase*/) => {
         ).children,
     }
 
-    const withMDX = WithMDX({
+    const withMDX = createMdx({
         extension: /\.mdx?$/,
         options: {
             remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions]],
@@ -2656,7 +2655,7 @@ const nextConfig = (/*phase*/) => {
         openAnalyzer: false,
     })*/
 
-    const withMDX = WithMDX({
+    const withMDX = createMdx({
         extension: /\.mdx?$/,
         options: {
             // If you use remark-gfm, you'll need to use next.config.mjs
