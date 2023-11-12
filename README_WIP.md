@@ -4227,9 +4227,9 @@ the above clip path we used, was to cut out the **bottom / right** corner, this 
 
     clip-path:
         polygon(0 0,
-            calc(100% - var(--cornerSideLength)) 0,
-            100% var(--cornerSideLength),
-            100% 100%,
+            100% 0,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
             0 100%);
 }
 ```
@@ -4364,6 +4364,48 @@ then we add the class for the second element, here we reduce the height and widt
     display: flex;
     align-items: center;
     justify-content: center;
+}
+```
+
+TODO: need to overhaul this example, it has fixed with and height, which works for some cases but not all, a much better approach is to use 100% for outer element and a padding of 1 px for inner element, to create the border like so:
+
+```css
+.markdown-alert {
+    margin: var(--main-spacing) 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1px;
+    background-color: var(--tertiary-light-color);
+    --cornerSideLength: 25px;
+    clip-path:
+        polygon(
+            0 0,
+            100% 0,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
+            0 100%
+        );
+}
+
+.makrdown-alert-fake-border {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--main-background-color);
+    --cornerSideLength: 25px;
+    clip-path:
+        polygon(
+            0 0,
+            100% 0,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
+            0 100%
+        );
 }
 ```
 
