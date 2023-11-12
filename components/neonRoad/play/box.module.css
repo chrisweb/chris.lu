@@ -12,7 +12,7 @@
 .playBox {
     display: flex;
     flex-direction: column;
-    padding-top: calc(var(--main-spacing) * 2);
+    padding-top: 2%;
     width: 380px;
 }
 
@@ -83,6 +83,10 @@
 
 /* max-width: 70rem / 1120px (mobile breakpoint) */
 @media all and (max-width: 70rem) {
+
+    .playBox {
+        padding-top: 4%;
+    }
 
     .withMusic,
     .withoutMusic {
