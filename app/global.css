@@ -393,7 +393,9 @@ code {
     padding-left: calc(var(--main-spacing) / 2);
     padding-right: calc(var(--main-spacing) / 2);
     padding-bottom: 0;
-    --cornerSideLength: 25px;
+    --cornerSideLength: 30px;
+    /* hack: in chrome a small line sometimes appears */
+    transform: skewY(0.001deg);
     clip-path:
         polygon(0 0,
             calc(100% - var(--cornerSideLength)) 0,
@@ -410,12 +412,12 @@ code {
     padding-bottom: calc(var(--main-spacing) / 2);
     text-align: end;
     font-size: medium;
-    --cornerSideLength: 25px;
-    /* hack: in chrome a small line sometimes appears, -1px fixes it */
-    --fixForLineInChrome: -1px;
+    --cornerSideLength: 30px;
+    /* hack: in chrome a small line sometimes appears */
+    transform: skewY(0.001deg);
     clip-path:
-        polygon(0 var(--fixForLineInChrome),
-            100% var(--fixForLineInChrome),
+        polygon(0 0,
+            100% 0,
             100% 100%,
             var(--cornerSideLength) 100%,
             0 calc(100% - var(--cornerSideLength)));
@@ -519,4 +521,80 @@ aside {
     100% {
         box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
     }
+}
+
+.markdown-alert {
+    margin: var(--main-spacing) 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1px;
+    --cornerSideLength: 30px;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
+            0 100%);
+}
+
+.markdown-alert-note,
+.markdown-alert-note .markdown-alert-header {
+    background-color: var(--tertiary-light-color);
+}
+
+.markdown-alert-warning,
+.markdown-alert-warning .markdown-alert-header {
+    background-color: var(--secondary-light-color);
+}
+
+.markdown-alert-note .markdown-alert-header {
+    color: black;
+}
+
+.markdown-alert-warning .markdown-alert-header {
+    color: white;
+}
+
+.makrdown-alert-fake-border {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    /* hack: in chrome a small line sometimes appears */
+    transform: skewY(0.001deg);
+    background-color: var(--main-background-color);
+    --cornerSideLength: 30px;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
+            0 100%);
+}
+
+.markdown-alert-header {
+    display: flex;
+    align-items: center;
+    width: 140px;
+    padding: 0 var(--main-spacing);
+    font-weight: 600;
+    --cornerSideLength: 30px;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
+            0 100%);
+}
+
+.markdown-alert-header>svg {
+    margin-right: calc(var(--main-spacing) / 2);
+}
+
+.markdown-alert-body {
+    padding: 0 var(--main-spacing);
 }
