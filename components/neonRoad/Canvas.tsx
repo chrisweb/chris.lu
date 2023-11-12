@@ -23,7 +23,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
 
         if (typeof window !== 'undefined') {
             // basic camera
-            cameraRef.current = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 20)
+            cameraRef.current = new PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.01, 20)
 
             cameraRef.current.position.x = 0
             cameraRef.current.position.y = 0.06

@@ -4,6 +4,4 @@
     max-width: 100%;
     position: relative;
     text-align: center;
-    /* to compensate for the fixed navbar */
-    margin-top: var(--header-navbar-height);
 }

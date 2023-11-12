@@ -5,14 +5,14 @@
     align-items: center;
     width: 100%;
     position: absolute;
-    top: 5%;
+    top: var(--header-navbar-height);
     z-index: 1;
 }
 
 .playBox {
     display: flex;
     flex-direction: column;
-    padding: var(--main-spacing);
+    padding-top: calc(var(--main-spacing) * 2);
     width: 380px;
 }
 
@@ -83,10 +83,6 @@
 
 /* max-width: 70rem / 1120px (mobile breakpoint) */
 @media all and (max-width: 70rem) {
-
-    .playContainer {
-        top: 3%;
-    }
 
     .withMusic,
     .withoutMusic {

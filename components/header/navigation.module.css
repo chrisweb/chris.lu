@@ -2,7 +2,7 @@
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter */
     backdrop-filter: saturate(200%) blur(5px);
     -webkit-backdrop-filter: saturate(200%) blur(5px);
-    background-color: rgba(255, 0, 170, 0.9);
+    background-color: rgba(255, 0, 170, 0.1);
     position: fixed;
     top: 0;
     bottom: 0;
