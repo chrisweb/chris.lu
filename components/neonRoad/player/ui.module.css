@@ -21,6 +21,10 @@
     margin-right: var(--main-spacing);
 }
 
+.audioWaveForm:hover {
+    cursor: var(--cursor-pointer);
+}
+
 /* max-width: 70rem / 1120px (mobile breakpoint) */
 @media all and (max-width: 70rem) {
     .audioWaveForm {
