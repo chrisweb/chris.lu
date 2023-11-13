@@ -318,16 +318,16 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                 </div>
                 <div className={styles.playerButtons}>
                     <RippleButton clickCallback={onClickTogglePlayPauseCallback}>
-                        <FontAwesomeIcon icon={isPlayingState ? faPause : faPlay} size="2x" color='white' />
+                        <FontAwesomeIcon icon={isPlayingState ? faPause : faPlay} size="xl" color='white' />
                     </RippleButton>
                     <RippleButton clickCallback={onClickNextHandler}>
-                        <FontAwesomeIcon icon={faForwardStep} size="2x" color='white' />
+                        <FontAwesomeIcon icon={faForwardStep} size="xl" color='white' />
                     </RippleButton>
                     <RippleButton clickCallback={onClickVolumeHandler} className="volume">
-                        <FontAwesomeIcon icon={faVolumeHigh} size="2x" color='white' />
+                        <FontAwesomeIcon icon={faVolumeHigh} size="xl" color='white' />
                     </RippleButton>
                     <RippleButton clickCallback={onClickEjectHandler}>
-                        <FontAwesomeIcon icon={faEject} size="2x" color='white' />
+                        <FontAwesomeIcon icon={faEject} size="xl" color='white' />
                     </RippleButton>
                 </div>
             </div>
