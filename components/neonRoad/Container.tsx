@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import React, { useState, useRef, useCallback } from 'react'
 import StaticImage from './StaticImage'
 import PlayBox from './play/Box'
 import dynamic from 'next/dynamic'
@@ -56,4 +56,4 @@ const Container: React.FC = () => {
     )
 }
 
-export default Container
+export default React.memo(Container)
