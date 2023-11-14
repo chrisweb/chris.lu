@@ -141,7 +141,8 @@
 /* max-width: 70rem / 1120px (mobile breakpoint) */
 @media all and (max-width: 70rem) {
     .hamburger {
-        display: block;
+        display: flex;
+        align-items: center;
     }
 }
 
