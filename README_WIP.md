@@ -4809,6 +4809,7 @@ node cli ./downloads Double_Dragon_Neon_City_Streets_1_-_Jake_Kaufman mp3 50 loc
 * add tests <https://2022.stateofjs.com/en-US/libraries/testing/>
 * optimize the images of the documentation (readme.md)
 * add "protect main branch" instructions to github chapter
+* add a chapter "react strict mode in nextjs" [Next.js "reactStrictMode" documentation](https://nextjs.org/docs/pages/api-reference/next-config-js/reactStrictMode)
 
 
 
