@@ -52,7 +52,7 @@
         "shiki": "0.14.5",
         "synthwave-vscode": "github:robb0wen/synthwave-vscode",
         "three": "0.158.0",
-        "waveform-visualizer": "4.1.1",
+        "waveform-visualizer": "4.1.2",
         "web-audio-api-player": "5.2.1"
     },
     "devDependencies": {
