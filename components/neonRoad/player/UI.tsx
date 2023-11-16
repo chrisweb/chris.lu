@@ -1,25 +1,27 @@
 'use client'
 
-import { useRef, useEffect, useState, forwardRef, useCallback } from 'react'
+import { useRef, useState, forwardRef, useCallback, useEffect } from 'react'
 import { PlayerCore, ISoundAttributes, ICoreOptions } from 'web-audio-api-player'
 import styles from './ui.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause, faForwardStep, faEject, faArrowUpRightFromSquare, faVolumeHigh } from '@fortawesome/free-solid-svg-icons'
 import { faCreativeCommons } from '@fortawesome/free-brands-svg-icons'
-import { Waveform, IWaveLayoutOptions, IWaveCoreOptions, IWaveClickCallback } from 'waveform-visualizer'
+import { Waveform } from 'waveform-visualizer'
 import RippleButton from './ripple/Button'
+import WaveformCanvas from './WaveformCanvas'
 
 interface ICredits {
     name: string
     artistName: string
     artistWebsite: string
     license: string
+    wave: number[]
 }
 
 const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<PlayerCore>) => {
 
     const volumeSliderRef = useRef<HTMLInputElement>()
-    const waveCanvasRef = useRef<HTMLCanvasElement>()
+
     const waveformRef = useRef<Waveform | null>(null)
 
     const [isPlayingState, setIsPlayingState] = useState(false)
@@ -30,19 +32,20 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
         artistName: '',
         artistWebsite: '',
         license: '',
+        wave: [],
     })
 
-    const initializePlayer = useCallback(() => {
+    const initializePlayer = (): PlayerCore => {
 
         const options: ICoreOptions = {
             soundsBaseUrl: '/assets/music/',
             loopQueue: true,
         }
 
-        playerRef.current = new PlayerCore(options)
+        const player = new PlayerCore(options)
 
         if (typeof volumeSliderRef.current !== 'undefined') {
-            volumeSliderRef.current.value = playerRef.current.getVolume().toString()
+            volumeSliderRef.current.value = player.getVolume().toString()
         }
 
         const mixTape = getMixTape()
@@ -67,13 +70,13 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                 },
                 onStarted: (playTimeOffset) => {
                     console.log('started', playTimeOffset)
-                    waveformRef.current.setWaveData(song.wave)
                     setIsPlayingState(true)
                     setCreditsState({
                         name: song.name,
                         artistName: song.artistName,
                         artistWebsite: song.artistWebsite,
                         license: song.license,
+                        wave: song.wave
                     })
                 },
                 onPaused: (playTime) => {
@@ -93,11 +96,13 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                 }
             }
 
-            playerRef.current.addSoundToQueue({ soundAttributes: soundAttributes })
+            player.addSoundToQueue({ soundAttributes: soundAttributes })
 
         })
 
-    }, [playerRef, waveformRef])
+        return player
+
+    }
 
     const getMixTape = () => {
 
@@ -194,81 +199,21 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
             }
         ]
 
-        setCreditsState(mixTape[0])
-
         return mixTape
 
     }
 
-    const onWaveClickHandler: IWaveClickCallback = useCallback((clickHorizontalPositionInPercent) => {
-
-        playerRef.current.setPosition(clickHorizontalPositionInPercent)
-
-    }, [playerRef])
-
-    const initializeWaveform = useCallback(() => {
-
-        const waveLayoutOptions: IWaveLayoutOptions = {
-            waveHeightInPixel: 40,
-            waveTopPercentage: 50,
-        }
-
-        const waveCoreOptions: IWaveCoreOptions = {
-            layout: waveLayoutOptions,
-            data: getMixTape()[0].wave,
-            waveformClickCallback: onWaveClickHandler,
-        }
-
-        const waveform = new Waveform(waveCoreOptions)
-
-        waveformRef.current = waveform
-
-        waveform.setCanvasElement(waveCanvasRef.current)
-
-        /*const waveCanvasContext = waveform.getCanvasContext()
-
-        const linearGradiantTopPeaks = waveCanvasContext.createLinearGradient(0,0,0,25)
-
-        linearGradiantTopPeaks.addColorStop(0, 'yellow')
-        linearGradiantTopPeaks.addColorStop(1, 'red')
-
-        const linearGradiantBottomPeaks = waveCanvasContext.createLinearGradient(0,25,0,50)
-
-        linearGradiantBottomPeaks.addColorStop(0, 'orange')
-        linearGradiantBottomPeaks.addColorStop(1, 'yellow')*/
-
-        /*const solidColorTopProgressFillStyle = 'red'
-        const solidColorBottomProgressFillStyle = 'orange'
-
-        waveform.setLayoutOptions({
-            peakTopFillStyle: linearGradiantTopPeaks,
-            peakBottomFillStyle: linearGradiantBottomPeaks,
-            peakTopProgressFillStyle: solidColorTopProgressFillStyle,
-            peakBottomProgressFillStyle: solidColorBottomProgressFillStyle,
-        })*/
-
-        waveform.setLayoutOptions({
-            peakTopFillStyle: 'rgba(255,255,255,0.7)',
-            peakBottomFillStyle: 'rgba(255,255,255,0.5)',
-            peakTopProgressFillStyle: 'white',
-            peakBottomProgressFillStyle: 'white',
-        })
-
-        waveform.draw(0)
-
-    }, [onWaveClickHandler])
-
     const onClickTogglePlayPauseCallback = () => {
         if (isPlayingState) {
-            playerRef.current.pause()
+            getPlayer().pause()
         } else {
-            playerRef.current.play()
+            getPlayer().play()
         }
     }
 
-    const onClickNextHandler = useCallback(async () => {
-        await playerRef.current.next()
-    }, [playerRef])
+    const onClickNextHandler = () => {
+        getPlayer().next()
+    }
 
     const onClickEjectHandler = () => {
         if (!isEjectedState) {
@@ -297,31 +242,47 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
     const onInputVolumeHandler = () => {
         if (typeof volumeSliderRef.current !== 'undefined') {
             const volume = volumeSliderRef.current.value
-            playerRef.current.setVolume(parseInt(volume))
+            getPlayer().setVolume(parseInt(volume))
         }
     }
 
-    useEffect(() => {
-        initializePlayer()
-        initializeWaveform()
-        return () => {
-            if (playerRef.current !== null) {
-                // tell the player to remove it's listeners
-                playerRef.current.disconnect()
-            }
-            if (waveformRef.current !== null) {
-                // tell the waveform to remove it's listeners
-                waveformRef.current.destroy()
-            }
+    const onWaveClickHandler = useCallback((clickHorizontalPositionInPercent: number) => {
+        getPlayer().setPosition(clickHorizontalPositionInPercent)
+    }, [])
+
+    const getPlayer = () => {
+
+        if (playerRef.current !== null) {
+            return playerRef.current
         }
-    }, [initializePlayer, initializeWaveform, playerRef, waveformRef])
+
+        const player = initializePlayer()
+        playerRef.current = player
+
+        return player
+
+    }
+
+    useEffect(() => {
+
+        console.log('use effect first song')
+
+        const firstSong = getMixTape()[0]
+
+        setCreditsState({
+            name: firstSong.name,
+            artistName: firstSong.artistName,
+            artistWebsite: firstSong.artistWebsite,
+            license: firstSong.license,
+            wave: firstSong.wave
+        })
+
+    }, [])
 
     return (
         <>
             <div className={styles.playerUI}>
-                <div className={styles.audioWaveForm}>
-                    <canvas ref={waveCanvasRef} width="200px" height="60px" />
-                </div>
+                <WaveformCanvas ref={waveformRef} onWaveClickHandler={onWaveClickHandler} waveData={creditsState.wave}></WaveformCanvas>
                 <div className={styles.playerButtons}>
                     <RippleButton clickCallback={onClickTogglePlayPauseCallback}>
                         <FontAwesomeIcon icon={isPlayingState ? faPause : faPlay} size="xl" color='white' />
