@@ -59,6 +59,12 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                         waveformRef.current.draw(playingProgress)
                     }
                 },
+                onSeeking: (seekingPercentage, duration, playTime) => {
+                    console.log('onSeeking', seekingPercentage, duration, playTime)
+                    if (waveformRef.current !== null) {
+                        waveformRef.current.draw(seekingPercentage)
+                    }
+                },
                 onStarted: (playTimeOffset) => {
                     console.log('started', playTimeOffset)
                     waveformRef.current.setWaveData(song.wave)
