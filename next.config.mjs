@@ -239,6 +239,7 @@ const nextConfig = (/*phase*/) => {
         eslint: {
             ignoreDuringBuilds: true,
         },
+        reactStrictMode: true,
         /*headers: async () => {
             return [
                 {
