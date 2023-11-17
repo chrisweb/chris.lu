@@ -17,7 +17,7 @@
 .notActive>a {
     /* 5% darker than --primary-light-color */
     color: rgb(230 0 155);
-    font-weight: var(--main-fontWeight-activeLinks);
+    font-weight: var(--main-fontWeight-links);
 }
 
 /* not on mobile */
