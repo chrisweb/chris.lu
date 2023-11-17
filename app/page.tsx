@@ -6,7 +6,7 @@ export default function Homepage() {
 
     return (
         <>
-            <section>
+            <section className="core">
                 <h1 className="h1">Hello, World! <span className="emoji">🚀</span></h1>
                 <p>Welcome to my blog, my name is Chris Weber (aka chrisweb)</p>
                 <p>I like <Typing>Web development, Lego bricks, Music, Games, Cooking, Movies & TV shows, Memes</Typing></p>

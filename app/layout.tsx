@@ -46,6 +46,7 @@ export default function RootLayout({ children }: {
                     <NeonRoadContainer />
                 </header>
                 <main>{children}</main>
+                <footer></footer>
             </body>
         </html>
     )
