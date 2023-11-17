@@ -29,7 +29,7 @@
     --main-fontWeight-bold: 600;
     --main-fontWeight-bolder: 700;
     --main-fontWeight-headline: 700;
-    --main-fontWeight-links: 400;
+    --main-fontWeight-links: 500;
     --main-fontWeight-activeLinks: 600;
     --main-textUnderlineOffset-links: 0.2rem;
     --main-spacing: 2rem;
@@ -505,7 +505,7 @@ aside {
 /* "external link" icon styling */
 .externalLinkIcon {
     color: var(--primary-light-color);
-    margin-left: calc(var(--main-spacing) / 3);
+    margin-left: calc(var(--main-spacing) / 5);
 }
 
 /* github like heading anchor */
