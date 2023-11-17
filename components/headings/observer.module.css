@@ -1,10 +1,11 @@
 .list {
     list-style-type: none;
     padding-inline-start: 2ch;
+    font-size: var(--main-fontSize-smaller);
+    line-height: 1.5;
 }
 
 .list li a {
-    font-size: var(--main-fontSize-smaller);
     margin-bottom: 0.5rem;
 }
 
