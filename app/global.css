@@ -22,6 +22,9 @@
     --main-fontSize-small: 1rem;
     /* 14px */
     --main-fontSize-smaller: 0.875rem;
+    --main-lineHeight-heading: 1.5;
+    --main-lineHeight-default: 1.6;
+    --main-lineHeight-small: 1.7;
     --main-fontWeight-default: 400;
     --main-fontWeight-bold: 600;
     --main-fontWeight-bolder: 700;
@@ -29,9 +32,7 @@
     --main-fontWeight-links: 400;
     --main-fontWeight-activeLinks: 600;
     --main-textUnderlineOffset-links: 0.2rem;
-    --main-lineHeight-default: 1.5;
-    --main-lineHeight-headline: 1.75;
-    --main-spacing: 1.5rem;
+    --main-spacing: 2rem;
     --main-maxWidth: 70rem;
     --main-article-maxWidth: 50rem;
     --main-aside-maxWidth: 20rem;
@@ -117,11 +118,8 @@ header,
 footer {
     font-size: var(--main-fontSize-default);
     line-height: var(--main-lineHeight-default);
-}
-
-header,
-footer {
-    overflow: hidden;
+    /* width fix for mobile when word is extremly long */
+    overflow-x: clip;
 }
 
 header {
@@ -130,6 +128,7 @@ header {
 
 footer {
     margin-top: var(--main-spacing);
+    min-height: calc(var(--main-spacing) * 2)
 }
 
 main {
@@ -140,14 +139,6 @@ main {
     margin-left: auto;
     margin-right: auto;
     max-width: var(--main-maxWidth);
-}
-
-/* max-width: 70rem / 1120px (mobile breakpoint) */
-@media all and (max-width: 70rem) {
-    main {
-        margin-left: var(--main-spacing);
-        margin-right: var(--main-spacing);
-    }
 }
 
 .h1,
@@ -185,18 +176,45 @@ h3,
 h4,
 h5,
 h6 {
-    display: block;
+    line-height: var(--main-lineHeight-heading);
     font-weight: var(--main-fontWeight-headline);
-    line-height: var(--main-lineHeight-headline);
-    margin: 0 0 0.35em 0;
     /* add a scroll margin because of the top navbar */
     /* fixes the scrollIntoView position */
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-margin-top */
     scroll-margin-top: 80px;
+    overflow-wrap: break-word;
+    position: relative;
+}
+
+/* helper middle line */
+/*h1:before,
+h2:before,
+h3:before,
+h4:before,
+h5:before,
+h6:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -25px;
+    border-top: 1px solid white;
+    width: 100%;
+}*/
+
+h1 {
+    margin: 0 0 var(--main-spacing) 0;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: var(--main-spacing) 0;
 }
 
 p {
-    margin: var(--main-spacing) 0;
+    margin: calc(var(--main-spacing) / 2) 0;
 }
 
 h1 {
@@ -393,6 +411,7 @@ code {
     padding-left: calc(var(--main-spacing) / 2);
     padding-right: calc(var(--main-spacing) / 2);
     padding-bottom: 0;
+    margin-top: calc(var(--main-spacing) / 2);
     --cornerSideLength: 30px;
     /* hack: in chrome a small line sometimes appears */
     transform: skewY(0.001deg);
@@ -410,6 +429,7 @@ code {
     padding-left: calc(var(--main-spacing) / 2);
     padding-right: calc(var(--main-spacing) / 2);
     padding-bottom: calc(var(--main-spacing) / 2);
+    margin-bottom: calc(var(--main-spacing) / 2);
     text-align: end;
     font-size: medium;
     --cornerSideLength: 30px;
@@ -424,6 +444,7 @@ code {
 }
 
 article,
+section,
 code,
 nav,
 aside {
@@ -433,11 +454,11 @@ aside {
 }
 
 article,
-.posts {
+.core {
     width: var(--main-article-maxWidth);
     max-width: var(--main-article-maxWidth);
-    /* width fix for mobile when word is extremly long */
-    overflow-x: hidden;
+    padding-left: var(--main-spacing);
+    padding-right: var(--main-spacing);
 }
 
 /* max-width: 70rem / 1120px (mobile breakpoint) */
@@ -481,18 +502,47 @@ aside {
     text-decoration: none;
 }
 
+/* "external link" icon styling */
 .externalLinkIcon {
     color: var(--primary-light-color);
     margin-left: calc(var(--main-spacing) / 3);
 }
 
+/* github like heading anchor */
 .headingAnchor {
-    font-weight: inherit;
-    fill: #fff;
+    float: left;
+    padding-right: 4px;
+    margin-left: -28px;
 }
 
-.headingAnchor>svg {
-    margin-left: calc(var(--main-spacing) / 2);
+h1 .headingAnchor {
+    line-height: 1.35;
+}
+
+h2 .headingAnchor {
+    line-height: 1.5;
+}
+
+h3 .headingAnchor {
+    line-height: 1.65;
+}
+
+h4 .headingAnchor {
+    line-height: 1.8;
+}
+
+h5 .headingAnchor {
+    line-height: 1.95;
+}
+
+h6 .headingAnchor {
+    line-height: 2;
+}
+
+.icon {
+    display: inline-block;
+    overflow: visible;
+    fill: #fff;
 }
 
 .ripple {
@@ -580,9 +630,9 @@ aside {
     display: flex;
     align-items: center;
     width: 140px;
-    padding: 0 var(--main-spacing);
+    padding: 0 calc(var(--main-spacing) / 2);
     font-weight: 600;
-    --cornerSideLength: 30px;
+    --cornerSideLength: 35px;
     clip-path:
         polygon(0 0,
             100% 0,
@@ -596,5 +646,5 @@ aside {
 }
 
 .markdown-alert-body {
-    padding: 0 var(--main-spacing);
+    padding: 0 calc(var(--main-spacing) / 2);
 }

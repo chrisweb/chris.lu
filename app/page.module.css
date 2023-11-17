@@ -63,5 +63,5 @@
     height: 100%;
     width: 100%;
     color: #fff;
-    padding: 0 var(--main-spacing);
+    padding: calc(var(--main-spacing) / 2) var(--main-spacing);
 }
