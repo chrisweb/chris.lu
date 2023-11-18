@@ -34,8 +34,8 @@
     --main-textUnderlineOffset-links: 0.2rem;
     --main-spacing: 2rem;
     --main-maxWidth: 70rem;
-    --main-article-maxWidth: 50rem;
-    --main-aside-maxWidth: 20rem;
+    --main-middle-maxWidth: 48rem;
+    --main-aside-maxWidth: 22rem;
     /* some useful tools to pick colors
     https://www.canva.com/colors/color-wheel/
     https://www.google.com/search?q=google+color+picker
@@ -415,6 +415,7 @@ code {
     --cornerSideLength: 30px;
     /* hack: in chrome a small line sometimes appears */
     transform: skewY(0.001deg);
+    height: 45px;
     clip-path:
         polygon(0 0,
             calc(100% - var(--cornerSideLength)) 0,
@@ -435,6 +436,7 @@ code {
     --cornerSideLength: 30px;
     /* hack: in chrome a small line sometimes appears */
     transform: skewY(0.001deg);
+    height: 45px;
     clip-path:
         polygon(0 0,
             100% 0,
@@ -456,13 +458,13 @@ aside {
 article,
 .middle,
 .core {
-    width: var(--main-article-maxWidth);
+    max-width: var(--main-middle-maxWidth);
     padding-left: var(--main-spacing);
     padding-right: var(--main-spacing);
 }
 
 .core {
-    width: var(--main-maxWidth);
+    max-width: var(--main-maxWidth);
 }
 
 /* max-width: 70rem / 1120px (mobile breakpoint) */
@@ -618,8 +620,6 @@ h6 .headingAnchor {
     display: flex;
     flex-flow: column;
     justify-content: center;
-    /* hack: in chrome a small line sometimes appears */
-    transform: skewY(0.001deg);
     background-color: var(--main-background-color);
     --cornerSideLength: 30px;
     clip-path:
