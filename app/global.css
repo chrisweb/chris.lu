@@ -454,11 +454,15 @@ aside {
 }
 
 article,
+.middle,
 .core {
     width: var(--main-article-maxWidth);
-    max-width: var(--main-article-maxWidth);
     padding-left: var(--main-spacing);
     padding-right: var(--main-spacing);
+}
+
+.core {
+    width: var(--main-maxWidth);
 }
 
 /* max-width: 70rem / 1120px (mobile breakpoint) */
