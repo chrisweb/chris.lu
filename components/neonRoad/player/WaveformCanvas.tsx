@@ -55,12 +55,13 @@ const WaveformCanvas = forwardRef(({ onWaveClickHandler, waveData }: IProps, wav
 
     useEffect(() => {
 
-        console.log('use effect, waveData: ', waveData)
+        if (waveData.length > 0) {
+            const waveform = getWaveform()
 
-        const waveform = getWaveform()
+            waveform.setWaveData(waveData)
+            waveform.draw(0)
+        }
 
-        waveform.setWaveData(waveData)
-        waveform.draw(0)
     }, [waveData])
 
     return (
