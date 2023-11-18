@@ -265,8 +265,6 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
 
     useEffect(() => {
 
-        console.log('use effect first song')
-
         const firstSong = getMixTape()[0]
 
         setCreditsState({
@@ -276,6 +274,8 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
             license: firstSong.license,
             wave: firstSong.wave
         })
+
+        getPlayer()
 
     }, [])
 
