@@ -242,6 +242,38 @@ declare module '@react-three/fiber' {
 </Effects>
 ```
 
+New try:
+
+in canvas.tsx
+
+```ts
+import { useRef, Suspense } from 'react'
+import { PerspectiveCamera, PCFSoftShadowMap } from 'three'
+import { EffectComposer, Bloom } from '@react-three/postprocessing'
+
+<meshStandardMaterial
+    map={floorTexture}
+    displacementMap={displacementMap}
+    displacementScale={displacementScale}
+    roughness={0.1}
+    metalness={0.6}
+    emissiveMap={displacementMap}
+    emissive={'white'}
+    emissiveIntensity={1}
+    toneMapped={true}
+/>
+```
+
+in meshes.tsx:
+
+```ts
+<Suspense fallback={null}>
+    <EffectComposer>
+    <Bloom luminanceThreshold={0.9} />
+    </EffectComposer>
+</Suspense>
+```
+
 ## performance tuning
 
 performance monitor <https://github.com/pmndrs/drei#performancemonitor> can be used to check the performance and apply changes based on the returned value, like for example disable antialiasing
