@@ -19,7 +19,7 @@ const StaticImage: React.FC<IProps> = (props) => {
             }}
             sizes="100vw"
             priority
-            quality={95}
+            quality={100}
         />
     )
 }

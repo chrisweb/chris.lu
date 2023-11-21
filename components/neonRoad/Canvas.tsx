@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, Suspense } from 'react'
+import { useRef } from 'react'
 import { PerspectiveCamera, PCFSoftShadowMap } from 'three'
 import { Canvas } from '@react-three/fiber'
 import { /*OrbitControls, useDetectGPU, Stats, Hud,*/ Sparkles } from '@react-three/drei'
@@ -114,14 +114,12 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 <ambientLight color={'#ffecec'} intensity={20} />
                 <Meshes terrainARef={terrainARef} terrainBRef={terrainBRef} />
                 <Sunshine />
-                <Suspense fallback={null}>
-                    <EffectComposer>
-                        <Bloom
-                            luminanceThreshold={0.01}
-                            intensity={0.4}
-                        />
-                    </EffectComposer>
-                </Suspense>
+                <EffectComposer>
+                    <Bloom
+                        luminanceThreshold={0.01}
+                        intensity={0.4}
+                    />
+                </EffectComposer>
             </Canvas>
         </>
 
