@@ -1,17 +1,19 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
-import { Mesh, Group } from 'three'
+import { useEffect, useRef, PropsWithChildren, MutableRefObject } from 'react'
+import type { Mesh, Group } from 'three'
 import { useFrame } from '@react-three/fiber'
 import { useTexture, useAspect } from '@react-three/drei'
 import PalmModel from './Palm'
 
-const NeonRoadMesh: React.FC = () => {
+interface IProps extends PropsWithChildren {
+    terrainARef: MutableRefObject<Mesh>
+    terrainBRef: MutableRefObject<Mesh>
+}
+
+const NeonRoadMesh: React.FC<IProps> = ({ terrainARef, terrainBRef }) => {
 
     const displacementScale = 0.5
-
-    const terrainARef = useRef<Mesh>(null)
-    const terrainBRef = useRef<Mesh>(null)
 
     const FLOOR_TEXTURE_PATH = '/assets/images/neonroad/grid_4096x8192-min.png'
     const DISPLACEMENT_MAP_PATH = '/assets/images/neonroad/displacement_32x64-min.png'
@@ -46,8 +48,6 @@ const NeonRoadMesh: React.FC = () => {
     })
 
     useFrame((state/*, delta, xrFrame*/) => {
-
-        //console.log(state, delta, xrFrame)
 
         if (!animate.current) {
             return
@@ -87,14 +87,15 @@ const NeonRoadMesh: React.FC = () => {
             const xPosition = side === 'right' ? -0.21 : 0.21
             spritesElements.push(
                 <PalmModel
-                    //rotation={[-Math.PI * 0.5, 0, 0]}
                     position={[xPosition, 0, positionChange]}
                     ref={ref => {
                         side === 'right' ? rightSideTreesRefs.current[i] = ref : leftSideTreesRefs.current[i] = ref
                     }}
                     scale={[0.009, 0.009, 0.009]}
                     castShadow={true} // default is false
+                    receiveShadow={false}
                     key={side + i}
+
                 />
             )
             positionChange += 0.2
@@ -110,14 +111,19 @@ const NeonRoadMesh: React.FC = () => {
                 position={[0, 0, positionZ]}
                 ref={terrainRef}
                 receiveShadow={true} // default is false
+                castShadow={false}
             >
                 <planeGeometry args={[1, 2, 32, 32]} />
                 <meshStandardMaterial
                     map={floorTexture}
                     displacementMap={displacementMap}
                     displacementScale={displacementScale}
+                    emissiveMap={displacementMap}
+                    emissive={'#650044'}
+                    emissiveIntensity={0.1}
+                    toneMapped={false}
                     roughness={0.9}
-                    metalness={0.9}
+                    metalness={0.7}
                 />
             </mesh>
         )
@@ -128,6 +134,8 @@ const NeonRoadMesh: React.FC = () => {
             <mesh
                 position={[0, 0.5, -2]}
                 scale={[3, 3, 3]}
+                castShadow={false}
+                receiveShadow={false}
             >
                 <planeGeometry />
                 <meshBasicMaterial
@@ -144,6 +152,8 @@ const NeonRoadMesh: React.FC = () => {
             <mesh
                 position={[0, 0.14, -1.5]}
                 scale={cityScale}
+                castShadow={false}
+                receiveShadow={false}
             >
                 <planeGeometry />
                 <meshBasicMaterial
