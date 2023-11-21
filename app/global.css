@@ -116,6 +116,9 @@ body {
 main,
 header,
 footer {
+    /* ensure the parent of next/image is relative */
+    /* header is the parent of the animation fallback img */
+    position: relative;
     font-size: var(--main-fontSize-default);
     line-height: var(--main-lineHeight-default);
     /* width fix for mobile when word is extremly long */
