@@ -2228,15 +2228,28 @@ then in our code block options we also used the id **special**, this way you can
 
 next we used the caption option, this is the similar to the title with the difference that it is under the code block instead of above, as the caption text we set tsx to indicate in what language the code in the code block is using, but of course you can use the caption part for what ever you want
 
-now we are done with the code blocks, but there is one last thing we can do use rehype pretty code and that is style inline code, so code inside of our article text, to do that we need to append the language inside of curly brackets at the end of our inline code, like so:
+now we are done with the code blocks, but there is one last thing we can do use rehype pretty code and that is style inline code, so code inside of our article text, for example let assume we have the following MDX content:
 
-```html
+> [!NOTE]  
+> you will notice that the generated HTML has put our inline code into a `<code>` element but the code has no styling, this is because the code highliter package does not know which language to use
+
+there are two ways to define the language, one way is to add a default language to the configuration of the **rehype pretty code** plugin, like so:
+
+```mjs
+TODO: code example
+```
+
+you don't need to add a default language and also when the inline code is not the default language, then this option won't solve our problem, this is why there is a second way of telling the plugin what language the code is in
+
+the second option is to add a hint for what language styling we want to use inside of curly brackets at the end of our inline code, like so:
+
+```mdx
 Lorem ipsum dolor sit amet, `helloWorld(){:tsx}`. Praesent vehicula sem ac erat sagittis, eget dapibus eros cursus.
 ```
 
 as you can see this works, our inline code has been highlighted and the colors are correct, but what if instead of **helloworld()** we use **helleworld** so just the function name without the brackets at the end:
 
-```html
+```mdx
 Lorem ipsum dolor sit amet, `helloWorld{:tsx}`. Praesent vehicula sem ac erat sagittis, eget dapibus eros cursus.
 ```
 
@@ -2244,7 +2257,7 @@ now even though we specified the language, the color is wrong, this is because b
 
 to fix this and tell the highlighter explicitly that this is a function, we need to use a **.token** instead of the language, like so:
 
-```html
+```mdx
 Lorem ipsum dolor sit amet, `helloWorld{:.entity.name.function}`. Praesent vehicula sem ac erat sagittis, eget dapibus eros cursus.
 ```
 
