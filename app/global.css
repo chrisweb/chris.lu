@@ -335,6 +335,16 @@ textarea {
     margin: 0;
 }
 
+blockquote {
+    border-left-width: 2px;
+    border-left-style: solid;
+    border-left-color: var(--primary-light-color);
+    padding-inline-start: 2ch;
+    /* reset browser margin styles */
+    margin: 0px;
+    margin-left: var(--main-spacing);
+}
+
 button {
     user-select: none;
 }
@@ -606,6 +616,11 @@ h6 .headingAnchor {
 .markdown-alert-warning,
 .markdown-alert-warning .markdown-alert-header {
     background-color: var(--secondary-light-color);
+}
+
+.markdown-alert-more,
+.markdown-alert-more .markdown-alert-header {
+    background-color: var(--primary-light-color);
 }
 
 .markdown-alert-note .markdown-alert-header {
