@@ -33,6 +33,10 @@ recap of the 1st and 2nd generation of data fetching in next.js:
 
 in october 2022 the next.js team released [Next.js 13](https://nextjs.org/blog/next-13) which included the first version of the new `app` directory and two months later in december 2022 [Next.js 13.1](https://nextjs.org/blog/next-13-1) which brought a lot of improvements for the new app directory but also for middlewares and next.js memory consumption, then in february 2023 we got [Next.js 13.2](https://nextjs.org/blog/next-13-2) which brought the new Metadata API for built SEO support and MDX support, in april 2023 we got [Next.js 13.3](https://nextjs.org/blog/next-13-3) which brought improvements for SEO tools like the [Metadata Files API](https://nextjs.org/docs/app/api-reference/file-conventions/metadata) and automatically generated OpenGraph Images, in may 203 we got [Next.js 13.4](https://nextjs.org/blog/next-13-4) which was the first version of next.js 13 version in which the **App Router** is considered being **stable** (meaning it has left beta)
 
+add some next js 14 specific info (what is new): <https://dev.to/usulpro/save-time-and-stay-informed-9-must-know-updates-in-nextjs-v14-5fnp>
+
+TODO: rework the react and nextjs history chapters and add another chapter chapter "what's new in xxx" which explicitly lists the new features, for nextjs make a note box to let people know about codemods (if they migrate): https://nextjs.org/docs/pages/building-your-application/upgrading/codemods
+
 ## image(s) manipulation
 
 converting images to AVIF and WEBP and thumbnails
