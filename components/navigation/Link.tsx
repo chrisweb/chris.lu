@@ -63,7 +63,7 @@ const NavigationLink: React.FC<INavigationLinkProps> = (props): JSX.Element => {
     }
 
     if (isMe) {
-        linkProps.rel += ' me'
+        linkProps.rel = 'me'
     }
 
     return (
