@@ -3,7 +3,7 @@
 import { useEffect, useRef, PropsWithChildren, MutableRefObject } from 'react'
 import type { Mesh, Group } from 'three'
 import { useFrame } from '@react-three/fiber'
-import { useTexture, useAspect } from '@react-three/drei'
+import { useTexture } from '@react-three/drei'
 import PalmModel from './Palm'
 
 interface IProps extends PropsWithChildren {
@@ -113,7 +113,7 @@ const NeonRoadMesh: React.FC<IProps> = ({ terrainARef, terrainBRef }) => {
                 receiveShadow={true} // default is false
                 castShadow={false}
             >
-                <planeGeometry args={[1, 2, 32, 32]} />
+                <planeGeometry args={[1, 2, 32, 64]} />
                 <meshStandardMaterial
                     map={floorTexture}
                     displacementMap={displacementMap}
@@ -147,11 +147,10 @@ const NeonRoadMesh: React.FC<IProps> = ({ terrainARef, terrainBRef }) => {
     }
 
     function City() {
-        const cityScale = useAspect(1024, 256, 0.2)
         return (
             <mesh
-                position={[0, 0.14, -1.5]}
-                scale={cityScale}
+                position={[0, 0.18, -1.5]}
+                scale={[1, 0.5, 0.5]}
                 castShadow={false}
                 receiveShadow={false}
             >
