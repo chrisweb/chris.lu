@@ -9,9 +9,10 @@ import PalmModel from './Palm'
 interface IProps extends PropsWithChildren {
     terrainARef: MutableRefObject<Mesh>
     terrainBRef: MutableRefObject<Mesh>
+    capFps?: boolean
 }
 
-const NeonRoadMesh: React.FC<IProps> = ({ terrainARef, terrainBRef }) => {
+const NeonRoadMesh: React.FC<IProps> = ({ terrainARef, terrainBRef, capFps = false }) => {
 
     const displacementScale = 0.5
 
@@ -47,11 +48,24 @@ const NeonRoadMesh: React.FC<IProps> = ({ terrainARef, terrainBRef }) => {
         }
     })
 
-    useFrame((state/*, delta, xrFrame*/) => {
+    let lastTime = 0
+
+    useFrame((state,/* delta, xrFrame*/) => {
+
+        console.log(state.clock.elapsedTime + lastTime)
 
         if (!animate.current) {
             return
         }
+
+        const timestamp = state.clock.elapsedTime
+
+        if (timestamp - lastTime <= 0.016 && capFps) {
+            console.log('don\'t render')
+            return
+        }
+
+        lastTime = timestamp
 
         const newZPosition = (state.clock.elapsedTime * 0.07) % 2
 

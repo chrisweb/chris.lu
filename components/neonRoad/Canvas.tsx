@@ -3,7 +3,7 @@
 import { useRef } from 'react'
 import { PerspectiveCamera, PCFSoftShadowMap } from 'three'
 import { Canvas } from '@react-three/fiber'
-import { /*OrbitControls, useDetectGPU, Stats, Hud,*/ Sparkles } from '@react-three/drei'
+import { /*OrbitControls, useDetectGPU,*/ Stats,/* Hud,*/ Sparkles } from '@react-three/drei'
 import Meshes from './Meshes'
 import StaticImage from './StaticImage'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
@@ -109,7 +109,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 />
                 {/*<axesHelper />*/}{/*enable for development*/}
                 {/*<OrbitControls camera={cameraRef.current} />*/}{/*enable for development*/}
-                {/*<Stats />*/}{/*enable for development*/}
+                *<Stats />{/*enable for development*/}
                 {/*GUI: https://github.com/pmndrs/leva*/}
                 <ambientLight color={'#ffecec'} intensity={20} />
                 <Meshes terrainARef={terrainARef} terrainBRef={terrainBRef} />
