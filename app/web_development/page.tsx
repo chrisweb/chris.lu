@@ -22,10 +22,10 @@ export default function WebDevelopmentPage() {
             <section id="web_development" className="middle">
                 <h1 className="h1">Web Development Posts</h1>
                 <h2 className="h2">Next.js static MDX Blog</h2>
-                <p>A personal blog tutorial. Fully static pages using Next.js (13 / 14) app directory and @next/mdx. Automatic table of contents generation in posts. Code blocks styling based on VSCode template.</p>
+                <p>A personal blog tutorial. Fully static pages using Next.js (v14) app directory and @next/mdx. Automatic table of contents generation in posts. Code blocks styling based on VSCode template.</p>
                 <ul>
                     <li>
-                        <NavigationLink href="/web_development/next-js-static-mdx-blog/eslint" className="a">ESLint</NavigationLink>
+                        <NavigationLink href="/web_development/tutorials/next-js-static-mdx-blog/eslint" className="a">ESLint</NavigationLink>
                     </li>
                 </ul>
             </section>

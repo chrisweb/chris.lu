@@ -217,7 +217,7 @@ h6 {
 }
 
 p {
-    margin: calc(var(--main-spacing) / 2) 0;
+    margin: var(--main-spacing) 0;
 }
 
 h1 {
@@ -340,9 +340,7 @@ blockquote {
     border-left-style: solid;
     border-left-color: var(--primary-light-color);
     padding-inline-start: 2ch;
-    /* reset browser margin styles */
-    margin: 0px;
-    margin-left: var(--main-spacing);
+    margin: var(--main-spacing);
 }
 
 button {
@@ -364,6 +362,10 @@ pre {
 }
 
 /* recommended by https://rehype-pretty-code.netlify.app/ */
+[data-rehype-pretty-code-fragment] {
+    margin: var(--main-spacing) 0;
+}
+
 pre>code {
     display: grid;
 }
@@ -668,5 +670,5 @@ h6 .headingAnchor {
 }
 
 .markdown-alert-body {
-    padding: 0 calc(var(--main-spacing) / 2);
+    padding: 0 var(--main-spacing);
 }
