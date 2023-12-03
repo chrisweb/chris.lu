@@ -27,7 +27,8 @@
 
         .btn-border {
             --cornerSideLength: 43px;
-
+            /* next line is a hack: in chrome a small line sometimes appears */
+            will-change: transform;
             clip-path:
                 polygon(0 0,
                     100% 0,
@@ -50,7 +51,8 @@
 
         .btn {
             --cornerSideLength: 40px;
-
+            /* next line is a hack: in chrome a small line sometimes appears */
+            will-change: transform;
             clip-path:
                 polygon(0 0,
                     100% 0,
