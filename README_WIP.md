@@ -4234,7 +4234,7 @@ I then added my clip path polygon to the css of the button:
 ```
 
 Note: TODO: explain why we use "will-change: transform;" source for chrome "hairline bug": https://stackoverflow.com/a/65132846/656689
-things like ("margin-bottom: -1px" OR "setting the polygon 100% values to 101%" OR "transform: skewY(0.001deg)" OR "transform: translateZ(0)") in these 3 stackoverflows did not fix the problem:
+things like ("margin-bottom: -1px" OR "setting the polygon 100% values to 101%" OR "transform: skewY(0.001deg)" OR "transform: translateZ(0)" OR "backface-visibility: hidden;") in these 3 stackoverflows did not fix the problem:
 https://stackoverflow.com/questions/45054056/why-there-is-a-gap-between-div-and-rotated-div-triangle/45303840#45303840
 https://stackoverflow.com/questions/51542919/clip-path-on-chrome-leaves-a-strange-line-on-the-edge?noredirect=1&lq=1
 https://stackoverflow.com/questions/53396831/clip-path-horizontal-white-line-in-chrome?noredirect=1&lq=1
