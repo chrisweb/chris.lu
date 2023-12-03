@@ -673,7 +673,7 @@ h6 .headingAnchor {
 .markdown-alert-header {
     display: flex;
     align-items: center;
-    width: 140px;
+    width: 160px;
     padding: 0 calc(var(--main-spacing) / 2);
     font-weight: 600;
     --cornerSideLength: 35px;
