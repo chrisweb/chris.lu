@@ -361,7 +361,8 @@ pre {
     text-wrap: nowrap;
 }
 
-/* recommended by https://rehype-pretty-code.netlify.app/ */
+/* https://rehype-pretty-code.netlify.app/ */
+/* code blocks styling */
 [data-rehype-pretty-code-fragment] {
     margin: var(--main-spacing) 0;
 }
@@ -458,6 +459,16 @@ code {
             100% 100%,
             var(--cornerSideLength) 100%,
             0 calc(100% - var(--cornerSideLength)));
+}
+
+/* this is the styling for inline code */
+[data-rehype-pretty-code-figure]>code {
+    border-radius: 5px;
+    padding: 2px 6px;
+}
+
+[data-rehype-pretty-code-figure] [data-line] {
+    padding: 0px;
 }
 
 article,
@@ -663,10 +674,6 @@ h6 .headingAnchor {
             100% calc(100% - var(--cornerSideLength)),
             calc(100% - var(--cornerSideLength)) 100%,
             0 100%);
-}
-
-.markdown-alert-header>svg {
-    margin-right: calc(var(--main-spacing) / 2);
 }
 
 .markdown-alert-body {
