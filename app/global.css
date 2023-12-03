@@ -429,8 +429,8 @@ code {
     padding-bottom: 0;
     margin-top: calc(var(--main-spacing) / 2);
     --cornerSideLength: 30px;
-    /* hack: in chrome a small line sometimes appears */
-    transform: skewY(0.001deg);
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
     height: 45px;
     clip-path:
         polygon(0 0,
@@ -450,8 +450,8 @@ code {
     text-align: end;
     font-size: medium;
     --cornerSideLength: 30px;
-    /* hack: in chrome a small line sometimes appears */
-    transform: skewY(0.001deg);
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
     height: 45px;
     clip-path:
         polygon(0 0,
@@ -618,6 +618,8 @@ h6 .headingAnchor {
     justify-content: center;
     padding: 1px;
     --cornerSideLength: 30px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
     clip-path:
         polygon(0 0,
             100% 0,
@@ -658,6 +660,8 @@ h6 .headingAnchor {
     justify-content: center;
     background-color: var(--main-background-color);
     --cornerSideLength: 30px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
     clip-path:
         polygon(0 0,
             100% 0,
@@ -673,6 +677,8 @@ h6 .headingAnchor {
     padding: 0 calc(var(--main-spacing) / 2);
     font-weight: 600;
     --cornerSideLength: 35px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
     clip-path:
         polygon(0 0,
             100% 0,

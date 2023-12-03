@@ -23,6 +23,8 @@
 }
 
 .cyberPortalBorder {
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
     clip-path:
         polygon(0 0,
             100% 0,
@@ -47,7 +49,8 @@
 
 .cyberPortalCore {
     --innerCornerSize: 39px;
-
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
     clip-path:
         polygon(0 0,
             100% 0,
