@@ -2151,6 +2151,8 @@ next we add even more css, but this time the css we add is to style the custom c
     background-color: #262335;
     padding: calc(var(--main-spacing) / 3) calc(var(--main-spacing) / 2);
     --cornerSideLength: 25px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
     clip-path:
         polygon(0 0,
             calc(100% - var(--cornerSideLength)) 0,
@@ -4205,7 +4207,8 @@ I then added my clip path polygon to the css of the button:
 ```css
 .btn {
     --cornerSideLength: 20px;
-
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
     clip-path:
         polygon(0 0,
             100% 0,
@@ -4229,6 +4232,12 @@ I then added my clip path polygon to the css of the button:
     text-transform: uppercase;
 }
 ```
+
+Note: TODO: explain why we use "will-change: transform;" source for chrome "hairline bug": https://stackoverflow.com/a/65132846/656689
+things like ("margin-bottom: -1px" OR "setting the polygon 100% values to 101%" OR "transform: skewY(0.001deg)" OR "transform: translateZ(0)") in these 3 stackoverflows did not fix the problem:
+https://stackoverflow.com/questions/45054056/why-there-is-a-gap-between-div-and-rotated-div-triangle/45303840#45303840
+https://stackoverflow.com/questions/51542919/clip-path-on-chrome-leaves-a-strange-line-on-the-edge?noredirect=1&lq=1
+https://stackoverflow.com/questions/53396831/clip-path-horizontal-white-line-in-chrome?noredirect=1&lq=1
 
 next we just need to create an html button (you can use a div or a real button element, I will use a link element for this example):
 
