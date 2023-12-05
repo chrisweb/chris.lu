@@ -1,18 +1,16 @@
 'use client'
 
-import { useEffect, useRef, PropsWithChildren, MutableRefObject } from 'react'
+import { useEffect, useRef, PropsWithChildren } from 'react'
 import type { Mesh, Group } from 'three'
 import { useFrame } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
 import PalmModel from './Palm'
 
 interface IProps extends PropsWithChildren {
-    terrainARef: MutableRefObject<Mesh>
-    terrainBRef: MutableRefObject<Mesh>
     capFps?: boolean
 }
 
-const NeonRoadMesh: React.FC<IProps> = ({ terrainARef, terrainBRef, capFps = false }) => {
+const NeonRoadMesh: React.FC<IProps> = ({ capFps = false }) => {
 
     const displacementScale = 0.5
 
@@ -27,6 +25,10 @@ const NeonRoadMesh: React.FC<IProps> = ({ terrainARef, terrainBRef, capFps = fal
         SUN_TEXTURE_PATH,
         CITY_TEXTURE_PATH,
     ])
+
+    const terrainARef = useRef<Mesh>(null)
+    const terrainBRef = useRef<Mesh>(null)
+    const terrainCRef = useRef<Mesh>(null)
 
     const animate = useRef(true)
 
@@ -50,45 +52,70 @@ const NeonRoadMesh: React.FC<IProps> = ({ terrainARef, terrainBRef, capFps = fal
 
     let lastTime = 0
 
-    useFrame((state,/* delta, xrFrame*/) => {
-
-        console.log(state.clock.elapsedTime + lastTime)
+    useFrame((state, delta /*, xrFrame*/) => {
 
         if (!animate.current) {
             return
         }
 
-        const timestamp = state.clock.elapsedTime
+        const elapsedTime = state.clock.getElapsedTime()
 
-        if (timestamp - lastTime <= 0.016 && capFps) {
-            console.log('don\'t render')
+        if (elapsedTime - lastTime <= 0.016 && capFps) {
             return
         }
 
-        lastTime = timestamp
+        lastTime = elapsedTime
 
-        const newZPosition = (state.clock.elapsedTime * 0.07) % 2
+        // speed is just a value we use to make the
+        // terrain move slower or faster
+        // increase the number to increase the speed
+        const speed = 0.1
+        const distance = delta * speed
 
+        // the distance between the city (when the terrain comes
+        // into view) and the bottom of the camera view field
+        // (at which point the terrain goes out of view) 
+        // is approximativly 2 units, so we need 3 terrains
+        // pnaels (of 1x1 in size), we put the first one
+        // at 1 unit from the city which is -0.5, the second
+        // one again 1 units away at 0.5 and the thirs one
+        // at 1.5, when a terrainr reaches 1.5 gets removed
+        // and put back at the start which is -1.5
         if (terrainARef.current) {
-            terrainARef.current.position.z = newZPosition
+            terrainARef.current.position.z += distance
+            if (terrainARef.current.position.z >= 1.5) {
+                terrainARef.current.position.z = -1.5
+            }
         }
         if (terrainBRef.current) {
-            terrainBRef.current.position.z = newZPosition - 2
+            terrainBRef.current.position.z += distance
+            if (terrainBRef.current.position.z >= 1.5) {
+                terrainBRef.current.position.z = -1.5
+            }
+        }
+        if (terrainCRef.current) {
+            terrainCRef.current.position.z += distance
+            if (terrainCRef.current.position.z >= 1.5) {
+                terrainCRef.current.position.z = -1.5
+            }
         }
 
-        // from position "-2.8" to "0.8" 
-        let positionChange = -2.8
-
+        // we put the first three at the end of first terrain
+        // so where the city is, one on each side
+        // between two threes we want 0.2 units, so we
+        // need 20 trees (on each side) to cover the 2 units
         leftSideTreesRefs.current.forEach((leftSideTreeRef) => {
-            leftSideTreeRef.position.z = newZPosition + positionChange
-            positionChange += 0.2
+            leftSideTreeRef.position.z += distance
+            if (leftSideTreeRef.position.z >= 1.5) {
+                leftSideTreeRef.position.z = -1.5
+            }
         })
 
-        positionChange = -2.8
-
         rightSideTreesRefs.current.forEach((rightSideTreeRef) => {
-            rightSideTreeRef.position.z = newZPosition + positionChange
-            positionChange += 0.2
+            rightSideTreeRef.position.z += distance
+            if (rightSideTreeRef.position.z >= 1.5) {
+                rightSideTreeRef.position.z = -1.5
+            }
         })
 
     })
@@ -127,7 +154,7 @@ const NeonRoadMesh: React.FC<IProps> = ({ terrainARef, terrainBRef, capFps = fal
                 receiveShadow={true} // default is false
                 castShadow={false}
             >
-                <planeGeometry args={[1, 2, 32, 64]} />
+                <planeGeometry args={[1, 1, 32, 64]} />
                 <meshStandardMaterial
                     map={floorTexture}
                     displacementMap={displacementMap}
@@ -146,8 +173,8 @@ const NeonRoadMesh: React.FC<IProps> = ({ terrainARef, terrainBRef, capFps = fal
     function Sun() {
         return (
             <mesh
-                position={[0, 0.5, -2]}
-                scale={[3, 3, 3]}
+                position={[0, 0.5, -1.6]}
+                scale={[2.5, 2.5, 0]}
                 castShadow={false}
                 receiveShadow={false}
             >
@@ -163,8 +190,8 @@ const NeonRoadMesh: React.FC<IProps> = ({ terrainARef, terrainBRef, capFps = fal
     function City() {
         return (
             <mesh
-                position={[0, 0.18, -1.5]}
-                scale={[1, 0.5, 0.5]}
+                position={[0, 0.18, -1]}
+                scale={[1, 0.4, 0]}
                 castShadow={false}
                 receiveShadow={false}
             >
@@ -179,10 +206,11 @@ const NeonRoadMesh: React.FC<IProps> = ({ terrainARef, terrainBRef, capFps = fal
 
     return (
         <>
-            <Terrain positionZ={0} terrainRef={terrainARef} />
-            <Terrain positionZ={-2} terrainRef={terrainBRef} />
-            <TreeModels amount={19} side={'left'} />
-            <TreeModels amount={19} side={'right'} />
+            <Terrain positionZ={0.5} terrainRef={terrainARef} />
+            <Terrain positionZ={-0.5} terrainRef={terrainBRef} />
+            <Terrain positionZ={-1.5} terrainRef={terrainCRef} />
+            <TreeModels amount={20} side={'left'} />
+            <TreeModels amount={20} side={'right'} />
             <Sun />
             <City />
         </>

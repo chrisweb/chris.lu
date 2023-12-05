@@ -3,11 +3,10 @@
 import { useRef } from 'react'
 import { PerspectiveCamera, PCFSoftShadowMap } from 'three'
 import { Canvas } from '@react-three/fiber'
-import { /*OrbitControls, useDetectGPU,*/ Stats,/* Hud,*/ Sparkles } from '@react-three/drei'
+import { /*OrbitControls, useDetectGPU, StatsGl, Hud,*/ Sparkles } from '@react-three/drei'
 import Meshes from './Meshes'
 import StaticImage from './StaticImage'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
-import type { Mesh } from 'three'
 
 interface IProps {
     altText: string
@@ -20,9 +19,6 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
     //console.log('useDetectGPU: ', gpuInfo)
 
     const cameraRef = useRef<PerspectiveCamera>(null)
-
-    const terrainARef = useRef<Mesh>(null)
-    const terrainBRef = useRef<Mesh>(null)
 
     const sceneSetup = () => {
 
@@ -44,8 +40,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
         // uncomment the next lines to use the spotlight helper
         // which helps to visualize the size and direction of your light
         // uncomment also the line that sets the ref, inside of spotLight
-        // put the two imports on top and if not already done also uncomment
-        // the "OrbitControls" inside of the canvas element
+        // put the two imports on top
         /*import { SpotLightHelper, SpotLight } from 'three'
         import { useHelper } from '@react-three/drei'
         const spotLightRef = useRef<SpotLight>(null)
@@ -107,12 +102,8 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                     scale={[30, 5, 1]}
                     speed={0}
                 />
-                {/*<axesHelper />*/}{/*enable for development*/}
-                {/*<OrbitControls camera={cameraRef.current} />*/}{/*enable for development*/}
-                *<Stats />{/*enable for development*/}
-                {/*GUI: https://github.com/pmndrs/leva*/}
                 <ambientLight color={'#ffecec'} intensity={20} />
-                <Meshes terrainARef={terrainARef} terrainBRef={terrainBRef} />
+                <Meshes />
                 <Sunshine />
                 <EffectComposer>
                     <Bloom
@@ -120,6 +111,10 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                         intensity={0.4}
                     />
                 </EffectComposer>
+                {/*<axesHelper />*/}{/*enable for development*/}
+                {/*<OrbitControls camera={cameraRef.current} />*/}{/*enable for development*/}
+                {/*<StatsGl />*/}{/*enable for development*/}
+                {/*GUI: https://github.com/pmndrs/leva*/}
             </Canvas>
         </>
 
