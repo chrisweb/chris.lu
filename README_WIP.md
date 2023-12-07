@@ -3204,6 +3204,17 @@ as the author of mui mentioned in a [comment](https://github.com/mui/material-ui
 
 The PR with an [example of mui with nextjs 13 app directory](https://github.com/mui/material-ui/pull/37315) has been merged, but I did not check it out yet, questions I'm asking myself are the ones mentioned above, so is this client components only or also server components, does this solve the problems of runtime generated css in combination with streaming, does this mean we do not have to wait for a static genrated solution (mui 6) and can use this today? meaning this solution works today but static generation could still be an improvement in terms of loading speeds
 
+#### stylex
+
+TODO: [stylex](https://github.com/facebook/stylex) just popped up out of nowhere, Meta announced Stylex via a [blog post](https://stylexjs.com/blog/introducing-stylex/) on the [Stylex website](https://stylexjs.com/) on the 5 december 2023, mui will not use it, but maybe I should use it in this project to experiment with it, maybe two tutorials, one for css modules and one for stylex?
+
+if like you wonder what stylex is, the stylex website says the following:
+
+> StyleX has become the preferred way to style components for every web surface within Meta
+
+Read more:
+
+[stylexjs website](https://stylexjs.com/)
 
 #### css modules (my current choice)
 
