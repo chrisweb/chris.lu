@@ -1,16 +1,14 @@
 'use client'
 
-import { useEffect, useRef, PropsWithChildren } from 'react'
+import { useRef, useCallback, useEffect } from 'react'
 import type { Mesh, Group } from 'three'
-import { useFrame } from '@react-three/fiber'
+import { useFrame, useThree } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
 import PalmModel from './Palm'
 
-interface IProps extends PropsWithChildren {
-    capFps?: boolean
-}
+const NeonRoadMesh: React.FC = () => {
 
-const NeonRoadMesh: React.FC<IProps> = ({ capFps = false }) => {
+    const three = useThree()
 
     const displacementScale = 0.5
 
@@ -26,11 +24,10 @@ const NeonRoadMesh: React.FC<IProps> = ({ capFps = false }) => {
         CITY_TEXTURE_PATH,
     ])
 
+    // terrains
     const terrainARef = useRef<Mesh>(null)
     const terrainBRef = useRef<Mesh>(null)
     const terrainCRef = useRef<Mesh>(null)
-
-    const animate = useRef(true)
 
     // 19 trees on the left side
     const leftSideTreesRefs = useRef<Group[]>([])
@@ -38,9 +35,16 @@ const NeonRoadMesh: React.FC<IProps> = ({ capFps = false }) => {
     // 19 trees on the right side
     const rightSideTreesRefs = useRef<Group[]>([])
 
-    const setAnimate = () => {
+    // animation request animation frame
+    const requestAnimationFrameRef = useRef(null)
+    const animationTimestampRef = useRef(0)
+
+    // visibility API
+    const animate = useRef(true)
+
+    const setAnimate = useCallback(() => {
         animate.current = !document.hidden
-    }
+    }, [document.hidden])
 
     useEffect(() => {
         // https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API
@@ -50,51 +54,71 @@ const NeonRoadMesh: React.FC<IProps> = ({ capFps = false }) => {
         }
     })
 
-    let lastTime = 0
+    useEffect(() => {
+        requestAnimationFrameRef.current = requestAnimationFrame(loop)
+        return () => {
+            cancelAnimationFrame(requestAnimationFrameRef.current)
+        }
+    }, [animate])
+
+    // custom loop
+    function loop(timeStamp: number) {
+
+        // only animate if visible
+        if (!animate.current) {
+            requestAnimationFrameRef.current = requestAnimationFrame(loop)
+            return
+        }
+
+        // if elapsed time < 60 frames per second => skip
+        const framesPerSecond = 1000 / 30
+
+        if ((timeStamp - animationTimestampRef.current) < framesPerSecond) {
+            requestAnimationFrameRef.current = requestAnimationFrame(loop)
+            return
+        }
+
+        animationTimestampRef.current = timeStamp
+
+        three.advance(timeStamp/1000)
+
+        requestAnimationFrameRef.current = requestAnimationFrame(loop)
+
+    }
 
     useFrame((state, delta /*, xrFrame*/) => {
-
-        if (!animate.current) {
-            return
-        }
-
-        const elapsedTime = state.clock.getElapsedTime()
-
-        if (elapsedTime - lastTime <= 0.016 && capFps) {
-            return
-        }
-
-        lastTime = elapsedTime
 
         // speed is just a value we use to make the
         // terrain move slower or faster
         // increase the number to increase the speed
-        const speed = 0.1
-        const distance = delta * speed
+        const speed = 0.05
+        const newZPosition = delta * speed
 
         // the distance between the city (when the terrain comes
         // into view) and the bottom of the camera view field
         // (at which point the terrain goes out of view) 
         // is approximativly 2 units, so we need 3 terrains
-        // pnaels (of 1x1 in size), we put the first one
-        // at 1 unit from the city which is -0.5, the second
-        // one again 1 units away at 0.5 and the thirs one
-        // at 1.5, when a terrainr reaches 1.5 gets removed
-        // and put back at the start which is -1.5
+        // pnaels (of 1x1 in size), to ensure the distance between
+        // the camera and city is covered at all times
+        // we put the first terrain panel, at where the camera 
+        // is (at +1) minus half a panel which is the panels
+        // center (+1 - 0.5 = 0.5) the second one at one unit
+        // from the first one so -0.5 and the third one at -1.5
+        // so behind the city (which is at -1, minus half a panel)
         if (terrainARef.current) {
-            terrainARef.current.position.z += distance
+            terrainARef.current.position.z += newZPosition
             if (terrainARef.current.position.z >= 1.5) {
                 terrainARef.current.position.z = -1.5
             }
         }
         if (terrainBRef.current) {
-            terrainBRef.current.position.z += distance
+            terrainBRef.current.position.z += newZPosition
             if (terrainBRef.current.position.z >= 1.5) {
                 terrainBRef.current.position.z = -1.5
             }
         }
         if (terrainCRef.current) {
-            terrainCRef.current.position.z += distance
+            terrainCRef.current.position.z += newZPosition
             if (terrainCRef.current.position.z >= 1.5) {
                 terrainCRef.current.position.z = -1.5
             }
@@ -105,14 +129,14 @@ const NeonRoadMesh: React.FC<IProps> = ({ capFps = false }) => {
         // between two threes we want 0.2 units, so we
         // need 20 trees (on each side) to cover the 2 units
         leftSideTreesRefs.current.forEach((leftSideTreeRef) => {
-            leftSideTreeRef.position.z += distance
+            leftSideTreeRef.position.z += newZPosition
             if (leftSideTreeRef.position.z >= 1.5) {
                 leftSideTreeRef.position.z = -1.5
             }
         })
 
         rightSideTreesRefs.current.forEach((rightSideTreeRef) => {
-            rightSideTreeRef.position.z += distance
+            rightSideTreeRef.position.z += newZPosition
             if (rightSideTreeRef.position.z >= 1.5) {
                 rightSideTreeRef.position.z = -1.5
             }
@@ -122,8 +146,7 @@ const NeonRoadMesh: React.FC<IProps> = ({ capFps = false }) => {
 
     function TreeModels({ amount, side }) {
         const spritesElements: React.ReactElement[] = []
-        // from position "-2.8" to "0.8" 
-        let positionChange = -2.8
+        let positionChange = -1.5
         for (let i = 0; i < amount; i++) {
             const xPosition = side === 'right' ? -0.21 : 0.21
             spritesElements.push(

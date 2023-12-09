@@ -290,6 +290,83 @@ const gpuInfo = useDetectGPU()
 console.log('useDetectGPU: ', gpuInfo)
 ```
 
+### create a custom animation loop
+
+```ts
+// animation request animation frame
+const requestAnimationFrameRef = useRef(null)
+const animationTimestampRef = useRef(0)
+
+// visibility API
+const animate = useRef(true)
+
+const setAnimate = useCallback(() => {
+    animate.current = !document.hidden
+}, [document.hidden])
+
+useEffect(() => {
+    // https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API
+    document.addEventListener('visibilitychange', setAnimate)
+    return () => {
+        document.removeEventListener('visibilitychange', setAnimate)
+    }
+})
+
+useEffect(() => {
+    requestAnimationFrameRef.current = requestAnimationFrame(loop)
+    return () => {
+        cancelAnimationFrame(requestAnimationFrameRef.current)
+    }
+}, [animate])
+
+// custom loop
+function loop(timeStamp: number) {
+
+    // only animate if visible
+    if (!animate.current) {
+        requestAnimationFrameRef.current = requestAnimationFrame(loop)
+        return
+    }
+
+    // if elapsed time < 60 frames per second => skip
+    const framesPerSecond = 1000 / 30
+
+    if ((timeStamp - animationTimestampRef.current) < framesPerSecond) {
+        requestAnimationFrameRef.current = requestAnimationFrame(loop)
+        return
+    }
+
+    animationTimestampRef.current = timeStamp
+
+    three.advance(timeStamp/1000)
+
+    requestAnimationFrameRef.current = requestAnimationFrame(loop)
+
+}
+```
+
+Note: calling state.clock.getDelta() flushes the clock back to 0, source: <https://github.com/pmndrs/react-three-fiber/discussions/1991#discussioncomment-1962835>
+
+A good video that explains delta time: <https://www.youtube.com/watch?v=yGhfUcPjXuE>
+
+custom three fiber loop sources:
+
+<https://discourse.threejs.org/t/how-we-can-stop-useframe-animation-in-react-three-fiber/41968/2>
+<https://docs.pmnd.rs/react-three-fiber/advanced/scaling-performance>
+
+### chrome memory and energy saver
+
+if chrome goes into energy or memory saver mode, what happens to the animation, does it slow down, stop completly, what happens when the chrome energy saver mode ends?
+
+to look up chrome discards and manually trigger them (also useful to toggle the energy saver mode) open this in tab:
+
+<chrome://discards/>
+
+sources:
+
+<https://developer.chrome.com/blog/memory-and-energy-saver-mode>
+<https://web.dev/articles/monitor-total-page-memory-usage>
+
 ## TODOs
 
 * make chris.lu text clickable to return home via react router and accessible using <https://docs.pmnd.rs/a11y>?

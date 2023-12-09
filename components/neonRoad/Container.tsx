@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react'
 import StaticImage from './StaticImage'
-import PlayBox from './play/Box'
+import PlayBox from './start/Screen'
 import dynamic from 'next/dynamic'
 import PlayerUI from './player/UI'
 import { PlayerCore } from 'web-audio-api-player'
@@ -25,12 +25,12 @@ const NeonRoadCanvas = dynamic(() => import('./Canvas'), {
 
 const Container: React.FC = () => {
 
-    const [showAnimationState, setShowAnimationState] = useState(false)
+    const [animationState, setAnimationState] = useState(false)
 
     const playerRef = useRef<PlayerCore | null>(null)
 
     const clickPlayCallback = useCallback(async (playMusic: boolean) => {
-        setShowAnimationState(true)
+        setAnimationState(true)
         if (playMusic) {
             await playerRef.current.play()
         }
@@ -40,13 +40,13 @@ const Container: React.FC = () => {
 
     return (
         <>
-            {!showAnimationState &&
+            {!animationState &&
                 <>
                     <StaticImage altText={altText} />
                     <PlayBox clickPlayCallback={clickPlayCallback} />
                 </>
             }
-            {showAnimationState &&
+            {animationState &&
                 <>
                     <NeonRoadCanvas altText={altText} />
                 </>

@@ -3,7 +3,7 @@
 import { useRef } from 'react'
 import { PerspectiveCamera, PCFSoftShadowMap } from 'three'
 import { Canvas } from '@react-three/fiber'
-import { /*OrbitControls, useDetectGPU, StatsGl, Hud,*/ Sparkles } from '@react-three/drei'
+import { Sparkles, OrbitControls, StatsGl/*, Hud, useDetectGPU*/ } from '@react-three/drei'
 import Meshes from './Meshes'
 import StaticImage from './StaticImage'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
@@ -76,8 +76,6 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
     //import { Stats } from '@react-three/drei'
     // then uncomment <Stats /> inside of the <Canvas>
 
-    const { altText } = props
-
     return (
         <>
             <Canvas
@@ -86,13 +84,14 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 //dpr={Math.min(window.devicePixelRatio, 2)} // pixel ratio, should be 1 or 2
                 // https://docs.pmnd.rs/react-three-fiber/api/canvas#render-defaults
                 shadows={{ type: PCFSoftShadowMap }}
-                fallback={<StaticImage altText={altText} />}
-                aria-label={'canvas:' + altText}
+                fallback={<StaticImage altText={props.altText} />}
+                aria-label={'canvas:' + props.altText}
                 role="img"
                 gl={{ antialias: false }}
                 style={{
-                    zIndex: -30,
+                    //zIndex: -30,
                 }}
+                frameloop="never"
             >
                 <color attach="background" args={['#2f0f30']} />
                 <Sparkles
@@ -112,8 +111,8 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                     />
                 </EffectComposer>
                 {/*<axesHelper />*/}{/*enable for development*/}
-                {/*<OrbitControls camera={cameraRef.current} />*/}{/*enable for development*/}
-                {/*<StatsGl />*/}{/*enable for development*/}
+                <OrbitControls camera={cameraRef.current} />{/*enable for development*/}
+                <StatsGl />{/*enable for development*/}
                 {/*GUI: https://github.com/pmndrs/leva*/}
             </Canvas>
         </>
