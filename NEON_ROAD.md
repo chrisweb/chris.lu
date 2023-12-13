@@ -369,6 +369,7 @@ sources:
 
 ## TODOs
 
+* check if making use of [instances](https://github.com/pmndrs/drei/#instances) or [merged](https://github.com/pmndrs/drei/#merged) improves the performance of our animation
 * make chris.lu text clickable to return home via react router and accessible using <https://docs.pmnd.rs/a11y>?
 * add post processing effects? <https://github.com/pmndrs/postprocessing>, if so then using performance monitor would be good <https://vercel.com/blog/building-an-interactive-webgl-experience-in-next-js#3.-optimize-performance>
 * loading animation?

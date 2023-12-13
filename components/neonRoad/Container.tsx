@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react'
 import StaticImage from './StaticImage'
-import PlayBox from './start/Screen'
+import StartScreen from './start/Screen'
 import dynamic from 'next/dynamic'
 import PlayerUI from './player/UI'
 import { PlayerCore } from 'web-audio-api-player'
@@ -43,7 +43,7 @@ const Container: React.FC = () => {
             {!animationState &&
                 <>
                     <StaticImage altText={altText} />
-                    <PlayBox clickPlayCallback={clickPlayCallback} />
+                    <StartScreen clickPlayCallback={clickPlayCallback} />
                 </>
             }
             {animationState &&

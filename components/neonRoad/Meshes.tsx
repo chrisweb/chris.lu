@@ -6,7 +6,13 @@ import { useFrame, useThree } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
 import PalmModel from './Palm'
 
-const NeonRoadMesh: React.FC = () => {
+interface IProps {
+    canPlay?: boolean
+}
+
+const NeonRoadMesh: React.FC<IProps> = (props) => {
+
+    console.log('props.canPlay', props.canPlay)
 
     const three = useThree()
 
@@ -37,61 +43,91 @@ const NeonRoadMesh: React.FC = () => {
 
     // animation request animation frame
     const requestAnimationFrameRef = useRef(null)
-    const animationTimestampRef = useRef(0)
+    const timeRef = useRef(null)
 
-    // visibility API
-    const animate = useRef(true)
-
-    const setAnimate = useCallback(() => {
-        animate.current = !document.hidden
+    const changeAnimationState = useCallback(() => {
+        document.hidden ? stop() : start()
     }, [document.hidden])
+
+    const start = () => {
+
+        three.clock.start()
+
+        const currentTime = performance.now()
+
+        timeRef.current = currentTime
+
+        three.clock.elapsedTime = currentTime
+
+        // https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
+        requestAnimationFrameRef.current = requestAnimationFrame(loop)
+    }
+
+    const stop = () => {
+
+        three.clock.stop()
+
+        cancelAnimationFrame(requestAnimationFrameRef.current)
+    }
 
     useEffect(() => {
         // https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API
-        document.addEventListener('visibilitychange', setAnimate)
+        document.addEventListener('visibilitychange', changeAnimationState)
+        start()
         return () => {
-            document.removeEventListener('visibilitychange', setAnimate)
+            document.removeEventListener('visibilitychange', changeAnimationState)
         }
-    })
-
-    useEffect(() => {
-        requestAnimationFrameRef.current = requestAnimationFrame(loop)
-        return () => {
-            cancelAnimationFrame(requestAnimationFrameRef.current)
-        }
-    }, [animate])
+    }, [])
 
     // custom loop
-    function loop(timeStamp: number) {
+    function loop() {
 
-        // only animate if visible
-        if (!animate.current) {
+        const currentTime = performance.now()
+
+        // delta time in seconds
+        const deltaTime = currentTime - timeRef.current
+
+        // extra measure for when the delta time is very high
+        // this avoids that all terrains and threes move to their
+        // distance threshold and then all reset their position
+        // at the same time, leading to (pot-)holes in the road
+        if (deltaTime > 100) {
+            timeRef.current = currentTime
             requestAnimationFrameRef.current = requestAnimationFrame(loop)
             return
         }
 
-        // if elapsed time < 60 frames per second => skip
-        const framesPerSecond = 1000 / 30
+        // max FPS = 30 frames per second
+        //const framesPerSecond = 1 / 30
 
-        if ((timeStamp - animationTimestampRef.current) < framesPerSecond) {
+        // if the time since last frame is below the time for one frame
+        // then we don't render in the current one but request the next one
+        // !!! not sure why but limiting the fps this way actually
+        // increases both the CPU and GPU usage
+        /*if (deltaTime < (framesPerSecond * 1000)) {
+            //three.clock.elapsedTime = deltaTime
             requestAnimationFrameRef.current = requestAnimationFrame(loop)
             return
-        }
+        }*/
 
-        animationTimestampRef.current = timeStamp
+        // when frameloop is set to "never" advance() will
+        // trigger the three fiber  render()
+        three.advance(currentTime)
 
-        three.advance(timeStamp/1000)
+        timeRef.current = currentTime
 
         requestAnimationFrameRef.current = requestAnimationFrame(loop)
 
     }
 
+    // the three fiber render() will trigger useFrame()
     useFrame((state, delta /*, xrFrame*/) => {
 
         // speed is just a value we use to make the
         // terrain move slower or faster
         // increase the number to increase the speed
-        const speed = 0.05
+        const speed = 0.00005
+        //const speed = 0.05
         const newZPosition = delta * speed
 
         // the distance between the city (when the terrain comes
@@ -143,6 +179,7 @@ const NeonRoadMesh: React.FC = () => {
         })
 
     })
+    //}
 
     function TreeModels({ amount, side }) {
         const spritesElements: React.ReactElement[] = []
@@ -159,7 +196,7 @@ const NeonRoadMesh: React.FC = () => {
                     castShadow={true} // default is false
                     receiveShadow={false}
                     key={side + i}
-
+                    //rotation={[0, 0, 0]}
                 />
             )
             positionChange += 0.2

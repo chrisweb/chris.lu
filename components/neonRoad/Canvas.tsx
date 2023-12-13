@@ -1,9 +1,9 @@
 'use client'
 
-import { useRef } from 'react'
-import { PerspectiveCamera, PCFSoftShadowMap } from 'three'
+import { useRef, Suspense/*, useState*/ } from 'react'
+import { PCFSoftShadowMap, PerspectiveCamera } from 'three'
 import { Canvas } from '@react-three/fiber'
-import { Sparkles, OrbitControls, StatsGl/*, Hud, useDetectGPU*/ } from '@react-three/drei'
+import { Sparkles, OrbitControls, PerformanceMonitor, PerformanceMonitorApi, StatsGl/*, Hud, useDetectGPU, PerspectiveCamera, useProgress*/ } from '@react-three/drei'
 import Meshes from './Meshes'
 import StaticImage from './StaticImage'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
@@ -14,21 +14,27 @@ interface IProps {
 
 const NeonRoadCanvas: React.FC<IProps> = (props) => {
 
+    //const [canPlayState, setCanPlayState] = useState(false)
+
     // uncomment if you want to see what useDetectGPU returns
     //const gpuInfo = useDetectGPU()
     //console.log('useDetectGPU: ', gpuInfo)
 
+    const canvasRef = useRef<HTMLCanvasElement>(null)
     const cameraRef = useRef<PerspectiveCamera>(null)
 
     const sceneSetup = () => {
 
         if (typeof window !== 'undefined') {
+
             // basic camera
-            cameraRef.current = new PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.01, 20)
+            cameraRef.current = new PerspectiveCamera(90, (window.innerHeight / window.innerWidth), 0.01, 20)
 
             cameraRef.current.position.x = 0
             cameraRef.current.position.y = 0.06
             cameraRef.current.position.z = 1
+
+
         }
 
     }
@@ -72,14 +78,31 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
         gl: {}
     }*/
 
-    // to enable stats import the module
-    //import { Stats } from '@react-three/drei'
-    // then uncomment <Stats /> inside of the <Canvas>
+    const onCanvasCreatedHandler = () => {
+        
+        //
+        
+    }
+
+    const onPerformanceChangeHandler = (api: PerformanceMonitorApi) => {
+        console.log(api.averages)
+        console.log(api.fps)
+        console.log(api.refreshrate)
+        console.log(api.frames)
+    }
+
+    function Loader() {
+        //const { active, progress, errors, item, loaded, total } = useProgress()
+        //console.log(active, progress, errors, item, loaded, total)
+        /*if (progress === 100) {
+            //setCanPlayState(true)
+        }*/
+        return <></>
+    }
 
     return (
         <>
             <Canvas
-                camera={cameraRef.current}
                 // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#new-pixel-ratio-default
                 //dpr={Math.min(window.devicePixelRatio, 2)} // pixel ratio, should be 1 or 2
                 // https://docs.pmnd.rs/react-three-fiber/api/canvas#render-defaults
@@ -89,31 +112,44 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 role="img"
                 gl={{ antialias: false }}
                 style={{
-                    //zIndex: -30,
+                    zIndex: -30,
                 }}
                 frameloop="never"
+                onCreated={onCanvasCreatedHandler}
+                ref={canvasRef}
+                camera={cameraRef.current}
             >
-                <color attach="background" args={['#2f0f30']} />
-                <Sparkles
-                    count={400}
-                    size={1}
-                    position={[0, 1, -2.1]}
-                    scale={[30, 5, 1]}
-                    speed={0}
-                />
-                <ambientLight color={'#ffecec'} intensity={20} />
-                <Meshes />
-                <Sunshine />
-                <EffectComposer>
-                    <Bloom
-                        luminanceThreshold={0.01}
-                        intensity={0.4}
+                <Suspense fallback={<Loader />}>
+                    {/*<PerspectiveCamera
+                        ref={cameraRef}
+                        fov={90}
+                        near={0.01}
+                        far={20}
+                        position={[0, 0.06, 1]}
+            />*/}
+                    <PerformanceMonitor onChange={onPerformanceChangeHandler} />
+                    <color attach="background" args={['#2f0f30']} />
+                    <Sparkles
+                        count={400}
+                        size={1}
+                        position={[0, 1, -2.1]}
+                        scale={[30, 5, 1]}
+                        speed={0}
                     />
-                </EffectComposer>
-                {/*<axesHelper />*/}{/*enable for development*/}
-                <OrbitControls camera={cameraRef.current} />{/*enable for development*/}
-                <StatsGl />{/*enable for development*/}
-                {/*GUI: https://github.com/pmndrs/leva*/}
+                    <ambientLight color={'#ffecec'} intensity={20} />
+                    <Meshes /*canPlay={canPlayState}*/ />
+                    <Sunshine />
+                    <EffectComposer>
+                        <Bloom
+                            luminanceThreshold={0.01}
+                            intensity={0.4}
+                        />
+                    </EffectComposer>
+                    {/*<axesHelper />*/}{/*enable for development*/}
+                    <OrbitControls camera={cameraRef.current} />{/*enable for development*/}
+                    <StatsGl />{/*enable for development*/}
+                    {/*GUI: https://github.com/pmndrs/leva*/}
+                </Suspense>
             </Canvas>
         </>
 
