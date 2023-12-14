@@ -4,9 +4,13 @@ import { useRef/*, Suspense, useState*/ } from 'react'
 import { PCFSoftShadowMap, PerspectiveCamera } from 'three'
 import { Canvas } from '@react-three/fiber'
 import { Sparkles/*, OrbitControls, PerformanceMonitor, PerformanceMonitorApi, StatsGl, Hud, useDetectGPU, PerspectiveCamera, useProgress*/ } from '@react-three/drei'
-import Meshes from './Meshes'
+import Sun from './Sun'
+import City from './City'
+import Trees from './Trees'
+import Terrains from './Terrains'
+//import Loop from './Loop'
 import StaticImage from './StaticImage'
-//import { EffectComposer, Bloom } from '@react-three/postprocessing'
+import { EffectComposer, Bloom } from '@react-three/postprocessing'
 
 interface IProps {
     altText: string
@@ -137,14 +141,18 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                         speed={0}
                     />
                     <ambientLight color={'#ffecec'} intensity={20} />
-                    <Meshes /*canPlay={canPlayState}*/ />
+                    <Sun />
+                    <City />
+                    <Trees />
+                    <Terrains />
                     <Sunshine />
-                    {/*<EffectComposer>
+                    {/*<Loop />*/}
+                    <EffectComposer>
                         <Bloom
                             luminanceThreshold={0.01}
                             intensity={0.4}
                         />
-                    </EffectComposer>*/}
+                    </EffectComposer>
                     {/*<axesHelper />*/}{/*enable for development*/}
                     {/*<OrbitControls camera={cameraRef.current} />*/}{/*enable for development*/}
                     {/*<StatsGl />*/}{/*enable for development*/}
