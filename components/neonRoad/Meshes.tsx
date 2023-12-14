@@ -1,20 +1,23 @@
 'use client'
 
-import { useRef, useCallback, useEffect } from 'react'
+import { useRef/*, useCallback, useEffect*/ } from 'react'
 import type { Mesh, Group } from 'three'
-import { useFrame, useThree } from '@react-three/fiber'
+import { useFrame/*, useThree*/ } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
 import PalmModel from './Palm'
 
-interface IProps {
+/*interface IProps {
     canPlay?: boolean
-}
+}*/
 
-const NeonRoadMesh: React.FC<IProps> = (props) => {
+const NeonRoadMesh: React.FC/*<IProps>*/ = (/*props*/) => {
 
-    console.log('props.canPlay', props.canPlay)
+    //console.log('props.canPlay', props.canPlay)
 
-    const three = useThree()
+    // if use three is being used it will case re-renders
+    // on scroll
+    // https://github.com/pmndrs/react-three-fiber/issues/251
+    //const three = useThree()
 
     const displacementScale = 0.5
 
@@ -42,7 +45,7 @@ const NeonRoadMesh: React.FC<IProps> = (props) => {
     const rightSideTreesRefs = useRef<Group[]>([])
 
     // animation request animation frame
-    const requestAnimationFrameRef = useRef(null)
+    /*const requestAnimationFrameRef = useRef(null)
     const timeRef = useRef(null)
 
     const changeAnimationState = useCallback(() => {
@@ -71,9 +74,11 @@ const NeonRoadMesh: React.FC<IProps> = (props) => {
     }
 
     useEffect(() => {
-        // https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API
-        document.addEventListener('visibilitychange', changeAnimationState)
-        start()
+        if (three.frameloop === 'never') {
+            // https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API
+            document.addEventListener('visibilitychange', changeAnimationState)
+            start()
+        }
         return () => {
             document.removeEventListener('visibilitychange', changeAnimationState)
         }
@@ -104,11 +109,11 @@ const NeonRoadMesh: React.FC<IProps> = (props) => {
         // then we don't render in the current one but request the next one
         // !!! not sure why but limiting the fps this way actually
         // increases both the CPU and GPU usage
-        /*if (deltaTime < (framesPerSecond * 1000)) {
-            //three.clock.elapsedTime = deltaTime
-            requestAnimationFrameRef.current = requestAnimationFrame(loop)
-            return
-        }*/
+        //if (deltaTime < (framesPerSecond * 1000)) {
+        //    //three.clock.elapsedTime = deltaTime
+        //    requestAnimationFrameRef.current = requestAnimationFrame(loop)
+        //    return
+        //}
 
         // when frameloop is set to "never" advance() will
         // trigger the three fiber  render()
@@ -118,15 +123,24 @@ const NeonRoadMesh: React.FC<IProps> = (props) => {
 
         requestAnimationFrameRef.current = requestAnimationFrame(loop)
 
-    }
+    }*/
 
     // the three fiber render() will trigger useFrame()
     useFrame((state, delta /*, xrFrame*/) => {
 
+        console.log(state, delta)
+
         // speed is just a value we use to make the
         // terrain move slower or faster
         // increase the number to increase the speed
-        const speed = 0.00005
+        //let speed = 0.05
+        const speed = 0.05
+
+        // when using frameloop = never, the delta is not
+        // in seconds but milliseconds so need to ajust the speed
+        /*if (three.frameloop === 'never') {
+            speed = 0.00005
+        }*/
         //const speed = 0.05
         const newZPosition = delta * speed
 
@@ -196,7 +210,7 @@ const NeonRoadMesh: React.FC<IProps> = (props) => {
                     castShadow={true} // default is false
                     receiveShadow={false}
                     key={side + i}
-                    //rotation={[0, 0, 0]}
+                //rotation={[0, 0, 0]}
                 />
             )
             positionChange += 0.2

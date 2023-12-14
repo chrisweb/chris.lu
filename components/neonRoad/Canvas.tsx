@@ -1,12 +1,12 @@
 'use client'
 
-import { useRef, Suspense/*, useState*/ } from 'react'
+import { useRef/*, Suspense, useState*/ } from 'react'
 import { PCFSoftShadowMap, PerspectiveCamera } from 'three'
 import { Canvas } from '@react-three/fiber'
-import { Sparkles, OrbitControls, PerformanceMonitor, PerformanceMonitorApi, StatsGl/*, Hud, useDetectGPU, PerspectiveCamera, useProgress*/ } from '@react-three/drei'
+import { Sparkles/*, OrbitControls, PerformanceMonitor, PerformanceMonitorApi, StatsGl, Hud, useDetectGPU, PerspectiveCamera, useProgress*/ } from '@react-three/drei'
 import Meshes from './Meshes'
 import StaticImage from './StaticImage'
-import { EffectComposer, Bloom } from '@react-three/postprocessing'
+//import { EffectComposer, Bloom } from '@react-three/postprocessing'
 
 interface IProps {
     altText: string
@@ -20,7 +20,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
     //const gpuInfo = useDetectGPU()
     //console.log('useDetectGPU: ', gpuInfo)
 
-    const canvasRef = useRef<HTMLCanvasElement>(null)
+    //const canvasRef = useRef<HTMLCanvasElement>(null)
     const cameraRef = useRef<PerspectiveCamera>(null)
 
     const sceneSetup = () => {
@@ -78,27 +78,27 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
         gl: {}
     }*/
 
-    const onCanvasCreatedHandler = () => {
+    /*const onCanvasCreatedHandler = (state: RootState) => {
         
-        //
+        //console.log(state)
         
-    }
+    }*/
 
-    const onPerformanceChangeHandler = (api: PerformanceMonitorApi) => {
+    /*const onPerformanceChangeHandler = (api: PerformanceMonitorApi) => {
         console.log(api.averages)
         console.log(api.fps)
         console.log(api.refreshrate)
         console.log(api.frames)
-    }
+    }*/
 
-    function Loader() {
+    /*function Loader() {
         //const { active, progress, errors, item, loaded, total } = useProgress()
         //console.log(active, progress, errors, item, loaded, total)
-        /*if (progress === 100) {
+        if (progress === 100) {
             //setCanPlayState(true)
-        }*/
+        }
         return <></>
-    }
+    }*/
 
     return (
         <>
@@ -114,12 +114,12 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 style={{
                     zIndex: -30,
                 }}
-                frameloop="never"
-                onCreated={onCanvasCreatedHandler}
-                ref={canvasRef}
+                //frameloop="never"
+                //onCreated={onCanvasCreatedHandler}
+                //ref={canvasRef}
                 camera={cameraRef.current}
             >
-                <Suspense fallback={<Loader />}>
+                {/*<Suspense fallback={<Loader />}>*/}
                     {/*<PerspectiveCamera
                         ref={cameraRef}
                         fov={90}
@@ -127,7 +127,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                         far={20}
                         position={[0, 0.06, 1]}
             />*/}
-                    <PerformanceMonitor onChange={onPerformanceChangeHandler} />
+                    {/*<PerformanceMonitor onChange={onPerformanceChangeHandler} />*/}
                     <color attach="background" args={['#2f0f30']} />
                     <Sparkles
                         count={400}
@@ -139,17 +139,17 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                     <ambientLight color={'#ffecec'} intensity={20} />
                     <Meshes /*canPlay={canPlayState}*/ />
                     <Sunshine />
-                    <EffectComposer>
+                    {/*<EffectComposer>
                         <Bloom
                             luminanceThreshold={0.01}
                             intensity={0.4}
                         />
-                    </EffectComposer>
+                    </EffectComposer>*/}
                     {/*<axesHelper />*/}{/*enable for development*/}
-                    <OrbitControls camera={cameraRef.current} />{/*enable for development*/}
-                    <StatsGl />{/*enable for development*/}
+                    {/*<OrbitControls camera={cameraRef.current} />*/}{/*enable for development*/}
+                    {/*<StatsGl />*/}{/*enable for development*/}
                     {/*GUI: https://github.com/pmndrs/leva*/}
-                </Suspense>
+                {/*</Suspense>*/}
             </Canvas>
         </>
 
