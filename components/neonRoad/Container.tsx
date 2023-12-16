@@ -27,7 +27,8 @@ const Container: React.FC = () => {
 
     const [animationState, setAnimationState] = useState(false)
 
-    const playerRef = useRef<PlayerCore | null>(null)
+    const containerRef = useRef<HTMLDivElement>(null)
+    const playerRef = useRef<PlayerCore>(null)
 
     const clickPlayCallback = useCallback(async (playMusic: boolean) => {
         setAnimationState(true)
@@ -39,7 +40,7 @@ const Container: React.FC = () => {
     const altText = 'Chris.lu header image, displaying an 80s style landscape and sunset'
 
     return (
-        <>
+        <div ref={containerRef} style={{width: '100%', height: '100%', position: 'relative'}}>
             {!animationState &&
                 <>
                     <StaticImage altText={altText} />
@@ -48,11 +49,11 @@ const Container: React.FC = () => {
             }
             {animationState &&
                 <>
-                    <NeonRoadCanvas altText={altText} />
+                    <NeonRoadCanvas altText={altText} containerRef={containerRef} />
                 </>
             }
             <PlayerUI ref={playerRef} />
-        </>
+        </div>
     )
 }
 
