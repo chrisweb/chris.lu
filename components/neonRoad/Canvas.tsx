@@ -1,19 +1,19 @@
 'use client'
 
 import { useRef/*, Suspense, useState*/ } from 'react'
-import { PCFSoftShadowMap, PerspectiveCamera } from 'three'
+import type { PerspectiveCamera as PerspectiveCameraType } from 'three'
 import { Canvas } from '@react-three/fiber'
-import { Sparkles/*, OrbitControls, PerformanceMonitor, PerformanceMonitorApi, StatsGl, Hud, useDetectGPU, PerspectiveCamera, useProgress*/ } from '@react-three/drei'
+import { Sparkles, PerspectiveCamera, /*OrbitControls, PerformanceMonitor, PerformanceMonitorApi, StatsGl, Hud, useDetectGPU, useProgress*/ } from '@react-three/drei'
 import Sun from './Sun'
 import City from './City'
 import Trees from './Trees'
 import Terrains from './Terrains'
 //import Loop from './Loop'
-import StaticImage from './StaticImage'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 
-interface IProps {
+interface IProps extends React.PropsWithChildren {
     altText: string
+    containerRef: React.MutableRefObject<HTMLDivElement>
 }
 
 const NeonRoadCanvas: React.FC<IProps> = (props) => {
@@ -25,9 +25,9 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
     //console.log('useDetectGPU: ', gpuInfo)
 
     //const canvasRef = useRef<HTMLCanvasElement>(null)
-    const cameraRef = useRef<PerspectiveCamera>(null)
+    const cameraRef = useRef<PerspectiveCameraType>(null)
 
-    const sceneSetup = () => {
+    /*const sceneSetup = () => {
 
         if (typeof window !== 'undefined') {
 
@@ -35,15 +35,15 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
             cameraRef.current = new PerspectiveCamera(90, (window.innerHeight / window.innerWidth), 0.01, 20)
 
             cameraRef.current.position.x = 0
-            cameraRef.current.position.y = 0.06
-            cameraRef.current.position.z = 1
+            cameraRef.current.position.y = 0.05
+            cameraRef.current.position.z = 0.6
 
 
         }
 
     }
 
-    sceneSetup()
+    sceneSetup()*/
 
     function Sunshine() {
 
@@ -53,24 +53,21 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
         // put the two imports on top
         /*import { SpotLightHelper, SpotLight } from 'three'
         import { useHelper } from '@react-three/drei'
+        // three.js three shaking
+        extend({ SpotLightHelper, SpotLight })
         const spotLightRef = useRef<SpotLight>(null)
         useHelper(spotLightRef, SpotLightHelper, '#fff400')*/
         return (
             <spotLight
                 color="#cc8000"
-                intensity={150}
-                position={[0, 1.5, -3]}
+                intensity={100}
+                position={[0, 1, -2]}
                 distance={20}
                 angle={Math.PI / 9} // default is Math.PI/3
                 //ref={spotLightRef}
                 castShadow={true} // default is false
                 shadow-mapSize-width={2048}
                 shadow-mapSize-height={2048}
-                shadow-camera-far={500}
-                shadow-camera-left={-100}
-                shadow-camera-right={100}
-                shadow-camera-top={100}
-                shadow-camera-bottom={-100}
             />
         )
     }
@@ -104,19 +101,25 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
         return <></>
     }*/
 
+    const Fallback = () => {
+
+        return (<>3D Canvas not supported on this device</>)
+
+    }
+
     return (
         <>
             <Canvas
                 // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#new-pixel-ratio-default
                 //dpr={Math.min(window.devicePixelRatio, 2)} // pixel ratio, should be 1 or 2
                 // https://docs.pmnd.rs/react-three-fiber/api/canvas#render-defaults
-                shadows={{ type: PCFSoftShadowMap }}
-                fallback={<StaticImage altText={props.altText} />}
-                aria-label={'canvas:' + props.altText}
+                shadows={true} // true will set shadows to PCFsoft
+                fallback={<Fallback />}
+                aria-label={props.altText}
                 role="img"
                 gl={{ antialias: false }}
                 style={{
-                    zIndex: -30,
+                    //zIndex: -30,
                 }}
                 //frameloop="never"
                 //onCreated={onCanvasCreatedHandler}
@@ -124,13 +127,15 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 camera={cameraRef.current}
             >
                 {/*<Suspense fallback={<Loader />}>*/}
-                    {/*<PerspectiveCamera
+                    <PerspectiveCamera
+                        makeDefault={true}
                         ref={cameraRef}
-                        fov={90}
+                        fov={75}
                         near={0.01}
-                        far={20}
+                        far={3}
                         position={[0, 0.06, 1]}
-            />*/}
+                        aspect={props.containerRef.current.clientWidth / props.containerRef.current.clientHeight}
+            />
                     {/*<PerformanceMonitor onChange={onPerformanceChangeHandler} />*/}
                     <color attach="background" args={['#2f0f30']} />
                     <Sparkles
@@ -154,6 +159,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                         />
                     </EffectComposer>
                     {/*<axesHelper />*/}{/*enable for development*/}
+
                     {/*<OrbitControls camera={cameraRef.current} />*/}{/*enable for development*/}
                     {/*<StatsGl />*/}{/*enable for development*/}
                     {/*GUI: https://github.com/pmndrs/leva*/}
