@@ -3,7 +3,7 @@
 import { useRef/*, Suspense, useState*/ } from 'react'
 import type { PerspectiveCamera as PerspectiveCameraType } from 'three'
 import { Canvas } from '@react-three/fiber'
-import { Sparkles, PerspectiveCamera, /*OrbitControls, PerformanceMonitor, PerformanceMonitorApi, StatsGl, Hud, useDetectGPU, useProgress*/ } from '@react-three/drei'
+import { Sparkles, PerspectiveCamera, OrbitControls/*, PerformanceMonitor, PerformanceMonitorApi, StatsGl, Hud, useDetectGPU, useProgress*/ } from '@react-three/drei'
 import Sun from './Sun'
 import City from './City'
 import Trees from './Trees'
@@ -26,24 +26,6 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
 
     //const canvasRef = useRef<HTMLCanvasElement>(null)
     const cameraRef = useRef<PerspectiveCameraType>(null)
-
-    /*const sceneSetup = () => {
-
-        if (typeof window !== 'undefined') {
-
-            // basic camera
-            cameraRef.current = new PerspectiveCamera(90, (window.innerHeight / window.innerWidth), 0.01, 20)
-
-            cameraRef.current.position.x = 0
-            cameraRef.current.position.y = 0.05
-            cameraRef.current.position.z = 0.6
-
-
-        }
-
-    }
-
-    sceneSetup()*/
 
     function Sunshine() {
 
@@ -159,8 +141,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                         />
                     </EffectComposer>
                     {/*<axesHelper />*/}{/*enable for development*/}
-
-                    {/*<OrbitControls camera={cameraRef.current} />*/}{/*enable for development*/}
+                    <OrbitControls camera={cameraRef.current} />{/*enable for development*/}
                     {/*<StatsGl />*/}{/*enable for development*/}
                     {/*GUI: https://github.com/pmndrs/leva*/}
                 {/*</Suspense>*/}
