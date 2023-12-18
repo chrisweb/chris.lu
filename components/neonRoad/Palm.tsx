@@ -85,7 +85,7 @@ const PalmModel: React.FC<GroupProps> = forwardRef((props: JSX.IntrinsicElements
     )
 })
 
-PalmModel.displayName = 'PalmModel'
+PalmModel.displayName = 'PalmGroupComponent'
 
 useGLTF.preload(PALM_GLTF_PATH)
 

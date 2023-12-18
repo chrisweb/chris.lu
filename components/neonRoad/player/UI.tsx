@@ -321,6 +321,6 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
     )
 })
 
-PlayerUI.displayName = 'PlayerUI'
+PlayerUI.displayName = 'PlayerUIComponent'
 
 export default PlayerUI

@@ -73,6 +73,6 @@ const WaveformCanvas = forwardRef(({ onWaveClickHandler, waveData }: IProps, wav
     )
 })
 
-WaveformCanvas.displayName = 'WaveformCanvas'
+WaveformCanvas.displayName = 'WaveformCanvasComponent'
 
 export default WaveformCanvas
