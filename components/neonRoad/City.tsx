@@ -1,8 +1,15 @@
 'use client'
 
+import type { PropsWithChildren } from 'react'
+import type { Vector3 } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
 
-const City: React.FC = () => {
+interface IProps extends PropsWithChildren {
+    position: Vector3
+    scale: Vector3
+}
+
+const City: React.FC<IProps> = (props) => {
 
     const CITY_TEXTURE_PATH = '/assets/images/neonroad/city_texture-min.png'
 
@@ -12,8 +19,8 @@ const City: React.FC = () => {
 
     return (
         <mesh
-            position={[0, 0.18, -1]}
-            scale={[1, 0.4, 0]}
+            position={props.position}
+            scale={props.scale}
             castShadow={false}
             receiveShadow={false}
         >
@@ -22,6 +29,7 @@ const City: React.FC = () => {
                 map={cityTexture}
                 transparent={true}
             />
+            {props.children}
         </mesh>
     )
 }

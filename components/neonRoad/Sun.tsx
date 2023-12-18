@@ -1,8 +1,15 @@
 'use client'
 
+import type { PropsWithChildren } from 'react'
+import type { Vector3 } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
 
-const Sun: React.FC = () => {
+interface IProps extends PropsWithChildren {
+    position: Vector3
+    scale: Vector3
+}
+
+const Sun: React.FC<IProps> = (props) => {
 
     const SUN_TEXTURE_PATH = '/assets/images/neonroad/sun_gradient-min.svg'
 
@@ -12,8 +19,8 @@ const Sun: React.FC = () => {
 
     return (
         <mesh
-            position={[0, 0.5, -1.6]}
-            scale={[2.5, 2.5, 0]}
+            position={props.position}
+            scale={props.scale}
             castShadow={false}
             receiveShadow={false}
         >

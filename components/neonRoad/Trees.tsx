@@ -1,9 +1,10 @@
 'use client'
 
 import { useRef/*, useMemo*/ } from 'react'
-import type { Group, Object3DEventMap } from 'three'
+import type { Group } from 'three'
 import { useFrame } from '@react-three/fiber'
 import PalmModel from './Palm'
+import { moveFromAToBInLoop } from './lib/helpers'
 
 interface ITreeModel {
     xPosition: number
@@ -14,52 +15,34 @@ const Trees: React.FC = () => {
 
     //const palms = useMemo(() => {
 
-    // 19 trees on the left side
-    const leftSideTreesRefs = useRef<Group<Object3DEventMap>[]>([])
+    // trees on the left side
+    const leftSideTreesRefs = useRef<Group[]>([])
 
-    // 19 trees on the right side
-    const rightSideTreesRefs = useRef<Group<Object3DEventMap>[]>([])
+    // trees on the right side
+    const rightSideTreesRefs = useRef<Group[]>([])
 
     // the three fiber render() will trigger useFrame()
     useFrame((state, delta /*, xrFrame*/) => {
 
-        // speed is just a value we use to make the
-        // terrain move slower or faster
-        // increase the number to increase the speed
-        //let speed = 0.05
-        const speed = 0.05
-
-        // when using frameloop = never, the delta is not
-        // in seconds but milliseconds so need to ajust the speed
-        /*if (three.frameloop === 'never') {
-            speed = 0.00005
-        }*/
-        //const speed = 0.05
-        const newZPosition = delta * speed
-
-        // we put the first three at the end of first terrain
-        // so where the city is, one on each side
-        // between two threes we want 0.2 units, so we
-        // need 20 trees (on each side) to cover the 2 units
-        leftSideTreesRefs.current.forEach((leftSideTree) => {
-            leftSideTree.position.z += newZPosition
-            if (leftSideTree.position.z >= 1.5) {
-                leftSideTree.position.z = -1.5
-            }
+        moveFromAToBInLoop({
+            delta,
+            objectsRef: leftSideTreesRefs,
+            cameraZPosition: 1,
+            distanceToNextObject: 0.2
         })
 
-        rightSideTreesRefs.current.forEach((rightSideTree) => {
-            rightSideTree.position.z += newZPosition
-            if (rightSideTree.position.z >= 1.5) {
-                rightSideTree.position.z = -1.5
-            }
+        moveFromAToBInLoop({ delta,
+            objectsRef: rightSideTreesRefs,
+            cameraZPosition: 1,
+            distanceToNextObject: 0.2
         })
 
     })
 
     const treesElements: React.ReactElement[] = []
+
     const sides = ['left', 'right']
-    const amountOfTreesPerSide = 20
+    const amountOfTreesPerSide = 13
 
     sides.forEach((side) => {
 

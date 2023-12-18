@@ -3,8 +3,10 @@
 import { useRef/*, Suspense, useState*/ } from 'react'
 import type { PerspectiveCamera as PerspectiveCameraType } from 'three'
 import { Canvas } from '@react-three/fiber'
-import { Sparkles, PerspectiveCamera, OrbitControls/*, PerformanceMonitor, PerformanceMonitorApi, StatsGl, Hud, useDetectGPU, useProgress*/ } from '@react-three/drei'
+import { PerspectiveCamera, OrbitControls/*, PerformanceMonitor, PerformanceMonitorApi, StatsGl, Hud, useDetectGPU, useProgress*/ } from '@react-three/drei'
+import NightSky from './NightSky'
 import Sun from './Sun'
+import SunLight from './SunLight'
 import City from './City'
 import Trees from './Trees'
 import Terrains from './Terrains'
@@ -26,33 +28,6 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
 
     //const canvasRef = useRef<HTMLCanvasElement>(null)
     const cameraRef = useRef<PerspectiveCameraType>(null)
-
-    function Sunshine() {
-
-        // uncomment the next lines to use the spotlight helper
-        // which helps to visualize the size and direction of your light
-        // uncomment also the line that sets the ref, inside of spotLight
-        // put the two imports on top
-        /*import { SpotLightHelper, SpotLight } from 'three'
-        import { useHelper } from '@react-three/drei'
-        // three.js three shaking
-        extend({ SpotLightHelper, SpotLight })
-        const spotLightRef = useRef<SpotLight>(null)
-        useHelper(spotLightRef, SpotLightHelper, '#fff400')*/
-        return (
-            <spotLight
-                color="#cc8000"
-                intensity={100}
-                position={[0, 1, -2]}
-                distance={20}
-                angle={Math.PI / 9} // default is Math.PI/3
-                //ref={spotLightRef}
-                castShadow={true} // default is false
-                shadow-mapSize-width={2048}
-                shadow-mapSize-height={2048}
-            />
-        )
-    }
 
     // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#expanded-gl-prop
     // https://threejs.org/docs/#api/en/renderers/WebGLRenderer
@@ -109,41 +84,46 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 camera={cameraRef.current}
             >
                 {/*<Suspense fallback={<Loader />}>*/}
-                    <PerspectiveCamera
-                        makeDefault={true}
-                        ref={cameraRef}
-                        fov={75}
-                        near={0.01}
-                        far={3}
-                        position={[0, 0.06, 1]}
-                        aspect={props.containerRef.current.clientWidth / props.containerRef.current.clientHeight}
-            />
-                    {/*<PerformanceMonitor onChange={onPerformanceChangeHandler} />*/}
-                    <color attach="background" args={['#2f0f30']} />
-                    <Sparkles
-                        count={400}
-                        size={1}
-                        position={[0, 1, -2.1]}
-                        scale={[30, 5, 1]}
-                        speed={0}
+                <PerspectiveCamera
+                    makeDefault={true}
+                    ref={cameraRef}
+                    fov={75}
+                    near={0.01}
+                    far={3}
+                    position={[0, 0.06, 1]}
+                    aspect={props.containerRef.current.clientWidth / props.containerRef.current.clientHeight}
+                />
+                {/*<PerformanceMonitor onChange={onPerformanceChangeHandler} />*/}
+                <color attach="background" args={['#2f0f30']} />
+                <ambientLight color={'#ffecec'} intensity={20} />
+                <NightSky
+                    position={[0, 1, -2.1]}
+                    scale={[30, 5, 1]}
+                />
+                <Sun
+                    position={[0, 0.5, -1.6]}
+                    scale={[2.5, 2.5, 0]}
+                />
+                <SunLight
+                    position={[0, 1, -1.6]}
+                />
+                <City
+                    position={[0, 0.18, -1]}
+                    scale={[1, 0.4, 0]}
+                />
+                <Trees />
+                <Terrains />
+                {/*<Loop />*/}
+                <EffectComposer>
+                    <Bloom
+                        luminanceThreshold={0.01}
+                        intensity={0.4}
                     />
-                    <ambientLight color={'#ffecec'} intensity={20} />
-                    <Sun />
-                    <City />
-                    <Trees />
-                    <Terrains />
-                    <Sunshine />
-                    {/*<Loop />*/}
-                    <EffectComposer>
-                        <Bloom
-                            luminanceThreshold={0.01}
-                            intensity={0.4}
-                        />
-                    </EffectComposer>
-                    {/*<axesHelper />*/}{/*enable for development*/}
-                    <OrbitControls camera={cameraRef.current} />{/*enable for development*/}
-                    {/*<StatsGl />*/}{/*enable for development*/}
-                    {/*GUI: https://github.com/pmndrs/leva*/}
+                </EffectComposer>
+                {/*<axesHelper />*/}{/*enable for development*/}
+                <OrbitControls camera={cameraRef.current} />{/*enable for development*/}
+                {/*<StatsGl />*/}{/*enable for development*/}
+                {/*GUI: https://github.com/pmndrs/leva*/}
                 {/*</Suspense>*/}
             </Canvas>
         </>
