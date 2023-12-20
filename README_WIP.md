@@ -167,6 +167,8 @@ npm i typescript@latest @types/react @types/react-dom @types/node --save-dev --s
 of course if you prefer to use [pNpM](https://pnpm.io/) or [Yarn](https://yarnpkg.com/) as your package managers to install the dependencies above, feel free to do so they are great tools too, I for my part prefer to use npm so this is what you will see in this tutorial but the install commands of [pNpM install](https://pnpm.io/cli/install) or [yarn install](https://yarnpkg.com/getting-started/usage) are very similar
 
 
+UPDATE: I found this interesting package: https://github.com/biomejs/biome, I need to test it with a next.js project, could be a nice tool to replace next lint!?
+
 ### our first page
 
 first we create the app directory in the root of our project, by using the following command or by using your IDE:
