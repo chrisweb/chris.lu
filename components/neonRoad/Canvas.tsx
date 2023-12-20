@@ -76,7 +76,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 role="img"
                 gl={{ antialias: false }}
                 style={{
-                    //zIndex: -30,
+                    zIndex: -30,
                 }}
                 //frameloop="never"
                 //onCreated={onCanvasCreatedHandler}
@@ -95,23 +95,23 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 />
                 {/*<PerformanceMonitor onChange={onPerformanceChangeHandler} />*/}
                 <color attach="background" args={['#2f0f30']} />
-                <ambientLight color={'#ffecec'} intensity={20} />
+                <ambientLight color={'#ecd7e2'} intensity={18} />
                 <NightSky
                     position={[0, 1, -2.1]}
-                    scale={[30, 5, 1]}
+                    scale={[20, 3, 1]}
                 />
                 <Sun
                     position={[0, 0.5, -1.6]}
-                    scale={[2.5, 2.5, 0]}
+                    scale={[2, 2, 0]}
                 />
                 <SunLight
                     position={[0, 1, -1.6]}
-                    intensity={300}
-                    distance={20}
+                    intensity={50}
+                    distance={5}
                 />
                 <City
-                    position={[0, 0.18, -1]}
-                    scale={[1, 0.4, 0]}
+                    position={[0, 0.12, -1]}
+                    scale={[0.8, 0.3, 0]}
                 />
                 <Trees />
                 <Terrains />
@@ -119,7 +119,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 <EffectComposer>
                     <Bloom
                         luminanceThreshold={0.01}
-                        intensity={0.4}
+                        intensity={0.7}
                     />
                 </EffectComposer>
                 {/*<axesHelper />*/}{/*enable for development*/}

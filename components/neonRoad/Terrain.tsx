@@ -15,10 +15,12 @@ const Terrain: React.FC<IProps> = forwardRef<Mesh, IProps>((props: IProps, terra
 
     const FLOOR_TEXTURE_PATH = '/assets/images/neonroad/grid_4096x8192-min.png'
     const DISPLACEMENT_MAP_PATH = '/assets/images/neonroad/displacement_32x64-min.png'
+    const EMISSIVE_MAP_PATH = '/assets/images/neonroad/emissive_map_4096x8192-min.png'
 
-    const [floorTexture, displacementMap] = useTexture([
+    const [floorTexture, displacementMap, emissiveMap] = useTexture([
         FLOOR_TEXTURE_PATH,
         DISPLACEMENT_MAP_PATH,
+        EMISSIVE_MAP_PATH,
     ])
 
     return (
@@ -34,9 +36,9 @@ const Terrain: React.FC<IProps> = forwardRef<Mesh, IProps>((props: IProps, terra
                 map={floorTexture}
                 displacementMap={displacementMap}
                 displacementScale={displacementScale}
-                emissiveMap={displacementMap}
-                emissive={'#650044'}
-                emissiveIntensity={0.1}
+                emissiveMap={emissiveMap}
+                emissive={'#11166c'}
+                emissiveIntensity={0.01}
                 toneMapped={false}
                 roughness={0.9}
                 metalness={0.7}

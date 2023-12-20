@@ -65,7 +65,7 @@ const Trees: React.FC = () => {
                     castShadow={true} // default is false
                     receiveShadow={false}
                     key={side + i}
-                //rotation={[0, 0, 0]}
+                    rotation={[0, 0, 0]}
                 />
             )
 
