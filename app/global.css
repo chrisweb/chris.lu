@@ -353,7 +353,7 @@ progress {
 
 pre {
     margin: 0;
-    padding: calc(var(--main-spacing) / 2) 0;
+    padding: calc(var(--main-spacing) / 2);
     overflow: auto;
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/white-space-collapse */
     white-space-collapse: preserve;
