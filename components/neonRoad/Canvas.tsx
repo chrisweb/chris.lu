@@ -76,7 +76,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 role="img"
                 gl={{ antialias: false }}
                 style={{
-                    zIndex: -30,
+                    //zIndex: -30,
                 }}
                 //frameloop="never"
                 //onCreated={onCanvasCreatedHandler}
@@ -106,6 +106,8 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 />
                 <SunLight
                     position={[0, 1, -1.6]}
+                    intensity={300}
+                    distance={20}
                 />
                 <City
                     position={[0, 0.18, -1]}
