@@ -367,6 +367,23 @@ sources:
 <https://developer.chrome.com/blog/memory-and-energy-saver-mode>
 <https://web.dev/articles/monitor-total-page-memory-usage>
 
+# procedurally generated terrain
+
+a nice improvement would be to generate the mountains left and right procedurally
+
+the first step to procedurally generate terrain is to have a library to create noise, there are two popular noise algorythms to procedurally generate terrain, one is called **perlin** noise and another one is called **simplex** noise
+
+Note: while doing some research about noise generation, I also found an intesting article about another approach to noise generation called [hill noise](https://blog.bruce-hill.com/hill-noise), I think it is worth reading but I will not use that code in this project
+
+there are a bunch of javascript "noise generation" libraries on npm, I tried to find one with decent documentation and at least one update in the last 2 years, I finally decided to use [simplex noise](https://www.npmjs.com/package/simplex-noise)
+
+here are two articles I found very helpful when you want to learn more about making terrain using noise libraries, [Making maps with noise functions](https://www.redblobgames.com/maps/terrain-from-noise/) is a very interesting article that has lots of interactive examples that are really helpful to understand and visualize how different values affect the end result, [Low Poly style Terrain Generation](https://medium.com/@joshmarinacci/low-poly-style-terrain-generation-8a017ab02e7b) is another very interesting article that goes straight to the point and through which I learned that I can use percentage values for RGB colors which is very useful as we need to convert noise values into colors to create a greyscale displacement map
+
+in our code for the elevations we use displacement maps, so the idea is to procdurally create a greyscale displacement map using a 2d canvas and then use that canvas as source for our mesh displacement map
+
+
+
+
 ## TODOs
 
 * check if making use of [instances](https://github.com/pmndrs/drei/#instances) or [merged](https://github.com/pmndrs/drei/#merged) improves the performance of our animation
