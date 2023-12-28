@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { Mesh } from 'three'
+import type { Mesh } from 'three'
 import { useFrame } from '@react-three/fiber'
 import Terrain from './Terrain'
 import { moveFromAToBInLoop } from './lib/helpers'
