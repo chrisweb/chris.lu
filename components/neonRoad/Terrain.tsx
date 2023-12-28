@@ -11,10 +11,9 @@ export interface IProps extends MeshProps {
 
 const Terrain: React.FC<IProps> = forwardRef<Mesh, IProps>((props: IProps, terrainRef: React.MutableRefObject<Mesh>) => {
 
-    const displacementScale = 0.5
-
     const FLOOR_TEXTURE_PATH = '/assets/images/neonroad/grid_4096x8192-min.png'
     const DISPLACEMENT_MAP_PATH = '/assets/images/neonroad/displacement_32x64-min.png'
+    //const DISPLACEMENT_MAP_PATH = '/assets/images/neonroad/displacement_map_128x256.png'
     const EMISSIVE_MAP_PATH = '/assets/images/neonroad/emissive_map_4096x8192-min.png'
 
     const [floorTexture, displacementMap, emissiveMap] = useTexture([
@@ -22,6 +21,19 @@ const Terrain: React.FC<IProps> = forwardRef<Mesh, IProps>((props: IProps, terra
         DISPLACEMENT_MAP_PATH,
         EMISSIVE_MAP_PATH,
     ])
+
+    /*
+    // https://threejs.org/docs/#api/en/textures/Texture.anisotropy
+    console.log(renderer.capabilities.getMaxAnisotropy())
+    */
+    floorTexture.anisotropy = 2
+
+    // https://threejs.org/examples/#webgl_materials_texture_filters
+    //import { LinearFilter, LinearMipmapLinearFilter } from 'three'
+    //floorTexture.magFilter = LinearFilter
+    //floorTexture.minFilter = LinearMipmapLinearFilter
+
+    const displacementScale = 0.5
 
     return (
         <mesh
