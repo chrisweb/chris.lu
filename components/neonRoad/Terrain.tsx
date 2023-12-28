@@ -22,10 +22,11 @@ const Terrain: React.FC<IProps> = forwardRef<Mesh, IProps>((props: IProps, terra
         EMISSIVE_MAP_PATH,
     ])
 
-    /*
     // https://threejs.org/docs/#api/en/textures/Texture.anisotropy
-    console.log(renderer.capabilities.getMaxAnisotropy())
-    */
+    //import { useThree } from '@react-three/fiber'
+    //const { gl } = useThree()
+    //console.log(gl.capabilities.getMaxAnisotropy())
+    
     floorTexture.anisotropy = 2
 
     // https://threejs.org/examples/#webgl_materials_texture_filters
