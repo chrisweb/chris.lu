@@ -381,8 +381,19 @@ here are two articles I found very helpful when you want to learn more about mak
 
 in our code for the elevations we use displacement maps, so the idea is to procdurally create a greyscale displacement map using a 2d canvas and then use that canvas as source for our mesh displacement map
 
+# make the terrain less blurry when far
 
+```ts
+floorTexture.anisotropy = 2
+```
 
+get the maximum anisotropy that the GPU supports:
+
+```ts
+import { useThree } from '@react-three/fiber'
+const { gl } = useThree()
+console.log(gl.capabilities.getMaxAnisotropy())
+```
 
 ## TODOs
 
