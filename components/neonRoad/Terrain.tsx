@@ -4,7 +4,6 @@ import { forwardRef } from 'react'
 import type { Mesh } from 'three'
 import type { MeshProps } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
-//import { NearestFilter , NearestMipmapNearestFilter } from 'three'
 
 export interface IProps extends MeshProps {
     zPosition: number
