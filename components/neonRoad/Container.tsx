@@ -33,7 +33,7 @@ const Container: React.FC = () => {
     const clickPlayCallback = useCallback(async (playMusic: boolean) => {
         setAnimationState(true)
         if (playMusic) {
-            await playerRef.current.play()
+            //await playerRef.current.play()
         }
     }, [])
 

@@ -1,74 +1,72 @@
-import { useEffect } from 'react'
-import { createNoise2D } from 'simplex-noise'
+import { useRef, useState } from 'react'
+import { Canvas } from '@react-three/fiber'
+import { PerspectiveCamera, OrbitControls } from '@react-three/drei'
+import type { PerspectiveCamera as PerspectiveCameraType, Mesh } from 'three'
+import Terrain from './Terrain'
 
 const Displacement_Map_canvas: React.FC = () => {
 
-    const convertRange = (value: number, r1: [number, number], r2: [number, number]) => {
-        // https://stackoverflow.com/a/14224813/656689
-        return (value - r1[0]) * (r2[1] - r2[0]) / (r1[1] - r1[0]) + r2[0]
+    const cameraRef = useRef<PerspectiveCameraType>(null!)
+    const terrainRef = useRef<Mesh>(null)
+
+    const [amplitude1State, setAmplitude1State] = useState<number>(1)
+    const [amplitude2State, setAmplitude2State] = useState<number>(0.5)
+    const [amplitude3State, setAmplitude3State] = useState<number>(0.25)
+    const [frequencyState, setFrequencyState] = useState<number>(1)
+
+    const width = 600
+    const height = 300
+    const aspect = width / height
+
+    const amplitude1ChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
+        setAmplitude1State(parseFloat(event.currentTarget.value))
     }
 
-    const inRange = (value: number, range: [number, number]) => value >= range[0] && value <= range[1]
-
-    const draw = () => {
-
-        const width = 32
-        const height = 64
-
-        const noise2D = createNoise2D()
-
-        const canvas = document.getElementById('displacement_map') as HTMLCanvasElement
-        const ctx = canvas.getContext('2d')
-
-        //let count = 0
-
-        for (let x = 0; x < width; x++) {
-            for (let y = 0; y < height; y++) {
-                // returns a value between -1 and 1
-                const value2d = noise2D(x, y)
-                //console.log(value2d)
-                // to convert "-1 to 1" range to "0 to 1" range do (x + 1) / 2
-                // to convert "0 to 1" range to "0 to 255" range, multiply by 255 
-                let rgbColor = ((value2d + 1) / 2) * 255
-
-                // close to the road limit the possible height of the mountains
-                if (inRange(x, [8, 10]) || inRange(x, [22, 24])) {
-                    rgbColor = convertRange(rgbColor, [0, 255], [0, 100])
-                }
-
-                // the road itself is pure black
-                if (inRange(x, [10, 22])) {
-                    rgbColor = 0
-                }
-
-                //console.log(rgbColor)
-
-                if (ctx !== null) {
-                    // grayscale
-                    ctx.fillStyle = `rgb(${rgbColor}, ${rgbColor}, ${rgbColor})`
-
-                    ctx.fillRect(x, y, 1, 1)
-                }
-                //count++
-            }
-        }
-
-        //console.log(width + '*' + height + '=' + count)
-
-        /*setTimeout(() => {
-            requestAnimationFrame(draw)
-        }, 200)*/
-
+    const amplitude2ChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
+        setAmplitude2State(parseFloat(event.currentTarget.value))
     }
 
-    useEffect(() => {
-        draw()
-    }, [])
+    const amplitude3ChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
+        setAmplitude3State(parseFloat(event.currentTarget.value))
+    }
+
+    const frequencyChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
+        setFrequencyState(parseFloat(event.currentTarget.value))
+    }
 
     return (
         <>
-            <canvas id="displacement_map" width="32" height="64"></canvas>
-            
+            <div style={{ position: 'relative', width: width + 'px', height: height + 'px' }}>
+                <Canvas
+                    gl={{ antialias: false }}
+                    camera={cameraRef.current}
+                >
+                    <PerspectiveCamera
+                        makeDefault={true}
+                        ref={cameraRef}
+                        fov={75}
+                        near={0.01}
+                        far={3}
+                        position={[0, 0.4, 0.7]}
+                        aspect={aspect}
+                    />
+                    <ambientLight color={'#fff'} intensity={50} />
+                    <Terrain ref={terrainRef} amplitude1={amplitude1State} amplitude2={amplitude2State} amplitude3={amplitude3State} frequency={frequencyState} />
+                    <OrbitControls camera={cameraRef.current} />
+                </Canvas>
+            </div>
+            <h5>Amplitude (octave 1): </h5>
+            <input type="range" id="amplitude1" min="0.05" max="1" value={amplitude1State} step="0.05" onChange={amplitude1ChangeHandler} />
+            <input type="text" readOnly={true} value={amplitude1State} />
+            <h5>Amplitude (octave 2): </h5>
+            <input type="range" id="amplitude2" min="0.05" max="1" value={amplitude2State} step="0.05" onChange={amplitude2ChangeHandler} />
+            <input type="text" readOnly={true} value={amplitude2State} />
+            <h5>Amplitude (octave 3): </h5>
+            <input type="range" id="amplitude3" min="0.05" max="1" value={amplitude3State} step="0.05" onChange={amplitude3ChangeHandler} />
+            <input type="text" readOnly={true} value={amplitude3State} />
+            <h5>Frequency (all octaves): </h5>
+            <input type="range" id="frequency" min="1" max="10" value={frequencyState} step="1" onChange={frequencyChangeHandler} />
+            <input type="text" readOnly={true} value={frequencyState} />
         </>
     )
 
