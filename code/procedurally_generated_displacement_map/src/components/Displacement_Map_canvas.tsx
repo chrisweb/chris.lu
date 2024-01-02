@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { PerspectiveCamera, OrbitControls } from '@react-three/drei'
 import type { PerspectiveCamera as PerspectiveCameraType, Mesh } from 'three'
-import Terrain from './Terrain'
+import Terrain from './Terrain_02_frequency_only_10_steps_limit'
 
 const Displacement_Map_canvas: React.FC = () => {
 
