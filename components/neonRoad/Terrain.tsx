@@ -54,7 +54,7 @@ const Terrain: React.FC<IProps> = forwardRef<Mesh, IProps>((props: IProps, terra
                 emissiveMap={emissiveMap}
                 emissive={'#11166c'}
                 emissiveIntensity={0.01}
-                toneMapped={false}
+                //toneMapped={false}
                 roughness={0.75}
                 metalness={0.7}
             />
