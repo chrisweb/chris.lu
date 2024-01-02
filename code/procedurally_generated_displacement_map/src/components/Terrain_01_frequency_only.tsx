@@ -8,7 +8,9 @@ interface IProps {
     amplitude1: number
     amplitude2: number
     amplitude3: number
-    frequency: number
+    frequency1: number
+    frequency2: number
+    frequency3: number
 }
 
 //const Terrain = forwardRef<Mesh>((_: unknown, terrainRef) => {
@@ -38,7 +40,7 @@ const Terrain = forwardRef<Mesh, IProps>((props: IProps, terrainRef) => {
         canvas.style.width = (width * 4) + 'px'
         canvas.style.height = (height * 4) + 'px'
 
-        const frequency = props.frequency
+        const frequency = props.frequency1
 
         //const elevations: number[][] = []
 
@@ -101,7 +103,7 @@ const Terrain = forwardRef<Mesh, IProps>((props: IProps, terrainRef) => {
 
     useEffect(() => {
         draw()
-    }, [props.amplitude1, props.amplitude2, props.amplitude3, props.frequency])
+    }, [props.amplitude1, props.amplitude2, props.amplitude3, props.frequency1])
 
     return (
         <mesh

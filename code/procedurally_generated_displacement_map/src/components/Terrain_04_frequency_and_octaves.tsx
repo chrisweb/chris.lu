@@ -40,9 +40,17 @@ const Terrain = forwardRef<Mesh, IProps>((props: IProps, terrainRef) => {
         canvas.style.width = (width * 4) + 'px'
         canvas.style.height = (height * 4) + 'px'
 
-        const frequency = props.frequency1
+        const frequencies = [props.frequency1, props.frequency2, props.frequency3]
 
         //const elevations: number[][] = []
+
+        const amplitudes = [props.amplitude1, props.amplitude2, props.amplitude3]
+
+        const octaves = amplitudes.length
+
+        const maximum = props.amplitude1 + props.amplitude2 + props.amplitude3
+
+        //console.log(maximum)
 
         for (let x = 0; x < width; x++) {
 
@@ -54,23 +62,29 @@ const Terrain = forwardRef<Mesh, IProps>((props: IProps, terrainRef) => {
 
                 const ny = y / width
 
-                // returns a value between -1 and 1
-                const value2d = noise2D(nx * frequency, ny * frequency)
+                let elevations = 0
+                
+                for (let i = 0; i < octaves; i++) {
 
-                //console.log(value2d)
+                    // returns a value between -1 and 1
+                    const value2d = noise2D(nx * frequencies[i], ny * frequencies[i]) * amplitudes[i]
 
-                // to convert "-1 to 1" range to "0 to 1" range do (x + 1) / 2
-                //elevations[x][y] = (value2d + 1) / 2
-                const elevation = (value2d + 1) / 2
+                    //console.log(value2d)
 
-                // limit the possible height levels to 10
-                // you can see the difference clearly in the 2D canavas 
-                const elevationStep = Math.round(elevation * 10) / 10
+                    // to convert "-1 to 1" range to "0 to 1" range do (x + 1) / 2
+                    //elevations[x][y] = (value2d + 1) / 2
+                    const value = (value2d + 1) / 2
+
+                    elevations += value / maximum
+
+                }
+
+                const elevation = elevations / maximum
 
                 if (ctx !== null) {
 
                     // grayscale = red, green, blue in percent
-                    const colorInPercent = (elevationStep * 100).toFixed(2)
+                    const colorInPercent = (elevation * 100).toFixed(2)
 
                     ctx.fillStyle = `rgb(${colorInPercent}%, ${colorInPercent}%, ${colorInPercent}%)`
 
@@ -107,7 +121,7 @@ const Terrain = forwardRef<Mesh, IProps>((props: IProps, terrainRef) => {
 
     useEffect(() => {
         draw()
-    }, [props.amplitude1, props.amplitude2, props.amplitude3, props.frequency1])
+    }, [props.amplitude1, props.amplitude2, props.amplitude3, props.frequency1, props.frequency2, props.frequency3])
 
     return (
         <mesh

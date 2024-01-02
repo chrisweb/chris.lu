@@ -55,7 +55,7 @@ const Terrain = forwardRef<Mesh, IProps>((props: IProps, terrainRef) => {
                 const ny = y / width
 
                 // returns a value between -1 and 1
-                const value2d = noise2D(nx * frequency, ny * frequency)
+                const value2d = noise2D(nx * frequency, ny * frequency) * props.amplitude1
 
                 //console.log(value2d)
 
@@ -63,14 +63,10 @@ const Terrain = forwardRef<Mesh, IProps>((props: IProps, terrainRef) => {
                 //elevations[x][y] = (value2d + 1) / 2
                 const elevation = (value2d + 1) / 2
 
-                // limit the possible height levels to 10
-                // you can see the difference clearly in the 2D canavas 
-                const elevationStep = Math.round(elevation * 10) / 10
-
                 if (ctx !== null) {
 
                     // grayscale = red, green, blue in percent
-                    const colorInPercent = (elevationStep * 100).toFixed(2)
+                    const colorInPercent = (elevation * 100).toFixed(2)
 
                     ctx.fillStyle = `rgb(${colorInPercent}%, ${colorInPercent}%, ${colorInPercent}%)`
 
