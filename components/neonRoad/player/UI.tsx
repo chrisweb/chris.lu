@@ -40,6 +40,7 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
         const options: ICoreOptions = {
             soundsBaseUrl: '/assets/music/',
             loopQueue: true,
+            visibilityWatch: true,
         }
 
         const player = new PlayerCore(options)
