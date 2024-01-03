@@ -27,7 +27,7 @@ const SunLight: React.FC<IProps> = (props) => {
 
     return (
         <spotLight
-            color="#cc6100"
+            color="#a46b00"
             intensity={props.intensity}
             position={props.position}
             distance={props.distance}

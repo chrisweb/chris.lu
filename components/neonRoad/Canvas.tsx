@@ -105,8 +105,8 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                     scale={[2, 2, 0]}
                 />
                 <SunLight
-                    position={[0, 1, -1.6]}
-                    intensity={50}
+                    position={[0, 1, -1.5]}
+                    intensity={70}
                     distance={5}
                 />
                 <City
