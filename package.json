@@ -51,6 +51,7 @@
         "remark-gfm": "4.0.0",
         "remark-table-of-contents": "2.1.0",
         "shikiji": "0.9.17",
+        "simplex-noise": "4.0.1",
         "synthwave-vscode": "github:robb0wen/synthwave-vscode",
         "three": "0.160.0",
         "waveform-visualizer": "4.2.0",
