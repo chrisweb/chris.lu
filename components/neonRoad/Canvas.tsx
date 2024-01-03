@@ -3,7 +3,7 @@
 import { useRef/*, Suspense, useState*/ } from 'react'
 import type { PerspectiveCamera as PerspectiveCameraType } from 'three'
 import { Canvas } from '@react-three/fiber'
-import { PerspectiveCamera, OrbitControls/*, PerformanceMonitor, PerformanceMonitorApi, StatsGl, Hud, useDetectGPU, useProgress*/ } from '@react-three/drei'
+import { PerspectiveCamera/*, OrbitControls, PerformanceMonitor, PerformanceMonitorApi, StatsGl, Hud, useDetectGPU, useProgress*/ } from '@react-three/drei'
 import NightSky from './NightSky'
 import Sun from './Sun'
 import SunLight from './SunLight'
@@ -76,7 +76,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 role="img"
                 gl={{ antialias: false }}
                 style={{
-                    //zIndex: -30,
+                    zIndex: -30,
                 }}
                 //frameloop="never"
                 //onCreated={onCanvasCreatedHandler}
@@ -123,7 +123,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                     />
                 </EffectComposer>
                 {/*<axesHelper />*/}{/*enable for development*/}
-                <OrbitControls camera={cameraRef.current} />{/*enable for development*/}
+                {/*<OrbitControls camera={cameraRef.current} />*/}{/*enable for development*/}
                 {/*<StatsGl />*/}{/*enable for development*/}
                 {/*GUI: https://github.com/pmndrs/leva*/}
                 {/*</Suspense>*/}
