@@ -1,0 +1,23 @@
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: absolute;
+    top: var(--header-navbar-height);
+    z-index: 1;
+}
+
+.loadingContainer span {
+    padding-top: var(--main-spacing);
+    /* https://fonts.google.com/specimen/VT323 */
+    font-family: var(--font-vt323);
+    font-size: var(--main-fontSize-big1);
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: subpixel-antialiased;
+    color: var(--primary-light-color)
+}

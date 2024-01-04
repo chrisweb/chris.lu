@@ -6,21 +6,14 @@ import StartScreen from './start/Screen'
 import dynamic from 'next/dynamic'
 import PlayerUI from './player/UI'
 import { PlayerCore } from 'web-audio-api-player'
+import LoadingScreen from './loading/Screen'
 
 // in this dynamic import case it is important to set "ssr: false"
 // as in the NeonRoadCanvas component we use window
 // else you get "window is not defined"
 const NeonRoadCanvas = dynamic(() => import('./Canvas'), {
     ssr: false,
-    loading: () => <div style={{
-        color: 'white',
-        fontSize: '30px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%',
-        height: '60%',
-    }}>Loading...</div>,
+    loading: () => <LoadingScreen />,
 })
 
 const Container: React.FC = () => {
