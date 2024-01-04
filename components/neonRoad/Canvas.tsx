@@ -59,9 +59,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
     }*/
 
     const Fallback = () => {
-
         return (<>3D Canvas not supported on this device</>)
-
     }
 
     return (
@@ -95,7 +93,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 />
                 {/*<PerformanceMonitor onChange={onPerformanceChangeHandler} />*/}
                 <color attach="background" args={['#2f0f30']} />
-                <ambientLight color={'#ecd7e2'} intensity={18} />
+                <ambientLight color={'#ecd7e2'} intensity={15} />
                 <NightSky
                     position={[0, 1, -2.1]}
                     scale={[20, 3, 1]}
@@ -105,9 +103,8 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                     scale={[2, 2, 0]}
                 />
                 <SunLight
-                    position={[0, 1, -1.5]}
-                    intensity={50}
-                    distance={5}
+                    position={[0, 0.5, -1.4]}
+                    intensity={8}
                 />
                 <City
                     position={[0, 0.12, -1]}

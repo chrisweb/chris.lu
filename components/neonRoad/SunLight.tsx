@@ -2,41 +2,42 @@
 
 //import { useRef } from 'react'
 import type { PropsWithChildren } from 'react'
-//import { extend } from '@react-three/fiber'
 import type { Vector3 } from '@react-three/fiber'
-//import { SpotLightHelper, SpotLight } from 'three'
+//import { DirectionalLightHelper } from 'three'
+//import type { DirectionalLight } from 'three'
 //import { useHelper } from '@react-three/drei'
-// three.js three shaking
-//extend({ SpotLightHelper, SpotLight })
+// three.js tree shaking
+//import { extend } from '@react-three/fiber'
+//extend({ DirectionalLightHelper })
 
 interface IProps extends PropsWithChildren {
     position: Vector3
     intensity: number
-    distance: number
 }
 
 const SunLight: React.FC<IProps> = (props) => {
 
-    // uncomment the next lines to use the spotlight helper
+    // uncomment the next lines to use the helper
     // which helps to visualize the size and direction of your light
-    // also uncomment the line that sets the ref
     // and finally uncomment the imports on top
-    //const spotLightRef = useRef<SpotLight>(null)
+    //const directionalLightRef = useRef<DirectionalLight>(null)
 
-    //useHelper(spotLightRef, SpotLightHelper, '#fff400')
+    //useHelper(directionalLightRef, DirectionalLightHelper)
 
     return (
-        <spotLight
+        <directionalLight
             color="#a46b00"
-            intensity={props.intensity}
-            position={props.position}
-            distance={props.distance}
-            angle={Math.PI / 9} // default is Math.PI/3
-            //ref={spotLightRef}
+            //ref={directionalLightRef}
             castShadow={true} // default is false
-            shadow-mapSize-width={1024*2}
-            shadow-mapSize-height={1024*2}
-        />
+            position={props.position}
+            intensity={props.intensity}
+            shadow-mapSize={[1024 * 2, 1024 * 2]}
+        >
+            <orthographicCamera
+                attach="shadow-camera"
+                args={[-1, 1, 1, -1, 0.1, 3]}
+            />
+        </directionalLight>
     )
 
 }
