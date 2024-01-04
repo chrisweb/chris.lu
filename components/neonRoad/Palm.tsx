@@ -37,47 +37,47 @@ const PalmModel: React.FC<GroupProps> = forwardRef((props: JSX.IntrinsicElements
     return (
         <group name={'PalmModel'} {...props} ref={ref}>
             <mesh
-                castShadow
+                castShadow={true} // default is false
                 geometry={nodes.tronc_tronc1_0.geometry}
                 material={materials.tronc1}
             />
             <mesh
-                castShadow
+                castShadow={true} // default is false
                 geometry={nodes.Feuille_1_feuilles_0.geometry}
                 material={materials.feuilles}
             />
             <mesh
-                castShadow
+                castShadow={true} // default is false
                 geometry={nodes.Feuille_2_feuilles_0.geometry}
                 material={materials.feuilles}
             />
             <mesh
-                castShadow
+                castShadow={true} // default is false
                 geometry={nodes.Feuille_3_feuilles_0.geometry}
                 material={materials.feuilles}
             />
             <mesh
-                castShadow
+                castShadow={true} // default is false
                 geometry={nodes.Feuille_4_feuilles_0.geometry}
                 material={materials.feuilles}
             />
             <mesh
-                castShadow
+                castShadow={true} // default is false
                 geometry={nodes.Feuille_5_feuilles_0.geometry}
                 material={materials.feuilles}
             />
             <mesh
-                castShadow
+                castShadow={true} // default is false
                 geometry={nodes.Feuille_6_feuilles_0.geometry}
                 material={materials.feuilles}
             />
             <mesh
-                castShadow
+                castShadow={true} // default is false
                 geometry={nodes.Feuille_7_feuilles_0.geometry}
                 material={materials.feuilles}
             />
             <mesh
-                castShadow
+                castShadow={true} // default is false
                 geometry={nodes.Feuille_8_feuilles_0.geometry}
                 material={materials.feuilles}
             />
