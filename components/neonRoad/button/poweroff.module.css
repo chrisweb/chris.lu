@@ -1,0 +1,52 @@
+.container {
+    position: absolute;
+    bottom: var(--main-spacing);
+    right: var(--main-spacing);
+    z-index: 1;
+}
+
+.powerOffButton {
+    margin: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1px;
+    --cornerSideLength: 12px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
+            0 100%);
+    width: 48px;
+    height: 48px;
+    background-color: var(--tertiary-light-color);
+    border: 0;
+    cursor: var(--cursor-pointer);
+}
+
+.powerOffButtonCore {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    background-color: var(--main-background-color);
+    --cornerSideLength: 12px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
+            0 100%);
+}
+
+.powerOffButtonCore>svg {
+    color: var(--tertiary-light-color);
+}
