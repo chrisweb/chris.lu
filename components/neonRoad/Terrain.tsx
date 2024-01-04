@@ -157,7 +157,6 @@ const Terrain: React.FC<IProps> = forwardRef<Mesh, IProps>((props: IProps, terra
             position={[0, 0, props.zPosition]}
             ref={terrainRef}
             receiveShadow={true} // default is false
-            castShadow={false}
         >
             <planeGeometry args={[1, 1, 32, 64]} />
             <meshStandardMaterial

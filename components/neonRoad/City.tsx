@@ -21,8 +21,6 @@ const City: React.FC<IProps> = (props) => {
         <mesh
             position={props.position}
             scale={props.scale}
-            castShadow={false}
-            receiveShadow={false}
         >
             <planeGeometry />
             <meshBasicMaterial
