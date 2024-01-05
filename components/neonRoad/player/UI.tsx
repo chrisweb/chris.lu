@@ -139,7 +139,7 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                     }
                 ],
                 wave: [41, 87, 88, 87, 88, 89, 88, 89, 49, 64, 80, 82, 79, 84, 79, 81, 69, 95, 92, 96, 94, 91, 93, 93, 92, 96, 85, 70, 75, 86, 83, 90, 87, 77, 75, 79, 87, 80, 82, 73, 94, 92, 97, 93, 93, 91, 92, 97, 100, 37],
-                name: 'Athena',
+                name: 'Sunset',
                 artistName: 'LukHash',
                 artistWebsite: 'https://www.lukhash.com/',
                 license: 'https://creativecommons.org/licenses/by-nc-nd/4.0/',
