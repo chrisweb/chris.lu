@@ -32,19 +32,22 @@
         padding-top: var(--main-spacing);
     }
 
-
     .layoutNavbar {
         flex-flow: column;
         margin: var(--header-navbar-height) auto 0 auto;
+        grid-gap: calc(var(--main-spacing) / 2);
+        gap: calc(var(--main-spacing) / 2);
     }
 
     @keyframes moveDown {
         from {
             top: calc(-85vh + var(--header-navbar-height));
+            background-color: rgba(255, 0, 170, 0.1);
         }
 
         to {
             top: 0;
+            background-color: rgba(255, 0, 170, 0.8);
         }
     }
 
@@ -55,10 +58,12 @@
     @keyframes moveUp {
         from {
             top: 0;
+            background-color: rgba(255, 0, 170, 0.8);
         }
 
         to {
             top: calc(-85vh + var(--header-navbar-height));
+            background-color: rgba(255, 0, 170, 0.1);
         }
     }
 
@@ -84,6 +89,10 @@
     transition: none;
 }
 
+.layoutNavbar a:hover {
+    color: #fff;
+}
+
 .layoutNavbar a::before {
     display: block;
     content: attr(title);
@@ -95,8 +104,9 @@
 
 /* not on mobile */
 @media (hover: hover) {
+
     .layoutNavbar a {
-        background-image: linear-gradient(#ffffff 0%, #ffffff 100%);
+        background-image: linear-gradient(#fff 0%, #fff 100%);
         background-size: 0% 1px;
         background-position-y: 100%;
         background-position-x: 0%;
@@ -105,9 +115,10 @@
     }
 
     .layoutNavbar a:hover {
-        color: #fff;
+
         background-size: 100% 1px;
     }
+
 }
 
 .layoutNavbar a.active {
@@ -120,7 +131,6 @@
 /* source for the hamburger css styling & animation: https://github.com/jonsuh/hamburgers */
 .hamburger {
     outline: none;
-    padding: 15px 15px;
     display: none;
     cursor: var(--cursor-pointer);
     transition-property: opacity, filter;
@@ -132,31 +142,30 @@
     background-color: transparent;
     border: 0;
     margin: 0;
+    padding: 4px;
     position: fixed;
-    top: 2px;
-    left: 0;
+    top: 5px;
+    left: 8px;
     z-index: 9999;
+    height: 48px;
+    width: 48px;
 }
 
 /* max-width: 70rem / 1120px (mobile breakpoint) */
 @media all and (max-width: 70rem) {
+
     .hamburger {
         display: flex;
         align-items: center;
+        justify-content: center;
     }
+
 }
 
 .hamburger.active .hamburgerInner,
 .hamburger.active .hamburgerInner::before,
 .hamburger.active .hamburgerInner::after {
     background-color: var(--main-text-color);
-}
-
-.hamburgerBox {
-    width: 40px;
-    height: 24px;
-    display: inline-block;
-    position: relative;
 }
 
 .hamburgerInner {
@@ -168,7 +177,7 @@
 .hamburgerInner,
 .hamburgerInner::before,
 .hamburgerInner::after {
-    width: 40px;
+    width: 30px;
     height: 4px;
     background-color: var(--main-text-color);
     border-radius: 4px;
@@ -197,6 +206,8 @@
 }
 
 .emphatic .hamburgerInner {
+    width: 30px;
+    height: 4px;
     transition: background-color 0.125s 0.175s ease-in;
 }
 

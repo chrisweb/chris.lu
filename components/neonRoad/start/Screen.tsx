@@ -47,20 +47,22 @@ const StartScreen: React.FC<IProps> = (props) => {
         <>
             <div className={styles.playContainer}>
                 <div className={styles.playBox}>
-                <button
-                        onClick={withMusicClickHandler}
-                        onKeyDown={withMusicKeyPressHandler}
-                        className={styles.withMusicButton}
-                    >
-                        <span className={`${styles.withMusic} ${withSoundState ? styles.selected : styles.notSelected}`}>Music ON</span>
-                    </button>
-                    <button
-                        onClick={withoutMusicClickHandler}
-                        onKeyDown={withoutMusicKeyPressHandler}
-                        className={styles.withoutMusicButton}
-                    >
-                        <span className={`${styles.withoutMusic} ${!withSoundState ? styles.selected : styles.notSelected}`}>Music OFF</span>
-                    </button>
+                    <div className={styles.playBoxSoundOptions}>
+                        <button
+                            onClick={withMusicClickHandler}
+                            onKeyDown={withMusicKeyPressHandler}
+                            className={styles.withMusicButton}
+                        >
+                            <span className={`${styles.withMusic} ${withSoundState ? styles.selected : styles.notSelected}`}>Music ON</span>
+                        </button>
+                        <button
+                            onClick={withoutMusicClickHandler}
+                            onKeyDown={withoutMusicKeyPressHandler}
+                            className={styles.withoutMusicButton}
+                        >
+                            <span className={`${styles.withoutMusic} ${!withSoundState ? styles.selected : styles.notSelected}`}>Music OFF</span>
+                        </button>
+                    </div>
                     <button
                         onClick={pressStartClickHandler}
                         onKeyDown={pressStartKeyPressHandler}

@@ -78,9 +78,7 @@ const HeaderNavigation: React.FC = () => {
     return (
         <>
             <button type="button" aria-label="open global navigation menu" className={`${styles.hamburger} ${styles.emphatic} ${navigationIsOpenState ? styles.active : ''}`} onClick={onClickHamburgerHandler}>
-                <span className={styles.hamburgerBox}>
-                    <span className={styles.hamburgerInner}></span>
-                </span>
+                <span className={styles.hamburgerInner}></span>
             </button>
             <div className={`${styles.layoutNavbarContainer} ${navigationIsOpenState === null ? '' : (navigationIsOpenState ? styles.openNavbar : styles.closeNavbar)}`} {...swipeHandlers} ref={swipeableRefPassthrough}>
                 <nav id="navigation" className={`${styles.layoutNavbar}`} >

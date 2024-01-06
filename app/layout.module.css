@@ -4,4 +4,15 @@
     max-width: 100%;
     position: relative;
     text-align: center;
+    background-color: #2f0f30;
+    overflow: hidden;
+}
+
+/* max-width: 70rem / 1120px (mobile breakpoint) */
+@media all and (max-width: 70rem) {
+
+    .layoutHeader {
+        padding-top: var(--header-navbar-height);
+    }
+
 }

@@ -36,7 +36,7 @@ const LoadingScreen: React.FC = () => {
     return (
         <>
             <div className={styles.loadingContainer}>
-                <span>{loadingMessageState}</span>
+                <span className={styles.loadingText}>{loadingMessageState}</span>
             </div>
         </>
     )

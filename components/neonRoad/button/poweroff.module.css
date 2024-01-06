@@ -2,10 +2,28 @@
     position: absolute;
     bottom: var(--main-spacing);
     right: var(--main-spacing);
-    z-index: 1;
+    z-index: 20;
+}
+
+/* max-width: 70rem / 1120px (mobile breakpoint) */
+@media all and (max-width: 70rem) {
+
+    .container {
+        bottom: calc(var(--main-spacing) / 2);
+        right: calc(var(--main-spacing) / 2);
+    }
+
 }
 
 .powerOffButton {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.powerOffButtonBorder {
+    width: 48px;
+    height: 48px;
     margin: 0;
     position: relative;
     display: flex;
@@ -21,11 +39,19 @@
             100% calc(100% - var(--cornerSideLength)),
             calc(100% - var(--cornerSideLength)) 100%,
             0 100%);
-    width: 48px;
-    height: 48px;
     background-color: var(--tertiary-light-color);
     border: 0;
     cursor: var(--cursor-pointer);
+}
+
+/* max-width: 70rem / 1120px (mobile breakpoint) */
+@media all and (max-width: 70rem) {
+
+    .powerOffButtonBorder {
+        width: 44px;
+        height: 44px;
+    }
+
 }
 
 .powerOffButtonCore {

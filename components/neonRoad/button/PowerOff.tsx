@@ -21,8 +21,10 @@ const ButtonPowerOff: React.FC<IProps> = (props) => {
                     onClick={powerOffClickHandler}
                     className={styles.powerOffButton}
                 >
-                    <div className={styles.powerOffButtonCore}>
-                        <FontAwesomeIcon icon={faPowerOff} size="xl" color='white' />
+                    <div className={styles.powerOffButtonBorder}>
+                        <div className={styles.powerOffButtonCore}>
+                            <FontAwesomeIcon icon={faPowerOff} size="xl" color='white' />
+                        </div>
                     </div>
                 </button>
             </div >

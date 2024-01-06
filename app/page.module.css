@@ -6,9 +6,11 @@
 
 /* max-width: 70rem / 1120px (mobile breakpoint) */
 @media all and (max-width: 70rem) {
+
     .portalsGrid {
         grid-template-columns: 1fr;
     }
+
 }
 
 .cyberPortalOuterGlow {
@@ -66,5 +68,5 @@
     height: 100%;
     width: 100%;
     color: #fff;
-    padding: calc(var(--main-spacing) / 2) var(--main-spacing);
+    padding: 0 var(--main-spacing);
 }

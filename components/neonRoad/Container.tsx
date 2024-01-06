@@ -6,8 +6,10 @@ import StartScreen from './start/Screen'
 import dynamic from 'next/dynamic'
 import PlayerUI from './player/UI'
 import { PlayerCore } from 'web-audio-api-player'
+import HeaderTitle from '@components/header/Title'
 import LoadingScreen from './loading/Screen'
 import ButtonPowerOff from './button/PowerOff'
+import styles from './container.module.css'
 
 // in this dynamic import case it is important to set "ssr: false"
 // as in the NeonRoadCanvas component we use window
@@ -39,21 +41,24 @@ const Container: React.FC = () => {
     const altText = 'Chris.lu header image, displaying an 80s style landscape and sunset'
 
     return (
-        <div ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative' }}>
-            {!animationState &&
-                <>
-                    <StaticImage altText={altText} />
-                    <StartScreen clickPlayCallback={clickPlayCallback} />
-                </>
-            }
-            {animationState &&
-                <>
-                    <NeonRoadCanvas altText={altText} containerRef={containerRef} />
-                    <ButtonPowerOff clickStopCallback={clickStopCallback} />
-                </>
-            }
+        <>
             <PlayerUI ref={playerRef} />
-        </div>
+            <div ref={containerRef} className={styles.neonRoadContainer}>
+                <HeaderTitle />
+                {!animationState &&
+                    <>
+                        <StaticImage altText={altText} />
+                        <StartScreen clickPlayCallback={clickPlayCallback} />
+                    </>
+                }
+                {animationState &&
+                    <>
+                        <NeonRoadCanvas altText={altText} containerRef={containerRef} />
+                        <ButtonPowerOff clickStopCallback={clickStopCallback} />
+                    </>
+                }
+            </div>
+        </>
     )
 }
 

@@ -5,15 +5,33 @@
     align-items: center;
     width: 100%;
     position: absolute;
-    top: var(--header-navbar-height);
-    z-index: 1;
+    top: calc(var(--header-navbar-height) + var(--main-spacing));
+    z-index: 30;
+}
+
+/* max-width: 70rem / 1120px (mobile breakpoint) */
+@media all and (max-width: 70rem) {
+
+    .playContainer {
+        top: 0;
+    }
+
 }
 
 .playBox {
     display: flex;
     flex-direction: column;
-    padding-top: 2%;
-    width: 380px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* max-width: 70rem / 1120px (mobile breakpoint) */
+@media all and (max-width: 70rem) {
+
+    .playBox {
+        width: 100%;
+    }
+
 }
 
 .playBox button span {
@@ -27,6 +45,21 @@
     cursor: var(--cursor-pointer);
 }
 
+.playBoxSoundOptions {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* max-width: 70rem / 1120px (mobile breakpoint) */
+@media all and (max-width: 70rem) {
+
+    .playBoxSoundOptions {
+        flex-direction: row;
+    }
+
+}
+
 .withMusicButton,
 .withoutMusicButton,
 .playButton {
@@ -36,12 +69,36 @@
     border: none;
 }
 
+/* max-width: 70rem / 1120px (mobile breakpoint) */
+@media all and (max-width: 70rem) {
+
+    .withMusicButton,
+    .withoutMusicButton {
+        width: 50%;
+    }
+
+}
+
+.playButton {
+    line-height: 1;
+}
+
 .withMusic,
 .withoutMusic {
-    font-size: 2rem;
+    font-size: var(--main-fontSize-big2);
     color: var(--tertiary-light-color);
     /* offset-x | offset-y | blur-radius | color */
     text-shadow: 0 0 2px var(--primary-light-color), 0 0 4px var(--secondary-light-color);
+}
+
+/* max-width: 70rem / 1120px (mobile breakpoint) */
+@media all and (max-width: 70rem) {
+
+    .withMusic,
+    .withoutMusic {
+        font-size: var(--main-fontSize-big3);
+    }
+
 }
 
 .withMusic:before,
@@ -53,17 +110,35 @@
 
 .selected:before {
     content: ">";
-    font-size: 2rem;
+    font-size: var(--main-fontSize-big2);
     color: #fcff00;
     width: 20px;
     display: inline-block;
 }
 
+/* max-width: 70rem / 1120px (mobile breakpoint) */
+@media all and (max-width: 70rem) {
+
+    .selected:before {
+        font-size: var(--main-fontSize-big3);
+    }
+
+}
+
 .pressStart {
     text-transform: capitalize;
-    font-size: 4.5rem;
+    font-size: calc(var(--main-fontSize-big1) * 1.5);
     color: var(--tertiary-light-color);
     text-transform: uppercase;
+}
+
+/* max-width: 70rem / 1120px (mobile breakpoint) */
+@media all and (max-width: 70rem) {
+
+    .pressStart {
+        font-size: var(--main-fontSize-big1);
+    }
+
 }
 
 .press {
@@ -79,24 +154,6 @@
 .blink {
     animation: blink-animation 2s steps(5, start) infinite;
     -webkit-animation: blink-animation 2s steps(5, start) infinite;
-}
-
-/* max-width: 70rem / 1120px (mobile breakpoint) */
-@media all and (max-width: 70rem) {
-
-    .playBox {
-        padding-top: 4%;
-    }
-
-    .withMusic,
-    .withoutMusic {
-        font-size: 1.8rem;
-    }
-
-    .pressStart {
-        font-size: 3rem;
-    }
-
 }
 
 @keyframes blink-animation {

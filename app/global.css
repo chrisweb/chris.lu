@@ -270,12 +270,13 @@ a {
     touch-action: pan-y;
 }
 
-a:hover {
-    color: var(--tertiary-light-color);
-}
-
 /* not on mobile */
 @media (hover: hover) {
+
+    a:hover {
+        color: var(--tertiary-light-color);
+    }
+
     .animatedUnderline {
         /* underline animation */
         /* https://nickymeuleman.netlify.app/blog/css-animated-wrapping-underline */
@@ -290,6 +291,7 @@ a:hover {
     .animatedUnderline:hover {
         background-size: 100% 1px;
     }
+
 }
 
 /* if using background clip underline disappears in chrome */
@@ -344,6 +346,8 @@ blockquote {
 }
 
 button {
+    min-height: 48px;
+    min-width: 48px;
     user-select: none;
 }
 

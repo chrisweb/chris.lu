@@ -73,9 +73,6 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 aria-label={props.altText}
                 role="img"
                 gl={{ antialias: false }}
-                style={{
-                    zIndex: -30,
-                }}
                 //frameloop="never"
                 //onCreated={onCanvasCreatedHandler}
                 //ref={canvasRef}

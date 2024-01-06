@@ -2,7 +2,6 @@ import NeonRoadContainer from '../components/neonRoad/Container'
 import './global.css'
 import styles from './layout.module.css'
 import { Permanent_Marker, VT323, Architects_Daughter } from 'next/font/google'
-import HeaderTitle from '../components/header/Title'
 import HeaderNavigation from '../components/header/Navigation'
 
 import '@fortawesome/fontawesome-svg-core/styles.css'
@@ -42,7 +41,6 @@ export default function RootLayout({ children }: {
             <body>
                 <header className={styles.layoutHeader}>
                     <HeaderNavigation />
-                    <HeaderTitle />
                     <NeonRoadContainer />
                 </header>
                 <main>{children}</main>
