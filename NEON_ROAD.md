@@ -406,7 +406,7 @@ console.log(gl.capabilities.getMaxAnisotropy())
 * control animation speed based on peeks height using <https://github.com/chrisweb/waveform-data-generator>
 * in this article <https://www.gatsbyjs.com/blog/performance-optimization-for-three-js-web-animations/> I read about a feature called saveData, should try to use it `navigator?.connection?.saveData`
 * check for user preference for animation(s) should be low (via three fiber accessibility package > user preferences > <https://docs.pmnd.rs/a11y/access-user-preferences>), then set the framerate to very low value
-* based on the performance monitor <https://github.com/pmndrs/drei#performancemonitor> value, change the gl antialias value, decrease the animation speed and change the canvas dpr value? I think gl can be accessed in useframe: `useFrame(({ gl }) => { })`
+* based on the performance monitor <https://github.com/pmndrs/drei#performancemonitor> value, change the gl antialias value, decrease the animation speed and change the canvas dpr value? I think gl can be accessed in useframe: `useFrame(({ gl }) => { })`, example of disabling bloom & shadows if low fps based on performance monitor: <https://github.com/wass08/r3f-playroom-multiplayer-shooter-game/commit/fb314a88b49cc0743f333b6a3bd7d4c6fe399542>
 * firefox accessibility says canvas is clickable and has no alt text, but setting aria attributes on canvas element has them moved to container div by three fiber
 * check if changing rendering performance setting is needed when mobile is detected
 * check if the shadows settings (camera) can be tweaked for better performance
