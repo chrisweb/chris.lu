@@ -1,0 +1,37 @@
+%toc%
+
+<article>
+
+# Node.js
+
+## Installation
+
+
+## Did you know?
+
+### Node.js now has built-in .env file support
+
+One of the first dependencies developers usually add to their Node.js project is [dotenv](https://www.npmjs.com/package/dotenv), but since v20.6.0 Node.js has [built-in .env file support](https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V20.md#built-in-env-file-support), so you might not need an extra package anymore
+
+If you use the following command:
+
+```shell
+node --env-file=config.env index.js
+```
+
+and this is the content of your **config.env**:
+
+```ini
+FOO='bar'
+```
+
+then in your code you can the following line to retrieve the value:
+
+```js
+let foo = process.env.FOO
+```
+
+> [!MORE]
+> [Node.js "--env-file" documentation](https://nodejs.org/docs/latest/api/cli.html#--env-fileconfig)
+
+</article>
