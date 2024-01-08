@@ -3176,6 +3176,10 @@ read more:
 
 ### ui / styling framework choice
 
+when it comes to styling (like so many other things) I'm happy that Next.js is NOT opinated and instead lets you chose the solution you like best...
+
+TODO: read: <https://leerob.io/blog/css>
+
 #### mui (react material ui styled components) (evaluation)
 
 In my previous projects I have used [**material ui (mui)**](https://mui.com/material-ui/getting-started/overview/) which is a popular react UI framework, I have loved how quickly I could build interfaces and forms and how well documented the project is
