@@ -2,13 +2,15 @@
 
 this series of articles will showcase how to build a blog using [Next.js](https://nextjs.org/) version 13 and up as our rendering framework as well as the [React](https://reactjs.org/) version 18 and up as our frontend framework and focus on using new features like "next.js app directory", "React Server Components", "React Streaming Components", "React Suspense"
 
+TODO: read: <https://www.mayank.co/blog/react-server-components>
+
 both [React](https://reactjs.org/) and [Next.js](https://nextjs.org/) are very popular in the javascript community, based on the latest results from the **state of js survey** that got released in january 2023 and is based on a survey they did at the end of november 2022. This time almost 40k developers from around the world participated and based on their feedback react is in 2022/2023 the most used frontend framework: ["state of js survey results: frontend frameworks"](https://2022.stateofjs.com/en-US/libraries/front-end-frameworks/) and next.js is the most used rendering framework ["state of js survey results: frontend frameworks"](https://2022.stateofjs.com/en-US/libraries/rendering-frameworks/)
 
 ## history
 
 ### react history
 
-the react team released the [RFC: React Server Components](https://reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html) as well as an experimental demo of React Server Components (RSC) in december 2020
+on december 21 2020, the react team announced in a [blog post on react.org](https://reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html) that they had just published the [RFC: React Server Components](https://github.com/reactjs/rfcs/blob/main/text/0188-server-components.md) on github, as well as an experimental demo [video of React Server Components (RSC) on YouTube](https://www.youtube.com/watch?v=TQQPAU21ZUw)
 
 the next announcement regarding server components came as part of a blog post announcing the release of [React v18.0](https://reactjs.org/blog/2022/03/29/react-v18.html), the react team mentions that the feature is considered experimental but also that they plan to release the server components in one of the next minor versions of react 18
 
