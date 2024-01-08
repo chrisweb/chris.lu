@@ -11,6 +11,12 @@ interface ITreeModel {
     zPosition: number
 }
 
+function randomDegrees() {
+    const min = 0
+    const max = 360
+    return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
 const Trees: React.FC = () => {
 
     //const palms = useMemo(() => {
@@ -31,7 +37,8 @@ const Trees: React.FC = () => {
             distanceToNextObject: 0.2
         })
 
-        moveFromAToBInLoop({ delta,
+        moveFromAToBInLoop({
+            delta,
             objectsRef: rightSideTreesRefs,
             cameraZPosition: 1,
             distanceToNextObject: 0.2
@@ -42,7 +49,7 @@ const Trees: React.FC = () => {
     const treesElements: React.ReactElement[] = []
 
     const sides = ['left', 'right']
-    const amountOfTreesPerSide = 13
+    const amountOfTreesPerSide = 12
 
     sides.forEach((side) => {
 
@@ -65,7 +72,7 @@ const Trees: React.FC = () => {
                     castShadow={true} // default is false
                     receiveShadow={false}
                     key={side + i}
-                    rotation={[0, 0, 0]}
+                    rotation={[0, randomDegrees(), 0]}
                 />
             )
 
