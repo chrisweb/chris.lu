@@ -27,3 +27,21 @@ Album: Ghosts
 Artist: LukHash
 Source: https://www.jamendo.com/track/1575624/sunset
 License: https://creativecommons.org/licenses/by-nc-nd/4.0/
+
+Song: Synthwave Vibe
+Album: Synthwave Vibe Single
+Artist: Meydän
+Source: https://meydan.bandcamp.com/track/synthwave-vibe
+License: https://creativecommons.org/licenses/by/3.0/
+
+Song: Little Calculations
+Album: Infinity
+Artist: Shirobon
+Source: https://shirobon.bandcamp.com/track/little-calculations
+License: https://creativecommons.org/licenses/by-nc-sa/3.0/
+
+Song: Out Of Love
+Album: Dimensions
+Artist: Shirobon
+Source: https://shirobon.bandcamp.com/track/out-of-love-2
+License: https://creativecommons.org/licenses/by-nc-sa/3.0/

@@ -129,20 +129,20 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
             {
                 source: [
                     {
-                        url: 'Sunset_-_LukHash.ogg',
+                        url: 'Synthwave_Vibe_-_Meydän.ogg',
                         codec: 'ogg',
                         isPreferred: true,
                     },
                     {
-                        url: 'Sunset_-_LukHash.mp3',
+                        url: 'Synthwave_Vibe_-_Meydän.mp3',
                         codec: 'mp3',
                     }
                 ],
-                wave: [41, 87, 88, 87, 88, 89, 88, 89, 49, 64, 80, 82, 79, 84, 79, 81, 69, 95, 92, 96, 94, 91, 93, 93, 92, 96, 85, 70, 75, 86, 83, 90, 87, 77, 75, 79, 87, 80, 82, 73, 94, 92, 97, 93, 93, 91, 92, 97, 100, 37],
-                name: 'Sunset',
-                artistName: 'LukHash',
-                artistWebsite: 'https://www.lukhash.com/',
-                license: 'https://creativecommons.org/licenses/by-nc-nd/4.0/',
+                wave: [41, 45, 46, 70, 82, 86, 88, 82, 81, 81, 95, 96, 99, 95, 96, 96, 88, 67, 68, 65, 66, 64, 62, 57, 63, 65, 70, 74, 60, 69, 94, 96, 100, 98, 96, 99, 98, 95, 99, 100, 99, 99, 96, 56, 14, 7, 3, 1, 0, 0],
+                name: 'Synthwave Vibe',
+                artistName: 'Meydän',
+                artistWebsite: 'https://linktr.ee/meydan',
+                license: 'https://creativecommons.org/licenses/by/3.0/',
             },
             {
                 source: [
@@ -165,6 +165,24 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
             {
                 source: [
                     {
+                        url: 'Out_Of_Love_-_Shirobon.ogg',
+                        codec: 'ogg',
+                        isPreferred: true,
+                    },
+                    {
+                        url: 'Out_Of_Love_-_Shirobon.mp3',
+                        codec: 'mp3',
+                    }
+                ],
+                wave: [34,35,35,35,59,62,82,77,96,95,96,95,97,97,96,81,39,57,97,92,95,70,21,25,30,42,52,52,52,64,71,79,93,92,97,97,97,95,96,97,97,99,100,100,100,42,33,23,20,6],
+                name: 'Out Of Love',
+                artistName: 'Shirobon',
+                artistWebsite: 'https://shirobon.bandcamp.com/',
+                license: 'https://creativecommons.org/licenses/by-nc-sa/3.0/',
+            },
+            {
+                source: [
+                    {
                         url: 'Double_Dragon_Neon_City_Streets_1_-_Jake_Kaufman.ogg',
                         codec: 'ogg',
                         isPreferred: true,
@@ -183,6 +201,24 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
             {
                 source: [
                     {
+                        url: 'Sunset_-_LukHash.ogg',
+                        codec: 'ogg',
+                        isPreferred: true,
+                    },
+                    {
+                        url: 'Sunset_-_LukHash.mp3',
+                        codec: 'mp3',
+                    }
+                ],
+                wave: [41, 87, 88, 87, 88, 89, 88, 89, 49, 64, 80, 82, 79, 84, 79, 81, 69, 95, 92, 96, 94, 91, 93, 93, 92, 96, 85, 70, 75, 86, 83, 90, 87, 77, 75, 79, 87, 80, 82, 73, 94, 92, 97, 93, 93, 91, 92, 97, 100, 37],
+                name: 'Sunset',
+                artistName: 'LukHash',
+                artistWebsite: 'https://www.lukhash.com/',
+                license: 'https://creativecommons.org/licenses/by-nc-nd/4.0/',
+            },
+            {
+                source: [
+                    {
                         url: '50_Million_Year_Trip_-_Karl_Casey.ogg',
                         codec: 'ogg',
                         isPreferred: true,
@@ -197,7 +233,25 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                 artistName: 'Karl Casey aka "White Bat Audio"',
                 artistWebsite: 'https://whitebataudio.com',
                 license: 'https://creativecommons.org/licenses/by/3.0/',
-            }
+            },
+            {
+                source: [
+                    {
+                        url: 'Little_Calculations_-_Shirobon.ogg',
+                        codec: 'ogg',
+                        isPreferred: true,
+                    },
+                    {
+                        url: 'Little_Calculations_-_Shirobon.mp3',
+                        codec: 'mp3',
+                    }
+                ],
+                wave: [25, 25, 51, 78, 80, 80, 79, 80, 80, 79, 79, 80, 82, 86, 80, 87, 81, 78, 87, 86, 88, 86, 88, 86, 86, 89, 87, 88, 89, 88, 87, 90, 95, 85, 74, 76, 77, 75, 86, 91, 89, 88, 89, 95, 97, 100, 99, 98, 90, 49],
+                name: 'Little Calculations',
+                artistName: 'Shirobon',
+                artistWebsite: 'https://shirobon.bandcamp.com/',
+                license: 'https://creativecommons.org/licenses/by-nc-sa/3.0/',
+            },
         ]
 
         return mixTape
