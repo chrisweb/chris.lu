@@ -22,6 +22,7 @@ module.exports = {
     plugins: [
         'react',
         '@typescript-eslint',
+        '@react-three',
         '@next/next',
     ],
     reportUnusedDisableDirectives: true,
@@ -34,6 +35,7 @@ module.exports = {
             extends: [
                 'eslint:recommended',
                 'plugin:@typescript-eslint/recommended',
+                'plugin:@react-three/recommended',
                 'plugin:@next/next/recommended',
             ],
             parser: '@typescript-eslint/parser',
