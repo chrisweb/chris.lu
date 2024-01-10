@@ -49,11 +49,6 @@ converting images to AVIF and WEBP and thumbnails
 
 ### create a new repository on github
 
-use github to create a new repository for your project
-
-also let github create a README.md a LICENSE as well as a default .gitignore file for you
-
-Note: if you chose "node" as template for the `.gitignore` it will create a quite large gitignore file that contains patterns for lots of common frameworks used when working with nodejs, one of them being next.js, which means the `.next` directory will get excluded if you use this gitignore, the other rules are less useful in our case but also do no harm, so you don't really need to touch that file, also in case you wonder, yes the .gitignore file should get commited
 
 now you can check out your project locally, typing the following command into favorite command line tool / terminal:
 
