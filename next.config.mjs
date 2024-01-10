@@ -18,6 +18,7 @@ import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
 import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
 import { rehypeGithubAlerts } from 'rehype-github-alerts'
+import remarkMdxImages from 'remark-mdx-images'
 
 /*const ContentSecurityPolicy = `
   default-src 'self';
@@ -221,7 +222,7 @@ const nextConfig = (/*phase*/) => {
     const withMDX = createMdx({
         extension: /\.mdx?$/,
         options: {
-            remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions], [remarkGfm, remarkGfmOptions]],
+            remarkPlugins: [remarkMdxImages, [remarkTableOfContents, remarkTableOfContentsOptions], [remarkGfm, remarkGfmOptions]],
             rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions], rehypeSlug, [rehypeAutolinkHeadings, rehypeAutolinkHeadingsOptions], [rehypeGithubAlerts, rehypeGithubAlertsOptions]],
             // If you use `MDXProvider`, uncomment the following line.
             // providerImportSource: "@mdx-js/react",
