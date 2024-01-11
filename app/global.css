@@ -637,8 +637,8 @@ h6 .headingAnchor {
     background-color: var(--tertiary-light-color);
 }
 
-.markdown-alert-warning,
-.markdown-alert-warning .markdown-alert-header {
+.markdown-alert-tip,
+.markdown-alert-tip .markdown-alert-header {
     background-color: var(--secondary-light-color);
 }
 
@@ -651,7 +651,7 @@ h6 .headingAnchor {
     color: black;
 }
 
-.markdown-alert-warning .markdown-alert-header {
+.markdown-alert-tip .markdown-alert-header {
     color: white;
 }
 
