@@ -1,0 +1,69 @@
+%toc%
+
+<article>
+
+# GitHub
+
+![](../../../../public/assets/images/app/web_development/posts/github/banner.png)
+
+## Create an account (sign up)
+
+To **sign up** on GitHub visit [github.com](https://github.com/) and click on "Sign Up"
+
+Then enter your email address, chose a strong password and chose a username that is not yet taken
+
+You when then get a mail with a code, copy the code and enter it on the next step of the account creation on github.com
+
+Then answer the few questions they ask you or click on **Skip personalization** on the bottom of the page, when asked about the tools you plan on using, they ask this to know what plan is best for you, as you are new to GitHub the free plan will be more than enough, this is why I would only check the first two checkboxes for **Collaborative coding** and **Automation and CI/CD**
+
+Then click on **Continue for free**
+
+> [!TIP]  
+> the free GitHub plan is more than enough for a single developer, you get unlimited public and private repositories, the only feature you don't get are mostly features needed when working in a team, don't hesitate to start with the free plan if later you realize that you need more you can still upgrade at that time
+
+## Create a repository
+
+If you have no repository yet, after creating an account on GitHub you will land on your dashboard page, here GitHub will suggest you to create a repository
+
+If you already created a repository in the past, click on your Avatar picture on the top right of the page and then on **Your repositories**, then click on the green **New** button on the top right
+
+Enter a **Repository name**, for example **"nextjs-blog"**, then you can chose to make it private or keep it public
+
+> [!TIP]  
+> I usually chose **public** because at same point you will probably want to share your work with others to ask for help or show them how cool your new project is, also if you are searching for a job having several projects you worked on your GitHub account shows your potential future employer what a motivated dev you are
+
+Next you will have a checkbox for **Add a README file**, I recommend you check this, if you do check it GitHub will automatically add a new ReadableStreamDefaultController.md file to your project
+
+> [!TIP]  
+> I always use the projects `README.md` file to document all the things I do in that project, for example add a chapter to describe how to setup a local development version of your project, or for example document the commands that can be used to do things like starting the local devopment server, you can also add notes about problems you faced and how you solved them
+>
+> In the future you will be happy to have all that information regarding your project in one place and if you share the project with someone else in the future it will help them get started without having to ask you lots of questions or dig through code and configuration files to understand how your project is set up
+
+Next you have a select box, click on it and then search for **Node** (which is the Node.js template for gitignore files) and then click on **Node** to select it
+
+> [!NOTE]
+> If you chose **node** as template for the `.gitignore` file, it will create a quite large `.gitignore` file that contains patterns for lots of common frameworks used when working with Node.js, one of them being Next.js
+>
+> Which means that for examaple `.next` directory (which contains temporary files that get created by the linting and compiling tools used by Next.js as well as local development build of your project) will get excluded from commits (which is what we want, there is no need to share your own local build with others or have a copy in your repository)
+>
+> Another directory that will get excluded is the **node_modules** directory which will contain local copies of all the packages you download from npm
+>
+> Finally the other rules are less or not all useful in our case as they are for other frameworks like Nuxt.js or Astro, but they also do no harm, so you don't really need to touch that file to remove those rules
+
+> [!TIP]  
+> `.gitignore` files specify which files and directories should be excluded from tracking in a Git repository, meaning that they will NOT get committed to your repository. Oh and in case you wonder, yes the .gitignore file itself should get commited (unlike the `.next` directory which should not)
+
+Next you have another select box to chose a license, you can skip this if you want, but if you want a license and are not sure which one, then it is safe to just chose the **MIT** license, it is a very popular license used by a lot of javascript projects, for example here is the [MIT license page of Next.js](https://github.com/vercel/next.js/blob/canary/license.md) and here is the [MIT license page of React](https://github.com/facebook/react/blob/main/LICENSE)
+
+> [!TIP]  
+> I usually pick the **MIT** license if it is a project that I want to share but also keep the copyright or pick the **creative commons zero** ([CC0](https://creativecommons.org/public-domain/cc0/)) license which basically is a license that defines that you are waiving your copyright rights and hence the code will be in the public domain
+
+You are finally done, now click on **Create repository** to create your new repository
+
+> [!MORE]  
+> [github "Creating an account on GitHub" documentation](https://docs.github.com/en/get-started/quickstart/creating-an-account-on-github)
+> [github "Creating a new repository" documentation](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository)
+> [open source initiave MIT license page](https://opensource.org/license/mit/)
+> [creative commons zero (CC0) page](https://creativecommons.org/public-domain/cc0/)
+
+</article>
