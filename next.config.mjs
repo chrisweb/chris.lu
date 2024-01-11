@@ -19,6 +19,7 @@ import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
 import { rehypeGithubAlerts } from 'rehype-github-alerts'
 import remarkMdxImages from 'remark-mdx-images'
+import remarkBreaks from 'remark-breaks'
 
 /*const ContentSecurityPolicy = `
   default-src 'self';
@@ -205,10 +206,10 @@ const nextConfig = (/*phase*/) => {
                 title: 'Note',
             },
             {
-                keyword: 'WARNING',
+                keyword: 'TIP',
                 icon: '',
                 color: '',
-                title: 'Warning',
+                title: 'Tip',
             },
             {
                 keyword: 'MORE',
@@ -222,7 +223,7 @@ const nextConfig = (/*phase*/) => {
     const withMDX = createMdx({
         extension: /\.mdx?$/,
         options: {
-            remarkPlugins: [remarkMdxImages, [remarkTableOfContents, remarkTableOfContentsOptions], [remarkGfm, remarkGfmOptions]],
+            remarkPlugins: [remarkBreaks, remarkMdxImages, [remarkTableOfContents, remarkTableOfContentsOptions], [remarkGfm, remarkGfmOptions]],
             rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions], rehypeSlug, [rehypeAutolinkHeadings, rehypeAutolinkHeadingsOptions], [rehypeGithubAlerts, rehypeGithubAlertsOptions]],
             // If you use `MDXProvider`, uncomment the following line.
             // providerImportSource: "@mdx-js/react",
