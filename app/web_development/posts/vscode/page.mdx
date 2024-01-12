@@ -4,13 +4,93 @@
 
 # VSCode
 
-![](../../../../public/assets/images/app/web_development/posts/vscode/banner.png)
+![banner image displaying a woman waring a vscode t-shirt and writing code](../../../../public/assets/images/app/web_development/posts/vscode/banner.png)
+
+
+Visual Studio Code (VSCode) is a versatile Integrated Development Environment (IDE) we will use to write our Javascript (Typescript) code. I like VSCode because it has a lot of great features like smart code completion called [Intellisense](https://code.visualstudio.com/docs/editor/intellisense), code [refactoring](https://code.visualstudio.com/docs/editor/refactoring)...
+
+VSCode also comes with great [debugging](https://code.visualstudio.com/docs/editor/debugging) tools, meaning you can debug your frontend but also backend code within VSCode, for example managing breakpoints is very similar to how debugging works in the chrome developer tools. The [VSCode debugger](https://code.visualstudio.com/docs/editor/debugging) launch configuration json file makes it very easy to adapt the debugger to any project and the debugger launch.json can then be shared as part of your git repository to make it very easy for other developers that will work on your project and that also use VSCode to use the debugger without having to configure it themself 
+
+What is also great is that it has [integrated source control (git) support](https://code.visualstudio.com/docs/sourcecontrol/overview), staging, switching between branches and pushing are all things supported by VSCode, meaning we will be able to push our commits directly to github from within VSCode with just one click. It also makes resolving of conflicts and merging very easy using it's visual diff (as opposed to using git in the terminal (command line) which is another option if this is what you prefer).
+
+VSCode also has an [extensions (plugins) marketplace](https://code.visualstudio.com/docs/editor/extension-marketplace), which means that if one feature is not in VSCode core you will probably find an extension that suits your needs.
+
+> [!NOTE]  
+> VSCode the project is opensource and everyone can access and contribute to it source code in the [VSCode GitHub repository](https://github.com/microsoft/vscode). The source code is licensed using the MIT license. VSCode the build that you download from Microsoft uses the [Microsoft Software License](https://code.visualstudio.com/license). It is similar to Chrome (not opensource) being the Chromium (opensource) build from Google, which contains propritary pieces, like the chrome logo image, but also pre installed extensions or codecs that are not part of chromium the fully opensource variant. So if you want an opensource version of the VSCode build you could check out [VSCodium](https://vscodium.com/) instead
+
+> [!MORE]  
+> [VSCode documentation](https://code.visualstudio.com/docs)  
+> [VSCode youtube channel](https://www.youtube.com/@code)  
 
 ## Installation
 
+Head over to the [VSCode download page](https://code.visualstudio.com/Download) and download the latest version for your operating system (OS)
 
+## Login to your GitHub account
 
+* click on the **Accounts** icon on the left in the **Activity bar** (if you have already customized VSCode, your Activity bar might be in another location)
 
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_activity_bar_accounts_icon.png)
 
+* now click on **Backup and Sync Settings...**
+* then on top center of your VSCode click on the **Sign in**
+* then chose the option **Sign in with GitHub**
+* this will open a window in your default browser, login to your GitHub account via the web (if you are not already logged in)
+* after you have logged in you will get asked to **Authorize GitHub for VS Code** (if you haven't already done so previously), click on the green **Authorize Visual-Studio-Code** button
+* then a modal box will appear asking you to open VSCode again 
+* you are now logged in, if you click again on the **Accounts** icon you will see that your GitHub account is now linked (here you can sign out from your account at any time)
+
+you will see a modal box pop up in the right corner to ask you if you want to sync your settings in the cloud, I recommend clicking on the **Turn on Settings Sync...** button, doing so will allow VSCode to synchronise your VSCode settings accross multiple devices (for example between your desktop computer and your laptop)
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_synchronize_settings.png)
+
+## Checking out your GitHub project in VSCode
+
+There are several ways to clone a git (GitHub) repository in VSCode, I will describe 2 that are very similar and make use of the integrated VSCode source control tool and then one using the VSCode Terminal
+
+Option 1 (via the **welcome** screen):
+
+* if you just opened VSCode you will see a **welcome** screen, click on **Clone git repository...**
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_welcome_screen_clone_repository.png)
+
+* then click on **Clone from GitHub**
+* finally select your repository from the list
+
+Option 2 (via the **Source Control** tool):
+
+* click on the **Source Control** icon on the left in the **Activity bar** (if you have already customized VSCode, your Activity bar might be in another location) or use the keyboard shortcut `Ctrl+Shift+G{:shell}` (macOS: ⇧⌘G, Linux: Ctrl+Shift+G)
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_activity_bar_source_control_icon.png)
+
+* then click on **Clone Repository**
+* then click on **Clone from GitHub**
+* finally select your repository from the list
+
+Option 3 (via the VSCode terminal / or your preferred command line tool):
+
+* the third option is to visit [GitHub](https://github.com/)
+* then on top right click on your Avatar image
+* in the side menu click on **Your repositories**
+* then click on the name of your repository
+* now on the top right of your repository page there is a green dropdown button labelled **Code**
+* click on it and then click on the **HTTPS** tab
+* copy the **https** URL
+* now go back to VSCode
+* open a terminal view, if you don't know how check out the [VSCode terminal](#vscode-terminal) chapter and if you prefer to use another command line tool feel free to do that
+* go into the directory in which you want to store a local copy of your projects, for example by using this command: `cd MY_PATH_TO_MY_REPOSITORIES{:shell}`
+* then type the following command to clone the repository: `git clone THE_REPOSITORY_URL_YOU_COPIED_ON_GITHUB{:shell}`
+* now click on the **Source Control** icon on the left in the **Activity bar** (if you have already customized VSCode, your Activity bar might be in another location) or use the keyboard shortcut `Ctrl+Shift+G{:shell}` (macOS: ⇧⌘G, Linux: Ctrl+Shift+G)
+* then click on **Open Folder** and select the folder into which you just cloned your repository
+
+> [!MORE]  
+> [VSCode "git source control" documentation](https://code.visualstudio.com/docs/sourcecontrol/intro-to-git)  
+> [VSCode youtube video "Using Git with Visual Studio Code"](https://www.youtube.com/watch?v=i_23KUAEtUM)  
+
+## VSCode terminal
+
+VSCode has a terminal (command line tool) that by default is closed, to open the terminal click on **View** on top of VSCode and then **Terminal**
+
+Or use the keyboard shortcut `` Ctrl+` {:shell}`` 
 
 </article>
