@@ -131,7 +131,7 @@ header {
 
 footer {
     margin-top: var(--main-spacing);
-    min-height: calc(var(--main-spacing) * 2)
+    min-height: calc(var(--main-spacing) * 2);
 }
 
 main {
@@ -484,7 +484,9 @@ article,
 section,
 code,
 nav,
-aside {
+aside,
+header,
+footer {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
