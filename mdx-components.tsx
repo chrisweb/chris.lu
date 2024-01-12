@@ -2,7 +2,7 @@ import type { MDXComponents } from 'mdx/types'
 import { PropsWithChildren } from 'react'
 import HeadingsObserver from '@components/headings/Observer'
 import NavigationLink from '@components/navigation/Link'
-import ImageArticleBanner from '@components/image/ArticleBanner'
+import ImageArticle from '@components/image/Article'
 import { ImageProps } from 'next/image'
 
 // This file allows you to provide custom React components
@@ -51,9 +51,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                 {children}
             </NavigationLink>
         ),
-        img: (props) => (
-            <ImageArticleBanner {...props as ImageProps} />
-        ),
+        img: (props) => (<ImageArticle {...props as ImageProps} />),
         aside: ({ children, ...props }) => (
             <>
                 {props.id === 'articleToc' ? (
