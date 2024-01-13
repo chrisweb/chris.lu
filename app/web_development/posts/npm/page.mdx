@@ -1,0 +1,25 @@
+%toc%
+
+<article>
+
+# npm
+
+![banner image displaying conveyor belts moving lots of packages](../../../../public/assets/images/app/web_development/posts/npm/banner.png)
+
+**npm** (Node Package Manager) is a package manager, that comes with every installation of Node.js but can be installed / updated seperatly if needed. npm is Command Line Interface (CLI) tool that is used to install the dependencies listed in a package.json file. By default it will install packages that are hosted on npmjs.com but it can also be used to install the content of a GitHub repository (or any other git online platform like for example [GitLab](https://about.gitlab.com/)). There are several popular alternatives to npm, like [yarn](https://yarnpkg.com/) or [PNPm](https://pnpm.io/)
+
+**package.json** is a file that you will find in most Javascript (Typescript) projects. Package.json is a JSON file that contains metadata about the project, like the project name, a description and the current version, a list of dependencies as well as devDependencies, scripts (custom scripts that can be run from the command line using `npm run SCRIPT_NAME`), ...
+
+**package-lock.json** is a file that gets created when you install packages using a package manager. It lists the exact version of each installed package and its dependencies (unlike the package.json itself which often will allow for a range of different versions to be installed). This file is important as it can be used to create reproducible builds. When you test your project on the staging server and then deploy it to production you don't want the packages versions to be different, as this could introduce bugs after you are done testing if a package uses a newer version in production than previously on the staging server.
+
+> [!MORE]  
+> [npmjs.com "package.json" documentation](https://docs.npmjs.com/cli/configuring-npm/package-json)  
+> [nodejs.org "Modules: Packages" documentation](https://nodejs.org/api/packages.html)  
+
+## Installation
+
+## Updating
+
+
+
+</article>
