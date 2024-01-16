@@ -25,7 +25,7 @@ VSCode also has an [extensions (plugins) marketplace](https://code.visualstudio.
 
 Head over to the [VSCode download page](https://code.visualstudio.com/Download) and download the latest version for your operating system (OS)
 
-## Login to your GitHub account
+## Turn on settings sync (using your GitHub account)
 
 * click on the **Accounts** icon on the left in the **Activity bar** (if you have already customized VSCode, your Activity bar might be in another location)
 
@@ -35,26 +35,23 @@ Head over to the [VSCode download page](https://code.visualstudio.com/Download) 
 * then on top center of your VSCode click on the **Sign in**
 * then chose the option **Sign in with GitHub**
 * this will open a window in your default browser, login to your GitHub account via the web (if you are not already logged in)
-* after you have logged in you will get asked to **Authorize GitHub for VS Code** (if you haven't already done so previously), click on the green **Authorize Visual-Studio-Code** button
-* then a modal box will appear asking you to open VSCode again 
-* you are now logged in, if you click again on the **Accounts** icon you will see that your GitHub account is now linked (here you can sign out from your account at any time)
+* after you have logged, the second step on GitHub will ask you to **Authorize GitHub for VS Code** (if you haven't already done so previously), click on the green **Authorize Visual-Studio-Code** button to accept
+* then a modal box will appear in your browser asking you to open VSCode again (now that the GitHub login and authorization process is done this will bring you back into VSCode)
+* that's it, you have connected your GitHub account in VSCode
 
-you will see a modal box pop up in the right corner to ask you if you want to sync your settings in the cloud, I recommend clicking on the **Turn on Settings Sync...** button, doing so will allow VSCode to synchronise your VSCode settings accross multiple devices (for example between your desktop computer and your laptop)
+If this is the first time you install VSCode, you will see a modal box pop up in the right corner to ask you if you want to sync your settings in the cloud, click on the **Turn on Settings Sync...** button, doing so will allow VSCode to synchronise your VSCode settings accross multiple devices (for example between your desktop computer and your laptop)
 
 ![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_synchronize_settings.png)
 
-## Checking out your GitHub project in VSCode
+## Cloning your GitHub repository in VSCode
 
-There are several ways to clone a git (GitHub) repository in VSCode, I will describe 2 that are very similar and make use of the integrated VSCode source control tool and then 1 using the VSCode Terminal:
+There are several ways to clone a git (GitHub) repository in VSCode, I will describe 2 that are simple and very similar and make use of the integrated VSCode source control tool and then 1 using the VSCode Terminal, this is a bit more complex but if you prefer doing things manually via the command line than this third option is for you
 
 Option 1 (via the **welcome** screen):
 
 * if you just opened VSCode you will see a **welcome** screen, click on **Clone git repository...**
 
 ![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_welcome_screen_clone_repository.png)
-
-* then click on **Clone from GitHub**
-* finally select your repository from the list
 
 Option 2 (via the **Source Control** tool):
 
@@ -63,8 +60,43 @@ Option 2 (via the **Source Control** tool):
 ![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_activity_bar_source_control_icon.png)
 
 * then click on **Clone Repository**
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_clone_repository.png)
+
+Option 1 & 2 next steps:
+
 * then click on **Clone from GitHub**
-* finally select your repository from the list
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_clone_from_github.png)
+
+**If you are not yet logged in with your GitHub account yet:**
+
+* VSCode will ask you to allow sign you in with GitHub:
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_github_extension_sign_in_modal.png)
+
+* click on the **Allow** button
+* this will open a window in your default browser, login to your GitHub account via the web (if you are not already logged in)
+* after you have logged, the second step on GitHub will ask you to **Authorize GitHub for VS Code** (if you haven't already done so previously), click on the green **Authorize Visual-Studio-Code** button to accept
+* then a modal box will appear in your browser asking you to open VSCode again (now that the GitHub login and authorization process is done this will bring you back into VSCode)
+
+**As soon as you are logged in with your GitHub account:**
+
+* in VSCode on top you will now see a list of all your GitHub repositories, select your repository from the list
+* now chose a local directory in which you will save the clone of your repository (something like /users/YOUR_USERNAME/my_github_projects, no need to create a directory with the project name, VSCode will do that when cloning the repository), then click on **Select as Repository Destination**
+* then in the bottom right you will see a modal box showing you that the cloning process is underway
+* when the cloning is done VSCode will ask you if you want to open the cloned repository, click on **Open** to open it in the current VSCode or click on **Open in New Window** to open another VSCode instance
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_open_cloned_repository_modal.png)
+
+* next (if you are not trusting that directory yet) you will see the following modal box asking you **do you trust the authors of the files in this directory**, because all the projects in parent directory are our own, we will check the box next to **Trust the authors...** and then click on **Yes, I trust the authors** (if it is a third party project you are cloning then the VSCode recommends to not trust it and only enable those extra features if you really need them, also if you clone third party projects it is recommended to store them in another directory than your own, of course all the usual security recommendations to protect your computer apply, like ensure you have an antivirus installed, ...)
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_trust_file_authors_modal.png)
+
+> [!TIP]  
+> to learn more about the I recommend to read the [VSCode "Workspace Trust" documentation](https://code.visualstudio.com/docs/editor/workspace-trust)
+
+that's finally it, congratulations you now have a local copy of your GitHub repository
 
 Option 3 (via the VSCode terminal / or your preferred command line tool):
 
@@ -84,6 +116,37 @@ Option 3 (via the VSCode terminal / or your preferred command line tool):
 
 > [!MORE]  
 > [VSCode "git source control" documentation](https://code.visualstudio.com/docs/sourcecontrol/intro-to-git)  
+
+## commit your changes to GitHub using the VSCode version control tool
+
+* click on the **Source Control** icon on the left in the **Activity bar** (if you have already customized VSCode, your Activity bar might be in another location) or use the keyboard shortcut `Ctrl+Shift+G{:shell}` (macOS: ⇧⌘G, Linux: Ctrl+Shift+G)
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_activity_bar_source_control_icon.png)
+
+* you will now see that all the files in which you did changes are listed in the category **Changes**
+* if you double click on a filename it will open a **diff** view in VSCode that allows you to see what has changed between the current version and the previous one, the previous version of the file is on the left the current one on the right, on the right side the lines that will change are highlighted with a green color, on the left highlighted in red are the lines that will get modified, if you want to undo a change and keep the previous version you can click on the arrow in the middle of the page next to the line you want to undo
+* you don't need to commit all files that have been changed all at once, if you do then just enter a commit message on top and hit the **Commit** button, else to chose which files to commit click on the + icon next to the file, this will add the file to a category called **Staged changes**, now enter a commit message for the files you selected and click on commit, this will create a commit with on those files
+* next to each file you also have an icon with an arrow that points to the left, if you want to discard all of the changes you made to a file, click on that icon and it will reset the file (be careful this will delete all changes you did and you will not be able to recover them, if you are unsure create a new branch and commit the changes to that branch to have a backup just in case)
+
+## switching between branches
+
+* click on the **Source Control** icon on the left in the **Activity bar** (if you have already customized VSCode, your Activity bar might be in another location) or use the keyboard shortcut `Ctrl+Shift+G{:shell}` (macOS: ⇧⌘G, Linux: Ctrl+Shift+G)
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_activity_bar_source_control_icon.png)
+
+* on the bottom left you will have your current branch that you are currently on, if you did not yet create a new branch it will probably be called "main"
+* click on the branch name to open the branch options on top of VSCode, here you can now chose a branch that you want to switch to (local branches have a branch icon in front of their name, branches that are on GitHub (remote branches that are in the cloud) have a cloud icon in front of their name and are called **origin**/branch_name)
+  * you can see a branch name twice, this is because a branch that for example got created by another developer will be listed as origin/branch_name, when you check out the origin/branch_name it will now exist both locally as **branch_name** and also remotly (on GitHub) as **origin/branch_name**, hence it will be twice in the list
+  * a branch that only exists in the remote repository or a branch you created locally but did not yet push to remote repository will only have one entry in the list
+
+## creating a new branch
+
+* click on the **Source Control** icon on the left in the **Activity bar** (if you have already customized VSCode, your Activity bar might be in another location) or use the keyboard shortcut `Ctrl+Shift+G{:shell}` (macOS: ⇧⌘G, Linux: Ctrl+Shift+G)
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_activity_bar_source_control_icon.png)
+
+* on the bottom left you will have your current branch that you are currently on, if you did not yet create a new branch it will probably be called "main"
+* if you want to create a new branch click on the branch name to open the branch options on top of VSCode and then click on **+ Create new branch** and then enter a name for that new branch
 
 ## VSCode terminal
 
