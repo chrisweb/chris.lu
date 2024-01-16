@@ -45,7 +45,7 @@ you will see a modal box pop up in the right corner to ask you if you want to sy
 
 ## Checking out your GitHub project in VSCode
 
-There are several ways to clone a git (GitHub) repository in VSCode, I will describe 2 that are very similar and make use of the integrated VSCode source control tool and then one using the VSCode Terminal
+There are several ways to clone a git (GitHub) repository in VSCode, I will describe 2 that are very similar and make use of the integrated VSCode source control tool and then 1 using the VSCode Terminal:
 
 Option 1 (via the **welcome** screen):
 
@@ -79,7 +79,7 @@ Option 3 (via the VSCode terminal / or your preferred command line tool):
 * open a terminal view, if you don't know how check out the [VSCode terminal](#vscode-terminal) chapter and if you prefer to use another command line tool feel free to do that
 * go into the directory in which you want to store a local copy of your projects, for example by using this command: `cd MY_PATH_TO_MY_REPOSITORIES{:shell}`
 * then type the following command to clone the repository: `git clone THE_REPOSITORY_URL_YOU_COPIED_ON_GITHUB{:shell}`
-* now click on the **Source Control** icon on the left in the **Activity bar** (if you have already customized VSCode, your Activity bar might be in another location) or use the keyboard shortcut `Ctrl+Shift+G{:shell}` (macOS: ⇧⌘G, Linux: Ctrl+Shift+G)
+* now click on the **Source Control** icon on the left in the **Activity bar** (if you have already customized VSCode, your Activity bar might be in another location) or use the keyboard shortcut `Ctrl+Shift+G{:shell}` (macOS: `⇧⌘G{:shell}`, Linux: `Ctrl+Shift+G{:shell}`)
 * then click on **Open Folder** and select the folder into which you just cloned your repository
 
 > [!MORE]  
@@ -88,8 +88,59 @@ Option 3 (via the VSCode terminal / or your preferred command line tool):
 
 ## VSCode terminal
 
-VSCode has a terminal (command line tool) that by default is closed, to open the terminal click on **View** on top of VSCode and then **Terminal**
+VSCode has a terminal (command line tool) that by default is closed, to open the terminal click on **View** the top navigation bar and then **Terminal**
 
-Or use the keyboard shortcut `` Ctrl+` {:shell}`` 
+Or use the keyboard shortcut `` Ctrl+` {:shell}`` (macOS: `` ⌃` {:shell}``, Linux: `` Ctrl+` {:shell}``)
+
+The third option is to use the command palette by pressing using the keyboard shortcut `Ctrl+Shift+p{:shell}` (macOS: `⇧⌘P{:shell}`, Linux: `Ctrl+Shift+P{:shell}`) and then type `view: toggle terminal{:shell}`
+
+> [!MORE]  
+> [VSCode "terminal" documentation](https://code.visualstudio.com/docs/terminal/basics)  
+
+## VSCode command palette
+
+To open the VSCode command palette use the keyboard shortcut `Ctrl+Shift+p{:shell}` (macOS: `⇧⌘P{:shell}`, Linux: `Ctrl+Shift+P{:shell}`)  
+
+> [!MORE]  
+> [VSCode "User Interface > Command Palette" documentation](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette)  
+
+## VSCode settings
+
+### open the settings
+
+To access the VSCode settings there are can click on **File** in the top navigation bar, then click on **Preferences** and select **Settings**
+
+Or use the keyboard shortcut `Ctrl+,{:shell}` (macOS: `⌘,{:shell}`, Linux: `Ctrl+,{:shell}`)
+
+The third option is to use the command palette, use the keyboard shortcut `Ctrl+Shift+p{:shell}` (macOS: `⇧⌘P{:shell}`, Linux: `Ctrl+Shift+P{:shell}`) to open the command palette and then type `preferences: open settings`
+
+> [!MORE]  
+> [VSCode "settings" documentation](https://code.visualstudio.com/docs/getstarted/settings)  
+
+### edit settings (user / workspace)
+
+To edit settings first [open the settings UI or file version](#open-the-settings)
+
+You have two types of settings:
+
+* **user** settings will apply to all your projects, these settings are saved in computers user directory, for example on windows this is something like , these settings get synchronised between all VSCode tools where you are signed in
+* **workspace** settings will only apply to the project (workspace) that is currently open in VSCode, those settings get saved into a `settings.json` file that is located in a `.vscode` directory of your project (workspace), meaning that you can commit that directory with your source code to share the settings with others
+
+On top of the settings page you have two tabs which allow you to switch between user and workspace settings
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/settings_tabs_user_workspace.png)
+
+On the top right you have an icon to switch between the UI version of the settings and the settings file
+
+If you are in the UI version, you will see an icon to switch to the file version:
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/settings_switch_to_file.png)
+
+And if you are in the file version, you will see an icon to switch to the UI version:
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/settings_switch_to_ui.png)
+
+> [!MORE]  
+> [VSCode "settings sync" documentation](https://code.visualstudio.com/docs/editor/settings-sync)  
 
 </article>
