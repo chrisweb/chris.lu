@@ -42,7 +42,7 @@
     */
     --primary-light-color: rgb(255 0 170);
     --secondary-light-color: rgb(255, 90, 45);
-    --tertiary-light-color: rgb(0, 255, 255);
+    --tertiary-light-color: rgb(0, 255, 240);
     --codebloc-font-family: Consolas, 'Courier New', monospace;
     --header-navbar-height: 58px;
     --cursor-default: url(/assets/cursors/secondary_mouse_default.cur), default;
@@ -141,6 +141,7 @@ main {
     justify-content: left;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: calc(4 * var(--main-spacing));
     max-width: var(--main-maxWidth);
 }
 
