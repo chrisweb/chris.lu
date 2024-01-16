@@ -6,10 +6,52 @@
 
 ![banner image displaying a waterfall of code with the text node.js](../../../../public/assets/images/app/web_development/posts/node-js/banner.png)
 
-**Node.js** is an open-source, cross-platform JavaScript runtime environment that executes JavaScript code outside of a web browser, meaning that it allows developers to use JavaScript for server side scripting. The big advantage is that web applications can be written using a single programming language, rather than different languages for server-side and client-side scripts. If you use other tools like [capacitor](https://capacitorjs.com/) or [electron](https://www.electronjs.org/) you can even go a step further and create mobile and desktop apps in Javascript.
+**Node.js** is an open-source, cross-platform JavaScript runtime environment that executes JavaScript code outside of a web browser, meaning that it allows developers to use JavaScript for server side scripting. Under the hood Node.js uses the chrome (chromium) [V8 engine](https://nodejs.org/en/learn/getting-started/the-v8-javascript-engine), meaning it based on the same asynchronous, event-driven model that chrome uses, but there are differences, if you would like to learn more about those differences check out the Node.js article [Differences between Node.js and the Browser](https://nodejs.org/en/learn/getting-started/differences-between-nodejs-and-the-browser). The big advantage when using Node.js is that web applications can be written using a single programming language, rather than different languages for server-side and client-side scripts. If later you also use other tools like [capacitor](https://capacitorjs.com/) or [electron](https://www.electronjs.org/) then you will be able to go a step further and create mobile and desktop apps for your project and still use Javascript as the only programming language, which also means that a lot of the code you wrote can be shared between the backend, frontend and even your apps.
 
 ## Installation
 
+There are several options when it comes to installing Node.js, the first option is good for beginners that start experimenting with Node.js and want a quick and easy installation, the second option uses a Node version manager to install Node.js, this has the advantage that you can install several versions of Node.js in parallel on your computer and then depending on which project you work on you can switch between version (for example you might want to use current version of Node.js for a personal project and also want to have a second version that uses the latest LTS version for a work related project)
+
+* Head over to the [Node.js download page](https://nodejs.org/en/download) and download the latest LTS version for your operating system (OS) (), on Mac OS X you can also use brew to install Node.js using this command `brew install node{:shell}`
+* Alternativly use a Node version manager to install Node.js, for windows have a look at [nvm-windows](https://github.com/coreybutler/nvm-windows), for Mac OS X check out [nvm](https://github.com/nvm-sh/nvm), for Linux distributions check out [NodeSource](https://github.com/nodesource/distributions), for a more complete list of options check out the [npm.js "download and install Node.js" documentation](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) page
+
+> [!MORE]  
+> [npm.js "download and install Node.js" documentation](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)  
+
+### should I install the LTS or current verion
+
+It depends 😉
+
+If you go the [Node.js download page](https://nodejs.org/en/download), you will see that Node.js has two versions, one is called **LTS** and the other one is called **Current**
+
+* LTS stands for **Long Term Support** and this version is recommended for production deployments, a LTS version is considered **stable** meaning it will not recieve the latest features from the current version, but critical bugs will be fixed for a total of 30 months
+* the current version is more modern but some newer features are likely to change, so if you want to try out the latest features before a Node.js version moves to the LTS phase then the current version is the one you should download
+
+> [!MORE]  
+> [Node.js "LTS and current versions" documentation and roadmap](https://nodejs.org/en/about/previous-releases)  
+
+## checking the current Node.js version
+
+you can use the following command in the VSCode terminal (or your favorite command line tool), to check which version of Node.js is currently installed:
+
+```shell
+node -v
+```
+
+## Node.js alternatives
+
+If for some reason you are unhappy with Node.js or are just curious and want to know more about alternatives, then I recommend to check out the following two JavaScript runtimes:
+
+* [Deno](https://deno.com/)
+
+> Deno is a JavaScript runtime that prioritizes productivity, security, and performance. Key features include built-in TypeScript, JSX, formatter, linter, and testing tools. Deno also supports creating standalone executables.
+
+* [Bun](https://bun.sh/)
+
+> Bun is an all-in-one JavaScript toolkit and runtime designed for speed. It includes a bundler, test runner, and a Node.js-compatible package manager.
+
+> [!MORE]  
+> [Bun 1.0 introduction video on YouTube](https://www.youtube.com/watch?v=BsnCpESUEqM)
 
 ## Did you know?
 
