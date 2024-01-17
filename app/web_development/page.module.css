@@ -1,0 +1,57 @@
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--main-spacing);
+}
+
+/* max-width: 70rem / 1120px (mobile breakpoint) */
+@media all and (max-width: 70rem) {
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+.preview {
+    --innerCornerSize: 39px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% calc(100% - var(--innerCornerSize)),
+            calc(100% - var(--innerCornerSize)) 100%,
+            0 100%);
+
+    background-color: var(--main-background-color);
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    height: 320px;
+    width: 100%;
+    color: #fff;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, .6);
+    width: 100%;
+    padding: calc(var(--main-spacing) / 2);
+}
+
+.link {
+    color: rgb(255, 255, 255);
+}
+
+/* not on mobile */
+@media (hover: hover) {
+
+    .link:hover {
+        color: var(--tertiary-light-color);
+    }
+
+}
