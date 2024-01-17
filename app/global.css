@@ -607,6 +607,7 @@ h6 .headingAnchor {
 .linksList li {
     display: flex;
     align-items: center;
+    margin-bottom: var(--main-spacing);
 }
 
 .linksList .social {
