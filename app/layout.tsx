@@ -1,7 +1,7 @@
 import NeonRoadContainer from '../components/neonRoad/Container'
 import './global.css'
 import styles from './layout.module.css'
-import { Permanent_Marker, VT323, Architects_Daughter } from 'next/font/google'
+import { Permanent_Marker, VT323, Architects_Daughter, Source_Code_Pro } from 'next/font/google'
 import HeaderNavigation from '../components/header/Navigation'
 import NavigationLink from '@components/navigation/Link'
 
@@ -32,12 +32,19 @@ const architectsDaughter = Architects_Daughter({
     display: 'swap',
 })
 
+const sourceCodePro = Source_Code_Pro({
+    subsets: ['latin'],
+    variable: '--font-sourceCodePro',
+    weight: ['400'],
+    display: 'swap',
+})
+
 export default function RootLayout({ children }: {
     children: React.ReactNode
 }) {
 
     return (
-        <html lang="en" className={`${permanentMarkerFont.variable} ${vt323.variable} ${architectsDaughter.variable}`}>
+        <html lang="en" className={`${permanentMarkerFont.variable} ${vt323.variable} ${architectsDaughter.variable} ${sourceCodePro.variable}`}>
             <head />
             <body>
                 <header className={styles.layoutHeader}>
