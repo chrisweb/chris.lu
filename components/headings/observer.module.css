@@ -15,9 +15,18 @@
 }
 
 .notActive>a {
-    /* 5% darker than --primary-light-color */
-    color: rgb(230 0 155);
+    /* make the text color a bit darker */
+    color: var(--primary-light-color);
     font-weight: var(--main-fontWeight-links);
+}
+
+@supports (color: color-mix(in srgb, var(--primary-light-color), black 10%)) {
+
+    .notActive>a {
+        /* make the text color a bit darker */
+        color: color-mix(in srgb, var(--primary-light-color), black 10%);
+    }
+
 }
 
 /* not on mobile */
@@ -29,6 +38,15 @@
 
     .notActive>a {
         background-image: linear-gradient(var(--primary-light-color) 0%, var(--primary-light-color) 100%);
+    }
+
+    @supports (color: color-mix(in srgb, var(--primary-light-color), black 10%)) {
+        
+        .notActive>a {
+            --darker-primary: color-mix(in srgb, var(--primary-light-color), black 10%);
+            background-image: linear-gradient(var(--darker-primary) 0%, var(--darker-primary) 100%);
+        }
+
     }
 
 }

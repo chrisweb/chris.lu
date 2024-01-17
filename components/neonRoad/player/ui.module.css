@@ -131,9 +131,9 @@
     width: 100%;
     height: 100%;
     background: transparent;
-    border-top: 2px solid magenta;
-    border-left: 2px solid magenta;
-    border-right: 2px solid magenta;
+    border-top: 2px solid var(--primary-light-color);
+    border-left: 2px solid var(--primary-light-color);
+    border-right: 2px solid var(--primary-light-color);
     box-shadow: rgba(0, 0, 0, 0.6) 0px 0px 20px;
     content: '';
     left: 0;
@@ -158,7 +158,7 @@
 
 .face {
     position: absolute;
-    border: 2px solid magenta;
+    border: 2px solid var(--primary-light-color);
     font-size: 40px;
     font-weight: bold;
     color: white;
@@ -190,7 +190,7 @@
 }
 
 .front {
-    background: rgba(255, 0, 255, 0.6);
+    background: rgba(var(--primary-light-value), 0.6);
     transform: rotateY(0deg) translateZ(24px);
     mask-image: radial-gradient(circle 20px at 115px 110px,
             transparent 19px,
@@ -207,34 +207,34 @@
 }
 
 .back {
-    background: rgba(255, 0, 255, 0);
+    background: rgba(var(--primary-light-value), 0);
     transform: rotateX(180deg) translateZ(24px);
 }
 
 .right {
-    background: rgba(255, 0, 255, 0);
+    background: rgba(var(--primary-light-value), 0);
     transform: rotateY(90deg) translateZ(193px);
 }
 
 .left {
-    background: rgba(255, 0, 255, 0);
+    background: rgba(var(--primary-light-value), 0);
     transform: rotateY(-90deg) translateZ(193px);
 }
 
 .top {
-    background: rgba(255, 0, 255, 0);
+    background: rgba(var(--primary-light-value), 0);
     transform: rotateX(90deg) translateZ(119px);
 }
 
 .bottom {
-    background: rgba(255, 0, 255, 0.4);
+    background: rgba(var(--primary-light-value), 0.4);
     transform: rotateX(-90deg) translateZ(119px);
 }
 
 .volumeModal {
     position: fixed;
     box-shadow: 0 0 10px 5px var(--primary-light-color);
-    background: rgba(255, 0, 170, 0.3);
+    background: rgba(var(--primary-light-value), 0.3);
     width: 40px;
     height: 170px;
     top: calc(var(--main-spacing) + var(--header-navbar-height));
