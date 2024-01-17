@@ -1,9 +1,11 @@
 /* https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties */
 :root {
-    --main-background-color: #000108;
-    --main-text-color: white;
+    --main-background-value: 15, 0, 25;
+    --main-background-color: rgb(var(--main-background-value));
+    --main-text-value: 249, 247, 249;
+    --main-text-color: rgb(var(--main-text-value));
     /* https://bitsofco.de/the-new-system-font-stack/ */
-    --main-frontFamily-default: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+    --main-frontFamily-default: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     /* 40px */
     --main-fontSize-big1: 2.5rem;
     /* 32px */
@@ -40,10 +42,13 @@
     https://www.canva.com/colors/color-wheel/
     https://www.google.com/search?q=google+color+picker
     */
-    --primary-light-color: rgb(255 0 170);
-    --secondary-light-color: rgb(255, 90, 45);
-    --tertiary-light-color: rgb(0, 255, 240);
-    --codebloc-font-family: Consolas, 'Courier New', monospace;
+    --primary-light-value: 255, 0, 170;
+    --primary-light-color: rgb(var(--primary-light-value));
+    --secondary-light-value: 255, 145, 45;
+    --secondary-light-color: rgb(var(--secondary-light-value));
+    --tertiary-light-value: 0, 255, 240;
+    --tertiary-light-color: rgb(var(--tertiary-light-value));
+    --codebloc-font-family: var(--font-sourceCodePro), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     --header-navbar-height: 58px;
     --cursor-default: url(/assets/cursors/secondary_mouse_default.cur), default;
     --cursor-pointer: url(/assets/cursors/secondary_mouse_pointer.cur), pointer;
