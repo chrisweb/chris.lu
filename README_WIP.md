@@ -1,6 +1,6 @@
 # chris.lu
 
-this series of articles will showcase how to build a blog using [Next.js](https://nextjs.org/) version 13 and up as our rendering framework as well as the [React](https://reactjs.org/) version 18 and up as our frontend framework and focus on using new features like "next.js app directory", "React Server Components", "React Streaming Components", "React Suspense"
+
 
 TODO: read: <https://www.mayank.co/blog/react-server-components>
 
