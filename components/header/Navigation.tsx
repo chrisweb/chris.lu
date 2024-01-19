@@ -67,9 +67,9 @@ const HeaderNavigation: React.FC = () => {
         { href: '/', text: 'Home' },
         { href: '/web_development', text: 'Web development' },
         { href: '/lego', text: 'Lego' },
-        /*{ href: '/music', text: 'Music' },
+        /*{ href: '/music', text: 'Music' },*/
         { href: '/games', text: 'Games' },
-        { href: '/cooking', text: 'Cooking' },
+        /*{ href: '/cooking', text: 'Cooking' },
         { href: '/movies_and_tv_shows', text: 'Movies & TV shows' },
         { href: '/memes', text: 'Memes' },*/
         { href: '/about_me', text: 'About Me' },
