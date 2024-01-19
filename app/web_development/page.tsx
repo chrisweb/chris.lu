@@ -66,6 +66,10 @@ export default function WebDevelopmentPage() {
                         <Image src="/assets/images/app/web_development/posts/npm/banner.png" alt="" fill sizes="100vw" style={{ objectFit: 'cover' }} />
                         <div className={styles.title}>NPM</div>
                     </Link>
+                    <Link href="/web_development/road-to-react-next-js-server-side-features" className={styles.preview}>
+                        <Image src="/assets/images/app/web_development/posts/road-to-react-next-js-server-side-features/banner.png" alt="" fill sizes="100vw" style={{ objectFit: 'cover' }} />
+                        <div className={styles.title}>The road to server components and server actions</div>
+                    </Link>
                 </div>
             </section>
         </>
