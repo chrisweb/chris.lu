@@ -14,13 +14,15 @@ const ImageArticle: React.FC<ImageProps> = (props): JSX.Element => {
                     }}
                     sizes="100vw"
                     priority
-                    quality={100}
                     placeholder="blur"
+                    //quality={90} // default is 75
                     {...(props as ImageProps)}
                 />
             ) : (
                 <Image
-                    quality={90}
+                    fill
+                    sizes="100vw"
+                    style={{ objectFit: 'cover' }}
                     placeholder="blur"
                     {...(props as ImageProps)}
                 />
