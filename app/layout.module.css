@@ -22,6 +22,8 @@
     margin-left: auto;
     margin-right: auto;
     font-size: var(--main-fontSize-smaller);
+    padding-right: var(--main-spacing);
+    padding-left: var(--main-spacing);
 }
 
 .layoutFooterSeperator {
