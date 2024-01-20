@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import styles from './page.module.css'
 import Link from 'next/link'
-import ImageArticle from '@components/image/Article'
+import Image from 'next/image'
 
 export const metadata: Metadata = {
     title: 'foo',
@@ -22,7 +22,7 @@ export default function WebDevelopmentPage() {
                     </li>
                     <li>
                         <a href="https://www.buymeacoffee.com/chriswwweb">
-                            <ImageArticle src="/assets/images/buy_me_a_coffee_button.png" alt="buy me a coffee button" width="240" height="67" />
+                            <Image src="/assets/images/buy_me_a_coffee_button.png" alt="button buy me a coffee" width="240" height="67" />
                         </a>
                     </li>
                 </ul>
@@ -30,44 +30,44 @@ export default function WebDevelopmentPage() {
             <section id="web_development" className="middle">
                 <h1 className="h1">Web Development</h1>
                 <h2 className="h2">Tutorials</h2>
-                <div className={styles.grid}>
+                <div className="grid">
                     <Link href="/web_development/tutorials/next-js-static-mdx-blog" className={styles.preview}>
-                        <ImageArticle src="/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/banner.png" alt="" />
+                        <Image src="/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/banner.png" alt="" fill sizes="100vw" style={{ objectFit: 'cover' }} />
                         <div className={styles.title}>Next.js static MDX Blog</div>
                     </Link>
                 </div>
                 <h2 className="h2">Posts</h2>
-                <div className={styles.grid}>
+                <div className="grid">
                     <Link href="/web_development/posts/vscode" className={styles.preview}>
-                        <ImageArticle src="/assets/images/app/web_development/posts/vscode/banner.png" alt="" />
+                        <Image src="/assets/images/app/web_development/posts/vscode/banner.png" alt="" fill sizes="100vw" style={{ objectFit: 'cover' }} />
                         <div className={styles.title}>VSCode</div>
                     </Link>
                     <Link href="/web_development/posts/node-js" className={styles.preview}>
-                        <ImageArticle src="/assets/images/app/web_development/posts/node-js/banner.png" alt="" />
+                        <Image src="/assets/images/app/web_development/posts/node-js/banner.png" alt="" fill sizes="100vw" style={{ objectFit: 'cover' }} />
                         <div className={styles.title}>Node.js</div>
                     </Link>
                     <Link href="/web_development/posts/git" className={styles.preview}>
-                        <ImageArticle src="/assets/images/app/web_development/posts/git/banner.png" alt="" />
+                        <Image src="/assets/images/app/web_development/posts/git/banner.png" alt="" fill sizes="100vw" style={{ objectFit: 'cover' }} />
                         <div className={styles.title}>git</div>
                     </Link>
                     <Link href="/web_development/posts/github" className={styles.preview}>
-                        <ImageArticle src="/assets/images/app/web_development/posts/github/banner.png" alt="" />
+                        <Image src="/assets/images/app/web_development/posts/github/banner.png" alt="" fill sizes="100vw" style={{ objectFit: 'cover' }} />
                         <div className={styles.title}>GitHub</div>
                     </Link>
                     <Link href="/web_development/posts/vercel" className={styles.preview}>
-                        <ImageArticle src="/assets/images/app/web_development/posts/vercel/banner.png" alt="" />
+                        <Image src="/assets/images/app/web_development/posts/vercel/banner.png" alt="" fill sizes="100vw" style={{ objectFit: 'cover' }} />
                         <div className={styles.title}>Vercel</div>
                     </Link>
                     <Link href="/web_development/posts/sentry-io" className={styles.preview}>
-                        <ImageArticle src="/assets/images/app/web_development/posts/sentry-io/banner.png" alt="" />
+                        <Image src="/assets/images/app/web_development/posts/sentry-io/banner.png" alt="" fill sizes="100vw" style={{ objectFit: 'cover' }} />
                         <div className={styles.title}>Sentry.io</div>
                     </Link>
                     <Link href="/web_development/posts/npm" className={styles.preview}>
-                        <ImageArticle src="/assets/images/app/web_development/posts/npm/banner.png" alt="" />
+                        <Image src="/assets/images/app/web_development/posts/npm/banner.png" alt="" fill sizes="100vw" style={{ objectFit: 'cover' }} />
                         <div className={styles.title}>NPM</div>
                     </Link>
                     <Link href="/web_development/posts/road-to-react-next-js-server-side-features" className={styles.preview}>
-                        <ImageArticle src="/assets/images/app/web_development/posts/road-to-react-next-js-server-side-features/banner.png" alt="" />
+                        <Image src="/assets/images/app/web_development/posts/road-to-react-next-js-server-side-features/banner.png" alt="" fill sizes="100vw" style={{ objectFit: 'cover' }} />
                         <div className={styles.title}>The road to server components and server actions</div>
                     </Link>
                 </div>

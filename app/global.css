@@ -704,3 +704,23 @@ h6 .headingAnchor {
 .markdown-alert-body {
     padding: 0 var(--main-spacing);
 }
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--main-spacing);
+}
+
+.grid p {
+    margin: 0;
+    padding: 0;
+}
+
+/* max-width: 70rem / 1120px (mobile breakpoint) */
+@media all and (max-width: 70rem) {
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+}
