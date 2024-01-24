@@ -726,3 +726,9 @@ h6 .headingAnchor {
     }
 
 }
+
+.buyMeACoffeeButtonContainer {
+    width: 100%;
+    text-align:center;
+    margin-top: calc(var(--main-spacing) * 2);
+}

@@ -4,6 +4,7 @@ import HeadingsObserver from '@components/headings/Observer'
 import NavigationLink from '@components/navigation/Link'
 import ImageArticle from '@components/image/Article'
 import { ImageProps } from 'next/image'
+import Image from 'next/image'
 
 // This file allows you to provide custom React components
 // to be used in MDX files. You can import and use any
@@ -59,6 +60,11 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                         <HeadingsObserver {...props}>
                             {children}
                         </HeadingsObserver>
+                        <div className="buyMeACoffeeButtonContainer">
+                            <a href="https://www.buymeacoffee.com/chriswwweb">
+                                <Image src="/assets/images/buy_me_a_coffee_button.png" alt="button buy me a coffee" width="240" height="67" />
+                            </a>
+                        </div>
                     </>
                 ) : (
                     <nav {...props}>
