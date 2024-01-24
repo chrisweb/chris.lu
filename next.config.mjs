@@ -93,9 +93,10 @@ const nextConfig = (/*phase*/) => {
 
     // https://github.com/chrisweb/remark-table-of-contents#options
     const remarkTableOfContentsOptions = {
-        containerAttributes: {
+        hasContainer: false,
+        /*containerAttributes: {
             id: 'articleToc',
-        },
+        },*/
         navAttributes: {
             'aria-label': 'table of contents'
         },

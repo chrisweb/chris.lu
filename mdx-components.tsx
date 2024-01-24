@@ -52,16 +52,18 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
             </NavigationLink>
         ),
         img: (props) => (<ImageArticle {...props as ImageProps} />),
-        aside: ({ children, ...props }) => (
+        nav: ({ children, ...props }) => (
             <>
-                {props.id === 'articleToc' ? (
-                    <HeadingsObserver {...props}>
-                        {children}
-                    </HeadingsObserver>
+                {props['aria-label'] === 'table of contents' ? (
+                    <>
+                        <HeadingsObserver {...props}>
+                            {children}
+                        </HeadingsObserver>
+                    </>
                 ) : (
-                    <aside {...props}>
+                    <nav {...props}>
                         {children}
-                    </aside>
+                    </nav>
                 )}
             </>
         ),
