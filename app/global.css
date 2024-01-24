@@ -44,7 +44,7 @@
     */
     --primary-light-value: 255, 0, 170;
     --primary-light-color: rgb(var(--primary-light-value));
-    --secondary-light-value: 255, 145, 45;
+    --secondary-light-value: 255, 185, 0;
     --secondary-light-color: rgb(var(--secondary-light-value));
     --tertiary-light-value: 0, 255, 240;
     --tertiary-light-color: rgb(var(--tertiary-light-value));
@@ -662,12 +662,9 @@ h6 .headingAnchor {
     background-color: var(--primary-light-color);
 }
 
+.markdown-alert-tip .markdown-alert-header,
 .markdown-alert-note .markdown-alert-header {
-    color: black;
-}
-
-.markdown-alert-tip .markdown-alert-header {
-    color: white;
+    color: var(--main-background-color);
 }
 
 .makrdown-alert-fake-border {
