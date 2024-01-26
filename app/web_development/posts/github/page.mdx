@@ -43,14 +43,14 @@ Enter a **Repository name**, for example **"nextjs-blog"**, then you can chose t
 > [!TIP]  
 > I usually chose **public** because at same point you will probably want to share your work with others to ask for help or show them how cool your new project is, also if you are searching for a job having several projects you worked on your GitHub account shows your potential future employer what a motivated dev you are
 
-Next you will have a checkbox for **Add a README file**, I recommend you check this, if you do check it GitHub will automatically add a new ReadableStreamDefaultController.md file to your project
+Next you will have a checkbox for **Add a README file**, I recommend you DO NOT check this if you intend to use [Create Next App](https://www.npmjs.com/package/create-next-app) to set up a Next.js project as it will create a README.md itself and if it finds a README.md it will ask you to delete it first, if however you don't use Next.js then feel free to check this box to have GitHub automatically create a new README.md file for your project
 
 > [!TIP]  
 > I always use the projects `README.md` file to document all the things I do in that project, for example add a chapter to describe how to setup a local development version of your project, or for example document the commands that can be used to do things like starting the local devopment server, you can also add notes about problems you faced and how you solved them
 >
 > In the future you will be happy to have all that information regarding your project in one place and if you share the project with someone else in the future it will help them get started without having to ask you lots of questions or dig through code and configuration files to understand how your project is set up
 
-Next you have a select box, click on it and then search for **Node** (which is the Node.js template for gitignore files) and then click on **Node** to select it
+Next you have a select box called **Add .gitignore**, click on it and then search for **Node** (which is the Node.js template for gitignore files) and then click on **Node** to select it
 
 > [!NOTE]
 > If you chose **node** as template for the `.gitignore` file, it will create a quite large `.gitignore` file that contains patterns for lots of common frameworks used when working with Node.js, one of them being Next.js
@@ -64,12 +64,14 @@ Next you have a select box, click on it and then search for **Node** (which is t
 > [!TIP]  
 > `.gitignore` files specify which files and directories should be excluded from tracking in a Git repository, meaning that they will NOT get committed to your repository. Oh and in case you wonder, yes the .gitignore file itself should get commited (unlike the `.next` directory which should not)
 
-Next you have another select box to chose a license, you can skip this if you want, but if you want a license and are not sure which one, then it is safe to just chose the **MIT** license, it is a very popular license used by a lot of javascript projects, for example here is the [MIT license page of Next.js](https://github.com/vercel/next.js/blob/canary/license.md) and here is the [MIT license page of React](https://github.com/facebook/react/blob/main/LICENSE)
+Next you have another select box to **Chose a license**, you can skip this if you want, but if you want a license and are not sure which one, then it is safe to just chose the **MIT** license, it is a very popular license used by a lot of javascript projects, for example here is the [MIT license page of Next.js](https://github.com/vercel/next.js/blob/canary/license.md) and here is the [MIT license page of React](https://github.com/facebook/react/blob/main/LICENSE)
 
 > [!TIP]  
 > I usually pick the **MIT** license if it is a project that I want to share but also keep the copyright or pick the **creative commons zero** ([CC0](https://creativecommons.org/public-domain/cc0/)) license which basically is a license that defines that you are waiving your copyright rights and hence the code will be in the public domain
 
 You are finally done, now click on **Create repository** to create your new repository
+
+GitHub will now have created a repository for you, with a .gitignore, a LICENSE and if you chose that option a README.md file too
 
 > [!MORE]  
 > [github "Creating an account on GitHub" documentation](https://docs.github.com/en/get-started/quickstart/creating-an-account-on-github)  
