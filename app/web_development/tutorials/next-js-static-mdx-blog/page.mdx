@@ -46,16 +46,42 @@ Now we need to sign in to our GitHub account in VSCode and use the VSCode source
 
 To be able to create a Javascript backend and run our Javascript code locally we need to install the Node.js runtime:
 
-* [install Node.js](/web_development/posts/node-js)
+* [install Node.js (and npm)](/web_development/posts/node-js)
+
+> [!NOTE]  
+> the **next.js 14** "app directory features" require nodejs v18.17 or later, so if you skipped the Node.js installation document because you already have Node.js installed, then just make sure you have a version installed that is high enough, to do that you can for example use the following command: `node -v{:shell}`
 
 ## The road to server components and server actions
 
-This is a little introduction if you are not yet familiar with two new features called **server components** and **server actions** in React and Next.js, it is NOT a deep dive but a little bit of history about what evolutions took place in the React or Next.js ecosystems in the last +-2 years, so if you did not build a project with Next.js 13/14 yet I recommend you check it out, but if you are already an expert feel free to skip this chapter 😉
+React and Next.js have evolved a lot lately, the most notable additions are **server components** and **server actions**, on this page I try to list all the updates that happend during the last +-2 years in the React and Next.js ecosystem, so if you did not build a project with Next.js 13/14 yet I recommend you check it out, but if you are already an expert feel free to skip this chapter 😉
 
 * [the road to React and Next.js server components and server actions](/web_development/posts/road-to-react-next-js-server-side-features)
 
 ## Getting started
 
+If you closed VSCode since last time, launch VSCode and open the folder we created in **Prerequisites** chapter (if you need help to open a folder in VSCode, check out my chapter [open a folder in VSCODE](/web_development/posts/vscode#open-a-folder-in-vscode) from the VSCode post)
 
+Make sure the VSCode terminal is open (if you need help to open the terminal in VSCode, check out my chapter [open a VSCode terminal](/web_development/posts/vscode#open-a-vscode-terminal) from the VSCode post)
+
+To create a new Next.js project we are going to use [Create Next App](https://www.npmjs.com/package/create-next-app) (which is CLI tool created by the Next.js to get started quickly), in your terminal type the following command:
+
+> [!NOTE]  
+> we will create the new project in the root of our directory (not a sub-directory), so make sure there is no README.md file in the directory yet, as the create-next-app tool we will use will create one and if it finds a README.md it will abort, if there is a README.md file, first delete it and then commit the changes (if you need help to commit changes using VSCode, check out my chapter [commit your changes to GitHub using the VSCode version control tool](#commit-your-changes-to-github-using-the-vscode-version-control-tool) from the VSCode post)
+
+```shell title="terminal"
+npx create-next-app@latest ./ --use-npm
+```
+
+* **Create Next App** will tell you it needs to be installed first, accept by typing `y{:shell}` and then press `ENTER{:shell}`
+* next you will get asked some more questions so that Next.js knows what it needs to install and set up for you:
+  * **Would you like to use TypeScript?**, of course we do (**Yes** is preselected, if for some reason you prefer to use javascript select **No** using the left / right arrow keys) and then just press `ENTER{:shell}` (I recommend to use Typescript but I will not argue in favor or against it here, this is not the right place, if you never used Typescript before, then maybe just give it a try and see for yourself how different it is from using Javascript and after having built this blog prototype you will be able to judge for yourself which one you like more)
+  * **Would you like to use ESLint?**, again **Yes** is preselected, so just press `ENTER{:shell}` ([ESLint](https://eslint.org/) is very useful tool that helps find and correct errors in your code)
+  * **Would you like to use Tailwind CSS?**, I will leave this on **No** (I will use another solution in this project, more on that later, so if you want to explore another solution with me through this project then select "No" too, if you know Tailwind CSS and want to use it instead feel free to press the `→` right arrow key to select "Yes")
+  * **Would you like to use `src/` directory?** I will leave this on **No** too (if prefer to place all your code in an `src/` directory then press the `→` right arrow key to select "Yes", some people prefer it for example to be able to restrict searches in files to files that are in the `src/` directory and hence avoid getting result from the node_modules folder, my personal preference is to not use it as it is not required, I like to have all my directories in the root and if needed I can exclude the node_modules directory which is the same amount of work as including src instead)
+  * **Would you like to use App Router?** definatly **Yes** press `ENTER{:shell}` (since Next.js 13 you have two directories to chose from, you can add your pages into the **pages** directory which is the older version or you use the more modern version, which is the **app** directory, I recommend enabling the app directory, you can still later create the pages directory manually if you want to use it, both can be used alongside each other)
+  * **Would you like to customize the default import alias (@/*)?** press the `→` right arrow key to select **Yes** and then press `ENTER{:shell}` (this will tell Next.js to add a configuration to the tsconfig.json (the Typescript configuration file) that will allow us to use an alias for the path of our custom components, I personally like that feature and will show you later how to use it, if however you don't want it feel free to leave it on "No")
+  * **What import alias would you like configured?** keep the default `@components/*` and press `ENTER{:shell}`
+
+That's it the **Create Next App** will now install Next.js and React for us, it will then add some development dependencies based on what we chose, like Typescript and ESLint and then it will add some default configuration files for each of these tools
 
 </article>
