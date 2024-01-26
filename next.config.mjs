@@ -232,17 +232,22 @@ const nextConfig = (/*phase*/) => {
 
     // CSP headers here is set based on Next.js recommendations:
     // https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
+    const cspReportOnly = true;
+
     const cspHeader = () => {
+
+        const upgradeInsecure = cspReportOnly ? '' : 'upgrade-insecure-requests;'
+
         const defaultsCSPHeaders = `
-        style-src 'self';
-        font-src 'self';
-        object-src 'none';
-        base-uri 'self';
-        form-action 'self';
-        frame-ancestors 'none';
-        block-all-mixed-content;
-        upgrade-insecure-requests;
-        `
+            default-src 'none';
+            font-src 'self';
+            object-src 'none';
+            base-uri 'none';
+            form-action 'none';
+            frame-ancestors 'none';
+            block-all-mixed-content;
+            ${upgradeInsecure}
+            `
 
         // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
         // and whitelist vercel's domains based on:
@@ -251,41 +256,40 @@ const nextConfig = (/*phase*/) => {
         // based on: https://vercel.com/docs/speed-insights#content-security-policy
         if (process.env?.VERCEL_ENV === "preview") {
             return `
-        ${defaultsCSPHeaders}
-        default-src 'none';
-        script-src 'self' https://vercel.live/ https://vercel.com 'unsafe-inline';
-        connect-src 'self' https://vercel.live/ https://vercel.com https://vitals.vercel-insights.com https://sockjs-mt1.pusher.com/ wss://ws-mt1.pusher.com/;
-        img-src 'self' https://vercel.live/ https://vercel.com https://sockjs-mt1.pusher.com/ data: blob:;
-        frame-src 'self' https://vercel.live/ https://vercel.com;
-        `
+                ${defaultsCSPHeaders}
+                style-src 'self';
+                script-src 'self' https://vercel.live/ https://vercel.com;
+                connect-src 'self' https://vercel.live/ https://vercel.com https://vitals.vercel-insights.com https://sockjs-mt1.pusher.com/ wss://ws-mt1.pusher.com/;
+                img-src 'self' https://vercel.live/ https://vercel.com https://sockjs-mt1.pusher.com/;
+                frame-src 'self' https://vercel.live/ https://vercel.com;
+            `
         }
 
         // for production environment white-list vitals.vercel-insights
         // based on: https://vercel.com/docs/speed-insights#content-security-policy
         if (process.env.NODE_ENV === "production") {
             return `
-        ${defaultsCSPHeaders}
-        default-src 'none';
-        script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
-        img-src 'self' blob: data:;
-        connect-src 'self' https://vitals.vercel-insights.com;
-        `
+                ${defaultsCSPHeaders}
+                style-src 'self';
+                script-src 'self';
+                connect-src 'self' https://vitals.vercel-insights.com;
+                img-src 'self';
+                frame-src 'none';
+            `
         }
 
         // for dev environment enable unsafe-eval for hot-reload
-        /*return `
-      ${defaultsCSPHeaders}
-      default-src 'self';
-      script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-eval';
-      img-src 'self' blob: data:;
-    `*/
         return `
-      ${defaultsCSPHeaders}
-      default-src 'self';
-      script-src 'self';
-      img-src 'self' blob: data:;
-    `
+            ${defaultsCSPHeaders}
+            style-src 'self' 'unsafe-inline';
+            script-src 'self' 'unsafe-eval' 'unsafe-inline';
+            connect-src 'self';
+            img-src 'self';
+            frame-src 'none';
+        `
     }
+
+    
 
     /** @type {import('next').NextConfig} */
     const nextConfig = {
@@ -316,8 +320,7 @@ const nextConfig = (/*phase*/) => {
                     source: '/(.*)',
                     headers: [
                         {
-                            //key: 'Content-Security-Policy',
-                            key: 'Content-Security-Policy-Report-Only',
+                            key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
                             value: cspHeader().replace(/\n/g, ''),
                         },
                     ],
