@@ -234,15 +234,15 @@ const nextConfig = (/*phase*/) => {
     // https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
     const cspHeader = () => {
         const defaultsCSPHeaders = `
-      style-src 'self';
-      font-src 'self';
-      object-src 'none';
-      base-uri 'self';
-      form-action 'self';
-      frame-ancestors 'none';
-      block-all-mixed-content;
-      upgrade-insecure-requests;
-    `
+        style-src 'self';
+        font-src 'self';
+        object-src 'none';
+        base-uri 'self';
+        form-action 'self';
+        frame-ancestors 'none';
+        block-all-mixed-content;
+        upgrade-insecure-requests;
+        `
 
         // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
         // and whitelist vercel's domains based on:
@@ -279,7 +279,7 @@ const nextConfig = (/*phase*/) => {
       script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-eval';
       img-src 'self' blob: data:;
     `*/
-    return `
+        return `
       ${defaultsCSPHeaders}
       default-src 'self';
       script-src 'self';
@@ -294,6 +294,8 @@ const nextConfig = (/*phase*/) => {
             // as of now (07.10.2023) there is no support for rehype plugins
             // this is why it is currently disabled
             mdxRs: false,
+            // experimental partial prerendering
+            //ppr: true,
         },
         // file formats for next/image
         images: {
