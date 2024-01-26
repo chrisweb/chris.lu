@@ -356,8 +356,12 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
             <div className={`${styles.walkman} ${isEjectedState ? styles.ejected : styles.inserted}`}>
                 <div className={`${styles.cassette} ${isEjectedState ? styles.slideIn : styles.slideOut}`}>
                     <div className={`${styles.face} ${styles.front}`}>
-                        <a href={creditsState !== null ? creditsState.license : ''} target="_blank" rel="noreferrer" tabIndex={-1} className={styles.songTitle}>{creditsState !== null ? creditsState.name : ''} <FontAwesomeIcon icon={faCreativeCommons} color='white' /></a>
-                        <a href={creditsState !== null ? creditsState.artistWebsite : ''} target="_blank" rel="noreferrer" tabIndex={-1} className={styles.artistName}>{creditsState !== null ? creditsState.artistName : ''} <FontAwesomeIcon icon={faArrowUpRightFromSquare} color='white' /></a>
+                        {/* I set the href to '/' by default, because if I set it to empty '' I get this error:
+                        Warning: An empty string ("") was passed to the href attribute.
+                        To fix this, either do not render the element at all or pass null to
+                        href instead of an empty string. */}
+                        <a href={creditsState !== null ? creditsState.license : null} target="_blank" rel="noreferrer" tabIndex={-1} className={styles.songTitle}>{creditsState !== null ? creditsState.name : ''} <FontAwesomeIcon icon={faCreativeCommons} color='white' /></a>
+                        <a href={creditsState !== null ? creditsState.artistWebsite : null} target="_blank" rel="noreferrer" tabIndex={-1} className={styles.artistName}>{creditsState !== null ? creditsState.artistName : ''} <FontAwesomeIcon icon={faArrowUpRightFromSquare} color='white' /></a>
                         <div className={styles.spoolLeft}></div>
                         <div className={styles.spoolRight}></div>
                         <div className={styles.shield}></div>
