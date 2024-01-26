@@ -34,18 +34,8 @@ converting images to AVIF and WEBP and thumbnails
 
 ## blog
 
-### create a new repository on github
-
-
-now you can check out your project locally, typing the following command into favorite command line tool / terminal:
-
-```shell
-git clone git@github.com:MY_GITHUB_USERNAME/MY_REPOSITORY_NAME.git
-```
 
 ### initialize project
-
-Note: install nodejs: the **next.js 13** "app directory features" require nodejs v16.8.0 or later
 
 
 run the following command to have npm guide you step by step through the creation of your `package.json` file:
@@ -57,9 +47,7 @@ npm init
 anser the question that get displayed in your command line, when this is done npm will create a `package.json` in the root of your project for you
 
 
-#### use create next app to create a basic project
 
-TODO: ...
 
 #### next.js npm scripts
 
