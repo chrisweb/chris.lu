@@ -84,4 +84,7 @@ npx create-next-app@latest ./ --use-npm
 
 That's it the **Create Next App** will now install Next.js and React for us, it will then add some development dependencies based on what we chose, like Typescript and ESLint and then it will add some default configuration files for each of these tools
 
+> [!NOTE]  
+> There might be a bug in the latest (28.01.2024) version of create next app, I opened a [discussion (#61261) in the next.js repository](https://github.com/vercel/next.js/discussions/61261) to discuss it, if you encounter an error during the create next app setup, then delete the repository and repeat the steps, create a new repository and clone it in VSCode, then use this command instead `npx create-next-app@latest my_project`, this will do a setup in a subdirectory **my_project**, when done copy all the content of that directory into the root of your project
+
 </article>
