@@ -87,4 +87,6 @@ That's it the **Create Next App** will now install Next.js and React for us, it 
 > [!NOTE]  
 > There might be a bug in the latest (28.01.2024) version of create next app, I opened a [discussion (#61261) in the next.js repository](https://github.com/vercel/next.js/discussions/61261) to discuss it, if you encounter an error during the create next app setup, then delete the repository and repeat the steps, create a new repository and clone it in VSCode, then use this command instead `npx create-next-app@latest my_project`, this will do a setup in a subdirectory **my_project**, when done copy all the content of that directory into the root of your project
 
+TODO: so the above seems to really a bug, spent a while tracking it down, seems to have been introduced in v13, now the question is how to fix it, we could exclude the git repo from the code causing the error, but not sure the next.js team like that solution, so I will ask tomorrow before going further
+
 </article>
