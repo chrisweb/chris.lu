@@ -53,7 +53,7 @@
         "remark-table-of-contents": "2.1.0",
         "shikiji": "0.10.2",
         "simplex-noise": "4.0.1",
-        "synthwave-vscode": "github:robb0wen/synthwave-vscode",
+        "synthwave-vscode": "github:robb0wen/synthwave-vscode#a7d6c78",
         "three": "0.161.0",
         "waveform-visualizer": "4.2.0",
         "web-audio-api-player": "5.3.0"
