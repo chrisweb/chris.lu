@@ -4,11 +4,38 @@
 
 <article>
 
-# npm
+# npm & package.json
 
 ![banner image displaying conveyor belts moving lots of packages](../../../../public/assets/images/app/web_development/posts/npm/banner.png)
 
+## npm
+
 **npm** (Node Package Manager) is a package manager, that comes with every installation of Node.js but can be installed / updated seperatly if needed. npm is Command Line Interface (CLI) tool that is used to install the dependencies listed in a package.json file. By default it will install packages that are hosted on npmjs.com but it can also be used to install the content of a GitHub repository (or any other git online platform like for example [GitLab](https://about.gitlab.com/)). There are several popular alternatives to npm, like [yarn](https://yarnpkg.com/) or [PNPm](https://pnpm.io/)
+
+> [!MORE]  
+> [npm documentation](https://docs.npmjs.com/)  
+
+### Installation
+
+You usually don't need to install NPM manually as it is bundled with Node.js, so if you installed Node.js you already have npm installed too
+
+### checking the current NPM version
+
+you can use the following command in the VSCode terminal (or your favorite command line tool), to check which version of NPM is currently installed:
+
+```shell
+npm -v
+```
+
+### Updating
+
+To update npm manually to the latest version, open the VSCode terminal (or use your favorite command line tool) and enter the following command:
+
+```shell
+npm install -g npm@latest
+```
+
+## package.json
 
 **package.json** is a file that you will find in most Javascript (Typescript) projects. Package.json is a JSON file that contains metadata about the project, like the project name, a description and the current version, a list of dependencies as well as devDependencies, scripts (custom scripts that can be run from the command line using `npm run SCRIPT_NAME`), ...
 
@@ -18,24 +45,97 @@
 > [npmjs.com "package.json" documentation](https://docs.npmjs.com/cli/configuring-npm/package-json)  
 > [nodejs.org "Modules: Packages" documentation](https://nodejs.org/api/packages.html)  
 
-## Installation
+### dependencies
 
-You usually don't need to install NPM manually as it is bundled with Node.js, so if you installed Node.js you already have npm installed too
+The part of your package.json that will change the most is probably the dependencies section
 
-## checking the current NPM version
+The dependencies list is an object that maps a dependency name to a version (for all dependencies that come from registry like npmjs.com)
 
-you can use the following command in the VSCode terminal (or your favorite command line tool), to check which version of NPM is currently installed:
+### add a dependency
 
-```shell
-npm -v
-```
+You can of course add a dependency manually by editing the package.json and then run the command `npm i` to install it
 
-## Updating
-
-To update npm manually to the latest version, open the VSCode terminal (or use your favorite command line tool) and enter the following command:
+But usually you will use a command, for example to install react you would use:
 
 ```shell
-npm install -g npm@latest
+npm i react react-dom
 ```
+
+this will install react and react-dom and add update your package.json as well as package-locl.json files
+
+```json title="package.json"
+    "dependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+    },
+```
+
+#### what are dependecies semver versions?
+
+packages use semantic versioning (semver) for their version numbers, with semver a version has 3 parts **MAJOR.MINOR.PATCH**:
+
+* if the patch number changes it means there has been a fix that does NOT introduce any breaking changes and also NO new features but one or more existing features recieved a fix, meaning if you install that version nothing is supposed to break in your code
+* the second number indicates a minor change has happend, meaning a new feature got added to the package but this new feature does not introduce breaking changes
+* the major version indicates that existing features got modified in a way that potentially will introduce breaking changes, so when updating a package and there is a change in the major version it is highly recommended that you check out the changelog of the package and identify breaking change notes and also verify that your code that uses the package is not impacted by those breaking changes, if it is impacted then you need to update your code accordingly
+
+> [!NOTE]  
+> when you install a dependency, the verion will be prefixed with a **^** (carret), when using **caret ranges** npm will install the version you specified as long as there is no newer version available, if however a newer PATCH or even MINOR version is available then npm will install the newer version instead, if we take the example above where we have "^18.2.0", this means npm will install react 18.2.0 as long as there is no update, however if react releases a fix for an existing feature and increment their PATCH number then the newest version would be 18.2.1 and if you now use the npm install command then npm will install 18.2.1 (and not 18.2.0 anymore), this is also true if the react team adds a new feature and bumps their MINOR number to 18.3.0 then npm will install that version, however if the react team adds breaking changes and the new version is 19.0.0 then npm will not update your package because this version might introduce breaking changes, instead npm will use the latest 18.x.x version that is available
+
+> [!MORE]  
+> [Semantic Versioning Specification](https://semver.org/)  
+> [npmjs-com "About semantic versioning" documentation](https://docs.npmjs.com/about-semantic-versioning)  
+
+#### dependecy version pinning (optional)
+
+if (like me) you prefer to **pinning** versions of package, then add the option **--save-exact** to your command:
+
+```shell
+npm i react react-dom --save-exact
+```
+
+this will add the dependencies to your package.json as before, but the difference is that the verion will NOT be prefixed with a **^** (carret):
+
+```json title="package.json"
+    "dependencies": {
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+    },
+```
+
+> [!NOTE]  
+> I like to pin versions so that I know exactly which version of each dependency is installed, from time to time I manually update all my dependencies, depending on how big the difference between two versions is I also visit the dependencies GitHub repository and check the change.log so that I'm aware of what has changed between the version I had installed and the new version I'm about to install, this helps find out about new features I might want to use and if I see that there is a section mentioning potential breacking changes then I know what I need to verify and eventually update in my code  
+
+#### VSCode extension for manual version updates
+
+To make manual updates of my dependencies easier, I use a VSCode extension called [versionlens](https://marketplace.visualstudio.com/items?itemName=pflannery.vscode-versionlens), I like this extension because when I open my package.json it will fetch all the versions of the packages I have installed and tell if a new version is available, if there is a new version and I want to use it all I need to do is click on **↑ latest x.x.x** (where x.x.x stands for the new version number) and version lens will insert the new version for me, when I'm done with updating the versions I save the package.json and then install the new versions with the command `npm i`
+
+> [!MORE]  
+> [VSCode "versionlens" extension](https://marketplace.visualstudio.com/items?itemName=pflannery.vscode-versionlens)  
+
+### Git(Hub) URLs as Dependencies
+
+If a package / repository has not been published on npm, for example one of your own projects on GitHub and you want to add it as a dependency to your project then you can do this too
+
+```json title="package.json"
+    "dependencies": {
+        "github_repository_name": "github:USER_NAME/REPOSITORY_NAME",
+    },
+```
+
+this will add the package located at https://github.com/USER_NAME/REPOSITORY_NAME as a dependency
+
+If you want to pin a more specific version of the repository you can do so by adding a hash symbol at the end followed by the commit id or follwed by the tag (if the author of the repository has published a tag)
+
+Example of adding a repository with the latest commit id being **d29f7d9** then you would do like this:
+
+```json title="package.json"
+    "dependencies": {
+        "github_repository_name": "github:USER_NAME/REPOSITORY_NAME#d29f7d9",
+    },
+```
+
+> [!MORE]  
+> [npmjs.com "package.json git(hub) urls" documentation](https://docs.npmjs.com/cli/v10/configuring-npm/package-json#github-urls)  
+
 
 </article>
