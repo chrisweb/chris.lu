@@ -117,25 +117,40 @@ To make manual updates of my dependencies easier, I use a VSCode extension calle
 If a package / repository has not been published on npm, for example one of your own projects on GitHub and you want to add it as a dependency to your project then you can do this too
 
 ```json title="package.json"
-    "dependencies": {
-        "github_repository_name": "github:USER_NAME/REPOSITORY_NAME",
-    },
+"dependencies": {
+    "GITHUB_REPOSITORY_NAME": "github:USER_NAME/REPOSITORY_NAME",
+},
 ```
 
 this will add the package located at https://github.com/USER_NAME/REPOSITORY_NAME as a dependency
 
-If you want to pin a more specific version of the repository you can do so by adding a hash symbol at the end followed by the commit id or follwed by the tag (if the author of the repository has published a tag)
+If you want to pin a more specific version of the repository you can do so by adding a hash symbol at the end followed by the commit id or follwed by the tag (if the author of the repository has published a tag) or a release version
 
 Example of adding a repository with the latest commit id being **d29f7d9** then you would do like this:
 
 ```json title="package.json"
-    "dependencies": {
-        "github_repository_name": "github:USER_NAME/REPOSITORY_NAME#d29f7d9",
-    },
+"dependencies": {
+    "GITHUB_REPOSITORY_NAME": "github:USER_NAME/REPOSITORY_NAME#d29f7d9",
+},
 ```
 
 > [!MORE]  
 > [npmjs.com "package.json git(hub) urls" documentation](https://docs.npmjs.com/cli/v10/configuring-npm/package-json#github-urls)  
 
+#### private repositories as dependency
+
+It is also possible to use a Git(Hub) url of a private repository, there are just a few more steps needed to achieve that
+
+First you need to create a **deploy key** and add it to your GitHub repository, to learn how to create and use deploy keys check out the chapter ["Create a deploy key to access a private repository" in my GitHub post](/posts/github#create-a-deploy-key-to-access-a-private-repository)
+
+Now that the SSH key has been created and is ready to be used, add your private repository to the `package.json` like this:
+
+```json title="package.json"
+"dependencies": {
+    "GITHUB_REPOSITORY_NAME": "git+ssh://git@github.com:USER_NAME/REPOSITORY_NAME"
+}
+```
+
+The important part replacing **github** (from the previous examples) with **git+ssh://git@github.com:**, this tells npm to use SSH to get your package (instead of https)
 
 </article>

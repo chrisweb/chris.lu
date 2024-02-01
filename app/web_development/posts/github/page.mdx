@@ -79,4 +79,106 @@ GitHub will now have created a repository for you, with a .gitignore, a LICENSE 
 > [open source initiave MIT license page](https://opensource.org/license/mit/)  
 > [creative commons zero (CC0) page](https://creativecommons.org/public-domain/cc0/)  
 
+## Create a deploy key to access a private repository
+
+> [!NOTE]  
+> you get an error message like "Permission denied (publickey)" or "fatal: Could not read from remote repository" then this means that you don't have access to a public repository yet, there are several methods available to solve that problem, my favorite is to use a deploy key as it can be revoked easily and is bound to the repository and not a user account
+
+In the following chapters we will create and then use a deploy key to manage access to our private repository, this is a good solution for single developers and small teams, however if you have an organisation account on GitHub there is an alternative you might want to check out called [GitHub App installation access tokens](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#github-app-installation-access-tokens)
+
+### generate an SSH key
+
+First you need to generate an SSH key on your local machine, to be able to generate an SSH key you need a command line tool and you need the OpenSSH Client to be installed
+
+* on windows git for windows comes with a Bash emulator called **Git Bash** as well as the OpenSSH client
+* on other operating systems (macOS, Linux) use your favorite command line tool and install OpenSSH using your default package manager (for example using brew on macOS the command is `brew install openssh`, yum / apt / ... on Linux, for example using apt, the command is: `sudo apt install openssh-client`)
+
+To make sure you have OpenSSH installed use the following command:
+
+```shell
+ ssh -V
+```
+
+If OpenSSH is installed it will print a line like `OpenSSH_VERSION, OpenSSL VERSION LAST_UPDATE_DATE`
+
+To generate an SSH key enter the following line in your command line tool:
+
+```shell
+ssh-keygen -t ed25519 -C "your_email@example.com"
+```
+
+Then press `ENTER`
+
+You will get asked for a path where you want to store the key, make sure the location is secure, usually the suggested path is a good location, then press `ENTER` to validate it
+
+Next you will get asked for a passphrase, either you add a passphrase (a string like a password that you will get asked to enter every time you want to use the SSH key) or you can leave it empty to not use a passphrase for that key
+
+> [!NOTE]  
+> passphrases make keys more secure but also make their usage more difficult, the advantage of using a passphrase is that if someone gains access to your machine and hence your SSH key they could use the key, however if the key is protected by a passphrase this added layer of security makes it impossible for them to use the key unless they also gain access to the passphrase, it is always good to increase security to maximum especially if it is related to a critical project at your workplace, however the passphrase also makes it more difficult to use the key so if the deploy key is only being used for example for non criticial personal project then you can chose not to NOT use a passphrase
+
+then enter the passphrase again for verification and finally press `ENTER`
+
+After the SSH key has been created you will see a message that contains a sentence like this:
+
+> Your public key has been saved in /PATH_TO_KEY/KEY_NAME.pub
+
+> [!MORE]  
+> [GitHub "Generating a new SSH key" documentation](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key)  
+> [GitHub "Working with SSH key passphrases" documentation](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/working-with-ssh-key-passphrases)  
+
+### add a new deploy key to a GitHub repository
+
+Next open the public key file using a text editor or via the command line (using the path you got when creating the key in the previous chapter) to see its content and then copy the content of the public key
+
+Now go to [github.com](https://github.com/) in your browser and open the repository for which you want to create a deploy key
+
+On the top repository page in the navigation bar click on **Settings**
+
+Then in the left sidebar click on **Deploy keys**
+
+Then click on the button **Add deploy key**
+
+Give the deploy key a title that will tell you in the future "what the deploy key is for"
+
+Paste the content you copied earlier into the text area name **Key**
+
+Leave the check box to grant write access unchecked, it is good that the key is only for read access as this is what we need it for (if for some reason you need write access, feel free to enable this, but most use cases will not require this)
+
+Finally click on the **Add key** button to save it
+
+> [!MORE]  
+> [GitHub "Managing deploy keys" documentation](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys)  
+
+### adding your SSH key to SSH agent
+
+The last step that is required is to add the SSH key to the ssh agent of the machine that will use it
+
+To do so, open git bash on windows or your favorite command line tool on macOS / Linux and then use the following command to make sure the SSH agent is running:
+
+```shell
+eval $(ssh-agent -s)
+```
+
+and then add the SSH key to the agent using the following command:
+
+```shell
+ssh-add /PATH_TO_KEY/KEY_NAME.pub
+```
+
+replace `/PATH_TO_KEY/KEY_NAME.pub` with the path you used when generating the SSH key in the previous chapter
+
+for the machine to be able to use your SSH key the SSH agent must be running, you can use the command I just mentioned at the beginning of this chapter to do so manually or you can create script to automatically launch the SSH agent on windows, check out the [GitHub documentation about autolaunching the SSH agent on windows](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/working-with-ssh-key-passphrases#auto-launching-ssh-agent-on-git-for-windows)
+
+It is possible to use multiple keys for multiple repositories, to learn more about how this works check out the [GitHub documentation using multiple keys for multiple repositories](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#using-multiple-repositories-on-one-server)
+
+### potential error when using your deploy key
+
+If you get an error that reads "The authenticity of host 'github.com (xxx.xxx.xxx.xxx)' can't be established", then this is because github.com is not a known host
+
+To add github.com to your known hosts, on windows open git bash (on linux and macOS open your favorite command line tool) and then use the following command:
+
+```shell
+ssh-keyscan github.com >> ~/.ssh/known_hosts
+```
+
 </article>
