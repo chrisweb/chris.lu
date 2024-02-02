@@ -68,7 +68,7 @@ Make sure the VSCode terminal is open (if you need help to open the terminal in 
 To create a new Next.js project we are going to use [Create Next App](https://www.npmjs.com/package/create-next-app) (which is CLI tool created by the Next.js to get started quickly), in your terminal type the following command:
 
 > [!NOTE]  
-> we will create the new project in the root of our directory (not a sub-directory), so make sure there is no README.md file in the directory yet, as the create-next-app tool we will use will create one and if it finds a README.md it will abort, if there is a README.md file, first delete it and then commit the changes (if you need help to commit changes using VSCode, check out my chapter [commit your changes to GitHub using the VSCode version control tool](#commit-your-changes-to-github-using-the-vscode-version-control-tool) from the VSCode post)
+> we will create the new project in the root of our directory (not a sub-directory), so make sure there is no README.md file in the directory yet, as the create-next-app tool we will use will create one and if it finds a README.md it will abort, if there is a README.md file, first delete it and then commit the changes (if you need help to commit changes using VSCode, check out my chapter [commit your changes to GitHub using the VSCode version control tool](/posts/vscode#commit-your-changes-to-github-using-the-vscode-version-control-tool) from the VSCode post)
 
 ```shell title="terminal"
 npx create-next-app@latest ./ --use-npm
@@ -86,9 +86,6 @@ npx create-next-app@latest ./ --use-npm
 
 That's it the **Create Next App** will now install Next.js and React for us, it will then add some development dependencies based on what we chose, like Typescript and ESLint and then it will add some default configuration files for each of these tools
 
-> [!NOTE]  
-> There might be a bug in the latest (28.01.2024) version of create next app, I opened a [discussion (#61261) in the next.js repository](https://github.com/vercel/next.js/discussions/61261) to discuss it, if you encounter an error during the create next app setup, then delete the repository and repeat the steps, create a new repository and clone it in VSCode, then use this command instead `npx create-next-app@latest my_project`, this will do a setup in a subdirectory **my_project**, when done copy all the content of that directory into the root of your project
 
-TODO: so the above seems to really a bug, spent a while tracking it down, seems to have been introduced in v13, now the question is how to fix it, we could exclude the git repo from the code causing the error, but not sure the next.js team like that solution, so I will ask tomorrow before going further
 
 </article>
