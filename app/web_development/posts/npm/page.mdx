@@ -139,11 +139,37 @@ Example of adding a repository with the latest commit id being **d29f7d9** then 
 
 #### private repositories as dependency
 
-It is also possible to use a Git(Hub) url of a private repository, there are just a few more steps needed to achieve that
+> [!NOTE]  
+> It is also possible to use a Git(Hub) url of a private repository but you need to add a method that will grant access to that private repository so that the tools in your pipeline can access it, for example when fetching those dependencies to start development but also later when doing deployments, so be careful what you use to access the private repository as some methods might for example not be compatible with the deployment tools or the hosting platform you use  
 
-First you need to create a **deploy key** and add it to your GitHub repository, to learn how to create and use deploy keys check out the chapter ["Create a deploy key to access a private repository" in my GitHub post](/posts/github#create-a-deploy-key-to-access-a-private-repository)
+I will list a few methods here and add some links to relevant documentation but I will not add complete walkthrough as those differ quite a lot depending on what platform your code is hosted and based on what tools are in your deployment pipeline (if however I see that there is interest in such a tutorial in the [GitHub discussions for chris.lu](https://github.com/chrisweb/chris.lu/discussions) then I might write one in the future)
 
-Now that the SSH key has been created and is ready to be used, add your private repository to the `package.json` like this:
+##### using a GitHub personal access token
+
+This method is for example recommended if you intend to deploy on Vercel, in their [Private dependencies on Vercel](https://vercel.com/guides/using-private-dependencies-with-vercel) documentation this is the method they recommend using, if this is the method you chose then might first check out the [GitHub personal access tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) documentation which explains how to create and manage personal access tokens
+
+First you need to create a personal access token and then by adding the private repository to the `package.json` like this it will be possible to access the private repository using the personal access token:
+
+```json title="package.json"
+"dependencies": {
+    "GITHUB_REPOSITORY_NAME": "git+https://USER_NAME:PERSONAL_TOKEN@github.com:USER_NAME/REPOSITORY_NAME"
+}
+```
+
+> [!MORE]  
+> [Vercel "How do I use private dependencies with Vercel?" documentation](https://vercel.com/guides/using-private-dependencies-with-vercel)  
+> [GitHub "Managing your personal access tokens" documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)  
+
+##### using a GitHub App access tokens
+
+If you are part of an organisation on GitHub there is an alternative you might want to check out called [GitHub App installation access tokens](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#github-app-installation-access-tokens)
+
+> [!MORE]  
+> [GitHub "App installation access tokens" documentation](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#github-app-installation-access-tokens)  
+
+##### using a GitHub repository deploy key
+
+For example one such method to access private repositories is to use a GitHub repository deploy key, the public part of that key is then given to your developers which then store it locally in their SSH agent and then by adding private repository to the `package.json` like this it will be possible to access the private repository:
 
 ```json title="package.json"
 "dependencies": {
@@ -152,5 +178,10 @@ Now that the SSH key has been created and is ready to be used, add your private 
 ```
 
 The important part replacing **github** (from the previous examples) with **git+ssh://git@github.com:**, this tells npm to use SSH to get your package (instead of https)
+
+> [!MORE]  
+> [GitHub "Managing deploy keys" documentation](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys)  
+> [GitHub "Generating a new SSH key" documentation](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key)  
+> [GitHub "Working with SSH key passphrases" documentation](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/working-with-ssh-key-passphrases)  
 
 </article>
