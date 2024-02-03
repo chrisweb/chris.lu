@@ -83,13 +83,13 @@ Next you will get asked some more questions so that Next.js knows what it needs 
 
 * **Would you like to use TypeScript?**, I recommended leaving it to **Yes** which is what is preselected, if however you prefer to use javascript select **No** using the left / right arrow keys and then just press `ENTER{:shell}` (I recommend to use Typescript but I will not argue in favor or against it here, this is not the right place, if you never used Typescript before, then maybe just give it a try and see for yourself how different it is from using Javascript and after having built this blog prototype you will be able to judge for yourself which one you like more)
 * **Would you like to use ESLint?**, again **Yes** is preselected, so just press `ENTER{:shell}` ([ESLint](https://eslint.org/) is very useful tool that helps find and correct errors in your code)
-* **Would you like to use Tailwind CSS?**, I will leave this on **No** (I will use another solution in this project, more on that later) so if you want to explore another solution with me through this project then select "No" too, if you know Tailwind CSS and want to use it instead feel free to press the `→` right arrow key to select "Yes"
-* **Would you like to use `src/` directory?** I will leave this on **No** too, if prefer to place all your code in an `src/` directory then press the `→` right arrow key to select "Yes", some people prefer it for example to be able to restrict searches in files to files that are in the `src/` directory and hence avoid getting result from the node_modules folder, my personal preference is to not use it as it is not required, I like to have all my directories in the root and if needed I can exclude the node_modules directory which is the same amount of work as including src instead)
-* **Would you like to use App Router?** definatly **Yes** press `ENTER{:shell}`, since Next.js 13 you have two directories to chose from, you can add your pages into the **pages** directory which is the older version or you use the more modern version, which is the **app** directory, I recommend enabling the app directory (you can still later create the pages directory manually if you want to use it, both can be used alongside each other)
-* **Would you like to customize the default import alias (@/*)?** press the `→` right arrow key to select **Yes** and then press `ENTER{:shell}`, this will tell CNA to add an alias for a given path in the `tsconfig.json` (the Typescript configuration file) if you selected **TypeScript** in the first question and if you chose **Javascript** it will create the alias in the `jsconfig.json` file (This alias can be used for imports as a replacement for a path to a dependency, to learn more about this feature I recommend you have a quick look at the [Next.js "Absolute Imports and Module Path Aliases" documentation](https://nextjs.org/docs/app/building-your-application/configuring/absolute-imports-and-module-aliases), if however you don't want it feel free to leave it on "No")
+* **Would you like to use Tailwind CSS?**, I will set this to **No**,  press `←` (the left arrow key) and then `ENTER{:shell}`, I will use another styling solution in this project, more on that later) so if you want to explore another solution with me through this project then select "No" too, if you know Tailwind CSS and want to use it instead feel free to keep it on "Yes"
+* **Would you like to use `src/` directory?** I will leave this on **No** and then press `ENTER{:shell}`, if prefer to place all your code in an `src/` directory then press the `→` right arrow key to select "Yes", some people prefer it for example to be able to restrict searches in files to files that are in the `src/` directory and hence avoid getting result from the node_modules folder, my personal preference is to not use it as it is not required, I like to have all my directories in the root and if needed I can exclude the node_modules directory which is the same amount of work as including src instead
+* **Would you like to use App Router?** definatly keep this on **Yes** and then press `ENTER{:shell}`, since Next.js 13 you have two directories to chose from, you can add your pages into the **pages** directory which is the older version or you use the more modern version, which is the **app** directory, I recommend enabling the app directory (you can still later create the pages directory manually if you want to use it, both can be used alongside each other
+* **Would you like to customize the default import alias (@/*)?** press `→` (the right arrow key) to select **Yes** and then press `ENTER{:shell}`, this will tell CNA to add an alias for a given path in the `tsconfig.json` (the Typescript configuration file) if you selected **TypeScript** in the first question and if you chose **Javascript** it will create the alias in the `jsconfig.json` file (This alias can be used for imports as a replacement for a path to a dependency, to learn more about this feature I recommend you have a quick look at the [Next.js "Absolute Imports and Module Path Aliases" documentation](https://nextjs.org/docs/app/building-your-application/configuring/absolute-imports-and-module-aliases)), if however you don't want it feel free to leave it on "No"
 * **What import alias would you like configured?** I personally keep the default `@/*`, but feel free to chose another one if you prefer, then press `ENTER{:shell}`
 
-That's it the **Create Next App** will now install Next.js and React for us, it will then add some development dependencies based on what we chose, like Typescript and ESLint and then it will add some default configuration files for each of these tools
+That's it the **Create Next App** will now install Next.js and React (and React DOM) for us, it will then add some development dependencies based on what we chose, like Typescript and ESLint and then it will add some default configuration files for each of these tools
 
 > [!TIP]  
 > when you use CNA, some of the options you chose will get stored, so that next time you use it again it will take your stored preferences instead of default values, if you want to reset those stored preferences you can use the `--reset-preferences{:shell}` option like so `npx create-next-app --reset-preferences{:shell}`, if successful CNA will print the following message "**Preferences reset successfully**"  
@@ -98,5 +98,46 @@ That's it the **Create Next App** will now install Next.js and React for us, it 
 > [Next.js "create-next-app" documentation](https://nextjs.org/docs/pages/api-reference/create-next-app)  
 > [VSCode "jsconfig.json" documentation](https://code.visualstudio.com/docs/languages/jsconfig)  
 > [Next.js "Absolute Imports and Module Path Aliases" documentation](https://nextjs.org/docs/app/building-your-application/configuring/absolute-imports-and-module-aliases)
+
+### first commit
+
+Now that create next app is done, it is a good time to do your first commit
+
+If you need help to commit changes using VSCode, check out my chapter [commit your changes to GitHub using the VSCode version control tool](/posts/vscode#commit-your-changes-to-github-using-the-vscode-version-control-tool) from the VSCode post
+
+After you have commited the files and synchronised the changes with remote repository, you can go to [github.com](https://github.com/) and check out your repository, if the commit and syncing was successful you will see that all the new files and directories are now listed in your GitHub repository
+
+> [!TIP]  
+> I recommend commiting often, as it will make it a lot easier if you decide to revert your last commit, as it will only include the code from one step you want to undo and NOT also the code of several other steps that you actually want to keep, also commiting and synchronising often reduces the risk that you lose code and hence hours or days of work if something happens to your local machine and finally it reduces the risk that you end of having conflits if you are not the only one working on the repository
+
+### update the README.md file
+
+> [!NOTE]  
+> for your future self and for others that might contribute on your project it is always helpful to have well documented project. This is why we will update the readme and place some documentation in it, if however you prefer to store such information somewhere else this is fine too, what really matters is to do update the documentation regulary so that it will not become a tedious task at some point and also is a helpful resource right from the start of your project
+
+The first file we will edit is the `README.md`, I recommend you remove everything that is currently in the REAME.md (not that it is bad advice but we will just structure it differently and add some more information to it)
+
+Then copy / paste the following content into your README:
+
+```md
+# MY_PROJECT
+
+## npm commands (package.json scripts)
+
+`npm run dev`: to start the development server
+`npm run build`: to make a production build
+`npm run start`: to start the server on a production server using the build we made with the previous command
+`npm run lint`: to run a linting script that will scan our code and help us find problems in our code
+```
+
+This adds documentation to the README for 4 commands that are available after setting up a project with CNA
+
+Then change **MY_PROJECT** to whatever you want to name your project
+
+Now save the file (to save the file you can use the VSCode shortcut `Ctrl+S{:shell}` (macOS: `⌘S{:shell}`, Linux: `Ctrl+S{:shell}`))
+
+Finally commit the changes and then sync
+
+
 
 </article>
