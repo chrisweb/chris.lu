@@ -45,6 +45,18 @@ npm install -g npm@latest
 > [npmjs.com "package.json" documentation](https://docs.npmjs.com/cli/configuring-npm/package-json)  
 > [nodejs.org "Modules: Packages" documentation](https://nodejs.org/api/packages.html)  
 
+### creating a package.json
+
+You can obviously create one manually using your IDE or copy a package.json from another project and then edit it to fit your needs, but the easiest way is to use the npm cli and let it create a package.json for you
+
+Use your VSCode terminal (or favorite command line tool) to execute the following command and have npm guide you step by step through the creation of your `package.json` file:
+
+```shell
+npm init
+```
+
+Anser the questions that get displayed, when this is done npm will create a `package.json` in the root of your project
+
 ### dependencies
 
 The part of your package.json that will change the most is probably the dependencies section
