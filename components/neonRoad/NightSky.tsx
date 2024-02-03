@@ -14,7 +14,7 @@ const NightSky: React.FC<IProps> = (props) => {
     return (
         <Sparkles
             count={600}
-            size={0.7}
+            size={0.6}
             position={props.position}
             scale={props.scale}
             speed={0}

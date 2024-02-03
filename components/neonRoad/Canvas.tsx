@@ -112,8 +112,9 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 {/*<Loop />*/}
                 <EffectComposer>
                     <Bloom
-                        luminanceThreshold={0.01}
+                        luminanceThreshold={0.08}
                         intensity={0.7}
+                        luminanceSmoothing={0.01}
                     />
                 </EffectComposer>
                 {/*<axesHelper />*/}{/*enable for development*/}
