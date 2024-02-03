@@ -12,6 +12,103 @@
 
 ## Installation
 
+### on Windows
 
+Go to [git-scm.com/download/win](https://git-scm.com/download/win) and click on **Click here to download** which will automatically download the latest (64bit) windows version
+
+When the download has finished, double click on the **exe** file to start the installation
+
+You will get asked a bunch of stuff, I usually keep the default settings but feel free to change the default values to fit your needs
+
+### on Linux
+
+If you are on a ditribution (like Fedora or CentOS) that come with **dnf**, then use this command:
+
+```shell
+sudo dnf install git-all
+```
+
+For distributions (like Debian or Ubuntu) that come with **apt**, then use this command:
+
+```shell
+sudo apt install git-all
+```
+
+### on macOS
+
+If you have the Xcode command line tools already installed on your machien then you already have git
+
+You can check if installed using this command:
+
+```shell
+git --version
+```
+
+If it is not yet installed, you can visit [git-scm.com/download/mac](https://git-scm.com/download/mac) to see all the options, my favorite way of installing git is via brew using the following command:
+
+```shell
+brew install git
+```
+
+## check what version is installed
+
+Use the following command in your VSCode terminal (or favorite command line tool):
+
+```shell
+git --version
+```
+
+## initialize git
+
+To initialize a git project locally, you first need to use the following command:
+
+```shell
+git init
+```
+
+As origin I will use github but you could use any other git cloud service like gitlab for example
+
+Next go to github and create a new repository by clicking on the "+" icon on the left of your user avatar (in the top right section of the page), then select "new repository"
+
+Then use the following command to add the origin to your local git setup:
+
+```shell
+git remote add origin https://github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
+```
+
+Or you are using the git credential manager and you have multiple users, then you may want to set the default, to do so add your DEFAULT_GIT_USER_NAME into the URL like this:
+
+```shell
+git remote add origin https://DEFAULT_GIT_USER_NAME@github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
+```
+
+> [!MORE]  
+> [git documentation](https://git-scm.com/doc)  
+> [GitHub "Adding locally hosted code to GitHub" documentation](https://docs.github.com/github/importing-your-projects-to-github/adding-an-existing-project-to-github-using-the-command-line)  
+
+## cloning a repository
+
+VSCode has a source control tool that makes it easy to clone repositories, but if you prefer to do it manually via the command line then use this command:
+
+```shell
+git clone https://github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
+```
+
+Or you are using the git credential manager and you have multiple users, then you may want to set the default, to do so add your DEFAULT_GIT_USER_NAME into the URL like this when cloning:
+
+```shell
+git clone https://DEFAULT_GIT_USER_NAME@github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
+```
+
+If you have already cloned the repository and want to add or change the default user, then use this command:
+
+```shell
+git remote set-url origin https://DEFAULT_GIT_USER_NAME@github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
+```
+
+> [!MORE]  
+> [git-credential-manager "Multiple users" documentation](https://github.com/git-ecosystem/git-credential-manager/blob/main/docs/multiple-users.md)  
+> [GitHub "git-credential-manager" repository](https://github.com/git-ecosystem/git-credential-manager)  
+> [git-credential-manager documentation](https://github.com/git-ecosystem/git-credential-manager/blob/release/docs/README.md)  
 
 </article>
