@@ -49,78 +49,7 @@ anser the question that get displayed in your command line, when this is done np
 
 
 
-#### next.js npm scripts
 
-add the next.js scripts to the `package.json` file, which is in the root of the project:
-
-```json
-{
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "npx eslint ./"
-  }
-}
-```
-
-TODO: do I really need to add those manually, I mean create next app should be handling this 
-
-those 4 scripts are the npm commands we will later in this tutorial use to execute different task, like:
-
-`npm run dev`: to start the development server
-`npm run build`: to make a production build
-`npm run start`: to start the server on a production server using the build we made with the previous command
-`npm run lint`: to run a linting script that will scan our code and help us find problems in our code
-
-#### enable the app directory in the next.js configuration file
-
-then we create the next.js configuration `next.config.js` file, in the root of the project:
-
-```js
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-    experimental: {
-        appDir: true,
-    },
-}
-
-module.exports = nextConfig
-```
-
-not much in there right now, for the moment we only add one line in the experimental block to enable the app dir which is still experimental (in beta at the time 01.01.2003)
-
-Note: **next.js 13** got released at the end of 2022 and even though it included a lot of improvements for existing features it also now includes the new `app` directory which is what we will use in this toturial, as the next.js team reminds as at several places this feature will evolve and get improved a lot over the coming months, the next.js team added it to **next.js 13** so that developers can start playing with it and to hopefully gather a lot of good feedback from the community but they also made it clear that you probably shouldn't use this in production just yet and wait a little bit longer for it to mature
-
-#### convert the next.js configuration to an ES module
-
-if you prefer to keep using the CommonJS (CJS) style configuration this is fine as long as you don't use any packages that are [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c), I personally prefer [ECMAScript modules (ES modules / ESM)](https://nodejs.org/api/esm.html) so I decided to convert my `next.config.js` into a `next.config.mjs`
-
-Note: later in this project we will use an [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c) package and at that point is will be mandatory to convert the next.js configuration to an ESM
-
-to do so change the next.config file extension from `.js` to `.mjs` and then change the file content to this:
-
-```js
-const nextConfig = () => {
-
-    /** @type {import('next').NextConfig} */
-    const nextConfig = {
-        experimental: {
-            appDir: true,
-        },
-    }
-
-    return nextConfig
-
-}
-
-export default nextConfig
-```
-
-read more:
-
-* next.js configuration documentation: <https://nextjs.org/docs/api-reference/next.config.js/introduction>
-* ESM only packages: <https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c>
 
 ### install first dependencies
 
@@ -139,7 +68,7 @@ npm i typescript@latest @types/react @types/react-dom @types/node --save-dev --s
 of course if you prefer to use [pNpM](https://pnpm.io/) or [Yarn](https://yarnpkg.com/) as your package managers to install the dependencies above, feel free to do so they are great tools too, I for my part prefer to use npm so this is what you will see in this tutorial but the install commands of [pNpM install](https://pnpm.io/cli/install) or [yarn install](https://yarnpkg.com/getting-started/usage) are very similar
 
 
-UPDATE: I found this interesting package: https://github.com/biomejs/biome, I need to test it with a next.js project, could be a nice tool to replace next lint!?
+
 
 ### our first page
 
