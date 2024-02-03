@@ -35,40 +35,6 @@ converting images to AVIF and WEBP and thumbnails
 ## blog
 
 
-### initialize project
-
-
-run the following command to have npm guide you step by step through the creation of your `package.json` file:
-
-```shell
-npm init
-```
-
-anser the question that get displayed in your command line, when this is done npm will create a `package.json` in the root of your project for you
-
-
-
-
-
-
-### install first dependencies
-
-install react and next.js
-
-```shell
-npm i react@latest react-dom@latest next@latest --save-exact
-```
-
-install typescript and types:
-
-```shell
-npm i typescript@latest @types/react @types/react-dom @types/node --save-dev --save-exact
-```
-
-of course if you prefer to use [pNpM](https://pnpm.io/) or [Yarn](https://yarnpkg.com/) as your package managers to install the dependencies above, feel free to do so they are great tools too, I for my part prefer to use npm so this is what you will see in this tutorial but the install commands of [pNpM install](https://pnpm.io/cli/install) or [yarn install](https://yarnpkg.com/getting-started/usage) are very similar
-
-
-
 
 ### our first page
 
