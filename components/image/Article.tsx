@@ -2,11 +2,9 @@ import Image, { ImageProps } from 'next/image'
 
 const ImageArticle: React.FC<ImageProps> = (props): JSX.Element => {
 
-    //console.log(props)
-
     return (
         <>
-            {props.alt.substring(0, 6) === 'banner' ? (
+            {props.alt.startsWith('banner') ? (
                 <Image
                     style={{
                         width: '100%',
@@ -18,11 +16,22 @@ const ImageArticle: React.FC<ImageProps> = (props): JSX.Element => {
                     //quality={90} // default is 75
                     {...(props as ImageProps)}
                 />
+            ) : (props.alt.startsWith('photo') || props.alt.startsWith('screenshot')) ? (
+                <Image
+                    style={{
+                        width: '100%',
+                        height: 'auto',
+                    }}
+                    sizes="100vw"
+                    placeholder="blur"
+                    {...(props as ImageProps)}
+                />
             ) : (
                 <Image
-                    fill
-                    sizes="100vw"
-                    style={{ objectFit: 'cover' }}
+                    style={{
+                        maxWidth: '100%',
+                        height: 'auto',
+                    }}
                     placeholder="blur"
                     {...(props as ImageProps)}
                 />
