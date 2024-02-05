@@ -145,7 +145,7 @@ The easiest way to save a file in VSCode is to use the keyboard shortcut `Ctrl+S
 
 ## commit your changes to GitHub using the VSCode version control tool
 
-* click on the **Source Control** icon on the left in the **Activity bar** (if you have already customized VSCode, your Activity bar might be in another location) or use the keyboard shortcut `Ctrl+Shift+G{:shell}` (macOS: ⇧⌘G, Linux: Ctrl+Shift+G)
+click on the **Source Control** icon on the left in the **Activity bar** (if you have already customized VSCode, your Activity bar might be in another location) or use the keyboard shortcut `Ctrl+Shift+G{:shell}` (macOS: ⇧⌘G, Linux: Ctrl+Shift+G)
 
 ![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_activity_bar_source_control_icon.png)
 
@@ -210,7 +210,7 @@ Once the **credential manager** is open select the second tab called **windows c
 
 ## switching between branches
 
-* click on the **Source Control** icon on the left in the **Activity bar** (if you have already customized VSCode, your Activity bar might be in another location) or use the keyboard shortcut `Ctrl+Shift+G{:shell}` (macOS: ⇧⌘G, Linux: Ctrl+Shift+G)
+click on the **Source Control** icon on the left in the **Activity bar** (if you have already customized VSCode, your Activity bar might be in another location) or use the keyboard shortcut `Ctrl+Shift+G{:shell}` (macOS: ⇧⌘G, Linux: Ctrl+Shift+G)
 
 ![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_activity_bar_source_control_icon.png)
 
@@ -223,12 +223,34 @@ Once the **credential manager** is open select the second tab called **windows c
 
 ## creating a new branch
 
-* click on the **Source Control** icon on the left in the **Activity bar** (if you have already customized VSCode, your Activity bar might be in another location) or use the keyboard shortcut `Ctrl+Shift+G{:shell}` (macOS: ⇧⌘G, Linux: Ctrl+Shift+G)
+on the bottom left you will have your current branch that you are currently on, if you did not yet create a new branch it will probably be called "main"
 
-![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_activity_bar_source_control_icon.png)
+to open the branches options (on top of the IDE) click on the branch name
 
-* on the bottom left you will have your current branch that you are currently on, if you did not yet create a new branch it will probably be called "main"
-* if you want to create a new branch click on the branch name to open the branch options on top of VSCode and then click on **+ Create new branch** and then enter a name for that new branch
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_main_branch.png)
+
+Now you have two options when it comes to creating branches, creating a new empty branch or creating a new branch based on what is in another branch (making a copy)
+
+### create a new (empty) branch
+
+this will open the branch options on top of VSCode and then click on **+ Create new branch** to create a new (empty) branch
+
+![alt text](../../../../public/assets/images/app/web_development/posts/vscode/vscode_create_new_branch.png)
+
+then enter a name for that new branch and you are done
+
+### create a new branch from (based on) another branch
+
+this will open the branch options on top of VSCode and then click on **+ Create new branch from...** to create a new branch by making a copy of an existing branch
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_create_new_branch_from.png)
+
+* First select which branch you want to use to create the new branch
+* then enter a name for that new branch
+
+Now that the new branch is created I recommend you immediatly also publish the branch (push it to the remote repository) by clicking on the cloud icon next to its name on the bottom left of VSCode
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_publish_branch.png)
 
 ## open a VSCode terminal
 
