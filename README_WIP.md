@@ -4753,12 +4753,21 @@ node cli ./downloads Double_Dragon_Neon_City_Streets_1_-_Jake_Kaufman mp3 50 loc
 
 mdx component for images:
 
+the solution I chose has the advantage that:
+
+* you DON'T need to import all images for each page manually, you don't need to use an image html element in markdown or even the next/image component in mdx and set all the attributes like width, height, loading,   fetchpriority, ... for each image
+* you JUST drag and drop an image in VSCode into your markdown and you are done
+
+we will use:
+
 1) [remark mdx images](https://www.npmjs.com/package/remark-mdx-images) will take the path and do an import
 2) because the image is now an import, next/image will be able to define the height and width, which means we can always use the placeholder=blur feature
 
-only the banner (images on top of pages) have the priority set, meaning their [fetchpriority attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/fetchPriority) is set to high, they are responsive images, they fill 100% of their container width
-photo and screenshot are also responsive images, they fill 100% of their container width, but have no priority set, meaning that the [loading attribute](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading) gets set to lazy
-the last one is a fallback for all other images, the size if those images is their actual size, but their is also a maxWodth set to 100% to make them responsive for mobile screens
+I use 3 default configurations for images:
+
+* only the banner (images on top of pages) have the priority set, meaning their [fetchpriority attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/fetchPriority) is set to high, they are responsive images, they fill 100% of their container width
+* photo and screenshot are also responsive images, they fill 100% of their container width, but have no priority set, meaning that the [loading attribute](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading) gets set to lazy
+* the last one is a fallback for all other images, the size if those images is their actual size, but their is also a maxWodth set to 100% to make them responsive for mobile screens
 
 import Image, { ImageProps } from 'next/image'
 
