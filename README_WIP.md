@@ -26,11 +26,7 @@ Question(s): regarding the new layouts system, the [Layouts RFC](https://nextjs.
 
 
 
-## image(s) manipulation
 
-converting images to AVIF and WEBP and thumbnails
-
-<https://www.npmjs.com/package/sharp>
 
 ## blog
 
