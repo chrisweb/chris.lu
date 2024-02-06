@@ -34,7 +34,6 @@ const nextConfig = (/*phase*/) => {
     })*/
 
     const themeJsonPath = new URL('./node_modules/synthwave-vscode/themes/synthwave-color-theme.json', import.meta.url)
-    //const themeJsonPath = new URL('./synthwave84.json', import.meta.url)
 
     // get the json theme
     const themeJsonContent = readFileSync(themeJsonPath, 'utf-8')
