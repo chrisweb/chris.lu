@@ -4,8 +4,10 @@ const ImageArticle: React.FC<ImageProps> = (props): JSX.Element => {
 
     let placeholder = true
 
-    // something is weird because
-    // src is of type StaticImport, but somehow ts thinks it has no properties
+    // something is odd here, but I have not found the reason yet
+    // src is either of type string or StaticImport and somehow ts
+    // thinks that when it is of type StaticImport that the object
+    // has no properties
     // @ts-expect-error: because the library definition is wrong
     if (props.src?.src.slice(-3) === 'gif') {
         placeholder = false
