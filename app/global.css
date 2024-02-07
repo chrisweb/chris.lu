@@ -67,16 +67,21 @@ html {
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-size-adjust */
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
-    /* scrollbar styling (w3c standard) */
-    /* chrome in v121 dropped webkit-scrollbar and now uses the standard too
-    https://developer.chrome.com/docs/css-ui/scrollbar-styling */
-    scrollbar-width: auto;
-    /* scrollbar-color: the first color is for the thumb of the scrollbar and the second color for the track */
-    scrollbar-color: rgba(var(--tertiary-light-value), 0.9) rgba(var(--tertiary-light-value), 0.02);
     /* custom cursor */
     cursor: var(--cursor-default);
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/tab-size */
     tab-size: 4;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    * {
+        /* scrollbar styling (w3c standard) */
+        /* chrome in v121 now supports the standard too
+        https://developer.chrome.com/docs/css-ui/scrollbar-styling */
+        scrollbar-width: auto;
+        /* scrollbar-color: the first color is for the thumb of the scrollbar and the second color for the track */
+        scrollbar-color: rgba(var(--tertiary-light-value), 0.9) rgba(var(--tertiary-light-value), 0.02);
+    }
 }
 
 @supports selector(::-webkit-scrollbar) {
