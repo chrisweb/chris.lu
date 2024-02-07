@@ -94,9 +94,9 @@ export default async function MyPage() {
 }
 ```
 
-When getting data in Server Component you are probably calling an API endpoint, in which case it is highly recommended to use **fetch** as it will automatically cache the data request. You can fine tune the caching of requests by for example defining when the cache should expire by setting the revalidate value manually and you can even disable caching if you want / need to. It is also possible to use tags which are useful to revalidate multiple cached queries at once based on their common tag.
+When getting data in Server Component you are probably calling an API endpoint, in which case it is highly recommended to use **fetch** as it will automatically cache the data request. You can fine tune the caching of requests by for example defining when the cache should expire by setting the revalidate value manually and you can even disable caching if you want / need to. It is also possible to use tags which are useful to revalidate multiple cached queries at once based on their common tag. I highly recommend to do a deep dive in the [Next.js "Data Fetching, Caching, and Revalidating" documentation](https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating) to better understand how this works and what options you have.
 
-Now fetch is not the only way to get data in server components, you can also directly use a database client package or even an ORM, but in that case you need to setup the caching yourself by using [react cache](https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating#fetching-data-on-the-server-with-third-party-libraries).
+Now fetch is not the only way to get data in server components, you can also directly use a database client package or even an ORM, but in that case you need to setup the caching yourself by for example using [react cache](https://react.dev/reference/react/cache).
 
 ```jsx
 import { cache } from 'react'
@@ -137,11 +137,14 @@ export default function MyPage() {
 Below I added a bunch of links to documents I think will help to fully understand the potential of Server Components and Server Actions:
 
 > [!MORE]  
-> [Next.js blog post "App Router common mistakes and how to fix them"](https://vercel.com/blog/common-mistakes-with-the-next-js-app-router-and-how-to-fix-them)  
-> [Next.js blog post "Server Components and Server Actions Security"](https://nextjs.org/blog/security-nextjs-server-components-actions)  
+> [Next.js "App Router common mistakes and how to fix them" blog post](https://vercel.com/blog/common-mistakes-with-the-next-js-app-router-and-how-to-fix-them)  
+> [Next.js "Server Components and Server Actions Security" blog post](https://nextjs.org/blog/security-nextjs-server-components-actions)  
+> [Vercel "Fetching data faster with the App Router" article](https://vercel.com/blog/nextjs-app-router-data-fetching)  
+> [Vercel "Understanding React Server Components" article](https://vercel.com/blog/understanding-react-server-components)
 > [Next.js "App Router Incremental Adoption Guide" documentation](https://nextjs.org/docs/app/building-your-application/upgrading/app-router-migration)  
 > [Next.js "Server Components" documentation](https://nextjs.org/docs/app/building-your-application/rendering/server-components)  
 > [Next.js "Data Fetching, Caching, and Revalidating" documentation](https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating)  
 > [Next.js "Server Actions and Mutations" documentation](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations)  
+> [React "Cache (Server components)" documentation](https://react.dev/reference/react/cache)  
 
 </article>
