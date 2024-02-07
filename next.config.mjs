@@ -240,6 +240,7 @@ const nextConfig = (/*phase*/) => {
         const defaultsCSPHeaders = `
             default-src 'none';
             font-src 'self';
+            media-src 'self';
             object-src 'none';
             base-uri 'none';
             form-action 'none';
@@ -283,7 +284,7 @@ const nextConfig = (/*phase*/) => {
             style-src 'self' 'unsafe-inline';
             script-src 'self' 'unsafe-eval' 'unsafe-inline';
             connect-src 'self';
-            img-src 'self';
+            img-src 'self' data:;
             frame-src 'none';
         `
     }
