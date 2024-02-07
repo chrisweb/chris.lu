@@ -148,9 +148,6 @@ footer {
 
 main {
     display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: left;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: calc(4 * var(--main-spacing));
@@ -514,9 +511,13 @@ article,
 .middle,
 .core {
     width: 100%;
-    max-width: var(--main-middle-maxWidth);
     padding-left: var(--main-spacing);
     padding-right: var(--main-spacing);
+}
+
+article,
+.middle {
+    max-width: var(--main-middle-maxWidth);
 }
 
 .core {
@@ -531,11 +532,13 @@ article,
 }
 
 aside {
-    position: sticky;
-    top: var(--header-navbar-height);
     width: var(--main-aside-maxWidth);
     order: 9999;
-    display: block;
+}
+
+.asideCore {
+    position: sticky;
+    top: calc(var(--header-navbar-height) + var(--main-spacing));
 }
 
 /* max-width: 70rem / 1120px (mobile breakpoint) */

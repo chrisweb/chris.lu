@@ -114,14 +114,15 @@ const HeadingsObserver: React.FC<IProps> = (props): JSX.Element => {
     // remarkTableOfContents maxDepth option is set to 3, so only observe h1, h2 & h3
     //const { activeIdState } = useObserver('h1, h2, h3, h4, h5, h6', '-20% 0% -35% 0px')
     const { activeIdState } = useObserver('h1, h2, h3', '-20% 0% -35% 0px')
-    const toc = findAndTransformRows(props.children, activeIdState)
+    const navChild = findFirstNodeThatMatchesType(props.children, 'nav')
+    const toc = findAndTransformRows(navChild.props.children, activeIdState)
 
     return (
         <>
-            <ErrorBoundary fallback={<nav {...props}><div className="error">Toc error</div></nav>}>
-                <nav {...props}>
+            <ErrorBoundary fallback={<div className="error">Toc error</div>}>
+
                     {toc}
-                </nav>
+
             </ErrorBoundary>
         </>
     )
