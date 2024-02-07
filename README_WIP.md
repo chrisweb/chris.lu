@@ -4818,3 +4818,9 @@ const ImageArticle: React.FC<ImageProps> = (props): JSX.Element => {
 }
 
 export default ImageArticle
+
+
+
+I could add a note that no direct descendant of main should have a position sticky or next.js adds warning to console:
+<https://github.com/shadcn-ui/ui/issues/1355>
+
