@@ -4824,3 +4824,4 @@ export default ImageArticle
 I could add a note that no direct descendant of main should have a position sticky or next.js adds warning to console:
 <https://github.com/shadcn-ui/ui/issues/1355>
 
+add an example how to use <https://www.npmjs.com/package/rehype-rewrite/v/2.1.3>
