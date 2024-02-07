@@ -32,42 +32,42 @@ export default function WebDevelopmentPage() {
                 <h2 className="h2">Tutorials</h2>
                 <div className="grid">
                     <Link href="/web_development/tutorials/next-js-static-mdx-blog" className={styles.preview}>
-                        <Image src="/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/banner.png" alt="" fill sizes="100vw" style={{ objectFit: 'cover' }} />
+                        <Image src="/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/banner.png" alt="" fill sizes="400px" style={{ objectFit: 'cover' }} />
                         <div className={styles.title}>Next.js static MDX Blog</div>
                     </Link>
                 </div>
                 <h2 className="h2">Posts</h2>
                 <div className="grid">
                     <Link href="/web_development/posts/vscode" className={styles.preview}>
-                        <Image src="/assets/images/app/web_development/posts/vscode/banner.png" alt="" fill sizes="100vw" style={{ objectFit: 'cover' }} />
+                        <Image src="/assets/images/app/web_development/posts/vscode/banner.png" alt="" fill sizes="400px" style={{ objectFit: 'cover' }} />
                         <div className={styles.title}>VSCode</div>
                     </Link>
                     <Link href="/web_development/posts/node-js" className={styles.preview}>
-                        <Image src="/assets/images/app/web_development/posts/node-js/banner.png" alt="" fill sizes="100vw" style={{ objectFit: 'cover' }} />
+                        <Image src="/assets/images/app/web_development/posts/node-js/banner.png" alt="" fill sizes="400px" style={{ objectFit: 'cover' }} />
                         <div className={styles.title}>Node.js</div>
                     </Link>
                     <Link href="/web_development/posts/git" className={styles.preview}>
-                        <Image src="/assets/images/app/web_development/posts/git/banner.png" alt="" fill sizes="100vw" style={{ objectFit: 'cover' }} />
+                        <Image src="/assets/images/app/web_development/posts/git/banner.png" alt="" fill sizes="400px" style={{ objectFit: 'cover' }} />
                         <div className={styles.title}>git</div>
                     </Link>
                     <Link href="/web_development/posts/github" className={styles.preview}>
-                        <Image src="/assets/images/app/web_development/posts/github/banner.png" alt="" fill sizes="100vw" style={{ objectFit: 'cover' }} />
+                        <Image src="/assets/images/app/web_development/posts/github/banner.png" alt="" fill sizes="400px" style={{ objectFit: 'cover' }} />
                         <div className={styles.title}>GitHub</div>
                     </Link>
                     <Link href="/web_development/posts/vercel" className={styles.preview}>
-                        <Image src="/assets/images/app/web_development/posts/vercel/banner.png" alt="" fill sizes="100vw" style={{ objectFit: 'cover' }} />
+                        <Image src="/assets/images/app/web_development/posts/vercel/banner.png" alt="" fill sizes="400px" style={{ objectFit: 'cover' }} />
                         <div className={styles.title}>Vercel</div>
                     </Link>
                     <Link href="/web_development/posts/sentry-io" className={styles.preview}>
-                        <Image src="/assets/images/app/web_development/posts/sentry-io/banner.png" alt="" fill sizes="100vw" style={{ objectFit: 'cover' }} />
+                        <Image src="/assets/images/app/web_development/posts/sentry-io/banner.png" alt="" fill sizes="400px" style={{ objectFit: 'cover' }} />
                         <div className={styles.title}>Sentry.io</div>
                     </Link>
                     <Link href="/web_development/posts/npm" className={styles.preview}>
-                        <Image src="/assets/images/app/web_development/posts/npm/banner.png" alt="" fill sizes="100vw" style={{ objectFit: 'cover' }} />
+                        <Image src="/assets/images/app/web_development/posts/npm/banner.png" alt="" fill sizes="400px" style={{ objectFit: 'cover' }} />
                         <div className={styles.title}>NPM and package.json</div>
                     </Link>
                     <Link href="/web_development/posts/road-to-react-next-js-server-side-features" className={styles.preview}>
-                        <Image src="/assets/images/app/web_development/posts/road-to-react-next-js-server-side-features/banner.png" alt="" fill sizes="100vw" style={{ objectFit: 'cover' }} />
+                        <Image src="/assets/images/app/web_development/posts/road-to-react-next-js-server-side-features/banner.png" alt="" fill sizes="400px" style={{ objectFit: 'cover' }} />
                         <div className={styles.title}>The road to server components and server actions</div>
                     </Link>
                 </div>
