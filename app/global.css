@@ -72,7 +72,7 @@ html {
     https://developer.chrome.com/docs/css-ui/scrollbar-styling */
     scrollbar-width: auto;
     /* scrollbar-color: the first color is for the thumb of the scrollbar and the second color for the track */
-    scrollbar-color: var(--tertiary-light-color) var(--main-background-color);
+    scrollbar-color: rgba(var(--tertiary-light-value), 0.9) rgba(var(--tertiary-light-value), 0.02);
     /* custom cursor */
     cursor: var(--cursor-default);
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/tab-size */
