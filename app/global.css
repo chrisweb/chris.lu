@@ -68,33 +68,37 @@ html {
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     /* scrollbar styling (w3c standard) */
-    scrollbar-width: .5rem;
+    /* chrome in v121 dropped webkit-scrollbar and now uses the standard too
+    https://developer.chrome.com/docs/css-ui/scrollbar-styling */
+    scrollbar-width: auto;
     /* scrollbar-color: the first color is for the thumb of the scrollbar and the second color for the track */
-    scrollbar-color: var(--tertiary-light-color) #111;
+    scrollbar-color: var(--tertiary-light-color) var(--main-background-color);
     /* custom cursor */
     cursor: var(--cursor-default);
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/tab-size */
     tab-size: 4;
 }
 
-/* scrollbar styling (webkit vendor prefix) */
-*::-webkit-scrollbar {
-    /* for vertical scrollbar */
-    width: 1rem;
-    /* for horizontal scrollbar */
-    height: 1rem;
-}
+@supports selector(::-webkit-scrollbar) {
+    /* scrollbar styling (webkit vendor prefix) */
+    *::-webkit-scrollbar {
+        /* for vertical scrollbar */
+        width: 1rem;
+        /* for horizontal scrollbar */
+        height: 1rem;
+    }
 
-*::-webkit-scrollbar-track {
-    background-color: #111;
-}
+    *::-webkit-scrollbar-track {
+        background-color: #111;
+    }
 
-*::-webkit-scrollbar-thumb {
-    background: linear-gradient(var(--tertiary-light-color) 0%, var(--primary-light-color) 95%);
-}
+    *::-webkit-scrollbar-thumb {
+        background: linear-gradient(var(--tertiary-light-color) 0%, var(--primary-light-color) 95%);
+    }
 
-*::-webkit-scrollbar-thumb:horizontal {
-    background: linear-gradient(95deg, var(--tertiary-light-color) 0%, var(--primary-light-color) 95%);
+    *::-webkit-scrollbar-thumb:horizontal {
+        background: linear-gradient(95deg, var(--tertiary-light-color) 0%, var(--primary-light-color) 95%);
+    }
 }
 
 body {
