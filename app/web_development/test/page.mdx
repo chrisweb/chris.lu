@@ -14,10 +14,10 @@ This is some inline code in typescript (tsx): `helloWorld(){:tsx}`, this is a in
 
 ## code blocks
 
-a codeblock set to javascript (js), with a title, line numbers enabled and a highlighted word:
+a codeblock, language is set to javascript (js), with a title and a highlighted word:
 
 ~~~md
-```js title="./test.js" showLineNumbers /console/
+```js title="./test.js" /console/#special
 function helloWorld() {
     // this is a comment
     let greeting = 'Hello World!'
@@ -26,7 +26,7 @@ function helloWorld() {
 ```
 ~~~
 
-```js title="./test.js" /console/
+```js title="./test.js" /console/#special
 function helloWorld() {
     // this is a comment
     let greeting = 'Hello World!'
@@ -34,10 +34,10 @@ function helloWorld() {
 }
 ```
 
-another code block set to typescripts (tsx), the third line is highlighted, a word is highlighted using a styling id, line numbers enabled and a caption:
+another code block, language is set to typescripts (tsx), the third line is highlighted, line numbers enabled and a caption:
 
 ~~~md
-```tsx {3} /helloWorld/#special showLineNumbers caption="tsx"
+```tsx {3} showLineNumbers caption="tsx"
 function helloWorld() {
     // this is a comment
     let greeting = 'Hello World!'
@@ -46,13 +46,38 @@ function helloWorld() {
 ```
 ~~~
 
-```tsx {3} /helloWorld/#special showLineNumbers caption="tsx"
+```tsx {3} showLineNumbers caption="tsx"
 function helloWorld() {
     // this is a comment
     let greeting = 'Hello World!'
     console.log(greeting)
 }
 ```
+
+another code block, language is set to typescripts (tsx), the third to fourth line are highlighted using the id #special, line numbers enabled and the first line number should be 10
+
+~~~md
+```tsx {3-4}#special showLineNumbers{10}
+function helloWorld() {
+    // this is a comment
+    let greeting = 'Hello World!'
+    console.log(greeting)
+}
+```
+~~~
+
+```tsx {3-4}#special showLineNumbers{10}
+function helloWorld() {
+    // this is a comment
+    let greeting = 'Hello World!'
+    console.log(greeting)
+}
+
+helloWorld()
+```
+
+> [!NOTE]  
+> did you notice how we set the highlighting to the third to fourth line, this is because highlighting is based on the actual line numbers of the code block and not the displayed line numbers, hence to highlight line 12 to 13 we set the highlight option to `{3-4}` and NOT `{12-13}`
 
 ## alerts
 
