@@ -843,6 +843,8 @@ Note: as you can see in this configuration we have not only enabled the new but 
 
 TODO: in next config, do I need to configure pageExtensions for MDX to work in app directory, or is this just for pages directory???
 
+TODO: add note about not leaking powered by info: poweredByHeader
+
 now we need to add two more files to make MDX work with server components
 
 add another file into the root of your project called `mdx-components.tsx` with the following content
@@ -2070,6 +2072,8 @@ then we use the option showLineNumbers which turns the line numbers on the right
 
 and finally we tell it to highlight the characters "console" in our code
 
+TODO: example to tell showLineNumbers to start with number 10, like so showLineNumbers{10}
+
 here is another code block example:
 
 ```tsx {3} /helloWorld/#special caption="tsx"
@@ -2150,6 +2154,9 @@ I will make a short list here with the most common token (for javascript / types
 * number: .constant.numeric.decimal.js
 * Object property: .meta.object-literal.key
 
+TODO:
+
+* check out what shiki transformers are <https://shiki.style/guide/transformers#transformers>, can they be useful for our blog <https://www.npmjs.com/package/@shikijs/transformers>
 
 read more:
 
@@ -4821,7 +4828,13 @@ export default ImageArticle
 
 
 
-I could add a note that no direct descendant of main should have a position sticky or next.js adds warning to console:
+future ideas (for after the initial release):
+* reduced motion, apply to some of the animations and also to the header animation <https://dev.to/ilizette/what-is-motion-sensitivity-how-to-design-accessible-web-animations-5dej>
+* article: I could add a note that no direct descendant of main should have a position sticky or next.js adds warning to console:
 <https://github.com/shadcn-ui/ui/issues/1355>
-
-add an example how to use <https://www.npmjs.com/package/rehype-rewrite/v/2.1.3>
+* article: add an example how to use <https://www.npmjs.com/package/rehype-rewrite/v/2.1.3>
+* I wanted to set a minimum nodejs version, but this article claims it only works for dependencies and not the project itself <https://www.marcusoft.net/2015/03/packagejson-and-engines-and-enginestrict.html> however the article is from 2015, so maybe things changed, I would need to install an older node.js version an make tests to be sure before I add this to the node.js/npm post, another post mentioned that you can enforce the engine by using the npm config option "engine-strict" <https://docs.npmjs.com/cli/v10/using-npm/config> in an npm rc file <https://docs.npmjs.com/cli/v10/configuring-npm/npmrc>
+* should I use the github api to fetch some info about me to be added to the aside of the web development section?
+* I found this project <https://medusajs.com/nextjs-commerce/> they use nextjs 14, would be worth looking at how do things, they have a create app script I should try out
+* should I create my own creat app script to allow users to quickly setup a developer blog with all the mdx installed and setup, like <https://www.npmjs.com/package/create-next-app> and <https://docs.medusajs.com/create-medusa-app>
+* interesting next.js 14 article I have not fully read yet <https://medusajs.com/blog/client-server-transition-learnings-nextjs-14-server-components/>
