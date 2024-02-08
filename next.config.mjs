@@ -42,52 +42,12 @@ const nextConfig = (/*phase*/) => {
     const themeJsonContentFixed = jsonrepair(themeJsonContent)
 
     // https://rehype-pretty-code.netlify.app/
+    /** @type {import('rehype-pretty-code').Options} */
     const rehypePrettyCodeOptions = {
         // VSCode "SynthWave '84" theme
         theme: JSON.parse(themeJsonContentFixed),
-
         // Keep the background or use a custom background color?
         keepBackground: true,
-
-        // "visitor" hooks to customize the html output
-        onVisitLine(element) {
-            // prevent lines from collapsing in `display: grid` mode, and
-            // allow empty lines to be copy/pasted
-            if (element.children.length === 0) {
-                element.children = [{ type: 'text', value: ' ' }]
-            }
-        },
-        onVisitHighlightedLine(element) {
-            if (typeof element.properties.className === 'undefined') {
-                element.properties.className = []
-            }
-            element.properties.className.push('highlightedLine')
-        },
-        onVisitHighlightedWord(element) {
-            if (typeof element.properties.className === 'undefined') {
-                element.properties.className = []
-            }
-            element.properties.className.push('highlightedWord')
-        },
-        onVisitHighlightedChars(element) {
-            if (typeof element.properties.className === 'undefined') {
-                element.properties.className = []
-            }
-            element.properties.className.push('highlightedChars')
-        },
-        onVisitTitle(element) {
-            if (typeof element.properties.className === 'undefined') {
-                element.properties.className = []
-            }
-            element.properties.className.push('codeBlockTitle')
-
-        },
-        onVisitCaption(element) {
-            if (typeof element.properties.className === 'undefined') {
-                element.properties.className = []
-            }
-            element.properties.className.push('codeBlockCaption')
-        },
     }
 
     // https://github.com/chrisweb/remark-table-of-contents#options
@@ -313,6 +273,7 @@ const nextConfig = (/*phase*/) => {
             ignoreDuringBuilds: true,
         },
         reactStrictMode: true,
+        poweredByHeader: false,
         headers: async () => {
             return [
                 {
