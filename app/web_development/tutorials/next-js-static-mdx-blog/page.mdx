@@ -136,11 +136,15 @@ Now save the file (to save the file you can use the VSCode shortcut `Ctrl+S{:she
 
 Finally commit the changes and then sync
 
-### create a new branch
+### create a new "preview" branch
 
-To learn how to create a new branch from another branch, I recommend you check the chapter [](/web_development/posts/vscode#creating-a-new-branch) in my VSCode post
+There are a lot of different approaches when it comes to managing code using branches, like [Git Flow](https://nvie.com/posts/a-successful-git-branching-model/), [GitHub Flow](https://docs.github.com/en/get-started/using-github/github-flow), [GitLab Flow](https://about.gitlab.com/topics/version-control/what-is-gitlab-flow/), [Trunk-based development](https://www.atlassian.com/continuous-delivery/continuous-integration/trunk-based-development) and many more. There is no right or wrong here, the best workflow is the one that works best for you (or for your team), this is why I recommend checking out the above links and familiarize yourself with the different workflows, then try the one out that you think is best suited and if it does not fit perfectly you can still adjust and make it your git flow 😉
 
-git flow, github flow gitlab flow
+Because this project is about a personal blog, I don't think we need a very complex Git Flow, this is why I will only create a second branch to commit the code updates into and then be able to preview the result (staging or testing environment), then if I'm satisfied with the result I will make a pull request (PR) to merge the code into the main branch, the main branch will then get deployed in production. If you work with others on your blog project, to avoid having to deal with merge conflicts on a regular basis, you might want to create a branch per feature (hence called feature branches) and use that branch for development, but if you are the only dev a **main** branch as well as an extra **preview** branch is probably enough.
+
+Create a new branch from the main branch and call it **preview**, to learn how to create a new branch from another branch (and then publish it), I recommend you check the chapter ["Creating a new branch" from the VSCode post](/web_development/posts/vscode#create-a-new-branch-from-based-on-another-branch) in my VSCode post
+
+Now that the branch is created, you will see in the bottom of VSCode that our new branch is already the one selected, it is not published yet, so go ahead and publish it (yes you could consider not publishing it until you are sure that you will use the code, but I prefer to always immediatly publish them, so that if something happens to my computer I still have a copy in the cloud, of course once published it is a bit more work if you want to delete it as you need to do so locally as well as remotly but I still prefer that to losing several hours or even days worth of work)
 
 ### first page
 
