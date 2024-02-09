@@ -2156,6 +2156,12 @@ I will make a short list here with the most common token (for javascript / types
 
 TODO:
 * check out my examples page: <http://localhost:3000/web_development/test>
+* add not about rehype pretty code token maps in rehypePrettyCodeOptions:
+```mjs
+tokensMap: {
+    'fn': 'entity.name.function',
+},
+```
 * make a tip box explaining that if you want to use html comments in code boxes you need to encode the html entities or the comment will not show, the browser considers it a real html comment if not encoded, so `<` needs to be encoded as `&lt;` and `>` encoded as `&gt;`, like so `&lt;!-- MY HTML COMMENT --&gt;`
 * check out what shiki transformers are <https://shiki.style/guide/transformers#transformers>, can they be useful for our blog <https://www.npmjs.com/package/@shikijs/transformers>
 
