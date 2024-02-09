@@ -3015,7 +3015,8 @@ read more:
 
 * [react "custom hooks" documentation](https://react.dev/learn/reusing-logic-with-custom-hooks)
 * [react "JSX conditanal rendering" documentation](https://react.dev/learn/conditional-rendering)
-
+* [MDN "Intersection Observer API" documentation](https://www.smashingmagazine.com/2021/07/dynamic-header-intersection-observer/)
+* [Smashing Magazine "Intersection Observer API" article](https://www.smashingmagazine.com/2021/07/dynamic-header-intersection-observer/)
 
 
 
