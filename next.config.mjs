@@ -48,6 +48,9 @@ const nextConfig = (/*phase*/) => {
         theme: JSON.parse(themeJsonContentFixed),
         // Keep the background or use a custom background color?
         keepBackground: true,
+        tokensMap: {
+            'fn': 'entity.name.function',
+        },
     }
 
     // https://github.com/chrisweb/remark-table-of-contents#options
@@ -247,8 +250,6 @@ const nextConfig = (/*phase*/) => {
             frame-src 'none';
         `
     }
-
-    
 
     /** @type {import('next').NextConfig} */
     const nextConfig = {
