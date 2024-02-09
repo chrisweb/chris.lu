@@ -16,16 +16,18 @@ export default function WebDevelopmentPage() {
     return (
         <>
             <aside>
-                <ul className="linksList">
-                    <li>
-                        <FontAwesomeIcon icon={faGithub} color='white' size="2x" className="social" /> <NavigationLink href="https://github.com/chrisweb">My GitHub Projects</NavigationLink>
-                    </li>
-                    <li>
-                        <a href="https://www.buymeacoffee.com/chriswwweb">
-                            <Image src="/assets/images/buy_me_a_coffee_button.png" alt="button buy me a coffee" width="240" height="67" />
-                        </a>
-                    </li>
-                </ul>
+                <div className="asideCore">
+                    <ul className="linksList">
+                        <li>
+                            <FontAwesomeIcon icon={faGithub} color='white' size="2x" className="social" /> <NavigationLink href="https://github.com/chrisweb">My GitHub Projects</NavigationLink>
+                        </li>
+                        <li>
+                            <a href="https://www.buymeacoffee.com/chriswwweb">
+                                <Image src="/assets/images/buy_me_a_coffee_button.png" alt="button buy me a coffee" width="240" height="67" />
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </aside>
             <section id="web_development" className="middle">
                 <h1 className="h1">Web Development</h1>
