@@ -59,6 +59,16 @@ React and Next.js have evolved a lot lately, the most notable additions are **se
 
 If you closed VSCode since last time, launch VSCode and open the folder we created in **Prerequisites** chapter (if you need help to open a folder in VSCode, check out my chapter [open a folder in VSCODE](/web_development/posts/vscode#open-a-folder-in-vscode) from the VSCode post)
 
+### create a new "preview" git branch
+
+There are a lot of different approaches when it comes to managing code using branches, like [Git Flow](https://nvie.com/posts/a-successful-git-branching-model/), [GitHub Flow](https://docs.github.com/en/get-started/using-github/github-flow), [GitLab Flow](https://about.gitlab.com/topics/version-control/what-is-gitlab-flow/), [Trunk-based development](https://www.atlassian.com/continuous-delivery/continuous-integration/trunk-based-development) and many more. There is no right or wrong here, the best workflow is the one that works best for you (or for your team), this is why I recommend checking out the above links and familiarize yourself with the different workflows, then try the one out that you think is best suited and if it does not fit perfectly you can still adjust and make it your git flow 😉
+
+Because this project is about a personal blog, I don't think we need a very complex Git Flow, this is why I will only create a second branch to commit the code updates into and then be able to preview the result (staging or testing environment), then if I'm satisfied with the result I will make a pull request (PR) to merge the code into the main branch, the main branch will then get deployed in production. If you work with others on your blog project, to avoid having to deal with merge conflicts on a regular basis, you might want to create a branch per feature (hence called feature branches) and use that branch for development, but if you are the only dev a **main** branch as well as an extra **preview** branch is probably enough.
+
+Create a new branch **from the main branch** and call it **preview**, to learn how to create a new branch from another branch (and then publish it), I recommend you check the chapter ["Creating a new branch" from the VSCode post](/web_development/posts/vscode#create-a-new-branch-from-based-on-another-branch) in my VSCode post
+
+Now that the branch is created, you will see in the bottom of VSCode that our new branch is already the one selected, it is not published yet, so go ahead and publish it (yes you could consider not publishing it until you are sure that you will use the code, but I prefer to always immediatly publish them, so that if something happens to my computer I still have a copy in the cloud, of course once published it is a bit more work if you want to delete it as you need to do so locally as well as remotly but I still prefer that to losing several hours or even days worth of work)
+
 ### using Create Next App (CNA)
 
 To create a new Next.js project we are going to use [Create Next App](https://www.npmjs.com/package/create-next-app) (CNA), CNA is a CLI tool created by the Next.js to get started quickly
@@ -101,12 +111,16 @@ That's it the **Create Next App** will now install Next.js and React (and React 
 
 Now that create next app is done, it is a good time to do your first commit
 
-If you need help to commit changes using VSCode, check out my chapter [commit your changes to GitHub using the VSCode version control tool](/web_development/posts/vscode#commit-your-changes-to-github-using-the-vscode-version-control-tool) from the VSCode post
+If you need help to commit changes (and then synchronize them) using VSCode, check out my chapter [commit your changes to GitHub using the VSCode version control tool](/web_development/posts/vscode#commit-your-changes-to-github-using-the-vscode-version-control-tool) from the VSCode post
 
-After you have commited the files and synchronised the changes with remote repository, you can go to [github.com](https://github.com/) and check out your repository, if the commit and syncing was successful you will see that all the new files and directories are now listed in your GitHub repository
+After you have commited the files and synchronised the changes with remote repository, you can go to [github.com](https://github.com/) and check out your repository or go directly to your repository if you remember the name, the URL should be in the format `https://github.com/MY_GITHUB_USER_NAME/MY_REPOSITORY_NAME`, by default the content of the **main** branch gets displayed, to switch to the **preview** branch click on the branches dropdown (under the repository name) and select preview
+
+![](../../../../public/assets/images/app/web_development/posts/github/github_switch_branch.png)
+
+If the commit and syncing was successful you will see that all the new files and directories are now listed in your GitHub repository
 
 > [!TIP]  
-> I recommend commiting often, as it will make it a lot easier if you decide to revert your last commit, as it will only include the code from one step you want to undo and NOT also the code of several other steps that you actually want to keep, also commiting and synchronising often reduces the risk that you lose code and hence hours or days of work if something happens to your local machine and finally it reduces the risk that you end of having conflits if you are not the only one working on the repository
+> I recommend you commit often as it will make it a lot easier if you decide to revert your last commit, because it will only include the code from one step you want to undo and NOT also the code of several other steps that you actually want to keep, it will also create a nicer commit history where the commit messages are short and related to a few files instead if having a huge commit messages attached to dozens of files, also commiting and synchronising often reduces the risk that you lose code and hence hours or days of work if something happens to your local machine and finally it reduces the risk that you end of having conflits if you are not the only one working on the repository
 
 ### update the README.md file
 
@@ -122,38 +136,113 @@ Then copy / paste the following content into your README:
 
 ## npm commands (package.json scripts)
 
-`npm run dev`: to start the development server
-`npm run build`: to make a production build
-`npm run start`: to start the server on a production server using the build we made with the previous command
-`npm run lint`: to run a linting script that will scan our code and help us find problems in our code
+`npm run dev`: to start the development server  
+`npm run build`: to make a production build  
+`npm run start`: to start the server on a production server using the build we made with the previous command  
+`npm run lint`: to run a linting script that will scan our code and help us find problems in our code  
+
 ```
+
+> [!TIP]  
+> I added 2 spaces after each line, for the 4 commands, this ensures that there is a line break after each of them  
 
 This adds documentation to the README for 4 commands that are available after setting up a project with CNA
 
 Then change **MY_PROJECT** to whatever you want to name your project
 
+> [!TIP]  
+> Did you know you can preview markdown files in VSCode? If not check out my short [mardown preview chapter](/web_development/posts/vscode#vscode-markdown-preview) in the VSCode post  
+
 Now save the file (to save the file you can use the VSCode shortcut `Ctrl+S{:shell}` (macOS: `⌘S{:shell}`, Linux: `Ctrl+S{:shell}`))
 
-Finally commit the changes and then sync
+Finally commit the changes and then synchronize them
 
-### create a new "preview" branch
+> [!MORE]  
+> [markdown "paragraphs and line breaks" documentation](https://daringfireball.net/projects/markdown/syntax#p)
 
-There are a lot of different approaches when it comes to managing code using branches, like [Git Flow](https://nvie.com/posts/a-successful-git-branching-model/), [GitHub Flow](https://docs.github.com/en/get-started/using-github/github-flow), [GitLab Flow](https://about.gitlab.com/topics/version-control/what-is-gitlab-flow/), [Trunk-based development](https://www.atlassian.com/continuous-delivery/continuous-integration/trunk-based-development) and many more. There is no right or wrong here, the best workflow is the one that works best for you (or for your team), this is why I recommend checking out the above links and familiarize yourself with the different workflows, then try the one out that you think is best suited and if it does not fit perfectly you can still adjust and make it your git flow 😉
+## creating a simple blog
 
-Because this project is about a personal blog, I don't think we need a very complex Git Flow, this is why I will only create a second branch to commit the code updates into and then be able to preview the result (staging or testing environment), then if I'm satisfied with the result I will make a pull request (PR) to merge the code into the main branch, the main branch will then get deployed in production. If you work with others on your blog project, to avoid having to deal with merge conflicts on a regular basis, you might want to create a branch per feature (hence called feature branches) and use that branch for development, but if you are the only dev a **main** branch as well as an extra **preview** branch is probably enough.
+### create the first page
 
-Create a new branch from the main branch and call it **preview**, to learn how to create a new branch from another branch (and then publish it), I recommend you check the chapter ["Creating a new branch" from the VSCode post](/web_development/posts/vscode#create-a-new-branch-from-based-on-another-branch) in my VSCode post
+Hope you are still there, because it is finally time to start coding (a bit) 🙂
 
-Now that the branch is created, you will see in the bottom of VSCode that our new branch is already the one selected, it is not published yet, so go ahead and publish it (yes you could consider not publishing it until you are sure that you will use the code, but I prefer to always immediatly publish them, so that if something happens to my computer I still have a copy in the cloud, of course once published it is a bit more work if you want to delete it as you need to do so locally as well as remotly but I still prefer that to losing several hours or even days worth of work)
+But first lets open the app directory create next app has created for us, if you have a bit of time have a look at what they put in there (it's always good to have a look at what the Next.js team recommends) but after that delete all the files in the `/app` directory as I want to go step by step through the process of creating a Next.js blog, you can also delete the content in the `/public` directory as we won't need the assets of the demo project anymore
 
-### first page
+Next create a new file in the app directory and name it `page.tsx` (or `page.jsx` if you chose to use javascript)
+
+Then add the following content into the `page.tsx` file and finally save it
+
+```tsx title="/app/page.tsx" showLineNumbers
+export default function Home() {
+
+    return (
+        <>
+            <h1>Hello World?</h1>
+        </>
+    )
+
+}
+
+```
+
+Congratulations you just coded your first Next.js page
 
 ### start the dev(elopment) server
 
-in your command line tool (or a vscode terminal), type this command to start the development server:
+Now open the VSCode terminal if it isn't open yet (or use your favorite command line tool) and let's use one of the 4 commands we added to our README.md earlier to start the development server:
 
 ```shell
 npm run dev
 ```
+
+Next open your browser and put the following URL into the address bar: [http://localhost:3000/](http://localhost:3000/)
+
+If you inspect the source of the page, you will see that Next.js injects a bunch of Javascript code into our page and some of those javascript files are really heavy, this is because Next.js adds for example a tool called **Hot Module Reload** (HMR), which will run in the background and update the project for us every time we edit and then save a file in our project, Next.js calls this [fast refresh](https://nextjs.org/docs/architecture/fast-refresh), then it will reload the content in the browser for us, all of that code however won't make it into production, Next.js only adds those tool when in development mode (we are in development mode because we use the dev server command)
+
+Now go back to VSCode and look at the list of files in the sidebar and you will notice that Next.js re-added the `/app/layout.tsx` file we just deleted earlier, that's because Next.js is a nice framework and it will always have your back, well and also because this layout file is called the **root layout** and it is **required**, also if you look at your VSCode terminal you will see that Next.js printed the following line, informing us that it created the layout file for us:
+
+> Your page app/page.tsx did not have a root layout. We created app\layout.tsx for you.
+
+If you open the file you will see that on top it has added a metadata object, this Next.js metadata API is what we will use in layouts and pages to modify the tags in the `<head>` element of our page(s), like the **title** and **description** (I will go more in detail in a future chapter)
+
+The second part it has added is just a basic React setup
+
+```tsx title="/app/layout.tsx" {1-4} showLineNumbers
+export const metadata = {
+    title: 'Next.js',
+    description: 'Generated by Next.js',
+}
+
+export default function RootLayout({
+    children,
+}: {
+    children: React.ReactNode
+}) {
+    return (
+        <html lang="en">
+            <body>{children}</body>
+        </html>
+    )
+}
+
+```
+
+> [!MORE]  
+> [Next.js "fast refresh" documentation](https://nextjs.org/docs/architecture/fast-refresh)  
+> [Next.js "Root Layout (Required)" documentation](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts#root-layout-required)  
+> [Next.js "Metadata API" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/metadata)  
+
+### edit the first page
+
+As you might have noticed I added a question mark in the **Hello World?** heading text, let's replace the question mark with an exclamation mark and then save the file
+
+> [!NOTE]  
+> as soon as you save the file, you will see in the terminal that Next.js prints a message **Compiled in Xms (Y modules)**, which shows you that Next.js detected changes in your code base and did a new build for you
+
+Now go back into your browser and even though you haven't reloaded the page you will notice that your changes have been applied
+
+Time to make another commit (and sync the changes) and then call it a day 😉
+
+## 
 
 </article>
