@@ -1,54 +1,3 @@
-Note for myself and future things to read and try out:
-
-TODO: read: <https://www.mayank.co/blog/react-server-components>
-
-Question(s): regarding the new layouts system, the [Layouts RFC](https://nextjs.org/blog/layouts-rfc) mentioned it would be nice to have a feature that allows to "preserve the state on navigation", did they include this? if so how does it work
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## blog
-
-
-
-### our first page
-
-first we create the app directory in the root of our project, by using the following command or by using your IDE:
-
-```shell
-mkdir app
-```
-
-inside of the `app` directory create a first page called `page.tsx` and put the following content into it:
-
-```tsx
-export default function Homepage() {
-    return <main>Hello, World!</main>
-}
-```
-
-Note: you will see in VSCode that the `<main>` element is underlined and shows an error, ignore this for now, it will go away in the next step as soon as next.js has created the typescript configuration file for us
 
 Note: did you notice how our first page is called `page.tsx` but the function itself has as name `Homepage`, if you worked with next.js before you might be used to create files for pages where the file name and the function were both identical and represented the content of that page, this isn't the case anymore, in the app directory every file containing UI code of a page is always called `page.tsx`
 
@@ -4847,3 +4796,4 @@ future ideas (for after the initial release):
 * should I create my own creat app script to allow users to quickly setup a developer blog with all the mdx installed and setup, like <https://www.npmjs.com/package/create-next-app> and <https://docs.medusajs.com/create-medusa-app>
 * interesting next.js 14 article I have not fully read yet <https://medusajs.com/blog/client-server-transition-learnings-nextjs-14-server-components/>
 * I could add to the npm and package.json post a little guide about hot to publish on npm (create alpha, beta or canary versions), also good to mention to use the package.json engines option, also good to add a tip that mentions that if you add it to your project then this option will neither throw a warning or get enforced (if you added the npmrc enforce engines config) because you don't install your project (you only install the dependencies of the project)
+* another good read: <https://www.mayank.co/blog/react-server-components>
