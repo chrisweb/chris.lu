@@ -50,9 +50,9 @@ Do I need to move all my code from pages to the app directory and do I need to u
 
 TLDR: NO!
 
-The app directory and server side React are all features you can opt in when ready, but nobody forces you to use them. The pages directory still exists in Next.js 13 and 14 and React is still has all the client components features it had before the introductions of Server Components and Server Actions.
+The app directory and server side React are all features you can opt in when ready, but nobody forces you to use them. The pages directory still exists in Next.js 13 and 14 and React is still has all the client components features it had before the additions of Server Components and Server Actions.
 
-This means you can still start a new project today and use the pages directory (I however don't recommend it), if you have an existing codebase you don't need to migrate everything at once from pages to the app directory, you can do it bit by bit, however if you start a new project in 2024 I recommend that you consider using the app directory as well as Server Components and eventually Server Actions, because those technologies are more future proof and also include a lot of great features the pages directory or client side only projects written in React did not have until today
+This means you can still start a new project today and use the pages directory (I however don't recommend it) and if you have an existing codebase you don't need to migrate everything at once from pages to the app directory, you can do it bit by bit. If however if you start a new project from scratch then I recommend that you consider using the app directory as well as Server Components and eventually Server Actions, because those technologies are more future proof and also include a lot of great features the pages router or React client side only projects do not have
 
 If you are already using a previous version of Next.js and are migrating to one of the latest versions then I highly recommend you first check out the [Next.js "codemods" documentation](https://nextjs.org/docs/pages/building-your-application/upgrading/codemods) as these might save you a lot of time, another good read is the [Next.js app router migration guide](https://nextjs.org/docs/app/building-your-application/upgrading/app-router-migration)
 
@@ -66,10 +66,19 @@ Some differences between Next.js app and pages directories
 
 ### routing in pages VS app
 
-Not so long ago all Next.js only had the **pages** directory, since the first release of Next.js 13, Next.js now has two main directories: the **pages** and **app** directories:
+Not so long ago all Next.js only had the **pages** directory, since the first release of Next.js 13, Next.js now has two directories to chose from the **pages** and **app** directories, which correspond to the [pages router](https://nextjs.org/docs/pages/building-your-application/routing) and the [app router](https://nextjs.org/docs/app/building-your-application/routing), both are file based routers but how files are being used differs:
 
-* when using the **pages** directory, files in the pages directory automatically become available as routes, which means that the file structure directly corresponds to the URL structure. For example, pages/foo.tsx becomes example.com/foo
-* the **app** directory in Next.js offers a more advanced approach for managing layouts, styles, and complex routing patterns. For example, pages/foo/page.tss becomes example.com/foo, because **foo** is now a directory and not the name of the page file, this allows us to add other files in that directory like a layout.tsx file to manage the styling of the page and all others pages in sub-directories, a loading.tsx file to add a loader that gets displayed while the content is being fetching
+* the **pages** router (/pages directory) a page file `/pages/foo.tsx` will be available at the URL `example.com/foo` and `/pages/bar/baz.tsx` will be reachable at `example.com/bar/baz`
+* with the **app** it is different, the page file name is always the same, every page is a `page.tsx`, so only the directory structure defines the route segments, so the URL `example.com/foo` would be a file in `/app/foo/page.tsx` and `example.com/bar/baz` a file in `/app/bar/baz/page.tsx`
+
+When using **app router** (`/app` directory) each URL segment corresponds to a directory, which means we can put more than just pages in a directory, one of those [routing files](https://nextjs.org/docs/getting-started/project-structure#routing-files) for example is a `layout.tsx` file, which allows us to build nested layouts, or the `loading.tsx` file to add a loader that gets displayed while the content of the page is getting fetched
+
+The app router supports features you already know from the pages router, like dynamic or catch all route segments, but offers more features today and even more new features got added since the first release like the parallel routes that got introduced in Next.js 13.3
+
+> [!MORE]  
+> [Next.js "pages routing" documentation](https://nextjs.org/docs/pages/building-your-application/routing)  
+> [Next.js "app routing" documentation](https://nextjs.org/docs/app/building-your-application/routing)  
+> [Next.js "routing files" documentation](https://nextjs.org/docs/getting-started/project-structure#routing-files)
 
 ### data fetching and rendering in the pages directory
 
