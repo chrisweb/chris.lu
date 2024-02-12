@@ -8,39 +8,33 @@
         ],
         "allowJs": true,
         "skipLibCheck": true,
-        "strict": false,
-        "forceConsistentCasingInFileNames": true,
+        "strict": true,
         "noEmit": true,
-        "incremental": true,
         "esModuleInterop": true,
         "module": "esnext",
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "resolveJsonModule": true,
         "isolatedModules": true,
         "jsx": "preserve",
+        "incremental": true,
         "plugins": [
             {
                 "name": "next"
             }
         ],
         "paths": {
-            "@interfaces/*": [
-                "./interfaces/*"
-            ],
-            "@components/*": [
-                "./components/*"
-            ],
-        },
+            "@/*": [
+                "./*"
+            ]
+        }
     },
     "include": [
         "next-env.d.ts",
-        ".next/types/**/*.ts",
         "**/*.ts",
         "**/*.tsx",
-        "next.config.mjs"
+        ".next/types/**/*.ts"
     ],
     "exclude": [
-        "node_modules",
-        "code"
+        "node_modules"
     ]
 }
