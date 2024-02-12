@@ -9,7 +9,7 @@ interface IProps {
 
 const Button: React.FC<IProps> = ({ children }) => {
 
-    const wordsList = children.toString()
+    const wordsList = children ? children.toString() : ''
     const parts = wordsList.split(', ')
     const requestAnimationFrameRef = useRef(0)
     const animationTimestampRef = useRef(0)
