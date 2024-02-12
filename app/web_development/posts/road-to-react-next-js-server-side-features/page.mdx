@@ -60,9 +60,9 @@ If you are already using a previous version of Next.js and are migrating to one 
 > [Next.js "App Router Incremental Adoption Guide" documentation](https://nextjs.org/docs/app/building-your-application/upgrading/app-router-migration)  
 > [Next.js "codemods" documentation](https://nextjs.org/docs/pages/building-your-application/upgrading/codemods)  
 
-## pages VS app directory
+## pages VS app router
 
-Some differences between Next.js app and pages directories
+This is a introduction to differences between Next.js app and pages router
 
 ### routing in pages VS app
 
@@ -127,13 +127,12 @@ When using the app directory, Next.js (>= 13) will consider that every component
 ```jsx
 'use client'
 
-import { client } from 'database'
+import { client } from 'my-database-lib'
 
 export default function MyPage() {
   async function formAction(formData) {
     'use server'
-    const username = formData.get('username')
-    client.insert({ name: username })
+    client.insert({ name: formData.get('username') })
   }
   return (<form action={formAction} method="POST">
     <input type="text" id="username">
@@ -141,7 +140,7 @@ export default function MyPage() {
 }
 ```
 
-Below I added a bunch of links to documents I think will help to fully understand the potential of Server Components and Server Actions:
+Below I are links to documents I think will help to fully understand the potential of the **App router** data fetching, **Server Components** and **Server Actions**:
 
 > [!MORE]  
 > [Next.js "App Router common mistakes and how to fix them" blog post](https://vercel.com/blog/common-mistakes-with-the-next-js-app-router-and-how-to-fix-them)  
