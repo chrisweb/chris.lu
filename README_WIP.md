@@ -4797,3 +4797,5 @@ future ideas (for after the initial release):
 * interesting next.js 14 article I have not fully read yet <https://medusajs.com/blog/client-server-transition-learnings-nextjs-14-server-components/>
 * I could add to the npm and package.json post a little guide about hot to publish on npm (create alpha, beta or canary versions), also good to mention to use the package.json engines option, also good to add a tip that mentions that if you add it to your project then this option will neither throw a warning or get enforced (if you added the npmrc enforce engines config) because you don't install your project (you only install the dependencies of the project)
 * another good read: <https://www.mayank.co/blog/react-server-components>
+* check out rauch project, some interesting dependencies for serverless postgresql <https://github.com/rauchg/emoji-todo>
+* I should add a chapter about security at some point, this related article is a good read: <https://nextjs.org/blog/security-nextjs-server-components-actions>
