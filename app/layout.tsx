@@ -5,18 +5,24 @@ import { Permanent_Marker, VT323, Architects_Daughter, Source_Code_Pro } from 'n
 import HeaderNavigation from '../components/header/Navigation'
 import NavigationLink from '@components/navigation/Link'
 
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+    title: 'chris.lu',
+    description: 'chrisweb\'s blog about web development, games, lego, me',
+}
+
+import type { Viewport } from 'next'
+
+export const viewport: Viewport = {
+    themeColor: '#570550',
+}
+
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import { config } from '@fortawesome/fontawesome-svg-core'
 // disable the fontawesome feature which adds a style tag with the css inside to a page
 // this is not needed as we also import the css into our project and next.js will bundle it
 config.autoAddCss = false
-
-import { Metadata } from 'next'
-
-export const metadata: Metadata = {
-    title: 'chris.lu',
-    description: '',
-}
 
 const permanentMarkerFont = Permanent_Marker({
     subsets: ['latin'],
