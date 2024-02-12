@@ -49,10 +49,10 @@ in tsconfig.json
 {
     "compilerOptions": {
         "paths": {
-            "@components/*": [
-                "./components/*"
-            ],
-        },
+            "@/*": [
+                "./*"
+            ]
+        }
     },
 }
 ```
@@ -60,7 +60,7 @@ in tsconfig.json
 this allows you to import your components that are located in /PROJECT_ROOT/components using the new alias (no need to know the exact relative path anymore)
 
 ```ts
-import NavigationLink from '@components/navigation/Link'
+import NavigationLink from '@/components/navigation/Link'
 ```
 
 
