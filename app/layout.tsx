@@ -11,6 +11,13 @@ import { config } from '@fortawesome/fontawesome-svg-core'
 // this is not needed as we also import the css into our project and next.js will bundle it
 config.autoAddCss = false
 
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+    title: 'chris.lu',
+    description: '',
+}
+
 const permanentMarkerFont = Permanent_Marker({
     subsets: ['latin'],
     variable: '--font-permanentMarker',
