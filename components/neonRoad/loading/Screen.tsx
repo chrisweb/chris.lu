@@ -5,7 +5,7 @@ import styles from './screen.module.css'
 
 const LoadingScreen: React.FC = () => {
 
-    const [loadingMessageState, setLoadingMessageState] = useState<string>(null)
+    const [loadingMessageState, setLoadingMessageState] = useState<string>()
 
     useEffect(() => {
 

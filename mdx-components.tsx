@@ -1,7 +1,7 @@
 import type { MDXComponents } from 'mdx/types'
-import HeadingsObserver from '@components/headings/Observer'
-import NavigationLink from '@components/navigation/Link'
-import ImageArticle from '@components/image/Article'
+import HeadingsObserver from '@/components/headings/Observer'
+import NavigationLink from '@/components/navigation/Link'
+import ImageArticle from '@/components/image/Article'
 import { ImageProps } from 'next/image'
 import Image from 'next/image'
 
@@ -44,10 +44,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                 {children}
             </h6>
         ),
-        // I have a types problem here
-        // maybe related to: https://github.com/vercel/next.js/issues/50471
         a: ({ children, href, ...props }) => (
-            <NavigationLink href={href} {...props}>
+            <NavigationLink href={href ? href : ''} {...props}>
                 {children}
             </NavigationLink>
         ),

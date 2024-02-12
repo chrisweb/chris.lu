@@ -15,7 +15,7 @@ import { EffectComposer, Bloom } from '@react-three/postprocessing'
 
 interface IProps extends React.PropsWithChildren {
     altText: string
-    containerRef: React.MutableRefObject<HTMLDivElement>
+    containerRef: React.MutableRefObject<HTMLDivElement | null>
 }
 
 const NeonRoadCanvas: React.FC<IProps> = (props) => {
@@ -62,6 +62,8 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
         return (<>3D Canvas not supported on this device</>)
     }
 
+    const aspect = props.containerRef.current !== null ? props.containerRef.current.clientWidth / props.containerRef.current.clientHeight : 2
+
     return (
         <>
             <Canvas
@@ -76,7 +78,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 //frameloop="never"
                 //onCreated={onCanvasCreatedHandler}
                 //ref={canvasRef}
-                camera={cameraRef.current}
+                camera={cameraRef.current !== null ? cameraRef.current : {}}
             >
                 {/*<Suspense fallback={<Loader />}>*/}
                 <PerspectiveCamera
@@ -86,7 +88,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                     near={0.01}
                     far={3}
                     position={[0, 0.06, 1]}
-                    aspect={props.containerRef.current.clientWidth / props.containerRef.current.clientHeight}
+                    aspect={aspect}
                 />
                 {/*<PerformanceMonitor onChange={onPerformanceChangeHandler} />*/}
                 <color attach="background" args={['#2f0f30']} />

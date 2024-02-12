@@ -9,11 +9,11 @@ interface IProps {
     waveData: number[]
 }
 
-const WaveformCanvas = forwardRef(({ onWaveClickHandler, waveData }: IProps, waveformRef: React.MutableRefObject<Waveform>) => {
+const WaveformCanvas = forwardRef<Waveform, IProps>(({ onWaveClickHandler, waveData }, waveformRef) => {
 
-    const waveCanvasRef = useRef<HTMLCanvasElement>()
+    const waveCanvasRef = useRef<HTMLCanvasElement | null>(null)
 
-    const initializeWaveform = () => {
+    const initializeWaveform = (): Waveform => {
 
         const waveLayoutOptions: IWaveLayoutOptions = {
             waveHeightInPixel: 40,
@@ -28,8 +28,10 @@ const WaveformCanvas = forwardRef(({ onWaveClickHandler, waveData }: IProps, wav
 
         const waveform = new Waveform(waveCoreOptions)
 
-        waveform.setCanvasElement(waveCanvasRef.current)
-
+        if (waveCanvasRef.current !== null) {
+            waveform.setCanvasElement(waveCanvasRef.current)
+        }
+        
         waveform.setLayoutOptions({
             peakTopFillStyle: 'rgba(255,255,255,0.7)',
             peakBottomFillStyle: 'rgba(255,255,255,0.5)',
@@ -41,25 +43,31 @@ const WaveformCanvas = forwardRef(({ onWaveClickHandler, waveData }: IProps, wav
 
     }
 
-    const getWaveform = () => {
-
-        if (waveformRef.current !== null) {
-            return waveformRef.current
-        }
+    const getWaveform = (): Waveform => {
 
         const waveform = initializeWaveform()
-        waveformRef.current = waveform
+
+        if (typeof waveformRef === 'function') {
+            waveformRef(waveform)
+        } else {
+            if (waveformRef !== null) {
+                waveformRef.current = waveform
+            }
+        }
 
         return waveform
+
     }
 
     useEffect(() => {
 
         if (waveData.length > 0) {
+
             const waveform = getWaveform()
 
             waveform.setWaveData(waveData)
             waveform.draw(0)
+
         }
 
     }, [waveData])

@@ -8,8 +8,6 @@ import { moveFromAToBInLoop } from './lib/helpers'
 
 const Terrains: React.FC = () => {
 
-    //const terrains = useMemo(() => {
-
     const terrainsRef = useRef<Mesh[]>([])
 
     // the three fiber render() will trigger useFrame()
@@ -43,6 +41,7 @@ const Terrains: React.FC = () => {
                 zPosition={zPosition}
                 key={i}
                 ref={ref => {
+                    if (ref === null) return
                     terrainsRef.current[i] = ref
                 }}
             />
@@ -51,10 +50,6 @@ const Terrains: React.FC = () => {
     }
 
     return (<>{terrainElements}</>)
-
-    //}, [])
-
-    //return (<>{terrains}</>)
 
 }
 

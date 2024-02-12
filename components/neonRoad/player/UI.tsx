@@ -18,9 +18,9 @@ interface ICredits {
     wave: number[]
 }
 
-const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<PlayerCore>) => {
+const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
 
-    const volumeSliderRef = useRef<HTMLInputElement>()
+    const volumeSliderRef = useRef<HTMLInputElement | null>(null)
 
     const waveformRef = useRef<Waveform | null>(null)
 
@@ -45,7 +45,7 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
 
         const player = new PlayerCore(options)
 
-        if (typeof volumeSliderRef.current !== 'undefined') {
+        if (volumeSliderRef.current !== null) {
             volumeSliderRef.current.value = player.getVolume().toString()
         }
 
@@ -174,7 +174,7 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                         codec: 'mp3',
                     }
                 ],
-                wave: [34,35,35,35,59,62,82,77,96,95,96,95,97,97,96,81,39,57,97,92,95,70,21,25,30,42,52,52,52,64,71,79,93,92,97,97,97,95,96,97,97,99,100,100,100,42,33,23,20,6],
+                wave: [34, 35, 35, 35, 59, 62, 82, 77, 96, 95, 96, 95, 97, 97, 96, 81, 39, 57, 97, 92, 95, 70, 21, 25, 30, 42, 52, 52, 52, 64, 71, 79, 93, 92, 97, 97, 97, 95, 96, 97, 97, 99, 100, 100, 100, 42, 33, 23, 20, 6],
                 name: 'Out Of Love',
                 artistName: 'Shirobon',
                 artistWebsite: 'https://shirobon.bandcamp.com/',
@@ -295,7 +295,7 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
     }
 
     const onInputVolumeHandler = () => {
-        if (typeof volumeSliderRef.current !== 'undefined') {
+        if (volumeSliderRef.current !== null) {
             const volume = volumeSliderRef.current.value
             getPlayer().setVolume(parseInt(volume))
         }
@@ -305,14 +305,17 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
         getPlayer().setPosition(clickHorizontalPositionInPercent)
     }, [])
 
-    const getPlayer = () => {
-
-        if (playerRef.current !== null) {
-            return playerRef.current
-        }
+    const getPlayer = (): PlayerCore => {
 
         const player = initializePlayer()
-        playerRef.current = player
+
+        if (typeof playerRef === 'function') {
+            playerRef(player)
+        } else {
+            if (playerRef !== null) {
+                playerRef.current = player
+            }
+        }
 
         return player
 
@@ -360,8 +363,8 @@ const PlayerUI = forwardRef((_: unknown, playerRef: React.MutableRefObject<Playe
                         Warning: An empty string ("") was passed to the href attribute.
                         To fix this, either do not render the element at all or pass null to
                         href instead of an empty string. */}
-                        <a href={creditsState !== null ? creditsState.license : null} target="_blank" rel="noreferrer" tabIndex={-1} className={styles.songTitle}>{creditsState !== null ? creditsState.name : ''} <FontAwesomeIcon icon={faCreativeCommons} color='white' /></a>
-                        <a href={creditsState !== null ? creditsState.artistWebsite : null} target="_blank" rel="noreferrer" tabIndex={-1} className={styles.artistName}>{creditsState !== null ? creditsState.artistName : ''} <FontAwesomeIcon icon={faArrowUpRightFromSquare} color='white' /></a>
+                        <a href={creditsState.license} target="_blank" rel="noreferrer" tabIndex={-1} className={styles.songTitle}>{creditsState !== null ? creditsState.name : ''} <FontAwesomeIcon icon={faCreativeCommons} color='white' /></a>
+                        <a href={creditsState.artistWebsite} target="_blank" rel="noreferrer" tabIndex={-1} className={styles.artistName}>{creditsState !== null ? creditsState.artistName : ''} <FontAwesomeIcon icon={faArrowUpRightFromSquare} color='white' /></a>
                         <div className={styles.spoolLeft}></div>
                         <div className={styles.spoolRight}></div>
                         <div className={styles.shield}></div>

@@ -66,6 +66,7 @@ const Trees: React.FC = () => {
                 <PalmModel
                     position={[treeModelSetup.xPosition, 0, treeModelSetup.zPosition]}
                     ref={ref => {
+                        if (ref === null) return
                         side === 'right' ? rightSideTreesRefs.current[i] = ref : leftSideTreesRefs.current[i] = ref
                     }}
                     scale={[0.009, 0.009, 0.009]}

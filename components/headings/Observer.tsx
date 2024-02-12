@@ -2,15 +2,15 @@
 
 import { ErrorBoundary } from 'react-error-boundary'
 import useObserver from '../../hooks/useObserver'
-import { ReactNode, ReactElement, Children, isValidElement, cloneElement, MouseEvent } from 'react'
+import { Children, isValidElement, cloneElement, MouseEvent } from 'react'
 import styles from './observer.module.css'
 
 interface IProps {
     id?: string
-    children?: ReactNode | ReactNode[]
+    children?: React.ReactNode | React.ReactNode[]
 }
 
-const findFirstNodeThatMatchesType = (children: ReactNode, type: string): ReactElement => {
+const findFirstNodeThatMatchesType = (children: React.ReactNode, type: string): React.ReactElement<unknown, string | React.JSXElementConstructor<unknown>> | undefined => {
 
     const childrenArray = Children.toArray(children)
 
@@ -24,7 +24,7 @@ const findFirstNodeThatMatchesType = (children: ReactNode, type: string): ReactE
 
 }
 
-const findFirstNodeThatHasProp = (children: ReactNode, prop: string): ReactElement => {
+const findFirstNodeThatHasProp = (children: React.ReactNode, prop: string) => {
 
     const childrenArray = Children.toArray(children)
 
@@ -53,42 +53,51 @@ const onClickLinkHandler = (event: MouseEvent<HTMLAnchorElement>) => {
     }
 }
 
-const findAndTransformRows = (children: ReactNode, activeIdState: string, level = 0): ReactNode => {
+const findAndTransformRows = (children: React.ReactNode, activeIdState: string, level = 0): React.ReactNode => {
 
     const ulChildInput = findFirstNodeThatMatchesType(children, 'ul')
 
-    let ulChildOutput: ReactNode
+    let ulChildOutput: React.ReactNode
 
-    if (ulChildInput !== undefined) {
+    if (typeof ulChildInput !== 'undefined') {
 
         level++
 
-        const liChildrenInput = ulChildInput.props.children
+        let liChildrenInput: React.ReactElement[] = []
 
-        const liChildrenOutput = liChildrenInput.map((liChild: ReactNode, index: number) => {
+        if (typeof ulChildInput.props === 'object' && ulChildInput.props !== null && 'children' in ulChildInput.props) {
+            liChildrenInput = ulChildInput.props.children as React.ReactElement[]
+        }
+
+        const liChildrenOutput = liChildrenInput.map((liChild: React.ReactNode, index: number) => {
 
             if (isValidElement(liChild)) {
 
                 if (liChild.type === 'li') {
 
                     const liChildLinkInput = findFirstNodeThatHasProp(liChild.props.children, 'href')
-                    const liChildLinkId = liChildLinkInput.props.href.slice(1)
-                    const moreRows = findAndTransformRows(liChild.props.children, activeIdState, level)
 
-                    const clonedLinkChild = cloneElement(liChildLinkInput, {
-                        ...liChildLinkInput.props,
-                        className: 'animatedUnderline noUnderline',
-                        onClick: onClickLinkHandler,
-                    })
+                    if (typeof liChildLinkInput !== 'undefined') {
 
-                    const clonedLiChild = cloneElement(liChild, {
-                        ...liChild.props,
-                        key: liChild.key !== null ? liChild.key : level + '_' + index,
-                        className: activeIdState === liChildLinkId ? styles.active : styles.notActive,
-                        children: moreRows ? [clonedLinkChild, moreRows] : clonedLinkChild
-                    })
+                        const liChildLinkId = liChildLinkInput.props.href.slice(1)
+                        const moreRows = findAndTransformRows(liChild.props.children, activeIdState, level)
 
-                    return clonedLiChild
+                        const clonedLinkChild = cloneElement(liChildLinkInput, {
+                            ...liChildLinkInput.props,
+                            className: 'animatedUnderline noUnderline',
+                            onClick: onClickLinkHandler,
+                        })
+
+                        const clonedLiChild = cloneElement(liChild, {
+                            ...liChild.props,
+                            key: liChild.key !== null ? liChild.key : level + '_' + index,
+                            className: activeIdState === liChildLinkId ? styles.active : styles.notActive,
+                            children: moreRows ? [clonedLinkChild, moreRows] : clonedLinkChild
+                        })
+
+                        return clonedLiChild
+
+                    }
 
                 }
             }
@@ -97,11 +106,16 @@ const findAndTransformRows = (children: ReactNode, activeIdState: string, level 
 
         })
 
-        ulChildOutput = cloneElement(ulChildInput, {
-            // https://react.dev/reference/react/cloneElement#parameters
-            className: ulChildInput.props.className ? ulChildInput.props.className + styles.list : styles.list,
-            children: liChildrenOutput
-        })
+        if (typeof ulChildInput.props === 'object' && ulChildInput.props !== null) {
+
+            ulChildOutput = cloneElement(ulChildInput,
+                {
+                    className: 'className' in ulChildInput.props ? ulChildInput.props.className + styles.list : styles.list
+                } as React.PropsWithChildren,
+                liChildrenOutput,
+            )
+
+        }
 
     }
 
@@ -116,7 +130,12 @@ const HeadingsObserver: React.FC<IProps> = (props): JSX.Element => {
     // https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver
     const { activeIdState } = useObserver('h1, h2, h3', '-25% 0px -35% 0px')
     const navChild = findFirstNodeThatMatchesType(props.children, 'nav')
-    const toc = findAndTransformRows(navChild.props.children, activeIdState)
+
+    let toc: React.ReactNode
+
+    if (navChild && typeof navChild.props === 'object' && navChild.props !== null && 'children' in navChild.props) {
+        toc = findAndTransformRows(navChild.props.children as React.ReactNode[], activeIdState)
+    }
 
     return (
         <>

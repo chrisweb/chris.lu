@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react'
 const useObserver = (elementsToObserve: string, rootMargin: string) => {
 
     const [activeIdState, setActiveIdState] = useState('')
-    const observerRef = useRef<IntersectionObserver>()
+    const observerRef = useRef<IntersectionObserver | null>(null)
 
     useEffect(() => {
 
@@ -25,7 +25,7 @@ const useObserver = (elementsToObserve: string, rootMargin: string) => {
 
             const elements = document.querySelectorAll(elementsToObserve)
 
-            elements.forEach((elem) => observerRef.current.observe(elem))
+            elements.forEach((elem) => observerRef.current !== null ? observerRef.current.observe(elem) : null)
         }
 
         return () => {

@@ -10,7 +10,7 @@ export interface IProps extends MeshProps {
     zPosition: number
 }
 
-const Terrain: React.FC<IProps> = forwardRef<Mesh, IProps>((props: IProps, terrainRef: React.MutableRefObject<Mesh>) => {
+const Terrain: React.FC<IProps> = forwardRef<Mesh, IProps>((props, terrainRef) => {
 
     const FLOOR_TEXTURE_PATH = '/assets/images/neonroad/grid_4096x8192-min.png'
     const EMISSIVE_MAP_PATH = '/assets/images/neonroad/emissive_map_4096x8192-min.png'
@@ -63,10 +63,10 @@ const Terrain: React.FC<IProps> = forwardRef<Mesh, IProps>((props: IProps, terra
 
                 const ny = y / width
 
-                let frequency: number
-                let amplitude: number
-                let seaLevelModifier: number
-                let limitHeightSteps: number
+                let frequency: number = 0
+                let amplitude: number = 0
+                let seaLevelModifier: number = 0
+                let limitHeightSteps: number = 0
 
                 if (x <= 4 || x >= 27) {
 

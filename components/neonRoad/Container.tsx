@@ -6,7 +6,7 @@ import StartScreen from './start/Screen'
 import dynamic from 'next/dynamic'
 import PlayerUI from './player/UI'
 import { PlayerCore } from 'web-audio-api-player'
-import HeaderTitle from '@components/header/Title'
+import HeaderTitle from '@/components/header/Title'
 import LoadingScreen from './loading/Screen'
 import ButtonPowerOff from './button/PowerOff'
 import styles from './container.module.css'
@@ -28,14 +28,16 @@ const Container: React.FC = () => {
 
     const clickPlayCallback = useCallback(async (playMusic: boolean) => {
         setAnimationState(true)
-        if (playMusic) {
+        if (playMusic && playerRef.current !== null) {
             await playerRef.current.play()
         }
     }, [])
 
     const clickStopCallback = useCallback(async () => {
         setAnimationState(false)
-        await playerRef.current.stop()
+        if (playerRef.current !== null) {
+            await playerRef.current.stop()
+        }
     }, [])
 
     const altText = 'Chris.lu header image, displaying an 80s style landscape and sunset'

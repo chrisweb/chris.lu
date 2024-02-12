@@ -12,8 +12,8 @@ const Loop: React.FC<IProps> = (props) => {
     const three = useThree()
 
     // animation request animation frame
-    const requestAnimationFrameRef = useRef(null)
-    const timeRef = useRef(null)
+    const requestAnimationFrameRef = useRef<number | null>(null)
+    const timeRef = useRef<number | null>(null)
 
     const changeAnimationState = useCallback(() => {
         document.hidden ? stop() : start()
@@ -37,7 +37,10 @@ const Loop: React.FC<IProps> = (props) => {
 
         three.clock.stop()
 
-        cancelAnimationFrame(requestAnimationFrameRef.current)
+        if (requestAnimationFrameRef.current !== null) {
+            cancelAnimationFrame(requestAnimationFrameRef.current)
+        }
+
     }
 
     useEffect(() => {
@@ -57,7 +60,7 @@ const Loop: React.FC<IProps> = (props) => {
         const currentTime = performance.now()
 
         // delta time in seconds
-        const deltaTime = currentTime - timeRef.current
+        const deltaTime = currentTime - (timeRef.current ? timeRef.current : 0)
 
         // extra measure for when the delta time is very high
         // this avoids that all terrains and threes move to their

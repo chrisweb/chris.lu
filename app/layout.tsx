@@ -1,9 +1,9 @@
-import NeonRoadContainer from '../components/neonRoad/Container'
+import NeonRoadContainer from '@/components/neonRoad/Container'
 import './global.css'
 import styles from './layout.module.css'
 import { Permanent_Marker, VT323, Architects_Daughter, Source_Code_Pro } from 'next/font/google'
-import HeaderNavigation from '../components/header/Navigation'
-import NavigationLink from '@components/navigation/Link'
+import HeaderNavigation from '@/components/header/Navigation'
+import NavigationLink from '@/components/navigation/Link'
 
 import { Metadata } from 'next'
 

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import NavigationLink from '@components/navigation/Link'
+import NavigationLink from '@/components/navigation/Link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import styles from './page.module.css'

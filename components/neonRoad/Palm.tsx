@@ -29,8 +29,8 @@ type GLTFResult = GLTF & {
 const PALM_GLTF_PATH = '/assets/3d_models/palm/palm.gltf'
 
 // code for the gltf version
-const PalmModel: React.FC<GroupProps> = forwardRef((props: JSX.IntrinsicElements['group'], ref: React.MutableRefObject<Group>) => {
-
+const PalmModel: React.FC<GroupProps> = forwardRef<Group, JSX.IntrinsicElements['group']>((props, ref) => {
+    
     // types problem see: https://github.com/pmndrs/gltfjsx/issues/167
     const { nodes, materials } = useGLTF(PALM_GLTF_PATH) as GLTFResult
 
