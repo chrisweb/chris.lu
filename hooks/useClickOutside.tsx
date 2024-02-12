@@ -4,12 +4,12 @@ export type TypeCallback = () => void
 
 const useClickOutside = (callback: TypeCallback) => {
 
-    const ref = useRef(null)
+    const ref = useRef<HTMLElement | null>(null)
 
     useEffect(() => {
 
         const clickHandler: EventListenerOrEventListenerObject = (event) => {
-            if (ref.current && !ref.current.contains(event.target)) {
+            if (ref.current && event.target !== null && !ref.current.contains(event.target as Node)) {
                 callback()
             }
         }

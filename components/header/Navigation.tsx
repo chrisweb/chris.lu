@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react'
 import styles from './navigation.module.css'
 import Link from 'next/link'
-import useClickOutside, { TypeCallback } from '../../hooks/useClickOutside'
+import useClickOutside, { TypeCallback } from '@/hooks/useClickOutside'
 import { useRouter, usePathname } from 'next/navigation'
 import { useSwipeable } from 'react-swipeable'
 
