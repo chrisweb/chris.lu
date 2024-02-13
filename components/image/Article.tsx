@@ -21,7 +21,7 @@ const ImageArticle: React.FC<ImageProps> = (props): JSX.Element => {
                         width: '100%',
                         height: 'auto',
                     }}
-                    sizes="704px"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     priority
                     placeholder={ placeholder ? 'blur' : 'empty' }
                     {...(props as ImageProps)}
@@ -32,7 +32,7 @@ const ImageArticle: React.FC<ImageProps> = (props): JSX.Element => {
                         width: '100%',
                         height: 'auto',
                     }}
-                    sizes="336px"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 15vw"
                     placeholder={ placeholder ? 'blur' : 'empty' }
                     {...(props as ImageProps)}
                 />
