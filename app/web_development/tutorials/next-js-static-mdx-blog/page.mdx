@@ -193,7 +193,15 @@ Now open the VSCode terminal if it isn't open yet (or use your favorite command 
 npm run dev
 ```
 
-Next open your browser and put the following URL into the address bar: [http://localhost:3000/](http://localhost:3000/)
+Now in the terminal, press `Ctrl` and then click on the Next.js local server URL or open your browser and put the following URL into the address bar: [http://localhost:3000/](http://localhost:3000/)
+
+> [!NOTE]  
+> port 3000 is the default, the port will be something else if:  
+>
+> * it was already in use Next.js will have taken another port  
+> * you have used the **-p** option for next.js **dev** or **start** cli commands, for example in your package.json use the option like so `next dev -p 4000` to change the port to 4000
+>
+> if you want to know for sure what port is being used check the terminal, Next.js will have printed the URL of the dev server
 
 If you inspect the source of the page, you will see that Next.js injects a bunch of Javascript code into our page and some of those javascript files are really heavy, this is because Next.js adds for example a tool called **Hot Module Reload** (HMR), which will run in the background and update the project for us every time we edit and then save a file in our project, Next.js calls this [fast refresh](https://nextjs.org/docs/architecture/fast-refresh), then it will reload the content in the browser for us, all of that code however won't make it into production, Next.js only adds those tool when in development mode (we are in development mode because we use the dev server command)
 
