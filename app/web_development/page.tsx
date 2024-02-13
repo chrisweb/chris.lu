@@ -1,15 +1,9 @@
-import type { Metadata } from 'next'
 import NavigationLink from '@/components/navigation/Link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import styles from './page.module.css'
 import Link from 'next/link'
 import Image from 'next/image'
-
-export const metadata: Metadata = {
-    title: 'foo',
-    description: 'bar',
-}
 
 export default function WebDevelopmentPage() {
 
