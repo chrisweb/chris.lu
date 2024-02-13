@@ -1,0 +1,4 @@
+.games h1 {
+    font-family: var(--font-vt323);
+    font-size: calc(var(--main-fontSize-big1) * 2);
+}
