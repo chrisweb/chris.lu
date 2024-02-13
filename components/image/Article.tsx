@@ -21,10 +21,9 @@ const ImageArticle: React.FC<ImageProps> = (props): JSX.Element => {
                         width: '100%',
                         height: 'auto',
                     }}
-                    sizes="100vw"
+                    sizes="704px"
                     priority
                     placeholder={ placeholder ? 'blur' : 'empty' }
-                    //quality={90} // default is 75
                     {...(props as ImageProps)}
                 />
             ) : (props.alt.startsWith('photo') || props.alt.startsWith('screenshot')) ? (
@@ -33,7 +32,7 @@ const ImageArticle: React.FC<ImageProps> = (props): JSX.Element => {
                         width: '100%',
                         height: 'auto',
                     }}
-                    sizes="100vw"
+                    sizes="336px"
                     placeholder={ placeholder ? 'blur' : 'empty' }
                     {...(props as ImageProps)}
                 />
