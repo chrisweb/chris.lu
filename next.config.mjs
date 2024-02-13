@@ -201,7 +201,6 @@ const nextConfig = (/*phase*/) => {
 
         const defaultsCSPHeaders = `
             default-src 'none';
-            font-src 'self';
             media-src 'self';
             object-src 'none';
             base-uri 'none';
@@ -219,11 +218,12 @@ const nextConfig = (/*phase*/) => {
         if (process.env?.VERCEL_ENV === "preview") {
             return `
                 ${defaultsCSPHeaders}
-                style-src 'self';
-                script-src 'self' https://vercel.live/ https://vercel.com;
-                connect-src 'self' https://vercel.live/ https://vercel.com https://vitals.vercel-insights.com https://sockjs-mt1.pusher.com/ wss://ws-mt1.pusher.com/;
-                img-src 'self' https://vercel.live/ https://vercel.com https://sockjs-mt1.pusher.com/;
-                frame-src 'self' https://vercel.live/ https://vercel.com;
+                font-src 'self' https://vercel.live/;
+                style-src 'self' 'unsafe-inline';
+                script-src 'self' https://vercel.live/;
+                connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/;
+                img-src 'self' https://vercel.live/;
+                frame-src 'self' https://vercel.live/;
             `
         }
 
@@ -232,7 +232,8 @@ const nextConfig = (/*phase*/) => {
         if (process.env.NODE_ENV === "production") {
             return `
                 ${defaultsCSPHeaders}
-                style-src 'self';
+                font-src 'self';
+                style-src 'self' 'unsafe-inline';
                 script-src 'self';
                 connect-src 'self' https://vitals.vercel-insights.com;
                 img-src 'self';
@@ -243,6 +244,7 @@ const nextConfig = (/*phase*/) => {
         // for dev environment enable unsafe-eval for hot-reload
         return `
             ${defaultsCSPHeaders}
+            font-src 'self';
             style-src 'self' 'unsafe-inline';
             script-src 'self' 'unsafe-eval' 'unsafe-inline';
             connect-src 'self';
