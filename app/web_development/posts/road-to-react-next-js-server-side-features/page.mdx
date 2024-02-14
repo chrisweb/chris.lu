@@ -10,7 +10,7 @@ This post is based on research I did a while ago when I first heard about Server
 
 I will try to keep this document up to date as things evolve continuously, if you find mistakes please use the [issues](https://github.com/chrisweb/chris.lu/issues) on GitHub to report them and if you want to discuss something related to article feel free to open post it in the [dicussions](https://github.com/chrisweb/chris.lu/discussions) on Github
 
-## React
+## React 18.x
 
 On december 21 2020, the react team announced in a [blog post on react.org](https://reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html) that they had just published the [RFC: React Server Components](https://github.com/reactjs/rfcs/blob/main/text/0188-server-components.md) on github, as well as an experimental demo [video of React Server Components (RSC) on YouTube](https://www.youtube.com/watch?v=TQQPAU21ZUw)
 
@@ -23,7 +23,17 @@ In may 2023 the React team announced the [Canary release channel](https://react.
 > [!MORE]  
 > [React (react.dev) blog](https://react.dev/blog)  
 
-## Next.js
+## new features in Next.js prior to v13
+
+Since version v10.2.1 Next.js enabled [Incremental type checking](https://www.typescriptlang.org/tsconfig#incremental), making builds much faster and for example in version v13.2.0 they added **Statically Typed Links (Routes)**, all these new Typescript features are listed in the [Next.js "TypeScript" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript), which I recommend checking out one in a while as the Next.js team adds new and interesting features over time
+
+Starting with version 12 Next.js typescript compilation is now much faster thx to the Next.js ["SWC"](https://swc.rs/) compiler written in Rust, for a bit of history and more in depth information check out their [Next.js "SWC compiler" documentation](https://nextjs.org/docs/advanced-features/compiler), also in [version 12 Next.js](https://nextjs.org/blog/next-12#react-server-components) started experimenting with React Server Components and they added the feature as alpha version (but no app directory yet)
+
+> [!MORE]  
+> [Next.js "TypeScript" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript)  
+> [Next.js "SWC compiler" documentation](https://nextjs.org/docs/advanced-features/compiler)  
+
+## Next.js v13 and beyond
 
 In may 2022 the next.js team released the [Layouts RFC](https://nextjs.org/blog/layouts-rfc) and sketched out their ideas for server components, but also improved data fetching and things like nested layouts, alongside the RFC posted on their blog they opened a [github discussion regarding the layouts RFC](https://github.com/vercel/next.js/discussions/37136)
 
@@ -79,6 +89,18 @@ The app router supports features you already know from the pages router, like dy
 > [Next.js "pages routing" documentation](https://nextjs.org/docs/pages/building-your-application/routing)  
 > [Next.js "app routing" documentation](https://nextjs.org/docs/app/building-your-application/routing)  
 > [Next.js "routing files" documentation](https://nextjs.org/docs/getting-started/project-structure#routing-files)
+
+### layout(s) in pages VS app
+
+With the [pages router layouts](https://nextjs.org/docs/pages/building-your-application/routing/pages-and-layouts), you have the possibility to wrap the **children** prop in your `_app.tsx` with a layout component which then gets applied to every page, if however you want to use more than one layout, then you have to write custom code to make it work, for example by adding custom code inside of your _app.tsx you could check which route you are on and based on that switch to another layout, or you could import different layout components in each page file
+
+With the [app router layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts), it is much easier to have different layouts for different segments of your website, all you need to do is add layout.tsx (layout.jsx) into a directory and it will apply to the segment it is in as well as all segments nested below that, so not only is it easy to have multiple layouts it is also easy to create a cascade of nested layouts
+
+So even the app router layout system does NOT come with a lot of new features (the page layout system is already quite feature rich), in my opinion the DX got improved by a lot and hence it is easier to manage complex scenarios
+
+> [!MORE]  
+> [Next.js "pages router layout" documentation](https://nextjs.org/docs/pages/building-your-application/routing/pages-and-layouts)  
+> [Next.js "app router layout" documentation](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts)  
 
 ### data fetching and rendering in the pages directory
 
