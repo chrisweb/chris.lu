@@ -120,6 +120,37 @@ If the commit and syncing was successful you will see that all the new files and
 > [!TIP]  
 > I recommend you commit often as it will make it a lot easier if you decide to revert your last commit, because it will only include the code from one step you want to undo and NOT also the code of several other steps that you actually want to keep, it will also create a nicer commit history where the commit messages are short and related to a few files instead if having a huge commit messages attached to dozens of files, also commiting and synchronising often reduces the risk that you lose code and hence hours or days of work if something happens to your local machine and finally it reduces the risk that you end of having conflits if you are not the only one working on the repository
 
+### Next.js typescript plugin
+
+Next.js comes with a typescript plugin, to make it work you need to change the Typescript version that VSCode is using to the **workspace version** (the version that Next.js create app just installed), because by default VSCode will use a built in Typescript version
+
+If you don't know how yet how to change the typescript version to **workspace version** (in VSCode), check out the [VSCode typescript version](/web_development/posts/vscode#vscode-command-palette) chapter in the VSCode post
+
+As soon as you switch to the **workspace version**, VSCode will create new `.vscode/settings.json` file (or if you already have a VSCode settings.json it will extend it), there is nothing wrong in sharing that file as it will ensure that everyone that works on your project (or if you use multiple devices yourself) that they use the same workspace settings, like the typescript workspace version but also in one of the next chapters we will add useful VSCode extension and they will be listed in settings file too, so if someone does not have the extension installed VSCode will show a modal that suggests installing it
+
+> [!TIP]  
+> Next.js typescript plugin comes with some useful features, for example you will have typed routes, meaning that if you use next/link and set a href to a page that doesn't exist you will get a warning, it will also warn you if something is wrong in how you use the **use client** directive in your components and some more, I recommend to keep an eye on the [Next.js "typescript" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript) as the Next.js team adds more features over time
+
+To ensure we benefit from **statically typed links** there is one more step needed, open the `next.config.mjs` and then add the **experimental** typedRoutes to your Next.js configuration file like so:
+
+```mjs title="next.config.mjs" showLineNumbers {3-5}
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    experimental: {
+        typedRoutes: true,
+    },
+};
+
+export default nextConfig;
+```
+
+then save your changes
+
+finally I recommend you commit / sync the new `.vscode/settings.json` and the changes you did in the `next.config.mjs`
+
+> [!MORE]  
+> [Next.js "TypeScript" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript)  
+
 ### update the README.md file
 
 > [!NOTE]  
@@ -158,7 +189,7 @@ Finally commit the changes and then synchronize them
 > [!MORE]  
 > [markdown "paragraphs and line breaks" documentation](https://daringfireball.net/projects/markdown/syntax#p)
 
-## creating a simple blog
+## first page
 
 ### create the first page
 
