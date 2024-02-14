@@ -67,7 +67,7 @@ This means you can still start a new project today and use the pages directory (
 If you are already using a previous version of Next.js and are migrating to one of the latest versions then I highly recommend you first check out the [Next.js "codemods" documentation](https://nextjs.org/docs/pages/building-your-application/upgrading/codemods) as these might save you a lot of time, another good read is the [Next.js app router migration guide](https://nextjs.org/docs/app/building-your-application/upgrading/app-router-migration)
 
 > [!MORE]  
-> [Next.js "App Router Incremental Adoption Guide" documentation](https://nextjs.org/docs/app/building-your-application/upgrading/app-router-migration)  
+> [Next.js "App Router Incremental Adoption" documentation](https://nextjs.org/docs/app/building-your-application/upgrading/app-router-migration)  
 > [Next.js "codemods" documentation](https://nextjs.org/docs/pages/building-your-application/upgrading/codemods)  
 
 ## pages VS app router
@@ -102,47 +102,113 @@ So even the app router layout system does NOT come with a lot of new features (t
 > [Next.js "pages router layout" documentation](https://nextjs.org/docs/pages/building-your-application/routing/pages-and-layouts)  
 > [Next.js "app router layout" documentation](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts)  
 
-### data fetching and rendering in the pages directory
+### data fetching and rendering using the pages router
 
-here is a little recap of the 1st and 2nd generation of data fetching features in the **pages** directory (Pages Router):
+Here is a little recap of the 1st and 2nd generation of data fetching features using the pages router (in the **pages** directory):
 
 * first there was [getInitialProps](https://nextjs.org/docs/pages/api-reference/functions/get-initial-props), because the first page gets rendered on the server, **getInitialProps** would be called on the server, then if visiting another page using next/link or next/router that second page would get generated in the client, so any code in getInitialProps would this time get executed on the client side. This however meant that you had to be aware if you were currently on the server and could use server side code to make a direct call to the database (to fetch data) or if you were in the client and hence had to fetch the data via an ajax call (to an API endpoint). Besides that it was also important to be careful about how and what packages you were importing as you might have been using a package in your getInitialProps on the server but did not want it to also get imported when getInitialProps runs in the client. This is why biggest pain point was that if you wanted to avoid that some server dependencies leak into the client code, then you had to exclude those packages from the client by either using dynamic imports encapsulated into conditions (that would check if the code is being executed on the server or the client and based on that decide to call the dynamic import or not), or you had to use bundler plugins that would automatically exclude those "server only" packages at build time for you.
 * the newer [getServerSideProps](https://nextjs.org/docs/pages/building-your-application/data-fetching/get-server-side-props) (which first appeared in march 2020 with [Next.js 9.3](https://nextjs.org/blog/next-9-3)) is an async function that fetches the data and populates the props object of your page function. Same as with getInitialProps for the first page the code gets executed on the server, but if you visit a second page **getServerSideProps** will again get executed on the server and the data it returns will get sent as JSON to the client. Using getServerSideProps instead of getInitialProps eliminates two pain points, first you do not have to care about your imports anymore as next.js will exclude those "server only" packages for you from client bundle automatically and the second pain point it eleminates is that you do NOT have to write extra "fetch data" code in the client as Next.js will call getServerSideProps on the server for you and then fetch the data as JSON.
 * [getStaticProps](https://nextjs.org/docs/pages/building-your-application/data-fetching/get-static-props) appeared alongside getServerSideProps, the difference between the two is that getServerSideProps disables ["Automatic Static Optimization"](https://nextjs.org/docs/pages/building-your-application/rendering/automatic-static-optimization) but getStaticProps does not, **getStaticProps** is useful to fetch data not at "runtime" but at "build time", so when a user visits a page no data call is being made, all data got already fetched at build time (and the page props have been put in a static json file), which means for any request being made by a user your data won't change, this can be very interesting to build pages that load super fast as they use data that does not change between two builds, however getStaticProps has a feature so that you can "revalidate" data in the background, this is what gets used by "[Incremental Static Regeneration](https://nextjs.org/docs/pages/building-your-application/data-fetching/incremental-static-regeneration)" and allows you to update the static data you got at build time.
 
-### data fetching and rendering in app directory
+### data fetching and rendering using the app router
 
-to do data fetching in the **app** directory (App Router) you do NOT use the getServerSideProps anymore, instead you use Server Components and Server Actions:
+To do **data fetching** in the **app Router** you do NOT use the getServerSideProps anymore, instead you use Server Components that fetch data on the server and then send it to the client, together with your pre-rendered client components and compiled css
 
-**Server Components** (in my opinion) make it easier to get data from an API compared to using the getServerSideProps in pages (less framework specific syntax you need to know), a regular fetch will do (fetch in Next.js got extended with framework specific features like a caching mechanism, but in the end it still works like a regular fetch), here is a very simple example:
+In the app router (in my opinion) it is easier to get data from an API compared to using the getServerSideProps in pages (less framework specific syntax you need to know), a regular fetch will do (fetch in Next.js got extended with framework specific features like a caching mechanism, but in the end it still works like a regular fetch), here is a very simple example:
 
 ```jsx
 export default async function MyPage() {
-  const data = await fetch('https://api.example.com/...')
-  return (<>{data.foo}</>)
+    const data = await fetch('https://api.example.com/...')
+    return (<>{data.foo}</>)
 }
 ```
 
-When getting data in Server Component you are probably calling an API endpoint, in which case it is highly recommended to use **fetch** as it will automatically cache the data request. You can fine tune the caching of requests by for example defining when the cache should expire by setting the revalidate value manually and you can even disable caching if you want / need to. It is also possible to use tags which are useful to revalidate multiple cached queries at once based on their common tag. I highly recommend to do a deep dive in the [Next.js "Data Fetching, Caching, and Revalidating" documentation](https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating) to better understand how this works and what options you have.
+When getting data in Server Component and you are calling an API endpoint, then it is highly recommended to use **fetch** as it will automatically cache the data request. You can fine tune the caching of requests by for example defining when the cache should expire by setting the revalidate value manually and you can even disable caching if you want / need to:
 
-Now fetch is not the only way to get data in server components, you can also directly use a database client package or even an ORM, but in that case you need to setup the caching yourself by for example using [react cache](https://react.dev/reference/react/cache).
+```jsx /{ next: { revalidate: 3600 } }/#special
+export default async function MyPage() {
+    // revalidate if cache older than an hour
+    const data = await fetch(
+        'https://api.example.com/...',
+        { next: { revalidate: 3600 } }
+    )
+    return (<>{data.foo}</>)
+}
+```
+
+It is also possible to use tags which are useful to request that multiple cached queries get revalidated all at once based on their common tag:
+
+```jsx /{ next: { tags: ['collection'] } }/#special title="page.tsx"
+export default async function MyPage() {
+    // revalidate if cache older than an hour
+    const data = await fetch(
+        'https://api.example.com/...',
+        { next: { tags: ['my_custom_tag'] } }
+    )
+    return (<>{data.foo}</>)
+}
+```
+
+```jsx {6} title="action.ts"
+'use server'
+ 
+import { revalidateTag } from 'next/cache'
+ 
+export default async function action() {
+    revalidateTag('my_custom_tag')
+}
+```
+
+> [!TIP]  
+> I highly recommend to do a deep dive in the [Next.js "Data Fetching, Caching, and Revalidating" documentation](https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating) to better understand how this works and what options you have.  
+
+Now fetch is not the only way to get data in server components, you can also directly use a database client package or even an ORM, but in that case you need to setup the caching yourself by for example using [react cache](https://react.dev/reference/react/cache). There is more information in the Next.js documentation about [fetching data on the server with third-party libraries](https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating#fetching-data-on-the-server-with-third-party-libraries).
 
 ```jsx
 import { cache } from 'react'
-import { client } from 'database'
+import { client } from 'third_party_database_client'
  
 export const getData = cache(async (id) => {
-  const data = await client.queryById({ id })
-  return data
+    const data = await client.queryById({ id })
+    return data
 })
 
 export default async function MyPage({ params: { id } }) {
-  const data = await getData(id)
-  return (<>{data.foo}</>)
+    const data = await getData(id)
+    return (<>{data.foo}</>)
 }
 ```
 
-When using the app directory, Next.js (>= 13) will consider that every component is a Server Component by default, meaning if you don't specify anything then a component is automatically considered being a Server Component. There are things you can't do in a Server Component like using `useEffect{:js}` or listening for an `onClick{:js}` event, if you want to use these you need to add the 'use client' directive on top of your component turning your component into a client component. It is recommended to turn as few componments into client components as possible, Next.js always has and still does render client components on the server, then sends the HTML to the client and finally does a hydration step to make the page interactive, however server components use a SSR technique called the React Server Component Payload (RSC Payload) that will result in less client code, which will result in reduced pageload times. It is recommended that you do all data fetching in Server Components as it allows you import packages that will only get used on the Server, meaning they will not get bundled with other client side code, hence reducing the payload that is being sent to the client. Another benefit is that you can use environment variables like an API key and those will stay secret and not be exposed to the client when you use them in Server Components.
+Another option for caching database request got introduced in **Next.js 14** but is currently marked as unstable (so be aware that the API might change in the future), the new next/cache feature is called [unstable_cache](https://nextjs.org/docs/app/api-reference/functions/unstable_cache), it is the same caching mechanism used by fetch by for own queries using the database client you prefer:
+
+```jsx
+import { unstable_cache } from 'next/cache'
+import { client } from 'third_party_database_client'
+ 
+const getData = unstable_cache(async (id) => {
+    const data = await client.queryById({ id })
+    return data
+}, ['my_custom_tag'])
+
+export default async function MyPage({ params: { id } }) {
+    const data = await getData(id)
+    return (<>{data.foo}</>)
+}
+```
+
+> [!MORE]  
+> [Next.js "Data Fetching, Caching, and Revalidating" documentation](https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating)  
+> [Next.js "unstable_cache" API reference](https://nextjs.org/docs/app/api-reference/functions/unstable_cache)  
+> [React "Cache (Server components)" documentation](https://react.dev/reference/react/cache)  
+> [Vercel "Fetching data faster with the App Router" article](https://vercel.com/blog/nextjs-app-router-data-fetching)  
+
+### app router server components and server actions
+
+When using the app directory, Next.js (>= 13) will consider that every component is a **Server Component** by default, meaning if you don't specify anything then a component is automatically considered being a Server Component. There are things you can't do in a Server Component like using `useEffect{:js}` or listening for an `onClick{:js}` event, if you want to use these you need to add the 'use client' directive on top of your component turning your component into a client component.
+
+It is recommended to turn as few componments into client components as possible, Next.js always has and still does render client components on the server, then sends the HTML to the client and finally does a hydration step to make the page interactive, however server components use a SSR technique called the React Server Component Payload (RSC Payload) that will result in less client code, which will result in reduced pageload times.
+
+It is also recommended that you do all data fetching in Server Components as it allows you import packages that will only get used on the Server, meaning they will not get bundled with other client side code, hence reducing the payload that is being sent to the client. Another benefit is that you can use environment variables like an API key and those will stay secret and not be exposed to the client when you use them in Server Components.
 
 **Server Actions** allow us to mutate data on the server (from within a client component) without for example having to call an API endpoint, by using the directive 'use server' inside client a component you turn a part of your client component into a Server Component and that code will get executed on the Server but resides inside of client component. This means that Server Actions have the potential to greatly simplify our code, for example using Server Actions allow you to update or insert data into a database next to the client code that handles the onSubmit of a form. Server Actions also make it easy to progressively enhance forms, meaning a form will be usable even before JavaScript has been loaded.
 
@@ -152,27 +218,23 @@ When using the app directory, Next.js (>= 13) will consider that every component
 import { client } from 'my-database-lib'
 
 export default function MyPage() {
-  async function formAction(formData) {
-    'use server'
-    client.insert({ name: formData.get('username') })
-  }
-  return (<form action={formAction} method="POST">
-    <input type="text" id="username">
-  </form>)
+    async function formAction(formData) {
+        'use server'
+        client.insert({ name: formData.get('username') })
+    }
+    return (<form action={formAction} method="POST">
+        <input type="text" id="username">
+    </form>)
 }
 ```
 
 Below I are links to documents I think will help to fully understand the potential of the **App router** data fetching, **Server Components** and **Server Actions**:
 
 > [!MORE]  
+> [Next.js "Server Components" documentation](https://nextjs.org/docs/app/building-your-application/rendering/server-components)  
+> [Next.js "Server Actions and Mutations" documentation](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations)  
 > [Next.js "App Router common mistakes and how to fix them" blog post](https://vercel.com/blog/common-mistakes-with-the-next-js-app-router-and-how-to-fix-them)  
 > [Next.js "Server Components and Server Actions Security" blog post](https://nextjs.org/blog/security-nextjs-server-components-actions)  
-> [Vercel "Fetching data faster with the App Router" article](https://vercel.com/blog/nextjs-app-router-data-fetching)  
-> [Vercel "Understanding React Server Components" article](https://vercel.com/blog/understanding-react-server-components)
-> [Next.js "App Router Incremental Adoption Guide" documentation](https://nextjs.org/docs/app/building-your-application/upgrading/app-router-migration)  
-> [Next.js "Server Components" documentation](https://nextjs.org/docs/app/building-your-application/rendering/server-components)  
-> [Next.js "Data Fetching, Caching, and Revalidating" documentation](https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating)  
-> [Next.js "Server Actions and Mutations" documentation](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations)  
-> [React "Cache (Server components)" documentation](https://react.dev/reference/react/cache)  
+> [Vercel "Understanding React Server Components" article](https://vercel.com/blog/understanding-react-server-components)  
 
 </article>
