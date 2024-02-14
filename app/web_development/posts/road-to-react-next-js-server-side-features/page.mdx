@@ -114,7 +114,7 @@ here is a little recap of the 1st and 2nd generation of data fetching features i
 
 to do data fetching in the **app** directory (App Router) you do NOT use the getServerSideProps anymore, instead you use Server Components and Server Actions:
 
-**Server Components** (in my opinion) make it easier to get data from an API compared to using the getServerSideProps in pages, all you need to is use fetch, here is a very simple example:
+**Server Components** (in my opinion) make it easier to get data from an API compared to using the getServerSideProps in pages (less framework specific syntax you need to know), a regular fetch will do (fetch in Next.js got extended with framework specific features like a caching mechanism, but in the end it still works like a regular fetch), here is a very simple example:
 
 ```jsx
 export default async function MyPage() {
