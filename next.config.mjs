@@ -264,7 +264,7 @@ const nextConfig = (/*phase*/) => {
             //ppr: true,
             // experimental typescript "statically typed links"
             // https://nextjs.org/docs/app/building-your-application/configuring/typescript#statically-typed-links
-            typedRoutes: true,
+            typedRoutes: false,
         },
         // file formats for next/image
         images: {
