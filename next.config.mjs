@@ -262,6 +262,9 @@ const nextConfig = (/*phase*/) => {
             mdxRs: false,
             // experimental partial prerendering
             //ppr: true,
+            // experimental typescript "statically typed links"
+            // https://nextjs.org/docs/app/building-your-application/configuring/typescript#statically-typed-links
+            typedRoutes: true,
         },
         // file formats for next/image
         images: {
