@@ -1,147 +1,25 @@
 
 
-loading:
-
-Note: next.js loading uses a react suspense boundary under the hood, meaning that loading.tsx is a suspense boundary wrapped around your page.tsx
-
-you can now create new loading files and these files have an error prop that contains details about the error
-
-Question(s): are loading scripts also getting used by nested segments, like with layouts or do you need a loading script in each segment?
-
-TODO: create a small demo by creating a loading file and adding a setTimeout to our library/fetch that returns the dummy json
-
-read more:
-
-* [next.js loading UI documentation](https://beta.nextjs.org/docs/routing/loading-ui)
-* [next.js loading.js documentation](https://beta.nextjs.org/docs/api-reference/file-conventions/loading)
-* [react beta docs suspense documentation](https://beta.reactjs.org/reference/react/Suspense)
-
-
-
-error:
-
-Note: similar to loading.tsx which use react suspense boundaries under the hood, the error.tsx file uses react error boundaries under the hood
-
-similar as loading, you can create error files
-
-Question(s): error files can only be client components???
-
-TODO: also check out how error bounderies work: 
-
-read more: 
-
-* [next.js error file convention documentation](https://beta.nextjs.org/docs/api-reference/file-conventions/error)
-* [next.js error handling documentation](https://beta.nextjs.org/docs/routing/error-handling)
-* [react error boundery documentation](https://reactjs.org/docs/error-boundaries.html)
-* [react beta docs catching rendering error with an error boundary documentation](https://beta.reactjs.org/reference/react/Component#catching-rendering-errors-with-an-error-boundary)
-
-
-
-put your components into a seperate `components` directory or alongside the page files inside of the route segment directory:
-
-prior to next.js 13's release or if you worked previously with create react app and did not use next.js at all, like me you might be used to put all components into a directory called `components`
-
-Note: putting a compenentX.tsx file into the `pages` directory would not be wise as next.js will consider every .tsx file to be a page
-
-if you use the new next.js 13 however, you can now put all your components into segment directories, this means you can put all your UI components and even your test files into the same directory as your page.tsx, only the page.tsx file will be handled as page by next.js and every other file except those that have reserved names like loading.tsx or error.tsx will be considered being components
-
-so is a seperate components directory still needed and advisable or should you now get rid of the components directory and put all components into segment directories along with your page files?
-
-you could also do both, put some components that are being used by only one page into the pages segment directory and all other components that are being used by more than one page into the components directory
-
-it is as you prefer, for the moment as next.js is very new there is not yet really a trend which shows us which solution is the most popular
-
-I for my part prefer a seperate components directory that acts as a library for all my components, for several reasons:
-
-* because some components will be used by more than one page, so putting them into a segment directory alongside a page but getting imported by another page in another directory seems weird to me
-* you could argue that doing both, putting the components used by a page alongside the page into the same directory and all other components that are being used by more than just one page into a components directory, but the disadvantage I see here is that often you will create a component and at first it will be used by one page so you will put it alongside the page but then later on you discover that another page will benefit from using it too and then you need to move it and refactor the import pathes, this is something I want to avoid
-* TODO: not sure about this? -> all components that are in the app directory are considered being server components by default, so does that mean all components that are not in the app directory are considered being client components by default, meaning you don't have to explicitly add the 'use client' statement on top of each file? the other way around, if you have a component outside of the app directory and you want it to be a server component, how do you communicate that to next.js 13???
-* all files in the components directory will have react only code and no have any next.js specific code
-* it will hopefully be easier in the future to re-use or share the components
-
-
-
-
-
-
-caching:
-
-TODO: <https://beta.nextjs.org/docs/data-fetching/fundamentals#caching-data>
-
-this page <https://beta.nextjs.org/docs/routing/fundamentals#server-centric-routing-with-client-side-navigation> mentions:
-
-> Additionally, as users navigate around the app, the router will store the result of the React Server Component payload in an in-memory client-side cache. The cache is split by route segments which allows invalidation at any level and ensures consistency across concurrent renders. This means that for certain cases, the cache of a previously fetched segment can be re-used, further improving performance.
-
-read more: <https://beta.nextjs.org/docs/data-fetching/caching>
-
-// Generates statically like getStaticProps.
-fetch(URL, { cache: 'force-cache' });
-
-// Generates server-side upon every request like getServerSideProps.
-fetch(URL, { cache: 'no-store' });
-
-// Generates statically but revalidates every 20 seconds
-fetch(URL, { next: { revalidate: 20 } });
-
-Note: if you use fetch with no options, the default value for cache will be force-cache(?) TODO: need to confirm that
-
-TODO: need to verify this, if using a fetch and not opt out of caching, will the page be static, meaning the fetch is done at build time???, need to test this with some examples using a version deployed to vercel, to use a real prod build for testing / verification
-
-TODO: check out the next.js 13.2 improvements: <https://nextjs.org/blog/next-13-2#nextjs-cache>
-
-
-
-
-revalidating:
-
-<https://beta.nextjs.org/docs/data-fetching/revalidating>
-
-
-
-
-streaming:
-
-from the ["next.js 13 blog post"](https://nextjs.org/blog/next-13):
-
-> the app/ directory introduces the ability to progressively render and incrementally stream rendered units of the UI to the client
-
-I let you check out the [next.js "what is Streaming?" documentation section](https://beta.nextjs.org/docs/data-fetching/streaming-and-suspense) it is very informative about what limitations SSR has and why streaming is good solution
-
-
-
-
-
-
-
-TODO: Web fetch() API ???
-https://beta.nextjs.org/docs/data-fetching/fundamentals, also interesting the new server actions: https://nextjs.org/docs/app/building-your-application/data-fetching/forms-and-mutations
-TODO: client components
-TODO: list all reserved next.js file names:
-layout.tsx
-page.tsx
-loading.tsx
-error.tsx
-template.tsx (similar to layouts, but the difference is that on navigation a new instance is being created)
-head.tsx
-not-found.tsx
-are there more?
-
-TODO: increase dev server speed with turbopack, add the option `--turbo` to `next dev` in the package json scripts
-https://nextjs.org/docs/advanced-features/turbopack
-Question(s): is turbo also used for build command? I mean prod build, same as for dev?
-
-
-
-
-
-add authentification using next-auth
-the session provider that was previously in _app now goes into the root layout
-the login button component which has a clickHandler must have a "use client" statement if it is located inside of the app dirctory or get moved to the components directory
-
-use jest to write some tests
-jest seems to have the biggest user base right now if you look at the ["state of js 2022 survey results"](https://2022.stateofjs.com/en-US/libraries/testing/)
-
-
+next chapters?
+
+* setting up vercel account
+* vercel preview (staging environment) with github commit triggers auto deploy
+* vercel analytics
+* CSP
+* sentry.io account
+* basic eslint
+* articles (pages) using MDX (@next/mdx)
+* eslint for MDX
+* next/mdx "mdx-components" file
+* optimizing images with next/image
+* all the MDX plugins
+* next/link
+* navigation
+* styling
+* optimizing fonts with next/font
+* SEO (metadat)
+* github: pull request from preview into main branch (automatically link / close tickets)
+* vercel prod release (custom domain)
 
 ### optimizing images with next/image
 
@@ -216,15 +94,7 @@ read more:
 
 [next.js next/font beta documentation](https://beta.nextjs.org/docs/optimizing/fonts)
 
-### state management
 
-here are the libraries I consider using:
-
-jotai: <https://github.com/pmndrs/jotai>
-zustand: <https://github.com/pmndrs/zustand>
-recoil: <https://github.com/facebookexperimental/Recoil>
-
-here is a comparison of the 3: <https://npmtrends.com/jotai-vs-recoil-vs-zustand>
 
 ### setting up vercel account
 
@@ -256,77 +126,6 @@ finally click on "Deploy"
 wait for the deployment to finish
 
 if the deployment was successfull it will show you a preview image of the homepage, click on that image to visit your deployment
-
-### introduction to planetscale
-
-planetscale is a MySQL database platform for serverless apps
-
-it's databases are powered by [Vitess](https://github.com/vitessio/vitess) a MySQL cloud database that is today opensource and got developped by youtube in 2011 for their own needs and is being used there since then
-
-they offer a generous free tier for hobbyists and two paid plans for enterprise use
-
-
-
-### setting up planetscale account
-
-planetscale website: <https://planetscale.com/>
-planetscale is free for "hobby" projects, like your personal blog: <https://planetscale.com/pricing>
-
-go to your planetscale account and create your first database
-
-enter a name and chose a default region for your first database (idially a location close to your own location)
-
-now on top you will see a button that reads "initializing" with a loading spinner, wait for it to finish
-
-Note: we don't define a schema just yet, we will come to that in a bit
-
-## connecting planetscale to vercel
-
-after you have created a plantscale account and set up the database for your project head back to your [vercel dashboard](https://vercel.com/dashboard)
-
-Note: [vercel integrations](https://vercel.com/docs/integrations) let you connect third party tools to your vercel account
-
-in the top navigation bar click on the **settings** tab and then in the left navighation click on **integrations**, ot in this case as we know what we want to add we can also directly visit the plantscale integration page: <https://vercel.com/integrations/planetscale>
-
-now in the top right of the page click on the button "Add integration"
-
-select the vercel account you want to connect planetscale to and then click on "continue"
-
-on the next step, select "Specific Projects" and chose the project you want to connect planetscale to
-
-next click on "Add Integration"
-
-on the next step, on the "Vercel" side is a field named "Framework" with 3 options, "General" "Nodejs" and "Prisma", which have an impact on what environment variables will be created for you in the vercel environment variables interface
-
-Note: when using planetscale in combination with vercel, you add planetscale as an "integration" in your vercel account and then you don't need to set up the env variables by yourself, vercel will automatically get them from planetscale for you
-
-we are not going to use Prisma as ORM for now, so as framework we chose "Nodejs", we are actually going to use the planetscale javascript database driver to connect to our database which supports ["database URLs"](https://github.com/planetscale/database-js#database-url) which is what vercel is going to set up as environment variable for us when chosing "Nodejs" as framework, you could also use "General", the only difference is that instead of one environment variable containing everything it will setup multiple variables (username, password, host), you can chose that option if you prefer, I for my part prefer to have all in one database URL
-
-Note: personally I think any ORM is overkill for small projects, they add overhead to queries and there is a lot to learn before you know exactly how to make good use of it, this is why I like to start with a basic mysql client and regular mysql queries before going over to using something more complex but if you prefer to go straight to using Prisma, fell free to do so
-
-Note: the plantscale repository on github: <https://github.com/planetscale/database-js>
-
-now click on the button "Connect database", you will see a message successfully connected and then "installation process" will start, don't close the window but instead wait for the installation to finish (the window will close itself when the installation is done)
-
-read more:
-
-* integrate plantscale with vercel (by vercel): <https://vercel.com/integrations/planetscale>
-* integrate plantscale with vercel (by plantscale): <https://planetscale.com/docs/tutorials/deploy-to-vercel>
-
-## creating a database using the planetscale interface
-
-Note: you can import an existing database, if you wish to do so follow the [planetscale database imports guide](https://planetscale.com/docs/imports/database-imports), but as we are working on the new project we will use the planetscale web interface to create a new database and tables
-
-go to your planetscale account and then click on "Console" in the top navigation bar
-
-Note: we earlier created a database, for that database planetscale has created a "default" branch called **main**, this branch should be selected by default in the console
-
-next click on **connect**
-
-<https://app.planetscale.com/chrisweb/chris-lu/console>
-<https://planetscale.com/docs/onboarding/create-a-database>
-<https://github.com/planetscale/docs/blob/main/docs/onboarding/create-a-database.md>
-<https://planetscale.com/docs/tutorials/planetscale-quick-start-guide#getting-started-%E2%80%94-planetscale-cli>
 
 ## vercel preview (staging environment)
 
@@ -377,6 +176,10 @@ Note: after the PR is done, if you listed your ticket(s) in the description of t
 ![github: linked PR message](./documentation/assets/images/linked_PR_and_ticket_closed.png)
 
 now that the PR into the **main** branch is done, vercel will do a new production deployment for you
+
+
+
+
 
 ## articles (pages) using MDX (@next/mdx)
 
@@ -2974,15 +2777,6 @@ read more:
 
 * ["CSS-animated hamburger icons" github repository](https://github.com/jonsuh/hamburgers)
 
-## planetscale staging environment
-
-> plantscale lets you branch your production database to create a staging environment for testing out schema changes
-
-## planetscale serverless javascript database driver
-
-<https://planetscale.com/blog/introducing-the-planetscale-serverless-driver-for-javascript>
-<https://github.com/planetscale/f1-championship-stats>
-<https://github.com/planetscale/database-js>
 
 ## vercel analytics
 
