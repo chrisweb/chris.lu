@@ -54,6 +54,14 @@
     --cursor-pointer: url(/assets/cursors/secondary_mouse_pointer.cur), pointer;
 }
 
+/* high contrast mode */
+@media (prefers-contrast: more) {
+    :root {
+        --main-background-value: 0, 0, 0;
+        --main-text-value: 255, 255, 255;
+    }
+}
+
 *,
 *::after,
 *::before {
@@ -438,7 +446,7 @@ code[data-line-numbers-max-digits="3"]>[data-line]::before {
 
 [data-highlighted-line][data-highlighted-line-id="special"] {
     background-color: #623c86;
-} 
+}
 
 [data-highlighted-chars] {
     background-color: #6f5886;
