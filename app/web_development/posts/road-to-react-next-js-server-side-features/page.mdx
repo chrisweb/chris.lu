@@ -204,7 +204,7 @@ export default async function MyPage({ params: { id } }) {
 
 ### app router server components and server actions
 
-When using the app directory, Next.js (>= 13) will consider that every component is a **Server Component** by default, meaning if you don't specify anything then a component is automatically considered being a Server Component. There are things you can't do in a Server Component like using `useEffect{:js}` or listening for an `onClick{:js}` event, if you want to use these you need to add the 'use client' directive on top of your component turning your component into a client component.
+When using the app directory, Next.js (>= 13) will consider that every component is a **Server Component** by default, meaning if you don't specify anything then a component (or page / layout) with no directive (either 'use client' or 'use server') is **automatically considered being a Server Component**. There are things you can't do in a Server Component like using `useEffect{:js}` or listening for an `onClick{:js}` event, if you want to use these you need to add the 'use client' directive on top of your component turning your component into a client component.
 
 It is recommended to turn as few componments into client components as possible, Next.js always has and still does render client components on the server, then sends the HTML to the client and finally does a hydration step to make the page interactive, however server components use a SSR technique called the React Server Component Payload (RSC Payload) that will result in less client code, which will result in reduced pageload times.
 
@@ -233,6 +233,7 @@ Below I are links to documents I think will help to fully understand the potenti
 > [!MORE]  
 > [Next.js "Server Components" documentation](https://nextjs.org/docs/app/building-your-application/rendering/server-components)  
 > [Next.js "Server Actions and Mutations" documentation](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations)  
+> [Next.js "rendering" documentation](https://nextjs.org/docs/app/building-your-application/rendering)
 > [Next.js "App Router common mistakes and how to fix them" blog post](https://vercel.com/blog/common-mistakes-with-the-next-js-app-router-and-how-to-fix-them)  
 > [Next.js "Server Components and Server Actions Security" blog post](https://nextjs.org/blog/security-nextjs-server-components-actions)  
 > [Vercel "Understanding React Server Components" article](https://vercel.com/blog/understanding-react-server-components)  
