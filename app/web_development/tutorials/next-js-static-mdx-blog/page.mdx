@@ -139,6 +139,16 @@ As soon as you switch to the **workspace version**, VSCode will create new `.vsc
 > [!TIP]  
 > Next.js typescript plugin comes with some useful features, for example you will have typed routes, meaning that if you use next/link and set a href to a page that doesn't exist you will get a warning, it will also warn you if something is wrong in how you use the **use client** directive in your components and some more, I recommend to keep an eye on the [Next.js "typescript" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript) as the Next.js team adds more features over time
 
+finally I recommend you commit / sync the new `.vscode/settings.json`
+
+> [!MORE]  
+> [Next.js "TypeScript" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript)  
+
+##### Statically Typed Links (Routes)
+
+> [!WARN]  
+> There seems to be a bug in the route types for `*.mdx` pages, when doing a prod build, when doing a dev build all routes are typed and listed in the `.next/types/links.d.ts` but they are missing in prod resulting in a **Type error** "XY is not an existing route.", so even though this feature seems very promissing, as of now I recommend to keep it turned off (set to false) if you have are using `*.mdx` pages (which is what we will do in this tutorial)
+
 To ensure we benefit from **statically typed links** there is one more step needed, open the `next.config.mjs` and then add the **experimental** typedRoutes to your Next.js configuration file like so:
 
 ```js title="next.config.mjs" showLineNumbers {3-5}
@@ -152,12 +162,65 @@ const nextConfig = {
 export default nextConfig;
 ```
 
-then save your changes
-
-finally I recommend you commit / sync the new `.vscode/settings.json` and the changes you did in the `next.config.mjs`
+then save your `next.config.mjs` and commit / sync your latest changes
 
 > [!MORE]  
-> [Next.js "TypeScript" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript)  
+> [Next.js "Statically Typed Links" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript)  
+
+### React (strict mode) and powered by header
+
+[React strict mode](https://react.dev/reference/react/StrictMode) and [powered by header(s)](https://nextjs.org/docs/app/api-reference/next-config-js/poweredByHeader) are two configuration options that often lead to controversial discussions among developers
+
+**React strict mode** is **enabled by default** since **Next.js v13.4** for the **app router** (not the pages router), you can disable the React strict mode in the `next.config.mjs` by setting option to **false**
+
+> [!NOTE]  
+> for example if you don't want the **Strict Mode** to be enabled in your entire project, then disable it via the Next.js configuration file and then use the `<StrictMode>` only in the pages / layouts ... in which you want to enable it
+
+I recommend not disabling the React Strict Mode, I see posts on [Stack Overflow](https://stackoverflow.com/) where people argue to turn it off as it causes problems in their app, however in my opinion this is masking problems instead of fixing the root cause, as mentioned on react.dev the Strict Mode does several important things, one of them is **checking if your components use deprecated APIs**
+
+> [!TIP]  
+> will only run in **development** and NOT in production, this is another reason to keep it turned on, even if it would lead to a problem in development it will NOT have any impact on your production build and hence have no impact on what your users experience
+
+What surprises developers the most when they use React Strict Mode for the first time, is that re-renders components an extra time (in development), hence every component gets rendered (and effects triggered) then the components get unmounted and then get mounted a second time, this is done to detect problems, here is the explanation from the React.dev documentation as to why this is done:
+
+> React components you write must always return the same JSX given the same inputs (props, state, and context). Components breaking this rule behave unpredictably and cause bugs.
+
+So if for some reason you don't want it to be enabled in your entire app or if you need to disable it temporarely, then you can do it in the Next.js configuration file:
+
+```js title="next.config.mjs" showLineNumbers {3}
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    reactStrictMode: false,
+};
+
+export default nextConfig;
+```
+
+**Next.js powered by header** is another Next.js configuration option, that if enabled will add an **x-powered-by** header to all of your pages
+
+Here is an example of the headers showing the **x-powered-by** header Next.js adds to pages, I used the **chrome dev tools**, opened the **Network tab** and then clicked on the row of the page to inspect the **response headers**:
+
+![](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/network_headers_powered_by.png)
+
+Why would you want to turn this configuration option off?
+
+When I get asked this, my first thought is to ask myself the opposite "why would I want to turn it on?" and honestly I have not yet found a reason as to why I would want to have it turned on. Another reason why I personally prefer to turn it off is because unfortunatly some people on the web have malicious intentions and the less they know about your apps technology stack the more difficult it will be for them to find vulnerabilities that have been disclosed but are not yet patched in the version you are using. Yes it does not make a huge difference, because hackers usually just launch batteries of tests that will check for a wide range of known vulnerabilities, few will use a bot that checks for **x-powered-by** headers to specifically target the exact version you are using. Also true, hackers can use profilling tools to get approximative information about what tech stack you are using. So yes, disabling the poweredByHeader option is not a miracle solution, that will prevent all potential attacks, but if there is a chance (no matter how small) that turning it off will make my app just a little bit safer then that's good enough for me and as I said earlier the second reason is that I see no reason why I would want to turn it on.
+
+```js title="next.config.mjs" showLineNumbers {3}
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    poweredByHeader: false,
+};
+
+export default nextConfig;
+```
+
+If you did any of the two changes I mentioned above , then save your `next.config.mjs` and commit / sync your latest changes
+
+> [!MORE]  
+> [React "Strict Mode" documentation](https://react.dev/reference/react/StrictMode)  
+> [Next.js "Strict Mode" API reference](https://nextjs.org/docs/app/api-reference/next-config-js/reactStrictMode)  
+> [Next.js "Powered By Header" API reference](https://nextjs.org/docs/app/api-reference/next-config-js/poweredByHeader)  
 
 ### update the README.md file
 
