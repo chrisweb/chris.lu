@@ -178,6 +178,12 @@ const nextConfig = (/*phase*/) => {
                 color: '',
                 title: 'Read more',
             },
+            {
+                keyword: 'WARN',
+                icon: '',
+                color: '',
+                title: 'Warning',
+            },
         ],
     }
 
@@ -261,7 +267,8 @@ const nextConfig = (/*phase*/) => {
             // this is why it is currently disabled
             mdxRs: false,
             // experimental partial prerendering
-            //ppr: true,
+            // (as of now) need a canary next.js for this to work
+            ppr: false,
             // experimental typescript "statically typed links"
             // https://nextjs.org/docs/app/building-your-application/configuring/typescript#statically-typed-links
             typedRoutes: false,

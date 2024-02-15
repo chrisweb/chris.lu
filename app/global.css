@@ -48,6 +48,8 @@
     --secondary-light-color: rgb(var(--secondary-light-value));
     --tertiary-light-value: 0, 255, 240;
     --tertiary-light-color: rgb(var(--tertiary-light-value));
+    --quaternary-light-value: 235, 250, 0;
+    --quaternary-light-color: rgb(var(--quaternary-light-value));
     --codebloc-font-family: var(--font-sourceCodePro), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     --header-navbar-height: 58px;
     --cursor-default: url(/assets/cursors/secondary_mouse_default.cur), default;
@@ -498,11 +500,6 @@ code[data-line-numbers-max-digits="3"]>[data-line]::before {
             0 calc(100% - var(--cornerSideLength)));
 }
 
-.markdown-alert-more ul {
-    list-style-type: none;
-    padding: 0px;
-}
-
 /* this is the styling for inline code */
 [data-rehype-pretty-code-figure]>code {
     border-radius: 5px;
@@ -675,26 +672,6 @@ h6 .headingAnchor {
             0 100%);
 }
 
-.markdown-alert-note,
-.markdown-alert-note .markdown-alert-header {
-    background-color: var(--tertiary-light-color);
-}
-
-.markdown-alert-tip,
-.markdown-alert-tip .markdown-alert-header {
-    background-color: var(--secondary-light-color);
-}
-
-.markdown-alert-more,
-.markdown-alert-more .markdown-alert-header {
-    background-color: var(--primary-light-color);
-}
-
-.markdown-alert-tip .markdown-alert-header,
-.markdown-alert-note .markdown-alert-header {
-    color: var(--main-background-color);
-}
-
 .makrdown-alert-fake-border {
     width: 100%;
     height: 100%;
@@ -733,6 +710,37 @@ h6 .headingAnchor {
 
 .markdown-alert-body {
     padding: 0 var(--main-spacing);
+}
+
+.markdown-alert-note,
+.markdown-alert-note .markdown-alert-header {
+    background-color: var(--tertiary-light-color);
+}
+
+.markdown-alert-warn,
+.markdown-alert-warn .markdown-alert-header {
+    background-color: var(--secondary-light-color);
+}
+
+.markdown-alert-tip,
+.markdown-alert-tip .markdown-alert-header {
+    background-color: var(--quaternary-light-color);
+}
+
+.markdown-alert-note .markdown-alert-header,
+.markdown-alert-warn .markdown-alert-header,
+.markdown-alert-tip .markdown-alert-header {
+    color: var(--main-background-color);
+}
+
+.markdown-alert-more,
+.markdown-alert-more .markdown-alert-header {
+    background-color: var(--primary-light-color);
+}
+
+.markdown-alert-more ul {
+    list-style-type: none;
+    padding: 0px;
 }
 
 .grid {
