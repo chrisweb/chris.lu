@@ -2,7 +2,7 @@
 
 next chapters?
 
-* setting up vercel account
+* [DONE] setting up vercel account
 * vercel preview (staging environment) with github commit triggers auto deploy
 * vercel analytics
 * CSP
