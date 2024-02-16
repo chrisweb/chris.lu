@@ -538,6 +538,9 @@ If you look closer at what rule sets we created, there are a total of 4, the fir
 
 If you look at the `script-src 'self' 'unsafe-eval' 'unsafe-inline'` rule we just edited for **development** you will see that we added the `'unsafe-eval'` value, now compare it with the `script-src` we use for the **production** and the rule we use for the **preview** environments and you will see that there we don't add that value, this is because scripts like HMR are only used in development, by not adding that exception to production and preview we make those two environments safer
 
+> [!TIP]  
+> I recommend you always start with the most restrictive rules possible, for example if you look at the top of CSP rules, I have set the **form-action** to none, this is because in this tutorial we will not have any forms so there is no reason to allow them, if you add such a feature in the future you will of course want to adjust that rule and for example set it to 'self' instead of 'none'
+
 Next if we look at the top of the configuration you will see that we set a variable **cspReportOnly** to **true**:
 
 ```js title="next.config.mjs" showLineNumbers {3}
@@ -585,5 +588,7 @@ For now we set the CSP mode to only report violations, however as soon as are co
 > [MDN "CSP Headers" reference](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy)  
 > [Next.js "Configuring CSP" documentation](https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy)  
 > [Vercel "Using a Content Security Policy" documentation](https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy)  
+
+
 
 </article>
