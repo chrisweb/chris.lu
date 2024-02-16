@@ -403,6 +403,9 @@ Back on the project page, click on the **3 dots** (...) at the end of your previ
 
 Your branch URL will be something like `MY_PROJECT_NAME-git-preview-MY_USER_NAME.vercel.app`, paste the branch URL you just copied into your browsers address bar and press `Enter`
 
+> [!NOTE]  
+> when you visit your preview URL vercel will ask you to log in (if you are not logged in yet), this is because only you are supposed to have access to the previews, if someone else wants access they will first have to request access and wait for you to grant them access
+
 Congratulations, you are now viewing a preview version of your project hosted on vercel
 
 Because GitHub and Vercel are now connected, you will also have all the information about your deployments on your GitHub page, open the repository page on GitHub and have a look at the right sidebar you will now see a new section called **Deployments**:
@@ -414,8 +417,173 @@ If for example you click on **preview** it will open the deployments page, on to
 Using [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) headers is not required to make an app work but it is highly recommended as it will make your project more secure
 
 > [!TIP]  
-> I like to set up the CSP headers as early as possible, because if you wait until the last moment before going into production and then decide to add them, then you will probably have a bunch of **violations** that get reported and it might take some time to adjust your CSP rules, so I recommend starting as early as possible and fix the violations one by one as soon as they occur
+> I like to set up the CSP headers as early as possible, because if you wait until the last moment before going into production and then decide to add them, then you will probably have a bunch of **violations** that get reported and it might take some time to adjust your CSP rules, this why I recommend starting as early as possible and fix the violations one by one as soon as they occur
 
+To add CSP rules to our Next.js project we need to edit the `next.config.mjs` in the root of our project
 
+Add the following lines to your configuration:
+
+```js title="next.config.mjs" showLineNumbers {1-61} {70-82}
+// CSP headers here is set based on Next.js recommendations:
+// https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
+const cspReportOnly = true;
+
+const cspHeader = () => {
+
+    const upgradeInsecure = cspReportOnly ? '' : 'upgrade-insecure-requests;'
+
+    const defaultsCSPHeaders = `
+        default-src 'none';
+        media-src 'self';
+        object-src 'none';
+        base-uri 'none';
+        form-action 'none';
+        frame-ancestors 'none';
+        block-all-mixed-content;
+        ${upgradeInsecure}
+        `
+
+    // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
+    // and whitelist vercel's domains based on:
+    // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
+    // and white-list vitals.vercel-insights
+    // based on: https://vercel.com/docs/speed-insights
+    if (process.env?.VERCEL_ENV === "preview") {
+        return `
+            ${defaultsCSPHeaders}
+            font-src 'self' https://vercel.live/;
+            style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
+            script-src 'self' 'unsafe-inline' https://vercel.live/;
+            connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/;
+            img-src 'self' https://vercel.com/ https://vercel.live/;
+            frame-src 'self' https://vercel.live/;
+        `
+    }
+
+    // for production environment white-list vitals.vercel-insights
+    // based on: https://vercel.com/docs/speed-insights
+    if (process.env.NODE_ENV === "production") {
+        return `
+            ${defaultsCSPHeaders}
+            font-src 'self';
+            style-src 'self' 'unsafe-inline';
+            script-src 'self';
+            connect-src 'self' https://vitals.vercel-insights.com;
+            img-src 'self';
+            frame-src 'none';
+        `
+    }
+
+    // for dev environment enable unsafe-eval for hot-reload
+    return `
+        ${defaultsCSPHeaders}
+        font-src 'self';
+        style-src 'self' 'unsafe-inline';
+        script-src 'self' 'unsafe-eval' 'unsafe-inline';
+        connect-src 'self';
+        img-src 'self' data:;
+        frame-src 'none';
+    `
+}
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    poweredByHeader: false,
+    experimental: {
+        // currently false as mdx pages are not typed in prod builds (yet)
+        typedRoutes: false,
+    },
+    headers: async () => {
+        return [
+            {
+                source: '/(.*)',
+                headers: [
+                    {
+                        key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
+                        value: cspHeader().replace(/\n/g, ''),
+                    },
+                ],
+            },
+        ]
+    },
+};
+
+export default nextConfig;
+```
+
+If you now start your development server (using `npm run dev`), open `http://localhost:3000` in your browser, then open the browsers developer tools and then click on the Console tab, then you should see no CSP violations messages
+
+Lets edit the CSP rules we just added an make the **script-src** rule stricter by disallowing **'unsafe-eval'**, to do so we remove the two values from the javascript resources rule, like so:
+
+```js title="next.config.mjs" showLineNumbers{51} {56}#special
+    // for dev environment enable unsafe-eval for hot-reload
+    return `
+        ${defaultsCSPHeaders}
+        font-src 'self';
+        style-src 'self' 'unsafe-inline';
+        script-src 'self' 'unsafe-inline';
+        connect-src 'self';
+        img-src 'self' data:;
+        frame-src 'none';
+    `
+```
+
+Go back into the browser and check the console again, you should now be able to see a bunch of errors like these:
+
+> [Report Only] Refused to execute inline script because it violates the following Content Security Policy directive: "script-src 'self'". Either the 'unsafe-inline' keyword, a hash ('sha256-xxx'), or a nonce ('nonce-...') is required to enable inline execution.
+
+Those violations are there because Next.js attempty to inject javascript code used by the Hot Module Reload (HMR) tool that reloads our page every time we save a file, for HMR to work we need to re-add the **'unsafe-eval'** value to the **script-src** rule, do that now and then save the file to fix violations again
+
+If you look closer at what rule sets we created, there are a total of 4, the first one contains several default rules that we will use for our 3 environments, then we have some rules that we will only apply if the environment is **preview** which is the case when we deploy the preview branch on vercel, the next group contains the rules for the production environment and the last group has the rules we use for our local development environment
+
+If you look at the `script-src 'self' 'unsafe-eval' 'unsafe-inline'` rule we just edited for **development** you will see that we added the `'unsafe-eval'` value, now compare it with the `script-src` we use for the **production** and the rule we use for the **preview** environments and you will see that there we don't add that value, this is because HMR is only used in development, by not adding that exception to production and preview we make those two environments safer
+
+Next if we look at the top of the configuration you will see that we set a variable **cspReportOnly** to **true**:
+
+```js title="next.config.mjs" showLineNumbers {3}
+// CSP headers here is set based on Next.js recommendations:
+// https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
+const cspReportOnly = true;
+```
+
+and then at the end of the configuration file we use that variable, like so:
+
+```js title="next.config.mjs"{63} showLineNumbers {76}
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    poweredByHeader: false,
+    experimental: {
+        // currently false as mdx pages are not typed in prod builds (yet)
+        typedRoutes: false,
+    },
+    headers: async () => {
+        return [
+            {
+                source: '/(.*)',
+                headers: [
+                    {
+                        key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
+                        value: cspHeader().replace(/\n/g, ''),
+                    },
+                ],
+            },
+        ]
+    },
+};
+
+export default nextConfig;
+```
+
+Depending on the value of **cspReportOnly**, we either set the CSP header to **Content-Security-Policy-Report-Only** mode (if true) or **Content-Security-Policy** (if false)
+
+This is because CSP has two modes, one that will only report violations, this is good for testing your rules before actually enforcing them and a second mode which will enforce the rules
+
+For now we set the CSP mode to only report violations, however as soon as are confident that there are no more violation reports it is recommend to set **cspReportOnly** to **false**
+
+> [!MORE]  
+> [MDN "Content Security Policy (CSP)" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)  
+> [MDN "CSP Headers" reference](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy)  
+> [Next.js "Configuring CSP" documentation](https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy)  
+> [Vercel "Using a Content Security Policy" documentation](https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy)  
 
 </article>
