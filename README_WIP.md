@@ -3,8 +3,7 @@
 next chapters?
 
 * [DONE] setting up vercel account
-* vercel preview (staging environment) with github commit triggers auto deploy
-* vercel analytics
+* [DONE] vercel preview (staging environment) with github commit triggers auto deploy
 * CSP
 * sentry.io account
 * basic eslint
@@ -21,6 +20,7 @@ next chapters?
 * SEO (metadat)
 * github: pull request from preview into main branch (automatically link / close tickets)
 * vercel prod release (custom domain)
+* vercel analytics
 
 ### optimizing images with next/image
 
