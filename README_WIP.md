@@ -13,6 +13,7 @@ next chapters?
 * next/mdx "mdx-components" file
 * optimizing images with next/image
 * all the MDX plugins
+* mdx homepage articles list by date (newest first)
 * next/link
 * navigation
 * styling
