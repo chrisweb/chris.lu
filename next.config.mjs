@@ -228,7 +228,7 @@ const nextConfig = (/*phase*/) => {
                 style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
                 script-src 'self' 'unsafe-inline' https://vercel.live/;
                 connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/;
-                img-src 'self' https://vercel.com/ https://vercel.live/;
+                img-src 'self' data: https://vercel.com/ https://vercel.live/;
                 frame-src 'self' https://vercel.live/;
             `
         }
