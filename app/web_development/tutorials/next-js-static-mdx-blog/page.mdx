@@ -455,7 +455,7 @@ const cspHeader = () => {
             style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
             script-src 'self' 'unsafe-inline' https://vercel.live/;
             connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/;
-            img-src 'self' https://vercel.com/ https://vercel.live/;
+            img-src 'self' data: https://vercel.com/ https://vercel.live/;
             frame-src 'self' https://vercel.live/;
         `
     }
@@ -530,13 +530,13 @@ Lets edit the CSP rules we just added an make the **script-src** rule stricter b
 
 Go back into the browser and check the console again, you should now be able to see a bunch of errors like these:
 
-> [Report Only] Refused to execute inline script because it violates the following Content Security Policy directive: "script-src 'self'". Either the 'unsafe-inline' keyword, a hash ('sha256-xxx'), or a nonce ('nonce-...') is required to enable inline execution.
+> [Report Only] Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self' 'unsafe-inline'".
 
-Those violations are there because Next.js attempty to inject javascript code used by the Hot Module Reload (HMR) tool that reloads our page every time we save a file, for HMR to work we need to re-add the **'unsafe-eval'** value to the **script-src** rule, do that now and then save the file to fix violations again
+Those violations are there because Next.js attempty to inject javascript code used by development scripts like the Hot Module Reload (HMR) tool that reloads our page every time we save a file, for HMR to work we need to re-add the **'unsafe-eval'** value to the **script-src** rule, do that now and then save the file to fix violations again
 
 If you look closer at what rule sets we created, there are a total of 4, the first one contains several default rules that we will use for our 3 environments, then we have some rules that we will only apply if the environment is **preview** which is the case when we deploy the preview branch on vercel, the next group contains the rules for the production environment and the last group has the rules we use for our local development environment
 
-If you look at the `script-src 'self' 'unsafe-eval' 'unsafe-inline'` rule we just edited for **development** you will see that we added the `'unsafe-eval'` value, now compare it with the `script-src` we use for the **production** and the rule we use for the **preview** environments and you will see that there we don't add that value, this is because HMR is only used in development, by not adding that exception to production and preview we make those two environments safer
+If you look at the `script-src 'self' 'unsafe-eval' 'unsafe-inline'` rule we just edited for **development** you will see that we added the `'unsafe-eval'` value, now compare it with the `script-src` we use for the **production** and the rule we use for the **preview** environments and you will see that there we don't add that value, this is because scripts like HMR are only used in development, by not adding that exception to production and preview we make those two environments safer
 
 Next if we look at the top of the configuration you will see that we set a variable **cspReportOnly** to **true**:
 
