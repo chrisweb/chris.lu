@@ -65,7 +65,10 @@ There are a lot of different approaches when it comes to managing code using bra
 
 Because this project is about a personal blog, I don't think we need a very complex Git Flow, this is why I will only create a second branch to commit the code updates into and then be able to preview the result (staging or testing environment), then if I'm satisfied with the result I will make a pull request (PR) to merge the code into the main branch, the main branch will then get deployed in production. If you work with others on your blog project, to avoid having to deal with merge conflicts on a regular basis, you might want to create a branch per feature (hence called feature branches) and use that branch for development, but if you are the only dev a **main** branch as well as an extra **preview** branch is probably enough.
 
-Create a new branch **from the main branch** and call it **preview**, to learn how to create a new branch from another branch (and then publish it), I recommend you check the chapter ["Creating a new branch" from the VSCode post](/web_development/posts/vscode#create-a-new-branch-from-based-on-another-branch) in my VSCode post
+Open VSCode and then create a new branch **from the main branch** and call it **preview** (to learn how to create a new branch from another branch (and then publish it), I recommend you check the chapter ["Creating a new branch" from the VSCode post](/web_development/posts/vscode#create-a-new-branch-from-based-on-another-branch) in my VSCode post)
+
+> [!TIP]  
+> we call our branch **preview** because later in this tutorial we will add a CI/CD pripeline via vercel.com and will use the **preview** branch to do preview deployments, the main (default) branch will be used to make production deployments
 
 Now that the branch is created, you will see in the bottom of VSCode that our new branch is already the one selected, it is not published yet, so go ahead and publish it (yes you could consider not publishing it until you are sure that you will use the code, but I prefer to always immediatly publish them, so that if something happens to my computer I still have a copy in the cloud, of course once published it is a bit more work if you want to delete it as you need to do so locally as well as remotly but I still prefer that to losing several hours or even days worth of work)
 
@@ -119,6 +122,44 @@ If the commit and syncing was successful you will see that all the new files and
 
 > [!TIP]  
 > I recommend you commit often as it will make it a lot easier if you decide to revert your last commit, because it will only include the code from one step you want to undo and NOT also the code of several other steps that you actually want to keep, it will also create a nicer commit history where the commit messages are short and related to a few files instead if having a huge commit messages attached to dozens of files, also commiting and synchronising often reduces the risk that you lose code and hence hours or days of work if something happens to your local machine and finally it reduces the risk that you end of having conflits if you are not the only one working on the repository
+
+### update the README.md file
+
+> [!NOTE]  
+> for your future self and for others that might contribute on your project it is always helpful to have well documented project. This is why we will update the readme and place some documentation in it, if however you prefer to store such information somewhere else this is fine too, what really matters is to do update the documentation regulary so that it will not become a tedious task at some point and also is a helpful resource right from the start of your project
+
+The first file we will edit is the `README.md`, I recommend you remove everything that is currently in the REAME.md (not that it is bad advice but we will just structure it differently and add some more information to it)
+
+Then copy / paste the following content into your README:
+
+```md
+# MY_PROJECT
+
+## npm commands (package.json scripts)
+
+`npm run dev`: to start the development server  
+`npm run build`: to make a production build  
+`npm run start`: to start the server on a production server using the build we made with the previous command  
+`npm run lint`: to run a linting script that will scan our code and help us find problems in our code  
+
+```
+
+> [!TIP]  
+> I added 2 spaces after each line, for the 4 commands, this ensures that there is a line break after each of them  
+
+This adds documentation to the README for 4 commands that are available after setting up a project with CNA
+
+Then change **MY_PROJECT** to whatever you want to name your project
+
+> [!TIP]  
+> Did you know you can preview markdown files in VSCode? If not check out my short [mardown preview chapter](/web_development/posts/vscode#vscode-markdown-preview) in the VSCode post  
+
+Now save the file (to save the file you can use the VSCode shortcut `Ctrl+S{:shell}` (macOS: `⌘S{:shell}`, Linux: `Ctrl+S{:shell}`))
+
+Finally commit the changes and then synchronize them
+
+> [!MORE]  
+> [markdown "paragraphs and line breaks" documentation](https://daringfireball.net/projects/markdown/syntax#p)  
 
 ### Next.js typescript plugin
 
@@ -222,44 +263,6 @@ If you did any of the two changes I mentioned above , then save your `next.confi
 > [Next.js "Strict Mode" API reference](https://nextjs.org/docs/app/api-reference/next-config-js/reactStrictMode)  
 > [Next.js "Powered By Header" API reference](https://nextjs.org/docs/app/api-reference/next-config-js/poweredByHeader)  
 
-### update the README.md file
-
-> [!NOTE]  
-> for your future self and for others that might contribute on your project it is always helpful to have well documented project. This is why we will update the readme and place some documentation in it, if however you prefer to store such information somewhere else this is fine too, what really matters is to do update the documentation regulary so that it will not become a tedious task at some point and also is a helpful resource right from the start of your project
-
-The first file we will edit is the `README.md`, I recommend you remove everything that is currently in the REAME.md (not that it is bad advice but we will just structure it differently and add some more information to it)
-
-Then copy / paste the following content into your README:
-
-```md
-# MY_PROJECT
-
-## npm commands (package.json scripts)
-
-`npm run dev`: to start the development server  
-`npm run build`: to make a production build  
-`npm run start`: to start the server on a production server using the build we made with the previous command  
-`npm run lint`: to run a linting script that will scan our code and help us find problems in our code  
-
-```
-
-> [!TIP]  
-> I added 2 spaces after each line, for the 4 commands, this ensures that there is a line break after each of them  
-
-This adds documentation to the README for 4 commands that are available after setting up a project with CNA
-
-Then change **MY_PROJECT** to whatever you want to name your project
-
-> [!TIP]  
-> Did you know you can preview markdown files in VSCode? If not check out my short [mardown preview chapter](/web_development/posts/vscode#vscode-markdown-preview) in the VSCode post  
-
-Now save the file (to save the file you can use the VSCode shortcut `Ctrl+S{:shell}` (macOS: `⌘S{:shell}`, Linux: `Ctrl+S{:shell}`))
-
-Finally commit the changes and then synchronize them
-
-> [!MORE]  
-> [markdown "paragraphs and line breaks" documentation](https://daringfireball.net/projects/markdown/syntax#p)
-
 ## first page
 
 ### create the first page
@@ -350,6 +353,68 @@ As you might have noticed I added a question mark in the **Hello World?** headin
 Now go back into your browser and even though you haven't reloaded the page you will notice that your changes have been applied
 
 Time to make another commit (and sync the changes) and then call it a day 😉
+
+## CI/CD pipeline for automatic deployments
+
+In this chapter we will set up a CI/CD pipeline, that will automatically deploy our code using [Vercel.com](https://vercel.com)
+
+> [!NOTE]  
+> You might still remember how in the past we would use a FTP software and manually transfer code to a server, or you might have struggled setting up GitHub actions... When using Vercel they will set up the workflow for us and then they will start monitoring our repository and when they detect a new commit (or pull request) they will fetch our code and automatically deploy it (on their infrastructure) for us
+>
+> This means we don't have to do anything else besides commiting our code as we have already done before but there will be no new additional step, you don't even need to click a button 😉
+
+Of course if you prefer to use GitHub actions to create your own CI/CD pipeline feel free to do so, also feel free to use another provider but in this example I show you how easy and quick it is using [Vercel.com](https://vercel.com), the Hobby plan is free so if you don't know vercel yet you might want to give it a try to get an idea of how it performs compared your current deployment process
+
+### vercel setup
+
+First you need to have or create an account on [Vercel.com](https://vercel.com) (if you need help with that step, check out my chapter [Create a Vercel account (sign up)](/web_development/posts/vercel#create-an-account-sign-up) in the vercel post)
+
+Now we need create a new project on Vercel and allow them to access our repository (if you need help with that step, check out my chapter [Add a new project (repository)](/web_development/posts/vercel#add-a-new-project-repository) in the vercel post)
+
+Now that we have added our GitHub repository to vercel, every commit (or pull request) we do into the **main** branch will trigger a **production** deployment and every commit we do into the **preview** branch will trigger a **preview** (staging) deployment
+
+### testing preview deployments
+
+To see how this works open a new tab in your browser and open the [Vercel dashboard](https://vercel.com/dashboard) page, in the **Projects** list click on the name of your project to access the project page (something like `https://vercel.com/MY_USER_NAME-projects/MY_PROJECT_NAME`), on top you will have section called **Production Deployment** and below that a section called **Active Branches** which is still empty (No Preview Deployments)
+
+Now open VSCode and make sure you are on the **preview** branch
+
+Open the `README.me` file and for example add a small explanation that our project is now auto deploying on vercel, like so:
+
+```md
+# MY_PROJECT
+
+## npm commands (package.json scripts)
+
+`npm run dev`: to start the development server  
+`npm run build`: to make a production build  
+`npm run start`: to start the server on a production server using the build we made with the previous command  
+`npm run lint`: to run a linting script that will scan our code and help us find problems in our code  
+
+## CI/CD pipeline for automatic deployments
+
+Everytime code gets pushed into the main branch it will trigger a production deployment, when code gets pushed into the preview branch it will trigger a preview deployment
+
+```
+
+Then save the file, commit and sync the changes and immediatly open the browser tab in which you opened your vercel project page, in the section **Active Branches** you should now see an entry for the **preview** branch (if it does not show up, manually reload the page), if you click on **View Deployment Status** it will open a page with details about the current deployment
+
+Back on the project page, click on the **3 dots** (...) at the end of your preview branch row and then click on **Copy Branch URL**
+
+Your branch URL will be something like `MY_PROJECT_NAME-git-preview-MY_USER_NAME.vercel.app`, paste the branch URL you just copied into your browsers address bar and press `Enter`
+
+Congratulations, you are now viewing a preview version of your project hosted on vercel
+
+Because GitHub and Vercel are now connected, you will also have all the information about your deployments on your GitHub page, open the repository page on GitHub and have a look at the right sidebar you will now see a new section called **Deployments**:
+
+If for example you click on **preview** it will open the deployments page, on top you will have a link to the live preview on vercel.app and below you will have a list of the recent deployments
+
+## Content Security Policy (CSP)
+
+Using [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) headers is not required to make an app work but it is highly recommended as it will make your project more secure
+
+> [!TIP]  
+> I like to set up the CSP headers as early as possible, because if you wait until the last moment before going into production and then decide to add them, then you will probably have a bunch of **violations** that get reported and it might take some time to adjust your CSP rules, so I recommend starting as early as possible and fix the violations one by one as soon as they occur
 
 
 
