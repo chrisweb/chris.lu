@@ -4,7 +4,7 @@ next chapters?
 
 * [DONE] setting up vercel account
 * [DONE] vercel preview (staging environment) with github commit triggers auto deploy
-* CSP
+* [DONE] CSP
 * sentry.io account
 * basic eslint
 * articles (pages) using MDX (@next/mdx)
