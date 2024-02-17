@@ -29,3 +29,6 @@ node_modules/
 
 # Serverless directories
 .serverless/
+
+# Sentry Config File
+.sentryclirc

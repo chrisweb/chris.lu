@@ -86,4 +86,14 @@ Now sentry will install some dependencies and modify the modify the next.config.
 
 **Did you configure CI as shown above?** chose **YES** and then make sure you add the environment variable to your setup, to ensure source maps get automatically uploaded to sentry every time you make a new build
 
+Next we do as they suggest and start the development server using the command and then we visit their example page in our browser at [http://localhost:3000/sentry-example-page](http://localhost:3000/sentry-example-page)
+
+On that page hit the **Throw Error!** button and then click on the link just below to **visit your Sentry projects issues page**
+
+Now wait for the backend and frontend errors to appear (this can take a few minutes, which is a good time to refresh your cup of coffee ☕ (or what ever beverage you prefer))
+
+As soon as the two errors appear, feel free to click on them and have a look at what error logging on Sentry.io looks like
+
+Before we commit / sync all the changes Sentry.io did in our project, remove the test page and the API route files that Sentry.io created to test the error logging, you will not need them anymore
+
 </article>

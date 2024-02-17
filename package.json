@@ -35,6 +35,7 @@
         "@react-three/drei": "9.97.3",
         "@react-three/fiber": "8.15.16",
         "@react-three/postprocessing": "^2.15.13",
+        "@sentry/nextjs": "^7.101.1",
         "globby": "14.0.0",
         "hast-util-from-html-isomorphic": "2.0.0",
         "hastscript": "9.0.0",
