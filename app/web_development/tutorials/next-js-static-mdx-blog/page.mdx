@@ -367,9 +367,9 @@ Of course if you prefer to use GitHub actions to create your own CI/CD pipeline 
 
 ### vercel setup
 
-First you need to have or create an account on [Vercel.com](https://vercel.com) (if you need help with that step, check out my chapter [Create a Vercel account (sign up)](/web_development/posts/vercel#create-an-account-sign-up) in the vercel post)
+First you need to have or create a hobby (free) account on [Vercel.com](https://vercel.com) (if you need help with that step, check out my chapter [Create a Vercel account (sign up)](/web_development/posts/vercel#create-an-account-sign-up) in the Vercel post)
 
-Now we need create a new project on Vercel and allow them to access our repository (if you need help with that step, check out my chapter [Add a new project (repository)](/web_development/posts/vercel#add-a-new-project-repository) in the vercel post)
+Now we need create a new project on Vercel and allow them to access our repository (if you need help with that step, check out my chapter [Add a new project (repository)](/web_development/posts/vercel#add-a-new-project-repository) in the Vercel post)
 
 Now that we have added our GitHub repository to vercel, every commit (or pull request) we do into the **main** branch will trigger a **production** deployment and every commit we do into the **preview** branch will trigger a **preview** (staging) deployment
 
@@ -418,6 +418,8 @@ Using [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/W
 
 > [!TIP]  
 > I like to set up the CSP headers as early as possible, because if you wait until the last moment before going into production and then decide to add them, then you will probably have a bunch of **violations** that get reported and it might take some time to adjust your CSP rules, this why I recommend starting as early as possible and fix the violations one by one as soon as they occur
+
+### Adding CSP Headers in Next config
 
 To add CSP rules to our Next.js project we need to edit the `next.config.mjs` in the root of our project
 
@@ -581,13 +583,23 @@ Depending on the value of **cspReportOnly**, we either set the CSP header to **C
 
 This is because CSP has two modes, one that will only report violations, this is good for testing your rules before actually enforcing them and a second mode which will enforce the rules
 
-For now we set the CSP mode to only report violations, however as soon as are confident that there are no more violation reports it is recommend to set **cspReportOnly** to **false**
+For now we set the CSP mode to only report violations, however as soon as are confident that there are no more violation reports it is recommend to set our custom variable **cspReportOnly** to **false**
 
 > [!MORE]  
 > [MDN "Content Security Policy (CSP)" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)  
 > [MDN "CSP Headers" reference](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy)  
 > [Next.js "Configuring CSP" documentation](https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy)  
 > [Vercel "Using a Content Security Policy" documentation](https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy)  
+
+### Logging CSP violations with Sentry.io
+
+CSP violations reports can not only be seen in the console, as this would limit us to only see violations that occur when we visit our app, they can also be logged
+
+You could write your own API to log CSP violations or you can use a service like [Sentry.io](https://sentry.io), we will do the later and create a free Sentry account, we will use that account to log the CSP violations and also to monitor error and loading times when our users visit app
+
+First you need to have or create an account on [Sentry.io](https://sentry.io) (if you need help with that step, check out my chapter [Create a Sentry account (sign up)](/web_development/posts/sentry-io#create-an-account-sign-up) in the Sentry.io post)
+
+Now we need create a new project on Sentry.io (if you need help with that step, check out my chapter [Add a new project](/web_development/posts/sentry-io#add-a-new-project-repository) in the Sentry.io post)
 
 
 
