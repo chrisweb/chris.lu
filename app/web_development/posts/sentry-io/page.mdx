@@ -53,14 +53,14 @@ Now click on **Configure SDK**
 
 Next you come to a page that explains you how to set up the sentry SDK
 
-## Setry.io for Next.js projects
+## Sentry.io for Next.js projects
 
 Open your [Sentry.io dashboard](https://sentry.io) and on the left click on **Projects** and then **Create project**
 
 You can either use the recommended sentry command or follow their manual [setup toturial](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/), I chose to use the command, if you chose manual you may want to copy the DSN they give you at the end of the page (a Sentry DSN is an API key you will use when setting up your SDK)
 
 > [!TIP]  
-> before using the wizard, I recommend commiting your latest changes (if you haven't already) and do a last sync before launching the sentry wizard, I had some trouble in the past because of that
+> before using the wizard, I recommend commiting your latest changes (if you haven't already) and do a last sync before launching the sentry wizard, this way you will be able to clearly see what stuff Sentry.io will add to your project and you will see what got changed in exsiting files like the next.config.mjs file
 
 In your VSCode terminal (or your preferred command line tool), type the following command:
 
@@ -76,11 +76,14 @@ First you will get asked if you accept installing the sentry wizard npm package,
 
 Then the sentry wizard will attempt to open a browser tab and ask you to login, so do just that
 
-Next you get asked to chose which Sentry Project you want to use, chose the one Sentry just created for you from the list (when using the wizard Sentry will have created a project for the SDK you chose eralier, if however you don't see a Project listed here, you can check out the [Create a Sentry.io project](#create-a-sentryio-project) to create a project first)
+**Select your Sentry project**, chose the your Sentry Project from the list (when using the wizard Sentry will have automatically created a project for the SDK you chose earlier for you, if however you don't see a Project listed here, you can check out the [Create a Sentry.io project](#create-a-sentryio-project) chapter to create a project first)
 
-Now the wizard will install the dependencies
+Now sentry will install some dependencies and modify the modify the next.config.mjs file with sentry specific configuration options, they even say "you probably want to clean this up a bit!"... we sure do, but later, let's finish the whole setup first
 
+**Do you want to create an example page** chose **YES** (we will later use it to test the Sentry setup and then we will delete it)
 
+**Are you using a CI/CD tool to build and deploy your application?** chose **YES** (if you are using Vercel, GitHub actions or any other CI/CD deployment tool, if you are not chose **NO**)
 
+**Did you configure CI as shown above?** chose **YES** and then make sure you add the environment variable to your setup, to ensure source maps get automatically uploaded to sentry every time you make a new build
 
 </article>
