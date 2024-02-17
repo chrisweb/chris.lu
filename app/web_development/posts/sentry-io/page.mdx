@@ -6,7 +6,7 @@
 
 ![banner image of a robot with sentry.io written on his chest that is catching bugs with a huge net](../../../../public/assets/images/app/web_development/posts/sentry-io/banner.png)
 
-Sentry.io is a cloud-based error monitoring service that helps developers by captureing and logging errors (including stack traces and request information) in real-time (when they occur in production). They support via a wide range of languages and frameworks through their ["sentry-*" opensource SDKs](https://github.com/getsentry) that are hosted on GitHub. Beyond error tracking, Sentry also offers [performance monitoring](https://docs.sentry.io/product/performance) features as well as a feature called [Sessions Replays](https://sentry.io/for/session-replay/) which lets you capture and then replay the user interactions that happend prior to the error occuring, making it easier to reproduce an error and more.
+Sentry.io is a cloud-based error monitoring service that helps developers by captureing and logging errors (including stack traces and request information) in real-time (when they occur in production). They support via a wide range of languages and frameworks through their ["sentry-*" opensource SDKs](https://github.com/getsentry) that are hosted on GitHub (the error logging SDKs for javascript, React, Capacitor, Next.js and many more have an MIT license, but not all sentry packages do, for example the [self hosted version](https://develop.sentry.dev/self-hosted/) of sentry uses a license called [FSL](https://github.com/getsentry/fsl.software/tree/main) that is NOT an OSI-approved license). Beyond error tracking, Sentry also offers [performance monitoring](https://docs.sentry.io/product/performance) features as well as a feature called [Sessions Replays](https://sentry.io/for/session-replay/) which lets you capture and then replay the user interactions that happend prior to the error occuring, making it easier to reproduce an error and more.
 
 Sentry.io has a (free) [Developer](https://sentry.io/pricing/) plan, for developers that want to start a side project or just experiment with the service, it includes logs for up to 5000 errors, 10k performance metrics and more
 
@@ -16,12 +16,67 @@ Sentry.io has a (free) [Developer](https://sentry.io/pricing/) plan, for develop
 
 ## Create an account (sign up)
 
+* Go to [sentry.io](https://sentry.io) and then click on **Get Started**
+* Next they ask you to create an account, you can do so using your email address or you can connect via your account from a git provider, I chose GitHub (but feel free to click on Google or Azure Devops if you have such an account already, I'm supprised they don't offer you to connect using [GitLab](https://about.gitlab.com/) or [Bitbucket](https://bitbucket.org/) 😲) as I intended to connect my GitHub account at some point anyway, as there are some features like converting an error log into a ticket that I want to try out (I usually try to not connect too much accounts which each other as a breach into one of them could potentially give the attacker access to the services that are linked to it too, but in this case I chose to because in the next step we need to connect our GitHub account anyway and allow Sentry.io to create tickets on GitHub for me)
+  * for a guide about creating a GitHub account check out my chapter [Create a GitHub account (sign up)](/web_development/posts/github#create-an-account-sign-up) in the GitHub post
+* next a pop up window will open, asking you to authorize Sentry.io, there is one request they do which is called [Act on your behalf](https://docs.github.com/en/apps/using-github-apps/authorizing-github-apps#about-github-apps-acting-on-your-behalf), this means that Sentry.io will be able to do tasks on your repositories, this is needed so that Sentry.io can for example help open / update issues in your repositories
 
+![](../../../../public/assets/images/app/web_development/posts/sentry-io/sentry_github_permissions_modal.png)
+
+* click on **Authorize Sentry.io** and you will get redirected to Sentry.io
+* on the next page they ask us of we already have a Sentry.io account, if you do follow their instructions in the message, however if like me you don't have an account yet, click on **New Account**
+* next we get another form (almost done... yeah yeah 😂), enter a user name for Sentry.io (you can either use your full name, or as I did use your GitHub username, or use any display name you like, if already or later plan to work in a team, then I recommend you chose a name they will recognize)
+* then you need to chose an **organization name** and the placeholder of the field says company name, however even do the name is **required** it does NOT mean you can NOT sign up as an individuel, organizations in Sentry.io are like organizations on GitHub, they don't solely represent companies but it can be any group you want, as I have no organisation on GitHub either I just **MY_USER_NAME-projects as name**
+* then check the mandatory terms checkbox
+* for the email updates chose what ever you prefer
+* finally click on **Continue**
+
+Next we have finally arrived on their welcome page,l you can either click on **Start** (which I recommend you do, but more on that in the next chapter) to get a guided tour on how to set up sentry, or set up your team or you can click on the link below to just skip onboarding
 
 > [!MORE]  
-> [sentry.io "Get Started" documentation](https://docs.sentry.io/product/sentry-basics/)
+> [sentry.io "Get Started" documentation](https://docs.sentry.io/product/sentry-basics/)  
+> [GitHub "About GitHub Apps acting on your behalf" documentation](https://docs.github.com/en/apps/using-github-apps/authorizing-github-apps#about-github-apps-acting-on-your-behalf)  
 
-## 
+## Create a Sentry.io project
+
+If you just finished the previous chapter and clicked on **Start** then you will have come to a page where you get asked to chose your main framework, else go to your Sentry.io account and on the left click on **Projects** and then **Create project**
+
+Chose whatever framework you like (during onboarding you can only add one at a time, however you will later be able to add more if you like, you could for example add sentry for a PHP Backend API, sentry for React for your frontend code and sentry for iOS and Android for your apps if that's is your technology stack)
+
+Next chose an alert frequency, I kept the default value **Alert me on every new issue** (you can change this later)
+
+Then you can **Name your project and assign it a team**, I again kept the default values
+
+Finally click on **Create Project**
+
+Now click on **Configure SDK**
+
+Next you come to a page that explains you how to set up the sentry SDK
+
+## Setry.io for Next.js projects
+
+Open your [Sentry.io dashboard](https://sentry.io) and on the left click on **Projects** and then **Create project**
+
+You can either use the recommended sentry command or follow their manual [setup toturial](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/), I chose to use the command, if you chose manual you may want to copy the DSN they give you at the end of the page (a Sentry DSN is an API key you will use when setting up your SDK)
+
+In your VSCode terminal (or your preferred command line tool), type the following command:
+
+```shell
+npx @sentry/wizard@latest -i nextjs
+```
+
+First you will get asked if you accept installing the sentry wizard npm package, press `y{:shell}` to accept and press `Enter{:shell}` move on
+
+**Are you using Sentry SaaS or self-hosted Sentry?** you probably want to chose SaaS like me (if you are a company though you might want to have a look at the hosted version) then press `Enter{:shell}`
+
+**Do you already have an account?** Yes (if you did follow the previous chapter or already had an account before) then press `Enter{:shell}`
+
+Then the sentry wizard will attempt to open a browser tab and ask you to login, so do just that
+
+Next you get asked to chose which Sentry Project you want to use, chose the one Sentry just created for you from the list (when using the wizard Sentry will have created a project for the SDK you chose eralier, if however you don't see a Project listed here, you can check out the [Create a Sentry.io project](#create-a-sentryio-project) to create a project first)
+
+Now the wizard will install the dependencies
+
 
 
 
