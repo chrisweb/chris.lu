@@ -188,7 +188,7 @@ finally I recommend you commit / sync the new `.vscode/settings.json`
 ##### Statically Typed Links (Routes)
 
 > [!WARN]  
-> There seems to be a bug in the route types for `*.mdx` pages, when doing a prod build, when doing a dev build all routes are typed and listed in the `.next/types/links.d.ts` but they are missing in prod resulting in a **Type error** "XY is not an existing route.", so even though this feature seems very promissing, as of now I recommend to keep it turned off (set to false) if you have are using `*.mdx` pages (which is what we will do in this tutorial)
+> There seems to be a bug in the route types for `*.mdx` pages, when doing a prod build, when doing a dev build all routes are typed and listed in the `.next/types/link.d.ts` but they are missing in prod resulting in a **Type error** "XY is not an existing route.", so even though this feature seems very promissing, as of now I recommend to keep it turned off (set to false) if you have are using `*.mdx` pages (which is what we will do in this tutorial)
 
 To ensure we benefit from **statically typed links** there is one more step needed, open the `next.config.mjs` and then add the **experimental** typedRoutes to your Next.js configuration file like so:
 
