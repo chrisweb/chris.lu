@@ -4,6 +4,7 @@ import NavigationLink from '@/components/navigation/Link'
 import ImageArticle from '@/components/image/Article'
 import { ImageProps } from 'next/image'
 import Image from 'next/image'
+import type { Route } from 'next'
 
 // This file allows you to provide custom React components
 // to be used in MDX files. You can import and use any
@@ -45,7 +46,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
             </h6>
         ),
         a: ({ children, href, ...props }) => (
-            <NavigationLink href={href ? href : ''} {...props}>
+            <NavigationLink href={href as Route} {...props}>
                 {children}
             </NavigationLink>
         ),

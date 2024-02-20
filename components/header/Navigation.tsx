@@ -6,6 +6,7 @@ import Link from 'next/link'
 import useClickOutside, { TypeCallback } from '@/hooks/useClickOutside'
 import { useRouter, usePathname } from 'next/navigation'
 import { useSwipeable } from 'react-swipeable'
+import { Route } from 'next'
 
 interface IMainMenuItem {
     href: string
@@ -39,7 +40,7 @@ const HeaderNavigation: React.FC = () => {
     const onClickLinkHandler = (event: React.MouseEvent<HTMLAnchorElement>) => {
         event.preventDefault()
         setNavigationIsOpenState(false)
-        router.push(event.currentTarget.href)
+        router.push(event.currentTarget.href as Route)
     }
 
     // on swipe up (when over the navigation) close the navigation
@@ -99,7 +100,7 @@ const HeaderNavigation: React.FC = () => {
                         }
                         return (
                             <Link
-                                href={mainMenuItem.href}
+                                href={mainMenuItem.href  as Route}
                                 key={mainMenuItem.href}
                                 onClick={onClickLinkHandler}
                                 className={isActiveClass}

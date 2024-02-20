@@ -2,9 +2,10 @@ import { PropsWithChildren } from 'react'
 import Link from 'next/link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
+import { Route } from 'next'
 
 export interface INavigationLinkProps extends PropsWithChildren {
-    href: string
+    href: Route<string> | URL
     target?: string
     rel?: string
     className?: string
@@ -54,8 +55,8 @@ const NavigationLink: React.FC<INavigationLinkProps> = (props): JSX.Element => {
 
     const { href, children, ...linkProps } = props
 
-    const isExternal = isExternalUrl(href, 'chris.lu')
-    const isMe = isUrlMe(href)
+    const isExternal = isExternalUrl(href.toString(), 'chris.lu')
+    const isMe = isUrlMe(href.toString())
 
     if (isExternal) {
         linkProps.rel = 'nofollow noopener noreferrer'
