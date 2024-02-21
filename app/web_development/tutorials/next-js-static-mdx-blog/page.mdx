@@ -412,6 +412,133 @@ Because GitHub and Vercel are now connected, you will also have all the informat
 
 If for example you click on **preview** it will open the deployments page, on top you will have a link to the live preview on vercel.app and below you will have a list of the recent deployments
 
+## Error handling and logging
+
+As we saw earlier each route segment is directory and each directory contains a page file, but unlike the page router, when using the app router we can add more than just pages, one of those files is an error file
+
+How this works is that Next.js will automatically wrap the children of your page with a **React Error Boundary**, meaning that when an error gets thrown in a page then the error boundary will contain it and then use the error file that is the closest (either an error file that is in the same directory as the page itself or a parent directory) as a fallback
+
+Let's create our first error file inside of our app directory and let's use the example from the Next.js documentation, like so:
+
+```ts title="app/error.tsx" showLineNumbers {13-16}
+'use client' // Error components must be Client Components
+
+import { useEffect } from 'react'
+
+export default function Error({
+    error,
+    reset,
+}: {
+    error: Error & { digest?: string }
+    reset: () => void
+}) {
+
+    useEffect(() => {
+        // Log the error to an error reporting service
+        console.error(error)
+    }, [error])
+
+    return (
+        <div>
+            <h2>Something went wrong!</h2>
+            <button
+                onClick={
+                    // Attempt to recover by trying to re-render the segment
+                    () => reset()
+                }
+            >
+                Try again
+            </button>
+        </div>
+    )
+}
+```
+
+As you can see the Next.js documentation example uses a `useEffect(){:.fn}` function to log the error in our console, but what happens if the error is getting triggered on a users computer, then we won't know about, so as Next.js suggests, in the second part of this chapter, we will use a third party service called [Sentry.io](https://sentry.io) to do the logging for us (of course if you prefer you can also develop and run your own logging service instead)
+
+> [!MORE]  
+> [Next.js "Handling Errors" documentation](https://nextjs.org/docs/app/building-your-application/routing/error-handling)  
+
+### Error logging using Sentry.io
+
+In this chapter we will use [Sentry.io](https://sentry.io) (which has a free plan for side projects) to add error logging to the Next.js error file we just created
+
+First you need to have or create an account on [Sentry.io](https://sentry.io) (if you need help with that step, check out my chapter [Create a Sentry account (sign up)](/web_development/posts/sentry-io#create-an-account-sign-up) in the Sentry.io post)
+
+Now we need create a new project on Sentry.io and use their wizard to include their Sentry.io SDK for Next.js into our project (if you need help with that step, check out my chapter [Sentry.io for Next.js projects](/web_development/posts/sentry-io#sentryio-for-nextjs-projects) in the Sentry.io post)
+
+After creating a Sentry.io account and setting up the SDK I recommend also using the [Sentry.io integration on Vercel](https://vercel.com/integrations/sentry) as this will automate the part **"Adding the Sentry authentication token as an environment variable to your CI setup"** that we just saw when using the Sentry.io wizard (if you need help with that step, check out my chapter [Sentry integration for Vercel](/web_development/posts/vercel#sentry-integration-for-vercel))
+
+Now that Sentry.io is set up we can modify the error file we created earlier and add import the Sentry SDK and add the Sentry.io logging function inside of the `useEffect(){:.fn}` to replace the example console.log, like so:
+
+```ts title="app/error.tsx" showLineNumbers {3} {14-17}
+'use client' // Error components must be Client Components
+
+import * as Sentry from '@sentry/nextjs'
+import { useEffect } from 'react'
+
+export default function Error({
+    error,
+    reset,
+}: {
+    error: Error & { digest?: string }
+    reset: () => void
+}) {
+
+    useEffect(() => {
+        // Log the error to Sentry.io
+        Sentry.captureException(error)
+    }, [error])
+```
+
+> [!MORE]  
+> [Sentry.io "Next.js SDK" documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/)  
+
+### Handling global errors
+
+The Sentry.io wizard we just used has created a Next.js `app/global-error.jsx{:shell}` file for us, the Next.js documentation explains well why this file is important:
+
+> The root app/error.js boundary does not catch errors thrown in the root app/layout.js or app/template.js component.
+>
+> To specifically handle errors in these root components, use a variation of error.js called app/global-error.js located in the root app directory.
+>
+> global-error.js is the least granular error UI and can be considered "catch-all" error handling for the whole application.
+
+But because Sentry created a **javascript** file but our project uses **typescript**, we will start by converting the file into a typescript file, by renaming `app/global-error.jsx{:shell}` to `app/global-error.tsx{:shell}`
+
+After renaming the file we edit it and replace its content with the code for a global error page from the Next.js documentation, which is a good start as it is strictly typed, the only difference is that we also modify the code to add the Sentry.io `captureException(){:.fn}` function, that will capture exceptions and send them to Sentry.io, the final version looks like this:
+
+```ts title="app/global-error.tsx"
+'use client'
+
+import * as Sentry from '@sentry/nextjs'
+import { useEffect } from 'react'
+
+export default function GlobalError({
+    error,
+    reset,
+}: {
+    error: Error & { digest?: string }
+    reset: () => void
+}) {
+
+    useEffect(() => {
+        Sentry.captureException(error)
+    }, [error])
+
+    return (
+        <html>
+            <body>
+                <h2>Something went wrong!</h2>
+                <button onClick={() => reset()}>Try again</button>
+            </body>
+        </html>
+    )
+}
+```
+
+Now we have error handling and logging, for pages as well as a global error handling file that will handle root layout error and act as a catch all for app errors, time to save, commit and sync
+
 ## Content Security Policy (CSP)
 
 Using [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) headers is not required to make an app work but it is highly recommended as it will make your project more secure
@@ -579,11 +706,14 @@ const nextConfig = {
 export default nextConfig;
 ```
 
-Depending on the value of **cspReportOnly**, we either set the CSP header to **Content-Security-Policy-Report-Only** mode (if true) or **Content-Security-Policy** (if false)
+Depending on the value of **cspReportOnly**, we either set the CSP header to **Content-Security-Policy-Report-Only** mode (if cspReportOnly = true) or we set it to **Content-Security-Policy** (if cspReportOnly = false)
 
-This is because CSP has two modes, one that will only report violations, this is good for testing your rules before actually enforcing them and a second mode which will enforce the rules
+This is because CSP has two modes, one that will ONLY report violations, this is good for testing your rules before actually enforcing them and a second mode which will enforce the rules
 
-For now we set the CSP mode to only report violations, however as soon as are confident that there are no more violation reports it is recommend to set our custom variable **cspReportOnly** to **false**
+> [!NOTE]  
+> when enforcing is enabled it will still report the violations (besides enforcing them)  
+
+For now we set the CSP mode to only report violations, however as soon as are confident that there are no more violations it is recommend to set our custom variable **cspReportOnly** to **false**
 
 > [!MORE]  
 > [MDN "Content Security Policy (CSP)" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)  
@@ -593,14 +723,9 @@ For now we set the CSP mode to only report violations, however as soon as are co
 
 ### Logging CSP violations with Sentry.io
 
-CSP violations reports can not only be seen in the console, as this would limit us to only see violations that occur when we visit our app, they can also be logged
+CSP violations reports can not only be seen in the console, as this would limit us to only see violations that occur when we visit the app ourself, but what about violations that happen when a user visits our project, for that we will use [Sentry.io](https://sentry.io) that we have set up earlier for error logging purposes and add CSP violations logging
 
-You could write your own API to log CSP violations or you can use a service like [Sentry.io](https://sentry.io), we will do the later and create a free Sentry account, we will use that account to log the CSP violations and also to monitor error and loading times when our users visit app
-
-First you need to have or create an account on [Sentry.io](https://sentry.io) (if you need help with that step, check out my chapter [Create a Sentry account (sign up)](/web_development/posts/sentry-io#create-an-account-sign-up) in the Sentry.io post)
-
-Now we need create a new project on Sentry.io and use their wizard to include their Sentry.io SDK for Next.js into our project (if you need help with that step, check out my chapter [Sentry.io for Next.js projects](/web_development/posts/sentry-io#sentryio-for-nextjs-projects) in the Sentry.io post)
-
-After creating a Sentry.io account and setting up the SDK I recommend also using the Vercel integration for Sentry.io as this will simply the part **Adding the Sentry authentication token as an environment variable to your CI setup** that we just saw when using the Sentry.io wizard
+> [!MORE]  
+> [Sentry.io "CSP violations logging" documentation](https://docs.sentry.io/product/security-policy-reporting/)  
 
 </article>
