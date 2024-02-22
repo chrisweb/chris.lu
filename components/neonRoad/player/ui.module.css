@@ -47,10 +47,8 @@
     perspective: 600px;
     position: fixed;
     z-index: 40;
-    right: 50px;
+    right: var(--main-spacing);
     top: -300px;
-    /*border: 1px solid #CCC;*/
-    margin: 40px auto;
 }
 
 /* max-width: 70rem / 1120px (mobile breakpoint) */
@@ -66,7 +64,14 @@
     transition-property: top;
     transition-duration: 1s;
     transition-timing-function: ease-out;
-    top: 50px;
+    top: calc(var(--header-navbar-height) + var(--main-spacing));
+}
+
+/* max-width: 70rem / 1120px (mobile breakpoint) */
+@media all and (max-width: 70rem) {
+    .ejected {
+        top: calc(var(--header-navbar-height));
+    }
 }
 
 .inserted {
