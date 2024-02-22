@@ -51,11 +51,7 @@ Finally click on **Create Project**
 
 Now click on **Configure SDK**
 
-Next you come to a page that explains you how to set up the sentry SDK
-
-## Sentry.io for Next.js projects
-
-Open your [Sentry.io dashboard](https://sentry.io) and on the left click on **Projects** and then **Create project**
+## Sentry.io SDK for Next.js projects
 
 You can either use the recommended sentry command or follow their manual [setup toturial](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/), I chose to use the command, if you chose manual you may want to copy the DSN they give you at the end of the page (a Sentry DSN is an API key you will use when setting up your SDK)
 
@@ -95,5 +91,67 @@ Now wait for the backend and frontend errors to appear (this can take a few minu
 As soon as the two errors appear, feel free to click on them and have a look at what error logging on Sentry.io looks like
 
 Before we commit / sync all the changes Sentry.io did in our project, **delete** the `app\sentry-example-page\page.jsx` **test page** and the `app\api\sentry-example-api\route.js` **API test route** files that Sentry.io created to test the error logging, you will not need them anymore
+
+## Sentry.io for Next.js configuration
+
+Sentry.io can be customized a lot and also has several places where you can change the default configuration
+
+First there is the `next.config.mjs` where you can configure options related to your Next.js project, by default the options that the wizard set for us are good enough, but as soon as you have the time I recommend checking out the [Extend your Next.js Configuration](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration) documentation which explains what each option does
+
+Another file that got added to the root of our project is `sentry.client.config.ts`, the file is being used to configuration Sentry.io for **client components**, check out the [Next.js SDK Configuration Options](https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/) documentation for more details about each option, I slighly modified my configuration file to be like this:
+
+```ts title="sentry.client.config.ts" showLineNumbers {3-9} {15} {20} {24} {35}
+import * as Sentry from '@sentry/nextjs'
+
+let replaysOnErrorSampleRate = 0
+let tracesSampleRate = 0
+
+if (process.env.NODE_ENV === 'production') {
+    replaysOnErrorSampleRate = 1
+    tracesSampleRate = 0.1
+}
+
+Sentry.init({
+    dsn: 'https://daf0befe66519725bbe2ad707a11bbb3@o4504017992482816.ingest.sentry.io/4506763918770176',
+
+    // Adjust this value in production, or use tracesSampler for greater control
+    tracesSampleRate: tracesSampleRate,
+
+    // Setting this option to true will print useful information to the console while you're setting up Sentry.
+    debug: false,
+
+    replaysOnErrorSampleRate: replaysOnErrorSampleRate,
+
+    // This sets the sample rate to be 10%. You may want this to be 100% while
+    // in development and sample at a lower rate in production
+    replaysSessionSampleRate: 0,
+
+    // You can remove this option if you're not planning to use the Sentry Session Replay feature:
+    integrations: [
+        Sentry.replayIntegration({
+            // Additional Replay configuration goes in here, for example:
+            maskAllText: true,
+            blockAllMedia: true,
+        }),
+    ],
+
+    environment: process.env.NODE_ENV ? process.env.NODE_ENV : '',
+})
+
+```
+
+line 3-9 I added two variables for the **replaysOnErrorSampleRate** and the **tracesSampleRate** and set them to zero by default, this is to ensure that no logging happens when not in production, then line 6-9 I added a check to verify if the current environment is **production** and if it is I tell Sentry to always make a replay if there is an error (be careful with this option, in the free plan you only have 50 replays per month), I also set the traces sample rate to 0.1, meaning 10% of the traces will get sent to Sentry, you may want a lower or higher value depending on what plan you are on and then check if you reach your limits or not and then adjust over time
+
+Line 24 I completly disabled **replaysSessionSampleRate**, meaning there will be no replays being made when there is no error, the free plan has 50 replays per month and I prefer to keep all the replays for cases where there is a bug
+
+Line 35 I pass the environment to Sentry, meaning Sentry will know if the environment is preview or production (that value is based on the Vercel environment on which Next.js got deployed)
+
+`sentry.edge.config.ts` are the options for when Next.js uses the [Vercel Edge Network](https://vercel.com/docs/edge-network/overview), I kept that file as, but feel free to adjust any values to fit your use case
+
+`sentry.server.config.ts` is again similar to the previous two, just this one is specifically for Next.js server side options, I also kept this file as is
+
+> [!MORE]  
+> [Sentry.io "Extend your Next.js Configuration" documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration)  
+> [Sentry.io "Next.js SDK Configuration" documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/)  
 
 </article>
