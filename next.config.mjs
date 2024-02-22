@@ -226,7 +226,7 @@ const nextConfig = (/*phase*/) => {
         // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
         // and white-list vitals.vercel-insights
         // based on: https://vercel.com/docs/speed-insights#content-security-policy
-        if (process.env?.VERCEL_ENV === "preview") {
+        if (process.env?.VERCEL_ENV === 'preview') {
             return `
                 ${defaultsCSPHeaders}
                 font-src 'self' https://vercel.live/;
@@ -240,7 +240,7 @@ const nextConfig = (/*phase*/) => {
 
         // for production environment white-list vitals.vercel-insights
         // based on: https://vercel.com/docs/speed-insights#content-security-policy
-        if (process.env.NODE_ENV === "production") {
+        if (process.env.NODE_ENV === 'production') {
             return `
                 ${defaultsCSPHeaders}
                 font-src 'self';

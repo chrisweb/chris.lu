@@ -561,10 +561,14 @@ const cspHeader = () => {
 
     const upgradeInsecure = cspReportOnly ? '' : 'upgrade-insecure-requests;'
 
+    // worker-src is for sentry replay
+    // child-src is because safari <= 15.4 does not support worker-src
     const defaultsCSPHeaders = `
         default-src 'none';
         media-src 'self';
         object-src 'none';
+        worker-src 'self' blob:;
+        child-src 'self' blob:;
         base-uri 'none';
         form-action 'none';
         frame-ancestors 'none';
@@ -577,7 +581,7 @@ const cspHeader = () => {
     // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
     // and white-list vitals.vercel-insights
     // based on: https://vercel.com/docs/speed-insights
-    if (process.env?.VERCEL_ENV === "preview") {
+    if (process.env?.VERCEL_ENV === 'preview') {
         return `
             ${defaultsCSPHeaders}
             font-src 'self' https://vercel.live/;
@@ -591,7 +595,7 @@ const cspHeader = () => {
 
     // for production environment white-list vitals.vercel-insights
     // based on: https://vercel.com/docs/speed-insights
-    if (process.env.NODE_ENV === "production") {
+    if (process.env.NODE_ENV === 'production') {
         return `
             ${defaultsCSPHeaders}
             font-src 'self';
