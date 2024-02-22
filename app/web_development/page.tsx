@@ -27,7 +27,15 @@ export default function WebDevelopmentPage() {
                 <div className="grid">
                     <Link href="/web_development/tutorials/next-js-static-mdx-blog" className={styles.preview}>
                         <Image src="/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/banner.png" alt="" fill sizes="400px" style={{ objectFit: 'cover' }} />
-                        <div className={styles.title}>Next.js static MDX Blog</div>
+                        <div className={styles.title}>Next.js / React static MDX Blog</div>
+                    </Link>
+                    <Link href="/web_development/tutorials/next-static-export-github-pages" className={styles.preview}>
+                        <Image src="/assets/images/app/web_development/tutorials/next-static-export-github-pages/banner.png" alt="" fill sizes="400px" style={{ objectFit: 'cover' }} />
+                        <div className={styles.title}>Next.js static export deployed on GitHub pages using GitHub actions</div>
+                    </Link>
+                    <Link href="/web_development/tutorials/xcode-cloud-capacitor-webapp" className={styles.preview}>
+                        <Image src="/assets/images/app/web_development/tutorials/xcode-cloud-capacitor-webapp/banner.png" alt="" fill sizes="400px" style={{ objectFit: 'cover' }} />
+                        <div className={styles.title}>Xcode Cloud CI/CD to distribute a capacitor app to TestFlight users and the App Store</div>
                     </Link>
                 </div>
                 <h2 className="h2">Posts</h2>
