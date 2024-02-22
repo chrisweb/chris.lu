@@ -51,7 +51,7 @@
     --quaternary-light-value: 235, 250, 0;
     --quaternary-light-color: rgb(var(--quaternary-light-value));
     --codebloc-font-family: var(--font-sourceCodePro), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    --header-navbar-height: 58px;
+    --header-navbar-height: 50px;
     --cursor-default: url(/assets/cursors/secondary_mouse_default.cur), default;
     --cursor-pointer: url(/assets/cursors/secondary_mouse_pointer.cur), pointer;
 }
