@@ -78,9 +78,14 @@ Now sentry will install some dependencies and modify the modify the next.config.
 
 **Do you want to create an example page** chose **YES** (we will later use it to test the Sentry setup and then we will delete it)
 
-**Are you using a CI/CD tool to build and deploy your application?** chose **YES** (if you are using Vercel, GitHub actions or any other CI/CD deployment tool, if you are not chose **NO**)
+**Are you using a CI/CD tool to build and deploy your application?** chose **YES** (if you are using Vercel, GitHub actions or any other CI/CD deployment tool, if you are NOT chose **NO**)
 
-**Did you configure CI as shown above?** chose **YES** and then make sure you add the environment variable to your setup, to ensure source maps get automatically uploaded to sentry every time you make a new build
+**Did you configure CI as shown above?** chose **YES**
+
+After that step the Sentry.io Wizard will give you a **SENTRY_AUTH_TOKEN** string, if you use a CI/CD for your deployments, for example if you set up a custom GitHub action then you will want to add that environement variable to your GitHub secrets and if you use another CI/CD service you should check out their documentation to learn how to automatically upload sourcemaps to Sentry, the CI/CD tool can authenticate itself using the **SENTRY_AUTH_TOKEN** environment variable and then use the Sentry.io API to automatically upload the sourcemaps of your build to Sentry.io (so that later if there is a bug report on Sentry.io it will be able to use the sourcemaps instead of the minified build files, to show you where the error occured).
+
+> [!NOTE]  
+> if you use Vercel for your deployments, then you don't need to set the **SENTRY_AUTH_TOKEN** yourself, you can use the [Sentry integration for Vercel](https://vercel.com/integrations/sentry), which will set the Vercel environment variables for you  
 
 Next we do as they suggest and start the development server using the command and then we visit their example page in our browser at [http://localhost:3000/sentry-example-page](http://localhost:3000/sentry-example-page)
 
