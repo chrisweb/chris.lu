@@ -43,16 +43,12 @@ const WaveformCanvas = forwardRef<Waveform, IProps>(({ onWaveClickHandler, waveD
 
     }
 
-    const getWaveform = (): Waveform => {
+    const getWaveform = (): Waveform | null => {
 
-        const waveform = initializeWaveform()
+        let waveform: Waveform | null = null
 
-        if (typeof waveformRef === 'function') {
-            waveformRef(waveform)
-        } else {
-            if (waveformRef !== null) {
-                waveformRef.current = waveform
-            }
+        if (typeof waveformRef !== 'function' && waveformRef !== null) {
+            waveform = waveformRef.current
         }
 
         return waveform
@@ -65,12 +61,26 @@ const WaveformCanvas = forwardRef<Waveform, IProps>(({ onWaveClickHandler, waveD
 
             const waveform = getWaveform()
 
-            waveform.setWaveData(waveData)
-            waveform.draw(0)
+            waveform?.setWaveData(waveData)
+            waveform?.draw(0)
 
         }
 
     }, [waveData])
+
+    useEffect(() => {
+
+        if (typeof waveformRef !== 'function' && waveformRef !== null) {
+            waveformRef.current = initializeWaveform()
+        }
+
+        return () => {
+            if (typeof waveformRef !== 'function' && waveformRef !== null) {
+                waveformRef.current?.destroy()
+            }
+        }
+
+    }, [])
 
     return (
         <>

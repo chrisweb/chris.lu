@@ -258,16 +258,16 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
 
     }
 
-    const onClickTogglePlayPauseCallback = () => {
+    const onClickTogglePlayPauseCallback = async () => {
         if (isPlayingState) {
-            getPlayer().pause()
+            getPlayer()?.pause()
         } else {
-            getPlayer().play()
+            getPlayer()?.play()
         }
     }
 
     const onClickNextHandler = () => {
-        getPlayer().next()
+        getPlayer()?.next()
     }
 
     const onClickEjectHandler = () => {
@@ -297,24 +297,20 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
     const onInputVolumeHandler = () => {
         if (volumeSliderRef.current !== null) {
             const volume = volumeSliderRef.current.value
-            getPlayer().setVolume(parseInt(volume))
+            getPlayer()?.setVolume(parseInt(volume))
         }
     }
 
     const onWaveClickHandler = useCallback((clickHorizontalPositionInPercent: number) => {
-        getPlayer().setPosition(clickHorizontalPositionInPercent)
+        getPlayer()?.setPosition(clickHorizontalPositionInPercent)
     }, [])
 
-    const getPlayer = (): PlayerCore => {
+    const getPlayer = (): PlayerCore | null => {
 
-        const player = initializePlayer()
+        let player: PlayerCore | null = null
 
-        if (typeof playerRef === 'function') {
-            playerRef(player)
-        } else {
-            if (playerRef !== null) {
-                playerRef.current = player
-            }
+        if (typeof playerRef !== 'function' && playerRef !== null) {
+            player = playerRef.current
         }
 
         return player
@@ -322,6 +318,10 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
     }
 
     useEffect(() => {
+
+        if (typeof playerRef !== 'function' && playerRef !== null) {
+            playerRef.current = initializePlayer()
+        }
 
         const firstSong = getMixTape()[0]
 
@@ -333,7 +333,11 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
             wave: firstSong.wave
         })
 
-        getPlayer()
+        return () => {
+            if (typeof playerRef !== 'function' && playerRef !== null) {
+                playerRef.current?.disconnect()
+            }
+        }
 
     }, [])
 
