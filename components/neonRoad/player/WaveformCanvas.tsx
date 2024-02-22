@@ -16,7 +16,7 @@ const WaveformCanvas = forwardRef<Waveform, IProps>(({ onWaveClickHandler, waveD
     const initializeWaveform = (): Waveform => {
 
         const waveLayoutOptions: IWaveLayoutOptions = {
-            waveHeightInPixel: 40,
+            waveHeightInPixel: 32,
             waveTopPercentage: 50,
         }
 
