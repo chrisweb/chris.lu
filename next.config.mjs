@@ -206,10 +206,14 @@ const nextConfig = (/*phase*/) => {
 
         const upgradeInsecure = cspReportOnly ? '' : 'upgrade-insecure-requests;'
 
+        // worker-src is for sentry replay
+        // child-src is because safari <= 15.4 does not support worker-src
         const defaultsCSPHeaders = `
             default-src 'none';
             media-src 'self';
             object-src 'none';
+            worker-src 'self' blob:;
+            child-src 'self' blob:;
             base-uri 'none';
             form-action 'none';
             frame-ancestors 'none';
