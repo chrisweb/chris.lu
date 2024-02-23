@@ -206,9 +206,22 @@ const nextConfig = (/*phase*/) => {
 
         const upgradeInsecure = cspReportOnly ? '' : 'upgrade-insecure-requests;'
 
+        //const sentryReportUri = 'https://o4504017992482816.ingest.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
+
+        // report directive to be added at the end
+        /*const reportCSPViolations = `
+            report-uri ${sentryReportUri};
+            report-to {"group":"default","max_age":10886400,"endpoints":[{"url":"${sentryReportUri}"}],"include_subdomains":true};
+        `*/
+        /*const reportCSPViolations = `
+            report-to {"group":"default","max_age":10886400,"endpoints":[{"url":"${sentryReportUri}"}],"include_subdomains":true};
+        `*/
+
+        //const reportingEndpoint = `default="${sentryReportUri}"`
+
         // worker-src is for sentry replay
         // child-src is because safari <= 15.4 does not support worker-src
-        const defaultsCSPHeaders = `
+        const defaultCSPDirectives = `
             default-src 'none';
             media-src 'self';
             object-src 'none';
@@ -218,8 +231,9 @@ const nextConfig = (/*phase*/) => {
             form-action 'none';
             frame-ancestors 'none';
             block-all-mixed-content;
+            require-trusted-types-for 'script';
             ${upgradeInsecure}
-            `
+        `
 
         // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
         // and whitelist vercel's domains based on:
@@ -228,13 +242,14 @@ const nextConfig = (/*phase*/) => {
         // based on: https://vercel.com/docs/speed-insights#content-security-policy
         if (process.env?.VERCEL_ENV === 'preview') {
             return `
-                ${defaultsCSPHeaders}
-                font-src 'self' https://vercel.live/;
+                ${defaultCSPDirectives}
+                font-src 'none';
                 style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
                 script-src 'self' 'unsafe-inline' https://vercel.live/;
                 connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/;
                 img-src 'self' data: https://vercel.com/ https://vercel.live/;
                 frame-src 'self' https://vercel.live/;
+                report-to default
             `
         }
 
@@ -242,7 +257,7 @@ const nextConfig = (/*phase*/) => {
         // based on: https://vercel.com/docs/speed-insights#content-security-policy
         if (process.env.NODE_ENV === 'production') {
             return `
-                ${defaultsCSPHeaders}
+                ${defaultCSPDirectives}
                 font-src 'self';
                 style-src 'self' 'unsafe-inline';
                 script-src 'self';
@@ -254,15 +269,20 @@ const nextConfig = (/*phase*/) => {
 
         // for dev environment enable unsafe-eval for hot-reload
         return `
-            ${defaultsCSPHeaders}
-            font-src 'self';
+            ${defaultCSPDirectives}
+            font-src 'none';
             style-src 'self' 'unsafe-inline';
             script-src 'self' 'unsafe-eval' 'unsafe-inline';
-            connect-src 'self';
+            connect-src 'self' https://o4504017992482816.ingest.sentry.io;
             img-src 'self' data:;
             frame-src 'none';
+            report-to default
         `
     }
+
+    const sentryReportUri = 'https://o4504017992482816.ingest.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
+
+    const reportingEndpoint = `default="${sentryReportUri}"`
 
     /** @type {import('next').NextConfig} */
     const nextConfig = {
@@ -300,6 +320,10 @@ const nextConfig = (/*phase*/) => {
                         {
                             key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
                             value: cspHeader().replace(/\n/g, ''),
+                        },
+                        {
+                            key: 'Reporting-Endpoints',
+                            value: reportingEndpoint,
                         },
                     ],
                 },
