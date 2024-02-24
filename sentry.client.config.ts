@@ -5,16 +5,21 @@
 import * as Sentry from '@sentry/nextjs'
 
 let replaysOnErrorSampleRate = 0
+let tracesSampleRate = 0.1
 
 if (process.env.NODE_ENV === 'production') {
     replaysOnErrorSampleRate = 1
+}
+
+if (process.env.NODE_ENV === 'development') {
+    tracesSampleRate = 0
 }
 
 Sentry.init({
     dsn: 'https://daf0befe66519725bbe2ad707a11bbb3@o4504017992482816.ingest.sentry.io/4506763918770176',
 
     // Adjust this value in production, or use tracesSampler for greater control
-    tracesSampleRate: 1,
+    tracesSampleRate: tracesSampleRate,
 
     // Setting this option to true will print useful information to the console while you're setting up Sentry.
     debug: false,
