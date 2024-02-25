@@ -558,7 +558,7 @@ To add CSP rules to our Next.js project we need to edit the `next.config.mjs` in
 
 Add the following lines to your configuration:
 
-```js title="next.config.mjs" showLineNumbers {1-61} {70-82}
+```js title="next.config.mjs" showLineNumbers
 // CSP headers here is set based on Next.js recommendations:
 // https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
 const cspReportOnly = true;
@@ -569,7 +569,7 @@ const cspHeader = () => {
 
     // worker-src is for sentry replay
     // child-src is because safari <= 15.4 does not support worker-src
-    const defaultsCSPHeaders = `
+    const defaultCSPDirectives = `
         default-src 'none';
         media-src 'self';
         object-src 'none';
@@ -580,7 +580,7 @@ const cspHeader = () => {
         frame-ancestors 'none';
         block-all-mixed-content;
         ${upgradeInsecure}
-        `
+    `
 
     // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
     // and whitelist vercel's domains based on:
@@ -589,7 +589,7 @@ const cspHeader = () => {
     // based on: https://vercel.com/docs/speed-insights
     if (process.env?.VERCEL_ENV === 'preview') {
         return `
-            ${defaultsCSPHeaders}
+            ${defaultCSPDirectives}
             font-src 'self' https://vercel.live/;
             style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
             script-src 'self' 'unsafe-inline' https://vercel.live/;
@@ -603,7 +603,7 @@ const cspHeader = () => {
     // based on: https://vercel.com/docs/speed-insights
     if (process.env.NODE_ENV === 'production') {
         return `
-            ${defaultsCSPHeaders}
+            ${defaultCSPDirectives}
             font-src 'self';
             style-src 'self' 'unsafe-inline';
             script-src 'self';
@@ -615,7 +615,7 @@ const cspHeader = () => {
 
     // for dev environment enable unsafe-eval for hot-reload
     return `
-        ${defaultsCSPHeaders}
+        ${defaultCSPDirectives}
         font-src 'self';
         style-src 'self' 'unsafe-inline';
         script-src 'self' 'unsafe-eval' 'unsafe-inline';
@@ -652,12 +652,15 @@ export default nextConfig;
 
 If you now start your development server (using `npm run dev`), open `http://localhost:3000` in your browser, then open the browsers developer tools and then click on the Console tab, then you should see no CSP violations messages
 
+> [!NOTE]  
+> To check for best practices I used a tool by google called [CSP Evaluator](https://csp-evaluator.withgoogle.com/), it showed a green checkmark for every directive except for **** where it mentioned that it would be better to remove **'unsafe-inline'**, however we unsafe-inline because next.js uses inline scripts a lot, for example scripts that inject css into the page, the second thing the tool mentioned is to add the directive **require-trusted-types-for 'script';**, however that directive again blocks css in js being injected into the html via scripts so I didn't use that directive, depending on what css framework you use, you might be able to use this directive, so I recommended adding it to test if it works for you and if there is no violation then keep it
+
 Lets edit the CSP rules we just added an make the **script-src** rule stricter by disallowing **'unsafe-eval'**, to do so we remove the two values from the javascript resources rule, like so:
 
-```js title="next.config.mjs" showLineNumbers{51} {56}#special
+```js title="next.config.mjs" showLineNumbers{55} {6}#special
     // for dev environment enable unsafe-eval for hot-reload
     return `
-        ${defaultsCSPHeaders}
+        ${defaultCSPDirectives}
         font-src 'self';
         style-src 'self' 'unsafe-inline';
         script-src 'self' 'unsafe-inline';
@@ -678,7 +681,7 @@ If you look closer at what rule sets we created, there are a total of 4, the fir
 If you look at the `script-src 'self' 'unsafe-eval' 'unsafe-inline'` rule we just edited for **development** you will see that we added the `'unsafe-eval'` value, now compare it with the `script-src` we use for the **production** and the rule we use for the **preview** environments and you will see that there we don't add that value, this is because scripts like HMR are only used in development, by not adding that exception to production and preview we make those two environments safer
 
 > [!TIP]  
-> I recommend you always start with the most restrictive rules possible, for example if you look at the top of CSP rules, I have set the **form-action** to none, this is because in this tutorial we will not have any forms so there is no reason to allow them, if you add such a feature in the future you will of course want to adjust that rule and for example set it to 'self' instead of 'none'
+> I recommend you always start with the most restrictive rules possible, for example if you look at the top of CSP rules, I have set the **form-action** to none, this is because in this tutorial we will not have any forms so there is no reason to allow them, however if you add forms to your project in the future then you will of course want to adjust the directive and for example set it to 'self' instead of 'none'
 
 Next if we look at the top of the configuration you will see that we set a variable **cspReportOnly** to **true**:
 
@@ -690,7 +693,7 @@ const cspReportOnly = true;
 
 and then at the end of the configuration file we use that variable, like so:
 
-```js title="next.config.mjs"{63} showLineNumbers {76}
+```js title="next.config.mjs" showLineNumbers{67} {14}
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     poweredByHeader: false,
@@ -731,13 +734,50 @@ For now we set the CSP mode to only report violations, however as soon as are co
 > [Next.js "Configuring CSP" documentation](https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy)  
 > [Vercel "Using a Content Security Policy" documentation](https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy)  
 
-### Logging CSP violations with Sentry.io
+### Logging CSP violations
 
-CSP violations reports can not only be seen in the console, as this would limit us to only see violations that occur when we visit the app ourself, but what about violations that happen when a user visits our project, for that we will use [Sentry.io](https://sentry.io) that we have set up earlier for error logging purposes and add CSP violations logging
+CSP violations can not only be seen in the console, as this would limit us to only see violations that occur when we (the developers) visit the app ourself, but what about violations that happen when a user visits our project, for such cases you can use CSP violations reporting, however how CSP violation reports work has changed over the years, the w3c has released several iterations of their Content Security Policy recommendations / working drafts:
+
+* in the [CSP level 1](https://www.w3.org/TR/2012/CR-CSP-20121115/) & [CSP level 2](https://www.w3.org/TR/CSP2/) recommandations, CSP violations get reported using a [report-uri](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-uri) reporting directive, if we look at [caniuse report-uri](https://caniuse.com/?search=report-uri) page we can see that it is supported by all major browsers, the major downside of this feature is that it will make a request per violation, meaning that if you have a violation like that occurs several dozen times on a page then the browser will spam your logging endpoint with reports
+* [CSP level 3](https://www.w3.org/TR/CSP3/) introduces a new [report-to](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-to) **reporting directive** and the w3c has marked the report-uri directive as deprecated, if we look at [caniuse report-to](https://caniuse.com/?search=report-to) however we see that firefox does not yet support the directive (their ticket ["CSP: Implement report-to"](https://bugzilla.mozilla.org/show_bug.cgi?id=1391243) is quite old but some ago they seemed to have started working on it) and safari only started to support it with v16.4 (released March 27, 2023)
 
 
+
+[firefox implemented it a while ago](https://bugzilla.mozilla.org/show_bug.cgi?id=1492036) but has since kept it behind a feature flag
+
+
+ we will use [Sentry.io](https://sentry.io) that we have set up earlier for error logging purposes and add CSP violations logging
+
+To make sure violations are being sent to Sentry.io, we need to edit our CSP headers like so:
+
+```js title="next.config.mjs" showLineNumbers{67} {17-22}
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    poweredByHeader: false,
+    experimental: {
+        // currently false as mdx pages are not typed in prod builds (yet)
+        typedRoutes: false,
+    },
+    headers: async () => {
+        return [
+            {
+                source: '/(.*)',
+                headers: [
+                    {
+                        key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
+                        value: cspHeader().replace(/\n/g, ''),
+                    },
+                ],
+            },
+        ]
+    },
+};
+
+export default nextConfig;
+```
 
 > [!MORE]  
 > [Sentry.io "CSP violations logging" documentation](https://docs.sentry.io/product/security-policy-reporting/)  
+> [w3c "Content Security Policy Level 3" working draft](https://w3c.github.io/webappsec-csp/)  
 
 </article>
