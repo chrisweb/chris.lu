@@ -213,12 +213,12 @@ const nextConfig = (/*phase*/) => {
             report-uri ${sentryReportUri};
             report-to {"group":"default","max_age":10886400,"endpoints":[{"url":"${sentryReportUri}"}],"include_subdomains":true};
         `*/
-        /*const reportCSPViolations = `
-            report-to {"group":"default","max_age":10886400,"endpoints":[{"url":"${sentryReportUri}"}],"include_subdomains":true};
-        `*/
         const reportCSPViolations = `
-            report-uri ${sentryReportUri};
+            report-to {"group":"default","max_age":10886400,"endpoints":[{"url":"${sentryReportUri}"}],"include_subdomains":true};
         `
+        /*const reportCSPViolations = `
+            report-uri ${sentryReportUri};
+        `*/
 
         // worker-src is for sentry replay
         // child-src is because safari <= 15.4 does not support worker-src
