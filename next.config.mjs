@@ -206,7 +206,7 @@ const nextConfig = (/*phase*/) => {
 
         const upgradeInsecure = cspReportOnly ? '' : 'upgrade-insecure-requests;'
 
-        //const sentryReportUri = 'https://o4504017992482816.ingest.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
+        const sentryReportUri = 'https://o4504017992482816.ingest.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
 
         // report directive to be added at the end
         /*const reportCSPViolations = `
@@ -216,8 +216,9 @@ const nextConfig = (/*phase*/) => {
         /*const reportCSPViolations = `
             report-to {"group":"default","max_age":10886400,"endpoints":[{"url":"${sentryReportUri}"}],"include_subdomains":true};
         `*/
-
-        //const reportingEndpoint = `default="${sentryReportUri}"`
+        const reportCSPViolations = `
+            report-uri ${sentryReportUri};
+        `
 
         // worker-src is for sentry replay
         // child-src is because safari <= 15.4 does not support worker-src
@@ -231,7 +232,6 @@ const nextConfig = (/*phase*/) => {
             form-action 'none';
             frame-ancestors 'none';
             block-all-mixed-content;
-            require-trusted-types-for 'script';
             ${upgradeInsecure}
         `
 
@@ -276,13 +276,14 @@ const nextConfig = (/*phase*/) => {
             connect-src 'self' https://o4504017992482816.ingest.sentry.io;
             img-src 'self' data:;
             frame-src 'none';
-            report-to default
+            ${reportCSPViolations}
         `
+        // report-to default
     }
 
-    const sentryReportUri = 'https://o4504017992482816.ingest.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
+    //const sentryReportUri = 'https://o4504017992482816.ingest.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
 
-    const reportingEndpoint = `default="${sentryReportUri}"`
+    //const reportingEndpoint = `default="${sentryReportUri}"`
 
     /** @type {import('next').NextConfig} */
     const nextConfig = {
@@ -321,10 +322,10 @@ const nextConfig = (/*phase*/) => {
                             key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
                             value: cspHeader().replace(/\n/g, ''),
                         },
-                        {
+                        /*{
                             key: 'Reporting-Endpoints',
                             value: reportingEndpoint,
-                        },
+                        },*/
                     ],
                 },
             ];
