@@ -249,7 +249,7 @@ const nextConfig = (/*phase*/) => {
                 connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/;
                 img-src 'self' data: https://vercel.com/ https://vercel.live/;
                 frame-src 'self' https://vercel.live/;
-                report-to default
+                ${reportCSPViolations}
             `
         }
 
