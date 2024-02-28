@@ -205,6 +205,30 @@ export default nextConfig;
 
 then save your `next.config.mjs` and commit / sync your latest changes
 
+> [!WARN]  
+> right now there is a bug in Next.js that prevents MDX pages (page.mdx) to be recognized as routes when doing a production build (in development the typed routes work well), I opened a [ticket #62335 on GitHub](https://github.com/vercel/next.js/issues/62335), until the bug is fixed I suggested only enabling the **typedRoutes in development**, you can do so by using the next config **phase** parameter, to check if current phase is **PHASE_DEVELOPMENT_SERVER**
+
+```js title="next.config.mjs" showLineNumbers {1} {3} {10}#special
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+
+const nextConfig = (phase) => {
+
+    /** @type {import('next').NextConfig} */
+    const nextConfig = {
+        experimental: {
+            // experimental typescript "statically typed links"
+            // https://nextjs.org/docs/app/building-your-application/configuring/typescript#statically-typed-links
+            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        },
+    }
+
+    return nextConfig
+
+}
+
+export default nextConfig;
+```
+
 > [!MORE]  
 > [Next.js "Statically Typed Links" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript)  
 

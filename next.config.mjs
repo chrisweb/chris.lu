@@ -1,8 +1,7 @@
 import { withSentryConfig } from '@sentry/nextjs';
 // uncomment the following lines if you want to use the bundle analyzer
-/*import WithBundleAnalyzer from '@next/bundle-analyzer'
-//import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'*/
-// then uncomment the phase parameter
+//import WithBundleAnalyzer from '@next/bundle-analyzer'
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 
 /**
  * @typedef {import('rehype-github-alerts').IOptions} IOptions
@@ -25,7 +24,7 @@ import remarkMdxImages from 'remark-mdx-images'
   default-src 'self';
 `*/
 
-const nextConfig = (/*phase*/) => {
+const nextConfig = (phase) => {
 
     // to use the bundle analyzer uncomment the following lines
     // then uncomment the return to use withBundleAnalyzer
@@ -255,7 +254,7 @@ const nextConfig = (/*phase*/) => {
 
         // for production environment white-list vitals.vercel-insights
         // based on: https://vercel.com/docs/speed-insights#content-security-policy
-        if (process.env.NODE_ENV === 'production') {
+        if (process.env.VERCEL_ENV === 'production') {
             return `
                 ${defaultCSPDirectives}
                 font-src 'self';
@@ -297,7 +296,7 @@ const nextConfig = (/*phase*/) => {
             ppr: false,
             // experimental typescript "statically typed links"
             // https://nextjs.org/docs/app/building-your-application/configuring/typescript#statically-typed-links
-            typedRoutes: false,
+            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
         },
         // file formats for next/image
         images: {
