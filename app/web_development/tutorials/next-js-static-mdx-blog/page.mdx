@@ -771,9 +771,24 @@ CSP violations can not only be seen in the console, as this would limit us to on
 
 But wait, there is more...
 
-report-to != Report-to
+##### report-to != Report-to
 
-TODO: w3c reporting api v0 and v1
+In the previous chapter we saw the CSP directive **report-to** but when reading about CSP you might also encounter a **Report-to** header, the difference between the header and the directive is the first letter of the header is a capital **R** while the directive has a small **r**
+
+The **Report-to** header is part of an initial Reporting API draft by the w3c, more about the reporting API in the next chapter...
+
+##### Reporting API
+
+Initially CSP would use a single header which included a directive to instruct the browser where to send reports, but the w3c introduced something new called the **Reporting API** which describes a new header that can be used to make reports. This header is NOT just to send CSP violations reports but covers a wide range of use cases, for example it can be used to send [Permissions-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy) reports, reports regarding deprecated browser features your code might be using, but also reports about browser crashes and more...
+
+The first draft of the **Reporting API (v0)** included a **Report-to header** and [chrome version 69](https://chromestatus.com/feature/4672626140119040) was the first browser to ship with support for this new feature, but after a while the w3c team decided to rename the header and so in the [w3c "Reporting API v1" working draft](https://www.w3.org/TR/reporting-1/) they renamed the Report-to header to **Reporting-Endpoints** and [chrome 96](https://chromestatus.com/feature/5712172409683968) is the first browser to support the ship support for Reporting-Endpoints. There is a very good article on [developer.chrome.com](https://developer.chrome.com/) you may want to read with lots of additional information about the new Reporting API Endpoints titled [Monitor your web application with the Reporting API](https://developer.chrome.com/docs/capabilities/web-apis/reporting-api)
+
+> [!MORE]  
+> [chrome developer "Monitor your web application with the Reporting API" article](https://developer.chrome.com/docs/capabilities/web-apis/reporting-api)  
+> [MDN "Reporting API" documentation](https://developer.mozilla.org/en-US/docs/Web/API/Reporting_API)  
+> [caniuse "Reporting API" page](https://caniuse.com/?search=Reporting%20API)  
+> [w3c "Reporting API v1" working draft](https://www.w3.org/TR/reporting-1/)  
+> [chromium "Reporting API" readme](https://chromium.googlesource.com/chromium/src/+/HEAD/net/reporting/README.md)  
 
 ##### Sentry.io does not support report-to yet
 
