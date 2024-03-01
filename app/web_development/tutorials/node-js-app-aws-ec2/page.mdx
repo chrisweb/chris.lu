@@ -1,0 +1,279 @@
+%toc%
+
+<article>
+
+# Tutorial: Node.js app deployment on AWS EC2 instance with NGINX reverse proxy
+
+![banner image displaying a young man in the clouds working on his laptop](../../../../public/assets/images/app/web_development/tutorials/node-js-app-aws-ec2/banner.png)
+
+In this tutorial we will:
+
+* create a new AWS EC2 instance with Amazon Linux 2023
+* install Node.js LTS using the Node Version Manager (NVM)
+* setup a remote Proxy server using NGINX and configure a custom domain
+* fetch the source code of our app from its GitHub repository
+
+## Prerequisites
+
+TODO: when finalizing this article check out the Ec2 aws documents I did for beavo, maybe there are things that can be added from those
+
+go to aws.amazon.com and either sign in (if you already have an account) or click on **create a new account** in the top right
+
+## ec2 instance
+
+Visit [https://aws.amazon.com/](https://aws.amazon.com/) and login into your account
+
+Now in the top left search field type **ec2** and then click on **EC2** (Virtual Servers in the Cloud)
+
+in the top right next to your username make sure you have the region selected in which you want to create a ec2 instance, either chose the one that is the closest to you (the closer the server is to your location the faster the connection will be) or chose a region that is cheap (not every region has the same costs, so you may want to check out the [ec2 (on demand) pricing](https://aws.amazon.com/ec2/pricing/on-demand/) first and decide based on that)
+
+then click on the orange button **Launch instance**
+
+TODO: steps to create ec2 micro with amazon linux 2023
+
+## DNS setup using route 53
+
+in the top left search field type **53** and then click on **Route 53** (Scalable DNS and Domain Name Registration)
+
+click on Hosted zone(s)
+
+click on the button **Create hosted zone**
+
+TODO: steps to create a hosted zone
+
+## putty
+
+### install putty
+
+I'm on windows so I will use putty (if you are on a Mac or Linux you will probably want to use ssh)
+
+install the [latest version of putty](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
+
+### connect to server (ec2 instance)
+
+TODO: steps to create a new session in putty
+
+### increase keep alive of putty connections
+
+to avoid losing the server connection after a short period of time (putty time out) you can set a keep alive in putty to keep the connection open
+
+to do so select your session and then click on **Load**
+
+then on the left click on **Connection**
+
+then in the field **Seconds between keepalives** (which is probably currently set to 0) enter 240
+
+now on the left click on **Session** and then **Save** to save the changes we just did
+
+## install nvm
+
+just to be sure, use dnf (or yum) to update the currently installed packages to the latest version using this command:
+
+sudo dnf update
+
+or if you prefer using yum (the predecessor of dnf):
+
+sudo yum update
+
+next we will use the [Node Version Manager](https://github.com/nvm-sh/nvm) (NVM) to install the latest Node.js LTS
+
+go to [NVM releases page on github](https://github.com/nvm-sh/nvm/releases) and check out which is the latest version available
+
+use the following command to start the NVM installation, but replace **** with the version you found on github 
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/LATEST_NVM_VERSION/install.sh | bash
+
+after replacing the version the command will be something like this:
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+
+then load nvm using this command:
+
+source ~/.bashrc
+
+to verify what NVM version got installed you can use this command:
+
+nvm --version
+
+and now install nvm using this command:
+
+nvm install --lts
+
+> [!NOTE]  
+> you can install multiple Node.js versions at a time (in parallel) but only use one at a time
+
+to switch between versions use the command `nvm use NODE_JS_VERSION{:shell}` so for example:
+
+```shell
+nvm use 20.11.1
+```
+
+which will switch to that version (as long as it is a version you have previously installed) and then print a message like this:
+
+```shell
+Now using node v20.11.1 (npm v10.2.4)
+```
+
+to know which versions are installed (and / or available) you can use this command:
+
+```shell
+nvm list
+```
+
+to verify what Node.js version got installed you can use this command:
+
+node -v
+
+> [!MORE]  
+> [AWS "Setting Up Node.js on an Amazon EC2 Instance" documentation](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html)
+
+## NGINX installation
+
+Next we will install NGINX to use it as reverse proxy (NGINX will listen on port 80/443)
+
+sudo dnf install nginx
+
+this will give you a list of what will be installed, then type `y{:shell}` and press `Enter{:shell}` to start the installation
+
+next we will **enable** NGINX
+
+> [!NOTE]  
+> **enabling** a service means it will start at boot automatically (meaning if you server crashes and needs to be restarted, then on boot the service like NGINX will get automatically restarted too without you having to do so manually), we will do so using **systemctl ** which is the systemd command for controlling how services start on a Linux system
+
+to enable NGINX use the following command:
+
+sudo systemctl enable --now nginx
+
+> [!NOTE]  
+> we used the systemctl **--now** switch to also start NGINX, depending on the systemctl version now might not be supported (now got added in systemctl version 220, to check what version you have you can use this command `sudo systemctl --version{:shell}`), am AWS Linux 2023 it is, which is why we can use it here, if now is not supported you can use the `sudo systemctl start nginx{:shell}` command to start it manually
+
+if you want to verify that NGINX is now enabled you can use this command:
+
+sudo systemctl is-enabled nginx
+
+and to check the nginx status (is it running?) you can use this command:
+
+sudo systemctl status nginx
+
+you should see a green message that says **active (running)**
+
+## NGINX server configuration
+
+next we will create a server configuration to instruct NGINX to act as reverse proxy for our Node.js app and to setup the domain name
+
+Before we edit the nginx configuration file, let’s do a backup that we can restore if needed:
+
+sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.old
+
+to edit the main NGINX configuration file use this command:
+
+sudo vi /etc/nginx/nginx.conf
+
+first locate the **http** block, and then find the **keepalive_timeout** line, go to the end of that line
+
+then press the `i{:shell}` key to **enter insert mode**
+
+then press the right arrow `→{:shell}` key and then `Enter{:shell}` to go to the new line
+
+then add **client_max_body_size** (http://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size) and set it to the value you require, this will increase the allowed size for uploads, if you don’t set it the default will be 1MB (which might be enough for your requirements, in which case you can skip this step), for my use case I set it to 50MB, like so:
+
+client_max_body_size 50m;
+
+to **exit insert mode** press the `ESC{:shell}` key
+
+Under that line we add another option to disable the header that exposes the nginx version, I prefer to give malicious people the least information possible which is why I prefer NOT giving away the exact NGINX version that is installed by turning the server token off:
+
+use the same steps as before to add a new line and go into insert mode, and then insert this line:
+
+server_tokens off;
+
+your configuration should not look like this:
+
+```shell
+    sendfile            on;
+    tcp_nopush          on;
+    keepalive_timeout   65;
+    client_max_body_size 50m;
+    server_tokens off;
+    types_hash_max_size 4096;
+```
+
+Next we add a line to tell nginx to include our own host files we are about to create, over the first server directive you should see the following line:
+
+include /etc/nginx/conf.d/*.conf;
+
+Under that line add the following line:
+
+include /etc/nginx/sites-enabled/*.conf;
+
+your configuration should not look like this:
+
+```shell
+    include /etc/nginx/conf.d/*.conf;
+
+    include /etc/nginx/sites-enabled/*.conf;
+```
+
+Next you should comment out the default http server, by adding a # (number sign) in front of every line, so that it looks like this:
+
+```shell
+#    server {
+#        listen       80;
+#        listen       [::]:80;
+#        server_name  _;
+#        root         /usr/share/nginx/html;
+#
+#        # Load configuration files for the default server block.
+#        include /etc/nginx/default.d/*.conf;
+#
+#        error_page 404 /404.html;
+#        location = /404.html {
+#        }
+#
+#        error_page 500 502 503 504 /50x.html;
+#        location = /50x.html {
+#        }
+#    }
+```
+
+the https one should already be commented out, if it is NOT commented out yet, comment it out too
+
+make sure you are not in insert mode by pressing the `ESC{:shell}` key
+
+Then save and exit by typing `:x!{:shell}` and then press `Enter{:shell}`
+
+Now we are going to create two new directories inside of /etc/nginx, one directory is called “sites-available” and it will contain the configuration file for our host(s), the second one is called “sites-enabled” and it will contain symbolic links to the configuration files we want to enable:
+
+sudo mkdir /etc/nginx/sites-available
+sudo mkdir /etc/nginx/sites-enabled
+
+> [!NOTE]  
+> in the main nginx configuration file we instructed nginx to look into the folder /etc/nginx/sites-enabled to find host configuration files, in that folder we will however not put the actual configuration files but symbolic links (symlinks) to the actual configuration files that we will create inside of sudo mkdir /etc/nginx/sites-available. This means that all host configuration files that are available no matter if they are currently being used or not will be in sites-available. Now if we want to use a configuration file we will add a symbolic link to it inside of sites-enabled, meaning it will then be enabled and nginx will follow the symbolic link to the actual configuration file. This allows us to quickly disable a host by deleting the symbolic link and reloading the nginx configuration, without actually deleting or altering the actual configuration file. Then later if we want to re-enable that host all we need to do is create a new symbolic link and reload the nginx configuration file.
+
+Let’s create one such host configuration file by creating a file called chrisweb.dev.conf inside of /etc/nginx/sites-available using this command:
+
+sudo vi /etc/nginx/sites-available/chrisweb.dev.conf
+
+then press the `i{:shell}` key to **enter insert mode**
+
+and then add add the following content (you can copy the following lines and then in putty press the right mouse key to paste), replace YOUR_DOMAIN_NAME with your domain name, something like **example.com**:
+
+```shell
+server {
+    listen 80;
+    server_name YOUR_DOMAIN_NAME; 
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+> [!NOTE]  
+> we use the default localhost IP (127.0.0.1) and port 3000 in the configuration above, if your app is listening on another port then you need to modify that value, also as IP we use the localhost but if your nodejs is on a remote server then you need to change the IP address too
+
+</article>
