@@ -9,10 +9,6 @@ module.exports = {
         es2021: true,
         node: true,
     },
-    settings: {
-        'mdx/code-blocks': true,
-        'mdx/remark': true,
-    },
     ignorePatterns: [
         'node_modules/',
         '.next/',
@@ -79,9 +75,13 @@ module.exports = {
         },
         {
             files: ['**/*.md?(x)'],
-            /*extends: [
+            settings: {
+                'mdx/code-blocks': false,
+                'mdx/remark': true,
+            },
+            extends: [
                 'plugin:mdx/recommended',
-            ],*/
+            ],
             parser: 'eslint-mdx',
             parserOptions: {
                 markdownExtensions: ['*.md, *.mdx'],
