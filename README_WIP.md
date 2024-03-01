@@ -1322,51 +1322,21 @@ const nextConfig = (/*phase*/) => {
     // fix errors in the json
     const themeJsonContentFixed = jsonrepair(themeJsonContent)
 
+    // https://rehype-pretty-code.netlify.app/
+    /** @type {import('rehype-pretty-code').Options} */
     const rehypePrettyCodeOptions = {
         // VSCode "SynthWave '84" theme
         theme: JSON.parse(themeJsonContentFixed),
-
-        // keep the SynthWave '84 background or use a custom background color?
+        // Keep the background or use a custom background color?
         keepBackground: true,
-
-        // "visitor" hooks to customize the html output
-        onVisitLine(element) {
-            // prevent lines from collapsing in `display: grid` mode, and
-            // allow empty lines to be copy/pasted
-            if (element.children.length === 0) {
-                element.children = [{ type: 'text', value: ' ' }]
-            }
+        tokensMap: {
+            'function': 'entity.name.function',
+            'string': '.constant.numeric.decimal.js',
+            'key': '.meta.object-literal.key',
         },
-        onVisitHighlightedLine(element) {
-            if (typeof element.properties.className === 'undefined') {
-                element.properties.className = []
-            }
-            element.properties.className.push('highlightedLine')
-        },
-        onVisitHighlightedWord(element) {
-            if (typeof element.properties.className === 'undefined') {
-                element.properties.className = []
-            }
-            element.properties.className.push('highlightedWord')
-        },
-        onVisitHighlightedChars(element) {
-            if (typeof element.properties.className === 'undefined') {
-                element.properties.className = []
-            }
-            element.properties.className.push('highlightedChars')
-        },
-        onVisitTitle(element) {
-            if (typeof element.properties.className === 'undefined') {
-                element.properties.className = []
-            }
-            element.properties.className.push('codeBlockTitle')
-
-        },
-        onVisitCaption(element) {
-            if (typeof element.properties.className === 'undefined') {
-                element.properties.className = []
-            }
-            element.properties.className.push('codeBlockCaption')
+        defaultLang: {
+            block: "plaintext",
+            inline: "plaintext",
         },
     }
 
@@ -1623,9 +1593,11 @@ I will make a short list here with the most common token (for javascript / types
 TODO:
 * check out my examples page: <http://localhost:3000/web_development/test>
 * add not about rehype pretty code token maps in rehypePrettyCodeOptions:
-```mjs
+```js
 tokensMap: {
-    'fn': 'entity.name.function',
+    'function': 'entity.name.function',
+    'string': '.constant.numeric.decimal.js',
+    'key': '.meta.object-literal.key',
 },
 ```
 * make a tip box explaining that if you want to use html comments in code boxes you need to encode the html entities or the comment will not show, the browser considers it a real html comment if not encoded, so `<` needs to be encoded as `&lt;` and `>` encoded as `&gt;`, like so `&lt;!-- MY HTML COMMENT --&gt;`
