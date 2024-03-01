@@ -49,7 +49,13 @@ const nextConfig = (phase) => {
         // Keep the background or use a custom background color?
         keepBackground: true,
         tokensMap: {
-            'fn': 'entity.name.function',
+            'function': 'entity.name.function',
+            'string': '.constant.numeric.decimal.js',
+            'key': '.meta.object-literal.key',
+        },
+        defaultLang: {
+            block: "tsx",
+            inline: "shell",
         },
     }
 
