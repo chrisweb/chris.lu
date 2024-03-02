@@ -283,7 +283,7 @@ const nextConfig = (phase) => {
             frame-src 'none';
             ${reportCSPViolations}
         `
-        // report-to default
+
     }
 
     //const sentryReportUri = 'https://o4504017992482816.ingest.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'

@@ -42,11 +42,17 @@ The first draft of the **Reporting API (v0)** included a **Report-to header** an
 
 ## logging CSP violations
 
-### Sentry.io does not support report-to yet
+## logging CSP violations using Sentry.io
 
-**report-to** is not yet supported by sentry.io, there are several open tickets related to this, like issue 
+#### Sentry.io does not support report-to / Report-to yet
 
-### Sentry.io will filter out report-uri requests made by localhost
+**report-to** is not yet supported by sentry.io, there are several open tickets related to this, one of them is [issue #10202](https://github.com/getsentry/sentry/issues/10202)
+
+Regarding the **Reporting API** there is also no support in Sentry as of now (february 2023), but it seems they are inclined to work on it: [Sentry issue #38940 "Reporting-API" support](https://github.com/getsentry/sentry/issues/38940) or this one from 2017 [issue #5471](https://github.com/getsentry/sentry/issues/5471)
+
+#### Sentry.io may filter reports coming from localhost
+
+
 
 By default localhost is on a blocklist in Sentry.io, so if you use **report-uri** you will see the requests in the Network tab but they won't show up in Sentry.io
 
