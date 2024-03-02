@@ -216,10 +216,10 @@ const nextConfig = (phase) => {
         // report directive to be added at the end
         /*const reportCSPViolations = `
             report-uri ${sentryReportUri};
-            report-to {"group":"default","max_age":10886400,"endpoints":[{"url":"${sentryReportUri}"}],"include_subdomains":true};
+            report-to {'group':'default','max_age':10886400,'endpoints':[{'url':'${sentryReportUri}'}],'include_subdomains':true};
         `*/
         const reportCSPViolations = `
-            report-to {"group":"default","max_age":10886400,"endpoints":[{"url":"${sentryReportUri}"}],"include_subdomains":true};
+            report-to {'group':'default','max_age':10886400,'endpoints':[{'url':'${sentryReportUri}'}],'include_subdomains':true};
         `
         /*const reportCSPViolations = `
             report-uri ${sentryReportUri};
