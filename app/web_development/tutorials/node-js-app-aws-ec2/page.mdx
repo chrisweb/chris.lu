@@ -189,7 +189,7 @@ server_tokens off;
 
 your configuration should not look like this:
 
-```shell
+```shell title="/etc/nginx/nginx.conf"
     sendfile            on;
     tcp_nopush          on;
     keepalive_timeout   65;
@@ -214,7 +214,7 @@ your configuration should not look like this:
     include /etc/nginx/sites-enabled/*.conf;
 ```
 
-Next you should comment out the default http server, by adding a # (number sign) in front of every line, so that it looks like this:
+Next you should comment out the default http server (or if you prefer delete those lines, we did a backup of this file anyway), by adding a # (number sign) in front of every line, so that it looks like this:
 
 ```shell
 #    server {
@@ -258,7 +258,7 @@ then press the `i{:shell}` key to **enter insert mode**
 
 and then add add the following content (you can copy the following lines and then in putty press the right mouse key to paste), replace YOUR_DOMAIN_NAME with your domain name, something like **example.com**:
 
-```shell
+```shell title="/etc/nginx/sites-available/chrisweb.dev.conf"
 server {
     listen 80;
     server_name YOUR_DOMAIN_NAME; 
@@ -275,5 +275,7 @@ server {
 
 > [!NOTE]  
 > we use the default localhost IP (127.0.0.1) and port 3000 in the configuration above, if your app is listening on another port then you need to modify that value, also as IP we use the localhost but if your nodejs is on a remote server then you need to change the IP address too
+
+
 
 </article>
