@@ -196,4 +196,42 @@ The important part replacing **github** (from the previous examples) with **git+
 > [GitHub "Generating a new SSH key" documentation](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key)  
 > [GitHub "Working with SSH key passphrases" documentation](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/working-with-ssh-key-passphrases)  
 
+## publishing a package on npmjs.com
+
+To publish a package on npm you can use the version command to bump the version in your package.json and also create a git commit:
+
+```shell
+npm version MY_PACKAGE_VERSION
+```
+
+So for example:
+
+```shell
+npm version 2.0.0
+```
+
+then to actually publish the package you use this command:
+
+```shell
+npm publish
+```
+
+### publishing a beta version
+
+To publish a beta your version you need to add **-beta.MY_BETA_VERSION** at the end of your version number, MY_BETA_VERSION is a number that **starts at 0 (zero)** when you publish your **first beta**, the next beta will be -beta.1 and so on
+
+The package version (MY_PACKAGE_VERSION) is the version you will want to use when the package comes out of beta, so for example 2.1.0
+
+So to publish the first beta of the 2.1.0 version of your package you use this command:
+
+```shell
+npm version 2.1.0-beta.0
+```
+
+then to publish the beta you use the option **--tag beta**, like so:
+
+```shell
+npm publish --tag beta
+```
+
 </article>
