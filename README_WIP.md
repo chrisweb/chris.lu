@@ -1957,8 +1957,8 @@ read more:
 
 there is more than just one plugin related to GitHub markdown:
 
-- [remark-gfm plugin](https://www.npmjs.com/package/remark-gfm)
-- [rehype "GitHub" plugins repository](https://github.com/rehypejs/rehype-github)
+* [remark-gfm plugin](https://www.npmjs.com/package/remark-gfm)
+* [rehype "GitHub" plugins repository](https://github.com/rehypejs/rehype-github)
 
 the **remark-gfm plugin** transforms GitHub Flavored Markdown (GFM) into HTML, the remark-gfm plugin will add the same features to your MDX pages that GitHub has introduced in their own GitHub Flavored Markdown (GFM), it has support for **autolink literals**, **footnotes**, **strikethrough**, **markdown tables**, **tasklists**, ...
 
