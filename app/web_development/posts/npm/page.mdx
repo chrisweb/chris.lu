@@ -228,10 +228,16 @@ So to publish the first beta of the 2.1.0 version of your package you use this c
 npm version 2.1.0-beta.0
 ```
 
-then to publish the beta you use the option **--tag beta**, like so:
+Then to publish the beta you use the option **--tag beta**, like so:
 
 ```shell
 npm publish --tag beta
+```
+
+The beta will have no impact on your **latest** package, meaning that if users use the regular `npm i PACKAGE_NAME` command they will still get the version tagged latest, however if a user wants to **explicitly install the beta** they can do so using this command:
+
+```shell
+npm i PACKAGE_NAME@beta
 ```
 
 </article>
