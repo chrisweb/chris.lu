@@ -38,7 +38,7 @@ I will describe 4 ways to add ESLint to a Next.js project
 - option 3: we will NOT use **create-next-app** at all, instead we will manually create an ESLint configuration file and install **eslint-config-next** manually, which will automatically install the 3 plugins (eslint-plugin-react, eslint-plugin-react-hooks and eslint-plugin-next) for us
 - option 4: we will do a fully manual installation of everything needed to lint both our code and MDX content (we will include **eslint-plugin-next**, but we will NOT use **create-next-app** or the **eslint-config-next** package)
 
-### option 1:
+### option 1
 
 the first thing we are about to do is use the [create-next-app](https://nextjs.org/docs/pages/api-reference/create-next-app) package to initialize a new Next.js project, this tool is similar to what [create-react-app](https://create-react-app.dev/) does for React, using this tool to setup a Next.js project will save you a lot of time and it adds a lot of useful dependencies (needed for a Next.js project) to your stack and also adds a default configuration for each of them so that you can start coding right away
 
@@ -68,7 +68,7 @@ this is already it, Next.js and code linting are ready to be used with almost no
 > [!MORE]  
 > - [create-next-app](https://nextjs.org/docs/pages/api-reference/create-next-app)
 
-### option 2:
+### option 2
 
 - use the following command `npx create-next-app@latest` to run create-next-app
 - when you get asked "Would you like to use ESLint?" choose "NO"
@@ -76,7 +76,7 @@ this is already it, Next.js and code linting are ready to be used with almost no
 - when using npm run lint, you will get asked if you want to use the **strict** mode (which includes the "core web vitals" rule-set) or the **base** eslint rule-sets, after that **eslint** and **eslint-config-next** will get installed for you
 - the script should also create an eslintrc file for you, but currently (16.10.2023) doesn't due to a bug: [Nextjs GitHub issue #55102 (next eslint .eslintrc.json file not being created)](https://github.com/vercel/next.js/issues/55102)
 
-### option 3:
+### option 3
 
 - run the following command to install **eslint-config-next** manually `npm i eslint eslint-config-next --save-dev --save-exact`
 - now also need to create an `.eslintrc.json` file (if you haven't already created one manually before) in the root of the project
@@ -86,7 +86,7 @@ Note: as mentioned in the [nextjs "configuring ESLint" documentation](https://ne
 
 the package.json will not have a linting command (because we did not use create-next-app), so we need to add the following line `"lint": "next lint"` to our package.json `scripts` to enable linting via the next cli, if we use **next lint** it will lint the default nextjs directories (as of now `ESLINT_DEFAULT_DIRS = ['app', 'pages', 'components', 'lib', 'src']`), but you can manually change that list using the `--dir` flag, to specify which files should get linted you can use the `--file` flag, you can also use the next lint option `--no-cache` to disable caching files into the directory `.next/cache`
 
-### option 4:
+### option 4
 
 #### create an eslintrc file
 

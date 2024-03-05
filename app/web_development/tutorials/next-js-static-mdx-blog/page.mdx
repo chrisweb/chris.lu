@@ -715,6 +715,7 @@ Lets edit the CSP rules we just added an make the **script-src** rule stricter b
 
 Go back into the browser and check the console again, you should now be able to see a bunch of errors like these:
 
+{/* eslint-disable-next-line mdx/remark */}
 > [Report Only] Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self' 'unsafe-inline'".
 
 Those violations are there because Next.js attempty to inject javascript code used by development scripts like the Hot Module Reload (HMR) tool that reloads our page every time we save a file, for HMR to work we need to re-add the **'unsafe-eval'** value to the **script-src** rule, do that now and then save the file to fix violations again
@@ -781,7 +782,7 @@ For now we set the CSP mode to only report violations, however as soon as are co
 
 On a lot of places you will read that it is recommended to use both report-to as well as report-uri as fallback, however I will in this example only use report-uri because the problem is that if you set both report-to and report-uri as fallback then chrome will use the newer report-to, which will send a request to sentry.io but that request **will fail** as Sentry.io does not yet support report-to, but because chrome used report-to it also means chrome will never try report-uri as alternative, meaning that if you set both then chrome reports will NOT get logged in Sentry.io at all
 
-
+TODO
 
  we will use [Sentry.io](https://sentry.io) that we have set up earlier for error logging purposes and add CSP violations logging
 

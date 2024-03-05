@@ -26,7 +26,7 @@ A basic meta element to configure a CSP policy would look like this:
 ```html
 <meta
     http-equiv="Content-Security-Policy"
-    content="default-src 'self';" />
+    content="img-src 'self';" />
 ```
 
 The header is often the preferred way of as it supports sending reports which is something that can't be done using the meta element
@@ -34,22 +34,38 @@ The header is often the preferred way of as it supports sending reports which is
 A very basic [Content-Security-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy) header looks like this:
 
 ```shell
-Content-Security-Policy: default-src 'self'
+Content-Security-Policy: img-src 'self'
 ```
 
 So far we used the Content-Security-Policy header but there is a second header [Content-Security-Policy-Report-Only](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy-Report-Only) that can be used, the difference is that when using Content-Security-Policy the browser will enforce the policy, if using Content-Security-Policy-**Report-Only** the browser will only report violations but NOT enforce them
+
+```shell
+Content-Security-Policy-Report-Only: img-src 'self'
+```
 
 ## CSP directives
 
 The **default-src directive** is a fallback that gets used everytime a [fetch directive](https://developer.mozilla.org/en-US/docs/Glossary/Fetch_directive) for a resource type is missing, for a complete list check out the [MDN "CSP: default-src" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/default-src)
 
-Not all policy directives are fetch directives, check out this [MDN directives documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy#directives) for a full list
+I saw countless CSP examples (for beginners) that would set the **default-src** to **'self'**, my personal recommendation is set the default-src to **none** or even better don't set it at all (which is equivalent to setting it to none), meaning that it will disallow any source for any content type, which means you use a **secure by default** approach instead of an open everything by default one, like this:
 
-My personal recommendation is set the default-src to **none**, meaning that it will disallow any source for any content and then check which violations get listed in your console log, now one by one use resource directives to fix the violations, for example a policy to allow images from the same origin as the html document would look like this:
+```shell
+Content-Security-Policy: default-src 'none'
+```
+
+Then I would check which violations get listed in your console log and then one by one use directives to fix the violations one resource type at a time, for example a policy to allow images from the same origin as the html document would look like this:
 
 ```shell
 Content-Security-Policy: default-src 'none'; img-src 'self'
 ```
+
+For a website that has images, javascript and css and where the javascript code needs to make requests to a remote API (api.example.com) I would use this basic CSP policy:
+
+```shell
+Content-Security-Policy: default-src 'none'; img-src 'self'; script-src 'self'; style-src 'self'; connect-src https://api.example.com
+```
+
+Not all policy directives are fetch directives, check out this [MDN directives documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy#directives) for a full list
 
 ## the state of violations reporting (as of february 2024)
 
@@ -192,7 +208,7 @@ You could however alter their example and update it to the [Reporting API v1](#r
 
 #### Sentry.io may filter reports coming from localhost
 
-
+TODO
 
 Your localhost requests might get filtered by Sentry.io if you or a team member have enabled that feature, if you use **report-uri** you will see the successful requests in the Network tab but they won't show up in Sentry.io
 

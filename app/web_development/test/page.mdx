@@ -28,6 +28,7 @@ an object literal (using `.meta.object-literal.key`): `const helloWorld = { foo:
 
 a codeblock, language is set to javascript (js), with a title and a highlighted word:
 
+{/* eslint-disable-next-line mdx/remark */}
 ~~~md
 ```js title="./test.js" /console/#special
 function helloWorld() {
@@ -48,6 +49,7 @@ function helloWorld() {
 
 another code block, language is set to typescripts (tsx), the third line is highlighted, line numbers enabled and a caption:
 
+{/* eslint-disable-next-line mdx/remark */}
 ~~~md
 ```tsx {3} showLineNumbers caption="tsx"
 function helloWorld() {
@@ -68,6 +70,7 @@ function helloWorld() {
 
 another code block, language is set to typescripts (tsx), the third to fourth line are highlighted using the id #special, line numbers enabled and the first line number should be 10
 
+{/* eslint-disable-next-line mdx/remark */}
 ~~~md
 ```tsx {3-4}#special showLineNumbers{10}
 function helloWorld() {
@@ -159,6 +162,7 @@ helloWorld()
 ###### h6 q Q ? ! @ Û u Ä * 123
 ```
 
+{/* eslint-disable-next-line mdx/remark */}
 # h1 q Q ? ! @ Û u Ä * 123
 
 ## h2 q Q ? ! @ Û u Ä * 123

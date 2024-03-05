@@ -17,7 +17,7 @@ you have 4 options when it comes to installing ESLint in a Nextjs project
 
 if you want to use one of those 4 options and know more about the differencies between them, then I recommend you first read my seperate post about [installing and configuring ESLint in a Next.js project](/web_development/posts/eslint-next-js)
 
-#### **next lint** command flags
+### **next lint** command flags
 
 if we use **next lint** it will lint the default nextjs directories (as of now `ESLINT_DEFAULT_DIRS = ['app', 'pages', 'components', 'lib', 'src']`)
 
@@ -30,11 +30,11 @@ read more:
 - [next lint "linting custom directories" documentation](https://nextjs.org/docs/pages/building-your-application/configuring/eslint#linting-custom-directories-and-files)
 - [next lint "no cache flag" documentation](https://nextjs.org/docs/pages/building-your-application/configuring/eslint#caching)
 
-#### **eslint** cli
+### **eslint** cli
 
 an alternative if you need more control over the lint command, is to NOT use **next lint** but instead use the **eslint cli** and create a custom linting command `npx eslint <baseDir> [options]`
 
-##### **eslint** cli flags
+#### **eslint** cli flags
 
 Note: when using **next lint** cli, several things were done for us in the background, however as we want to use the eslint cli we need to set those flags ourself
 
@@ -79,7 +79,7 @@ you can of course run this command manually but we want to be able to keep using
 
 we also created a second command called **lint-debug** using the `--debug` to do a linting with a verbose output in case we want to analyze a linting problem
 
-#### next build does not use `npm run lint`
+### next build does not use `npm run lint`
 
 when doing a build (to deploy next.js) it will start by launching a linting process, unfortunatly Next.js will use its own **next lint** cli command to automatically lint the code during a build process, but it will NOT do so by using **lint** command you have defined in your package.json **scripts**
 
@@ -113,30 +113,19 @@ the updated **build** command will execute our lint script and if there is an er
 
 Note: platforms like Vercel will use the package.json build script by executing the command `npm run build`, which means that if your linting fails then the deployment on vercel will get aborted
 
-
-
-
-
-
-
-
-
-
 - option 4: you don't install **eslint-config-next** at all, but instead you install the 3 plugins manually (eslint-plugin-react, eslint-plugin-react-hooks and eslint-plugin-next) yourself and then manually create an eslint configuration file
-  - run the following command to install **eslint-plugin-next** and the other plugins manually `npm i eslint eslint-plugin-react eslint-plugin-react-hooks @next/eslint-plugin-next --save-dev --save-exact`
-  - add the recommended rule-sets for each plugin via extends to our `.eslintrc` file
-    - adding `plugin:react/recommended` will add the recommended rule-set for the eslint-plugin-react
-    - adding `plugin:@next/next/recommended` will add the base rule-set for eslint-plugin-react
-    - adding `plugin:@next/next/core-web-vitals` will additionnally also add some more rules related to "core-web-vitals"
 
+run the following command to install **eslint-plugin-next** and the other plugins manually
 
+`npm i eslint eslint-plugin-react eslint-plugin-react-hooks @next/eslint-plugin-next --save-dev --save-exact`
 
+add the recommended rule-sets for each plugin via extends to our `.eslintrc` file
 
+- adding `plugin:react/recommended` will add the recommended rule-set for the eslint-plugin-react
+- adding `plugin:@next/next/recommended` will add the base rule-set for eslint-plugin-react
+- adding `plugin:@next/next/core-web-vitals` will additionnally also add some more rules related to "core-web-vitals"
 
-
-
-- if you use this option there is a lot more fine tuning you might want to apply to the eslint configuration file, for example, the eslint-plugin-react recommends you set the `"ecmaFeatures": { "jsx": true }` in the `parserOptions` and in `settings` you should set `"react": { "version": "detect" },` (you can also check in the package.json what react version you are using and set it to that instead of using "detect"), ... I will not further explain every tweak that can be made as this would go far beyond the goals of this tutorial, but I highly recommend you check out the [eslint-plugin-react readme](https://github.com/jsx-eslint/eslint-plugin-react#readme) and [eslint-plugin-react-hooks readme](https://github.com/facebook/react/blob/main/packages/eslint-plugin-react-hooks/README.md) if you want to learn more
-
+if you use this option there is a lot more fine tuning you might want to apply to the eslint configuration file, for example, the eslint-plugin-react recommends you set the `"ecmaFeatures": { "jsx": true }` in the `parserOptions` and in `settings` you should set `"react": { "version": "detect" },` (you can also check in the package.json what react version you are using and set it to that instead of using "detect"), ... I will not further explain every tweak that can be made as this would go far beyond the goals of this tutorial, but I highly recommend you check out the [eslint-plugin-react readme](https://github.com/jsx-eslint/eslint-plugin-react#readme) and [eslint-plugin-react-hooks readme](https://github.com/facebook/react/blob/main/packages/eslint-plugin-react-hooks/README.md) if you want to learn more
 
 Note: option 4 gives you full control over what gets installed, what version of each plugin gets used and you can configure each plugin how you want, but this is also clearly more work (and will probably increase your maintenance costs), so if you don't need to configure every detail of every plugin manually and if you don't use custom overrides then I recommend using one of the first 3 options instead (if you use option 1, 2 or 3 you can still extend add plugins manually or change the eslint configuration at a later point in time)
 
@@ -145,8 +134,6 @@ For this project I will choose option 4, it can be used when creating a new proj
 another reason I chose option 4, is that 
 
  also has the benefit that it can be used when you need to create a custom **overrides**, which is the case if you want to lint two different types of files using different plugins and rules
-
-
 
 read more:
 
@@ -227,9 +214,7 @@ parserOptions: {
 },
 ```
 
-
-
-## 
+## TODO
 
 in this MDX blog tutorial the goal is to lint both our typescript (javascript) files but also also our MDX files
 
@@ -241,8 +226,6 @@ this is why we will create two overrides:
 
 - one overrides for typescript using a typescript parser as well as a bunch of plugins to lint typescript, react, next.js and more, that will replace the **next-lint** overrides
 - a second overrides for our MDX files that will use remark as parser and add a bunch of remark
-
-
 
 ```mjs
     overrides: [
@@ -509,8 +492,6 @@ read more:
 
 - [remark lint "ignore warnings" documentation](https://github.com/remarkjs/remark-lint#ignore-warnings)
 
-
-
 ## transitioning to flat config files
 
 as of now (06.11.2023) you can still use eslintrc configuration files, but it will be deprecated in ESLint >= 9.0.0, as ESLint mentions in their documentation:
@@ -529,21 +510,17 @@ Note: in early 2019 ESLint released an [RFC for flat config files](https://githu
 
 the first ESLint version that has support for [flat config files is ESLint v8.21.0](https://eslint.org/blog/2022/08/eslint-v8.21.0-released/) but newer versions got released since that have brought fixes and improvements
 
-
-
 read more:
 
 - [new ESLint config system documentation](https://eslint.org/docs/head/use/configure/configuration-files-new)
 - [new ESLint config system blog post: part 1](https://eslint.org/blog/2022/08/new-config-system-part-1/)
 - [new ESLint config system blog post: part 2](https://eslint.org/blog/2022/08/new-config-system-part-2/)
 
-
-
 TODO: snippets backup, do I need this or delete:
 
 If you already have ESLint configured in your application, we recommend extending from this plugin directly instead of including eslint-config-next
 
-**eslint-config-next**
+### eslint-config-next
 
 because we don't use next lint, the node_modules directory is probably going to be linted, so the node_modules directory needs to get excluded (to check this add .js extension to eslint cli command)
 
