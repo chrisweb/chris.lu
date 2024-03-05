@@ -75,16 +75,16 @@ module.exports = {
         },
         {
             files: ['**/*.md?(x)'],
-            settings: {
-                'mdx/code-blocks': false,
-                'mdx/remark': true,
-            },
             extends: [
                 'plugin:mdx/recommended',
             ],
             parser: 'eslint-mdx',
             parserOptions: {
                 markdownExtensions: ['*.md, *.mdx'],
+            },
+            settings: {
+                'mdx/code-blocks': false,
+                'mdx/remark': true,
             },
             // rules get configured in remarkrc.mjs
         },
