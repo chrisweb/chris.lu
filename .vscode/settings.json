@@ -23,7 +23,6 @@
         "typescript",
         "typescriptreact"
     ],
-    "mdx.experimentalLanguageServer": true,
     "files.associations": {
         "*.mdx": "markdown"
     },
