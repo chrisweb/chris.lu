@@ -19,8 +19,6 @@ function randomDegrees() {
 
 const Trees: React.FC = () => {
 
-    //const palms = useMemo(() => {
-
     // trees on the left side
     const leftSideTreesRefs = useRef<Group[]>([])
 
@@ -84,10 +82,6 @@ const Trees: React.FC = () => {
     })
 
     return (<>{treesElements}</>)
-
-    //}, [])
-
-    //return <>{palms}</>
 
 }
 
