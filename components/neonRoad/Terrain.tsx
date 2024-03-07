@@ -10,7 +10,7 @@ export interface IProps extends MeshProps {
     zPosition: number
 }
 
-const Terrain: React.FC<IProps> = forwardRef<Mesh, IProps>((props, terrainRef) => {
+const Terrain = forwardRef<Mesh, IProps>((props, terrainRef) => {
 
     const FLOOR_TEXTURE_PATH = '/assets/images/neonroad/grid_4096x8192-min.png'
     const EMISSIVE_MAP_PATH = '/assets/images/neonroad/emissive_map_4096x8192-min.png'
