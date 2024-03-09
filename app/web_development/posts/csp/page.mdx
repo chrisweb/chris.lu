@@ -199,6 +199,8 @@ As of now (february 2023) Sentry.io has an example which uses report-to as a fal
 
 ![](../../../../public/assets/images/app/web_development/posts/csp/sentry_io_report_to_fallback_documentation_outdated.png)
 
+There is an open [ticket #9199](https://github.com/getsentry/sentry-docs/issues/9199) for the documentation issue, hit the notification button if you want to get a message when there is something new
+
 If you use their example you will get errors in chrome since v96, for more about this check out the [Reporting API v0](#reporting-api-v0) chapter of this post
 
 You could however alter their example and update it to the [Reporting API v1](#reporting-api-v1) standard, but if you do you will face another problem, which is that Sentry.io does not support it, so chrome would see you have a report-to header and send a report to Sentry.io, this reporting would fail and then chrome would not fallback to report-uri
