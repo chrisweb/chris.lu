@@ -5,6 +5,7 @@ import { faSpotify } from '@fortawesome/free-brands-svg-icons'
 import Link from 'next/link'
 import Image from 'next/image'
 import styles from './page.module.css'
+import MusicBannerImage from '/public/assets/images/app/music/banner.png'
 
 export const metadata: Metadata = {
     title: 'foo',
@@ -29,6 +30,17 @@ export default function MusicPage() {
             </aside>
             <section id="music" className="middle">
                 <h1 className="h1">Music</h1>
+                <Image
+                    src={MusicBannerImage}
+                    alt="banner image of a band of alian musicians and a human singer"
+                    style={{
+                        width: '100%',
+                        height: 'auto',
+                    }}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    priority
+                    placeholder={'blur'}
+                />
                 <h2 className="h2">Spotify Playlists</h2>
                 <div className="grid">
                     <Link href="https://open.spotify.com/playlist/0ju1z7ELlpnSeabW2kEuQT" className={styles.preview}>
