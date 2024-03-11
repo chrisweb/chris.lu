@@ -1,4 +1,7 @@
 import type { Metadata } from 'next'
+import NavigationLink from '@/components/navigation/Link'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpotify } from '@fortawesome/free-brands-svg-icons'
 import Link from 'next/link'
 import Image from 'next/image'
 import styles from './page.module.css'
@@ -12,25 +15,29 @@ export default function MusicPage() {
 
     return (
         <>
+            <aside>
+                <ul className="linksList">
+                    <li>
+                        <FontAwesomeIcon icon={faSpotify} color='white' size="2x" className="social" /> <NavigationLink href="https://open.spotify.com/user/chriswwweb/playlists">My Spotify Playlists</NavigationLink>
+                    </li>
+                    <li>
+                        <a href="https://www.buymeacoffee.com/chriswwweb">
+                            <Image src="/assets/images/buy_me_a_coffee_button.png" alt="button buy me a coffee" width="240" height="67" />
+                        </a>
+                    </li>
+                </ul>
+            </aside>
             <section id="music" className="middle">
                 <h1 className="h1">Music</h1>
                 <h2 className="h2">Spotify Playlists</h2>
                 <div className="grid">
-                    <Link href="/web_development/tutorials/next-js-static-mdx-blog" className={styles.preview}>
-                        <Image src="/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/banner.png" alt="" fill sizes="400px" style={{ objectFit: 'cover' }} />
-                        <div className={styles.title}>Next.js / React static MDX Blog</div>
+                    <Link href="https://open.spotify.com/playlist/0ju1z7ELlpnSeabW2kEuQT" className={styles.preview}>
+                        <Image src="/assets/images/app/music/indie_summer.png" alt="" fill sizes="400px" style={{ objectFit: 'cover' }} />
+                        <div className={styles.title}>Indie summer ☀️</div>
                     </Link>
-                    <Link href="/web_development/tutorials/next-static-export-github-pages" className={styles.preview}>
-                        <Image src="/assets/images/app/web_development/tutorials/next-static-export-github-pages/banner.png" alt="" fill sizes="400px" style={{ objectFit: 'cover' }} />
-                        <div className={styles.title}>Next.js static export deployed on GitHub pages using GitHub actions</div>
-                    </Link>
-                    <Link href="/web_development/tutorials/xcode-cloud-capacitor-webapp" className={styles.preview}>
-                        <Image src="/assets/images/app/web_development/tutorials/xcode-cloud-capacitor-webapp/banner.png" alt="" fill sizes="400px" style={{ objectFit: 'cover' }} />
-                        <div className={styles.title}>Xcode Cloud CI/CD to distribute a capacitor app to TestFlight users and the App Store</div>
-                    </Link>
-                    <Link href="/web_development/tutorials/node-js-app-aws-ec2" className={styles.preview}>
-                        <Image src="/assets/images/app/web_development/tutorials/node-js-app-aws-ec2/banner.png" alt="" fill sizes="400px" style={{ objectFit: 'cover' }} />
-                        <div className={styles.title}>Node.js app deployment on AWS EC2 instance with NGINX reverse proxy</div>
+                    <Link href="https://open.spotify.com/playlist/341fyZWfso1OzWrQjfnHyV" className={styles.preview}>
+                        <Image src="/assets/images/app/music/indie_rock.png" alt="" fill sizes="400px" style={{ objectFit: 'cover' }} />
+                        <div className={styles.title}>Indie rock 🎸</div>
                     </Link>
                 </div>
             </section>
