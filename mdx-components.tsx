@@ -1,7 +1,7 @@
 import type { MDXComponents } from 'mdx/types'
 import HeadingsObserver from '@/components/headings/Observer'
-import NavigationLink from '@/components/navigation/Link'
-import ImageArticle from '@/components/image/Article'
+import BaseLink from '@/components/base/Link'
+import BaseImage from '@/components/base/Image'
 import { ImageProps } from 'next/image'
 import Image from 'next/image'
 import type { Route } from 'next'
@@ -46,11 +46,11 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
             </h6>
         ),
         a: ({ children, href, ...props }) => (
-            <NavigationLink href={href as Route} {...props}>
+            <BaseLink href={href as Route} {...props}>
                 {children}
-            </NavigationLink>
+            </BaseLink>
         ),
-        img: (props) => (<ImageArticle {...props as ImageProps} />),
+        img: (props) => (<BaseImage {...props as ImageProps} />),
         aside: ({ children, ...props }) => (
             <>
                 {props['id'] === 'articleToc' ? (

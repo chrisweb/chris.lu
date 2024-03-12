@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import NavigationLink from '@/components/navigation/Link'
+import BaseLink from '@/components/base/Link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpotify } from '@fortawesome/free-brands-svg-icons'
 import Link from 'next/link'
@@ -19,7 +19,7 @@ export default function MusicPage() {
             <aside>
                 <ul className="linksList">
                     <li>
-                        <FontAwesomeIcon icon={faSpotify} color='white' size="2x" className="social" /> <NavigationLink href="https://open.spotify.com/user/chriswwweb/playlists">My Spotify Playlists</NavigationLink>
+                        <FontAwesomeIcon icon={faSpotify} color='white' size="2x" className="social" /> <BaseLink href="https://open.spotify.com/user/chriswwweb/playlists">My Spotify Playlists</BaseLink>
                     </li>
                     <li>
                         <a href="https://www.buymeacoffee.com/chriswwweb">

@@ -1,6 +1,6 @@
 import Image, { ImageProps } from 'next/image'
 
-const ImageArticle: React.FC<ImageProps> = (props): JSX.Element => {
+const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 
     let placeholder = true
 
@@ -11,6 +11,7 @@ const ImageArticle: React.FC<ImageProps> = (props): JSX.Element => {
     // @ts-expect-error: because the library definition is wrong
     if (props.src?.src.slice(-3) === 'gif') {
         placeholder = false
+        props.unoptimized = true
     }
 
     return (
@@ -23,7 +24,7 @@ const ImageArticle: React.FC<ImageProps> = (props): JSX.Element => {
                     }}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     priority
-                    placeholder={ placeholder ? 'blur' : 'empty' }
+                    placeholder={placeholder ? 'blur' : 'empty'}
                     {...(props as ImageProps)}
                 />
             ) : (props.alt.startsWith('photo') || props.alt.startsWith('screenshot')) ? (
@@ -33,16 +34,29 @@ const ImageArticle: React.FC<ImageProps> = (props): JSX.Element => {
                         height: 'auto',
                     }}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 15vw"
-                    placeholder={ placeholder ? 'blur' : 'empty' }
+                    placeholder={placeholder ? 'blur' : 'empty'}
                     {...(props as ImageProps)}
                 />
+            ) : (props.alt.startsWith('meme')) ? (
+                // @ts-expect-error: because the library definition is wrong
+                <a href={props.src?.src} target="_blank">
+                    <Image
+                        style={{
+                            width: '100%',
+                            height: 'auto',
+                        }}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 15vw"
+                        placeholder={placeholder ? 'blur' : 'empty'}
+                        {...(props as ImageProps)}
+                    />
+                </a>
             ) : (
                 <Image
                     style={{
                         maxWidth: '100%',
                         height: 'auto',
                     }}
-                    placeholder={ placeholder ? 'blur' : 'empty' }
+                    placeholder={placeholder ? 'blur' : 'empty'}
                     {...(props as ImageProps)}
                 />
             )}
@@ -50,4 +64,4 @@ const ImageArticle: React.FC<ImageProps> = (props): JSX.Element => {
     )
 }
 
-export default ImageArticle
+export default BaseImage

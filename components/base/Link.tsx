@@ -51,7 +51,7 @@ const isUrlMe = (url: string): boolean => {
 
 }
 
-const NavigationLink: React.FC<INavigationLinkProps> = (props): JSX.Element => {
+const BaseLink: React.FC<INavigationLinkProps> = (props): JSX.Element => {
 
     const { href, children, ...linkProps } = props
 
@@ -77,4 +77,4 @@ const NavigationLink: React.FC<INavigationLinkProps> = (props): JSX.Element => {
     )
 }
 
-export default NavigationLink
+export default BaseLink

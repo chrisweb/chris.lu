@@ -1,4 +1,4 @@
-import NavigationLink from '@/components/navigation/Link'
+import BaseLink from '@/components/base/Link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import styles from './page.module.css'
@@ -12,7 +12,7 @@ export default function WebDevelopmentPage() {
             <aside>
                 <ul className="linksList">
                     <li>
-                        <FontAwesomeIcon icon={faGithub} color='white' size="2x" className="social" /> <NavigationLink href="https://github.com/chrisweb">My GitHub Projects</NavigationLink>
+                        <FontAwesomeIcon icon={faGithub} color='white' size="2x" className="social" /> <BaseLink href="https://github.com/chrisweb">My GitHub Projects</BaseLink>
                     </li>
                     <li>
                         <a href="https://www.buymeacoffee.com/chriswwweb">
