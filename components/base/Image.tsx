@@ -1,6 +1,12 @@
+'use client'
+
+import { useState, useCallback } from 'react'
 import Image, { ImageProps } from 'next/image'
+import UIModal from '@/components/ui/modal'
 
 const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
+
+    const [imageDialogIsOpenState, setImageDialogIsOpenState] = useState(false)
 
     let placeholder = true
 
@@ -13,6 +19,18 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
         placeholder = false
         props.unoptimized = true
     }
+
+    const toggleState = () => {
+        setImageDialogIsOpenState(prevState => !prevState)
+    }
+
+    const imageButtonClickHandler = () => {
+        toggleState()
+    }
+
+    const closeDialogCallback = useCallback(() => {
+        toggleState()
+    }, [imageDialogIsOpenState])
 
     return (
         <>
@@ -38,18 +56,30 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
                     {...(props as ImageProps)}
                 />
             ) : (props.alt.startsWith('meme')) ? (
-                // @ts-expect-error: because the library definition is wrong
-                <a href={props.src?.src} target="_blank">
-                    <Image
-                        style={{
-                            width: '100%',
-                            height: 'auto',
-                        }}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 15vw"
-                        placeholder={placeholder ? 'blur' : 'empty'}
-                        {...(props as ImageProps)}
-                    />
-                </a>
+                <>
+                    <button onClick={imageButtonClickHandler}>
+                        <Image
+                            style={{
+                                width: '100%',
+                                height: 'auto',
+                            }}
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 15vw"
+                            placeholder={placeholder ? 'blur' : 'empty'}
+                            {...(props as ImageProps)}
+                        />
+                    </button>
+                    <UIModal isOpen={imageDialogIsOpenState} onCloseCallback={closeDialogCallback}>
+                        <Image
+                            fill
+                            style={{
+                                objectFit: 'contain'
+                            }}
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 15vw"
+                            placeholder={placeholder ? 'blur' : 'empty'}
+                            {...(props as ImageProps)}
+                        />
+                    </UIModal>
+                </>
             ) : (
                 <Image
                     style={{
