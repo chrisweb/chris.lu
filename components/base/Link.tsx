@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 import { Route } from 'next'
 
-export interface INavigationLinkProps extends PropsWithChildren {
+export interface IBaseLinkProps extends PropsWithChildren {
     href: Route<string> | URL
     target?: string
     rel?: string
@@ -51,7 +51,7 @@ const isUrlMe = (url: string): boolean => {
 
 }
 
-const BaseLink: React.FC<INavigationLinkProps> = (props): JSX.Element => {
+const BaseLink: React.FC<IBaseLinkProps> = (props): JSX.Element => {
 
     const { href, children, ...linkProps } = props
 
