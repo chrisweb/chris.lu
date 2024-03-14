@@ -8,8 +8,9 @@ import PlayerUI from './player/UI'
 import { PlayerCore } from 'web-audio-api-player'
 import HeaderTitle from '@/components/header/Title'
 import LoadingScreen from './loading/Screen'
-import ButtonPowerOff from './button/PowerOff'
+import ButtonWithIcon from '@/components/base/button/WithIcon'
 import styles from './container.module.css'
+import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
 
 // in this dynamic import case it is important to set "ssr: false"
 // as in the NeonRoadCanvas component we use window
@@ -56,7 +57,7 @@ const Container: React.FC = () => {
                 {animationState &&
                     <>
                         <NeonRoadCanvas altText={altText} containerRef={containerRef} />
-                        <ButtonPowerOff clickStopCallback={clickStopCallback} />
+                        <ButtonWithIcon clickCallback={clickStopCallback} whichIcon={faPowerOff} />
                     </>
                 }
             </div>
