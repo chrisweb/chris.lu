@@ -17,16 +17,18 @@ export default function MusicPage() {
     return (
         <>
             <aside>
-                <ul className="linksList">
-                    <li>
-                        <FontAwesomeIcon icon={faSpotify} color='white' size="2x" className="social" /> <BaseLink href="https://open.spotify.com/user/chriswwweb/playlists">My Spotify Playlists</BaseLink>
-                    </li>
-                    <li>
-                        <a href="https://www.buymeacoffee.com/chriswwweb">
-                            <Image src="/assets/images/buy_me_a_coffee_button.png" alt="button buy me a coffee" width="240" height="67" />
-                        </a>
-                    </li>
-                </ul>
+                <div className='asideCore sticky'>
+                    <ul className="linksList">
+                        <li>
+                            <FontAwesomeIcon icon={faSpotify} color='white' size="2x" className="social" /> <BaseLink href="https://open.spotify.com/user/chriswwweb/playlists">My Spotify Playlists</BaseLink>
+                        </li>
+                        <li>
+                            <a href="https://www.buymeacoffee.com/chriswwweb">
+                                <Image src="/assets/images/buy_me_a_coffee_button.png" alt="button buy me a coffee" width="240" height="67" />
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </aside>
             <section id="music" className="middle">
                 <h1 className="h1">Music</h1>
