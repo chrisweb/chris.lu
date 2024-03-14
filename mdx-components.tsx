@@ -1,7 +1,7 @@
 import type { MDXComponents } from 'mdx/types'
 import HeadingsObserver from '@/components/headings/Observer'
 import BaseLink from '@/components/base/Link'
-import BaseImage from '@/components/base/Image'
+import ImageDispatch from '@/components/base/image/Dispatch'
 import { ImageProps } from 'next/image'
 import Image from 'next/image'
 import type { Route } from 'next'
@@ -50,12 +50,12 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                 {children}
             </BaseLink>
         ),
-        img: (props) => (<BaseImage {...props as ImageProps} />),
+        img: (props) => (<ImageDispatch {...props as ImageProps} />),
         aside: ({ children, ...props }) => (
             <>
                 {props['id'] === 'articleToc' ? (
                     <aside>
-                        <div className='asideCore'>
+                        <div className='asideCore sticky'>
                             <HeadingsObserver>
                                 {children}
                             </HeadingsObserver>
