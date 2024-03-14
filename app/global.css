@@ -552,7 +552,6 @@ aside {
 }
 
 .asideCore {
-    position: sticky;
     top: calc(var(--header-navbar-height) + var(--main-spacing));
 }
 
