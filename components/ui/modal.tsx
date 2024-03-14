@@ -2,8 +2,9 @@
 
 import { useRef, useEffect, useState } from 'react'
 import type { PropsWithChildren } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import ButtonWithIcon from '../base/button/WithIcon'
 import { faClose } from '@fortawesome/free-solid-svg-icons'
+import styles from './modal.module.css'
 
 export interface IUIModalProps extends PropsWithChildren {
     isOpen: boolean;
@@ -59,19 +60,14 @@ const UIModal: React.FC<IUIModalProps> = (props): JSX.Element => {
     }, [isModalOpenState])
 
     return (
-        <>
-            <dialog ref={modalRef} onKeyDown={dialogKeyDownHandler} className="modal" style={{width: '100%', height: '100%'}}>
+        <dialog ref={modalRef} onKeyDown={dialogKeyDownHandler} className={styles.modal}>
+            <div className={styles.modalCore} onClick={closeButtonClickHandler}>
                 {withCloseButton && (
-                    <button
-                        onClick={closeButtonClickHandler}
-                        className="close"
-                    >
-                        <FontAwesomeIcon icon={faClose} size="xl" color='white' />
-                    </button>
+                    <ButtonWithIcon clickCallback={closeButtonClickHandler} whichIcon={faClose} />
                 )}
                 {children}
-            </dialog>
-        </>
+            </div>
+        </dialog>
     )
 }
 

@@ -1,0 +1,31 @@
+.buttonReset {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.buttonCursor {
+    cursor: var(--cursor-pointer);
+}
+
+.openButton {
+    position: relative;
+}
+
+.openButton svg {
+    color: var(--tertiary-light-color);
+}
+
+.iconPositioning {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 20;
+}
+
+.icon {
+    backdrop-filter: saturate(200%) blur(5px);
+    -webkit-backdrop-filter: saturate(200%) blur(5px);
+    background-color: rgba(var(--primary-light-value), 0.01);
+    padding: calc(var(--main-spacing) / 4);
+}
