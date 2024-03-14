@@ -83,6 +83,15 @@ html {
     tab-size: 4;
 }
 
+/* not on mobile */
+@media (hover: hover) {
+    html {
+        /* fix layout shift when no scrollbar on the right */
+        /* https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-gutter */
+        scrollbar-gutter: stable;
+    }
+}
+
 @supports not selector(::-webkit-scrollbar) {
     * {
         /* scrollbar styling (w3c standard) */
@@ -129,14 +138,10 @@ body {
     line-height: normal;
 }
 
-/* not on mobile */
-@media (hover: hover) {
-    body {
-        /* always have scrollbar on the right */
-        /* if this is not set, the page content will move when
-        going from a page with scrollbar to a page without */
-        overflow-y: scroll;
-    }
+/* prevent any scrolling when dialog is open */
+/* https://github.com/whatwg/html/issues/7732 */
+body:has(dialog[open]) {
+    overflow: hidden
 }
 
 @media print {
