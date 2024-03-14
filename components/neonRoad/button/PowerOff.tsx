@@ -16,18 +16,16 @@ const ButtonPowerOff: React.FC<IProps> = (props) => {
 
     return (
         <>
-            <div className={styles.container}>
-                <button
-                    onClick={powerOffClickHandler}
-                    className={styles.powerOffButton}
-                >
-                    <div className={styles.powerOffButtonBorder}>
-                        <div className={styles.powerOffButtonCore}>
-                            <FontAwesomeIcon icon={faPowerOff} size="xl" color='white' />
-                        </div>
+            <button
+                onClick={powerOffClickHandler}
+                className={`${styles.powerOffButton} ${styles.buttonReset}`}
+            >
+                <div className={styles.powerOffButtonBorder}>
+                    <div className={styles.powerOffButtonCore}>
+                        <FontAwesomeIcon icon={faPowerOff} size="xl" color='white' />
                     </div>
-                </button>
-            </div >
+                </div>
+            </button>
         </>
     )
 }
