@@ -60,6 +60,7 @@ const nextConfig = (phase) => {
     }
 
     // https://github.com/chrisweb/remark-table-of-contents#options
+    /** @type {import('remark-table-of-contents').IRemarkTableOfContentsOptions} */
     const remarkTableOfContentsOptions = {
         containerAttributes: {
             id: 'articleToc',
