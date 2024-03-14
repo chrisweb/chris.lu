@@ -19,7 +19,7 @@ const ButtonWithIcon: React.FC<IProps> = (props) => {
         <>
             <button
                 onClick={buttonClickHandler}
-                className={`${styles.buttonPositioning} ${styles.buttonReset}`}
+                className={`${styles.buttonPositioning} ${styles.buttonCursor} ${styles.buttonReset}`}
             >
                 <div className={styles.buttonBorder}>
                     <div className={styles.buttonCore}>

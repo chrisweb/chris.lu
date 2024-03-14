@@ -11,6 +11,10 @@
     z-index: 20;
 }
 
+.buttonCursor {
+    cursor: var(--cursor-pointer);
+}
+
 /* max-width: 70rem / 1120px (mobile breakpoint) */
 @media all and (max-width: 70rem) {
 
@@ -41,7 +45,6 @@
             0 100%);
     background-color: var(--tertiary-light-color);
     border: 0;
-    cursor: var(--cursor-pointer);
 }
 
 /* max-width: 70rem / 1120px (mobile breakpoint) */
