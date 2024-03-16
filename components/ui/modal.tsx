@@ -7,13 +7,13 @@ import type { PropsWithChildren } from 'react'
 import ButtonWithIcon from '../base/button/WithIcon'
 import { faClose } from '@fortawesome/free-solid-svg-icons'
 import styles from './modal.module.css'
-import type { ImageProps } from 'next/image'
 
 export interface IUIModalProps extends PropsWithChildren {
     isOpen: boolean;
     hasCloseButton?: boolean
     onCloseCallback?: () => void
-    imageProps: ImageProps
+    width?: number
+    height?: number
 }
 
 const UIModal: React.FC<IUIModalProps> = (props): JSX.Element => {
@@ -67,18 +67,23 @@ const UIModal: React.FC<IUIModalProps> = (props): JSX.Element => {
         }
     }, [isModalOpenState])
 
+    const dimensionsStyles: { width?: string, height?: string } = {}
+
+    if (typeof props.width !== 'undefined') {
+        dimensionsStyles['width'] = props.width + 'px'
+    }
+
+    if (typeof props.height !== 'undefined') {
+        dimensionsStyles['height'] = props.height + 'px'
+    }
+
     return createPortal(
         <dialog
             ref={modalRef}
             onCancel={closeHandler}
             onAnimationEnd={animationEndHandler}
             className={`${styles.modal} ${closeAnimationState === true ? styles.hide : ''}`}
-            style={{
-                // @ts-expect-error: because the library definition is wrong
-                width: props.imageProps.src?.width,
-                // @ts-expect-error: because the library definition is wrong
-                height: props.imageProps.src?.height,
-            }}
+            style={dimensionsStyles}
         >
             <div className={styles.modalCore} onClick={closeHandler}>
                 {withCloseButton && (

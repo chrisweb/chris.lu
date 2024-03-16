@@ -23,7 +23,10 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
         setImageDialogIsOpenState(false)
     }, [imageDialogIsOpenState])
 
-    console.log(props)
+    // @ts-expect-error: because the library definition is wrong
+    const modalWidth = props.src?.width
+    // @ts-expect-error: because the library definition is wrong
+    const modalHeight = props.src?.height
 
     return (
         <>
@@ -41,7 +44,7 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
                     <FontAwesomeIcon icon={faMagnifyingGlass} size="xl" color='white' className={`${styles.iconPositioning}  ${styles.icon}`} />
                 )}
             </button>
-            <UIModal isOpen={imageDialogIsOpenState} onCloseCallback={closeDialogCallback} hasCloseButton={false} imageProps={props}>
+            <UIModal isOpen={imageDialogIsOpenState} onCloseCallback={closeDialogCallback} hasCloseButton={false} width={modalWidth} height={modalHeight}>
                 <Image
                     style={{
                         objectFit: 'cover',
