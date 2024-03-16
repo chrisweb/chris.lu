@@ -9,7 +9,7 @@ import { faClose } from '@fortawesome/free-solid-svg-icons'
 import styles from './modal.module.css'
 
 export interface IUIModalProps extends PropsWithChildren {
-    isOpen: boolean;
+    isOpen: boolean
     hasCloseButton?: boolean
     onCloseCallback?: () => void
     width?: number
