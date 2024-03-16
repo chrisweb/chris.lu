@@ -23,6 +23,8 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
         setImageDialogIsOpenState(false)
     }, [imageDialogIsOpenState])
 
+    console.log(props)
+
     return (
         <>
             <button onClick={imageButtonClickHandler} className={`${styles.openButton}  ${styles.buttonCursor} ${styles.buttonReset}`}>
@@ -39,7 +41,7 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
                     <FontAwesomeIcon icon={faMagnifyingGlass} size="xl" color='white' className={`${styles.iconPositioning}  ${styles.icon}`} />
                 )}
             </button>
-            <UIModal isOpen={imageDialogIsOpenState} onCloseCallback={closeDialogCallback} hasCloseButton={false}>
+            <UIModal isOpen={imageDialogIsOpenState} onCloseCallback={closeDialogCallback} hasCloseButton={false} imageProps={props}>
                 <Image
                     style={{
                         objectFit: 'cover',
