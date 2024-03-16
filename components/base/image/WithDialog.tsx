@@ -7,7 +7,7 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styles from './withdialog.module.css'
 
-const UIModal = dynamic(() => import('@/components/ui/modal'), { ssr: false })
+const UIModal = dynamic(() => import('@/components/ui/Modal'), { ssr: false })
 
 const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 
