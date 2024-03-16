@@ -43,8 +43,10 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
                 <Image
                     style={{
                         objectFit: 'contain',
-                        maxWidth: '100%',
-                        maxHeight: '100%',
+                        maxWidth: 'calc(100vw - 2em - 6px)',
+                        maxHeight: 'calc(100vh - 2em - 6px)',
+                        width: '100%',
+                        height: 'auto',
                     }}
                     placeholder="blur"
                     {...(props as ImageProps)}
