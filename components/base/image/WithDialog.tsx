@@ -45,8 +45,6 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
                 <Image
                     style={{
                         objectFit: 'cover',
-                        maxWidth: 'calc(100vw - 2em - 6px)',
-                        maxHeight: 'calc(100vh - 2em - 6px)',
                         width: '100%',
                         height: 'auto',
                     }}
