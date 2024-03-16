@@ -50,6 +50,7 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
                         objectFit: 'cover',
                         width: '100%',
                         height: 'auto',
+                        maxHeight: '100%',
                     }}
                     placeholder="blur"
                     {...(props as ImageProps)}
