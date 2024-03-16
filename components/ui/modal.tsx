@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import type { PropsWithChildren } from 'react'
 import ButtonWithIcon from '../base/button/WithIcon'
 import { faClose } from '@fortawesome/free-solid-svg-icons'
@@ -33,14 +34,8 @@ const UIModal: React.FC<IUIModalProps> = (props): JSX.Element => {
         setIsModalOpenState(false)
     }
 
-    const closeButtonClickHandler = () => {
+    const closeHandler = () => {
         closeModal()
-    }
-
-    const dialogKeyDownHandler = (event: React.KeyboardEvent<HTMLDialogElement>) => {
-        if (event.key === 'Escape') {
-            closeModal()
-        }
     }
 
     useEffect(() => {
@@ -59,15 +54,16 @@ const UIModal: React.FC<IUIModalProps> = (props): JSX.Element => {
         }
     }, [isModalOpenState])
 
-    return (
-        <dialog ref={modalRef} onKeyDown={dialogKeyDownHandler} className={styles.modal}>
-            <div className={styles.modalCore} onClick={closeButtonClickHandler}>
+    return createPortal(
+        <dialog ref={modalRef} onCancel={closeHandler} className={styles.modal}>
+            <div className={styles.modalCore} onClick={closeHandler}>
                 {withCloseButton && (
-                    <ButtonWithIcon clickCallback={closeButtonClickHandler} whichIcon={faClose} />
+                    <ButtonWithIcon clickCallback={closeHandler} whichIcon={faClose} />
                 )}
                 {children}
             </div>
-        </dialog>
+        </dialog>,
+        document.body
     )
 }
 
