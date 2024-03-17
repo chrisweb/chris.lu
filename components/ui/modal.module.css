@@ -1,12 +1,12 @@
-.modal {
-    max-width: calc(100vw - 2em - 6px);
-    max-height: calc(100vh - 2em - 6px);
-}
-
 .reset {
     border: 0px;
     padding: 0px;
     background-color: transparent;
+}
+
+.modal {
+    max-width: calc(100vw - 2em - 6px);
+    max-height: calc(100vh - 2em - 6px);
 }
 
 .modal::backdrop {
