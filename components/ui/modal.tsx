@@ -82,10 +82,10 @@ const UIModal: React.FC<IUIModalProps> = (props): JSX.Element => {
             ref={modalRef}
             onCancel={closeHandler}
             onAnimationEnd={animationEndHandler}
-            className={`${styles.modal} ${closeAnimationState === true ? styles.hide : ''}`}
+            className={`${styles.modal} ${styles.reset} ${closeAnimationState === true ? styles.hide : ''}`}
             style={dimensionsStyles}
         >
-            <div className={styles.modalCore} onClick={closeHandler}>
+            <div className={styles.core} onClick={closeHandler}>
                 {withCloseButton && (
                     <ButtonWithIcon clickCallback={closeHandler} whichIcon={faClose} />
                 )}
