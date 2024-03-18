@@ -4265,3 +4265,7 @@ export default ImageArticle
 
 
 
+new chapter: final touches
+* robots.txt: https://nextjs.org/docs/app/api-reference/file-conventions/metadata/robots
+* sitemap.xml: https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap
+* manifest.json: https://nextjs.org/docs/app/api-reference/file-conventions/metadata/manifest
