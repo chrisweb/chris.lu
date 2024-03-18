@@ -1,0 +1,54 @@
+.slider {
+    cursor: var(--cursor-pointer);
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    appearance: none;
+    -webkit-appearance: none;
+    /* I tried "appearance slider-vertical" but it does not work in firefox and chrome adds a console log message that it is not a standard and will get removed, so instead we will use a "tranform rotate" */
+    transform: rotate(270deg);
+    transform-origin: center left;
+    -webkit-transform: rotate(270deg);
+    /* because of the 270deg rotation: height value sets how wide the slider is */
+    height: 2px;
+    /* because of the 270deg rotation: width value sets how high the slider is */
+    width: 130px;
+    /* track color */
+    background-color: #fff;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    background: #fff;
+}
+
+.slider::-moz-range-thumb,
+.slider::slider-thumb {
+    appearance: none;
+    height: 20px;
+    width: 20px;
+    background: #fff;
+    border: 0;
+    border-radius: 0%;
+}
+
+.slider:hover::-webkit-slider-thumb {
+    background-color: var(--tertiary-light-color);
+}
+
+.slider:hover::-moz-range-thumb {
+    background-color: var(--tertiary-light-color);
+}
+
+.slider::-moz-range-progress {
+    background-color: var(--tertiary-light-color);
+    height: 4px;
+}
+
+/* https://github.com/w3c/csswg-drafts/issues/4410#issuecomment-1720875895 */
+.slider::slider-fill {
+    background-color: var(--tertiary-light-color);
+    height: 4px;
+}

@@ -4,11 +4,15 @@ import { useRef, useState, forwardRef, useCallback, useEffect } from 'react'
 import { PlayerCore, ISoundAttributes, ICoreOptions } from 'web-audio-api-player'
 import styles from './ui.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay, faPause, faForwardStep, faEject, faArrowUpRightFromSquare, faVolumeHigh } from '@fortawesome/free-solid-svg-icons'
-import { faCreativeCommons } from '@fortawesome/free-brands-svg-icons'
+import { faPlay, faPause, faForwardStep, faEject, faVolumeHigh } from '@fortawesome/free-solid-svg-icons'
 import { Waveform } from 'waveform-visualizer'
 import RippleButton from './ripple/Button'
 import WaveformCanvas from './WaveformCanvas'
+import dynamic from 'next/dynamic'
+import VolumeSlider from './volumeSlider'
+
+//const Walkman = dynamic(() => import('./Walkman'), { ssr: false })
+const VolumeDialog = dynamic(() => import('./VolumeDialog'), { ssr: false })
 
 interface ICredits {
     name: string
@@ -44,10 +48,6 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
         }
 
         const player = new PlayerCore(options)
-
-        if (volumeSliderRef.current !== null) {
-            volumeSliderRef.current.value = player.getVolume().toString()
-        }
 
         const mixTape = getMixTape()
 
@@ -294,6 +294,19 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
         }
     }
 
+    const onVolumeDialogCloseCallback = () => {
+        setIsVolumeModalOpenState(false)
+    }
+
+    const onVolumeDialogOpenCallback = () => {
+        if (volumeSliderRef.current !== null) {
+            const player = getPlayer()
+            if (player !== null) {
+                volumeSliderRef.current.value = player.getVolume().toString()
+            }
+        }
+    }
+
     const onInputVolumeHandler = () => {
         if (volumeSliderRef.current !== null) {
             const volume = volumeSliderRef.current.value
@@ -360,29 +373,10 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
                     </RippleButton>
                 </div>
             </div>
-            <div className={`${styles.walkman} ${isEjectedState ? styles.ejected : styles.inserted}`}>
-                <div className={`${styles.cassette} ${isEjectedState ? styles.slideIn : styles.slideOut}`}>
-                    <div className={`${styles.face} ${styles.front}`}>
-                        {/* I set the href to '/' by default, because if I set it to empty '' I get this error:
-                        Warning: An empty string ("") was passed to the href attribute.
-                        To fix this, either do not render the element at all or pass null to
-                        href instead of an empty string. */}
-                        <a href={creditsState.license} target="_blank" rel="noreferrer" tabIndex={-1} className={styles.songTitle}>{creditsState !== null ? creditsState.name : ''} <FontAwesomeIcon icon={faCreativeCommons} color='white' /></a>
-                        <a href={creditsState.artistWebsite} target="_blank" rel="noreferrer" tabIndex={-1} className={styles.artistName}>{creditsState !== null ? creditsState.artistName : ''} <FontAwesomeIcon icon={faArrowUpRightFromSquare} color='white' /></a>
-                        <div className={styles.spoolLeft}></div>
-                        <div className={styles.spoolRight}></div>
-                        <div className={styles.shield}></div>
-                    </div>
-                    <div className={`${styles.face} ${styles.back}`}></div>
-                    <div className={`${styles.face} ${styles.right}`}></div>
-                    <div className={`${styles.face} ${styles.left}`}></div>
-                    <div className={`${styles.face} ${styles.top}`}></div>
-                    <div className={`${styles.face} ${styles.bottom}`}></div>
-                </div>
-            </div>
-            <div className={`${styles.volumeModal} ${isVolumeModalOpenState ? styles.openVolume : styles.closeVolume}`}>
-                <input type="range" id="volume" name="volume" min="0" max="100" className={styles.volumeSlider} ref={volumeSliderRef} onInput={onInputVolumeHandler} />
-            </div>
+            {/*<Walkman />*/}
+            <VolumeDialog isOpen={isVolumeModalOpenState} onCloseCallback={onVolumeDialogCloseCallback} onOpenCallback={onVolumeDialogOpenCallback}>
+                <VolumeSlider ref={volumeSliderRef} onInputVolumeHandler={onInputVolumeHandler} />
+            </VolumeDialog>
         </>
     )
 })
