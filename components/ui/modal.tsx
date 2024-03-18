@@ -82,7 +82,7 @@ const UIModal: React.FC<IUIModalProps> = (props): JSX.Element => {
             ref={modalRef}
             onCancel={closeHandler}
             onAnimationEnd={animationEndHandler}
-            className={`${styles.reset} ${styles.modal} ${closeAnimationState === true ? styles.hide : ''}`}
+            className={`${styles.reset} ${styles.modal} disablePageScroll ${closeAnimationState === true ? styles.hide : ''}`}
             style={dimensionsStyles}
         >
             <div className={styles.core} onClick={closeHandler}>

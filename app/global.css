@@ -108,9 +108,9 @@ html {
     /* scrollbar styling (webkit vendor prefix) */
     *::-webkit-scrollbar {
         /* for vertical scrollbar */
-        width: 1rem;
+        width: 13px;
         /* for horizontal scrollbar */
-        height: 1rem;
+        height: 13px;
     }
 
     *::-webkit-scrollbar-track {
@@ -140,8 +140,8 @@ body {
 
 /* prevent any scrolling when dialog is open */
 /* https://github.com/whatwg/html/issues/7732 */
-body:has(dialog[open]) {
-    overflow: hidden
+body:has(dialog.disablePageScroll[open]) {
+    overflow: hidden;
 }
 
 @media print {
