@@ -27,11 +27,11 @@
 }
 
 .modal[open] {
-    animation: openAnimation .5s ease normal;
+    animation: openAnimation .5s ease forwards;
 }
 
 .modal.hide {
-    animation: closeAnimation .5s ease normal;
+    animation: closeAnimation .5s ease forwards;
 }
 
 @keyframes openAnimation {
