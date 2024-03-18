@@ -6,22 +6,30 @@
 }
 
 .dialog {
-    box-shadow: 0 0 10px 5px var(--primary-light-color);
-    background: rgba(var(--primary-light-value), 0.3);
-    width: 40px;
-    height: 170px;
-    right: 85px;
+    width: 386px;
+    height: 238px;
+    right: var(--main-spacing);
     left: auto;
     top: -300px;
-    z-index: 41;
+    perspective: 600px;
+    z-index: 40;
+}
+
+/* max-width: 70rem / 1120px (mobile breakpoint) */
+@media all and (max-width: 70rem) {
+    .dialog {
+        transform: scale(0.8);
+        right: auto;
+        background-color: rgba(0, 0, 0, 0.7)
+    }
 }
 
 .dialog[open] {
-    animation: openAnimation .5s ease forwards;
+    animation: openAnimation 1s ease forwards;
 }
 
 .dialog.close {
-    animation: closeAnimation .5s ease forwards;
+    animation: closeAnimation 1s ease forwards;
 }
 
 @keyframes openAnimation {

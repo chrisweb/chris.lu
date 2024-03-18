@@ -9,9 +9,10 @@ import { Waveform } from 'waveform-visualizer'
 import RippleButton from './ripple/Button'
 import WaveformCanvas from './WaveformCanvas'
 import dynamic from 'next/dynamic'
-import VolumeSlider from './volumeSlider'
+import Cassette from './Cassette'
+import VolumeSlider from './VolumeSlider'
 
-//const Walkman = dynamic(() => import('./Walkman'), { ssr: false })
+const WalkmanDialog = dynamic(() => import('./WalkmanDialog'), { ssr: false })
 const VolumeDialog = dynamic(() => import('./VolumeDialog'), { ssr: false })
 
 interface ICredits {
@@ -282,6 +283,10 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
         }
     }
 
+    const onWalkmanDialogCloseCallback = () => {
+        setIsEjectedState(false)
+    }
+
     const onClickVolumeHandler = () => {
         if (!isVolumeModalOpenState) {
             // if the casette is open, close it first
@@ -373,7 +378,9 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
                     </RippleButton>
                 </div>
             </div>
-            {/*<Walkman />*/}
+            <WalkmanDialog isOpen={isEjectedState} onCloseCallback={onWalkmanDialogCloseCallback}>
+                <Cassette credits={creditsState} />
+            </WalkmanDialog>
             <VolumeDialog isOpen={isVolumeModalOpenState} onCloseCallback={onVolumeDialogCloseCallback} onOpenCallback={onVolumeDialogOpenCallback}>
                 <VolumeSlider ref={volumeSliderRef} onInputVolumeHandler={onInputVolumeHandler} />
             </VolumeDialog>
