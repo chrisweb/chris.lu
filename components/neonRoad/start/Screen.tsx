@@ -16,6 +16,7 @@ const StartScreen: React.FC<IProps> = (props) => {
     }
 
     const withMusicKeyPressHandler = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+        // on press enter key
         if (event.code === '13') {
             setWidthSoundState(true)
         }
@@ -26,6 +27,7 @@ const StartScreen: React.FC<IProps> = (props) => {
     }
 
     const withoutMusicKeyPressHandler = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+        // on press enter key
         if (event.code === '13') {
             setWidthSoundState(false)
         }
@@ -37,6 +39,7 @@ const StartScreen: React.FC<IProps> = (props) => {
     }
 
     const pressStartKeyPressHandler = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+        // on press enter key
         if (event.code === '13') {
             const { clickPlayCallback } = props
             clickPlayCallback(withSoundState)
