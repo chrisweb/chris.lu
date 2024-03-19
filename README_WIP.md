@@ -4269,3 +4269,9 @@ new chapter: final touches
 * robots.txt: https://nextjs.org/docs/app/api-reference/file-conventions/metadata/robots
 * sitemap.xml: https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap
 * manifest.json: https://nextjs.org/docs/app/api-reference/file-conventions/metadata/manifest
+
+https://web.dev/explore/progressive-web-apps?hl=en
+https://w3c.github.io/manifest/#shortcuts-member
+https://developer.mozilla.org/en-US/docs/Web/Manifest/shortcuts
+https://web.dev/articles/install-criteria
+also search google for "manifest json generator" and "favicon generator", to find tools like this nice one: https://realfavicongenerator.net/
