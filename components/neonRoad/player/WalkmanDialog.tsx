@@ -34,8 +34,10 @@ const WalkmanDialog: React.FC<IProps> = (props) => {
         setIsDialogOpenState(false)
     }
 
-    const closeHandler = () => {
-        closeModal()
+    const onKeyDownHandler = (event: React.KeyboardEvent<HTMLDialogElement>) => {
+        if (event.key === 'Escape') {
+            closeModal()
+        }
     }
 
     const animationEndHandler = (event: AnimationEvent<HTMLDialogElement>) => {
@@ -70,7 +72,7 @@ const WalkmanDialog: React.FC<IProps> = (props) => {
     return createPortal(
         <dialog
             ref={dialogRef}
-            onCancel={closeHandler}
+            onKeyDown={onKeyDownHandler}
             onAnimationEnd={animationEndHandler}
             className={`${styles.reset} ${styles.dialog} ${closeAnimationState === true ? styles.close : ''}`}
         >
