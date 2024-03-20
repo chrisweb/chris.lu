@@ -144,6 +144,14 @@ body:has(dialog.disablePageScroll[open]) {
     overflow: hidden;
 }
 
+/* not on mobile */
+@media not screen and (hover: hover) {
+    /* remove focus for elements in dialogs */
+    dialog :focus {
+        outline: none;
+    }
+}
+
 @media print {
     body {
         background-color: white;
