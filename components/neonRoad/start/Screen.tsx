@@ -2,12 +2,15 @@
 
 import { useState } from 'react'
 import styles from './screen.module.css'
+import PlayButton from './PlayButton'
 
 interface IProps {
     clickPlayCallback: (playMusic: boolean) => void
 }
 
 const StartScreen: React.FC<IProps> = (props) => {
+
+    const { clickPlayCallback } = props
 
     const [withSoundState, setWidthSoundState] = useState(true)
 
@@ -33,15 +36,8 @@ const StartScreen: React.FC<IProps> = (props) => {
         }
     }
 
-    const pressStartClickHandler = (/*event: React.MouseEvent<HTMLButtonElement>*/) => {
-        const { clickPlayCallback } = props
-        clickPlayCallback(withSoundState)
-    }
-
-    const pressStartKeyPressHandler = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-        // on press enter key
-        if (event.code === '13') {
-            const { clickPlayCallback } = props
+    const playButtonCallback = (/*event: React.MouseEvent<HTMLButtonElement>*/) => {
+        if (typeof clickPlayCallback === 'function') {
             clickPlayCallback(withSoundState)
         }
     }
@@ -66,13 +62,12 @@ const StartScreen: React.FC<IProps> = (props) => {
                             <span className={`${styles.withoutMusic} ${!withSoundState ? styles.selected : styles.notSelected}`}>Music OFF</span>
                         </button>
                     </div>
-                    <button
-                        onClick={pressStartClickHandler}
-                        onKeyDown={pressStartKeyPressHandler}
-                        className={styles.playButton}
+                    <PlayButton
+                        playButtonCallback={playButtonCallback}
+                        playButtonStyles={styles.playButton}
                     >
                         <span className={`${styles.pressStart} ${styles.blink}`}><span className={styles.press}>press</span> <span className={styles.start}>start</span></span>
-                    </button>
+                    </PlayButton>
                 </div>
             </div >
         </>

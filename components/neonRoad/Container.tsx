@@ -26,19 +26,19 @@ const Container: React.FC = () => {
 
     const containerRef = useRef<HTMLDivElement>(null)
     const playerRef = useRef<PlayerCore>(null)
+    const powerOffButtonRef = useRef<HTMLButtonElement>(null)
 
     const clickPlayCallback = useCallback(async (playMusic: boolean) => {
         setAnimationState(true)
-        if (playMusic && playerRef.current !== null) {
-            await playerRef.current.play()
+        if (playMusic) {
+            await playerRef.current?.play()
         }
+        powerOffButtonRef.current?.focus()
     }, [])
 
-    const clickStopCallback = useCallback(async () => {
+    const powerOffCallback = useCallback(async () => {
         setAnimationState(false)
-        if (playerRef.current !== null) {
-            await playerRef.current.stop()
-        }
+        await playerRef.current?.stop()
     }, [])
 
     const altText = 'Chris.lu header image, displaying an 80s style landscape and sunset'
@@ -57,7 +57,7 @@ const Container: React.FC = () => {
                 {animationState &&
                     <>
                         <NeonRoadCanvas altText={altText} containerRef={containerRef} />
-                        <ButtonWithIcon clickCallback={clickStopCallback} whichIcon={faPowerOff} />
+                        <ButtonWithIcon clickCallback={powerOffCallback} whichIcon={faPowerOff} ref={powerOffButtonRef} />
                     </>
                 }
             </div>
