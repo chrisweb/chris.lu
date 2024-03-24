@@ -12,11 +12,19 @@ import ButtonWithIcon from '@/components/base/button/WithIcon'
 import styles from './container.module.css'
 import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
 
-// in this dynamic import case it is important to set "ssr: false"
-// as in the NeonRoadCanvas component we use window
-// else you get "window is not defined"
+/**
+ * By using a dynamic import for the Canvas we avoid loading
+ * assets used by the animation, not everyone will launch
+ * the animation so it is better to only load them when
+ * someone clicks play
+ */
+
+// if the canvas component uses window then srr needs to be
+// false because on server side build window is undefined
+// currently window is not used, so I re-enabled ssr by
+// commenting ssr: false
 const NeonRoadCanvas = dynamic(() => import('./Canvas'), {
-    ssr: false,
+    //ssr: false,
     loading: () => <LoadingScreen />,
 })
 
