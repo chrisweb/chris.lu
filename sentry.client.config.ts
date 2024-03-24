@@ -37,6 +37,10 @@ Sentry.init({
             maskAllText: true,
             blockAllMedia: true,
         }),
+        // https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/integrations/
+        Sentry.breadcrumbsIntegration({
+            console: false,
+        }),
     ],
 
     environment: process.env.NODE_ENV ? process.env.NODE_ENV : '',
