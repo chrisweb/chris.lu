@@ -12,10 +12,12 @@ interface IProps {
 
 type ButtonWithIconRefType = HTMLButtonElement
 
-const ButtonWithIcon = forwardRef<ButtonWithIconRefType, IProps>((props, playButtonRef = null) => {
+const ButtonWithIcon = forwardRef<ButtonWithIconRefType, IProps>((props, playButtonRef) => {
+
+    const { clickCallback, whichIcon, ...rest } = props
 
     const buttonClickHandler = (/*event: React.MouseEvent<HTMLButtonElement>*/) => {
-        props.clickCallback()
+        clickCallback()
     }
 
     return (
@@ -24,10 +26,11 @@ const ButtonWithIcon = forwardRef<ButtonWithIconRefType, IProps>((props, playBut
                 onClick={buttonClickHandler}
                 className={`${styles.buttonPositioning} ${styles.buttonCursor} ${styles.buttonReset}`}
                 ref={playButtonRef}
+                {...rest}
             >
                 <div className={styles.buttonBorder}>
                     <div className={styles.buttonCore}>
-                        <FontAwesomeIcon icon={props.whichIcon} size="xl" color='white' />
+                        <FontAwesomeIcon icon={whichIcon} size="xl" color='white' />
                     </div>
                 </div>
             </button>
