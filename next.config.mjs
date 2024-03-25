@@ -328,7 +328,7 @@ const nextConfig = (phase) => {
                         },
                         {
                             key: 'Report-To',
-                            value: `{"group":"csp-endpoint","max_age":10886400,"endpoints":[{"url":"${sentryReportUri}"}],"include_subdomains":true}`,
+                            value: `{"group":"endpoint-sentry","max_age":10886400,"endpoints":[{"url":"${sentryReportUri}"}],"include_subdomains":true}`,
                         },
                         /*{
                             key: 'Reporting-Endpoints',
