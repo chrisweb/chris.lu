@@ -19,12 +19,10 @@ import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
  * someone clicks play
  */
 
-// if the canvas component uses window then srr needs to be
-// false because on server side build window is undefined
-// currently window is not used, so I re-enabled ssr by
-// commenting ssr: false
+// if the canvas component uses window then ssr needs to be
+// false (for example if using window it is undefined)
 const NeonRoadCanvas = dynamic(() => import('./Canvas'), {
-    //ssr: false,
+    ssr: false,
     loading: () => <LoadingScreen />,
 })
 
@@ -36,12 +34,13 @@ const Container: React.FC = () => {
     const playerRef = useRef<PlayerCore>(null)
     const powerOffButtonRef = useRef<HTMLButtonElement>(null)
 
-    const clickPlayCallback = useCallback(async (playMusic: boolean) => {
+    const playCallback = useCallback(async (playMusic: boolean) => {
         setAnimationState(true)
         if (playMusic) {
             await playerRef.current?.play()
         }
-        powerOffButtonRef.current?.focus()
+        // preventScroll is false by default (so NOT prevented)
+        powerOffButtonRef.current?.focus({ preventScroll: true })
     }, [])
 
     const powerOffCallback = useCallback(async () => {
@@ -59,7 +58,7 @@ const Container: React.FC = () => {
                 {!animationState &&
                     <>
                         <StaticImage altText={altText} />
-                        <StartScreen clickPlayCallback={clickPlayCallback} />
+                        <StartScreen playCallback={playCallback} />
                     </>
                 }
                 {animationState &&
