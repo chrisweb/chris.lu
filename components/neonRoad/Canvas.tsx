@@ -24,7 +24,9 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
 
     // uncomment if you want to see what useDetectGPU returns
     //const gpuInfo = useDetectGPU()
+    //if (process.env.NODE_ENV === 'development') {
     //console.log('useDetectGPU: ', gpuInfo)
+    //}
 
     //const canvasRef = useRef<HTMLCanvasElement>(null)
     const cameraRef = useRef<PerspectiveCameraType>(null)
@@ -37,21 +39,25 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
     }*/
 
     /*const onCanvasCreatedHandler = (state: RootState) => {
-        
+        //if (process.env.NODE_ENV === 'development') {
         //console.log(state)
-        
+        //}
     }*/
 
     /*const onPerformanceChangeHandler = (api: PerformanceMonitorApi) => {
-        console.log(api.averages)
-        console.log(api.fps)
-        console.log(api.refreshrate)
-        console.log(api.frames)
+        if (process.env.NODE_ENV === 'development') {
+            console.log(api.averages)
+            console.log(api.fps)
+            console.log(api.refreshrate)
+            console.log(api.frames)
+        }
     }*/
 
     /*function Loader() {
         //const { active, progress, errors, item, loaded, total } = useProgress()
+        //if (process.env.NODE_ENV === 'development') {
         //console.log(active, progress, errors, item, loaded, total)
+        //}
         if (progress === 100) {
             //setCanPlayState(true)
         }
