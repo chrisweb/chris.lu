@@ -152,18 +152,23 @@
 }
 
 .blink {
-    animation: blink-animation 2s steps(5, start) infinite;
-    -webkit-animation: blink-animation 2s steps(5, start) infinite;
+    animation: blink-animation 2.5s linear infinite;
 }
 
 @keyframes blink-animation {
-    to {
-        visibility: hidden;
+    0% {
+        opacity: 0;
     }
-}
 
-@-webkit-keyframes blink-animation {
-    to {
-        visibility: hidden;
+    20% {
+        opacity: 1;
+    }
+
+    80% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
     }
 }
