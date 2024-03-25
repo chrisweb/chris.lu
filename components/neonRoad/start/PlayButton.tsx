@@ -16,8 +16,13 @@ const PlayButton: React.FC<IProps> = (props) => {
     }
 
     const pressStartKeyPressHandler = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-        // on press enter key
-        if (event.code === '13') {
+        if (event.key === 'Enter') {
+            
+            // prevent default, to avoid a click event to be
+            // triggered on the powerOff button, which will
+            // recieve focus when the animation starts
+            event.preventDefault()
+
             if (typeof playButtonCallback === 'function') {
                 playButtonCallback()
             }

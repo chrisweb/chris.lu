@@ -26,6 +26,7 @@ const ButtonWithIcon = forwardRef<ButtonWithIconRefType, IProps>((props, playBut
                 onClick={buttonClickHandler}
                 className={`${styles.buttonPositioning} ${styles.buttonCursor} ${styles.buttonReset}`}
                 ref={playButtonRef}
+                type='button'
                 {...rest}
             >
                 <div className={styles.buttonBorder}>
