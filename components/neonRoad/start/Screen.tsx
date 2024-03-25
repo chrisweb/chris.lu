@@ -5,12 +5,12 @@ import styles from './screen.module.css'
 import PlayButton from './PlayButton'
 
 interface IProps {
-    clickPlayCallback: (playMusic: boolean) => void
+    playCallback: (playMusic: boolean) => void
 }
 
 const StartScreen: React.FC<IProps> = (props) => {
 
-    const { clickPlayCallback } = props
+    const { playCallback } = props
 
     const [withSoundState, setWidthSoundState] = useState(true)
 
@@ -19,8 +19,7 @@ const StartScreen: React.FC<IProps> = (props) => {
     }
 
     const withMusicKeyPressHandler = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-        // on press enter key
-        if (event.code === '13') {
+        if (event.key === 'Enter') {
             setWidthSoundState(true)
         }
     }
@@ -30,15 +29,14 @@ const StartScreen: React.FC<IProps> = (props) => {
     }
 
     const withoutMusicKeyPressHandler = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-        // on press enter key
-        if (event.code === '13') {
+        if (event.key === 'Enter') {
             setWidthSoundState(false)
         }
     }
 
     const playButtonCallback = (/*event: React.MouseEvent<HTMLButtonElement>*/) => {
-        if (typeof clickPlayCallback === 'function') {
-            clickPlayCallback(withSoundState)
+        if (typeof playCallback === 'function') {
+            playCallback(withSoundState)
         }
     }
 
