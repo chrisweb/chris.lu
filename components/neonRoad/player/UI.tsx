@@ -57,7 +57,9 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
             const soundAttributes: ISoundAttributes = {
                 source: song.source,
                 onLoading: (loadingProgress, maximumValue, currentValue) => {
-                    console.log('loading: ', loadingProgress, maximumValue, currentValue)
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('loading: ', loadingProgress, maximumValue, currentValue)
+                    }
                 },
                 onPlaying: (playingProgress/*, maximumValue, currentValue*/) => {
                     if (waveformRef.current !== null) {
@@ -65,13 +67,17 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
                     }
                 },
                 onSeeking: (seekingPercentage, duration, playTime) => {
-                    console.log('onSeeking', seekingPercentage, duration, playTime)
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('onSeeking', seekingPercentage, duration, playTime)
+                    }
                     if (waveformRef.current !== null) {
                         waveformRef.current.draw(seekingPercentage)
                     }
                 },
                 onStarted: (playTimeOffset) => {
-                    console.log('started', playTimeOffset)
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('started', playTimeOffset)
+                    }
                     setIsPlayingState(true)
                     setCreditsState({
                         name: song.name,
@@ -82,19 +88,27 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
                     })
                 },
                 onPaused: (playTime) => {
-                    console.log('paused', playTime)
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('paused', playTime)
+                    }
                     setIsPlayingState(false)
                 },
                 onStopped: (playTime) => {
-                    console.log('stopped', playTime)
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('stopped', playTime)
+                    }
                     setIsPlayingState(false)
                 },
                 onResumed: (playTime) => {
-                    console.log('resumed', playTime)
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('resumed', playTime)
+                    }
                     setIsPlayingState(true)
                 },
                 onEnded: (willPlayNext) => {
-                    console.log('ended', willPlayNext)
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('ended', willPlayNext)
+                    }
                 }
             }
 
