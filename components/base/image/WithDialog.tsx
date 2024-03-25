@@ -47,7 +47,7 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
             <UIModal isOpen={imageDialogIsOpenState} onCloseCallback={closeDialogCallback} hasCloseButton={false} width={modalWidth} height={modalHeight}>
                 <Image
                     style={{
-                        objectFit: 'cover',
+                        objectFit: 'contain',
                         width: '100%',
                         height: 'auto',
                         maxHeight: '100%',
