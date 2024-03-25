@@ -253,7 +253,7 @@ const nextConfig = (phase) => {
                 font-src 'none';
                 style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
                 script-src 'self' 'unsafe-inline' https://vercel.live/;
-                connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/;
+                connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/ https://*.ingest.sentry.io;
                 img-src 'self' data: https://vercel.com/ https://vercel.live/;
                 frame-src 'self' https://vercel.live/;
                 ${reportCSPViolations}
@@ -268,7 +268,7 @@ const nextConfig = (phase) => {
                 font-src 'self';
                 style-src 'self' 'unsafe-inline';
                 script-src 'self';
-                connect-src 'self' https://vitals.vercel-insights.com;
+                connect-src 'self' https://vitals.vercel-insights.com https://*.ingest.sentry.io;
                 img-src 'self';
                 frame-src 'none';
                 ${reportCSPViolations}
@@ -281,7 +281,7 @@ const nextConfig = (phase) => {
             font-src 'self';
             style-src 'self' 'unsafe-inline';
             script-src 'self' 'unsafe-eval' 'unsafe-inline';
-            connect-src 'self' https://o4504017992482816.ingest.sentry.io;
+            connect-src 'self' https://*.ingest.sentry.io;
             img-src 'self' data:;
             frame-src 'none';
             ${reportCSPViolations}
