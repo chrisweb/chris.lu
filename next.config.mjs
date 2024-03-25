@@ -209,11 +209,11 @@ const nextConfig = (phase) => {
     // https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
     const cspReportOnly = true;
 
+    const sentryReportUri = 'https://o4504017992482816.ingest.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
+
     const cspHeader = () => {
 
         const upgradeInsecure = cspReportOnly ? '' : 'upgrade-insecure-requests;'
-
-        const sentryReportUri = 'https://o4504017992482816.ingest.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
 
         // report directive to be added at the end
         /*const reportCSPViolations = `
@@ -221,7 +221,7 @@ const nextConfig = (phase) => {
             report-to {"group":"default","max_age":10886400,"endpoints":[{"url":"${sentryReportUri}"}],"include_subdomains":true}
         `*/
         const reportCSPViolations = `
-            report-to {"group":"default","max_age":10886400,"endpoints":[{"url":"${sentryReportUri}"}],"include_subdomains":true}
+            report-to endpoint-sentry
         `
         /*const reportCSPViolations = `
             report-uri ${sentryReportUri};
@@ -271,13 +271,14 @@ const nextConfig = (phase) => {
                 connect-src 'self' https://vitals.vercel-insights.com;
                 img-src 'self';
                 frame-src 'none';
+                ${reportCSPViolations}
             `
         }
 
         // for dev environment enable unsafe-eval for hot-reload
         return `
             ${defaultCSPDirectives}
-            font-src 'none';
+            font-src 'self';
             style-src 'self' 'unsafe-inline';
             script-src 'self' 'unsafe-eval' 'unsafe-inline';
             connect-src 'self' https://o4504017992482816.ingest.sentry.io;
@@ -287,10 +288,6 @@ const nextConfig = (phase) => {
         `
 
     }
-
-    //const sentryReportUri = 'https://o4504017992482816.ingest.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
-
-    //const reportingEndpoint = `default="${sentryReportUri}"`
 
     /** @type {import('next').NextConfig} */
     const nextConfig = {
@@ -328,6 +325,10 @@ const nextConfig = (phase) => {
                         {
                             key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
                             value: cspHeader().replace(/\n/g, ''),
+                        },
+                        {
+                            key: 'Report-To',
+                            value: `{"group":"csp-endpoint","max_age":10886400,"endpoints":[{"url":"${sentryReportUri}"}],"include_subdomains":true}`,
                         },
                         /*{
                             key: 'Reporting-Endpoints',
