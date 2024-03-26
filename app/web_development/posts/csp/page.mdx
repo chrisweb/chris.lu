@@ -135,6 +135,11 @@ Chrome does not support this syntax anymore, and print a series of errors in you
 
 Did you notice the **max_age** key in the Report-to json, this tells the browser for how long you want to cache the endpoint information, meaning that if the next page (as long as the origin is the same) wants to make a report you don't need to specify the endpoint again and can just use it in the directive, this feature however got dropped in the v1 specs of the reporting API
 
+> [!MORE]  
+> [MDN "CSP: report-to" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-to)  
+> [caniuse "report-to directive" page](https://caniuse.com/mdn-http_headers_content-security-policy_report-to)
+> [caniuse "Report-To header" page](https://caniuse.com/mdn-http_headers_report-to)  
+
 #### Reporting API v1
 
 After a while the w3c team decided to rename the header and so in the [w3c "Reporting API v1" working draft](https://www.w3.org/TR/reporting-1/) they renamed the Report-to header to **Reporting-Endpoints**
@@ -160,6 +165,7 @@ Reporting-Endpoints: default="https://csp-logging.example.com", second-endpoint=
 
 > [!MORE]  
 > [chrome developer "Monitor your web application with the Reporting API" article](https://developer.chrome.com/docs/capabilities/web-apis/reporting-api)  
+> [chrome developer "Migrate to Reporting API v1" article](https://developer.chrome.com/blog/reporting-api-migration)
 > [MDN "Reporting API" documentation](https://developer.mozilla.org/en-US/docs/Web/API/Reporting_API)  
 > [caniuse "Reporting API" page](https://caniuse.com/?search=Reporting%20API)  
 > [w3c "Reporting API v1" working draft](https://www.w3.org/TR/reporting-1/)  
