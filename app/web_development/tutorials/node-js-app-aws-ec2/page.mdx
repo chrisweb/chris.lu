@@ -41,6 +41,28 @@ click on the button **Create hosted zone**
 
 TODO: steps to create a hosted zone
 
+## Change the nameservers of your domain
+
+Next you need to change the nameservers of your domain so that the domain uses the AWS Route 53 DNS setup we just did
+
+Every domain name reseller has a slightly different interface, but usually the procedure is something like this:
+
+* login on the website of your domain name reseller
+* go to your domains page
+* click on the domain name you want to edit
+* click on manage nameservers
+* if there are already nameserver listed, deleted those first
+* then login into AWS and go to Route 53
+* copy the 4 nameservers from AWS
+* add the 4 nameserver to your domain (on the domain resellers website)
+* click save
+
+> [!MORE]  
+> ["change domain nameservers" on name.com](https://www.name.com/support/articles/205934547-changing-nameservers-for-dns-management)  
+> ["change domain nameservers" on gandi.net](https://docs.gandi.net/en/domain_names/common_operations/changing_nameservers.html)  
+> ["change domain nameservers" on domains.google.com](https://support.google.com/domains/answer/3290309)  
+> ["change domain nameservers" on namecheap.com](https://www.namecheap.com/support/knowledgebase/article.aspx/767/10/how-to-change-dns-for-a-domain/)  
+
 ## putty
 
 ### install putty
@@ -275,6 +297,46 @@ server {
 
 > [!NOTE]  
 > we use the default localhost IP (127.0.0.1) and port 3000 in the configuration above, if your app is listening on another port then you need to modify that value, also as IP we use the localhost but if your nodejs is on a remote server then you need to change the IP address too
+
+Now we can add a symbolic link in sites-enabled pointing to the configuration in sites-available to **enable** that configuration (as nginx will look up all configuration files in sites-enabled), to create the symlink use this command:
+
+```shell
+sudo ln -s /etc/nginx/sites-available/chrisweb.dev.conf /etc/nginx/sites-enabled/chrisweb.dev.conf
+```
+
+> [!TIP]  
+> To later quickly disable a domain (configuration) just remove the symbolic link and reload the nginx configuration, to re-enable it just re-create the symbolic link (and leave the actual configuration in sites-available untouched)
+
+To test the configuration file, you can use the following command:
+
+```shell
+sudo nginx -t
+```
+
+To reload the configuration use the following command:
+
+```shell
+sudo nginx -s reload
+```
+
+> [!TIP]  
+> After a configuration change it is preferred to use reload instead of restart, reload will spawn a worker processes using your new configuration and then stop the old worker processes, which means that nginx will always be up and processing requests without interruption
+
+Reload only works if NGINX is already running, if NGINX was stopped and you reload it will throw an error that it can't find the pid, in that case use the following command to start NGINX:
+
+```shell
+sudo nginx
+```
+
+## Let's Encrypt SSL certificate installation using Certbot
+
+We are going to add a [Let’s Encrypt](https://letsencrypt.org/) SSL certificate for our domain, to do so we will use the [Certbot](https://certbot.eff.org/) by the [Electronic Frontier Foundation](https://www.eff.org/)
+
+To install certbot use the following command:
+
+```shell
+sudo nginx
+```
 
 
 
