@@ -4,6 +4,13 @@
     padding: 0;
 }
 
+/* max-width: 70rem / 1120px (mobile breakpoint) */
+@media all and (max-width: 70rem) {
+    .reset:focus {
+        outline: none;
+    }
+}
+
 .bottomRight {
     position: absolute;
     bottom: var(--main-spacing);
@@ -13,16 +20,10 @@
 
 /* max-width: 70rem / 1120px (mobile breakpoint) */
 @media all and (max-width: 70rem) {
-
-    .reset {
-        outline: none;
-    }
-    
     .bottomRight {
         bottom: calc(var(--main-spacing) / 2);
         right: calc(var(--main-spacing) / 2);
     }
-
 }
 
 .cursor {
