@@ -24,13 +24,13 @@ const ButtonWithIcon = forwardRef<ButtonWithIconRefType, IProps>((props, playBut
         <>
             <button
                 onClick={buttonClickHandler}
-                className={`${styles.buttonPositioning} ${styles.buttonCursor} ${styles.buttonReset}`}
+                className={`${styles.bottomRight} ${styles.cursor} ${styles.reset}`}
                 ref={playButtonRef}
                 type='button'
                 {...rest}
             >
-                <div className={styles.buttonBorder}>
-                    <div className={styles.buttonCore}>
+                <div className={styles.border}>
+                    <div className={styles.core}>
                         <FontAwesomeIcon icon={whichIcon} size="xl" color='white' />
                     </div>
                 </div>

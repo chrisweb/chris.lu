@@ -1,31 +1,35 @@
-.buttonReset {
+.reset {
     background: none;
     border: none;
     padding: 0;
 }
 
-.buttonPositioning {
+.bottomRight {
     position: absolute;
     bottom: var(--main-spacing);
     right: var(--main-spacing);
     z-index: 20;
 }
 
-.buttonCursor {
-    cursor: var(--cursor-pointer);
-}
-
 /* max-width: 70rem / 1120px (mobile breakpoint) */
 @media all and (max-width: 70rem) {
 
-    .buttonPositioning {
+    .reset {
+        outline: none;
+    }
+    
+    .bottomRight {
         bottom: calc(var(--main-spacing) / 2);
         right: calc(var(--main-spacing) / 2);
     }
 
 }
 
-.buttonBorder {
+.cursor {
+    cursor: var(--cursor-pointer);
+}
+
+.border {
     width: 48px;
     height: 48px;
     margin: 0;
@@ -50,14 +54,14 @@
 /* max-width: 70rem / 1120px (mobile breakpoint) */
 @media all and (max-width: 70rem) {
 
-    .buttonBorder {
+    .border {
         width: 44px;
         height: 44px;
     }
 
 }
 
-.buttonCore {
+.core {
     width: 100%;
     height: 100%;
     position: relative;
@@ -76,6 +80,6 @@
             0 100%);
 }
 
-.buttonCore>svg {
+.core>svg {
     color: var(--tertiary-light-color);
 }
