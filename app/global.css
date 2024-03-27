@@ -364,6 +364,11 @@ a {
     }
 }
 
+/* outline style */
+*:focus {
+    outline: 2px dashed var(--primary-light-color);
+}
+
 video {
     width: 100%;
     height: auto;
