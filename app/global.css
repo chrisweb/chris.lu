@@ -300,7 +300,8 @@ h6 {
 .h4>.emoji,
 .h5>.emoji,
 .h6>.emoji {
-    -webkit-text-fill-color: white;
+    -webkit-text-fill-color: var(--main-background-color);
+    background-color: var(--main-background-color);
 }
 
 a {
