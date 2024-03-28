@@ -93,11 +93,15 @@ now on the left click on **Session** and then **Save** to save the changes we ju
 
 just to be sure, use dnf (or yum) to update the currently installed packages to the latest version using this command:
 
+```shell
 sudo dnf update
+```
 
 or if you prefer using yum (the predecessor of dnf):
 
+```shell
 sudo yum update
+```
 
 next we will use the [Node Version Manager](https://github.com/nvm-sh/nvm) (NVM) to install the latest Node.js LTS
 
@@ -105,23 +109,33 @@ go to [NVM releases page on github](https://github.com/nvm-sh/nvm/releases) and 
 
 use the following command to start the NVM installation, but replace **** with the version you found on github 
 
+```shell
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/LATEST_NVM_VERSION/install.sh | bash
+```
 
 after replacing the version the command will be something like this:
 
+```shell
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+```
 
 then load nvm using this command:
 
+```shell
 source ~/.bashrc
+```
 
 to verify what NVM version got installed you can use this command:
 
+```shell
 nvm --version
+```
 
 and now install nvm using this command:
 
+```shell
 nvm install --lts
+```
 
 > [!NOTE]  
 > you can install multiple Node.js versions at a time (in parallel) but only use one at a time
@@ -146,7 +160,9 @@ nvm list
 
 to verify what Node.js version got installed you can use this command:
 
+```shell
 node -v
+```
 
 > [!MORE]  
 > [AWS "Setting Up Node.js on an Amazon EC2 Instance" documentation](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html)
@@ -155,7 +171,9 @@ node -v
 
 Next we will install NGINX to use it as reverse proxy (NGINX will listen on port 80/443)
 
+```shell
 sudo dnf install nginx
+```
 
 this will give you a list of what will be installed, then type `y{:shell}` and press `Enter{:shell}` to start the installation
 
@@ -166,18 +184,25 @@ next we will **enable** NGINX
 
 to enable NGINX use the following command:
 
+
+```shell
 sudo systemctl enable --now nginx
+```
 
 > [!NOTE]  
 > we used the systemctl **--now** switch to also start NGINX, depending on the systemctl version now might not be supported (now got added in systemctl version 220, to check what version you have you can use this command `sudo systemctl --version{:shell}`), am AWS Linux 2023 it is, which is why we can use it here, if now is not supported you can use the `sudo systemctl start nginx{:shell}` command to start it manually
 
 if you want to verify that NGINX is now enabled you can use this command:
 
+```shell
 sudo systemctl is-enabled nginx
+```
 
 and to check the nginx status (is it running?) you can use this command:
 
+```shell
 sudo systemctl status nginx
+```
 
 you should see a green message that says **active (running)**
 
@@ -187,11 +212,15 @@ next we will create a server configuration to instruct NGINX to act as reverse p
 
 Before we edit the nginx configuration file, let’s do a backup that we can restore if needed:
 
+```shell
 sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.old
+```
 
 to edit the main NGINX configuration file use this command:
 
+```shell
 sudo vi /etc/nginx/nginx.conf
+```
 
 first locate the **http** block, and then find the **keepalive_timeout** line, go to the end of that line
 
@@ -201,7 +230,9 @@ then press the right arrow `→{:shell}` key and then `Enter{:shell}` to go to t
 
 then add **client_max_body_size** (http://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size) and set it to the value you require, this will increase the allowed size for uploads, if you don’t set it the default will be 1MB (which might be enough for your requirements, in which case you can skip this step), for my use case I set it to 50MB, like so:
 
+```shell
 client_max_body_size 50m;
+```
 
 to **exit insert mode** press the `ESC{:shell}` key
 
@@ -209,7 +240,9 @@ Under that line we add another option to disable the header that exposes the ngi
 
 use the same steps as before to add a new line and go into insert mode, and then insert this line:
 
+```shell
 server_tokens off;
+```
 
 your configuration should not look like this:
 
@@ -224,11 +257,15 @@ your configuration should not look like this:
 
 Next we add a line to tell nginx to include our own host files we are about to create, over the first server directive you should see the following line:
 
+```shell
 include /etc/nginx/conf.d/*.conf;
+```
 
 Under that line add the following line:
 
+```shell
 include /etc/nginx/sites-enabled/*.conf;
+```
 
 your configuration should not look like this:
 
@@ -268,8 +305,10 @@ Then save and exit by typing `:x!{:shell}` and then press `Enter{:shell}`
 
 Now we are going to create two new directories inside of /etc/nginx, one directory is called “sites-available” and it will contain the configuration file for our host(s), the second one is called “sites-enabled” and it will contain symbolic links to the configuration files we want to enable:
 
+```shell
 sudo mkdir /etc/nginx/sites-available
 sudo mkdir /etc/nginx/sites-enabled
+```
 
 > [!NOTE]  
 > in the main nginx configuration file we instructed nginx to look into the folder /etc/nginx/sites-enabled to find host configuration files, in that folder we will however not put the actual configuration files but symbolic links (symlinks) to the actual configuration files that we will create inside of sudo mkdir /etc/nginx/sites-available. This means that all host configuration files that are available no matter if they are currently being used or not will be in sites-available. Now if we want to use a configuration file we will add a symbolic link to it inside of sites-enabled, meaning it will then be enabled and nginx will follow the symbolic link to the actual configuration file. This allows us to quickly disable a host by deleting the symbolic link and reloading the nginx configuration, without actually deleting or altering the actual configuration file. Then later if we want to re-enable that host all we need to do is create a new symbolic link and reload the nginx configuration file.
@@ -347,6 +386,8 @@ sudo systemctl status nginx
 
 We are going to add a [Let’s Encrypt](https://letsencrypt.org/) SSL certificate for our domain, to do so we will use the [Certbot](https://certbot.eff.org/) by the [Electronic Frontier Foundation](https://www.eff.org/)
 
+To install the certificate we will use [pip](https://pip.pypa.io/en/stable/) (the python package manager), if you prefer you can also use [Snap](https://snapcraft.io/) (which is currently the [recommeded way of insalling certbot](https://eff-certbot.readthedocs.io/en/latest/install.html)) by checking out the [Snapd Fedora install instructions](https://snapcraft.io/docs/installing-snap-on-fedora) (I added a link to the fedora instrcutions as there are no specific Amazon Linux 2023 but [AL2023 is based on Fedora](https://aws.amazon.com/linux/amazon-linux-2023/faqs/)) and then the check out the [Install Certbot using Snap instructions](https://certbot.eff.org/instructions?ws=nginx&os=snap)
+
 The certificate we will install will be for the domain only, if you want a wildcard certificate follow the [instructions provided on the certbot website](https://certbot.eff.org/instructions?ws=nginx&os=pip&tab=wildcard)
 
 First we need to install [Python](https://www.python.org/) version 3 (if python is already installed it will get skipped) and a package called [augeas-libs](https://augeas.net/) (used to parse configuration files), to do so use the following command:
@@ -398,22 +439,116 @@ After your certificate has been installed you can open the domain configuration 
 sudo vi /etc/nginx/sites-available/chrisweb.dev.conf
 ```
 
-To exit the file without saving enter `:q!{:shell}` and then press `Enter{:shell}` to exit the file 
+To exit the file without saving enter `:q!{:shell}` and then press `Enter{:shell}` to exit the file
 
-One last important thing, as certificates are shortlived we want to have a cron that will take care of automatically update our certificate(s) periodically (when certbot detects that it is close to expering)
+> [!MORE]
+> [certbot "domain (default) certificate, certbot setup" documentation](https://certbot.eff.org/instructions?ws=nginx&os=pip)
+> [certbot "wildcard certificate, certbot setup" documentation](https://certbot.eff.org/instructions?ws=nginx&os=pip&tab=wildcard)
+> [python.org "Installing Packages" documentation](https://packaging.python.org/en/latest/tutorials/installing-packages/)
+
+### Periodically check for expired certificate(s) and automatically renew them
+
+One last important thing, as certificates are shortlived we want to set up a recurring task that will to automatically renew our certificate(s) (when certbot detects that it is close to expering)
+
+Let's start by testing if renewing a certificate works by launching a dry run (dry runs don't actually renew certificates they just simulate a renew):
+
+```shell
+sudo certbot renew --dry-run
+```
+
+If successful you will see a message that says:
+
+> Congratulations, all simulated renewals succeeded
+
+#### systemd timer OR cronjob
+
+> [!NOTE]  
+> Amazon Linux 2023 does pre-install cronie (as they explained in a [ticket on github](https://github.com/amazonlinux/amazon-linux-2023/issues/300#issuecomment-1481592973)), instead they use [systemd timers](https://wiki.archlinux.org/title/systemd/Timers)
+
+I documentated both ways of doing it, either using a **systemd timer** or a **cronjob** (cronie), chose which you like best:
+
+##### Using systemd timer
+
+Now that we know that renewals work, lets create a service file for our systemd timer:
+
+```shell
+sudo vi /lib/systemd/system/certbot.service
+```
+
+And then paste the following content into the file:
+
+```yaml title="/lib/systemd/system/certbot.service"
+[Unit]
+Description=Certbot renew
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/certbot renew -q
+```
+
+Then we create a second file which is the actual timer:
+
+```shell
+sudo vi /lib/systemd/system/certbot.timer
+```
+
+And add the following content into it:
+
+```yaml title="/lib/systemd/system/certbot.timer"
+[Unit]
+Description=Run certbot twice a day
+
+[Timer]
+OnCalendar=*-*-* 00,12:00:00
+RandomizedDelaySec=43200
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+```
+
+Finally, we use the following command to enable and start the certbot systemd timer:
+
+```shell
+sudo systemctl enable --now certbot.timer
+```
+
+To check if the timer is actually running use:
+
+```shell
+systemctl status certbot.timer
+```
+
+##### Using cronjobs (cronie)
+
+If instead of **systemd timers** you prefer to use a cron then do the following:
+
+To install cronie now, we use the follwing command:
+
+```shell
+sudo dnf install cronie
+```
+
+This will install cronie and cronie anacron
+
+Then we enable and start it using:
+
+```shell
+sudo systemctl enable --now crond.service
+```
+
+And finally we add a line to the `/etc/crontab` file to tell certbot to check every 12 hours for certificates that are about to expire and if it finds one renew it automatically: 
 
 ```shell
 echo "0 0,12 * * * root /opt/certbot/bin/python -c 'import random; import time; time.sleep(random.random() * 3600)' && sudo certbot renew -q" | sudo tee -a /etc/crontab > /dev/null
 ```
+
+### updating certbot
 
 In the future if you need to upgrade certbot to the latest version use this command:
 
 ```shell
 sudo /opt/certbot/bin/pip install --upgrade certbot certbot-nginx
 ```
-
-> [certbot "domain (default) certificate, certbot setup" documentation](https://certbot.eff.org/instructions?ws=nginx&os=pip)
-> [certbot "wildcard certificate, certbot setup" documentation](https://certbot.eff.org/instructions?ws=nginx&os=pip&tab=wildcard)
-> [python.org "Installing Packages" documentation](https://packaging.python.org/en/latest/tutorials/installing-packages/)
 
 </article>
