@@ -25,11 +25,13 @@ Visit [https://aws.amazon.com/](https://aws.amazon.com/) and login into your acc
 
 Now in the top left search field type **ec2** and then click on **EC2** (Virtual Servers in the Cloud)
 
-in the top right next to your username make sure you have the region selected in which you want to create a ec2 instance, either chose the one that is the closest to you (the closer the server is to your location the faster the connection will be) or chose a region that is cheap (not every region has the same costs, so you may want to check out the [ec2 (on demand) pricing](https://aws.amazon.com/ec2/pricing/on-demand/) first and decide based on that)
+> [!TIP]  
+> In the top right next to your username make sure you have the region selected in which you want to create a ec2 instance, either chose the one that is the closest to you (the closer the server is to your location the faster the connection will be) or chose a region that is cheap (not every region has the same costs, so you may want to check out the [ec2 (on demand) pricing](https://aws.amazon.com/ec2/pricing/on-demand/) first and decide based on that)
 
 then click on the orange button **Launch instance**
 
 TODO: steps to create ec2 micro with amazon linux 2023
+TODO: make sure the security group has the port 80 open, when making a test I had a security group,with only the ssh port 22 and ssl port 443 open, which made it impossible to set up the ssl certificate
 
 ## DNS setup using route 53
 
@@ -383,7 +385,12 @@ Now we can finally request a certificate for the domain we added to the NGINX co
 sudo certbot --nginx
 ```
 
-You will get asked some questions by the certbot cli tool, like your email address (which will get used if your certificate is about to expire and has not been automatically renewed), then you need to accept the terms and conditions, you also get asked if you want to share your email with the [Electronic Frontier Foundation](https://www.eff.org/) so that they can periodically send you mails about their work and finally it asks you to select the domains for which you want to install a certificate
+You will get asked some questions by the certbot cli tool
+
+* do you wan't to provide your your email address (which will get used if your certificate is about to expire and has not been automatically renewed)
+* Do you accept the terms and conditions
+* Do you want to share your email with the [Electronic Frontier Foundation](https://www.eff.org/) so that they can periodically send you mails about their work 
+* select the domains for which you want to install a certificate
 
 After your certificate has been installed you can open the domain configuration file again and will see that certbot automatically added the HTTPS configuration:
 
