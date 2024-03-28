@@ -282,7 +282,8 @@ and then add add the following content (you can copy the following lines and the
 
 ```shell title="/etc/nginx/sites-available/chrisweb.dev.conf"
 server {
-    listen 80;
+    listen       80;
+    listen       [::]:80;
     server_name YOUR_DOMAIN_NAME; 
 
     location / {
@@ -325,19 +326,73 @@ sudo nginx -s reload
 Reload only works if NGINX is already running, if NGINX was stopped and you reload it will throw an error that it can't find the pid, in that case use the following command to start NGINX:
 
 ```shell
-sudo nginx
+sudo systemctl start nginx
+```
+
+To check if NGINX is running use this command:
+
+```shell
+sudo systemctl status nginx
 ```
 
 ## Let's Encrypt SSL certificate installation using Certbot
 
 We are going to add a [Let’s Encrypt](https://letsencrypt.org/) SSL certificate for our domain, to do so we will use the [Certbot](https://certbot.eff.org/) by the [Electronic Frontier Foundation](https://www.eff.org/)
 
-To install certbot use the following command:
+The certificate we will install will be for the domain only, if you want a wildcard certificate follow the [instructions provided on the certbot website](https://certbot.eff.org/instructions?ws=nginx&os=pip&tab=wildcard)
+
+First we need to install [Python](https://www.python.org/) version 3 (if python is already installed it will get skipped) and a package called [augeas-libs](https://augeas.net/) (used to parse configuration files), to do so use the following command:
 
 ```shell
-sudo nginx
+sudo dnf install python3 augeas-libs
 ```
 
+Now we can use the following command to set up a virtual environment:
 
+```shell
+sudo python3 -m venv /opt/certbot/
+```
+
+Then we install pip (a tool used to install python packages), using this command:
+
+```shell
+sudo /opt/certbot/bin/pip install --upgrade pip
+```
+
+Now using pip we install certbot and the NGINX certbot plugin, using this command:
+
+```shell
+sudo /opt/certbot/bin/pip install certbot certbot-nginx
+```
+
+Next we use a symlink so that the user only needs to type "certbot" instead of the full path to use it, using this command:
+
+```shell
+sudo ln -s /opt/certbot/bin/certbot /usr/bin/certbot
+```
+
+Now we can finally request a certificate for the domain we added to the NGINX configuration and let certbot edit the configuration to server traffic over HTTPS:
+
+```shell
+sudo certbot --nginx
+```
+
+You will get asked some questions by the certbot cli tool, like your email address (which will get used if your certificate is about to expire and has not been automatically renewed), then you need to accept the terms and conditions, you also get asked if you want to share your email with the [Electronic Frontier Foundation](https://www.eff.org/) so that they can periodically send you mails about their work and finally it asks you to select the domains for which you want to install a certificate
+
+One last important thing, as certificates are shortlived we want to have a cron that will take care of automatically update our certificate(s) periodically (when certbot detects that it is close to expering)
+
+```shell
+echo "0 0,12 * * * root /opt/certbot/bin/python -c 'import random; import time; time.sleep(random.random() * 3600)' && sudo certbot renew -q" | sudo tee -a /etc/crontab > /dev/null
+```
+
+In the future if you need to upgrade certbot to the latest version use this command:
+
+```shell
+sudo /opt/certbot/bin/pip install --upgrade certbot certbot-nginx
+```
+
+> [certbot "domain (default) certificate, certbot setup" documentation](https://certbot.eff.org/instructions?ws=nginx&os=pip)
+> [certbot "wildcard certificate, certbot setup" documentation](https://certbot.eff.org/instructions?ws=nginx&os=pip&tab=wildcard)
+> [python.org "Installing Packages" documentation](https://packaging.python.org/en/latest/tutorials/installing-packages/)
 
 </article>
