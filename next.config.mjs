@@ -209,7 +209,8 @@ const nextConfig = (phase) => {
     // https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
     const cspReportOnly = true;
 
-    const sentryReportUri = 'https://o4504017992482816.ingest.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
+    //const reportUrl = 'https://o4504017992482816.ingest.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
+    const reportUrl = 'https://chrisweb.dev'
 
     const cspHeader = () => {
 
@@ -221,7 +222,7 @@ const nextConfig = (phase) => {
             report-to {"group":"default","max_age":10886400,"endpoints":[{"url":"${sentryReportUri}"}],"include_subdomains":true}
         `*/
         const reportCSPViolations = `
-            report-uri ${sentryReportUri};
+            report-uri ${reportUrl};
             report-to endpoint-sentry
         `
         /*const reportCSPViolations = `
@@ -279,7 +280,7 @@ const nextConfig = (phase) => {
         // for dev environment enable unsafe-eval for hot-reload
         return `
             ${defaultCSPDirectives}
-            font-src 'self';
+            font-src 'none';
             style-src 'self' 'unsafe-inline';
             script-src 'self' 'unsafe-eval' 'unsafe-inline';
             connect-src 'self' https://*.ingest.sentry.io;
@@ -329,7 +330,7 @@ const nextConfig = (phase) => {
                         },
                         {
                             key: 'Report-To',
-                            value: `{"group":"endpoint-sentry","max_age":10886400,"endpoints":[{"url":"${sentryReportUri}"}],"include_subdomains":true}`,
+                            value: `{"group":"endpoint-sentry","max_age":10886400,"endpoints":[{"url":"${reportUrl}"}],"include_subdomains":true}`,
                         },
                         /*{
                             key: 'Reporting-Endpoints',
