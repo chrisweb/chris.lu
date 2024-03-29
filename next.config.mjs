@@ -328,14 +328,14 @@ const nextConfig = (phase) => {
                             key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
                             value: cspHeader().replace(/\n/g, ''),
                         },
-                        {
+                        /*{
                             key: 'Report-To',
                             value: `{"group":"endpoint-sentry","max_age":10886400,"endpoints":[{"url":"${reportUrl}"}],"include_subdomains":true}`,
-                        },
-                        /*{
-                            key: 'Reporting-Endpoints',
-                            value: reportingEndpoint,
                         },*/
+                        {
+                            key: 'Reporting-Endpoints',
+                            value: `endpoint-sentry="${reportUrl}"`,
+                        },
                     ],
                 },
             ];
