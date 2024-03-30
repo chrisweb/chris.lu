@@ -223,7 +223,7 @@ const nextConfig = (phase) => {
         `*/
         const reportCSPViolations = `
             report-uri ${reportUrl};
-            report-to endpoint-sentry
+            report-to default
         `
         /*const reportCSPViolations = `
             report-uri ${sentryReportUri};
@@ -334,7 +334,7 @@ const nextConfig = (phase) => {
                         },*/
                         {
                             key: 'Reporting-Endpoints',
-                            value: `endpoint-sentry="${reportUrl}"`,
+                            value: `default="${reportUrl}"`,
                         },
                     ],
                 },
