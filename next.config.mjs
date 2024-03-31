@@ -209,25 +209,23 @@ const nextConfig = (phase) => {
     // https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
     const cspReportOnly = true;
 
-    //const reportUrl = 'https://o4504017992482816.ingest.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
-    const reportUrl = 'https://chrisweb.dev'
+    const reportingUrl = 'https://o4504017992482816.ingest.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
+    const reportingDomainWildcard = 'https://*.ingest.sentry.io'
 
     const cspHeader = () => {
 
         const upgradeInsecure = cspReportOnly ? '' : 'upgrade-insecure-requests;'
 
         // report directive to be added at the end
+        // with Reporting API fallback
         /*const reportCSPViolations = `
-            report-uri ${sentryReportUri};
-            report-to {"group":"default","max_age":10886400,"endpoints":[{"url":"${sentryReportUri}"}],"include_subdomains":true}
-        `*/
-        const reportCSPViolations = `
-            report-uri ${reportUrl};
+            report-uri ${reportingUrl};
             report-to default
-        `
-        /*const reportCSPViolations = `
-            report-uri ${sentryReportUri};
         `*/
+        // reporting uri (CSP v1) only
+        const reportCSPViolations = `
+            report-uri ${reportingUrl};
+        `
 
         // worker-src is for sentry replay
         // child-src is because safari <= 15.4 does not support worker-src
@@ -252,10 +250,10 @@ const nextConfig = (phase) => {
         if (process.env?.VERCEL_ENV === 'preview') {
             return `
                 ${defaultCSPDirectives}
-                font-src 'none';
+                font-src 'self';
                 style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
                 script-src 'self' 'unsafe-inline' https://vercel.live/;
-                connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/ ${reportUrl};
+                connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/ ${reportingDomainWildcard};
                 img-src 'self' data: https://vercel.com/ https://vercel.live/;
                 frame-src 'self' https://vercel.live/;
                 ${reportCSPViolations}
@@ -270,7 +268,7 @@ const nextConfig = (phase) => {
                 font-src 'self';
                 style-src 'self' 'unsafe-inline';
                 script-src 'self';
-                connect-src 'self' https://vitals.vercel-insights.com ${reportUrl};
+                connect-src 'self' https://vitals.vercel-insights.com ${reportingDomainWildcard};
                 img-src 'self';
                 frame-src 'none';
                 ${reportCSPViolations}
@@ -280,10 +278,10 @@ const nextConfig = (phase) => {
         // for dev environment enable unsafe-eval for hot-reload
         return `
             ${defaultCSPDirectives}
-            font-src 'none';
+            font-src 'self';
             style-src 'self' 'unsafe-inline';
             script-src 'self' 'unsafe-eval' 'unsafe-inline';
-            connect-src 'self' ${reportUrl};
+            connect-src 'self' ${reportingDomainWildcard};
             img-src 'self' data:;
             frame-src 'none';
             ${reportCSPViolations}
@@ -328,14 +326,16 @@ const nextConfig = (phase) => {
                             key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
                             value: cspHeader().replace(/\n/g, ''),
                         },
+                        // reporting API v0
                         /*{
                             key: 'Report-To',
-                            value: `{"group":"endpoint-sentry","max_age":10886400,"endpoints":[{"url":"${reportUrl}"}],"include_subdomains":true}`,
+                            value: `{"group":"default","max_age":10886400,"endpoints":[{"url":"${reportUrl}"}],"include_subdomains":true}`,
                         },*/
-                        {
+                        // reporting API v1
+                        /*{
                             key: 'Reporting-Endpoints',
                             value: `default="${reportUrl}"`,
-                        },
+                        },*/
                     ],
                 },
             ];
