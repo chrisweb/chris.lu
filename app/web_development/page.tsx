@@ -16,7 +16,7 @@ export default function WebDevelopmentPage() {
                             <FontAwesomeIcon icon={faGithub} color='white' size="2x" className="social" /> <BaseLink href="https://github.com/chrisweb">My GitHub Projects</BaseLink>
                         </li>
                         <li>
-                            <a href="https://www.buymeacoffee.com/chriswwweb">
+                            <a href="https://www.buymeacoffee.com/chriswwweb" className='shake'>
                                 <Image src="/assets/images/buy_me_a_coffee_button.png" alt="button buy me a coffee" width="240" height="67" />
                             </a>
                         </li>

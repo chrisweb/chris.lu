@@ -146,6 +146,7 @@ body:has(dialog.disablePageScroll[open]) {
 
 /* not on mobile */
 @media not screen and (hover: hover) {
+
     /* remove focus for elements in dialogs */
     dialog :focus {
         outline: none;
@@ -788,4 +789,34 @@ h6 .headingAnchor {
     width: 100%;
     text-align: center;
     margin-top: calc(var(--main-spacing) * 2);
+}
+
+.shake > img:hover {
+    animation: 2s shake infinite alternate;
+}
+
+@keyframes shake {
+    0% {
+        transform: skewX(-15deg);
+    }
+
+    2% {
+        transform: skewX(15deg);
+    }
+
+    4% {
+        transform: skewX(-15deg);
+    }
+
+    6% {
+        transform: skewX(15deg);
+    }
+
+    8% {
+        transform: skewX(0deg);
+    }
+
+    100% {
+        transform: skewX(0deg);
+    }
 }

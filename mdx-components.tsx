@@ -60,7 +60,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                                 {children}
                             </HeadingsObserver>
                             <div className="buyMeACoffeeButtonContainer">
-                                <a href="https://www.buymeacoffee.com/chriswwweb">
+                                <a href="https://www.buymeacoffee.com/chriswwweb" className='shake'>
                                     <Image src="/assets/images/buy_me_a_coffee_button.png" alt="button buy me a coffee" width="240" height="67" />
                                 </a>
                             </div>
