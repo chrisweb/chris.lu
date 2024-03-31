@@ -1,20 +1,27 @@
+.buttonCore {
+    transition: box-shadow .5s ease;
+}
+
+.buttonCore:hover {
+    box-shadow: 0px 0px 30px 10px rgba(var(--primary-light-value), 0.3);
+}
+
 .buttonReset {
     background: none;
     border: none;
     padding: 0;
+    font-size: 0;
 }
 
-.buttonCursor {
+.buttonCore {
+    overflow: hidden;
     cursor: var(--cursor-pointer);
-}
-
-.openButton {
     width: 100%;
     height: auto;
     position: relative;
 }
 
-.openButton svg {
+.buttonCore svg {
     color: var(--tertiary-light-color);
 }
 

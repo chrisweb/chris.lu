@@ -30,12 +30,13 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 
     return (
         <>
-            <button onClick={imageButtonClickHandler} className={`${styles.openButton}  ${styles.buttonCursor} ${styles.buttonReset}`}>
+            <button onClick={imageButtonClickHandler} className={`${styles.buttonReset}  ${styles.buttonCore}`}>
                 <Image
                     style={{
                         width: '100%',
                         height: 'auto',
                     }}
+                    className={styles.thumbnail}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 15vw"
                     placeholder="blur"
                     {...(props as ImageProps)}
