@@ -10,7 +10,12 @@
     height: var(--main-fontSize-default);
     background: var(--tertiary-light-color);
     display: inline-block;
-    animation: blinkingCarretAnimation 1s steps(2) infinite;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .blinkingCarret::after {
+        animation: blinkingCarretAnimation 1s steps(2) infinite;
+    }
 }
 
 @keyframes blinkingCarretAnimation {

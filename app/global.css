@@ -199,10 +199,21 @@ main {
     -webkit-text-fill-color: transparent;
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
-    animation: colorwave 10s infinite linear;
-    -webkit-animation: colorwave 10s infinite linear;
     background-size: 200% 100%;
     background-image: linear-gradient(90deg, var(--primary-light-color) 5%, var(--secondary-light-color) 50%, var(--primary-light-color) 95%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+
+    .h1,
+    .h2,
+    .h3,
+    .h4,
+    .h5,
+    .h6 {
+        animation: colorwave 10s infinite linear;
+        -webkit-animation: colorwave 10s infinite linear;
+    }
 }
 
 @-webkit-keyframes colorwave {
@@ -791,8 +802,10 @@ h6 .headingAnchor {
     margin-top: calc(var(--main-spacing) * 2);
 }
 
-.shake > img:hover {
-    animation: 2s shake infinite alternate;
+@media (prefers-reduced-motion: no-preference) {
+    .shake>img:hover {
+        animation: 2s shake infinite alternate;
+    }
 }
 
 @keyframes shake {

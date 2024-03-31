@@ -152,8 +152,10 @@
     text-shadow: -1px 1px 0 rgb(0, 145, 255), -2px 2px 0 rgb(0, 170, 255), -3px 3px 0 rgb(0, 195, 255);
 }
 
-.blink {
-    animation: blink-animation 2.5s linear infinite;
+@media (prefers-reduced-motion: no-preference) {
+    .blink {
+        animation: blink-animation 2.5s linear infinite;
+    }
 }
 
 @keyframes blink-animation {
