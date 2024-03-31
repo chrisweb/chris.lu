@@ -162,4 +162,38 @@ Line 38 I pass the environment to Sentry, meaning Sentry will know if the enviro
 > [Sentry.io "Extend your Next.js Configuration" documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration)  
 > [Sentry.io "Next.js SDK Configuration" documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/)  
 
+## Investigating Sentry.io dropped requests
+
+When trying to log my CSP reports in Sentry.io I could see that some reports got dropped but the stats page did not give me the exact reason
+
+To get the exact reason why a request got dropped you can use the Sentry.io API
+
+To get some data about the events, you can use Curl to make the following request:
+
+```shell
+curl https://sentry.io/api/0/organizations/{organization_slug}/stats-summary/ \
+ -H 'Authorization: Bearer <auth_token>'
+```
+
+You will however need an auth token, which you can get creating a custom **integration** for your organization, like so:
+ 
+* to get an auth token go to "Settings", then in the section "Developer Settings" click on "Custom Integrations"
+* then click on "Create New Integration", chose "Create Internal Integration" and click on "Next"
+* then add a project name and then under "Permissions" for "Issue & Event" chose "Read" then click on "Save Changes"
+* then on the Integration page, scroll down and click on "New Token", copy the token (you will need it later to do API requests) and then click on "Done"
+* finally click on save changes
+
+No that you have your auth token you can make an API call like this (replace MY_ORGANIZATION with the name of your organiyation on Sentry.io and replace xxx111 at the end with your actual auth token):
+
+```shell
+curl 'https://sentry.io/api/0/organizations/MY_ORGANIZATION/stats-summary/?field=sum(times_seen)&statsPeriod=24h' -H 'Authorization: Bearer xxx111'
+```
+
+On Mac / Linux use the **terminal** or your favorite command line tool to execute the command, on Windows I recommend using **Git Bash**
+
+This will hopefully help you understand if your requests got filtered, were invalid or if there was another reason why they got dropped
+
+> [!MORE]  
+> [Sentry.io "Sentry API organization events" documentation](https://docs.sentry.io/api/organizations/retrieve-event-counts-for-an-organization-v2/)
+
 </article>
