@@ -365,9 +365,12 @@ a {
     }
 }
 
-/* outline style */
-*:focus {
+/* outline style: important use focus-visible and not focus */
+/* when using focus the outline also appears when clicked */
+/* https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible */
+*:focus-visible {
     outline: 2px dashed var(--primary-light-color);
+    outline-offset: 2px;
 }
 
 video {
