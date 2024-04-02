@@ -238,7 +238,6 @@ const nextConfig = (phase) => {
             base-uri 'none';
             form-action 'none';
             frame-ancestors 'none';
-            block-all-mixed-content;
             ${upgradeInsecure}
         `
 
@@ -252,7 +251,7 @@ const nextConfig = (phase) => {
         // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
         // and white-list vitals.vercel-insights
         // based on: https://vercel.com/docs/speed-insights#content-security-policy
-        if (process.env?.VERCEL_ENV === 'preview') {
+        if (process.env.VERCEL_ENV === 'preview') {
             return `
                 ${defaultCSPDirectives}
                 font-src 'self';
@@ -261,6 +260,7 @@ const nextConfig = (phase) => {
                 connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/ ${reportingDomainWildcard};
                 img-src 'self' data: https://vercel.com/ https://vercel.live/;
                 frame-src 'self' https://vercel.live/;
+                upgrade-insecure-requests;
                 ${reportCSPViolations}
             `
         }
@@ -276,6 +276,7 @@ const nextConfig = (phase) => {
                 connect-src 'self' https://vitals.vercel-insights.com ${reportingDomainWildcard};
                 img-src 'self';
                 frame-src 'none';
+                upgrade-insecure-requests;
                 ${reportCSPViolations}
             `
         }
@@ -286,12 +287,23 @@ const nextConfig = (phase) => {
             font-src 'self';
             style-src 'self' 'unsafe-inline';
             script-src 'self' 'unsafe-eval' 'unsafe-inline';
-            connect-src 'self' ${reportingDomainWildcard};
+            connect-src 'self';
             img-src 'self' data:;
             frame-src 'none';
-            ${reportCSPViolations}
         `
 
+    }
+
+    // security headers for preview & production
+    const extraSecurityHeaders = []
+
+    if (phase !== PHASE_DEVELOPMENT_SERVER) {
+        extraSecurityHeaders.push(
+            {
+                key: 'Strict-Transport-Security',
+                value: 'max-age=31536000', // 1 year
+            },
+        )
     }
 
     /** @type {import('next').NextConfig} */
@@ -327,6 +339,7 @@ const nextConfig = (phase) => {
                 {
                     source: '/(.*)',
                     headers: [
+                        ...extraSecurityHeaders,
                         {
                             key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
                             value: cspHeader().replace(/\n/g, ''),
@@ -341,6 +354,14 @@ const nextConfig = (phase) => {
                             key: 'Reporting-Endpoints',
                             value: `default="${reportUrl}"`,
                         },*/
+                        {
+                            key: 'Referrer-Policy',
+                            value: 'origin-when-cross-origin',
+                        },
+                        {
+                            key: 'X-Content-Type-Options',
+                            value: 'nosniff',
+                        },
                     ],
                 },
             ];
