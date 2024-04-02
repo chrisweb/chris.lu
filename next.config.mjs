@@ -260,7 +260,6 @@ const nextConfig = (phase) => {
                 connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/ ${reportingDomainWildcard};
                 img-src 'self' data: https://vercel.com/ https://vercel.live/;
                 frame-src 'self' https://vercel.live/;
-                upgrade-insecure-requests;
                 ${reportCSPViolations}
             `
         }
@@ -276,7 +275,6 @@ const nextConfig = (phase) => {
                 connect-src 'self' https://vitals.vercel-insights.com ${reportingDomainWildcard};
                 img-src 'self';
                 frame-src 'none';
-                upgrade-insecure-requests;
                 ${reportCSPViolations}
             `
         }
