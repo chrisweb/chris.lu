@@ -5,7 +5,6 @@ next chapters?
 * [DONE] setting up vercel account
 * [DONE] vercel preview (staging environment) with github commit triggers auto deploy
 * [DONE] CSP
-* sentry.io account
 * basic eslint
 * articles (pages) using MDX (@next/mdx)
 * eslint for MDX
@@ -184,7 +183,7 @@ now that the PR into the **main** branch is done, vercel will do a new productio
 
 ## articles (pages) using MDX (@next/mdx)
 
-As a developer using markdown to format content makes sense, as most of are probably used to using it when formatting our project readmes, or when writing comments or documentation, this is why I chose to use mdx for my nextjs blog project
+As a developer using markdown to format content makes sense, as most of are probably used to using it when formatting our project READMEs, or when writing comments or documentation, this is why I chose to use mdx for my nextjs blog project
 
 Most things worked as intended and I was able to quickly set up a working prototype, but there are some [open MDX tickets in the nextjs issues list on github](https://github.com/vercel/next.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22area%3A+MDX%22), I recommend checking them out briefly to have an idea of what might not work or just have a look at the list when you have the feeling something is not working as it should
 
