@@ -620,8 +620,8 @@ const cspHeader = () => {
         child-src 'self' blob:;
         base-uri 'none';
         form-action 'none';
+        require-trusted-types-for 'script';
         frame-ancestors 'none';
-        block-all-mixed-content;
         ${upgradeInsecure}
     `
 
@@ -629,28 +629,28 @@ const cspHeader = () => {
     // and whitelist vercel's domains based on:
     // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
     // and white-list vitals.vercel-insights
-    // based on: https://vercel.com/docs/speed-insights
-    if (process.env?.VERCEL_ENV === 'preview') {
+    // based on: https://vercel.com/docs/speed-insights#content-security-policy
+    if (process.env.VERCEL_ENV === 'preview') {
         return `
             ${defaultCSPDirectives}
-            font-src 'self' https://vercel.live/;
+            font-src 'self';
             style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
             script-src 'self' 'unsafe-inline' https://vercel.live/;
-            connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/;
+            connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/ ${reportingDomainWildcard};
             img-src 'self' data: https://vercel.com/ https://vercel.live/;
             frame-src 'self' https://vercel.live/;
         `
     }
 
     // for production environment white-list vitals.vercel-insights
-    // based on: https://vercel.com/docs/speed-insights
-    if (process.env.NODE_ENV === 'production') {
+    // based on: https://vercel.com/docs/speed-insights#content-security-policy
+    if (process.env.VERCEL_ENV === 'production') {
         return `
             ${defaultCSPDirectives}
             font-src 'self';
             style-src 'self' 'unsafe-inline';
             script-src 'self';
-            connect-src 'self' https://vitals.vercel-insights.com;
+            connect-src 'self' https://vitals.vercel-insights.com ${reportingDomainWildcard};
             img-src 'self';
             frame-src 'none';
         `
@@ -666,6 +666,7 @@ const cspHeader = () => {
         img-src 'self' data:;
         frame-src 'none';
     `
+
 }
 
 /** @type {import('next').NextConfig} */
@@ -696,9 +697,9 @@ export default nextConfig;
 If you now start your development server (using `npm run dev{:shell}`), open `http://localhost:3000{:shell}` in your browser, then open the browsers developer tools and then click on the Console tab, then you should see no CSP violations messages
 
 > [!NOTE]  
-> To check for best practices I used a tool by google called [CSP Evaluator](https://csp-evaluator.withgoogle.com/), it showed a green checkmark for every directive except the **script-src** directive, where it mentioned that it would be better to remove **'unsafe-inline'**, however unsafe-inline is there because next.js uses inline scripts a lot, for example scripts that inject css into the page, the second thing the tool mentioned is to add the directive **require-trusted-types-for 'script';**, however that directive again blocks css in js being injected into the html via scripts so I didn't use that directive, depending on what css framework you use, you might be able to use this directive, so I recommended adding it to test if it works for you and if there is no violation then keep it
+> To check for best practices I used a tool by google called [CSP Evaluator](https://csp-evaluator.withgoogle.com/), it showed a green checkmark for every directive except the **script-src** directive, where it mentioned that it would be better to remove **'unsafe-inline'**, however unsafe-inline is there because next.js uses inline scripts a lot
 
-Lets edit the CSP rules we just added an make the **script-src** rule stricter by disallowing **'unsafe-eval'**, to do so we remove the two values from the javascript resources rule, like so:
+Lets edit the CSP rules we just added an make the **script-src** directive stricter by not using **'unsafe-eval'** as recommended by the CSP Evaluator service, like so:
 
 ```js title="next.config.mjs" showLineNumbers{55} {6}#special
     // for dev environment enable unsafe-eval for hot-reload
@@ -718,7 +719,7 @@ Go back into the browser and check the console again, you should now be able to 
 {/* eslint-disable-next-line mdx/remark */}
 > [Report Only] Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self' 'unsafe-inline'".
 
-Those violations are there because Next.js attempty to inject javascript code used by development scripts like the Hot Module Reload (HMR) tool that reloads our page every time we save a file, for HMR to work we need to re-add the **'unsafe-eval'** value to the **script-src** rule, do that now and then save the file to fix violations again
+Those violations are there because Next.js attempts to inject javascript code used by development scripts like the Hot Module Reload (HMR) tool, which is a tool that reloads our page every time we save a file, for HMR to work we need to re-add the **'unsafe-eval'** value to the **script-src** rule, do that now and then save the file to fix violations again
 
 If you look closer at what rule sets we created, there are a total of 4, the first one contains several default rules that we will use for our 3 environments, then we have some rules that we will only apply if the environment is **preview** which is the case when we deploy the preview branch on vercel, the next group contains the rules for the production environment and the last group has the rules we use for our local development environment
 
@@ -819,25 +820,19 @@ First you need to visit Sentry.io and copy the CSP reporting URL of your project
 
 To make sure violations are being sent to Sentry.io (logged like any other error), we need to edit our CSP headers in the next.config.mjs file, like so:
 
-```js title="next.config.mjs" showLineNumbers{67} {5-6} {19-21} {49} {52} {64} {67} {77} {80}
+```js title="next.config.mjs" showLineNumbers{67} {5-6} {13-15} {45} {60}
     // CSP headers here is set based on Next.js recommendations:
     // https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
     const cspReportOnly = true;
 
-    const reportingUrl = 'https://foo123.ingest.sentry.io/api/bar456/security/?sentry_key=baz789'
+    const reportingUrl = 'https://o4504017992482816.ingest.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
     const reportingDomainWildcard = 'https://*.ingest.sentry.io'
 
     const cspHeader = () => {
 
         const upgradeInsecure = cspReportOnly ? '' : 'upgrade-insecure-requests;'
 
-        // report directive to be added at the end
-        // with Reporting API fallback
-        /*const reportCSPViolations = `
-            report-uri ${reportingUrl};
-            report-to default
-        `*/
-        // reporting uri (CSP v1) only
+        // reporting uri (CSP v1)
         const reportCSPViolations = `
             report-uri ${reportingUrl};
         `
@@ -853,7 +848,6 @@ To make sure violations are being sent to Sentry.io (logged like any other error
             base-uri 'none';
             form-action 'none';
             frame-ancestors 'none';
-            block-all-mixed-content;
             ${upgradeInsecure}
         `
 
@@ -862,7 +856,7 @@ To make sure violations are being sent to Sentry.io (logged like any other error
         // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
         // and white-list vitals.vercel-insights
         // based on: https://vercel.com/docs/speed-insights#content-security-policy
-        if (process.env?.VERCEL_ENV === 'preview') {
+        if (process.env.VERCEL_ENV === 'preview') {
             return `
                 ${defaultCSPDirectives}
                 font-src 'self';
@@ -896,10 +890,9 @@ To make sure violations are being sent to Sentry.io (logged like any other error
             font-src 'self';
             style-src 'self' 'unsafe-inline';
             script-src 'self' 'unsafe-eval' 'unsafe-inline';
-            connect-src 'self' ${reportingDomainWildcard};
+            connect-src 'self';
             img-src 'self' data:;
             frame-src 'none';
-            ${reportCSPViolations}
         `
 
     }
@@ -910,15 +903,18 @@ To make sure violations are being sent to Sentry.io (logged like any other error
 
 What we have done is adding two variables, to store the Sentry.io CSP logging URL and a wildcard for the Sentry.io ingest sub-domain
 
-The first variable contains the CSP logging URL **https://foo123.ingest.sentry.io/api/bar456/security/?sentry_key=baz789** is the same for dev, preview and prod, it is the endpoint URL where the reports will get sent to
-
-We use that variable to tell the report-uri directive where to send CSP violations reports
+The first variable contains the CSP logging URL **https://foo123.ingest.sentry.io/api/bar456/security/?sentry_key=baz789** is the same for preview and prod, it is the endpoint URL where the reports will get sent to, which means we use that variable to tell the report-uri directive where to send CSP violations reports
 
 The second variable contains a wildcard for the sentry domain so that we can add the domain to our connect-src directive
 
 We use the second varibale at the our our connect-src directive to whitelist the Sentry CSP logging URL, if we would not add the sub-domain wildcard to connect-src then the browser would block the CSP reports
 
+> [!NOTE]  
+> I only added the report-uri directive to preview and production but NOT development as Sentry.io will filter out reports from localhost anyway, if you want to debug your code you might want to add the reporting also for development, in that case add the `${reportCSPViolations}` variable to the development directives too (same as for preview and production) and then check out the chapter about [disableng the "reports from locahost" filter](/web_development/posts/sentry-io/#disable-the-reports-from-locahost-filter) in my Sentry.io post
+
 > [!MORE]  
 > [Sentry.io "CSP violations logging" documentation](https://docs.sentry.io/product/security-policy-reporting/)  
+
+
 
 </article>
