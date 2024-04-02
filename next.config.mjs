@@ -354,7 +354,7 @@ const nextConfig = (phase) => {
                         },*/
                         {
                             key: 'Referrer-Policy',
-                            value: 'origin-when-cross-origin',
+                            value: 'same-origin',
                         },
                         {
                             key: 'X-Content-Type-Options',
