@@ -51,7 +51,7 @@ I saw countless CSP examples (for beginners) that would set the **default-src** 
 Content-Security-Policy: default-src 'none'
 ```
 
-Then I would check which violations get listed in your console log and then one by one use directives to fix the violations one resource type at a time, for example a policy to allow images from the same origin as the html document would look like this:
+Then I would check which violations get listed in your console and then use directives to fix the violations one at a time, for example a policy to allow images from the same origin as the html document would look like this:
 
 ```shell
 Content-Security-Policy: default-src 'none'; img-src 'self'
@@ -63,7 +63,34 @@ For a website that has images, javascript and css and where the javascript code 
 Content-Security-Policy: default-src 'none'; img-src 'self'; script-src 'self'; style-src 'self'; connect-src https://api.example.com
 ```
 
-Not all policy directives are fetch directives, check out this [MDN directives documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy#directives) for a full list
+Not all policy directives are fetch directives, check out this [MDN "Content-Security-Policy Directives" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy#directives) for a full list of directives
+
+For example the [require-trusted-types-for](require-trusted-types-for) directive is recommended to reducing the DOM XSS attack surface:
+
+```shell
+Content-Security-Policy: default-src 'none'; img-src 'self'; script-src 'self'; style-src 'self'; connect-src https://api.example.com; require-trusted-types-for 'script'
+```
+
+### nonce, hash and strict-dynamic
+
+An alternative to whitelisting an entire domain for external scripts is to use **hashes** or **nonces** to only whitelist certain scripts sources
+
+Those nonces and hashes can also be used for inline scripts, when used for inline scripts the big advantage is that you can avoid using unsafe-inline which whitelists all inline scripts
+
+**Hashes** are a powerful way of only allowing certain scripts instead of whitelisted an entire external source, this is preferred because if the domain gets taken over or hacked and the script(s) gets altered to include malicous code, then the hash won't match anymore and your code will refuse to use the script, this is much safer then to whitelist a domain and accept whatever version of a script that domain is hosting
+
+**Nonces** are very useful for your inline scripts, instead of using **unsafe-inline** you create a nonce for your inline script(s), hence only allowing scripts that have a nonce you created instead of allowing all inline scripts, many frameworks support nonces, for example if you use Next.js check out their ["nonce" documentation](https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy#nonces) or Remix ["Streaming with a Content Security Policy" documentation](https://remix.run/docs/en/main/guides/streaming#streaming-with-a-content-security-policy) (you might also want to dig into this Remix [CSP nonce Issue #5162](https://github.com/remix-run/remix/issues/5162)) and for Astro check out [discussion #377](https://github.com/withastro/roadmap/discussions/377)
+
+Finally I recommend checking out the strict-dynamic source expression which can be used when you want the trust that you have in a script to be propagated to all the scripts getting loaded by the root script, but use with caution as allowing a script to load other scripts should only happen if you have unconditional trust into the scripts code and the sources it gets other scripts from
+
+> [!MORE]  
+> [MDN "CSP hashes" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src#whitelisting_external_scripts_using_hashes)  
+> [MDN "CSP nonce" documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce)  
+> [MDN "CSP strict-dynamic expression" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src#strict-dynamic)  
+
+### CSP online validation
+
+A tool that can help you improve your Content-Security-Policy HTTP header is [Google's CSP Evaluator](https://csp-evaluator.withgoogle.com/)
 
 ## the state of violations reporting (as of february 2024)
 
@@ -72,7 +99,13 @@ CSP violations can not only be seen in the console, as this would limit us to on
 However how CSP violation reports work has changed over the years, the w3c has released several iterations of their Content Security Policy recommendations / working drafts and then even created a drafts for something called the Reporting API which is a new header dedicated to sending reports to an endpoint
 
 * in the [CSP level 1](https://www.w3.org/TR/2012/CR-CSP-20121115/) & [CSP level 2](https://www.w3.org/TR/CSP2/) recommandations, CSP violations get reported using a [report-uri](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-uri) reporting directive, if we look at [caniuse report-uri](https://caniuse.com/?search=report-uri) page we can see that it is supported by all major browsers
-* [CSP level 3](https://www.w3.org/TR/CSP3/) introduces a new [report-to](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-to) **reporting directive** and the w3c has marked the report-uri directive as deprecated, if we look at [caniuse report-to](https://caniuse.com/mdn-http_headers_content-security-policy_report-to) however we see that firefox does not yet support the directive, they actually now do have support for it but it is behind a feature flag (their ticket ["CSP: Implement report-to"](https://bugzilla.mozilla.org/show_bug.cgi?id=1391243) is quite old but some ago they seemed to have started working on it) and safari only started to support it with v16.4 (released March 27, 2023), chrome on the other hand has had support for report-to and the corresponding Report-To header (from the reporting API v0 specs) since [version 69](https://chromestatus.com/feature/4672626140119040) but dropped it in version 96 in favor of the more modern **Reporting-Endpoints** (introduced in the reporting API v1)
+* [CSP level 3](https://www.w3.org/TR/CSP3/) introduces a new [report-to](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-to) **reporting directive** and the w3c has marked the report-uri directive as deprecated, if we look at [caniuse report-to](https://caniuse.com/mdn-http_headers_content-security-policy_report-to)
+
+All browsers support the report-uri directive, but NOT all browsers support the report-to directive or the Report-To and Reporting-Endpoints headers:
+
+* Firefox supports the report-to directive but it is behind a feature flag, the Firefox ["CSP: Implement report-to" Issue](https://bugzilla.mozilla.org/show_bug.cgi?id=1391243) is quite old but one of the latest comments states that support has landed but is behind a feature flag), support for the reporting API gets tracked using the ["Considering implementing the Reporting API" Issue](https://bugzilla.mozilla.org/show_bug.cgi?id=1492036) and first shipped in Firefox 65 but has also been behind a feature flag since
+* Safari added support for the report-to directive and the Reporting-Endpoints header in their [technology preview 154](https://developer.apple.com/documentation/safari-technology-preview-release-notes/stp-release-154#Reporting-API) and support landed in [Safari version 16.4](https://developer.apple.com/documentation/safari-release-notes/safari-16_4-release-notes) (released March 27, 2023)
+* Chrome on the other hand has had support for **report-to** directive since [version 69](https://chromestatus.com/feature/5826576096690176) and also the corresponding **Report-To** header since [version 69](https://chromestatus.com/feature/4672626140119040) (based on the reporting API v0 specs), since [version 96 chrome](https://chromestatus.com/feature/5712172409683968) now supports the more modern **Reporting-Endpoints** header (introduced in the reporting API v1)
 
 ### report-uri
 
