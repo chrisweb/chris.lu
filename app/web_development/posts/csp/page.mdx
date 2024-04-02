@@ -88,6 +88,24 @@ Finally I recommend checking out the strict-dynamic source expression which can 
 > [MDN "CSP nonce" documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce)  
 > [MDN "CSP strict-dynamic expression" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src#strict-dynamic)  
 
+### upgrade-insecure-requests and frame-ancestors
+
+The **upgrade-insecure-requests** directive can be used to upgrade any first-party as well as third-party requests to https, this is useful for cases where for example you have an image URL that has not been migrated from HTTP to HTTPS yet or where a mistake was made by using HTTP instead of HTTPS, this directive will tell the browser to rewrite the URL with HTTPS before the insecure requests gets made, but be careful this is NOT a replacement for the HSTS header, here is a quote from MDN that explains it well:
+
+> The upgrade-insecure-requests directive will not ensure that users visiting your site via links on third-party sites will be upgraded to HTTPS for the top-level navigation and thus does not replace the Strict-Transport-Security (HSTS) header, which should still be set with an appropriate max-age to ensure that users are not subject to SSL stripping attacks.
+
+So even if you use the **upgrade-insecure-requests** directive it is still recommended to also set the **Strict-Transport-Security** header
+
+You might still find examples on the web using the **block-all-mixed-content**, this one is however deprecated and not needed when using **upgrade-insecure-requests**
+
+The **frame-ancestors** directive is useful to specify what parent source may embed a page, so if you want to disallow anyone to put your pages into an iFrame then set this directive to none, when frame-ancestors is set to none it does the same thing as the **X-Frame-Options** header when set to deny, meaning that the frame-ancestors directive is a replacement for X-Frame-Options in modern browsers, so when you see a high enough support percentage on the [caniuse "frame-ancestors" page](https://caniuse.com/?search=frame-ancestors) then you can ditch the **X-Frame-Options** header
+
+> [!MORE]  
+> [MDN "upgrade-insecure-requests" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/upgrade-insecure-requests)  
+> [MDN "Strict-Transport-Security" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)
+> [MDN "frame-ancestors" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors)  
+> [MDN "block-all-mixed-content (deprecated)" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/block-all-mixed-content)  
+
 ### CSP online validation
 
 A tool that can help you improve your Content-Security-Policy HTTP header is [Google's CSP Evaluator](https://csp-evaluator.withgoogle.com/)
