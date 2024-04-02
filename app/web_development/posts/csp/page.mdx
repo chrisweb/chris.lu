@@ -245,17 +245,10 @@ The repoting API v1 **Reporting-Endpoints** header is not yet supported by sentr
 
 Your localhost requests might get filtered by Sentry.io if you or a team member have enabled that feature, if you use **report-uri** you will see the successful requests in the Network tab but they won't show up in Sentry.io
 
-If you want to **report-uri** CSP reports from localhost
-
-* visit Sentry.io and log in
-* in the left navigation on the bottom click on **Settings**
-* Then in the Settings navigation on the left click on **Projects**
-* Click on the project name
-* Then in navigation on the left, under **PROCESSING**, click on **Inbound Filters**
-* On that page there is an option called **Filter out events coming from localhost** disable that option to not filter reports coming from localhost anymore
+For a guide about how to disable the filter, check out the chapter about [disabling the "reports from locahost" filter](/web_development/posts/sentry-io/#disable-the-reports-from-locahost-filter) in my Sentry.io post
 
 > [!TIP]  
-> You probably don't want to keep that enabled for too long as developing locally will generate all sorts of error logs that are not very useful, so just remember to turn the filter back on when you don't need the localhost reports anymore
+> You probably don't want to keep the localhost reports filter disabled for too long as developing locally will generate all sorts of error logs that are not very useful, so just remember to turn the filter back on when you don't need the localhost reports anymore
 
 ### Sentry.io documentation example is not ideal
 
