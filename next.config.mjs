@@ -242,6 +242,11 @@ const nextConfig = (phase) => {
             ${upgradeInsecure}
         `
 
+        // I wanted to add:
+        // require-trusted-types-for 'script';
+        // unfortunatly because of fontawesome this is not possible (yet)
+        // https://github.com/FortAwesome/Font-Awesome/issues/20001
+
         // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
         // and whitelist vercel's domains based on:
         // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
