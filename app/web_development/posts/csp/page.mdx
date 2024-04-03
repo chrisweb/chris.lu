@@ -24,7 +24,7 @@ A basic meta element to configure a CSP policy would look like this:
 ```html
 <meta
     http-equiv="Content-Security-Policy"
-    content="img-src 'self';" />
+    content="default-src 'self';" />
 ```
 
 The header is often the preferred way of as it supports sending reports which is something that can't be done using the meta element
@@ -32,26 +32,31 @@ The header is often the preferred way of as it supports sending reports which is
 A very basic [Content-Security-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy) header looks like this:
 
 ```shell
-Content-Security-Policy: img-src 'self'
+Content-Security-Policy: default-src 'self'
 ```
 
 So far we used the Content-Security-Policy header but there is a second header [Content-Security-Policy-Report-Only](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy-Report-Only) that can be used, the difference is that when using Content-Security-Policy the browser will enforce the policy, if using Content-Security-Policy-**Report-Only** the browser will only report violations but NOT enforce them
 
 ```shell
-Content-Security-Policy-Report-Only: img-src 'self'
+Content-Security-Policy-Report-Only: default-src 'self'
 ```
 
 ## CSP directives
 
 The **default-src directive** is a fallback that gets used everytime a [fetch directive](https://developer.mozilla.org/en-US/docs/Glossary/Fetch_directive) for a resource type is missing, for a complete list check out the [MDN "CSP: default-src" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/default-src)
 
-I saw countless CSP examples (for beginners) that would set the **default-src** to **'self'**, my personal recommendation is set the default-src to **none** or even better don't set it at all (which is equivalent to setting it to none), meaning that it will disallow any source for any content type, which means you use a **secure by default** approach instead of an open everything by default one, like this:
+I saw countless CSP examples (for beginners) that would set the **default-src** to **'self'**, my personal recommendation is set the default-src to **none**, meaning that it will disallow any source for any content type that is not explicitly whitelisted using a fetch directive
+
+Use a **secure by default** approach instead of an open everything by default approach, like this:
 
 ```shell
 Content-Security-Policy: default-src 'none'
 ```
 
-Then I would check which violations get listed in your console and then use directives to fix the violations one at a time, for example a policy to allow images from the same origin as the html document would look like this:
+> [!WARN]  
+> Always set a default-src, if you don't set a default-src then every resource type that has no directive will be allowed, which means that if there is no default-src and you don't set the script-src directive then all scripts from whatever source will be allowed, if you don't set a default-src there is no fallback 
+
+Now that we have a basic CSP, I would check what violations get listed in your browser console and then use specific directives to fix the violations one at a time, for example a directive to allow images from the same origin as the html document would look like this:
 
 ```shell
 Content-Security-Policy: default-src 'none'; img-src 'self'
@@ -65,7 +70,7 @@ Content-Security-Policy: default-src 'none'; img-src 'self'; script-src 'self'; 
 
 Not all policy directives are fetch directives, check out this [MDN "Content-Security-Policy Directives" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy#directives) for a full list of directives
 
-For example the [require-trusted-types-for](require-trusted-types-for) directive is recommended to reducing the DOM XSS attack surface:
+For example adding the [require-trusted-types-for](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/require-trusted-types-for) directive is recommended to reduce the DOM XSS attack surface, this ensures that if you have a script that attempts to put a string into for example Element.innerHTML but the string has not been sanitized then CSP will consider this a violation:
 
 ```shell
 Content-Security-Policy: default-src 'none'; img-src 'self'; script-src 'self'; style-src 'self'; connect-src https://api.example.com; require-trusted-types-for 'script'
