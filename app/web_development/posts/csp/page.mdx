@@ -103,7 +103,7 @@ So even if you use the **upgrade-insecure-requests** directive it is still recom
 
 You might still find examples on the web using the **block-all-mixed-content**, this one is however deprecated and not needed when using **upgrade-insecure-requests**
 
-The **frame-ancestors** directive is useful to specify what parent source may embed a page, so if you want to disallow anyone to put your pages into an iFrame then set this directive to none, when frame-ancestors is set to none it does the same thing as the **X-Frame-Options** header when set to deny, meaning that the frame-ancestors directive is a replacement for X-Frame-Options in modern browsers, so when you see a high enough support percentage on the [caniuse "frame-ancestors" page](https://caniuse.com/?search=frame-ancestors) then you can ditch the **X-Frame-Options** header
+The **frame-ancestors** directive is useful to specify what parent source may embed a page and can help prevent clickjacking attacks, so if you want to disallow anyone to put your pages into an iFrame then set this directive to none, when frame-ancestors is set to none it does the same thing as the **X-Frame-Options** header when set to deny, meaning that the frame-ancestors directive is a replacement for X-Frame-Options in modern browsers, so when you see a high enough support percentage on the [caniuse "frame-ancestors" page](https://caniuse.com/?search=frame-ancestors) then you can ditch the **X-Frame-Options** header
 
 > [!MORE]  
 > [MDN "upgrade-insecure-requests" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/upgrade-insecure-requests)  
