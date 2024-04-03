@@ -21,169 +21,13 @@ next chapters?
 * vercel prod release (custom domain)
 * vercel analytics
 
-### optimizing images with next/image
-
-images go into the public directory, but `public` is not part of the src path, only what comes after
-
-so an image called `foo.jpg` located in `/public/images/` would have an src like this: `/images/foo.jpg`
-
-Note: if you used next/image prior to **next.js 13** you might want to check out the migration guide as there are some major changes as to how some options work: <https://nextjs.org/docs/messages/next-image-upgrade-to-13>
-
-for the layout header, we will add a fallback image for the canvas element, the goal is to use the [css property object fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) to make it as large as the canvas container:
-
-```ts
-<Image
-    src="/assets/images/neonroad/fallback-min.png"
-    alt="Chris.lu header image, displaying an 80s style landscape and sunset"
-    fill
-    style={{objectFit:'cover'}}
-    sizes="100vw"
-    priority
-    quality={80}
-/>
-```
-
-if now open the page in your browser and inspect the html you will see that next.js add a lot of different srcset attributes to the img tag
-
-Note: when you start your server with `npm run dev`, next.js will automatically create files with different dimensions of your image and store them into the directory `\.next\cache\images`
-
-our original image is a PNG image, so it's quite heavy, because modern browser support formats like [AVIF](https://developer.mozilla.org/docs/Web/Media/Formats/Image_types#avif_image) or [WebP](https://developer.mozilla.org/docs/Web/Media/Formats/Image_types#webp_image) we want next.js to convert our original file into these formats and depending on what format the browser supports we want next.js to either ship .avif files to the user (best compression / smallest size) or else ship .webp files (good compression / smaller size) and only if none of those two is formats is supported it should ship .png files (worst compression / bigger size)
-
-to add support for webp and avif we need to add the following code to our next.config.js:
-
-```js
-const nextConfig = () => {
-
-    /** @type {import('next').NextConfig} */
-    const nextConfig = {
-        experimental: {
-            // experimental support for next.js > 13 app directory
-            appDir: true,
-        },
-        // file formats for next/image
-        images: {
-            formats: ['image/avif', 'image/webp']
-        },
-    }
-
-    return nextConfig
-
-}
-
-export default nextConfig
-```
-
-no need to change any code of the `<Image>` component we added previously, next.js will handle the conversion to the different formats automatically now that we have added them to the configuration file and will store the different versions into `\.next\cache\images`
-
-Note: next/image uses sharp <https://www.npmjs.com/package/sharp> to convert images to other formats
-
-Note: when using next/image for the first time, check out the browser dev tools console, next.js might give you tips about how to improve the usage you make of it, for example if your image is on top of the page but you have not set the attribute ["priority"](https://beta.nextjs.org/docs/api-reference/components/image#priority) then next.js will tell you to do so:
-
-> Image with src "/assets/images/neonroad/fallback-min.png" was detected as the Largest Contentful Paint (LCP). Please add the "priority" property if this image is above the fold.
-
-read more:
-
-* next.js next/image documentation: <https://beta.nextjs.org/docs/api-reference/components/image>
-* use avif in next.js: <https://avif.io/blog/tutorials/nextjs/>
-
-### optimizing fonts with next/font
-
-next.js 13.2 has some next/font improvements: <https://nextjs.org/blog/next-13-2#other-improvements>
-
-read more:
-
-[next.js next/font beta documentation](https://beta.nextjs.org/docs/optimizing/fonts)
-
-
-
-### setting up vercel account
-
-vercel website: <https://vercel.com/>
-vercel is free for personal prjects, like your blog: <https://vercel.com/pricing>
-
-first one your dashboard: <https://vercel.com/dashboard>, if haven't connected your git account (github, gitlab, ...) do that first
-
-click on "Add new project", then select your git account
-
-now for the repositories you can chose to enable vercel on all of them or just a selection (I chose to select which ones I want to use with vercel as I have a bunch of accounts which are either forks, own packages or just experiments I created)
-
-then click on "Install"
-
-on the next page, click the "import" button next to the project you want to set up
-
-Note: if like me in this project, you use next.js, vercel will set up your project using default values for projects using next.js with will reduce the time you spend on configuring the next step
-
-now you must configure the project, you will notice that most values have default values but feel free to edit them if you need to
-
-when I look at the "Build and Output Settings" section, I see vercel says they will use "npm install" by default to install the projects dependencies, I'm a bit surprised that they don't use `npm ci` [(npm ci documentation)](https://docs.npmjs.com/cli/commands/npm-ci)
-
-TODO: for now I did not change the install command to `npm ci`, I let the default value, I will do a deployment and see if I can see in the logs which command is really being used
-
-one section we will need to make some changes at some point is the [environment variables section](https://vercel.com/docs/concepts/projects/environment-variables), but for now we have no environment variables, so we skip it for now
-
-finally click on "Deploy"
-
-wait for the deployment to finish
-
-if the deployment was successfull it will show you a preview image of the homepage, click on that image to visit your deployment
-
-## vercel preview (staging environment)
-
-if you have a repository with a **main** and do a commit vercel will do a new deployment of your production environment
-
-some people like to live dangerously:
-
-![I don't always test my code, but when I do, I do it in production](./documentation/assets/images/test_in_production.png)
-
-it is useful to have **preview** deployments, so that you can check out changes you made before pushing those into production
-
-to have vercel create **preview** deployments we create a new branch in our repository and call it **preview**, then we switch to that branch in VSCode
-
-now every change we do, we commit it into our **preview** branch, this will trigger a **preview** deployment by vercel
-
-open your repository on github and now on the right side you should see a section environments, you now have two environments listed here, **production** and **preview**
-
-![github / vercel deployment environments](./documentation/assets/images/github_vercel_deployment_environments.png)
-
-click on **preview** to go to the deployments history page, there you can click on **View deployment** and then you can test the deployment
-
-## github: pull request from preview into main branch (automatically link / close tickets)
-
-if everything is ok, you need to merge the changes from your **preview** branch into the **main** branch, or even better do a [PR (pull request)](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)
-
-go to your repository on github, if you are on the **main** branch switch to the **preview** branch
-
-if you did a commit not long ago github will automatically show a message on top "preview had recent pushes", if that the case click on **Compare and pull request**, if the latest commits are a bit older you will have a button **Pull request** on the top right side of your branch files list, click it to go to the PR page
-
-github creates a PR brings you to the PR page
-
-first add a good title to describe what is in the PR
-
-then you can add an optional description
-
-Note: to [automatically link your PRs to one or more tickets](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue), edit the PR description, type hashtag and then select your ticket from the list or manually type #TICKET_NUMBER
-
-Note: if you want the linked ticket to get automatically **closed** by the PR, put a word like **closes** or **fixes** (for a full list of keywords check out the [github "ticket linking" documentation page](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword)) in front of the #TICKET_NUMBER in your PR description, so for example `fixes #1`, then after doing the PR the ticket will get automatically set to **closed** by github
-
-![github: this PR closes the issue(s)](./documentation/assets/images/PR_closes_issue.png)
-
-if you are part of a team and want to have other people check out your PR, you also assign one or more reviewers on the right side of the PR page
-
-when your PR is ready to get merged into the **main** branch, click the button **Merge pull request** on the bottom of the page
-
-Note: after the PR is done, if you listed your ticket(s) in the description of the PR, then on the page of your ticket you will see that it automatically got linked to your PR and if you used one of the keywords that automatically closes the ticket then you will notice that it also got closed
-
-![github: linked PR message](./documentation/assets/images/linked_PR_and_ticket_closed.png)
-
-now that the PR into the **main** branch is done, vercel will do a new production deployment for you
-
 
 
 
 
 ## articles (pages) using MDX (@next/mdx)
 
-ai image, mad scientist in a laboratory with dramtic lightning, mixing a fluorescent potion in a bowl on a table, pouring from two bottles with labels, simpsons like style 
+
 
 As a developer using markdown to format content makes sense, as most of are probably used to using it when formatting our project READMEs, or when writing comments or documentation, this is why I chose to use mdx for my nextjs blog project
 
@@ -4281,3 +4125,160 @@ https://w3c.github.io/manifest/#shortcuts-member
 https://developer.mozilla.org/en-US/docs/Web/Manifest/shortcuts
 https://web.dev/articles/install-criteria
 also search google for "manifest json generator" and "favicon generator", to find tools like this nice one: https://realfavicongenerator.net/
+
+### optimizing images with next/image
+
+images go into the public directory, but `public` is not part of the src path, only what comes after
+
+so an image called `foo.jpg` located in `/public/images/` would have an src like this: `/images/foo.jpg`
+
+Note: if you used next/image prior to **next.js 13** you might want to check out the migration guide as there are some major changes as to how some options work: <https://nextjs.org/docs/messages/next-image-upgrade-to-13>
+
+for the layout header, we will add a fallback image for the canvas element, the goal is to use the [css property object fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) to make it as large as the canvas container:
+
+```ts
+<Image
+    src="/assets/images/neonroad/fallback-min.png"
+    alt="Chris.lu header image, displaying an 80s style landscape and sunset"
+    fill
+    style={{objectFit:'cover'}}
+    sizes="100vw"
+    priority
+    quality={80}
+/>
+```
+
+if now open the page in your browser and inspect the html you will see that next.js add a lot of different srcset attributes to the img tag
+
+Note: when you start your server with `npm run dev`, next.js will automatically create files with different dimensions of your image and store them into the directory `\.next\cache\images`
+
+our original image is a PNG image, so it's quite heavy, because modern browser support formats like [AVIF](https://developer.mozilla.org/docs/Web/Media/Formats/Image_types#avif_image) or [WebP](https://developer.mozilla.org/docs/Web/Media/Formats/Image_types#webp_image) we want next.js to convert our original file into these formats and depending on what format the browser supports we want next.js to either ship .avif files to the user (best compression / smallest size) or else ship .webp files (good compression / smaller size) and only if none of those two is formats is supported it should ship .png files (worst compression / bigger size)
+
+to add support for webp and avif we need to add the following code to our next.config.js:
+
+```js
+const nextConfig = () => {
+
+    /** @type {import('next').NextConfig} */
+    const nextConfig = {
+        experimental: {
+            // experimental support for next.js > 13 app directory
+            appDir: true,
+        },
+        // file formats for next/image
+        images: {
+            formats: ['image/avif', 'image/webp']
+        },
+    }
+
+    return nextConfig
+
+}
+
+export default nextConfig
+```
+
+no need to change any code of the `<Image>` component we added previously, next.js will handle the conversion to the different formats automatically now that we have added them to the configuration file and will store the different versions into `\.next\cache\images`
+
+Note: next/image uses sharp <https://www.npmjs.com/package/sharp> to convert images to other formats
+
+Note: when using next/image for the first time, check out the browser dev tools console, next.js might give you tips about how to improve the usage you make of it, for example if your image is on top of the page but you have not set the attribute ["priority"](https://beta.nextjs.org/docs/api-reference/components/image#priority) then next.js will tell you to do so:
+
+> Image with src "/assets/images/neonroad/fallback-min.png" was detected as the Largest Contentful Paint (LCP). Please add the "priority" property if this image is above the fold.
+
+read more:
+
+* next.js next/image documentation: <https://beta.nextjs.org/docs/api-reference/components/image>
+* use avif in next.js: <https://avif.io/blog/tutorials/nextjs/>
+
+### optimizing fonts with next/font
+
+next.js 13.2 has some next/font improvements: <https://nextjs.org/blog/next-13-2#other-improvements>
+
+read more:
+
+[next.js next/font beta documentation](https://beta.nextjs.org/docs/optimizing/fonts)
+
+
+
+### setting up vercel account
+
+vercel website: <https://vercel.com/>
+vercel is free for personal prjects, like your blog: <https://vercel.com/pricing>
+
+first one your dashboard: <https://vercel.com/dashboard>, if haven't connected your git account (github, gitlab, ...) do that first
+
+click on "Add new project", then select your git account
+
+now for the repositories you can chose to enable vercel on all of them or just a selection (I chose to select which ones I want to use with vercel as I have a bunch of accounts which are either forks, own packages or just experiments I created)
+
+then click on "Install"
+
+on the next page, click the "import" button next to the project you want to set up
+
+Note: if like me in this project, you use next.js, vercel will set up your project using default values for projects using next.js with will reduce the time you spend on configuring the next step
+
+now you must configure the project, you will notice that most values have default values but feel free to edit them if you need to
+
+when I look at the "Build and Output Settings" section, I see vercel says they will use "npm install" by default to install the projects dependencies, I'm a bit surprised that they don't use `npm ci` [(npm ci documentation)](https://docs.npmjs.com/cli/commands/npm-ci)
+
+TODO: for now I did not change the install command to `npm ci`, I let the default value, I will do a deployment and see if I can see in the logs which command is really being used
+
+one section we will need to make some changes at some point is the [environment variables section](https://vercel.com/docs/concepts/projects/environment-variables), but for now we have no environment variables, so we skip it for now
+
+finally click on "Deploy"
+
+wait for the deployment to finish
+
+if the deployment was successfull it will show you a preview image of the homepage, click on that image to visit your deployment
+
+## vercel preview (staging environment)
+
+if you have a repository with a **main** and do a commit vercel will do a new deployment of your production environment
+
+some people like to live dangerously:
+
+![I don't always test my code, but when I do, I do it in production](./documentation/assets/images/test_in_production.png)
+
+it is useful to have **preview** deployments, so that you can check out changes you made before pushing those into production
+
+to have vercel create **preview** deployments we create a new branch in our repository and call it **preview**, then we switch to that branch in VSCode
+
+now every change we do, we commit it into our **preview** branch, this will trigger a **preview** deployment by vercel
+
+open your repository on github and now on the right side you should see a section environments, you now have two environments listed here, **production** and **preview**
+
+![github / vercel deployment environments](./documentation/assets/images/github_vercel_deployment_environments.png)
+
+click on **preview** to go to the deployments history page, there you can click on **View deployment** and then you can test the deployment
+
+## github: pull request from preview into main branch (automatically link / close tickets)
+
+if everything is ok, you need to merge the changes from your **preview** branch into the **main** branch, or even better do a [PR (pull request)](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)
+
+go to your repository on github, if you are on the **main** branch switch to the **preview** branch
+
+if you did a commit not long ago github will automatically show a message on top "preview had recent pushes", if that the case click on **Compare and pull request**, if the latest commits are a bit older you will have a button **Pull request** on the top right side of your branch files list, click it to go to the PR page
+
+github creates a PR brings you to the PR page
+
+first add a good title to describe what is in the PR
+
+then you can add an optional description
+
+Note: to [automatically link your PRs to one or more tickets](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue), edit the PR description, type hashtag and then select your ticket from the list or manually type #TICKET_NUMBER
+
+Note: if you want the linked ticket to get automatically **closed** by the PR, put a word like **closes** or **fixes** (for a full list of keywords check out the [github "ticket linking" documentation page](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword)) in front of the #TICKET_NUMBER in your PR description, so for example `fixes #1`, then after doing the PR the ticket will get automatically set to **closed** by github
+
+![github: this PR closes the issue(s)](./documentation/assets/images/PR_closes_issue.png)
+
+if you are part of a team and want to have other people check out your PR, you also assign one or more reviewers on the right side of the PR page
+
+when your PR is ready to get merged into the **main** branch, click the button **Merge pull request** on the bottom of the page
+
+Note: after the PR is done, if you listed your ticket(s) in the description of the PR, then on the page of your ticket you will see that it automatically got linked to your PR and if you used one of the keywords that automatically closes the ticket then you will notice that it also got closed
+
+![github: linked PR message](./documentation/assets/images/linked_PR_and_ticket_closed.png)
+
+now that the PR into the **main** branch is done, vercel will do a new production deployment for you
+
