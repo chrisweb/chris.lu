@@ -32,7 +32,7 @@ I will describe 4 ways to add ESLint to a Next.js project
 > the first option is by far the fastest to set up and the one that will require the least amount of maintenance (which matters to keep the technilogical dept of your project low) but on the other hand it is the one that is the least customizable, the last one is most time consuming but also most customizable
 
 - option 1: you use [create-next-app](https://www.npmjs.com/package/create-next-app) and when asked about installing eslint you select **YES** to install ESLint
-- option 2: you use **create-next-app** but when asked about installing ESLint you select **NO**, then later you use the Next.js cli linting script via the command `npm run lint{:shell}` (which will install eslint if you did not already install it manully)
+- option 2: you use **create-next-app** but when asked about installing ESLint you select **NO**, then later you use the Next.js cli linting script via the command `npm run lint` (which will install eslint if you did not already install it manully)
 - option 3: we will NOT use **create-next-app** at all, instead we will manually create an ESLint configuration file and install **eslint-config-next** manually, which will automatically install the 3 plugins (eslint-plugin-react, eslint-plugin-react-hooks and eslint-plugin-next) for us
 - option 4: we will do a fully manual installation of everything needed to lint both our code and MDX content (we will include **eslint-plugin-next**, but we will NOT use **create-next-app** or the **eslint-config-next** package)
 
@@ -59,7 +59,7 @@ this time we choose **YES**
 
 **create-next-app** will also create an `.eslintrc.json` file in the root of the project, create-next-app will automatically use the "strict" (it is the default mode when using create next app, you can not chose the mode yourself), in strict next/core-web-vitals gets extended in the eslintrc configuration file, **next/core-web-vitals** is a set of extra rules intended to warn you about potential optimizations you can do that are related to core web vitals metrics, like rules to improve page loading speed
 
-finally **create-next-app** will also add the line `"lint": "next lint"{:json}` to your package.json `scripts`, which means that you now can use the command `npm run lint{:shell}`, which will execute `next lint`, next lint is the Nextjs cli command for linting
+finally **create-next-app** will also add the line `"lint": "next lint"{:json}` to your package.json `scripts`, which means that you now can use the command `npm run lint`, which will execute `next lint`, next lint is the Nextjs cli command for linting
 
 this is already it, Next.js and code linting are ready to be used with almost no effort from your side and you can be sure that the create-next-app script has created a solid linting solution because it was built using the collective knowledge of all the devs contributing to Next.js
 

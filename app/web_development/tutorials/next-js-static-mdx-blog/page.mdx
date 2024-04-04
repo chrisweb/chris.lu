@@ -47,7 +47,7 @@ To be able to create a Javascript backend and run our Javascript code locally we
 * [install Node.js (and npm)](/web_development/posts/node-js)
 
 > [!NOTE]  
-> the **next.js 14** "app directory features" require nodejs v18.17 or later, so if you skipped the Node.js installation document because you already have Node.js installed, then just make sure you have a version installed that is high enough, to do that you can for example use the following command: `node -v{:shell}`
+> the **next.js 14** "app directory features" require nodejs v18.17 or later, so if you skipped the Node.js installation document because you already have Node.js installed, then just make sure you have a version installed that is high enough, to do that you can for example use the following command: `node -v`
 
 ## The road to server components and server actions
 
@@ -80,30 +80,30 @@ To create a new Next.js project we are going to use [Create Next App](https://ww
 > we will create the new project in the root of our directory (not a sub-directory), so make sure there is no README.md file in the directory yet, as the create-next-app tool we will use will create one and if it finds a README.md it will abort, if there is a README.md file, first delete it and then commit the changes (if you need help to commit changes using VSCode, check out my chapter [commit your changes to GitHub using the VSCode version control tool](/web_development/posts/vscode#commit-your-changes-to-github-using-the-vscode-version-control-tool) from the VSCode post)
 
 > [!TIP]  
-> I will use the option `--use-npm{:shell}`, if you prefer using another package manager you can change the option to `--use-pnpm{:shell}` for [pnpm](https://pnpm.io/), `--use-yarn{:shell}` for [yarn](https://yarnpkg.com/) or `--use-bun{:shell}` for [bun](https://bun.sh/package-manager)
+> I will use the option `--use-npm`, if you prefer using another package manager you can change the option to `--use-pnpm` for [pnpm](https://pnpm.io/), `--use-yarn` for [yarn](https://yarnpkg.com/) or `--use-bun` for [bun](https://bun.sh/package-manager)
 
-Make sure the VSCode terminal is open (if you need help to open the terminal in VSCode, check out my chapter [open a VSCode terminal](/web_development/posts/vscode#open-a-vscode-terminal) from the VSCode post) and then enter the following command and then press `ENTER{:shell}`:
+Make sure the VSCode terminal is open (if you need help to open the terminal in VSCode, check out my chapter [open a VSCode terminal](/web_development/posts/vscode#open-a-vscode-terminal) from the VSCode post) and then enter the following command and then press `ENTER`:
 
 ```shell title="terminal"
 npx create-next-app@latest ./ --use-npm
 ```
 
-**Create Next App** will tell you it needs to be installed first, accept by typing `y{:shell}` and then press `ENTER{:shell}`
+**Create Next App** will tell you it needs to be installed first, accept by typing `y` and then press `ENTER`
 
 Next you will get asked some more questions so that Next.js knows what it needs to install and set up for you:
 
-* **Would you like to use TypeScript?**, I recommended leaving it to **Yes** which is what is preselected, if however you prefer to use javascript select **No** using the left / right arrow keys and then just press `ENTER{:shell}` (I recommend to use Typescript but I will not argue in favor or against it here, this is not the right place, if you never used Typescript before, then maybe just give it a try and see for yourself how different it is from using Javascript and after having built this blog prototype you will be able to judge for yourself which one you like more)
-* **Would you like to use ESLint?**, again **Yes** is preselected, so just press `ENTER{:shell}` ([ESLint](https://eslint.org/) is very useful tool that helps find and correct errors in your code)
-* **Would you like to use Tailwind CSS?**, I will set this to **No**,  press `←{:shell}` (the left arrow key) and then `ENTER{:shell}`, I will use another styling solution in this project, more on that later) so if you want to explore another solution with me through this project then select "No" too, if you know Tailwind CSS and want to use it instead feel free to keep it on "Yes"
-* **Would you like to use `src/{:shell}` directory?** I will leave this on **No** and then press `ENTER{:shell}`, if prefer to place all your code in an `src/{:shell}` directory then press the `→{:shell}` right arrow key to select "Yes", some people prefer it for example to be able to restrict searches in files to files that are in the `src/{:shell}` directory and hence avoid getting result from the node_modules folder, my personal preference is to not use it as it is not required, I like to have all my directories in the root and if needed I can exclude the node_modules directory which is the same amount of work as including src instead
-* **Would you like to use App Router?** definatly keep this on **Yes** and then press `ENTER{:shell}`, since Next.js 13 you have two directories to chose from, you can add your pages into the **pages** directory which is the older version or you use the more modern version, which is the **app** directory, I recommend enabling the app directory (you can still later create the pages directory manually if you want to use it, both can be used alongside each other
-* **Would you like to customize the default import alias (@/*)?** press `→{:shell}` (the right arrow key) to select **Yes** and then press `ENTER{:shell}`, this will tell CNA to add an alias for a given path in the `tsconfig.json{:shell}` (the Typescript configuration file) if you selected **TypeScript** in the first question and if you chose **Javascript** it will create the alias in the `jsconfig.json{:shell}` file (This alias can be used for imports as a replacement for a path to a dependency, to learn more about this feature I recommend you have a quick look at the [Next.js "Absolute Imports and Module Path Aliases" documentation](https://nextjs.org/docs/app/building-your-application/configuring/absolute-imports-and-module-aliases)), if however you don't want it feel free to leave it on "No"
-* **What import alias would you like configured?** I personally keep the default `@/*{:shell}`, but feel free to chose another one if you prefer, then press `ENTER{:shell}`
+* **Would you like to use TypeScript?**, I recommended leaving it to **Yes** which is what is preselected, if however you prefer to use javascript select **No** using the left / right arrow keys and then just press `ENTER` (I recommend to use Typescript but I will not argue in favor or against it here, this is not the right place, if you never used Typescript before, then maybe just give it a try and see for yourself how different it is from using Javascript and after having built this blog prototype you will be able to judge for yourself which one you like more)
+* **Would you like to use ESLint?**, again **Yes** is preselected, so just press `ENTER` ([ESLint](https://eslint.org/) is very useful tool that helps find and correct errors in your code)
+* **Would you like to use Tailwind CSS?**, I will set this to **No**,  press `←` (the left arrow key) and then `ENTER`, I will use another styling solution in this project, more on that later) so if you want to explore another solution with me through this project then select "No" too, if you know Tailwind CSS and want to use it instead feel free to keep it on "Yes"
+* **Would you like to use `src/` directory?** I will leave this on **No** and then press `ENTER`, if prefer to place all your code in an `src/` directory then press the `→` right arrow key to select "Yes", some people prefer it for example to be able to restrict searches in files to files that are in the `src/` directory and hence avoid getting result from the node_modules folder, my personal preference is to not use it as it is not required, I like to have all my directories in the root and if needed I can exclude the node_modules directory which is the same amount of work as including src instead
+* **Would you like to use App Router?** definatly keep this on **Yes** and then press `ENTER`, since Next.js 13 you have two directories to chose from, you can add your pages into the **pages** directory which is the older version or you use the more modern version, which is the **app** directory, I recommend enabling the app directory (you can still later create the pages directory manually if you want to use it, both can be used alongside each other
+* **Would you like to customize the default import alias (@/*)?** press `→` (the right arrow key) to select **Yes** and then press `ENTER`, this will tell CNA to add an alias for a given path in the `tsconfig.json` (the Typescript configuration file) if you selected **TypeScript** in the first question and if you chose **Javascript** it will create the alias in the `jsconfig.json` file (This alias can be used for imports as a replacement for a path to a dependency, to learn more about this feature I recommend you have a quick look at the [Next.js "Absolute Imports and Module Path Aliases" documentation](https://nextjs.org/docs/app/building-your-application/configuring/absolute-imports-and-module-aliases)), if however you don't want it feel free to leave it on "No"
+* **What import alias would you like configured?** I personally keep the default `@/*`, but feel free to chose another one if you prefer, then press `ENTER`
 
 That's it the **Create Next App** will now install Next.js and React (and React DOM) for us, it will then add some development dependencies based on what we chose, like Typescript and ESLint and then it will add some default configuration files for each of these tools
 
 > [!TIP]  
-> when you use CNA, some of the options you chose will get stored, so that next time you use it again it will take your stored preferences instead of default values, if you want to reset those stored preferences you can use the `--reset-preferences{:shell}` option like so `npx create-next-app --reset-preferences{:shell}`, if successful CNA will print the following message "**Preferences reset successfully**"  
+> when you use CNA, some of the options you chose will get stored, so that next time you use it again it will take your stored preferences instead of default values, if you want to reset those stored preferences you can use the `--reset-preferences` option like so `npx create-next-app --reset-preferences`, if successful CNA will print the following message "**Preferences reset successfully**"  
 
 > [!MORE]  
 > [Next.js "create-next-app" documentation](https://nextjs.org/docs/app/api-reference/create-next-app)  
@@ -116,7 +116,7 @@ Now that create next app is done, it is a good time to do your first commit
 
 If you need help to commit changes (and then synchronize them) using VSCode, check out my chapter [commit your changes to GitHub using the VSCode version control tool](/web_development/posts/vscode#commit-your-changes-to-github-using-the-vscode-version-control-tool) from the VSCode post
 
-After you have commited the files and synchronised the changes with remote repository, you can go to [github.com](https://github.com/) and check out your repository or go directly to your repository if you remember the name, the URL should be in the format `https://github.com/MY_GITHUB_USER_NAME/MY_REPOSITORY_NAME{:shell}`, by default the content of the **main** branch gets displayed and because we commited our changes into the **preview** branch you need switch to the **preview** branch on GitHub to see your files (if you don't know how to switch branches on GitHub check out the [switch branches](/web_development/posts/github#switch-branches) chapter in my GitHub post)
+After you have commited the files and synchronised the changes with remote repository, you can go to [github.com](https://github.com/) and check out your repository or go directly to your repository if you remember the name, the URL should be in the format `https://github.com/MY_GITHUB_USER_NAME/MY_REPOSITORY_NAME`, by default the content of the **main** branch gets displayed and because we commited our changes into the **preview** branch you need switch to the **preview** branch on GitHub to see your files (if you don't know how to switch branches on GitHub check out the [switch branches](/web_development/posts/github#switch-branches) chapter in my GitHub post)
 
 If the commit and syncing was successful you will see that all the new files and directories are now listed in your GitHub repository
 
@@ -128,7 +128,7 @@ If the commit and syncing was successful you will see that all the new files and
 > [!NOTE]  
 > for your future self and for others that might contribute on your project it is always helpful to have well documented project. This is why we will update the readme and place some documentation in it, if however you prefer to store such information somewhere else this is fine too, what really matters is to do update the documentation regulary so that it will not become a tedious task at some point and also is a helpful resource right from the start of your project
 
-The first file we will edit is the `README.md{:shell}`, I recommend you remove everything that is currently in the REAME.md (not that it is bad advice but we will just structure it differently and add some more information to it)
+The first file we will edit is the `README.md`, I recommend you remove everything that is currently in the REAME.md (not that it is bad advice but we will just structure it differently and add some more information to it)
 
 Then copy / paste the following content into your README:
 
@@ -154,7 +154,7 @@ Then change **MY_PROJECT** to whatever you want to name your project
 > [!TIP]  
 > Did you know you can preview markdown files in VSCode? If not check out my short [mardown preview chapter](/web_development/posts/vscode#vscode-markdown-preview) in the VSCode post  
 
-Now save the file (to save the file you can use the VSCode shortcut `Ctrl+S{:shell}` (macOS: `⌘S{:shell}`, Linux: `Ctrl+S{:shell}`))
+Now save the file (to save the file you can use the VSCode shortcut `Ctrl+S` (macOS: `⌘S`, Linux: `Ctrl+S`))
 
 Finally commit the changes and then synchronize them
 
@@ -175,12 +175,12 @@ To make the Next.js typescript plugin work you need to change the Typescript ver
 
 If you don't know how yet how to change the typescript version to **workspace version** (in VSCode), check out the [VSCode typescript version](/web_development/posts/vscode#vscode-command-palette) chapter in the VSCode post
 
-As soon as you switch to the **workspace version**, VSCode will create new `.vscode/settings.json{:shell}` file (or if you already have a VSCode settings.json it will extend it), there is nothing wrong in sharing that file as it will ensure that everyone that works on your project (or if you use multiple devices yourself) that they use the same workspace settings, like the typescript workspace version but also in one of the next chapters we will add useful VSCode extension and they will be listed in settings file too, so if someone does not have the extension installed VSCode will show a modal that suggests installing it
+As soon as you switch to the **workspace version**, VSCode will create new `.vscode/settings.json` file (or if you already have a VSCode settings.json it will extend it), there is nothing wrong in sharing that file as it will ensure that everyone that works on your project (or if you use multiple devices yourself) that they use the same workspace settings, like the typescript workspace version but also in one of the next chapters we will add useful VSCode extension and they will be listed in settings file too, so if someone does not have the extension installed VSCode will show a modal that suggests installing it
 
 > [!TIP]  
 > Next.js typescript plugin comes with some useful features, for example you will have typed routes, meaning that if you use next/link and set a href to a page that doesn't exist you will get a warning, it will also warn you if something is wrong in how you use the **use client** directive in your components and some more, I recommend to keep an eye on the [Next.js "typescript" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript) as the Next.js team adds more features over time
 
-finally I recommend you commit / sync the new `.vscode/settings.json{:shell}`
+finally I recommend you commit / sync the new `.vscode/settings.json`
 
 > [!MORE]  
 > [Next.js "TypeScript" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript)  
@@ -188,9 +188,9 @@ finally I recommend you commit / sync the new `.vscode/settings.json{:shell}`
 ##### Statically Typed Links (Routes)
 
 > [!WARN]  
-> There seems to be a bug in the route types for `*.mdx{:shell}` pages, when doing a prod build, when doing a dev build all routes are typed and listed in the `.next/types/link.d.ts{:shell}` but they are missing in prod resulting in a **Type error** "XY is not an existing route.", so even though this feature seems very promissing, as of now I recommend to keep it turned off (set to false) if you have are using `*.mdx{:shell}` pages (which is what we will do in this tutorial)
+> There seems to be a bug in the route types for `*.mdx` pages, when doing a prod build, when doing a dev build all routes are typed and listed in the `.next/types/link.d.ts` but they are missing in prod resulting in a **Type error** "XY is not an existing route.", so even though this feature seems very promissing, as of now I recommend to keep it turned off (set to false) if you have are using `*.mdx` pages (which is what we will do in this tutorial)
 
-To ensure we benefit from **statically typed links** there is one more step needed, open the `next.config.mjs{:shell}` and then add the **experimental** typedRoutes to your Next.js configuration file like so:
+To ensure we benefit from **statically typed links** there is one more step needed, open the `next.config.mjs` and then add the **experimental** typedRoutes to your Next.js configuration file like so:
 
 ```js title="next.config.mjs" showLineNumbers {3-5}
 /** @type {import('next').NextConfig} */
@@ -203,14 +203,14 @@ const nextConfig = {
 export default nextConfig;
 ```
 
-Line 1 you can see that the Next.js configuration file uses [jsdoc](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html) with the `@type{:shell}` Typescript script, which allows us to have types even though the configuration file is not Typescript (but Javascript), which means if you start typing inside of the nextConfig object you will benefit from autocompletation for the Next.js configuration options
+Line 1 you can see that the Next.js configuration file uses [jsdoc](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html) with the `@type` Typescript script, which allows us to have types even though the configuration file is not Typescript (but Javascript), which means if you start typing inside of the nextConfig object you will benefit from autocompletation for the Next.js configuration options
 
-Line 3-5 we use the typedRoutes (experimental) option and enabled it, which means that when using `npm run dev{:shell}` or when building for production, Next.js will generate a `.next/types/link.d.ts{:shell}` file that contains information about all existing routes in our application, the advantage of this is that if we now use [next/link](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#link-component) but set the href to a route that doesn't exist we will see an error in VSCode getting displayed and builds will fail until we fix the typo in our URL
+Line 3-5 we use the typedRoutes (experimental) option and enabled it, which means that when using `npm run dev` or when building for production, Next.js will generate a `.next/types/link.d.ts` file that contains information about all existing routes in our application, the advantage of this is that if we now use [next/link](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#link-component) but set the href to a route that doesn't exist we will see an error in VSCode getting displayed and builds will fail until we fix the typo in our URL
 
 > [!NOTE]  
-> You might have noticed that in the latest Next.js the configuration file is now an [ECMAScript module](https://nodejs.org/api/esm.html) (ES modules / ESM) and not a [CommonJS module](https://nodejs.org/api/modules.html#modules-commonjs-modules) like in previous versions, which is why the extension is now `.mjs{:shell}` and not `.js{:shell}` anymore, this means that instead of using a require function to import other modules we now use the same import statement we use in client code, this change also matters because more and packages on npm are migrating to an ESM only format, which reduces the amount of code needed as they can drop CommonJS backward compatibility, but for us it means we must use import statements and can't NOT use the require function anymore  
+> You might have noticed that in the latest Next.js the configuration file is now an [ECMAScript module](https://nodejs.org/api/esm.html) (ES modules / ESM) and not a [CommonJS module](https://nodejs.org/api/modules.html#modules-commonjs-modules) like in previous versions, which is why the extension is now `.mjs` and not `.js` anymore, this means that instead of using a require function to import other modules we now use the same import statement we use in client code, this change also matters because more and packages on npm are migrating to an ESM only format, which reduces the amount of code needed as they can drop CommonJS backward compatibility, but for us it means we must use import statements and can't NOT use the require function anymore  
 
-then save your `next.config.mjs{:shell}` and commit / sync your latest changes
+then save your `next.config.mjs` and commit / sync your latest changes
 
 > [!MORE]  
 > [Next.js "configuration options" reference](https://nextjs.org/docs/app/api-reference/next-config-js)  
@@ -243,7 +243,7 @@ const nextConfig = (phase) => {
 export default nextConfig;
 ```
 
-Line 3 we have converted our next config object into a function, this allows us to use the Next.js configuration **phase** parameter, phase allows us to check what the current context of our Next.js app is, in our configuration we import the `PHASE_DEVELOPMENT_SERVER{:shell}` constant and then line 10 we check if the phase is **development server**, if it is we enable typedRoutes and if it is NOT we disable the typedRoutes option
+Line 3 we have converted our next config object into a function, this allows us to use the Next.js configuration **phase** parameter, phase allows us to check what the current context of our Next.js app is, in our configuration we import the `PHASE_DEVELOPMENT_SERVER` constant and then line 10 we check if the phase is **development server**, if it is we enable typedRoutes and if it is NOT we disable the typedRoutes option
 
 Next.js has some constants to make it easier to check what phase the app is in, those constants can be found in [src/shared/lib/constants](https://github.com/vercel/next.js/blob/canary/packages/next/src/shared/lib/constants.ts#L38-L43)
 
@@ -255,10 +255,10 @@ Next.js has some constants to make it easier to check what phase the app is in, 
 
 [React strict mode](https://react.dev/reference/react/StrictMode) and [powered by header(s)](https://nextjs.org/docs/app/api-reference/next-config-js/poweredByHeader) are two configuration options that often lead to controversial discussions among developers
 
-**React strict mode** is **enabled by default** since **Next.js v13.4** for the **app router** (not the pages router), you can disable the React strict mode in the `next.config.mjs{:shell}` by setting option to **false**
+**React strict mode** is **enabled by default** since **Next.js v13.4** for the **app router** (not the pages router), you can disable the React strict mode in the `next.config.mjs` by setting option to **false**
 
 > [!NOTE]  
-> for example if you don't want the **Strict Mode** to be enabled in your entire project, then disable it via the Next.js configuration file and then use the `<StrictMode>{:shell}` only in the pages / layouts ... in which you want to enable it
+> for example if you don't want the **Strict Mode** to be enabled in your entire project, then disable it via the Next.js configuration file and then use the `<StrictMode>` only in the pages / layouts ... in which you want to enable it
 
 I recommend not disabling the React Strict Mode, I see posts on [Stack Overflow](https://stackoverflow.com/) where people argue to turn it off as it causes problems in their app, however in my opinion this is masking problems instead of fixing the root cause, as mentioned on react.dev the Strict Mode does several important things, one of them is **checking if your components use deprecated APIs**
 
@@ -299,7 +299,7 @@ const nextConfig = {
 export default nextConfig;
 ```
 
-If you did any of the two changes I mentioned above , then save your `next.config.mjs{:shell}` and commit / sync your latest changes
+If you did any of the two changes I mentioned above , then save your `next.config.mjs` and commit / sync your latest changes
 
 > [!MORE]  
 > [React "Strict Mode" documentation](https://react.dev/reference/react/StrictMode)  
@@ -308,15 +308,15 @@ If you did any of the two changes I mentioned above , then save your `next.confi
 
 ## first page
 
-### create the first page
+### Our first typescript (javascript) page
 
 Hope you are still there, because it is finally time to start coding (a bit) 🙂
 
-But first lets open the app directory create next app has created for us, if you have a bit of time have a look at what they put in there (it's always good to have a look at what the Next.js team recommends) but after that delete all the files in the `/app{:shell}` directory as I want to go step by step through the process of creating a Next.js blog, you can also delete the content in the `/public{:shell}` directory as we won't need the assets of the demo project anymore
+But first lets open the app directory create next app has created for us, if you have a bit of time have a look at what they put in there (it's always good to have a look at what the Next.js team recommends) but after that delete all the files in the `/app` directory as I want to go step by step through the process of creating a Next.js blog, you can also delete the content in the `/public` directory as we won't need the assets of the demo project anymore
 
-Next create a new file in the app directory and name it `page.tsx{:shell}` (or `page.jsx{:shell}` if you chose to use javascript)
+Next create a new file in the app directory and name it `page.tsx` (or `page.jsx` if you chose to use javascript)
 
-Then add the following content into the `page.tsx{:shell}` file and finally save it
+Then add the following content into the `page.tsx` file and finally save it
 
 ```tsx title="/app/page.tsx" showLineNumbers
 export default function Home() {
@@ -341,23 +341,23 @@ Now open the VSCode terminal if it isn't open yet (or use your favorite command 
 npm run dev
 ```
 
-Now in the terminal, press `Ctrl{:shell}` and then click on the Next.js local server URL or open your browser and put the following URL into the address bar: [http://localhost:3000/](http://localhost:3000/)
+Now in the terminal, press `Ctrl` and then click on the Next.js local server URL or open your browser and put the following URL into the address bar: [http://localhost:3000/](http://localhost:3000/)
 
 > [!NOTE]  
 > port 3000 is the default, the port will be something else if:  
 >
 > * it was already in use Next.js will have taken another port  
-> * you have used the **-p** option for next.js **dev** or **start** cli commands, for example in your package.json use the option like so `next dev -p 4000{:shell}` to change the port to 4000
+> * you have used the **-p** option for next.js **dev** or **start** cli commands, for example in your package.json use the option like so `next dev -p 4000` to change the port to 4000
 >
 > if you want to know for sure what port is being used check the terminal, Next.js will have printed the URL of the dev server
 
 If you inspect the source of the page, you will see that Next.js injects a bunch of Javascript code into our page and some of those javascript files are really heavy, this is because Next.js adds for example a tool called **Hot Module Reload** (HMR), which will run in the background and update the project for us every time we edit and then save a file in our project, Next.js calls this [fast refresh](https://nextjs.org/docs/architecture/fast-refresh), then it will reload the content in the browser for us, all of that code however won't make it into production, Next.js only adds those tool when in development mode (we are in development mode because we use the dev server command)
 
-Now go back to VSCode and look at the list of files in the sidebar and you will notice that Next.js re-added the `/app/layout.tsx{:shell}` file we just deleted earlier, that's because Next.js is a nice framework and it will always have your back, well and also because this layout file is called the **root layout** and it is **required**, also if you look at your VSCode terminal you will see that Next.js printed the following line, informing us that it created the layout file for us:
+Now go back to VSCode and look at the list of files in the sidebar and you will notice that Next.js re-added the `/app/layout.tsx` file we just deleted earlier, that's because Next.js is a nice framework and it will always have your back, well and also because this layout file is called the **root layout** and it is **required**, also if you look at your VSCode terminal you will see that Next.js printed the following line, informing us that it created the layout file for us:
 
 > Your page app/page.tsx did not have a root layout. We created app\layout.tsx for you.
 
-If you open the file you will see that on top it has added a metadata object, this Next.js metadata API is what we will use in layouts and pages to modify the tags in the `<head>{:shell}` element of our page(s), like the **title** and **description** (I will go more in detail in a future chapter)
+If you open the file you will see that on top it has added a metadata object, this Next.js metadata API is what we will use in layouts and pages to modify the tags in the `<head>` element of our page(s), like the **title** and **description** (I will go more in detail in a future chapter)
 
 The second part it has added is just a basic React setup
 
@@ -418,11 +418,11 @@ Now that we have added our GitHub repository to vercel, every commit (or pull re
 
 ### testing preview deployments
 
-To see how this works open a new tab in your browser and open the [Vercel dashboard](https://vercel.com/dashboard) page, in the **Projects** list click on the name of your project to access the project page (something like `https://vercel.com/MY_USER_NAME-projects/MY_PROJECT_NAME{:shell}`), on top you will have section called **Production Deployment** and below that a section called **Active Branches** which is still empty (No Preview Deployments)
+To see how this works open a new tab in your browser and open the [Vercel dashboard](https://vercel.com/dashboard) page, in the **Projects** list click on the name of your project to access the project page (something like `https://vercel.com/MY_USER_NAME-projects/MY_PROJECT_NAME`), on top you will have section called **Production Deployment** and below that a section called **Active Branches** which is still empty (No Preview Deployments)
 
 Now open VSCode and make sure you are on the **preview** branch
 
-Open the `README.md{:shell}` file and for example add a small explanation that our project is now auto deploying on vercel, like so:
+Open the `README.md` file and for example add a small explanation that our project is now auto deploying on vercel, like so:
 
 ```md
 # MY_PROJECT
@@ -444,7 +444,7 @@ Then save the file, commit and sync the changes and immediatly open the browser 
 
 Back on the project page, click on the **3 dots** (...) at the end of your preview branch row and then click on **Copy Branch URL**
 
-Your branch URL will be something like `MY_PROJECT_NAME-git-preview-MY_USER_NAME.vercel.app{:shell}`, paste the branch URL you just copied into your browsers address bar and press `Enter{:shell}`
+Your branch URL will be something like `MY_PROJECT_NAME-git-preview-MY_USER_NAME.vercel.app`, paste the branch URL you just copied into your browsers address bar and press `Enter`
 
 > [!NOTE]  
 > when you visit your preview URL vercel will ask you to log in (if you are not logged in yet), this is because only you are supposed to have access to the previews, if someone else wants access they will first have to request access and wait for you to grant them access
@@ -545,7 +545,7 @@ export default function Error({
 
 ### Handling global errors
 
-The Sentry.io wizard we just used has created a Next.js `app/global-error.jsx{:shell}` file for us, the Next.js documentation explains well why this file is important:
+The Sentry.io wizard we just used has created a Next.js `app/global-error.jsx` file for us, the Next.js documentation explains well why this file is important:
 
 > The root app/error.js boundary does not catch errors thrown in the root app/layout.js or app/template.js component.
 >
@@ -553,7 +553,7 @@ The Sentry.io wizard we just used has created a Next.js `app/global-error.jsx{:s
 >
 > global-error.js is the least granular error UI and can be considered "catch-all" error handling for the whole application.
 
-But because Sentry created a **javascript** file but our project uses **typescript**, we will start by converting the file into a typescript file, by renaming `app/global-error.jsx{:shell}` to `app/global-error.tsx{:shell}`
+But because Sentry created a **javascript** file but our project uses **typescript**, we will start by converting the file into a typescript file, by renaming `app/global-error.jsx` to `app/global-error.tsx`
 
 After renaming the file we edit it and replace its content with the code for a global error page from the Next.js documentation, which is a good start as it is strictly typed, the only difference is that we also modify the code to add the Sentry.io `captureException(){:.fn}` function, that will capture exceptions and send them to Sentry.io, the final version looks like this:
 
@@ -597,7 +597,7 @@ Using [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/W
 
 ### Adding CSP Headers in Next.js configuration
 
-To add CSP rules to our Next.js project we need to edit the `next.config.mjs{:shell}` in the root of our project
+To add CSP rules to our Next.js project we need to edit the `next.config.mjs` in the root of our project
 
 Add the following lines to your configuration:
 
@@ -694,7 +694,7 @@ const nextConfig = {
 export default nextConfig;
 ```
 
-If you now start your development server (using `npm run dev{:shell}`), open `http://localhost:3000{:shell}` in your browser, then open the browsers developer tools and then click on the Console tab, then you should see no CSP violations messages
+If you now start your development server (using `npm run dev`), open `http://localhost:3000` in your browser, then open the browsers developer tools and then click on the Console tab, then you should see no CSP violations messages
 
 > [!NOTE]  
 > To check for best practices I used a tool by google called [CSP Evaluator](https://csp-evaluator.withgoogle.com/), it showed a green checkmark for every directive except the **script-src** directive, where it mentioned that it would be better to remove **'unsafe-inline'**, however unsafe-inline is there because next.js uses inline scripts a lot
@@ -723,7 +723,7 @@ Those violations are there because Next.js attempts to inject javascript code us
 
 If you look closer at what rule sets we created, there are a total of 4, the first one contains several default rules that we will use for our 3 environments, then we have some rules that we will only apply if the environment is **preview** which is the case when we deploy the preview branch on vercel, the next group contains the rules for the production environment and the last group has the rules we use for our local development environment
 
-If you look at the `script-src 'self' 'unsafe-eval' 'unsafe-inline'{:shell}` rule we just edited for **development** you will see that we added the `'unsafe-eval'{:shell}` value, now compare it with the `script-src{:shell}` we use for the **production** and the rule we use for the **preview** environments and you will see that there we don't add that value, this is because scripts like HMR are only used in development, by not adding that exception to production and preview we make those two environments safer
+If you look at the `script-src 'self' 'unsafe-eval' 'unsafe-inline'` rule we just edited for **development** you will see that we added the `'unsafe-eval'` value, now compare it with the `script-src` we use for the **production** and the rule we use for the **preview** environments and you will see that there we don't add that value, this is because scripts like HMR are only used in development, by not adding that exception to production and preview we make those two environments safer
 
 > [!TIP]  
 > I recommend you always start with the most restrictive rules possible, for example if you look at the top of CSP rules, I have set the **form-action** to none, this is because in this tutorial we will not have any forms so there is no reason to allow them, however if you add forms to your project in the future then you will of course want to adjust the directive and for example set it to 'self' instead of 'none'
@@ -986,6 +986,30 @@ We also add 3 more headers by to the end of our headers array:
 > [MDN "X-Content-Type-Options" documentation]()  
 > [MDN "X-Frame-Options" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options)
 
+## Adding MDX support using @next/mdx
 
+As a developer using markdown to format content makes sense, as most of us probably already know Markdown because we have been using it when formatting our project READMEs, or when opening Issues or participating in Discussions on GitHub, this is why I chose to use MDX for this "static Next.js blog" project
+
+To add MDX support to the Next.js blog I will use [@next/mdx](https://www.npmjs.com/package/@next/mdx) which is an MDX package by the same team that is behind Next.js, but there are other alternatives that work well too, I listed some of them in the [@next/mdx alternatives chapter](/web_development/posts/mdx/#nextmdx-alternatives) in my MDX post, if you prefer you can also create your own package in which case I recommend you start by reading the **Deep Dive: How do you transform markdown into HTML?** section of the [next.js "Markdown and MDX" documentation](https://nextjs.org/docs/app/building-your-application/configuring/mdx#deep-dive-how-do-you-transform-markdown-into-html)
+
+> [!NOTE]  
+> If you want to get more background information about MDX I recommended checking out my [MDX post](/web_development/posts/mdx) first
+
+**@next/mdx** is stable and I had no major problems using it for this project, there are however a series of open Issues on GitHub, I recommend having a brief look at the [@next/mdx issues search on GitHub](https://github.com/vercel/next.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22area%3A+MDX%22) to have an idea of what might not work or just have a look at the list when you have the feeling something is not working as it should
+
+### MDX support setup
+
+
+
+is this still needed???:
+```ts
+// types/mdx.d.ts
+declare module '*.mdx' {
+    let MDXComponent: (props) => JSX.Element
+    export default MDXComponent
+}
+```
+
+### Our first MDX article (page)
 
 </article>

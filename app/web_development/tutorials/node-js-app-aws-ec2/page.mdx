@@ -140,7 +140,7 @@ nvm install --lts
 > [!NOTE]  
 > you can install multiple Node.js versions at a time (in parallel) but only use one at a time
 
-to switch between versions use the command `nvm use NODE_JS_VERSION{:shell}` so for example:
+to switch between versions use the command `nvm use NODE_JS_VERSION` so for example:
 
 ```shell
 nvm use 20.11.1
@@ -175,7 +175,7 @@ Next we will install NGINX to use it as reverse proxy (NGINX will listen on port
 sudo dnf install nginx
 ```
 
-this will give you a list of what will be installed, then type `y{:shell}` and press `Enter{:shell}` to start the installation
+this will give you a list of what will be installed, then type `y` and press `Enter` to start the installation
 
 next we will **enable** NGINX
 
@@ -190,7 +190,7 @@ sudo systemctl enable --now nginx
 ```
 
 > [!NOTE]  
-> we used the systemctl **--now** switch to also start NGINX, depending on the systemctl version now might not be supported (now got added in systemctl version 220, to check what version you have you can use this command `sudo systemctl --version{:shell}`), am AWS Linux 2023 it is, which is why we can use it here, if now is not supported you can use the `sudo systemctl start nginx{:shell}` command to start it manually
+> we used the systemctl **--now** switch to also start NGINX, depending on the systemctl version now might not be supported (now got added in systemctl version 220, to check what version you have you can use this command `sudo systemctl --version`), am AWS Linux 2023 it is, which is why we can use it here, if now is not supported you can use the `sudo systemctl start nginx` command to start it manually
 
 if you want to verify that NGINX is now enabled you can use this command:
 
@@ -224,9 +224,9 @@ sudo vi /etc/nginx/nginx.conf
 
 first locate the **http** block, and then find the **keepalive_timeout** line, go to the end of that line
 
-then press the `i{:shell}` key to **enter insert mode**
+then press the `i` key to **enter insert mode**
 
-then press the right arrow `→{:shell}` key and then `Enter{:shell}` to go to the new line
+then press the right arrow `→` key and then `Enter` to go to the new line
 
 then add **client_max_body_size** (http://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size) and set it to the value you require, this will increase the allowed size for uploads, if you don’t set it the default will be 1MB (which might be enough for your requirements, in which case you can skip this step), for my use case I set it to 50MB, like so:
 
@@ -234,7 +234,7 @@ then add **client_max_body_size** (http://nginx.org/en/docs/http/ngx_http_core_m
 client_max_body_size 50m;
 ```
 
-to **exit insert mode** press the `ESC{:shell}` key
+to **exit insert mode** press the `ESC` key
 
 Under that line we add another option to disable the header that exposes the nginx version, I prefer to give malicious people the least information possible which is why I prefer NOT giving away the exact NGINX version that is installed by turning the server token off:
 
@@ -299,9 +299,9 @@ Next you should comment out the default http server (or if you prefer delete tho
 
 the https one should already be commented out, if it is NOT commented out yet, comment it out too
 
-make sure you are not in insert mode by pressing the `ESC{:shell}` key
+make sure you are not in insert mode by pressing the `ESC` key
 
-Then save and exit by typing `:x!{:shell}` and then press `Enter{:shell}`
+Then save and exit by typing `:x!` and then press `Enter`
 
 Now we are going to create two new directories inside of /etc/nginx, one directory is called “sites-available” and it will contain the configuration file for our host(s), the second one is called “sites-enabled” and it will contain symbolic links to the configuration files we want to enable:
 
@@ -319,7 +319,7 @@ Let’s create one such host configuration file by creating a file called chrisw
 sudo vi /etc/nginx/sites-available/chrisweb.dev.conf
 ```
 
-then press the `i{:shell}` key to **enter insert mode**
+then press the `i` key to **enter insert mode**
 
 and then add add the following content (you can copy the following lines and then in putty press the right mouse key to paste), replace YOUR_DOMAIN_NAME with your domain name, something like **example.com**:
 
@@ -339,9 +339,9 @@ server {
 }
 ```
 
-then press the `ESC{:shell}` key to **exit insert mode**
+then press the `ESC` key to **exit insert mode**
 
-then type `:x!{:shell}` and then press `Enter{:shell}` to save the file
+then type `:x!` and then press `Enter` to save the file
 
 > [!NOTE]  
 > we use the default localhost IP (127.0.0.1) and port 3000 in the configuration above, if your app is listening on another port then you need to modify that value, also as IP we use the localhost but if your nodejs is on a remote server then you need to change the IP address too
@@ -439,7 +439,7 @@ After your certificate has been installed you can open the domain configuration 
 sudo vi /etc/nginx/sites-available/chrisweb.dev.conf
 ```
 
-To exit the file without saving enter `:q!{:shell}` and then press `Enter{:shell}` to exit the file
+To exit the file without saving enter `:q!` and then press `Enter` to exit the file
 
 Now if you want to test the quality of your SSL certificate setup, you can do so using the free [Qualys SSL Server Test](https://www.ssllabs.com/ssltest/index.html)
 
