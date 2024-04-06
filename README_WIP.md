@@ -4046,11 +4046,13 @@ new chapter: final touches
 * sitemap.xml: https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap
 * manifest.json: https://nextjs.org/docs/app/api-reference/file-conventions/metadata/manifest
 
-https://web.dev/explore/progressive-web-apps?hl=en
-https://w3c.github.io/manifest/#shortcuts-member
-https://developer.mozilla.org/en-US/docs/Web/Manifest/shortcuts
-https://web.dev/articles/install-criteria
-also search google for "manifest json generator" and "favicon generator", to find tools like this nice one: https://realfavicongenerator.net/
+https://web.dev/explore/progressive-web-apps
+https://web.dev/articles/add-manifest
+https://web.dev/articles/maskable-icon
+https://w3c.github.io/manifest/
+https://developer.mozilla.org/en-US/docs/Web/Manifest
+manifest generator: https://manifest-gen.netlify.app/
+favicon generator: https://realfavicongenerator.net/
 
 ### optimizing images with next/image
 
