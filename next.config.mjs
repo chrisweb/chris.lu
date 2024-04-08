@@ -235,6 +235,7 @@ const nextConfig = (phase) => {
             object-src 'none';
             worker-src 'self' blob:;
             child-src 'self' blob:;
+            manifest-src 'self';
             base-uri 'none';
             form-action 'none';
             frame-ancestors 'none';
