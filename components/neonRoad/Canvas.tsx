@@ -15,7 +15,7 @@ import { EffectComposer, Bloom } from '@react-three/postprocessing'
 
 interface IProps extends React.PropsWithChildren {
     altText: string
-    containerRef: React.MutableRefObject<HTMLDivElement | null>
+    containerRef?: React.MutableRefObject<HTMLDivElement | null>
 }
 
 const NeonRoadCanvas: React.FC<IProps> = (props) => {
@@ -68,7 +68,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
         return (<>3D Canvas not supported on this device</>)
     }
 
-    const aspect = props.containerRef.current !== null ? props.containerRef.current.clientWidth / props.containerRef.current.clientHeight : 2
+    const aspect = (typeof props.containerRef !== 'undefined' && props.containerRef.current !== null) ? props.containerRef?.current.clientWidth / props.containerRef?.current.clientHeight : 2
 
     return (
         <>
