@@ -4210,3 +4210,23 @@ Note: after the PR is done, if you listed your ticket(s) in the description of t
 
 now that the PR into the **main** branch is done, vercel will do a new production deployment for you
 
+
+
+## metadata
+
+[Next.js "metadata" documentation](https://nextjs.org/docs/app/api-reference/functions/generate-metadata)
+
+### favicon and web app icon(s)
+
+[Next.js "app icon(s)" documentation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/app-icons)
+[Apple "web application icon" documentation](https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html)
+
+### web app manifest
+
+[MDN "manifest shortcuts" documentation](https://developer.mozilla.org/en-US/docs/Web/Manifest/shortcuts)
+[web.dev "manifest" documentation](https://web.dev/articles/add-manifest)
+[MDN "CSP manifest-src" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/manifest-src)
+
+### opengraph
+
+[Next.js "opengraph image" documentation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image)
