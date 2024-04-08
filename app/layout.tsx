@@ -11,61 +11,7 @@ export const metadata: Metadata = {
     title: 'Home | chris.lu',
     description: 'chrisweb\'s blog about web development, games, Lego, music, memes, ... | chris.lu',
     manifest: 'manifest.json',
-    /*icons: {
-        icon: [
-            { url: '/favicon.ico' },
-          ],
-    }*/
-    /*icons: [
-        {
-            rel: 'icon',
-            url: 'favicon.ico'
-        },
-        {
-            rel: 'icon',
-
-            url: 'favicon-16x16.png'
-        },
-        {
-            rel: 'icon',
-
-            url: 'favicon-32x32.png'
-        },
-        {
-            rel: 'apple-touch-icon',
-            url: 'apple-touch-icon.png'
-        },
-        {
-            rel: 'apple-touch-icon',
-            sizes: '152x152',
-            url: 'apple-touch-icon-152x152.png'
-        },
-        {
-            rel: 'apple-touch-icon',
-            sizes: '167x167',
-            url: 'apple-touch-icon-167x167.png'
-        },
-        {
-            rel: 'apple-touch-icon',
-            sizes: '180x180',
-            url: 'apple-touch-icon-180x180.png'
-        },
-        {
-            rel: 'apple-touch-icon',
-            sizes: '192x192',
-            url: 'apple-touch-icon-192x192.png'
-        },
-        {
-            rel: 'apple-touch-icon',
-            sizes: '512x512',
-            url: 'apple-touch-icon-512x512.png'
-        },
-        {
-            rel: 'mask-icon',
-            sizes: '512x512',
-            url: 'maskable-icon-512x512.svg'
-        }
-    ],*/
+    twitter: {},
 }
 
 import type { Viewport } from 'next'
