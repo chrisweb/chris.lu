@@ -618,6 +618,7 @@ const cspHeader = () => {
         object-src 'none';
         worker-src 'self' blob:;
         child-src 'self' blob:;
+        manifest-src 'self';
         base-uri 'none';
         form-action 'none';
         require-trusted-types-for 'script';
@@ -845,6 +846,7 @@ To make sure violations are being sent to Sentry.io (logged like any other error
             object-src 'none';
             worker-src 'self' blob:;
             child-src 'self' blob:;
+            manifest-src 'self';
             base-uri 'none';
             form-action 'none';
             frame-ancestors 'none';
