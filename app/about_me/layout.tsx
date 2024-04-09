@@ -4,7 +4,7 @@ export const metadata: Metadata = {
     title: 'About me | chris.lu',
 }
 
-export default function WebDevelopmentLayout({ children }: {
+export default function AboutMeLayout({ children }: {
     children: React.ReactNode
 }) {
 

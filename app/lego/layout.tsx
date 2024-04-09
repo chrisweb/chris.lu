@@ -4,7 +4,7 @@ export const metadata: Metadata = {
     title: 'Lego | chris.lu',
 }
 
-export default function WebDevelopmentLayout({ children }: {
+export default function LegoLayout({ children }: {
     children: React.ReactNode
 }) {
 

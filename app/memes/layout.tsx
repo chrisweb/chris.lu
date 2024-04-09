@@ -4,7 +4,7 @@ export const metadata: Metadata = {
     title: 'Memes | chris.lu',
 }
 
-export default function WebDevelopmentLayout({ children }: {
+export default function MemesLayout({ children }: {
     children: React.ReactNode
 }) {
 

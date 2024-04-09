@@ -4,7 +4,7 @@ export const metadata: Metadata = {
     title: 'Music | chris.lu',
 }
 
-export default function WebDevelopmentLayout({ children }: {
+export default function MusicLayout({ children }: {
     children: React.ReactNode
 }) {
 
