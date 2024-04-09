@@ -5,8 +5,8 @@ export const runtime = 'edge'
 
 // Image metadata
 export const size = {
-    width: 2560,
-    height: 512,
+    width: 1200,
+    height: 630,
 }
 
 export const contentType = 'image/png'
@@ -31,7 +31,7 @@ export default async function OGImage(/*props: IImageProps*/) {
     ).then((res) => res.arrayBuffer())
 
     const imageData = await fetch(
-        new URL('/public/assets/images/og_image_background.jpg', import.meta.url)
+        new URL('/public/assets/images/og_image_background_1200x630.jpg', import.meta.url)
     ).then((res) => res.arrayBuffer())
 
     return new ImageResponse(
@@ -62,7 +62,7 @@ export default async function OGImage(/*props: IImageProps*/) {
                         position: 'absolute',
                         width: '600',
                         height: '350',
-                        left: '38%',
+                        left: '24%',
                         bottom: '0',
                         textAlign: 'center',
                         margin: 0,
@@ -89,7 +89,7 @@ export default async function OGImage(/*props: IImageProps*/) {
                         position: 'absolute',
                         width: '500',
                         height: '150',
-                        left: '47.5%',
+                        left: '45.5%',
                         bottom: '-10%',
                     }}
                 >
