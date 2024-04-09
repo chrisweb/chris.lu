@@ -4229,6 +4229,9 @@ now that the PR into the **main** branch is done, vercel will do a new productio
 
 ### opengraph
 
+> [!WARN]  
+> If like me you are on the vercel free plan (Hobby plan), be careful to not use images that are very heavy or use a lot of images (or other assets like fonts) in your og image script, because functions have a limit of 1MB, so if your PNG background image is 1.5 MB you will get this error during the build process: "Error: The Edge Function "web_development/opengraph-image" size is 1.68 MB and your plan size limit is 1 MB. Learn More: [https://vercel.link/edge-function-size](https://vercel.link/edge-function-size)"
+
 [Next.js "opengraph image" documentation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image)
 [Vercel "OG image generation" documentation](https://vercel.com/docs/functions/og-image-generation)
 [Vercel "OG image examples" documentation](https://vercel.com/docs/functions/og-image-generation/og-image-examples)
