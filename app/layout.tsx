@@ -11,6 +11,15 @@ export const metadata: Metadata = {
     description: 'chrisweb\'s blog about web development, games, Lego, music, memes, ... | chris.lu',
     manifest: 'manifest.json',
     twitter: {},
+    alternates: {
+        canonical: 'https://chris.lu/',
+    },
+    openGraph: {
+        url: 'https://chris.lu/',
+        siteName: 'Chris.lu',
+        locale: 'en_US',
+        type: 'website',
+    },
 }
 
 import type { Viewport } from 'next'
