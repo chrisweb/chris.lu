@@ -4230,3 +4230,5 @@ now that the PR into the **main** branch is done, vercel will do a new productio
 ### opengraph
 
 [Next.js "opengraph image" documentation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image)
+[Vercel "OG image generation" documentation](https://vercel.com/docs/functions/og-image-generation)
+[Vercel "OG image examples" documentation](https://vercel.com/docs/functions/og-image-generation/og-image-examples)
