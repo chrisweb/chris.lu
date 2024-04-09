@@ -47,6 +47,7 @@ export default async function OGImage(/*props: IImageProps*/) {
                 }}
             >
                 {
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                         // @ts-ignore: this is fine 🔥
                         src={imageData}
