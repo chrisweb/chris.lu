@@ -8,8 +8,7 @@ import styles from './page.module.css'
 import MusicBannerImage from '/public/assets/images/app/music/banner.png'
 
 export const metadata: Metadata = {
-    title: 'foo',
-    description: 'bar',
+
 }
 
 export default function MusicPage() {

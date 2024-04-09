@@ -4,7 +4,6 @@ import styles from './layout.module.css'
 import { Permanent_Marker, VT323, Architects_Daughter, Source_Code_Pro } from 'next/font/google'
 import HeaderNavigation from '@/components/header/Navigation'
 import BaseLink from '@/components/base/Link'
-
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
