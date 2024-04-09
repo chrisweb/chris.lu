@@ -31,7 +31,7 @@ export default async function OGImage(/*props: IImageProps*/) {
     ).then((res) => res.arrayBuffer())
 
     const imageData = await fetch(
-        new URL('/public/assets/images/neonroad/fallback.png', import.meta.url)
+        new URL('/public/assets/images/og_image_background.jpg', import.meta.url)
     ).then((res) => res.arrayBuffer())
 
     return new ImageResponse(
