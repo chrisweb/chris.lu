@@ -71,13 +71,16 @@ module.exports = {
                         },
                     }
                 ],
-                '@typescript-eslint/ban-ts-comment': {
-                    'ts-expect-error': 'allow-with-description',
-                    'ts-ignore': 'allow-with-description',
-                    'ts-nocheck': true,
-                    'ts-check': true,
-                    minimumDescriptionLength: 3,
-                }
+                '@typescript-eslint/ban-ts-comment': [
+                    'error',
+                    {
+                        'ts-expect-error': 'allow-with-description',
+                        'ts-ignore': 'allow-with-description',
+                        'ts-nocheck': false,
+                        'ts-check': false,
+                        minimumDescriptionLength: 3,
+                    },
+                ],
             },
         },
         {
