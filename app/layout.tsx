@@ -7,6 +7,11 @@ import BaseLink from '@/components/base/Link'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
+    // default next.js value
+    // added this just to make the console message go away
+    metadataBase: process.env.VERCEL_URL
+        ? new URL(`https://${process.env.VERCEL_URL}`)
+        : new URL(`http://localhost:${process.env.PORT || 3000}`),
     title: 'Home | chris.lu',
     description: 'chrisweb\'s blog about web development, games, Lego, music, memes, ... | chris.lu',
     manifest: 'manifest.json',
