@@ -634,7 +634,7 @@ const cspHeader = () => {
     if (process.env.VERCEL_ENV === 'preview') {
         return `
             ${defaultCSPDirectives}
-            font-src 'self';
+            font-src 'self' https://vercel.live/;
             style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
             script-src 'self' 'unsafe-inline' https://vercel.live/;
             connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/ ${reportingDomainWildcard};
@@ -662,7 +662,7 @@ const cspHeader = () => {
         ${defaultCSPDirectives}
         font-src 'self';
         style-src 'self' 'unsafe-inline';
-        script-src 'self' 'unsafe-eval' 'unsafe-inline';
+        script-src 'self' 'unsafe-inline' 'unsafe-eval';
         connect-src 'self';
         img-src 'self' data:;
         frame-src 'none';
@@ -849,6 +849,7 @@ To make sure violations are being sent to Sentry.io (logged like any other error
             manifest-src 'self';
             base-uri 'none';
             form-action 'none';
+            require-trusted-types-for 'script';
             frame-ancestors 'none';
             ${upgradeInsecure}
         `
@@ -861,7 +862,7 @@ To make sure violations are being sent to Sentry.io (logged like any other error
         if (process.env.VERCEL_ENV === 'preview') {
             return `
                 ${defaultCSPDirectives}
-                font-src 'self';
+                font-src 'self' https://vercel.live/;
                 style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
                 script-src 'self' 'unsafe-inline' https://vercel.live/;
                 connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/ ${reportingDomainWildcard};
@@ -891,7 +892,7 @@ To make sure violations are being sent to Sentry.io (logged like any other error
             ${defaultCSPDirectives}
             font-src 'self';
             style-src 'self' 'unsafe-inline';
-            script-src 'self' 'unsafe-eval' 'unsafe-inline';
+            script-src 'self' 'unsafe-inline' 'unsafe-eval';
             connect-src 'self';
             img-src 'self' data:;
             frame-src 'none';
