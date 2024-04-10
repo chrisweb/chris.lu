@@ -285,7 +285,7 @@ const nextConfig = (phase) => {
             ${defaultCSPDirectives}
             font-src 'self';
             style-src 'self' 'unsafe-inline';
-            script-src 'self' 'unsafe-eval' 'unsafe-inline';
+            script-src 'self' 'unsafe-inline' 'unsafe-eval';
             connect-src 'self';
             img-src 'self' data:;
             frame-src 'none';
