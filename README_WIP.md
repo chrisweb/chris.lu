@@ -25,56 +25,7 @@ next chapters?
 
 
 
-First we will add the `@next/mdx` package our next.js project, this package will add support for MDX files to our next.js project, to install the package execute the following command in your VSCode terminal:
 
-```shell
-npm install @next/mdx --save-exact
-```
-
-then we need to update the content our `next.config.mjs` file, to this:
-
-```mjs
-import createMdx from '@next/mdx'
-
-const nextConfig = () => {
-
-    const withMDX = createMdx(/*{
-        extension: /\.mdx?$/,
-        options: {
-            // If you use remark-gfm, you'll need to use next.config.mjs
-            // as the package is ESM only
-            // https://github.com/remarkjs/remark-gfm#install
-            remarkPlugins: [
-                //remarkGfm,
-            ],
-            rehypePlugins: [],
-            // If you use `MDXProvider`, uncomment the following line.
-            // providerImportSource: "@mdx-js/react",
-        },
-    }*/)
-
-    /** @type {import('next').NextConfig} */
-    const nextConfig = {
-        experimental: {
-            // experimental support for next.js > 13 app directory
-            appDir: true,
-            // experimental use rust compiler for MDX
-            mdxRs: true,
-        },
-        // file formats for next/image
-        images: {
-            formats: ['image/avif', 'image/webp']
-        },
-        // configure pageExtensions to include md and mdx
-        pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
-    }
-
-    return withMDX(nextConfig)
-
-}
-
-export default nextConfig
-```
 
 Note: as you can see in this configuration we have not only enabled the new but still experimental `app` directory but we have also added `mdxRs: true`, this tells next.js that we would like to use the new but also still experimental rust compiler for our MDX content, you can disable this if you prefer, if you wish to do so you might want to read my post about ["disabling the experimental rust compiler for MDX content"](#disabling-the-experimental-mdx-rust-compiler-mdxrs)
 
