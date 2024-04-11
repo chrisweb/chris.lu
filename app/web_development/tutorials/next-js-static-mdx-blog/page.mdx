@@ -1086,10 +1086,10 @@ To add MDX support to the Next.js blog I will use [@next/mdx](https://www.npmjs.
 
 ### MDX packages installation
 
-First we will add the `@next/mdx` package, two dependencies from the `@mdx-js` repository and the MDX types to our next.js project, this package will add support for MDX files to our next.js project, to install the package execute the following command in your VSCode terminal:
+First we will add the `@next/mdx` package and the MDX types to our next.js project, the **@next/mdx** package will add support for MDX files to our next.js project, to install the package execute the following command in your VSCode terminal:
 
 ```shell
-npm install @next/mdx @mdx-js/loader @mdx-js/react @types/mdx --save-exact
+npm install @next/mdx @types/mdx --save-exact
 ```
 
 ### MDX support setup
@@ -1148,6 +1148,29 @@ const nextConfig = (phase) => {
 
 You can configure @next/mdx by passing an object to **createMdx**, using **extension** we tell @next/mdx what for what pages it should use the MDX parser and the via the options we add support for **remark plugins** and **rehype plugins** (we will add a bunch of those later)
 
+The following file is not mandatory, but it doesn't hurt to add the right type for MDX pages (I found this in the Next.js ["app-dir-mdx"](https://github.com/vercel/next.js/tree/5e2ac0986f78c8e15756ec403666d20a99d3247e/examples/app-dir-mdx) example on GitHub), so (if it doesn't exist already) I recommend creating a `types` folder in the root of your project and adding a `mdx.d.ts` file with the following content:
+
+```ts title="types/mdx.d.ts"
+declare module '*.mdx' {
+    let MDXComponent: (props) => JSX.Element
+    export default MDXComponent
+}
+```
+
+Because we used **create next app** in our tsconfig.json we **already** have the following include (if it isn't in your tsconfig.json then you need to add it), which means the d.ts file we just created will get used by typescript:
+
+```json title="tsconfig.json" {2}
+    "include": [
+        ".next/types/**/*.ts"
+    ],
+```
+
+> [!MORE]  
+> ["@next/mdx package" README](https://github.com/vercel/next.js/tree/canary/packages/next-mdx)  
+> [mdxjs.com "Types" documentation](https://mdxjs.com/docs/getting-started/#types)
+
+#### (optional) adding support for more markdown extensions
+
 The configuration we just did adds support for MDX in pages that have the extension `*.mdx`, if you want to also add support for pages with the `*.md` extension, then add the extension in two places like so:
 
 ```mjs title="next.config.mjs" {4} {17}
@@ -1179,28 +1202,37 @@ If you use an other extension for your markdown pages, like *.markdown, *.mdown,
 
 If you don't add your markdown extension to the **pageExtensions** then the Next.js app router will not be able to find your file and it will show a 404, if you don't also add the extension to the **createMDX options** then @next/mdx won't be able to parse the content of your file
 
-The following file is not mandatory, but it doesn't hurt to add the right type for MDX pages (I found this in the Next.js ["app-dir-mdx"](https://github.com/vercel/next.js/tree/5e2ac0986f78c8e15756ec403666d20a99d3247e/examples/app-dir-mdx) example on GitHub), so (if it doesn't exist already) I recommend creating a `types` folder in the root of your project and adding a `mdx.d.ts` file with the following content:
+### Our first MDX page
 
-```ts title="types/mdx.d.ts"
-declare module '*.mdx' {
-    let MDXComponent: (props) => JSX.Element
-    export default MDXComponent
-}
+In the `app` folder, create a new `first_page` folder and then add a page using the mdx extension, with the following content:
+
+```md title="/app/first_page/page.mdx"
+# Hello 👋 with MDX!
+
+## headline 2nd level
+
+*italic*
+
+**bold**
+
+***bold and italic***
+
+> a quote
+
+[link to Next.js](https://nextjs.org)
+
+* foo
+* bar
+* baz
+
+![This is an octocat image](https://myoctocat.com/assets/images/base-octocat.svg 'I\'m the title of the octocat image')
 ```
 
-Because we used **create next app** in our tsconfig.json we **already** have the following include (if it isn't in your tsconfig.json then you need to add it), which means the d.ts file we just created will get used by typescript:
+Make sure your dev server is running, if it is not start it using `npm run dev`
 
-```json title="tsconfig.json" {2}
-    "include": [
-        ".next/types/**/*.ts"
-    ],
-```
+And then visit your newly created MDX page in the browser at `http://localhost:3000/first_page`
 
-> [!MORE]  
-> ["@next/mdx package" README](https://github.com/vercel/next.js/tree/canary/packages/next-mdx)  
-> [mdxjs.com "Types" documentation](https://mdxjs.com/docs/getting-started/#types)
-
-### Our first MDX article (page)
+Congratulations 🎉 you now can create Next.js pages using MDX and the best part is that they are fully static, which means they will render blazingly fast
 
 
 
