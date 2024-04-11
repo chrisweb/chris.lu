@@ -323,7 +323,7 @@ const nextConfig = (phase) => {
         },
         // TODO: is this needed for app directory
         // Configure pageExtensions to include md and mdx
-        pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+        pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'mdx'],
         // disable linting during builds using "next lint"
         // we have manually added our lint script in package.json to the build command
         eslint: {
