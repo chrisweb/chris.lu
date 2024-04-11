@@ -251,7 +251,7 @@ Next.js has some constants to make it easier to check what phase the app is in, 
 > [Next.js "Statically Typed Links" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript)  
 > [Next.js "next.config.js phase" documentation](https://nextjs.org/docs/pages/api-reference/next-config-js)  
 
-### React (strict mode) and powered by header
+### React (Next.js) strict mode configuration
 
 [React strict mode](https://react.dev/reference/react/StrictMode) and [powered by header(s)](https://nextjs.org/docs/app/api-reference/next-config-js/poweredByHeader) are two configuration options that often lead to controversial discussions among developers
 
@@ -280,6 +280,8 @@ const nextConfig = {
 export default nextConfig;
 ```
 
+### Next.js powered by header configuration
+
 **Next.js powered by header** is another Next.js configuration option, that if enabled will add an **x-powered-by** header to all of your pages
 
 Here is an example of the headers showing the **x-powered-by** header Next.js adds to pages, I used the **chrome dev tools**, opened the **Network tab** and then clicked on the row of the page to inspect the **response headers**:
@@ -293,6 +295,7 @@ When I get asked this, my first thought is to ask myself the opposite "why would
 ```js title="next.config.mjs" showLineNumbers {3}
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    reactStrictMode: true,
     poweredByHeader: false,
 };
 
@@ -672,6 +675,7 @@ const cspHeader = () => {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    reactStrictMode: true,
     poweredByHeader: false,
     experimental: {
         // currently false as mdx pages are not typed in prod builds (yet)
@@ -740,6 +744,7 @@ and then at the end of the configuration file we use that variable, like so:
 ```js title="next.config.mjs" {14}
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    reactStrictMode: true,
     poweredByHeader: false,
     experimental: {
         // currently false as mdx pages are not typed in prod builds (yet)
@@ -932,7 +937,10 @@ In the previous examples the **nextConfig** variable was an **object**, we had a
 
 ```mjs
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+    reactStrictMode: true,
+    poweredByHeader: false,
+}
 
 export default nextConfig;
 ```
@@ -940,9 +948,14 @@ export default nextConfig;
 To get the phase **phase** property we need to convert **nextConfig** into a **function**, so that we get a configuration that looks like this:
 
 ```mjs
-/** @type {import('next').NextConfig} */
 const nextConfig = (phase) => {
-    const nextConfigOptions = {}
+
+    /** @type {import('next').NextConfig} */
+    const nextConfigOptions = {
+        reactStrictMode: true,
+        poweredByHeader: false,
+    }
+
     return nextConfigOptions
 }
 
@@ -954,10 +967,11 @@ Now that we have access to the **phase** we can use the [next/constants](https:/
 ```mjs
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 
-/** @type {import('next').NextConfig} */
 const nextConfig = (phase) => {
 
+    /** @type {import('next').NextConfig} */
     const nextConfigOptions = {
+        reactStrictMode: true,
         poweredByHeader: false,
         experimental: {
             // experimental typescript "statically typed links"
@@ -1000,6 +1014,7 @@ const nextConfig = (phase) => {
 
     /** @type {import('next').NextConfig} */
     const nextConfigOptions = {
+        reactStrictMode: true,
         poweredByHeader: false,
         experimental: {
             // currently false as mdx pages are not typed in prod builds (yet)
@@ -1065,17 +1080,128 @@ To add MDX support to the Next.js blog I will use [@next/mdx](https://www.npmjs.
 
 **@next/mdx** is stable and I had no major problems using it for this project, there are however a series of open Issues on GitHub, I recommend having a brief look at the [@next/mdx issues search on GitHub](https://github.com/vercel/next.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22area%3A+MDX%22) to have an idea of what might not work or just have a look at the list when you have the feeling something is not working as it should
 
+> [!MORE]  
+> [mdxjs.com "getting started" documentation](https://mdxjs.com/docs/getting-started/)  
+> [@next/mdx repository](https://github.com/vercel/next.js/tree/canary/packages/next-mdx)  
+
+### MDX packages installation
+
+First we will add the `@next/mdx` package, two dependencies from the `@mdx-js` repository and the MDX types to our next.js project, this package will add support for MDX files to our next.js project, to install the package execute the following command in your VSCode terminal:
+
+```shell
+npm install @next/mdx @mdx-js/loader @mdx-js/react @types/mdx --save-exact
+```
+
 ### MDX support setup
 
-is this still needed???:
-```ts
-// types/mdx.d.ts
+First we need to create a new file called `mdx-components.tsx` in the root of our project and add the following content:
+
+```tsx title="mdx-components.tsx" showLineNumbers
+import type { MDXComponents } from 'mdx/types'
+
+// This file allows you to provide custom React components
+// to be used in MDX files. You can import and use any
+// React component you want, including components from
+// other libraries.
+
+// This file is required to use MDX in `app` directory.
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+    return {
+        // Allows customizing built-in components, e.g. to add styling.
+        // h1: ({ children }) => <h1 style={{ fontSize: "100px" }}>{children}</h1>,
+        ...components,
+    }
+}
+```
+
+> [!WARN]  
+> Adding the file is very important, I see a lot of posts of developers struggling with the first steps of getting MDX support to work in their Next.js project and 90% of the cases are because they have not added the `mdx-components.tsx` file, without `mdx-components.tsx` in Next.js 13 you will get an error that says **Module not found: Can't resolve 'next-mdx-import-source-file'** and in Next.js 14 you will get a bunch of **node_modules/@mdx-js/react/lib** related errors in your terminal, so it is mandatory to have that file at the root of the project, even if you don't use it (yet)
+
+Now we need to update the content our `next.config.mjs` file (in the root of our project), to this:
+
+```mjs title="next.config.mjs"
+import createMdx from '@next/mdx'
+
+const nextConfig = (phase) => {
+
+    const withMDX = createMdx({
+        extension: /\.mdx?$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [],
+            rehypePlugins: [],
+        },
+    })
+
+    /** @type {import('next').NextConfig} */
+    const nextConfigOptions = {
+        reactStrictMode: true,
+        poweredByHeader: false,
+        // configure `pageExtensions` to include MDX files
+        pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx'],
+    }
+
+    return withMDX(nextConfigOptions)
+
+}
+```
+
+You can configure @next/mdx by passing an object to **createMdx**, using **extension** we tell @next/mdx what for what pages it should use the MDX parser and the via the options we add support for **remark plugins** and **rehype plugins** (we will add a bunch of those later)
+
+The configuration we just did adds support for MDX in pages that have the extension `*.mdx`, if you want to also add support for pages with the `*.md` extension, then add the extension in two places like so:
+
+```mjs title="next.config.mjs" {4} {17}
+const nextConfig = (phase) => {
+
+    const withMDX = createMdx({
+        extension: /\.(md|mdx)$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [],
+            rehypePlugins: [],
+        },
+    })
+
+    /** @type {import('next').NextConfig} */
+    const nextConfigOptions = {
+        reactStrictMode: true,
+        poweredByHeader: false,
+        // configure `pageExtensions` to include MDX files
+        pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx', 'md'],
+    }
+
+    return withMDX(nextConfigOptions)
+
+}
+```
+
+If you use an other extension for your markdown pages, like *.markdown, *.mdown, *.mkd, ... then replace the **md** with the extension you prefer using
+
+If you don't add your markdown extension to the **pageExtensions** then the Next.js app router will not be able to find your file and it will show a 404, if you don't also add the extension to the **createMDX options** then @next/mdx won't be able to parse the content of your file
+
+The following file is not mandatory, but it doesn't hurt to add the right type for MDX pages (I found this in the Next.js ["app-dir-mdx"](https://github.com/vercel/next.js/tree/5e2ac0986f78c8e15756ec403666d20a99d3247e/examples/app-dir-mdx) example on GitHub), so (if it doesn't exist already) I recommend creating a `types` folder in the root of your project and adding a `mdx.d.ts` file with the following content:
+
+```ts title="types/mdx.d.ts"
 declare module '*.mdx' {
     let MDXComponent: (props) => JSX.Element
     export default MDXComponent
 }
 ```
 
+Because we used **create next app** in our tsconfig.json we **already** have the following include (if it isn't in your tsconfig.json then you need to add it), which means the d.ts file we just created will get used by typescript:
+
+```json title="tsconfig.json" {2}
+    "include": [
+        ".next/types/**/*.ts"
+    ],
+```
+
+> [!MORE]  
+> ["@next/mdx package" README](https://github.com/vercel/next.js/tree/canary/packages/next-mdx)  
+> [mdxjs.com "Types" documentation](https://mdxjs.com/docs/getting-started/#types)
+
 ### Our first MDX article (page)
+
+
 
 </article>
