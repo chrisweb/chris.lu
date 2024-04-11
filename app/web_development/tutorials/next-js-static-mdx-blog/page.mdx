@@ -557,7 +557,7 @@ But because Sentry created a **javascript** file but our project uses **typescri
 
 After renaming the file we edit it and replace its content with the code for a global error page from the Next.js documentation, which is a good start as it is strictly typed, the only difference is that we also modify the code to add the Sentry.io `captureException(){:.fn}` function, that will capture exceptions and send them to Sentry.io, the final version looks like this:
 
-```ts title="app/global-error.tsx"
+```ts title="app/global-error.tsx" showLineNumbers
 'use client'
 
 import * as Sentry from '@sentry/nextjs'
@@ -601,7 +601,7 @@ To add CSP rules to our Next.js project we need to edit the `next.config.mjs` in
 
 Add the following lines to your configuration:
 
-```js title="next.config.mjs" showLineNumbers
+```js title="next.config.mjs"
 // CSP headers here is set based on Next.js recommendations:
 // https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
 const cspReportOnly = true;
@@ -691,8 +691,6 @@ const nextConfig = {
         ]
     },
 };
-
-export default nextConfig;
 ```
 
 If you now start your development server (using `npm run dev`), open `http://localhost:3000` in your browser, then open the browsers developer tools and then click on the Console tab, then you should see no CSP violations messages
@@ -702,7 +700,7 @@ If you now start your development server (using `npm run dev`), open `http://loc
 
 Lets edit the CSP rules we just added an make the **script-src** directive stricter by not using **'unsafe-eval'** as recommended by the CSP Evaluator service, like so:
 
-```js title="next.config.mjs" showLineNumbers{55} {6}#special
+```js title="next.config.mjs" {6}#special
     // for dev environment enable unsafe-eval for hot-reload
     return `
         ${defaultCSPDirectives}
@@ -739,7 +737,7 @@ const cspReportOnly = true;
 
 and then at the end of the configuration file we use that variable, like so:
 
-```js title="next.config.mjs" showLineNumbers{67} {14}
+```js title="next.config.mjs" {14}
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     poweredByHeader: false,
@@ -821,84 +819,84 @@ First you need to visit Sentry.io and copy the CSP reporting URL of your project
 
 To make sure violations are being sent to Sentry.io (logged like any other error), we need to edit our CSP headers in the next.config.mjs file, like so:
 
-```js title="next.config.mjs" showLineNumbers{67} {5-6} {13-15} {45} {60}
-    // CSP headers here is set based on Next.js recommendations:
-    // https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
-    const cspReportOnly = true;
+```js title="next.config.mjs" {5-6} {13-15} {45} {60}
+// CSP headers here is set based on Next.js recommendations:
+// https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
+const cspReportOnly = true;
 
-    const reportingUrl = 'https://o4504017992482816.ingest.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
-    const reportingDomainWildcard = 'https://*.ingest.sentry.io'
+const reportingUrl = 'https://o4504017992482816.ingest.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
+const reportingDomainWildcard = 'https://*.ingest.sentry.io'
 
-    const cspHeader = () => {
+const cspHeader = () => {
 
-        const upgradeInsecure = cspReportOnly ? '' : 'upgrade-insecure-requests;'
+    const upgradeInsecure = cspReportOnly ? '' : 'upgrade-insecure-requests;'
 
-        // reporting uri (CSP v1)
-        const reportCSPViolations = `
-            report-uri ${reportingUrl};
+    // reporting uri (CSP v1)
+    const reportCSPViolations = `
+        report-uri ${reportingUrl};
+    `
+
+    // worker-src is for sentry replay
+    // child-src is because safari <= 15.4 does not support worker-src
+    const defaultCSPDirectives = `
+        default-src 'none';
+        media-src 'self';
+        object-src 'none';
+        worker-src 'self' blob:;
+        child-src 'self' blob:;
+        manifest-src 'self';
+        base-uri 'none';
+        form-action 'none';
+        require-trusted-types-for 'script';
+        frame-ancestors 'none';
+        ${upgradeInsecure}
+    `
+
+    // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
+    // and whitelist vercel's domains based on:
+    // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
+    // and white-list vitals.vercel-insights
+    // based on: https://vercel.com/docs/speed-insights#content-security-policy
+    if (process.env.VERCEL_ENV === 'preview') {
+        return `
+            ${defaultCSPDirectives}
+            font-src 'self' https://vercel.live/;
+            style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
+            script-src 'self' 'unsafe-inline' https://vercel.live/;
+            connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/ ${reportingDomainWildcard};
+            img-src 'self' data: https://vercel.com/ https://vercel.live/;
+            frame-src 'self' https://vercel.live/;
+            ${reportCSPViolations}
         `
+    }
 
-        // worker-src is for sentry replay
-        // child-src is because safari <= 15.4 does not support worker-src
-        const defaultCSPDirectives = `
-            default-src 'none';
-            media-src 'self';
-            object-src 'none';
-            worker-src 'self' blob:;
-            child-src 'self' blob:;
-            manifest-src 'self';
-            base-uri 'none';
-            form-action 'none';
-            require-trusted-types-for 'script';
-            frame-ancestors 'none';
-            ${upgradeInsecure}
-        `
-
-        // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
-        // and whitelist vercel's domains based on:
-        // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
-        // and white-list vitals.vercel-insights
-        // based on: https://vercel.com/docs/speed-insights#content-security-policy
-        if (process.env.VERCEL_ENV === 'preview') {
-            return `
-                ${defaultCSPDirectives}
-                font-src 'self' https://vercel.live/;
-                style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
-                script-src 'self' 'unsafe-inline' https://vercel.live/;
-                connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/ ${reportingDomainWildcard};
-                img-src 'self' data: https://vercel.com/ https://vercel.live/;
-                frame-src 'self' https://vercel.live/;
-                ${reportCSPViolations}
-            `
-        }
-
-        // for production environment white-list vitals.vercel-insights
-        // based on: https://vercel.com/docs/speed-insights#content-security-policy
-        if (process.env.VERCEL_ENV === 'production') {
-            return `
-                ${defaultCSPDirectives}
-                font-src 'self';
-                style-src 'self' 'unsafe-inline';
-                script-src 'self';
-                connect-src 'self' https://vitals.vercel-insights.com ${reportingDomainWildcard};
-                img-src 'self';
-                frame-src 'none';
-                ${reportCSPViolations}
-            `
-        }
-
-        // for dev environment enable unsafe-eval for hot-reload
+    // for production environment white-list vitals.vercel-insights
+    // based on: https://vercel.com/docs/speed-insights#content-security-policy
+    if (process.env.VERCEL_ENV === 'production') {
         return `
             ${defaultCSPDirectives}
             font-src 'self';
             style-src 'self' 'unsafe-inline';
-            script-src 'self' 'unsafe-inline' 'unsafe-eval';
-            connect-src 'self';
-            img-src 'self' data:;
+            script-src 'self';
+            connect-src 'self' https://vitals.vercel-insights.com ${reportingDomainWildcard};
+            img-src 'self';
             frame-src 'none';
+            ${reportCSPViolations}
         `
-
     }
+
+    // for dev environment enable unsafe-eval for hot-reload
+    return `
+        ${defaultCSPDirectives}
+        font-src 'self';
+        style-src 'self' 'unsafe-inline';
+        script-src 'self' 'unsafe-inline' 'unsafe-eval';
+        connect-src 'self';
+        img-src 'self' data:;
+        frame-src 'none';
+    `
+
+}
 ```
 
 > [!WARN]  
@@ -920,9 +918,65 @@ We use the second varibale at the our our connect-src directive to whitelist the
 
 ### Adding security headers in Next.js configuration
 
-While at it, lets add a 3 more security headers to our Next.js configuration, like so:
+While at it, lets add a 3 more security headers to our Next.js configuration...
 
-```js title="next.config.mjs" showLineNumbers{67} {2} {4-11} {25} {30-41}
+#### convert nextConfig into a function
+
+To be able to know what the current environement is, you could use Node.js [process.env](https://nodejs.org/en/learn/command-line/how-to-read-environment-variables-from-nodejs) **NODE_ENV** environment variable, however you need to know that this variable will on only ever have two states, when using the `npm run dev` command (the dev server) then this variable is development, this is still ok and else Next.js will always set **NODE_ENV** to production
+
+Another option if like me you deploy on Vercel, then you can use the **VERCEL_ENV** variable, which is **devlopment** when running your project locally or **preview** when devploying a preview on Vercel and **production** when deploying a production build on Vercel
+
+The third way to know the current context, is to use the Next.js config property called **phase**, to access the phase property we need to convert our configuration from an object into a function
+
+In the previous examples the **nextConfig** variable was an **object**, we had a configuration that looked like this:
+
+```mjs
+/** @type {import('next').NextConfig} */
+const nextConfig = {}
+
+export default nextConfig;
+```
+
+To get the phase **phase** property we need to convert **nextConfig** into a **function**, so that we get a configuration that looks like this:
+
+```mjs
+/** @type {import('next').NextConfig} */
+const nextConfig = (phase) => {
+    const nextConfigOptions = {}
+    return nextConfigOptions
+}
+
+export default nextConfig;
+```
+
+Now that we have access to the **phase** we can use the [next/constants](https://github.com/vercel/next.js/blob/5e6b008b561caf2710ab7be63320a3d549474a5b/packages/next/shared/lib/constants.ts#L19-L23) to check what the current context is, like so:
+
+```mjs
+/** @type {import('next').NextConfig} */
+const nextConfig = (phase) => {
+
+    const nextConfigOptions = {
+
+    }
+
+    return nextConfigOptions
+}
+
+export default nextConfig;
+```
+
+> [!MORE]  
+> [Node.js "environment variables" documentation](https://nodejs.org/en/learn/command-line/how-to-read-environment-variables-from-nodejs)  
+> [Next.js "configuration" documentation](https://nextjs.org/docs/app/api-reference/next-config-js)  
+> [Vercel "system environment variables" documentation](https://vercel.com/docs/projects/environment-variables/system-environment-variables)
+
+#### next configuration security headers
+
+Now that we have access to the phase property we can change the config to this:
+
+```js title="next.config.mjs" {2} {4-11} {25} {30-41}
+const nextConfig = (phase) => {
+
     // security headers for preview & production
     const extraSecurityHeaders = []
 
@@ -936,7 +990,7 @@ While at it, lets add a 3 more security headers to our Next.js configuration, li
     }
 
     /** @type {import('next').NextConfig} */
-    const nextConfig = {
+    const nextConfigOptions = {
         poweredByHeader: false,
         experimental: {
             // currently false as mdx pages are not typed in prod builds (yet)
@@ -970,7 +1024,9 @@ While at it, lets add a 3 more security headers to our Next.js configuration, li
         },
     }
 
-    return withMDX(nextConfig)
+    return nextConfigOptions
+
+}
 ```
 
 First we added a new variable `extraSecurityHeaders` to store the HSTS header as we want to exclude it in development where we don't have an SSL certificate
