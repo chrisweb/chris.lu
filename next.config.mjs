@@ -303,6 +303,7 @@ const nextConfig = (phase) => {
 
     /** @type {import('next').NextConfig} */
     const nextConfigOptions = {
+        reactStrictMode: true,
         poweredByHeader: false,
         experimental: {
             // experimental use rust compiler for MDX
@@ -328,7 +329,6 @@ const nextConfig = (phase) => {
         eslint: {
             ignoreDuringBuilds: true,
         },
-        reactStrictMode: true,
         headers: async () => {
             return [
                 {
