@@ -110,7 +110,7 @@ Sentry.io can be customized a lot and also has several places where you can chan
 Sentry wizard has edited our `next.config.mjs` and it should now look like this:
 
 ```mjs title="next.config.mjs"
-import { withSentryConfig } from '@sentry/nextjs';
+import { withSentryConfig } from '@sentry/nextjs'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -152,7 +152,7 @@ export default withSentryConfig(nextConfig, {
     // https://docs.sentry.io/product/crons/
     // https://vercel.com/docs/cron-jobs
     automaticVercelMonitors: true,
-});
+})
 ```
 
 > [!NOTE]  
@@ -200,7 +200,6 @@ Sentry.init({
 
     environment: process.env.NODE_ENV ? process.env.NODE_ENV : '',
 })
-
 ```
 
 line 3-12 I added two variables for the **replaysOnErrorSampleRate** and the **tracesSampleRate**, replaysOnErrorSampleRate I set to zero by default to not produce replays when not in production, then line 6-8 I added a check to verify if the current environment is **production** and if it is I tell Sentry to always make a replay if there is an error (be careful with this option, in the free plan you only have 50 replays per month, which is why I only turn it on in production, also in development it is usually the developer themself that triggers the error so there is not really a need for a replay), the tracesSampleRate I set it to 0.1, meaning 10% of the traces will get sent to Sentry but then line 10-12 I disable them in development (this is to ensure no performance metrics are getting calculated when the app is running on a local computer, to check local performance it is preferred to use the developer tools), you may want a lower or higher value depending on what plan you are on and then check if you reach your limits or not and then adjust over time
