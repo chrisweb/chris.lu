@@ -952,11 +952,18 @@ export default nextConfig;
 Now that we have access to the **phase** we can use the [next/constants](https://github.com/vercel/next.js/blob/5e6b008b561caf2710ab7be63320a3d549474a5b/packages/next/shared/lib/constants.ts#L19-L23) to check what the current context is, like so:
 
 ```mjs
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = (phase) => {
 
     const nextConfigOptions = {
-
+        poweredByHeader: false,
+        experimental: {
+            // experimental typescript "statically typed links"
+            // https://nextjs.org/docs/app/building-your-application/configuring/typescript#statically-typed-links
+            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        },
     }
 
     return nextConfigOptions
@@ -964,6 +971,8 @@ const nextConfig = (phase) => {
 
 export default nextConfig;
 ```
+
+In this example we check if the phase is **development** by using the **PHASE_DEVELOPMENT_SERVER** constant and if it is we enable the typedRoutes and if it is not the development server we disable the routes types
 
 > [!MORE]  
 > [Node.js "environment variables" documentation](https://nodejs.org/en/learn/command-line/how-to-read-environment-variables-from-nodejs)  
