@@ -70,24 +70,30 @@ First you will get asked if you accept installing the sentry wizard npm package,
 
 **Do you already have an account?** Yes (if you did follow the previous chapter or already had an account before) then press `Enter`
 
-Then the sentry wizard will attempt to open a browser tab and ask you to login, so do just that
+Then the sentry wizard will ask you to login, which will open the sentry login page in your default browser, now login into your account (or create one if you haven't one yet), then go back to your terminal
 
 **Select your Sentry project**, chose the your Sentry Project from the list (when using the wizard Sentry will have automatically created a project for the SDK you chose earlier for you, if however you don't see a Project listed here, you can check out the [Create a Sentry.io project](#create-a-sentryio-project) chapter to create a project first)
 
-Now sentry will install some dependencies and modify the modify the next.config.mjs file with sentry specific configuration options, they even say "you probably want to clean this up a bit!"... we sure do, but later, let's finish the whole setup first
+Now sentry will install the Sentry SDK for Next.js
+
+**Do you want to route Sentry requests in the browser through your NextJS server to avoid ad blockers?**, Sentry wants to know if it should route the requests it sends out through your Next.js server, by doing so Sentry attempts to bypass the block lists of adblocker addons that are installed in some browsers, this means Sentry will first send the client-side requests to a URL on your server and then your server will forward the request to the Sentry API, I personally chose **Yes** as I want to increase the chance of getting bug reports, but feel free to answer **No** if for example you don't like to have the extra traffic this redirect will cause
 
 **Do you want to create an example page** chose **YES** (we will later use it to test the Sentry setup and then we will delete it)
 
 **Are you using a CI/CD tool to build and deploy your application?** chose **YES** (if you are using Vercel, GitHub actions or any other CI/CD deployment tool, if you are NOT chose **NO**)
 
+Sentry.io Wizard will give you a **SENTRY_AUTH_TOKEN** string, if you use a CI/CD for your deployments, copy the token and save it in a secure location, you will need this token later if for example if you set up a custom GitHub action, then you will want to add that token environement variable to your GitHub secrets and if you use another CI/CD service you should check out their documentation to learn how to use that token to automatically upload sourcemaps to Sentry
+
+CI/CD tools can authenticate themself to Sentry.io using the **SENTRY_AUTH_TOKEN** environment variable and then use the Sentry.io API to automatically upload the sourcemaps of your build to Sentry.io, so that later if there is a bug report on Sentry.io it will be able to use the sourcemaps instead of the minified build files, to show you where the error occured
+
 **Did you configure CI as shown above?** chose **YES**
 
-After that step the Sentry.io Wizard will give you a **SENTRY_AUTH_TOKEN** string, if you use a CI/CD for your deployments, for example if you set up a custom GitHub action then you will want to add that environement variable to your GitHub secrets and if you use another CI/CD service you should check out their documentation to learn how to automatically upload sourcemaps to Sentry, the CI/CD tool can authenticate itself using the **SENTRY_AUTH_TOKEN** environment variable and then use the Sentry.io API to automatically upload the sourcemaps of your build to Sentry.io (so that later if there is a bug report on Sentry.io it will be able to use the sourcemaps instead of the minified build files, to show you where the error occured).
+After answering all questions, the Sentry SDK will edit your next.config.mjs file with sentry specific configuration options and it will have added several sentry.*.config files (to the root of your project) which cotain environment specific configurations
 
 > [!NOTE]  
 > if you use Vercel for your deployments, then you don't need to set the **SENTRY_AUTH_TOKEN** yourself, you can use the [Sentry integration for Vercel](https://vercel.com/integrations/sentry), which will set the Vercel environment variables for you  
 
-Next we do as they suggest and start the development server using the command and then we visit their example page in our browser at [http://localhost:3000/sentry-example-page](http://localhost:3000/sentry-example-page)
+Next as suggested by the wizard at the end of the installation process, it is recommended to start the development server using the `npm run dev` command and then we visit the Sentry example page in our browser at [http://localhost:3000/sentry-example-page](http://localhost:3000/sentry-example-page)
 
 On that page hit the **Throw Error!** button and then click on the link just below to **visit your Sentry projects issues page**
 
@@ -101,7 +107,56 @@ Before we commit / sync all the changes Sentry.io did in our project, **delete**
 
 Sentry.io can be customized a lot and also has several places where you can change the default configuration
 
-First there is the `next.config.mjs` where you can configure options related to your Next.js project, by default the options that the wizard set for us are good enough, but as soon as you have the time I recommend checking out the [Extend your Next.js Configuration](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration) documentation which explains what each option does
+Sentry wizard has edited our `next.config.mjs` and it should now look like this:
+
+```mjs title="next.config.mjs"
+import { withSentryConfig } from '@sentry/nextjs';
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    poweredByHeader: false,
+};
+
+export default withSentryConfig(nextConfig, {
+    // For all available options, see:
+    // https://github.com/getsentry/sentry-webpack-plugin#options
+
+    // Suppresses source map uploading logs during build
+    silent: true,
+    org: "YOUR_ORGANISATION_NAME",
+    project: "YOUR_PROJECT_NAME",
+}, {
+    // For all available options, see:
+    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+
+    // Upload a larger set of source maps for prettier stack traces (increases build time)
+    widenClientFileUpload: true,
+
+    // Transpiles SDK to be compatible with IE11 (increases bundle size)
+    transpileClientSDK: true,
+
+    // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
+    // This can increase your server load as well as your hosting bill.
+    // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
+    // side errors will fail.
+    tunnelRoute: "/monitoring",
+
+    // Hides source maps from generated client bundles
+    hideSourceMaps: true,
+
+    // Automatically tree-shake Sentry logger statements to reduce bundle size
+    disableLogger: true,
+
+    // Enables automatic instrumentation of Vercel Cron Monitors.
+    // See the following for more information:
+    // https://docs.sentry.io/product/crons/
+    // https://vercel.com/docs/cron-jobs
+    automaticVercelMonitors: true,
+});
+```
+
+> [!NOTE]  
+> By default the options that the wizard set for us are good enough, as soon as you have the time I recommend checking out the [Extend your Next.js Configuration](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration) Sentry.io documentation which explains what each option does
 
 Another file that got added to the root of our project is `sentry.client.config.ts`, the file is being used to configuration Sentry.io for **client components**, check out the [Next.js SDK Configuration Options](https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/) documentation for more details about each option, I slighly modified my configuration file to be like this:
 
