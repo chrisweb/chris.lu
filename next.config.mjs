@@ -21,10 +21,6 @@ import { rehypeGithubAlerts } from 'rehype-github-alerts'
 import remarkMdxImages from 'remark-mdx-images'
 import remarkUnwrapImages from 'remark-unwrap-images'
 
-/*const ContentSecurityPolicy = `
-  default-src 'self';
-`*/
-
 const nextConfig = (phase) => {
 
     // to use the bundle analyzer uncomment the following lines
@@ -306,7 +302,7 @@ const nextConfig = (phase) => {
     }
 
     /** @type {import('next').NextConfig} */
-    const nextConfig = {
+    const nextConfigOptions = {
         experimental: {
             // experimental use rust compiler for MDX
             // as of now (07.10.2023) there is no support for rehype plugins
@@ -367,8 +363,8 @@ const nextConfig = (phase) => {
         },
     }
 
-    return withMDX(nextConfig)
-    //return withBundleAnalyzer(withMDX(nextConfig))
+    return withMDX(nextConfigOptions)
+    //return withBundleAnalyzer(withMDX(nextConfigOptions))
 
 }
 
