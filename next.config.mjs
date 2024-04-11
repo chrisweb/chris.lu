@@ -303,6 +303,7 @@ const nextConfig = (phase) => {
 
     /** @type {import('next').NextConfig} */
     const nextConfigOptions = {
+        poweredByHeader: false,
         experimental: {
             // experimental use rust compiler for MDX
             // as of now (07.10.2023) there is no support for rehype plugins
@@ -328,7 +329,6 @@ const nextConfig = (phase) => {
             ignoreDuringBuilds: true,
         },
         reactStrictMode: true,
-        poweredByHeader: false,
         headers: async () => {
             return [
                 {
