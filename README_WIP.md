@@ -25,85 +25,9 @@ next chapters?
 
 
 
-
-
-Note: as you can see in this configuration we have not only enabled the new but still experimental `app` directory but we have also added `mdxRs: true`, this tells next.js that we would like to use the new but also still experimental rust compiler for our MDX content, you can disable this if you prefer, if you wish to do so you might want to read my post about ["disabling the experimental rust compiler for MDX content"](#disabling-the-experimental-mdx-rust-compiler-mdxrs)
-
-TODO: in next config, do I need to configure pageExtensions for MDX to work in app directory, or is this just for pages directory???
-
-TODO: add note about not leaking powered by info: poweredByHeader
-
-now we need to add two more files to make MDX work with server components
-
-add another file into the root of your project called `mdx-components.tsx` with the following content
-
-```tsx
-import type { MDXComponents } from 'mdx/types'
-
-// This file allows you to provide custom React components
-// to be used in MDX files. You can import and use any
-// React component you want, including components from
-// other libraries.
-
-// This file is required to use MDX in `app` directory.
-export function useMDXComponents(components: MDXComponents): MDXComponents {
-    return {
-        // Allows customizing built-in components, e.g. to add styling.
-        // h1: ({ children }) => <h1 style={{ fontSize: "100px" }}>{children}</h1>,
-        ...components,
-    }
-}
-```
-
-Note: it is important you add the `mdx-components.tsx` to your project for MDX files to work in the app directory, if you don't add it you will get this error:
-
-> Module not found: Can't resolve 'next-mdx-import-source-file'
-
-Note: Also after adding this file or in the future after making changes to it, you always need to restart the dev server for the changes to take effect (next.config.mjs changes will trigger a server reload in the latest next.js versions but this file will not)
-
-(??? is this still needed, it is not in the nextjs documentation anymore) and then in the root of the project create a directory called `types` and inside of it add a file called `mdx.d.ts` with the following content:
-
-```ts
-// types/mdx.d.ts
-declare module '*.mdx' {
-    let MDXComponent: (props) => JSX.Element
-    export default MDXComponent
-}
-```
+`mdxRs: true`, this tells next.js that we would like to use the new but also still experimental rust compiler for our MDX content, you can disable this if you prefer, if you wish to do so you might want to read my post about ["disabling the experimental rust compiler for MDX content"](#disabling-the-experimental-mdx-rust-compiler-mdxrs)
 
 #### option 1: multiple page.tsx files, one static route per article
-
-in the `app` directory, create a new directory called `articles` and then inside that another directory `option1`, to end up with the following structure:
-
-```shell
-─ app
-├─ articles
-  ├─ option1
-```
-
-then inside of the `option1` directory, we create a file that we call `content.mdx`, which will contain some MDX formatted content, so that we can then import it into our page
-
-```md
-# Hello, World!
-
-## option 1
-
-*italic*
-
-**bold**
-
-***bold and italic***
-
-> quote
-
-[link](https://chris.lu)
-
-* foo
-* bar
-* baz
-
-![This is an octocat image](https://myoctocat.com/assets/images/base-octocat.svg)
-```
 
 next inside of that same `option1` directory, we will now create a regular `page.tsx` file that will import the `content.mdx` file we just created
 
