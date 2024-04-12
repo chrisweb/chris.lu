@@ -32,16 +32,16 @@
         "@fortawesome/free-solid-svg-icons": "6.5.2",
         "@fortawesome/react-fontawesome": "0.2.0",
         "@mdx-js/loader": "3.0.1",
-        "@next/mdx": "14.1.4",
+        "@next/mdx": "14.2.0",
         "@react-three/drei": "9.105.3",
         "@react-three/fiber": "8.16.1",
         "@react-three/postprocessing": "^2.16.2",
-        "@sentry/nextjs": "^7.109.0",
+        "@sentry/nextjs": "^7.110.0",
         "globby": "14.0.1",
         "hast-util-from-html-isomorphic": "2.0.0",
         "hastscript": "9.0.0",
-        "jsonrepair": "3.6.0",
-        "next": "14.1.4",
+        "jsonrepair": "3.6.1",
+        "next": "14.2.0",
         "postprocessing": "6.35.3",
         "react": "18.2.0",
         "react-dom": "18.2.0",
@@ -63,12 +63,12 @@
         "web-audio-api-player": "5.3.1"
     },
     "devDependencies": {
-        "@next/bundle-analyzer": "14.1.4",
-        "@next/eslint-plugin-next": "14.1.4",
+        "@next/bundle-analyzer": "14.2.0",
+        "@next/eslint-plugin-next": "14.2.0",
         "@react-three/eslint-plugin": "0.1.1",
-        "@types/node": "20.12.6",
-        "@types/react": "18.2.75",
-        "@types/react-dom": "18.2.24",
+        "@types/node": "20.12.7",
+        "@types/react": "18.2.77",
+        "@types/react-dom": "18.2.25",
         "@typescript-eslint/eslint-plugin": "7.6.0",
         "@typescript-eslint/parser": "7.6.0",
         "eslint": "8.57.0",
@@ -88,7 +88,7 @@
         "remark-preset-lint-markdown-style-guide": "6.0.0",
         "remark-preset-lint-recommended": "7.0.0",
         "sharp": "0.33.3",
-        "typescript": "5.4.4"
+        "typescript": "5.4.5"
     },
     "browserslist": [
         ">0.1%, not dead, not Opera < 100, not op_mini all, not and_uc < 15, not samsung < 21, not android > 0, not and_ff < 117, not and_qq < 13, not ie <= 11"
