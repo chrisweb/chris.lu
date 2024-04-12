@@ -18,10 +18,11 @@
 }
 
 .layoutFooter {
+    color: rgba(var(--main-text-value), 0.9);
     max-width: var(--main-maxWidth);
     margin-left: auto;
     margin-right: auto;
-    font-size: var(--main-fontSize-smaller);
+    font-size: var(--main-fontSize-small);
     padding-right: var(--main-spacing);
     padding-left: var(--main-spacing);
 }
