@@ -323,6 +323,54 @@ And if you are in the file version, you will see an icon to switch to the UI ver
 > [!MORE]  
 > [VSCode "settings sync" documentation](https://code.visualstudio.com/docs/editor/settings-sync)  
 
+## VSCode themes
+
+The VSCode appearance can be easily customized using themes, my personal favorite is [SynthWave '84](https://marketplace.visualstudio.com/items?itemName=RobbOwen.synthwave-vscode)
+
+If you haven't found your perfect theme yet, I recommend checking out [vscodethemes.com](https://vscodethemes.com/) where you can browse and preview a lot of great themes for VSCode
+
+> [!MORE]  
+> [VSCode "themes" documentation](https://code.visualstudio.com/docs/getstarted/themes)  
+> [vscodethemes.com](https://vscodethemes.com/)
+
+### Manually adjust theme colors
+
+You can change VSCode theme colors per user or per project in the VSCode settings, if you don't know yet how to open the settings for a user / workspace then check out the [VSCode settings](#vscode-settings) chapter
+
+For a full list of items that can be customized check out the [VSCode theme color](https://code.visualstudio.com/api/references/theme-color) reference page
+
+> [!MORE]  
+> [VSCode "theme color" reference](https://code.visualstudio.com/api/references/theme-color) reference
+
+#### Changing the VSCode scrollbar color
+
+I personally wanted to change the color of the main scrollbar as it was barely detectable when very small, if you want to do the same here is how to do it:
+
+Open the VSCode settings (keyboard shortcut `Ctrl+,` (macOS: `⌘,`, Linux: `Ctrl+,`)) and then type **workbench color** in the settings search field
+
+First make sure that on the top right the **User** tab is selected and not the **Workspace** if you want to change the colors no matter what workspace (project) is open
+
+Then under **Workbench: Color Customizations** click on **Edit in settings.json**
+
+To customize the VSCode scrollbar colors, we have 4 options we can customize, for example like so:
+
+```json
+"workbench.colorCustomizations": {
+    // https://code.visualstudio.com/api/references/theme-color#scrollbar-control
+    "scrollbar.shadow": "#4d0033",
+    "scrollbarSlider.activeBackground": "#fc00a8f5",
+    "scrollbarSlider.background": "#b40078",
+    "scrollbarSlider.hoverBackground": "#942870"
+},
+```
+
+I chose those colors as they work well with the [SynthWave '84](https://marketplace.visualstudio.com/items?itemName=RobbOwen.synthwave-vscode) and have a high contrast value, but of course feel free to adjust them to whatever you like best
+
+Even though VSCode is written in Javascript and hence uses CSS for styling, the only formats that are supported by default are #RGB, #RGBA, #RRGGBB and #RRGGBBAA (where AA is the alpha value, **ff** is fully opaque and **00** fully transparent), there are however extensions that allow you to use for example gradients, I however found this [stackoverflow anser](https://stackoverflow.com/a/75739431/656689) that recommends using the [Custom CSS and JS Loader](https://marketplace.visualstudio.com/items?itemName=be5invis.vscode-custom-css) extension to achieve just that
+
+> [!MORE]  
+> [VSCode "Custom CSS and JS Loader" extension](https://marketplace.visualstudio.com/items?itemName=be5invis.vscode-custom-css)
+
 ## VSCode markdown preview
 
 Because I work a lot with markdown (and MDX) I really like the markdown preview feature in VSCode
