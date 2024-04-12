@@ -34,7 +34,7 @@ const ShareButton = forwardRef<ButtonWithIconRefType, IProps>((props, buttonRef)
         const shareData = { url, title, description }
 
         try {
-            await navigator
+            await window.navigator
                 .share(shareData)
                 .then(() => {
                     console.log('shared')
