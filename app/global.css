@@ -585,16 +585,6 @@ aside {
     order: 9999;
 }
 
-.asideCore {
-    top: calc(var(--header-navbar-height) + var(--main-spacing));
-    overflow-y: auto;
-    height: calc(100vh - var(--header-navbar-height))
-}
-
-.asideCore p {
-    padding: 0 calc(var(--main-spacing) / 2);
-}
-
 /* max-width: 70rem / 1120px (mobile breakpoint) */
 @media all and (max-width: 70rem) {
     aside {
@@ -602,10 +592,10 @@ aside {
     }
 }
 
-.asideContainer {
-    width: 100%;
-    text-align: center;
-    margin-top: calc(var(--main-spacing) * 2);
+.asideCore {
+    top: calc(var(--header-navbar-height) + var(--main-spacing));
+    overflow-y: auto;
+    height: calc(100vh - var(--header-navbar-height) - var(--main-spacing))
 }
 
 @media (prefers-reduced-motion: no-preference) {

@@ -1,0 +1,9 @@
+.content {
+    width: 100%;
+    text-align: center;
+    margin-top: calc(var(--main-spacing) * 2);
+}
+
+.content p {
+    padding: 0 calc(var(--main-spacing) / 2);
+}
