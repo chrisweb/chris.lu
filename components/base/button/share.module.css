@@ -1,0 +1,70 @@
+.reset {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.cursor {
+    cursor: var(--cursor-pointer);
+}
+
+.base {
+    width: 100%;
+    max-width: 240px;
+    margin-bottom: var(--main-spacing);
+}
+
+.border {
+    height: 48px;
+    color: var(--primary-light-color);
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1px;
+    --cornerSideLength: 12px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
+            0 100%);
+    background-color: var(--primary-light-color);
+    border: 0;
+}
+
+/* max-width: 70rem / 1120px (mobile breakpoint) */
+@media all and (max-width: 70rem) {
+
+    .base {
+        height: 44px;
+    }
+
+}
+
+.border:hover {
+    color: var(--tertiary-light-color);
+    background-color: var(--tertiary-light-color);
+}
+
+.core {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    background-color: var(--main-background-color);
+    --cornerSideLength: 12px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
+            0 100%);
+}
