@@ -6,18 +6,20 @@ import type { IconProp } from '@fortawesome/fontawesome-svg-core'
 import styles from './withicon.module.css'
 
 interface IProps {
-    clickCallback: () => void
     whichIcon: IconProp
+    clickCallback?: () => void
 }
 
 type ButtonWithIconRefType = HTMLButtonElement
 
-const ButtonWithIcon = forwardRef<ButtonWithIconRefType, IProps>((props, playButtonRef) => {
+const ButtonWithIcon = forwardRef<ButtonWithIconRefType, IProps>((props, buttonRef) => {
 
     const { clickCallback, whichIcon, ...rest } = props
 
     const buttonClickHandler = (/*event: React.MouseEvent<HTMLButtonElement>*/) => {
-        clickCallback()
+        if (typeof clickCallback === 'function') {
+            clickCallback()
+        }
     }
 
     return (
@@ -25,7 +27,7 @@ const ButtonWithIcon = forwardRef<ButtonWithIconRefType, IProps>((props, playBut
             <button
                 onClick={buttonClickHandler}
                 className={`${styles.bottomRight} ${styles.cursor} ${styles.reset}`}
-                ref={playButtonRef}
+                ref={buttonRef}
                 type='button'
                 {...rest}
             >
