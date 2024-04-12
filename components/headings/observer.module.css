@@ -1,3 +1,14 @@
+.tocContainer {
+    margin-bottom: var(--main-spacing);
+}
+
+/* on phone don't show toc */
+@media all and (max-width: 48rem) {
+    .tocContainer {
+        display: none;
+    }
+}
+
 .list {
     list-style-type: none;
     padding-inline-start: 2ch;

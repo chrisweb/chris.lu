@@ -6,6 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import styles from './page.module.css'
 import MusicBannerImage from '/public/assets/images/app/music/banner.png'
+import AsideContent from '@/components/aside/Content'
 
 export const metadata: Metadata = {
 
@@ -21,12 +22,8 @@ export default function MusicPage() {
                         <li>
                             <FontAwesomeIcon icon={faSpotify} color='white' size="2x" className="social" /> <BaseLink href="https://open.spotify.com/user/chriswwweb/playlists">My Spotify Playlists</BaseLink>
                         </li>
-                        <li>
-                            <a href="https://www.buymeacoffee.com/chriswwweb" className='shake'>
-                                <Image src="/assets/images/buy_me_a_coffee_button.png" alt="button buy me a coffee" width="240" height="67" />
-                            </a>
-                        </li>
                     </ul>
+                    <AsideContent />
                 </div>
             </aside>
             <section id="music" className="middle">

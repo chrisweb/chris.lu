@@ -184,8 +184,16 @@ main {
     display: flex;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: calc(4 * var(--main-spacing));
+    margin-bottom: calc(var(--main-spacing) * 4);
     max-width: var(--main-maxWidth);
+}
+
+/* on phones put aside below article */
+@media all and (max-width: 48rem) {
+    main {
+        margin-bottom: calc(var(--main-spacing) * 2);
+        flex-flow: column;
+    }
 }
 
 .h1,
@@ -567,6 +575,7 @@ article,
 article,
 .middle {
     max-width: var(--main-middle-maxWidth);
+    margin-bottom: calc(var(--main-spacing) * 2);
 }
 
 .core {
@@ -585,17 +594,26 @@ aside {
     order: 9999;
 }
 
-/* max-width: 70rem / 1120px (mobile breakpoint) */
-@media all and (max-width: 70rem) {
+@media all and (max-width: 48rem) {
     aside {
-        display: none;
+        width: 100%;
+        padding-left: var(--main-spacing);
+        padding-right: var(--main-spacing);
     }
 }
 
 .asideCore {
     top: calc(var(--header-navbar-height) + var(--main-spacing));
     overflow-y: auto;
-    height: calc(100vh - var(--header-navbar-height) - var(--main-spacing))
+    height: calc(100vh - var(--header-navbar-height) - var(--main-spacing));
+}
+
+@media all and (max-width: 48rem) {
+    .asideCore {
+        top: 0;
+        overflow-y: none;
+        height: auto;
+    }
 }
 
 @media (prefers-reduced-motion: no-preference) {

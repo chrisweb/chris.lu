@@ -4,6 +4,7 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import styles from './page.module.css'
 import Link from 'next/link'
 import Image from 'next/image'
+import AsideContent from '@/components/aside/Content'
 
 export default function WebDevelopmentPage() {
 
@@ -15,12 +16,8 @@ export default function WebDevelopmentPage() {
                         <li>
                             <FontAwesomeIcon icon={faGithub} color='white' size="2x" className="social" /> <BaseLink href="https://github.com/chrisweb">My GitHub Projects</BaseLink>
                         </li>
-                        <li>
-                            <a href="https://www.buymeacoffee.com/chriswwweb" className='shake'>
-                                <Image src="/assets/images/buy_me_a_coffee_button.png" alt="button buy me a coffee" width="240" height="67" />
-                            </a>
-                        </li>
                     </ul>
+                    <AsideContent />
                 </div>
             </aside>
             <section id="web_development" className="middle">

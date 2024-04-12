@@ -1,9 +1,15 @@
 .content {
     width: 100%;
     text-align: center;
-    margin-top: calc(var(--main-spacing) * 2);
+    margin-bottom: var(--main-spacing);
 }
 
 .content p {
     padding: 0 calc(var(--main-spacing) / 2);
+}
+
+@media all and (max-width: 48rem) {
+    .content p {
+        padding: 0;
+    }
 }

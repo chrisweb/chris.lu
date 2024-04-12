@@ -140,7 +140,9 @@ const HeadingsObserver: React.FC<IProps> = (props): JSX.Element => {
     return (
         <>
             <ErrorBoundary fallback={<div className="error">Toc error</div>}>
-                {toc}
+                <div className={styles.tocContainer}>
+                    {toc}
+                </div>
             </ErrorBoundary>
         </>
     )
