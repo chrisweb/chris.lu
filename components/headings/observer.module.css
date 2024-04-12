@@ -19,10 +19,11 @@
     font-weight: var(--main-fontWeight-links);
 }
 
+/* if the color-mix css feature is supported
+make the text color a bit darker */
 @supports (color: color-mix(in srgb, var(--primary-light-color), black 10%)) {
 
     .notActive>a {
-        /* make the text color a bit darker */
         color: color-mix(in srgb, var(--primary-light-color), black 10%);
     }
 
