@@ -14,7 +14,7 @@ export const metadata: Metadata = {
         : new URL(`http://localhost:${process.env.PORT || 3000}`),
     title: 'Home | chris.lu',
     description: 'chrisweb\'s blog about web development, games, Lego, music, memes, ... | chris.lu',
-    manifest: 'manifest.json',
+    manifest: '/manifest.json',
     twitter: {},
     alternates: {
         canonical: 'https://chris.lu/',
