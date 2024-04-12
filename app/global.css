@@ -336,7 +336,7 @@ a {
     .animatedUnderline {
         /* underline animation */
         /* https://nickymeuleman.netlify.app/blog/css-animated-wrapping-underline */
-        background-image: linear-gradient(var(--primary-light-color) 0%, var(--primary-light-color) 100%);
+        background-image: linear-gradient(var(--tertiary-light-color) 0%, var(--tertiary-light-color) 100%);
         background-size: 0% 1px;
         background-position-y: 100%;
         background-position-x: 0%;
@@ -587,12 +587,56 @@ aside {
 
 .asideCore {
     top: calc(var(--header-navbar-height) + var(--main-spacing));
+    overflow-y: auto;
+    height: calc(100vh - var(--header-navbar-height))
+}
+
+.asideCore p {
+    padding: 0 calc(var(--main-spacing) / 2);
 }
 
 /* max-width: 70rem / 1120px (mobile breakpoint) */
 @media all and (max-width: 70rem) {
     aside {
         display: none;
+    }
+}
+
+.asideContainer {
+    width: 100%;
+    text-align: center;
+    margin-top: calc(var(--main-spacing) * 2);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .shake>img:hover {
+        animation: 2s shake infinite alternate;
+    }
+}
+
+@keyframes shake {
+    0% {
+        transform: skewX(-15deg);
+    }
+
+    2% {
+        transform: skewX(15deg);
+    }
+
+    4% {
+        transform: skewX(-15deg);
+    }
+
+    6% {
+        transform: skewX(15deg);
+    }
+
+    8% {
+        transform: skewX(0deg);
+    }
+
+    100% {
+        transform: skewX(0deg);
     }
 }
 
@@ -650,6 +694,18 @@ h5 .headingAnchor {
 
 h6 .headingAnchor {
     line-height: 2;
+}
+
+.fontSmall {
+    font-size: var(--main-fontSize-small);
+}
+
+.fontSmaller {
+    font-size: var(--main-fontSize-smaller);
+}
+
+.fontDarker {
+    color: rgba(var(--main-text-value), 0.9);
 }
 
 .icon {
@@ -794,42 +850,4 @@ h6 .headingAnchor {
         grid-template-columns: 1fr;
     }
 
-}
-
-.buyMeACoffeeButtonContainer {
-    width: 100%;
-    text-align: center;
-    margin-top: calc(var(--main-spacing) * 2);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-    .shake>img:hover {
-        animation: 2s shake infinite alternate;
-    }
-}
-
-@keyframes shake {
-    0% {
-        transform: skewX(-15deg);
-    }
-
-    2% {
-        transform: skewX(15deg);
-    }
-
-    4% {
-        transform: skewX(-15deg);
-    }
-
-    6% {
-        transform: skewX(15deg);
-    }
-
-    8% {
-        transform: skewX(0deg);
-    }
-
-    100% {
-        transform: skewX(0deg);
-    }
 }
