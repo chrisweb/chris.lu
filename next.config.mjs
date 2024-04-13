@@ -251,7 +251,7 @@ const nextConfig = (phase) => {
         if (process.env.VERCEL_ENV === 'preview') {
             return `
                 ${defaultCSPDirectives}
-                font-src 'self' https://vercel.live/;
+                font-src 'self' https://vercel.live/ https://assets.vercel.com https://fonts.gstatic.com;
                 style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
                 script-src 'self' 'unsafe-inline' https://vercel.live/;
                 connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/ ${reportingDomainWildcard};
