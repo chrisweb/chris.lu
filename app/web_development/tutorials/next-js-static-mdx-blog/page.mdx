@@ -228,15 +228,15 @@ import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 const nextConfig = (phase) => {
 
     /** @type {import('next').NextConfig} */
-    const nextConfig = {
+    const nextConfigOptions = {
         experimental: {
-            // experimental typescript "statically typed links"
+            // experimental typescript "statically typed links (routes)"
             // https://nextjs.org/docs/app/building-your-application/configuring/typescript#statically-typed-links
             typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
         },
     }
 
-    return nextConfig
+    return nextConfigOptions
 
 }
 
@@ -678,7 +678,7 @@ const nextConfig = {
     reactStrictMode: true,
     poweredByHeader: false,
     experimental: {
-        // currently false as mdx pages are not typed in prod builds (yet)
+        // currently false in prod as there is currently a bug: Issue  #
         typedRoutes: false,
     },
     headers: async () => {
@@ -747,7 +747,8 @@ const nextConfig = {
     reactStrictMode: true,
     poweredByHeader: false,
     experimental: {
-        // currently false as mdx pages are not typed in prod builds (yet)
+        // currently false in prod until Issue #62335 is fixed
+        // https://github.com/vercel/next.js/issues/62335
         typedRoutes: false,
     },
     headers: async () => {
@@ -976,6 +977,8 @@ const nextConfig = (phase) => {
         experimental: {
             // experimental typescript "statically typed links"
             // https://nextjs.org/docs/app/building-your-application/configuring/typescript#statically-typed-links
+            // currently false in prod until Issue #62335 is fixed
+            // https://github.com/vercel/next.js/issues/62335
             typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
         },
     }
@@ -997,7 +1000,7 @@ In this example we check if the phase is **development** by using the **PHASE_DE
 
 Now that we have access to the phase property we can change the config to this:
 
-```js title="next.config.mjs" {2} {4-11} {25} {30-41}
+```js title="next.config.mjs" {1} {3-4} {6-13} {26-51}
 const nextConfig = (phase) => {
 
     // security headers for preview & production
@@ -1017,8 +1020,11 @@ const nextConfig = (phase) => {
         reactStrictMode: true,
         poweredByHeader: false,
         experimental: {
-            // currently false as mdx pages are not typed in prod builds (yet)
-            typedRoutes: false,
+            // experimental typescript "statically typed links"
+            // https://nextjs.org/docs/app/building-your-application/configuring/typescript#statically-typed-links
+            // currently false in prod until Issue #62335 is fixed
+            // https://github.com/vercel/next.js/issues/62335
+            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
         },
         headers: async () => {
             return [
@@ -1137,6 +1143,13 @@ const nextConfig = (phase) => {
     const nextConfigOptions = {
         reactStrictMode: true,
         poweredByHeader: false,
+        experimental: {
+            // experimental typescript "statically typed links"
+            // https://nextjs.org/docs/app/building-your-application/configuring/typescript#statically-typed-links
+            // currently false in prod until Issue #62335 is fixed
+            // https://github.com/vercel/next.js/issues/62335
+            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        },
         // configure `pageExtensions` to include MDX files
         pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx'],
     }
@@ -1173,7 +1186,7 @@ Because we used **create next app** in our tsconfig.json we **already** have the
 
 The configuration we just did adds support for MDX in pages that have the extension `*.mdx`, if you want to also add support for pages with the `*.md` extension, then add the extension in two places like so:
 
-```mjs title="next.config.mjs" {4} {17}
+```mjs title="next.config.mjs" {4} {24}
 const nextConfig = (phase) => {
 
     const withMDX = createMdx({
@@ -1189,6 +1202,13 @@ const nextConfig = (phase) => {
     const nextConfigOptions = {
         reactStrictMode: true,
         poweredByHeader: false,
+        experimental: {
+            // experimental typescript "statically typed links"
+            // https://nextjs.org/docs/app/building-your-application/configuring/typescript#statically-typed-links
+            // currently false in prod until Issue #62335 is fixed
+            // https://github.com/vercel/next.js/issues/62335
+            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        },
         // configure `pageExtensions` to include MDX files
         pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx', 'md'],
     }
@@ -1202,7 +1222,7 @@ If you use an other extension for your markdown pages, like *.markdown, *.mdown,
 
 If you don't add your markdown extension to the **pageExtensions** then the Next.js app router will not be able to find your file and it will show a 404, if you don't also add the extension to the **createMDX options** then @next/mdx won't be able to parse the content of your file
 
-### Our first MDX page
+## Our first MDX page
 
 In the `app` folder, create a new `first_page` folder and then add a page using the mdx extension, with the following content:
 
@@ -1233,6 +1253,152 @@ Make sure your dev server is running, if it is not start it using `npm run dev`
 And then visit your newly created MDX page in the browser at `http://localhost:3000/first_page`
 
 Congratulations 🎉 you now can create Next.js pages using MDX and the best part is that they are fully static, which means they will render blazingly fast
+
+### React components in MDX content
+
+Of course the big advantage of MDX over regular markdown is that we use any React component inside of our MDX content
+
+First create a new folder `components` in the root of your project
+
+Inside of the `components` folder create another folder `buttons` and inside of that folder create a file `Counting.tsx` and insert the following code:
+
+```tsx title="/components/buttons/Counting.tsx"
+'use client'
+
+import { useState } from 'react'
+
+const Counting: React.FC = () => {
+
+    const [count, setCount] = useState(0)
+
+    const handleClick = () => {
+        setCount(count + 1)
+    }
+
+    return (
+        <>
+            <button onClick={handleClick}>
+                Clicked {count} times
+            </button>
+        </>
+    )
+}
+
+export default Counting
+```
+
+Now lets edit the `/app/first_page/page.mdx` page we created earlier and add our Counting component to it, like so:
+
+```mdx title="/app/first_page/page.mdx"
+import Counting from '@/components//buttons/Counting'
+
+# Hello 👋 with MDX!
+
+<Counting />
+
+## headline 2nd level
+
+*italic*
+
+**bold**
+
+***bold and italic***
+
+> a quote
+
+[link to Next.js](https://nextjs.org)
+
+* foo
+* bar
+* baz
+
+![This is an octocat image](https://myoctocat.com/assets/images/base-octocat.svg 'I\'m the title of the octocat image')
+```
+
+Make sure your dev server is running, if it is not start it using `npm run dev`
+
+And then visit the updated MDX page in the browser at `http://localhost:3000/first_page` and try out the counting button
+
+Of course this is just an example, you can import any component you want, for example a chart component to visualize some statistics or a component displaying a 3d model of an object and so on
+
+## MDX in pages and components
+
+Besides turning a whole page into an MDX page as we saw in the previous chapter, you can also use MDX in pages or components
+
+### MDX in a page
+
+First create a new folder `mdx_in_a_page` inside of the `app` folder and then create a file called `content.mdx` with the following content:
+
+```md title="/app/mdx_in_a_page/content.mdx"
+# Hello 👋 World!
+
+I'm MDX content that got imported in a regular page.tsx file
+```
+
+And then in the same folder create a `page.tsx` with the following content:
+
+```tsx title="/app/mdx_in_a_page/page.tsx"
+import ContentMDX from './content.mdx'
+
+export default function Page() {
+
+    return (
+        <>
+            <ContentMDX />
+        </>
+    )
+}
+```
+
+Make sure your dev server is running, if it is not start it using `npm run dev`
+
+And then visit your newly created page in the browser at `http://localhost:3000/mdx_in_a_page`
+
+### MDX in a component
+
+First inside of the `components` folder create another folder called `mdx` and inside of that folder a file called `content.mdx` and insert the following content:
+
+```md title="/components/mdx/content.mdx"
+# Hello 👋 World!
+
+I'm MDX content that got imported in a Component
+```
+
+And then in the same folder create a `Example.tsx` file, with the following content:
+
+```tsx title="/components/mdx/Example.tsx"
+import ContentMDX from './content.mdx'
+
+const MDXExample: React.FC = () => {
+
+    return (
+        <>
+            <ContentMDX />
+        </>
+    )
+}
+
+export default MDXExample
+```
+
+Then inside of `app` folder, create another new folder `mdx_in_a_component` and finally in that folder create a page file `page.tsx` with the following content:
+
+```tsx title="/app/mdx_in_a_component/page.tsx"
+import MDXExample from '@/components/mdx/Example'
+
+export default function Page() {
+
+    return (
+        <>
+            <MDXExample />
+        </>
+    )
+}
+```
+
+Make sure your dev server is running, if it is not start it using `npm run dev`
+
+And then visit your newly created MDX page in the browser at `http://localhost:3000/mdx_in_a_component`
 
 
 
