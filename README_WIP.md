@@ -44,7 +44,7 @@ export default function Article() {
 }
 ```
 
-if your dev server is not yet running, use the following command in the VSCode terminal (or use your preferred command line tool):
+If your Next.js dev server is not yet running, use the following command in the VSCode terminal (or use your preferred command line tool) to start the Next.js dev server:
 
 ```shell
 npm run dev
