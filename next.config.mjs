@@ -312,9 +312,12 @@ const nextConfig = (phase) => {
             mdxRs: false,
             // experimental partial prerendering
             // (as of now) need a canary next.js for this to work
+            // https://nextjs.org/docs/messages/ppr-preview
             ppr: false,
             // experimental typescript "statically typed links"
             // https://nextjs.org/docs/app/building-your-application/configuring/typescript#statically-typed-links
+            // currently false in prod until Issue #62335 is fixed
+            // https://github.com/vercel/next.js/issues/62335
             typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
         },
         // file formats for next/image
