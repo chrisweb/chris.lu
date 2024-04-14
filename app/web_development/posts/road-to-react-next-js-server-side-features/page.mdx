@@ -12,16 +12,19 @@ I will try to keep this document up to date as things evolve continuously, if yo
 
 ## React 18.x
 
-On december 21 2020, the react team announced in a [blog post on react.org](https://reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html) that they had just published the [RFC: React Server Components](https://github.com/reactjs/rfcs/blob/main/text/0188-server-components.md) on github, as well as an experimental demo [video of React Server Components (RSC) on YouTube](https://www.youtube.com/watch?v=TQQPAU21ZUw)
+React updates recap:
 
-The next announcement regarding server components came as part of a blog post announcing the release of [React v18.0](https://reactjs.org/blog/2022/03/29/react-v18.html), the react team mentions that the feature is considered experimental but also that they plan to release the server components in one of the next minor versions of react 18
-
-In march 2023 we got another update from the React Team in a blog post [What We've Been Working On](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023), one of the new features they mentioned to be working on were Server Actions (which then first appeared in Next.js 14 in october 2023)
-
-In may 2023 the React team announced the [Canary release channel](https://react.dev/blog/2023/05/03/react-canaries), the canary releases are officially supported, meaning that if any regressions land, they will treat them with a similar urgency to bugs in stable releases, which for you means that you can use canary releases in production, Next.js for example uses those canary releases
+* On december 21 2020, the react team announced in a [blog post on react.org](https://reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html) that they had just published the [RFC: React Server Components](https://github.com/reactjs/rfcs/blob/main/text/0188-server-components.md) on github, as well as an experimental demo [video of React Server Components (RSC) on YouTube](https://www.youtube.com/watch?v=TQQPAU21ZUw)
+* In march 2022 they released a blog post announcing the release of [React v18.0](https://reactjs.org/blog/2022/03/29/react-v18.html) and in that post they also mentioned that the **Server Components** were still in development and would get released in a future update, they also posted a new guide on React.dev to help developers [migrate to React 18](https://react.dev/blog/2022/03/08/react-18-upgrade-guide), the [React 18 changelog](https://github.com/facebook/react/releases/tag/v18.0.0) lists a lot improvements, the first one is the introduction of **Concurrent React** and some new hooks mostly useful for CSS-in-JS libraries and external data stores to allow them to work well during concurrent rendering, the second big feature was [Suspense](https://react.dev/reference/react/Suspense) another, **Suspense** is a new feature related to concurrent rendering and the one that makes other new features like **Streaming Server Rendering** and **Selective Hydration** even possible (features that would get mostly used by frameworks in upcoming releases)
+* In april 2022 react released the first major update [React 18.1](https://github.com/facebook/react/releases/tag/v18.1.0) which was a maintenance version with a lot of fixes, most were for React DOM
+* That same year in june 2022 the React team released [React 18.2](https://github.com/facebook/react/releases/tag/v18.2.0) another maintenance release with again lots of improvements for React DOM
+* One year after the first release of React 18 in march 2023 we got another update from the React Team in a blog post [What We've Been Working On](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023), one of the new features they mentioned to be working on were Server Actions (which then first appeared in Next.js 14 in october 2023)
+* In may 2023 the React team announced the [Canary release channel](https://react.dev/blog/2023/05/03/react-canaries), the canary releases are officially supported, meaning that if any regressions land, they will treat them with a similar urgency to bugs in stable releases, which for you means that you can use canary releases in production, a lot of frameworks like Next.js, Remix, Astro, ... for example uses those canary releases, which is why frameworks now support **Server Components** and **Server Actions** even though there has not been a stable React release that ships those features
+* In february 2024 the React team released another [post](https://react.dev/blog/2024/02/15/react-labs-what-we-have-been-working-on-february-2024) in their series called **What We've Been Working On**, one big announcement was that they were preparing the first open source release of the React compiler in the upcoming months, they also announced that they were working on a client only version of **Server Actions** called **Actions**
 
 > [!MORE]  
 > [React (react.dev) blog](https://react.dev/blog)  
+> [React releases list and changelogs on GitHub](https://github.com/facebook/react/releases)
 
 ## new features in Next.js prior to v13
 
@@ -49,6 +52,8 @@ Next.js 13 releases in 2022:
 Next.js 14 release(s) in 2023:
 
 * in october 2023 (one year after the release of Next.js 13) the Next.js team released the first [Next.js 14](https://nextjs.org/blog/next-14) version, in this version the **Server Actions** feature (that they introduced in version 13.4 as alpha) is now considered being stable (meaning you can safely use it in production now), this version also another interesting new feature called **Partial Prerendering** (currently in preview / experimental), [Partial Prerendering](https://nextjs.org/docs/app/api-reference/next-config-js/partial-prerendering) will allow us to mix static and dynamic content, as of now if you call a dynamic function like noStore or cookies inside your route then you opt out of static rendering, with means that with partial rendering you will be able to include dynamic components without the whole page becoming dynamic
+* In january 2024 the Next.js team released [Next.js 14.1](https://nextjs.org/blog/next-14-1) providing a stable version of custom cache handlers and there is now a configuration option to instruct Next.js to log cache **HITs** and **SKIPs** when running in development mode, this version also came with many improvements for fast refresh, error messages, parallel & intercepted routes and Turbo
+* In april 2024 the Next.js team released [Next.js 14.2](https://nextjs.org/blog/next-14-2) added a new experimental option to called [staleTimes](https://nextjs.org/docs/app/api-reference/next-config-js/staleTimes) to let developers to set custom revalidation times for the [Router Cache](https://nextjs.org/docs/app/building-your-application/caching#router-cache), this version also came with some changes intended to improve Tree-shaking and builds should now use less memory
 
 > [!MORE]  
 > [Next.js blog](https://nextjs.org/blog)  
@@ -179,7 +184,7 @@ export default async function MyPage({ params: { id } }) {
 }
 ```
 
-Another option for caching database request got introduced in **Next.js 14** but is currently marked as unstable (so be aware that the API might change in the future), the new next/cache feature is called [unstable_cache](https://nextjs.org/docs/app/api-reference/functions/unstable_cache), it is the same caching mechanism used by fetch by for own queries using the database client you prefer:
+Another option for caching database request got introduced in **Next.js 14** where it marked as unstable (so be aware that the API might change in the future), the new next/cache feature is called [unstable_cache](https://nextjs.org/docs/app/api-reference/functions/unstable_cache), it is the same caching mechanism used by fetch by for own queries using the database client you prefer:
 
 ```jsx
 import { unstable_cache } from 'next/cache'
@@ -196,11 +201,37 @@ export default async function MyPage({ params: { id } }) {
 }
 ```
 
+In version 14.1 Next.js got some improvements for [custom cache handlers](https://nextjs.org/docs/app/building-your-application/deploying#configuring-caching) which got released as stable version, (most useful when not deploying your project on Vercel and when using your own custom cache storage), the two configuration options are now called [cacheHandler](https://nextjs.org/docs/app/api-reference/next-config-js/incrementalCacheHandlerPath) and **cacheMaxMemorySize**:
+
+```mjs title="next.config.mjs"
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    cacheHandler: require.resolve('./MY_CUSTOM_CACHE_HANDLER.js'),
+    cacheMaxMemorySize: 0,
+}
+```
+
+In version 14.2 the Next.js team added a new experimental option to called [staleTimes](https://nextjs.org/docs/app/api-reference/next-config-js/staleTimes) to let developers to set custom revalidation times for the [Router Cache](https://nextjs.org/docs/app/building-your-application/caching#router-cache):
+
+```mjs title="next.config.mjs"
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    experimental: {
+        staleTimes: {
+            dynamic: 30,
+            static: 180,
+        },
+    },
+}
+```
+
 > [!MORE]  
 > [Next.js "Data Fetching, Caching, and Revalidating" documentation](https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating)  
 > [Next.js "unstable_cache" API reference](https://nextjs.org/docs/app/api-reference/functions/unstable_cache)  
 > [React "Cache (Server components)" documentation](https://react.dev/reference/react/cache)  
 > [Vercel "Fetching data faster with the App Router" article](https://vercel.com/blog/nextjs-app-router-data-fetching)  
+> [Next.js "Configuring Caching" documentation](https://nextjs.org/docs/app/building-your-application/deploying#configuring-caching)  
+> [Next.js "Router Cache" documentation](https://nextjs.org/docs/app/building-your-application/caching#router-cache)  
 
 ### app router server components and server actions
 
