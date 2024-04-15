@@ -528,6 +528,8 @@ export default nextConfig
 
 Note: all "visitor" hooks you see in the **rehypePrettyCodeOptions** have been added so that we have classNames when one of those features is present, for example if you highlight a row the hook will ensure that the line has a class named **highlightedLine** which will help us to style the features in the next step
 
+Tip: in CSS3 pseudo elements like **before** and **after** have two colons, so `::before` and `::after` (in CSS2 they only have one colon), check out the [MDN ::before page](https://developer.mozilla.org/en-US/docs/Web/CSS/::before) for further details
+
 next we add the following css to our `global.css` file:
 
 ```css
@@ -2150,6 +2152,8 @@ read more:
 the second major disadvantage is that you can only use this technique if you want a button or box that has 1 or 2 **angled corners**, you can use the **pseudo element ::after** for one corner and then the **pseudo element ::before** for the second corner, but there is NO pseudo element to do the third of fourth corner
 
 the advantage however of this technique is that it works in every browser, even very old IE (internet explorer) verions, as we can see on [can I use "::after pseudo-element content"](https://caniuse.com/css-gencontent), which makes this technique more suitable for example when doing the design of a newsletter that will be sent by mail, because a lot of mail clients or services have html and css engines that often a lot less powerfull and modern compared to browsers
+
+Tip: in CSS3 pseudo elements like **before** and **after** have two colons, so `::before` and `::after` (in CSS2 they only have one colon), check out the [MDN ::before page](https://developer.mozilla.org/en-US/docs/Web/CSS/::before) for further details
 
 here is the css that will be needed
 

@@ -46,7 +46,7 @@
     left: 67px;
 }
 
-.shield:after {
+.shield::after {
     position: absolute;
     width: 100%;
     height: 100%;

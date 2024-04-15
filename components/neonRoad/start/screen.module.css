@@ -102,14 +102,14 @@
 
 }
 
-.withMusic:before,
-.withoutMusic:before {
+.withMusic::before,
+.withoutMusic::before {
     content: "";
     width: 20px;
     display: inline-block;
 }
 
-.selected:before {
+.selected::before {
     content: ">";
     font-size: var(--main-fontSize-big2);
     color: #fcff00;
@@ -120,7 +120,7 @@
 /* max-width: 70rem / 1120px (mobile breakpoint) */
 @media all and (max-width: 70rem) {
 
-    .selected:before {
+    .selected::before {
         font-size: var(--main-fontSize-big3);
     }
 
