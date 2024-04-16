@@ -2,7 +2,7 @@
 :root {
     --main-background-value: 15, 0, 25;
     --main-background-color: rgb(var(--main-background-value));
-    --main-text-value: 225, 235, 250;
+    --main-text-value: 245, 240, 245;
     --main-text-color: rgb(var(--main-text-value));
     /* https://bitsofco.de/the-new-system-font-stack/ */
     --main-frontFamily-default: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
