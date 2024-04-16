@@ -32,10 +32,10 @@
 
 /* if the color-mix css feature is supported
 make the text color a bit darker */
-@supports (color: color-mix(in srgb, var(--quaternary-light-color), black 10%)) {
+@supports (color: color-mix(in srgb, var(--quaternary-light-color), black 20%)) {
 
     .notActive>a {
-        color: color-mix(in srgb, var(--quaternary-light-color), black 10%);
+        color: color-mix(in srgb, var(--quaternary-light-color), black 20%);
     }
 
 }
