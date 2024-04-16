@@ -8,7 +8,7 @@
     content: "";
     width: 2px;
     height: var(--main-fontSize-default);
-    background: var(--tertiary-light-color);
+    background: var(--secondary-light-color);
     display: inline-block;
 }
 

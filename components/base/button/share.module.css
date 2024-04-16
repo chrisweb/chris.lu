@@ -16,7 +16,6 @@
 
 .border {
     height: 48px;
-    color: var(--primary-light-color);
     margin: 0 auto;
     position: relative;
     display: flex;
@@ -32,8 +31,10 @@
             100% calc(100% - var(--cornerSideLength)),
             calc(100% - var(--cornerSideLength)) 100%,
             0 100%);
-    background-color: var(--primary-light-color);
+    background: linear-gradient(90deg, var(--quaternary-light-color) 0%, var(--primary-light-color) 95%);
     border: 0;
+    color: var(--primary-light-color);
+    font-weight: 600;
 }
 
 /* max-width: 70rem / 1120px (mobile breakpoint) */
@@ -46,8 +47,8 @@
 }
 
 .border:hover {
-    color: var(--tertiary-light-color);
-    background-color: var(--tertiary-light-color);
+    color: var(--secondary-light-color);
+    background-color: var(--secondary-light-color);
 }
 
 .core {

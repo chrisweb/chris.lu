@@ -21,21 +21,21 @@
 }
 
 .active>a {
-    color: var(--tertiary-light-color);
+    color: var(--secondary-light-color);
     font-weight: var(--main-fontWeight-activeLinks);
 }
 
 .notActive>a {
-    color: var(--primary-light-color);
+    color: var(--quaternary-light-color);
     font-weight: var(--main-fontWeight-links);
 }
 
 /* if the color-mix css feature is supported
 make the text color a bit darker */
-@supports (color: color-mix(in srgb, var(--primary-light-color), black 10%)) {
+@supports (color: color-mix(in srgb, var(--quaternary-light-color), black 10%)) {
 
     .notActive>a {
-        color: color-mix(in srgb, var(--primary-light-color), black 10%);
+        color: color-mix(in srgb, var(--quaternary-light-color), black 10%);
     }
 
 }
@@ -44,12 +44,12 @@ make the text color a bit darker */
 @media (hover: hover) {
 
     .active>a:hover {
-        background-image: linear-gradient(var(--tertiary-light-color) 0%, var(--tertiary-light-color) 100%);
+        background-image: linear-gradient(var(--secondary-light-color) 0%, var(--secondary-light-color) 100%);
     }
 
     .notActive>a:hover {
-        color: var(--tertiary-light-color);
-        background-image: linear-gradient(var(--tertiary-light-color) 0%, var(--tertiary-light-color) 100%);
+        color: var(--secondary-light-color);
+        background-image: linear-gradient(var(--secondary-light-color) 0%, var(--secondary-light-color) 100%);
     }
 
 }

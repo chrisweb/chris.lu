@@ -36,7 +36,7 @@
 @media (hover: hover) {
 
     .link:hover {
-        color: var(--tertiary-light-color);
+        color: var(--secondary-light-color);
     }
 
 }

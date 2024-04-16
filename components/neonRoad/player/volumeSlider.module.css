@@ -35,20 +35,20 @@
 }
 
 .slider:hover::-webkit-slider-thumb {
-    background-color: var(--tertiary-light-color);
+    background-color: var(--secondary-light-color);
 }
 
 .slider:hover::-moz-range-thumb {
-    background-color: var(--tertiary-light-color);
+    background-color: var(--secondary-light-color);
 }
 
 .slider::-moz-range-progress {
-    background-color: var(--tertiary-light-color);
+    background-color: var(--secondary-light-color);
     height: 4px;
 }
 
 /* https://github.com/w3c/csswg-drafts/issues/4410#issuecomment-1720875895 */
 .slider::slider-fill {
-    background-color: var(--tertiary-light-color);
+    background-color: var(--secondary-light-color);
     height: 4px;
 }

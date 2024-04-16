@@ -2,7 +2,7 @@
 :root {
     --main-background-value: 15, 0, 25;
     --main-background-color: rgb(var(--main-background-value));
-    --main-text-value: 249, 247, 249;
+    --main-text-value: 225, 235, 250;
     --main-text-color: rgb(var(--main-text-value));
     /* https://bitsofco.de/the-new-system-font-stack/ */
     --main-frontFamily-default: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -44,11 +44,11 @@
     */
     --primary-light-value: 255, 0, 170;
     --primary-light-color: rgb(var(--primary-light-value));
-    --secondary-light-value: 255, 185, 0;
+    --secondary-light-value: 0, 255, 240;
     --secondary-light-color: rgb(var(--secondary-light-value));
-    --tertiary-light-value: 0, 255, 240;
+    --tertiary-light-value: 255, 185, 0;
     --tertiary-light-color: rgb(var(--tertiary-light-value));
-    --quaternary-light-value: 235, 250, 0;
+    --quaternary-light-value: 215, 110, 255;
     --quaternary-light-color: rgb(var(--quaternary-light-value));
     --codebloc-font-family: var(--font-sourceCodePro), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     --header-navbar-height: 50px;
@@ -99,7 +99,7 @@ html {
         https://developer.chrome.com/docs/css-ui/scrollbar-styling */
         scrollbar-width: auto;
         /* scrollbar-color: the first color is for the thumb of the scrollbar and the second color for the track */
-        scrollbar-color: rgba(var(--tertiary-light-value), 0.9) rgba(var(--tertiary-light-value), 0.02);
+        scrollbar-color: rgba(var(--secondary-light-value), 0.9) rgba(var(--secondary-light-value), 0.02);
     }
 }
 
@@ -114,15 +114,15 @@ html {
     }
 
     *::-webkit-scrollbar-track {
-        background-color: rgba(var(--tertiary-light-value), 0.02);
+        background-color: rgba(var(--secondary-light-value), 0.02);
     }
 
     *::-webkit-scrollbar-thumb {
-        background: linear-gradient(var(--tertiary-light-color) 0%, var(--primary-light-color) 95%);
+        background: linear-gradient(var(--secondary-light-color) 0%, var(--primary-light-color) 95%);
     }
 
     *::-webkit-scrollbar-thumb:horizontal {
-        background: linear-gradient(95deg, var(--tertiary-light-color) 0%, var(--primary-light-color) 95%);
+        background: linear-gradient(95deg, var(--secondary-light-color) 0%, var(--primary-light-color) 95%);
     }
 }
 
@@ -208,7 +208,7 @@ main {
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
     background-size: 200% 100%;
-    background-image: linear-gradient(90deg, var(--primary-light-color) 5%, var(--secondary-light-color) 50%, var(--primary-light-color) 95%);
+    background-image: linear-gradient(90deg, var(--primary-light-color) 5%, var(--tertiary-light-color) 50%, var(--primary-light-color) 95%);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -338,13 +338,13 @@ a {
 @media (hover: hover) {
 
     a:hover {
-        color: var(--tertiary-light-color);
+        color: var(--secondary-light-color);
     }
 
     .animatedUnderline {
         /* underline animation */
         /* https://nickymeuleman.netlify.app/blog/css-animated-wrapping-underline */
-        background-image: linear-gradient(var(--tertiary-light-color) 0%, var(--tertiary-light-color) 100%);
+        background-image: linear-gradient(var(--secondary-light-color) 0%, var(--secondary-light-color) 100%);
         background-size: 0% 1px;
         background-position-y: 100%;
         background-position-x: 0%;
@@ -363,12 +363,12 @@ a {
 /* https://github.com/w3c/csswg-drafts/issues/7394 */
 /* I just found another bug in chrome 114, if background rule it won't do the text clip */
 .hyperLink {
-    font-weight: 800;
+    font-weight: 700;
     text-decoration: underline;
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-color */
     text-decoration-color: var(--primary-light-color);
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-thickness */
-    text-decoration-thickness: 1px;
+    text-decoration-thickness: 2px;
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-thickness */
     text-underline-offset: var(--main-textUnderlineOffset-links);
     background: -webkit-linear-gradient(45deg, var(--primary-light-color), var(--tertiary-light-color));
@@ -381,7 +381,7 @@ a {
 @media (hover: hover) {
     .hyperLink:hover {
         text-decoration-thickness: 2px;
-        text-decoration-color: var(--tertiary-light-color);
+        text-decoration-color: var(--secondary-light-color);
     }
 }
 
@@ -716,6 +716,16 @@ h6 .headingAnchor {
     color: rgba(var(--main-text-value), 0.9);
 }
 
+/* if the color-mix css feature is supported
+make the text color a bit darker */
+@supports (color: color-mix(in srgb, var(--main-text-color), black 20%)) {
+
+    .fontDarker {
+        color: color-mix(in srgb, var(--main-text-color), black 20%);
+    }
+
+}
+
 .icon {
     display: inline-block;
     overflow: visible;
@@ -811,12 +821,12 @@ h6 .headingAnchor {
 
 .markdown-alert-note,
 .markdown-alert-note .markdown-alert-header {
-    background-color: var(--tertiary-light-color);
+    background-color: var(--secondary-light-color);
 }
 
 .markdown-alert-warn,
 .markdown-alert-warn .markdown-alert-header {
-    background-color: var(--secondary-light-color);
+    background-color: var(--tertiary-light-color);
 }
 
 .markdown-alert-tip,

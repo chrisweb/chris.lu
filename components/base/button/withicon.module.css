@@ -48,7 +48,7 @@
             100% calc(100% - var(--cornerSideLength)),
             calc(100% - var(--cornerSideLength)) 100%,
             0 100%);
-    background-color: var(--tertiary-light-color);
+    background-color: var(--secondary-light-color);
     border: 0;
 }
 
@@ -82,5 +82,5 @@
 }
 
 .core>svg {
-    color: var(--tertiary-light-color);
+    color: var(--secondary-light-color);
 }
