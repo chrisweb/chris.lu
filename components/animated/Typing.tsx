@@ -7,6 +7,20 @@ interface IProps {
     children: React.ReactNode
 }
 
+const colors = ['#09f7ee', '#2dd2e3', '#649bd5', '#9d63c5', '#d628b5', '#ff00aa']
+let lastColor = ''
+
+const getRandomColor = (): string => {
+    const random = Math.floor(Math.random() * colors.length)
+    const color = colors[random]
+    if (color !== lastColor) {
+        lastColor = color
+        return color
+    } else {
+        return getRandomColor()
+    }
+}
+
 const Button: React.FC<IProps> = ({ children }) => {
 
     const wordsList = children ? children.toString() : ''
@@ -17,8 +31,10 @@ const Button: React.FC<IProps> = ({ children }) => {
     const characterIndexRef = useRef(0)
     const pauseIndexRef = useRef(20)
     const actionRef = useRef('type')
+    const withColorChange = true
 
     const [wordState, setWordState] = useState('')
+    const [colorState, setColorState] = useState('#fff')
 
     const updatePartIndex = useCallback(() => {
         if (partIndexRef.current < parts.length - 1) {
@@ -32,13 +48,18 @@ const Button: React.FC<IProps> = ({ children }) => {
         const part = parts[partIndexRef.current]
         const charactersArray = [...part]
         const character = charactersArray[characterIndexRef.current]
+        // set a new color
+        if (withColorChange && characterIndexRef.current === 0) {
+            const color = getRandomColor()
+            setColorState(color)
+        }
         if (characterIndexRef.current < charactersArray.length - 1) {
             // we have NOT reached the end of the characters array
             characterIndexRef.current++
         } else {
             // no characters left, jump to next part
             updatePartIndex()
-            // change the action, to "undo" the characters
+            // part typing done, make a pause
             actionRef.current = 'pause'
         }
         setWordState((previousState) => {
@@ -51,7 +72,7 @@ const Button: React.FC<IProps> = ({ children }) => {
             // the pause is NOT done yet
             pauseIndexRef.current--
         } else {
-            // change the action, to "type" again
+            // pause done, remove current part
             actionRef.current = 'undo'
             // reset the pause index
             pauseIndexRef.current = 20
@@ -63,7 +84,7 @@ const Button: React.FC<IProps> = ({ children }) => {
             // we have NOT removed all characters yet
             characterIndexRef.current--
         } else {
-            // change the action, to "pause"
+            // all characters removed, type next
             actionRef.current = 'type'
         }
         setWordState((previousState) => {
@@ -100,7 +121,7 @@ const Button: React.FC<IProps> = ({ children }) => {
 
     return (
         <>
-            <span className={styles.blinkingCarret}>{wordState}</span>
+            <span className={styles.blinkingCarret} style={{ color: colorState }}>{wordState}</span>
         </>
     )
 }

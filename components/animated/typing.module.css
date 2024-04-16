@@ -2,13 +2,14 @@
     display: inline-flex;
     align-items: center;
     gap: 2px;
+    font-weight: 700;
 }
 
 .blinkingCarret::after {
     content: "";
     width: 2px;
     height: var(--main-fontSize-default);
-    background: var(--secondary-light-color);
+    background: white;
     display: inline-block;
 }
 
