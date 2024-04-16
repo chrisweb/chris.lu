@@ -1400,6 +1400,77 @@ Make sure your dev server is running, if it is not start it using `npm run dev`
 
 And then visit your newly created MDX page in the browser at `http://localhost:3000/mdx_in_a_component`
 
+## ESLint
 
+Adding linting to a project is something I recommend doing as early as possible, similar to adding CSP to a project, those are things that if you postpone them then you will have a lot more work later, that's why it is best to add linting as early as possible and then fix linting related problems one by one as soon as they come up
+
+> [!NOTE]  
+> The following ESLint setup uses the [ESLint "Classic" configuration files](https://eslint.org/docs/latest/use/configure/configuration-files-deprecated) which is the default for all ESLint versions below 9, in ESLint 9 those configuration files are now **deprecated** and it is recommended to use the new [flat config files](https://eslint.org/docs/latest/use/configure/configuration-files) which are the new default since the release of ESLint 9, I use the classic configuration files with overrides as this is what is currently supported by Next.js, a lot of plugins like typescript-eslint have started working on support for **ESLint 9 flat config files** as you can see in [typescript-eslint Issue #8211](https://github.com/typescript-eslint/typescript-eslint/issues/8211), so expect the new flat config files to become the new default in a foreseeable future
+
+### But didn't Next.js already set up linting?
+
+Yes, Next.js has built in linting support, earlier in this tutorial we used **create-next-app** which has installed [ESLint](https://github.com/eslint/eslint) as well as the **eslint-config-next** package for us (both packages got added to the devDependencies in the `package.json`)
+
+**create-next-app** has also added an `.eslintrc.json` file in the root of the project, in that file Next.js has added a default configuration that works best for most projects and adds linting for your code
+
+When you [install ESLint for Next.js manually](https://nextjs.org/docs/app/building-your-application/configuring/eslint) by adding the lint command `"lint": "next lint"` to your package.json scripts and then executing it for the first time it will detect that there is no `.eslintrc.json` it will ask you if you want to use the **Base** mode or the **Strict** mode, we however used **create-next-app** and it did not let us chose if we prefer the **Base** mode or the **Strict** mode, that's because when using **create-next-app** it choses the strict mode by default
+
+The **Strict** mode is the same as the base mode but additionally it extendeds the **next/core-web-vitals** rules set, **next/core-web-vitals** is a set of extra rules that will check your code and inform you about potential optimizations you can do that are related to core web vitals metrics, like rules to improve page loading speed
+
+Finally **create-next-app** will has also add the line `"lint": "next lint"{:json}` to your package.json `scripts`, which means that you now can use the command `npm run lint`, which will execute `next lint`, next lint is the Nextjs cli command for linting
+
+> [!MORE]  
+> [web.dev "Core Web Vitals" page](https://web.dev/articles/vitals)
+
+### Why does Next.js have two packages related to ESLINT?
+
+before we get started, I want to make you aware of something
+
+Next.js has **2 packages** that are related to ESLint, one is called eslint-**config**-next (ESLint Config) and the other one is called eslint-**plugin**-next (ESLint Plugin)
+
+* [eslint-config-next](https://www.npmjs.com/package/eslint-config-next)
+* [eslint-plugin-next](https://www.npmjs.com/package/@next/eslint-plugin-next)
+
+Package 1: **eslint-config-next** (ESLint Config) intends to make it easier to get started with ESLint by installing and configuring several plugins for us, some plugins it installs are:
+
+* [eslint-plugin-react](https://www.npmjs.com/package/eslint-plugin-react)
+* [eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks)
+* [eslint-plugin-next](https://www.npmjs.com/package/@next/eslint-plugin-next)
+
+and some more, if you want the full list of plugins that eslint-config-next installs check out the [eslint-config-next package.json dependencies](https://github.com/vercel/next.js/blob/canary/packages/eslint-config-next/package.json)
+
+Package 2: **eslint-plugin-next** is the actual ESLint plugin for Nextjs (called **@next/eslint-plugin-next** on npmjs), it aims to catch common problems in a Nextjs application
+
+for a full list of rules that the Next.js ESLint plugin adds check out the [Nextjs "ESLint rules" documentation](https://nextjs.org/docs/app/building-your-application/configuring/eslint#eslint-plugin) or have a look at the [eslint-plugin-next rules directory on github](https://github.com/vercel/next.js/tree/canary/packages/eslint-plugin-next/src/rules)
+
+### Why are we changing the Next.js linting setup?
+
+If Next.js already has linting built in for the code we write, **then why change it**?
+
+That's because the Next.js setup lints code in .ts and .tsx files using a typescript parser, it however does not lint markdown and code in MDX files for which you need to have an MDX parser installed, we are going to 3 packages to do the linting of markdown style as well as ES syntax in MDX pages:
+
+* the first one is a plugin called [remark lint](https://github.com/remarkjs/remark-lint) and it is an ESLint plugin that will lint the markdown style we use to format our content in MDX pages
+* the second one is a plugin we are going to add is [eslint-plugin-mdx](https://github.com/mdx-js/eslint-mdx/tree/master/packages/eslint-plugin-mdx) which will lint ES code in MDX files
+* the third one is parser which will parse the content of MDX files
+
+**The recommended way** to add [eslint-plugin-mdx as described in their README](https://github.com/mdx-js/eslint-mdx#notice) is to use the overrides feature of ESLint (if you want to know more about the parsing issues you might have if not using overrides check out the [eslint-plugin-mdx GitHub issue #251](https://github.com/mdx-js/eslint-mdx/issues/251#issuecomment-736139224))
+
+However even though Next.js has created an `.eslintrc.json` for us that lets us do some fine tuning of rules, adding a new **overrides** for markdown is not possible due to a limitation how **next lint** works (there is open discussion [next lint command doesn't support overrides #35228](https://github.com/vercel/next.js/issues/35228) where this limitation gets discussed)
+
+So because **next lint** does ignore custom overrides in `.eslintrc.json`, this unfortunatly means that we will not be able to use the typescript files overrides from **eslint-config-next** and we will also not be able to use the **next lint** cli anymore (if I missed something or if you know of a better solution please let me know by posting it in the [chris.lu Discussion board](https://github.com/chrisweb/chris.lu/discussions) on Github) and instead we will create two custom overrides (one for ts(x) files and a second one for md(x) files) and then we will create a custom eslint command in the package.json scripts
+
+### step 1: ESLint ts files overrides
+
+
+
+### step 2: ESLint mdx files overrides
+
+
+### step 3: package.json scripts linting command
+
+
+### linting tests to ensure everything works
+
+we will create some errors in both tsx and mdx files and if we did the setup correctly we should get linting errors both in VSCode as well as in the command line output
 
 </article>

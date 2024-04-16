@@ -4,20 +4,7 @@
 
 TODO: check out the nodejs.org repo, they use next.js, their eslint is very well written: [](https://github.com/nodejs/nodejs.org/blob/main/.eslintrc.json)
 
-# ESLint
 
-Next.js has two different packages related to ESLint, one is called **eslint-config-next** consists of setup for common React ESLint plugins that are useful to lint react code, the other one is called **eslint-plugin-next** and this is an ESLint plugin which adds rules to lint the code of Next.js projects
-
-to learn more about the two packages check out my short introduction in the this [Next.js ESLint packages](/web_development/posts/eslint-next-js) post
-
-## installing eslint
-
-you have 4 options when it comes to installing ESLint in a Nextjs project
-
-> [!NOTE]
-> spoiler alert I will use option 4 for this project, but feel free to read about the first 3 options so that you know what is possible and then chose for yourself which one you like best
-
-if you want to use one of those 4 options and know more about the differencies between them, then I recommend you first read my seperate post about [installing and configuring ESLint in a Next.js project](/web_development/posts/eslint-next-js)
 
 ### **next lint** command flags
 
@@ -222,7 +209,7 @@ in this MDX blog tutorial the goal is to lint both our typescript (javascript) f
 
 Note: it would be nice to be able to use the the nextjs **eslint-config-next** package that already has an ESLint "overrides" set up for the typescript files and only add a second **overrides** for MDX files
 
-however if you create a custom eslintrc and add on overrides for MDX and then use **eslint-config-next**, it will  not use the overrides you set in your custom eslint, however this is currently not possible, there is open ticket regarding that limitation: [next lint command doesn't support overrides #35228](https://github.com/vercel/next.js/issues/35228)
+however if you create a custom eslintrc and add on overrides for MDX and then use **eslint-config-next**, it will  not use the overrides you set in your custom eslint, however this is currently not possible, there is open discussion regarding that limitation: [next lint command doesn't support overrides #35228](https://github.com/vercel/next.js/issues/35228)
 
 this is why we will create two overrides:
 

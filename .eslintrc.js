@@ -15,16 +15,10 @@ module.exports = {
         '.vscode/',
         'public/',
     ],
-    plugins: [
-        'react',
-        '@typescript-eslint',
-        '@react-three',
-        '@next/next',
-    ],
     reportUnusedDisableDirectives: true,
     // ignore all by default
     // we re-eanble each by using overrides
-    ignorePatterns: ['**/*.ts?(x)', '**/*.md?(x)'],
+    //ignorePatterns: ['**/*.ts?(x)', '**/*.md?(x)'],
     overrides: [
         {
             files: ['**/*.ts?(x)'],
@@ -42,6 +36,12 @@ module.exports = {
                 },
                 warnOnUnsupportedTypeScriptVersion: true,
             },
+            plugins: [
+                'react',
+                '@typescript-eslint',
+                '@react-three',
+                '@next/next',
+            ],
             rules: {
                 // Indentation BUG: https://github.com/eslint/eslint/issues/16385
                 /*
