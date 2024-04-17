@@ -17,6 +17,9 @@ In this tutorial we will:
 * add linting tools for both the code of the project and the content of the posts
 * add a CI/CD pipeline using vercel.com so that every time we commit code to our GitHub repository it gets automatically deployed
 
+> [!NOTE]  
+> I made this tutorial for total beginners in mind, however if you are already an experienced Next.js dev then there are some chapter you may want to skip
+
 ## Prerequisites
 
 > [!NOTE]  
@@ -231,7 +234,7 @@ const nextConfig = (phase) => {
     const nextConfigOptions = {
         experimental: {
             // experimental typescript "statically typed links (routes)"
-            // https://nextjs.org/docs/app/building-your-application/configuring/typescript#statically-typed-links
+            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
             typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
         },
     }
@@ -336,7 +339,7 @@ export default function Home() {
 
 Congratulations you just coded your first Next.js page
 
-### start the dev(elopment) server
+### Start the dev(elopment) server
 
 Now open the VSCode terminal if it isn't open yet (or use your favorite command line tool) and let's use one of the 4 commands we added to our README.md earlier to start the development server:
 
@@ -346,17 +349,183 @@ npm run dev
 
 Now in the terminal, press `Ctrl` and then click on the Next.js local server URL or open your browser and put the following URL into the address bar: [http://localhost:3000/](http://localhost:3000/)
 
+### Stop the dev(elopment) server
+
+To stop the development press `Ctrl+S`
+
+Then you will get asked of you really want to quit:
+
+> Terminate batch job (Y/N)?
+
+To confirm press enter either `Y` and press `ENTER` or just press `Ctrl+S` again
+
+#### What are npm run scripts
+
+All `npm run SCRIPT` commands work because they have been added to the package.json scripts block, in our case the `npm run dev` works because **create next app** has added it to the package.json for us
+
+To get a list of all scripts that are available as commands, use the following command:
+
+```shell
+npm run
+```
+
+This will show you the 4 run-scripts commands that got added by create next app
+
+> [!MORE]  
+> [NPM "run scripts" documentation](https://docs.npmjs.com/cli/v10/commands/npm-run-script)
+
+#### Edit run scripts
+
+To edit run scripts open your `package.json` in the root of the project
+
+There you will find the existing commands:
+
+```json title="package.json"
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+```
+
+> [!MORE]  
+> [NPM "package.json run scripts" documentation](https://docs.npmjs.com/cli/v10/commands/npm-run-script)
+
+#### Changing the Next.js dev server port
+
+As you may have noticed when we used `npm run dev` it started the dev server using the port 3000, this is because port 3000 is the default, the port will NOT be 3000 it was already in use, then Next.js will use the next best free port, for example 3001, 3002, ...
+
+You can however also change the port manually if needed, to do so you need to use **-p** option for next.js **dev** (also works for the **start** cli commands used to start the production server)
+
+For example to use the port 4000 edit your `package.json` change `next dev` to this:
+
+```json title="package.json"
+  "scripts": {
+    "dev": "next dev -p 4000",
+  },
+```
+
+Then run the npm command to execute that script like so:
+
+```shell
+npm run dev
+```
+
+You will see that now Next.js uses the port you have told it to use, because the address it prints in the terminal is now using the port 4000:
+
+```shell
+  - Local: http://localhost:4000
+```
+
 > [!NOTE]  
-> port 3000 is the default, the port will be something else if:  
->
-> * it was already in use Next.js will have taken another port  
-> * you have used the **-p** option for next.js **dev** or **start** cli commands, for example in your package.json use the option like so `next dev -p 4000` to change the port to 4000
->
-> if you want to know for sure what port is being used check the terminal, Next.js will have printed the URL of the dev server
+> Now I recommend you discard the changes we just did, it is preferred to let Next.js chose the port for you and use 3000 by default, only set the port to a specific value if you have a use case for it
 
-If you inspect the source of the page, you will see that Next.js injects a bunch of Javascript code into our page and some of those javascript files are really heavy, this is because Next.js adds for example a tool called **Hot Module Reload** (HMR), which will run in the background and update the project for us every time we edit and then save a file in our project, Next.js calls this [fast refresh](https://nextjs.org/docs/architecture/fast-refresh), then it will reload the content in the browser for us, all of that code however won't make it into production, Next.js only adds those tool when in development mode (we are in development mode because we use the dev server command)
+#### Using the Next.js CLI commands in the terminal
 
-Now go back to VSCode and look at the list of files in the sidebar and you will notice that Next.js re-added the `/app/layout.tsx` file we just deleted earlier, that's because Next.js is a nice framework and it will always have your back, well and also because this layout file is called the **root layout** and it is **required**, also if you look at your VSCode terminal you will see that Next.js printed the following line, informing us that it created the layout file for us:
+When using a command like `npm run dev` npm will check for a script and then execute the command of that script, in the case of `npm run dev` it will execute `next dev`
+
+`next dev` is a Next.js CLI command, as we already saw in the package.json scripts there other Next.js CLI commands you can use, like `next build`, `next start`, `next lint` and a bunch more
+
+If you try to run one of those commands in the terminal (or your favorite command line tool), for example:
+
+```shell
+next dev
+```
+
+On linux you will get an error like:
+
+```shell
+bash: next: command not found
+```
+
+On windows in powershell you will get an error like:
+
+```shell
+The term 'next' is not recognized as the name of a cmdlet, function, script file, or operable program. (...)
+```
+
+To fix this, we can use NPMs npx, like so:
+
+```shell
+npx next dev
+```
+
+> [!TIP]  
+> If you want to see what options a given Next.js CLI command has, add the -h flag to the command, for example `next dev -h` will show you a list of options for the dev command, for a list of all commands use `next -h`
+
+For example this command will show the options for the Next.js dev CLI:
+
+```shell
+npx next dev -h
+```
+
+Or to see the options of the linting command, use:
+
+```shell
+npx next lint -h
+```
+
+Besides starting the dev server, there are other interesting CLI commands you may want to try out at some point, for example if you have a build that fails during deployment and you want to debug that build of your project locally, then you can use this command:
+
+```shell
+npx next build --debug
+```
+
+After the build is done, Next.js will print a lot of interesting information in your terminal, like what headers, rewrites, redirects, routes, ... your app uses and information like, did this page get prerendered as static content or is it dynamic and get rendered at runtime
+
+Or to get some information about the your system you can use:
+
+```shell
+npx next info
+```
+
+After experimenting with Next.js CLI in your terminal, you can of course add those to your package.json too, this has the advantage that other devs on your project can use them too and for you it has the advantage that you don't need to remember them
+
+To add the info CLI command to your `package.json`, open the `package.json` and edit it like this:
+
+```json title="package.json" {3}#special
+  "scripts": {
+    "dev": "next dev -p 4000",
+    "info": "next info",
+  },
+```
+
+As you can see because the command is inside of the scripts of the `package.json` we do NOT need to use **npx** anymore, as NPM will do that for you
+
+> [!MORE]  
+> [Next.js "cli" documentation](https://nextjs.org/docs/app/api-reference/next-cli)  
+> [NPM "npx" documentation](https://docs.npmjs.com/cli/v10/commands/npx)  
+
+#### Next dev HTTPS (localhost SSL certificate)
+
+There is one last dev CLI option I want to highlight before we go back to our project, which is `--experimental-https`
+
+When using the next dev command it will always start a dev server using HTTP, but there are situations where you want to use HTTPS instead
+
+The great thing about `--experimental-https` is that Next.js will download an extra package that it will then use to create and set up a self signed certificate for our locahost, all we need to do is that option to our next dev command like so:
+
+```shell
+npx next dev --experimental-https
+```
+
+This will start your dev server using HTTPS and you can see a recap of what Next.js did for you in your terminal, something like this:
+
+> ⚠ Self-signed certificates are currently an experimental feature, use with caution.
+> Attempting to generate self signed certificate. This may prompt for your password
+> CA Root certificate created in APPDATA_PATH\Local\mkcert
+> Certificates created in PATH_TO_PROJECT\certificates
+> Adding certificates to .gitignore
+
+You can now visit your localhost with SSL at: [https://localhost:3000/](https://localhost:3000/)
+
+### fast refresh, root layout and metadata
+
+Let's go back to our project, make sure the dev server is running or use the `npm run dev` command to start it and then open [http://localhost:3000/](http://localhost:3000/) in your browser
+
+In your browser **right click** somewhere in the page and then select **Inspect** (or by using the dev tools (to open the dev tools press `F12` key) and then open the `Elments` tab), you will see that Next.js injects a bunch of Javascript code into our page and some of those javascript files are really heavy, this is because Next.js adds for example a tool called **Hot Module Reload** (HMR), which will run in the background and update the project for us every time we edit and then save a file in our project, Next.js calls this [fast refresh](https://nextjs.org/docs/architecture/fast-refresh), then it will reload the content in the browser for us, all of that code however won't make it into production, Next.js only adds those tool when in development mode (we are in development mode because we use the dev server command)
+
+Now go back to VSCode and look at the list of files in the sidebar and you will notice that Next.js re-added the `/app/layout.tsx` file we just deleted earlier, because this layout file is called the **root layout** and it is **required** (and that's because Next.js is a clever framework that in many places helps you do the right thing 😉), also if you look at your VSCode terminal you will see that Next.js printed the following line, informing us that it created the layout file for us:
 
 > Your page app/page.tsx did not have a root layout. We created app\layout.tsx for you.
 
@@ -976,7 +1145,7 @@ const nextConfig = (phase) => {
         poweredByHeader: false,
         experimental: {
             // experimental typescript "statically typed links"
-            // https://nextjs.org/docs/app/building-your-application/configuring/typescript#statically-typed-links
+            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
             // currently false in prod until Issue #62335 is fixed
             // https://github.com/vercel/next.js/issues/62335
             typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
@@ -1021,7 +1190,7 @@ const nextConfig = (phase) => {
         poweredByHeader: false,
         experimental: {
             // experimental typescript "statically typed links"
-            // https://nextjs.org/docs/app/building-your-application/configuring/typescript#statically-typed-links
+            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
             // currently false in prod until Issue #62335 is fixed
             // https://github.com/vercel/next.js/issues/62335
             typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
@@ -1075,9 +1244,16 @@ We also add 3 more headers by to the end of our headers array:
 > [MDN "X-Content-Type-Options" documentation]()  
 > [MDN "X-Frame-Options" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options)
 
-## Adding MDX support using @next/mdx
+## Why use markdown (MDX)?
 
-As a developer using markdown to format content makes sense, as most of us probably already know Markdown because we have been using it when formatting our project READMEs, or when opening Issues or participating in Discussions on GitHub, this is why I chose to use MDX for this "static Next.js blog" project
+As a developer using markdown to format content makes sense, as most of us probably already know Markdown because we have been using it when formatting our project READMEs, or when opening Issues or participating in Discussions on GitHub, or when formatting questions and answers on [Stack Overflow](https://stackoverflow.com/editing-help), or even in messages on a [Discord](https://support.discord.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline) server, this is why I chose to use MDX (markdown + JSX) for this "static Next.js blog" project
+
+> [!MORE]  
+> [GitHub "markdown" formatting](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
+> [Stack Overflow "markdown" help](https://stackoverflow.com/editing-help)  
+> [Discord "markdown" formatting](https://support.discord.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline)
+
+## Adding MDX support using @next/mdx
 
 To add MDX support to the Next.js blog I will use [@next/mdx](https://www.npmjs.com/package/@next/mdx) which is an MDX package by the same team that is behind Next.js, but there are other alternatives that work well too, I listed some of them in the [@next/mdx alternatives chapter](/web_development/posts/mdx/#nextmdx-alternatives) in my MDX post, if you prefer you can also create your own package in which case I recommend you start by reading the **Deep Dive: How do you transform markdown into HTML?** section of the [next.js "Markdown and MDX" documentation](https://nextjs.org/docs/app/building-your-application/configuring/mdx#deep-dive-how-do-you-transform-markdown-into-html)
 
@@ -1145,7 +1321,7 @@ const nextConfig = (phase) => {
         poweredByHeader: false,
         experimental: {
             // experimental typescript "statically typed links"
-            // https://nextjs.org/docs/app/building-your-application/configuring/typescript#statically-typed-links
+            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
             // currently false in prod until Issue #62335 is fixed
             // https://github.com/vercel/next.js/issues/62335
             typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
@@ -1204,7 +1380,7 @@ const nextConfig = (phase) => {
         poweredByHeader: false,
         experimental: {
             // experimental typescript "statically typed links"
-            // https://nextjs.org/docs/app/building-your-application/configuring/typescript#statically-typed-links
+            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
             // currently false in prod until Issue #62335 is fixed
             // https://github.com/vercel/next.js/issues/62335
             typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
