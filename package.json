@@ -5,12 +5,15 @@
     "main": "index.js",
     "scripts": {
         "dev": "next dev",
+        "dev-ssl": "next dev --experimental-https",
         "build": "npm run lint && next build",
+        "build-debug": "next build --debug",
         "start": "next start",
         "next-lint": "next lint",
         "lint": "npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint",
         "lint-nocache": "npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md",
-        "lint-debug": "npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint --debug"
+        "lint-debug": "npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint --debug",
+        "info": "next info"
     },
     "repository": {
         "type": "git",
