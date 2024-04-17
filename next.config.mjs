@@ -309,16 +309,24 @@ const nextConfig = (phase) => {
             // experimental use rust compiler for MDX
             // as of now (07.10.2023) there is no support for rehype plugins
             // this is why it is currently disabled
+            // https://nextjs.org/docs/app/api-reference/next-config-js/mdxRs
             mdxRs: false,
             // experimental partial prerendering
             // (as of now) need a canary next.js for this to work
             // https://nextjs.org/docs/messages/ppr-preview
             ppr: false,
             // experimental typescript "statically typed links"
-            // https://nextjs.org/docs/app/building-your-application/configuring/typescript#statically-typed-links
+            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
             // currently false in prod until Issue #62335 is fixed
             // https://github.com/vercel/next.js/issues/62335
             typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        },
+        // hit or skip data cache logging (dev server)
+        // https://nextjs.org/docs/app/api-reference/next-config-js/logging
+        logging: {
+            fetches: {
+                fullUrl: true,
+            },
         },
         // file formats for next/image
         images: {
