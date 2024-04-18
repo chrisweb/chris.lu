@@ -1,6 +1,6 @@
 'use client'
 
-import { forwardRef, useRef, useEffect } from 'react'
+import { forwardRef, useRef, useEffect, useCallback } from 'react'
 import type { Mesh, CanvasTexture } from 'three'
 import type { MeshProps } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
@@ -41,7 +41,7 @@ const Terrain = forwardRef<Mesh, IProps>((props, terrainRef) => {
 
     const inRange = (value: number, range: [number, number]) => value >= range[0] && value <= range[1]
 
-    const procedurallyGenerateDisplacementMap = () => {
+    const procedurallyGenerateDisplacementMap = useCallback(() => {
 
         const width = 32
         const height = 64
@@ -145,11 +145,11 @@ const Terrain = forwardRef<Mesh, IProps>((props, terrainRef) => {
 
         displacementMapRef.current!.needsUpdate = true
 
-    }
+    }, [])
 
     useEffect(() => {
         procedurallyGenerateDisplacementMap()
-    }, [])
+    }, [procedurallyGenerateDisplacementMap])
 
     return (
         <mesh

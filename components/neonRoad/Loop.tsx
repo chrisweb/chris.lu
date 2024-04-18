@@ -15,47 +15,8 @@ const Loop: React.FC<IProps> = (props) => {
     const requestAnimationFrameRef = useRef<number | null>(null)
     const timeRef = useRef<number | null>(null)
 
-    const changeAnimationState = useCallback(() => {
-        document.hidden ? stop() : start()
-    }, [document.hidden])
-
-    const start = () => {
-
-        three.clock.start()
-
-        const currentTime = performance.now()
-
-        timeRef.current = currentTime
-
-        three.clock.elapsedTime = currentTime
-
-        // https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
-        requestAnimationFrameRef.current = requestAnimationFrame(loop)
-    }
-
-    const stop = () => {
-
-        three.clock.stop()
-
-        if (requestAnimationFrameRef.current !== null) {
-            cancelAnimationFrame(requestAnimationFrameRef.current)
-        }
-
-    }
-
-    useEffect(() => {
-        if (three.frameloop === 'never') {
-            // https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API
-            document.addEventListener('visibilitychange', changeAnimationState)
-            start()
-        }
-        return () => {
-            document.removeEventListener('visibilitychange', changeAnimationState)
-        }
-    }, [])
-
     // custom loop
-    function loop() {
+    const loop = useCallback(() => {
 
         const currentTime = performance.now()
 
@@ -93,7 +54,46 @@ const Loop: React.FC<IProps> = (props) => {
 
         requestAnimationFrameRef.current = requestAnimationFrame(loop)
 
-    }
+    }, [three])
+    
+    const start = useCallback(() => {
+
+        three.clock.start()
+
+        const currentTime = performance.now()
+
+        timeRef.current = currentTime
+
+        three.clock.elapsedTime = currentTime
+
+        // https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
+        requestAnimationFrameRef.current = requestAnimationFrame(loop)
+    }, [loop, three.clock])
+
+    const stop = useCallback(() => {
+
+        three.clock.stop()
+
+        if (requestAnimationFrameRef.current !== null) {
+            cancelAnimationFrame(requestAnimationFrameRef.current)
+        }
+
+    }, [three.clock])
+
+    const changeAnimationState = useCallback(() => {
+        document.hidden ? stop() : start()
+    }, [stop, start])
+
+    useEffect(() => {
+        if (three.frameloop === 'never') {
+            // https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API
+            document.addEventListener('visibilitychange', changeAnimationState)
+            start()
+        }
+        return () => {
+            document.removeEventListener('visibilitychange', changeAnimationState)
+        }
+    }, [changeAnimationState, start, three.frameloop])
 
     return (<>{props.children}</>)
 

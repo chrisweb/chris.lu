@@ -65,7 +65,7 @@ const Button: React.FC<IProps> = ({ children }) => {
         setWordState((previousState) => {
             return previousState += character
         })
-    }, [parts, updatePartIndex])
+    }, [parts, updatePartIndex, withColorChange])
 
     const pause = useCallback(() => {
         if (pauseIndexRef.current >= 0) {

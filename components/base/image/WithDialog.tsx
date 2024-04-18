@@ -21,7 +21,7 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 
     const closeDialogCallback = useCallback(() => {
         setImageDialogIsOpenState(false)
-    }, [imageDialogIsOpenState])
+    }, [])
 
     // @ts-expect-error: because the library definition is wrong
     const modalWidth = props.src?.width

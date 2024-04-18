@@ -40,87 +40,7 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
         wave: [],
     })
 
-    const initializePlayer = (): PlayerCore => {
-
-        const options: ICoreOptions = {
-            soundsBaseUrl: '/assets/music/',
-            loopQueue: true,
-            visibilityWatch: true,
-        }
-
-        const player = new PlayerCore(options)
-
-        const mixTape = getMixTape()
-
-        mixTape.forEach((song) => {
-
-            const soundAttributes: ISoundAttributes = {
-                source: song.source,
-                onLoading: (loadingProgress, maximumValue, currentValue) => {
-                    if (process.env.NODE_ENV === 'development') {
-                        console.log('loading: ', loadingProgress, maximumValue, currentValue)
-                    }
-                },
-                onPlaying: (playingProgress/*, maximumValue, currentValue*/) => {
-                    if (waveformRef.current !== null) {
-                        waveformRef.current.draw(playingProgress)
-                    }
-                },
-                onSeeking: (seekingPercentage, duration, playTime) => {
-                    if (process.env.NODE_ENV === 'development') {
-                        console.log('onSeeking', seekingPercentage, duration, playTime)
-                    }
-                    if (waveformRef.current !== null) {
-                        waveformRef.current.draw(seekingPercentage)
-                    }
-                },
-                onStarted: (playTimeOffset) => {
-                    if (process.env.NODE_ENV === 'development') {
-                        console.log('started', playTimeOffset)
-                    }
-                    setIsPlayingState(true)
-                    setCreditsState({
-                        name: song.name,
-                        artistName: song.artistName,
-                        artistWebsite: song.artistWebsite,
-                        license: song.license,
-                        wave: song.wave
-                    })
-                },
-                onPaused: (playTime) => {
-                    if (process.env.NODE_ENV === 'development') {
-                        console.log('paused', playTime)
-                    }
-                    setIsPlayingState(false)
-                },
-                onStopped: (playTime) => {
-                    if (process.env.NODE_ENV === 'development') {
-                        console.log('stopped', playTime)
-                    }
-                    setIsPlayingState(false)
-                },
-                onResumed: (playTime) => {
-                    if (process.env.NODE_ENV === 'development') {
-                        console.log('resumed', playTime)
-                    }
-                    setIsPlayingState(true)
-                },
-                onEnded: (willPlayNext) => {
-                    if (process.env.NODE_ENV === 'development') {
-                        console.log('ended', willPlayNext)
-                    }
-                }
-            }
-
-            player.addSoundToQueue({ soundAttributes: soundAttributes })
-
-        })
-
-        return player
-
-    }
-
-    const getMixTape = () => {
+    const getMixTape = useCallback(() => {
 
         const mixTape = [
             {
@@ -271,7 +191,99 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
 
         return mixTape
 
-    }
+    }, [])
+
+    const initializePlayer = useCallback((): PlayerCore => {
+
+        const options: ICoreOptions = {
+            soundsBaseUrl: '/assets/music/',
+            loopQueue: true,
+            visibilityWatch: true,
+        }
+
+        const player = new PlayerCore(options)
+
+        const mixTape = getMixTape()
+
+        mixTape.forEach((song) => {
+
+            const soundAttributes: ISoundAttributes = {
+                source: song.source,
+                onLoading: (loadingProgress, maximumValue, currentValue) => {
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('loading: ', loadingProgress, maximumValue, currentValue)
+                    }
+                },
+                onPlaying: (playingProgress/*, maximumValue, currentValue*/) => {
+                    if (waveformRef.current !== null) {
+                        waveformRef.current.draw(playingProgress)
+                    }
+                },
+                onSeeking: (seekingPercentage, duration, playTime) => {
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('onSeeking', seekingPercentage, duration, playTime)
+                    }
+                    if (waveformRef.current !== null) {
+                        waveformRef.current.draw(seekingPercentage)
+                    }
+                },
+                onStarted: (playTimeOffset) => {
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('started', playTimeOffset)
+                    }
+                    setIsPlayingState(true)
+                    setCreditsState({
+                        name: song.name,
+                        artistName: song.artistName,
+                        artistWebsite: song.artistWebsite,
+                        license: song.license,
+                        wave: song.wave
+                    })
+                },
+                onPaused: (playTime) => {
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('paused', playTime)
+                    }
+                    setIsPlayingState(false)
+                },
+                onStopped: (playTime) => {
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('stopped', playTime)
+                    }
+                    setIsPlayingState(false)
+                },
+                onResumed: (playTime) => {
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('resumed', playTime)
+                    }
+                    setIsPlayingState(true)
+                },
+                onEnded: (willPlayNext) => {
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('ended', willPlayNext)
+                    }
+                }
+            }
+
+            player.addSoundToQueue({ soundAttributes: soundAttributes })
+
+        })
+
+        return player
+
+    }, [getMixTape])
+
+    const getPlayer = useCallback((): PlayerCore | null => {
+
+        let player: PlayerCore | null = null
+
+        if (typeof playerRef !== 'function' && playerRef !== null) {
+            player = playerRef.current
+        }
+
+        return player
+
+    }, [playerRef])
 
     const onClickTogglePlayPauseCallback = async () => {
         if (isPlayingState) {
@@ -335,19 +347,7 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
 
     const onWaveClickHandler = useCallback((clickHorizontalPositionInPercent: number) => {
         getPlayer()?.setPosition(clickHorizontalPositionInPercent)
-    }, [])
-
-    const getPlayer = (): PlayerCore | null => {
-
-        let player: PlayerCore | null = null
-
-        if (typeof playerRef !== 'function' && playerRef !== null) {
-            player = playerRef.current
-        }
-
-        return player
-
-    }
+    }, [getPlayer])
 
     useEffect(() => {
 
@@ -371,7 +371,7 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
             }
         }
 
-    }, [])
+    }, [getMixTape, initializePlayer, playerRef])
 
     return (
         <>
