@@ -24,7 +24,7 @@
         "typescriptreact"
     ],
     "files.associations": {
-        "*.mdx": "markdown"
+        "*.mdx": "mdx"
     },
     "eslint.onIgnoredFiles": "warn",
     "eslint.probe": [
