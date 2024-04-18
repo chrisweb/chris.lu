@@ -17,28 +17,34 @@ const ImageDispatch: React.FC<ImageProps> = (props): JSX.Element => {
     return (
         <>
             {props.alt.startsWith('banner') ? (
-                <Image
-                    style={{
-                        width: '100%',
-                        height: 'auto',
-                    }}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    priority
-                    placeholder={optimizable ? 'blur' : 'empty'}
-                    {...(props as ImageProps)}
-                />
+                <>
+                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                    <Image
+                        style={{
+                            width: '100%',
+                            height: 'auto',
+                        }}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        priority
+                        placeholder={optimizable ? 'blur' : 'empty'}
+                        {...(props as ImageProps)}
+                    />
+                </>
             ) : (props.alt.startsWith('meme') || props.alt.startsWith('photo') || props.alt.startsWith('screenshot')) ? (
                 <ImageWithDialog {...(props as ImageProps)} />
             ) : (
-                <Image
-                    style={{
-                        maxWidth: '100%',
-                        height: 'auto',
-                    }}
-                    placeholder={optimizable ? 'blur' : 'empty'}
-                    unoptimized={optimizable ? false : true }
-                    {...(props as ImageProps)}
-                />
+                <>
+                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                    <Image
+                        style={{
+                            maxWidth: '100%',
+                            height: 'auto',
+                        }}
+                        placeholder={optimizable ? 'blur' : 'empty'}
+                        unoptimized={optimizable ? false : true}
+                        {...(props as ImageProps)}
+                    />
+                </>
             )}
         </>
     )

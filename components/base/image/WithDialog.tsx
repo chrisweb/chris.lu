@@ -31,6 +31,7 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
     return (
         <>
             <button onClick={imageButtonClickHandler} className={`${styles.buttonReset}  ${styles.buttonCore}`}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
                 <Image
                     style={{
                         width: '100%',
@@ -46,6 +47,7 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
                 )}
             </button>
             <UIModal isOpen={imageDialogIsOpenState} onCloseCallback={closeDialogCallback} hasCloseButton={false} width={modalWidth} height={modalHeight}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
                 <Image
                     style={{
                         objectFit: 'contain',
