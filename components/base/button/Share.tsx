@@ -85,4 +85,6 @@ const ShareButton = forwardRef<ButtonWithIconRefType, IProps>((props, buttonRef)
     )
 })
 
+ShareButton.displayName = 'ShareButton'
+
 export default ShareButton

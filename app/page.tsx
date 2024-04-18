@@ -42,7 +42,7 @@ export default function Homepage() {
                         <div className={styles.cyberPortalBorder}>
                             <div className={styles.cyberPortalInnerGlow}>
                                 <div className={styles.cyberPortalCore}>
-                                    <p><Link href="/music" className="hyperLink">Playlists:</Link> There are a lot of different activities during which I like listening to music, hence the music genres I listen to vary depending on what I do. I have my road trip playlists for when I'm in my car, my work playlist I listen to while coding, my chill playlists when building with bricks, ...</p>
+                                    <p><Link href="/music" className="hyperLink">Playlists:</Link> There are a lot of different activities during which I like listening to music, hence the music genres I listen to vary depending on what I do. I have my road trip playlists for when I&apos;m in my car, my work playlist I listen to while coding, my chill playlists when building with bricks, ...</p>
                                 </div>
                             </div>
                         </div>

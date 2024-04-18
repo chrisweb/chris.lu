@@ -16,4 +16,6 @@ const VolumeSlider = forwardRef<VolumeInputRefType, IProps>((props, volumeSlider
     )
 })
 
+VolumeSlider.displayName = 'VolumeSlider'
+
 export default VolumeSlider

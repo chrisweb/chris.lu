@@ -41,4 +41,6 @@ const ButtonWithIcon = forwardRef<ButtonWithIconRefType, IProps>((props, buttonR
     )
 })
 
+ButtonWithIcon.displayName = 'ButtonWithIcon'
+
 export default ButtonWithIcon
