@@ -33,4 +33,8 @@ node_modules/
 # Sentry Config File
 .sentryclirc
 
+# localhost ssl certificate(s)
 certificates
+
+# eslint tests
+/app/tests
