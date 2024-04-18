@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, forwardRef, useEffect } from 'react'
+import { useRef, forwardRef, useEffect, useCallback } from 'react'
 import styles from './ui.module.css'
 import { Waveform, IWaveLayoutOptions, IWaveCoreOptions } from 'waveform-visualizer'
 
@@ -13,7 +13,7 @@ const WaveformCanvas = forwardRef<Waveform, IProps>(({ onWaveClickHandler, waveD
 
     const waveCanvasRef = useRef<HTMLCanvasElement | null>(null)
 
-    const initializeWaveform = (): Waveform => {
+    const initializeWaveform = useCallback((): Waveform => {
 
         const waveLayoutOptions: IWaveLayoutOptions = {
             waveHeightInPixel: 32,
@@ -41,9 +41,9 @@ const WaveformCanvas = forwardRef<Waveform, IProps>(({ onWaveClickHandler, waveD
 
         return waveform
 
-    }
+    }, [onWaveClickHandler])
 
-    const getWaveform = (): Waveform | null => {
+    const getWaveform = useCallback((): Waveform | null => {
 
         let waveform: Waveform | null = null
 
@@ -53,7 +53,7 @@ const WaveformCanvas = forwardRef<Waveform, IProps>(({ onWaveClickHandler, waveD
 
         return waveform
 
-    }
+    }, [waveformRef])
 
     useEffect(() => {
 
@@ -66,7 +66,7 @@ const WaveformCanvas = forwardRef<Waveform, IProps>(({ onWaveClickHandler, waveD
 
         }
 
-    }, [waveData])
+    }, [waveData, getWaveform])
 
     useEffect(() => {
 
@@ -80,7 +80,7 @@ const WaveformCanvas = forwardRef<Waveform, IProps>(({ onWaveClickHandler, waveD
             }
         }
 
-    }, [])
+    }, [waveformRef, initializeWaveform])
 
     return (
         <>

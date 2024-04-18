@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import type { AnimationEvent, PropsWithChildren } from 'react'
 import { createPortal } from 'react-dom'
 import styles from './volumeDialog.module.css'
@@ -20,19 +20,19 @@ const VolumeDialog: React.FC<IProps> = (props) => {
 
     const dialogRef = useRef<HTMLDialogElement | null>(null)
 
-    const openModal = () => {
+    const openModal = useCallback(() => {
         setIsDialogOpenState(true)
         if (typeof onOpenCallback === 'function') {
             onOpenCallback()
         }
-    }
+    }, [onOpenCallback])
 
-    const closeModal = () => {
+    const closeModal = useCallback(() => {
         if (typeof onCloseCallback === 'function') {
             onCloseCallback()
         }
         setIsDialogOpenState(false)
-    }
+    }, [onCloseCallback])
 
     const onKeyDownHandler = (event: React.KeyboardEvent<HTMLDialogElement>) => {
         if (event.key === 'Escape') {
@@ -53,7 +53,7 @@ const VolumeDialog: React.FC<IProps> = (props) => {
         } else {
             closeModal()
         }
-    }, [isOpen])
+    }, [isOpen, openModal, closeModal])
 
     useEffect(() => {
         const dialogElement = dialogRef.current
