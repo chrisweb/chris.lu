@@ -131,39 +131,6 @@ read more:
 TODO: adding the eslint plugins typescript, jsx-a11y and mdx
 TODO: if you want to disable specific rules
 
-## customizing eslint rules
-
-```mjs
-module.exports = {
-    rules: {
-        indent: [
-            'error',
-            4,
-        ],
-        quotes: [
-            'error',
-            'single',
-        ],
-        semi: [
-            'error',
-            'never',
-        ],
-        '@typescript-eslint/naming-convention': [
-            'error',
-            {
-                'selector': 'interface',
-                'format': [
-                    'PascalCase'
-                ],
-                'custom': {
-                    'regex': '^I[A-Z]',
-                    'match': true
-                },
-            }
-        ],
-    },
-}
-```
 
 ## installing the @typescript-eslint parser + plugin
 
@@ -205,16 +172,7 @@ parserOptions: {
 
 ## TODO
 
-in this MDX blog tutorial the goal is to lint both our typescript (javascript) files but also also our MDX files
 
-Note: it would be nice to be able to use the the nextjs **eslint-config-next** package that already has an ESLint "overrides" set up for the typescript files and only add a second **overrides** for MDX files
-
-however if you create a custom eslintrc and add on overrides for MDX and then use **eslint-config-next**, it will  not use the overrides you set in your custom eslint, however this is currently not possible, there is open discussion regarding that limitation: [next lint command doesn't support overrides #35228](https://github.com/vercel/next.js/issues/35228)
-
-this is why we will create two overrides:
-
-- one overrides for typescript using a typescript parser as well as a bunch of plugins to lint typescript, react, next.js and more, that will replace the **next-lint** overrides
-- a second overrides for our MDX files that will use remark as parser and add a bunch of remark
 
 ```mjs
     overrides: [
@@ -512,5 +470,26 @@ If you already have ESLint configured in your application, we recommend extendin
 ### eslint-config-next
 
 because we don't use next lint, the node_modules directory is probably going to be linted, so the node_modules directory needs to get excluded (to check this add .js extension to eslint cli command)
+
+
+
+
+
+[https://www.npmjs.com/package/eslint-plugin-react-refresh]()
+```json
+rules: {
+    'react-refresh/only-export-components': 'warn',
+  },
+   extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
+    'plugin:react-hooks/recommended',
+  ],
+```
+
+
+
+
 
 </article>

@@ -1633,16 +1633,111 @@ That's because the Next.js setup lints code in .ts and .tsx files using a typesc
 
 However even though Next.js has created an `.eslintrc.json` for us that lets us do some fine tuning of rules, adding a new **overrides** for markdown is not possible due to a limitation how **next lint** works (there is open discussion [next lint command doesn't support overrides #35228](https://github.com/vercel/next.js/issues/35228) where this limitation gets discussed)
 
-So because **next lint** does ignore custom overrides in `.eslintrc.json`, this unfortunatly means that we will not be able to use the typescript files overrides from **eslint-config-next** and we will also not be able to use the **next lint** cli anymore (if I missed something or if you know of a better solution please let me know by posting it in the [chris.lu Discussion board](https://github.com/chrisweb/chris.lu/discussions) on Github) and instead we will create two custom overrides (one for ts(x) files and a second one for md(x) files) and then we will create a custom eslint command in the package.json scripts
+So because **next lint** does ignore custom overrides in `.eslintrc.json`, this unfortunatly means that we will not be able to use the typescript files overrides from **eslint-config-next** and we will also not be able to use the **next lint** cli anymore and instead we will create two custom overrides (one for ts(x) files and a second one for md(x) files) and then we will create a custom eslint command in the package.json scripts (if I missed something or if you know of a better solution please let me know by posting it in the [chris.lu Discussion board](https://github.com/chrisweb/chris.lu/discussions) on Github)
 
-### step 1: ESLint ts files overrides
+### step 1: basic eslint javascript file
+
+**create next app** has added an `.eslintrc.json` in the root of our project, as we will add out own custom eslint configuration file we start by deleting the current `.eslintrc.json`
+
+> [!NOTE]  
+> I chose javascript for my eslint configuration, I usually use javascript over json as it allows me to add comments, however if you prefer json feel free to create an `.eslintrc.json` instead of an `.eslintrc.js` or use one of the many other [ESLint configuration file formats](https://eslint.org/docs/latest/use/configure/configuration-files-deprecated#configuration-file-formats) that are supported
+
+Then create a new `.eslintrc.js` and add the following content:
+
+```js title=".eslintrc.js"
+module.exports = {
+    root: true,
+    'env': {
+        es2021: true,
+        node: true,
+        browser: true,
+    },
+    ignorePatterns: [
+        'node_modules/',
+        '.next/',
+        '.vscode/',
+        'public/',
+    ],
+    reportUnusedDisableDirectives: true,
+    overrides: [
+    ],
+}
+```
+
+The above is what you get if you use the [eslint init](https://eslint.org/docs/v8.x/use/getting-started) script to setup ESLint in a new project
+
+I added root true to make sure eslint [stops at the root of my project](https://eslint.org/docs/v8.x/use/configure/configuration-files#cascading-and-hierarchy) and does not attempt to check for other eslint configuration files in parent directories
+
+I added some entries in the **ignorePatterns** to make sure ESLint is not going to lint anything in those folders
+
+I enabled to make sure ESLint will trigger a [warning if it finds unused disable eslint comments](https://eslint.org/docs/v8.x/use/configure/rules#report-unused-eslint-disable-comments), which can happen when code gets deleted or moved around and suddenly an `// eslint-disable-next-line` comment becomes useless
+
+### step 2: ESLint ts files overrides
+
+Next we add the following code inside of the **overrides** array, like so:
+
+```js title=".eslintrc.js"
+overrides: [
+    {
+        files: ['**/*.ts?(x)'],
+        extends: [
+            'eslint:recommended',
+            'plugin:@typescript-eslint/recommended',
+            'plugin:@next/next/core-web-vitals',
+        ],
+        parser: '@typescript-eslint/parser',
+        parserOptions: {
+            sourceType: 'module',
+            ecmaFeatures: {
+                jsx: true,
+            },
+            warnOnUnsupportedTypeScriptVersion: true,
+        },
+        plugins: [
+            'react',
+            '@typescript-eslint',
+            '@next/next',
+        ],
+        rules: {
+            quotes: [
+                'error',
+                'single',
+                { "allowTemplateLiterals": true },
+            ],
+            semi: [
+                'error',
+                'never',
+            ],
+            '@typescript-eslint/ban-ts-comment': [
+                'error',
+                {
+                    'ts-expect-error': 'allow-with-description',
+                    'ts-ignore': 'allow-with-description',
+                    'ts-nocheck': false,
+                    'ts-check': false,
+                    minimumDescriptionLength: 3,
+                },
+            ],
+        },
+    },
+],
+```
+
+what this **overrides** does:
+
+* **files** is set so that it will (only) parse **ts** and **tsx** files
+* **extends** is set so that we will include the **recommended** rules from the **eslint** plugin and **typescript-eslint** plugin, it will also use the rules from the **core-web-vitals**, which are the recommended rules from the **eslint-plugin-next** (the ESLint plugin for Next.js) plus a few more rules related to core web vitals
 
 
 
-### step 2: ESLint mdx files overrides
+### step 3: ESLint mdx files overrides
 
+```js title=".eslintrc.js"
+overrides: [
+],
+```
 
-### step 3: package.json scripts linting command
+### package.json scripts linting command
 
 
 ### linting tests to ensure everything works
