@@ -1639,6 +1639,12 @@ So because **next lint** does ignore custom overrides in `.eslintrc.json`, this 
 
 **create next app** has added an `.eslintrc.json` in the root of our project, as we will add out own custom eslint configuration file we start by deleting the current `.eslintrc.json`
 
+**create next app** should have installed all dependencies needed, but just in case some are missing and to make sure the latest version is installed, I recommend running this command: 
+
+```shell
+npm i eslint-import-resolver-typescript@latest eslint-import-resolver-node@latest @typescript-eslint/parser@latest eslint-plugin-import@latest eslint-plugin-jsx-a11y@latest eslint-plugin-react@latest eslint-plugin-react-hooks@latest --save-exact --save-dev
+```
+
 > [!NOTE]  
 > I chose javascript for my eslint configuration, I usually use javascript over json as it allows me to add comments, however if you prefer json feel free to create an `.eslintrc.json` instead of an `.eslintrc.js` or use one of the many other [ESLint configuration file formats](https://eslint.org/docs/latest/use/configure/configuration-files-deprecated#configuration-file-formats) that are supported
 
