@@ -35,6 +35,3 @@ node_modules/
 
 # localhost ssl certificate(s)
 certificates
-
-# eslint tests
-/app/tests

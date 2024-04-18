@@ -10,6 +10,7 @@ module.exports = {
         '.next/',
         '.vscode/',
         'public/',
+        'tests/',
     ],
     reportUnusedDisableDirectives: true,
     overrides: [
