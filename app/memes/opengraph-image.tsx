@@ -55,6 +55,7 @@ export default async function OGImage(/*props: IImageProps*/) {
                             objectFit: 'cover',
                             objectPosition: 'center',
                         }}
+                        alt=""
                     />
                 }
                 <span
