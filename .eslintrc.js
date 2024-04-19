@@ -14,6 +14,8 @@ module.exports = {
         '.next/',
         '.vscode/',
         'public/',
+        // comment tests folder to test eslint configuration
+        'tests/',
     ],
     reportUnusedDisableDirectives: true,
     overrides: [
