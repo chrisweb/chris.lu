@@ -1650,6 +1650,9 @@ So because **next lint** does ignore custom overrides in `.eslintrc.json`, this 
 
 Finally there is yet another problem, the Next.js CLI **build** command does not use the `package.json` **lint** script but uses the Next.js **lint** CLI directly, this means that we will need to tell the **build** CLI to not do linting during builds and then we will manually re-add linting by changing the `package.json` **build** script so that it uses our `package.json` **lint** script before doing an actual build
 
+> [!MORE]  
+> [ESLint "how eslint overrides work" documentation](https://eslint.org/docs/v8.x/use/configure/configuration-files#how-do-overrides-work)
+
 ### Installing the MDX ESLint plugin and parser
 
 First we need to make sure the [MDX eslint plugin](https://www.npmjs.com/package/eslint-plugin-mdx) (and parser) are installed, by using the following command:
@@ -1832,21 +1835,233 @@ This was the last **overrides** which means our configuration file is now comple
 
 ### adding and configuring remark-lint
 
-We have now created an `.eslintrc.js` ESLint configuration file, we have added the MDX plugin which has installed [remark-lint](https://www.npmjs.com/package/remark-lint) for us as it is a dependency of the **eslint-plugin-mdx** package, so the next step is to configure **remark-lint**
+We have now created an `.eslintrc.js` ESLint configuration file, we have added the MDX plugin which has installed [remark-lint](https://www.npmjs.com/package/remark-lint) for us as it is a dependency of the **eslint-plugin-mdx** package
+
+The next step is to configure **remark-lint**, but first let's install 3 packages that contain presets for remark-lint, those presets will install a bunch of rules for us and will add a default configuration for those rules, use the following command to install them:
+
+```shell
+npm i remark-preset-lint-consistent@latest remark-preset-lint-recommended@latest remark-preset-lint-markdown-style-guide@latest --save-exact --save-dev
+```
 
 Remark-lint rules don't get added to `.eslintrc.js`, but instead we create a new file called `.remarkrc.mjs` (in the root of our project) and add the following content:
 
+```mjs title=".remarkrc.mjs"
+// presets imports
+import remarkPresetLintRecommended from 'remark-preset-lint-consistent'
+import remarkPresetLintConsistent from 'remark-preset-lint-recommended'
+import remarkPresetLintMarkdownStyleGuide from 'remark-preset-lint-markdown-style-guide'
 
+// rules imports
+import remarkLintMaximumHeadingLength from 'remark-lint-maximum-heading-length'
+import remarkLintUnorderedListMarkerStyle from 'remark-lint-unordered-list-marker-style'
+import remarkLintNoUndefinedReferences from 'remark-lint-no-undefined-references'
+import remarkLintLinkTitleStyle from 'remark-lint-link-title-style'
+import remarkLintMaximumLineLength from 'remark-lint-maximum-line-length'
+import remarkLintListItemSpacing from 'remark-lint-list-item-spacing'
 
+const config = {
+    plugins: [
+        // presets
+        remarkPresetLintRecommended,
+        remarkPresetLintConsistent,
+        remarkPresetLintMarkdownStyleGuide,
+        // rules
+        // https://www.npmjs.com/package/remark-lint-maximum-heading-length
+        [remarkLintMaximumHeadingLength, [1, 100]],
+        // https://www.npmjs.com/package/remark-lint-unordered-list-marker-style
+        [remarkLintUnorderedListMarkerStyle, 'consistent'],
+        // https://www.npmjs.com/package/remark-lint-no-undefined-references
+        [remarkLintNoUndefinedReferences, { allow: ['!NOTE', '!TIP', '!MORE', '!WARN', ' ', 'x'] }],
+        // https://www.npmjs.com/package/remark-lint-link-title-style
+        [remarkLintLinkTitleStyle, '\''],
+        // https://www.npmjs.com/package/remark-lint-maximum-line-length
+        [remarkLintMaximumLineLength, false],
+        // https://www.npmjs.com/package/remark-lint-list-item-spacing
+        [remarkLintListItemSpacing, false],
+    ]
+}
 
-### package.json scripts linting command
+export default config
+```
 
+The first 3 imports are presets with recommended rules, below in the plugins config object we use the 3 presets
 
-### VSCode ESLint and MDX plugins
+The other imports are single rules we want to configure, below in the config object we use arrays where the first value is the rule and the second value is the configuration we want to apply:
 
+* for the **maximum headings length** rule, we use **1,100** which tells remark-lint that headings should not have a length lower than 1 character and not greater than 100
+* for the **unordered lists marker style** we set it to **consistent**, when set to **consistent** the rule will check which marker is the most used and then enforce it everywhere, this is nice because it means it is flexible and will adapt to what you use, do you often define lists by using an asterisk (*), then this is what the rule will enforce or do you prefer using an hyphen-minus (-) then that is what will get enforced, consistent is nice setting to ensure that your styling is consitent based on what you use the most
+* the **no undefined references** rule adds a list of references that should get excluded (hence not be considered undefined), we add !NOTE and some others as those will be used at some point when we start to use GitHub like alerts for markdown
+* images and links can have a title, the title needs to be enclosed by two symbols, here we define that we want to use a single quote (') for titles, so an image with a title would look like this `![IMAGE_ALT_TEXT](IMAGE_PATH 'IMAGE_TITLE')`, if you prefer you can enforce double quotes or even set it to consistent to let it chose the one you use most
+* the **maximum line length** rule I disabled it, some people like to stick to 80 characters, I try to keep my lines short but if a line is bigger that's ok (for me) too
+* finally the **list item spacing** I disabled it because I had a lot of false positives when using that rule (I might re-enable it in the future and check if the problems I encountered got fixed)
 
-#### VSCode markdown language service setting
+> [!TIP]  
+> To get more information about what each rule does as well as more information about the 3 presets I use here I recommend visiting the [rules and presets GitHub repository](https://github.com/remarkjs/remark-lint/tree/main/packages) and then check out the README of each package
 
+There are a lot more rules than the ones listed here that get used, but for all other rules we keep the default configuration, so we don't need to install and import them individually
+
+> [!MORE]  
+> [remark lint "rules and presets" repository](https://github.com/remarkjs/remark-lint/tree/main/packages)  
+
+### package.json lint script update
+
+The next thing we need to do (as I explained in the ["Why are we changing the Next.js linting setup?" chapter](#why-are-we-changing-the-nextjs-linting-setup)) is to change the lint script in our `package.json`
+
+Instead of using **Next lint** CLI command for linting we will create our own command using the **ESLint CLI**
+
+Change the **lint script** in the  to this:
+
+```mjs title="package.json" {3}
+{
+    "scripts": {
+        "lint": "npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint",
+    },
+}
+```
+
+Now when we use the `npm run lint` command in our terminal, it will use our new script, which will use the **ESLint CLI** which will read the ESLint configuration from our `.eslintrc.js` configuration file
+
+I have two more scripts that can be useful, that you might to add too:
+
+```mjs title="package.json" {4-5}#special
+{
+    "scripts": {
+        "lint": "npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint",
+        "lint-nocache": "npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md",
+        "lint-debug": "npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint --debug",
+    },
+}
+```
+
+The **lint-nocache** script is the same linting command but it does **NOT** use the ESLint **cache**, this is useful when tweaking the ESLint configuration and not wanting ESLint to use the cache but instead always do a fresh start
+
+The **lint-debug** script is again the same linting command but this time we add the `--debug` flag, this will print a lot of useful information about what ESLint does in the **OUTPUT** tab in VSCode, which is again useful if you tweak your configuration and want to verify the things ESLint is doing or to debug a problem with your setup, like checking if your plugins get loaded correctly and much more
+
+If you don't know (yet) how to open the output channel, check out the ["VSCode (ESLint) output channel" chapter](/web_development/posts/vscode#vscode-eslint-output-channel) in the VSCode post
+
+### package.json build script update
+
+Another script we need to change is the **build** script (as I explained in the ["Why are we changing the Next.js linting setup?" chapter](#why-are-we-changing-the-nextjs-linting-setup))
+
+We need to ensure the **build** script will **NOT** use the **Next lint** CLI by default, by editing the our `next.config.mjs`, we then add the **ignoreDuringBuilds** option and set it to **true**, like so:
+
+```mjs title="next.config.mjs" {10-12}#special
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+import createMdx from '@next/mdx'
+
+const nextConfig = (phase) => {
+
+    /** @type {import('next').NextConfig} */
+    const nextConfigOptions = {
+        // disable linting during builds using "next lint"
+        // we have manually added our lint script in package.json to the build command
+        eslint: {
+            ignoreDuringBuilds: true,
+        },
+    }
+
+    return withMDX(nextConfigOptions)
+
+}
+```
+
+Now as we still want linting to happen before a build, we need to add the **lint** script we did in the previous chapter to the **build** script in our `package.json`, like so:
+
+```mjs title="package.json" {10-12}#special
+{
+    "scripts": {
+        "build": "npm run lint && next build",
+    },
+}
+```
+
+When we now use our `npm run build` command (or when our deployment script uses it), it will first execute `npm run lint` and if there are no linting errors it will then execute `next build`
+
+### VSCode ESLint and MDX extensions
+
+We now have linting using the lint command 🎉 but we have no linting in VSCode itself (yet)
+
+We are going to install 2 **VSCode extensions**, the first one will add linting messages directly into our code and the second one will add MDX language support to the VSCode intellisense
+
+Having the ESLint extension is great because it allows us to see linting hints, warnings and errors as we code, instead of having to wait for the linting command to run, meaning we can fix the problems one by one as the occur instead of waiting until the last moment and potentially having to fix a lot of problems all at once
+
+#### ESLint extension
+
+The first extension I recommend installing is the [VSCode "ESLint" extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+
+After installing the ESLint extension you need to edit the settings of that extension to add things like the **.mdx** extension to the list of file extensions that it will use
+
+You have several options when editing VSCode settings (spoiler alert: I will use option 2)
+
+Option 1: first open the extensions view (extensions list), if you don't know (yet) how to do this, then I recommend checking out my ["VSCode extensions view" chapter](/web_development/posts/vscode#vscode-extensions-view) in the VSCode post
+
+Then click on the gear icon (⚙️) of the ESLint extension and then in the menu select **Extension Settings**
+
+Option 2: If you have already set custom settings for your VSCode workspace then you will have a `.vscode` folder in your project root, if not create that folder, then inside of that folder you will have a `settings.json` file, if that file is not there create it
+
+> [!NOTE]  
+> when you edit settings you can do it on a **User** level or **Workspace** level, in this case I will we will do it on a **Workspace** level by using the `settings.json` file inside of the `.vscode` folder (that is in the root of our project), to learn more about how to use the VSCode settings I recommend checking out the [VSCode settings](/web_development/posts/vscode#vscode-settings) in the VSCode post
+
+Now open the `.vscode/settings.json` file and add the following settings for our ESLint extension:
+
+```json
+{
+    "eslint.debug": true,
+    "eslint.options": {
+        "extensions": [
+            ".js",
+            ".jsx",
+            ".md",
+            ".mdx",
+            ".ts",
+            ".tsx"
+        ]
+    },
+    "eslint.validate": [
+        "markdown",
+        "mdx",
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ]
+}
+```
+
+This will tell the ESLint extension to include files with the ts(x) as well as md(x) extension and it will make sure that it validates markdown, mdx, javscript, typescript and also react code
+
+#### MDX extension
+
+The second VSCode extension I recommend installing is the [VSCode language support extension for MDX](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx), when working with MDX content as this extension will add IntelliSense support for MDX files to VSCode
+
+> [!Note]  
+> this extension is still experimental, but I had no problems when using it
+
+### Restart the ESLint server in VSCode
+
+Every time you make changes to your ESLint setup, for example after editing either the `.eslintrc.js` ESLint configuration file or the `.remarkrc.mjs` remark-lint configuration file, I recommend restarting the ESLint server in VSCode to make sure the changes get applied immediatly
+
+To restart the eslint server in VSCode press `ctrl` + `shift` + `p` to open the command palette, then type `ESLint` and choose the command called **ESLint: Restart ESLint Server**
+
+#### VSCode fix for markdown highliting in mdx files
+
+Depending on what theme you use, markdown highliting will be broken when viewing the content of MDX files
+
+This is due to a problem where not all themes are up to date and have colors set for MDX, for example I use the [SynthWave '84](https://marketplace.visualstudio.com/items?itemName=RobbOwen.synthwave-vscode) which I like a lot, unfortunatly all my content in MDX files is just getting displayed used the standard text color
+
+If you have this problem too, there is a little trick you can apply, which is to tell VSCode via the `.vscode/settings.json` file to use the **markdown** VSCode language service for MDX files instead of **mdx**
+
+If you have already set custom settings for your VSCode workspace then you will have a `.vscode` folder in your project root, if not create that folder, then inside of that folder you will have a `settings.json` file, if that file is not there create it
+
+Then edit the `.vscode/settings.json` file and add the following setting for **files.associations**:
+
+```json title=".vscode/settings.json"
+{
+    "files.associations": {
+        "*.mdx": "markdown"
+    },
+}
+```
 
 ### linting tests to ensure everything works
 
