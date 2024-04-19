@@ -1,9 +1,7 @@
+// presets imports
 import remarkPresetLintRecommended from 'remark-preset-lint-consistent'
 import remarkPresetLintConsistent from 'remark-preset-lint-recommended'
 import remarkPresetLintMarkdownStyleGuide from 'remark-preset-lint-markdown-style-guide'
-//import remarkGfm from 'remark-gfm'
-//import remarkGithub from 'remark-github'
-//import remarkFrontmatter from 'remark-frontmatter'
 
 // rules imports
 import remarkLintMaximumHeadingLength from 'remark-lint-maximum-heading-length'
@@ -15,12 +13,11 @@ import remarkLintListItemSpacing from 'remark-lint-list-item-spacing'
 
 const config = {
     plugins: [
+        // presets
         remarkPresetLintRecommended,
         remarkPresetLintConsistent,
         remarkPresetLintMarkdownStyleGuide,
-        // full list of rules packages
-        // https://github.com/remarkjs/remark-lint/tree/main/packages
-        //
+        // rules
         // https://www.npmjs.com/package/remark-lint-maximum-heading-length
         [remarkLintMaximumHeadingLength, [1, 100]],
         // https://www.npmjs.com/package/remark-lint-unordered-list-marker-style
@@ -33,10 +30,6 @@ const config = {
         [remarkLintMaximumLineLength, false],
         // https://www.npmjs.com/package/remark-lint-list-item-spacing
         [remarkLintListItemSpacing, false],
-
-        //remarkGfm,
-        //remarkGithub,
-        //remarkFrontmatter,
     ]
 }
 
