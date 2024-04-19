@@ -14,8 +14,12 @@ module.exports = {
         '.next/',
         '.vscode/',
         'public/',
-        // comment tests folder to test eslint configuration
-        'tests/',
+        // by default we always ignore our tests folder
+        // to ensure the tests dont trigger errors in
+        // staging / production deployments
+        // comment out the next line to have eslint check
+        // the test files (in development)
+        'tests/eslint/',
     ],
     reportUnusedDisableDirectives: true,
     overrides: [
