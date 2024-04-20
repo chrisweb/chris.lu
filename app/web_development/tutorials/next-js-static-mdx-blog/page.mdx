@@ -155,7 +155,7 @@ This adds documentation to the README for 4 commands that are available after se
 Then change **MY_PROJECT** to whatever you want to name your project
 
 > [!TIP]  
-> Did you know you can preview markdown files in VSCode? If not check out my short [mardown preview chapter](/web_development/posts/vscode#vscode-markdown-preview) in the VSCode post  
+> Did you know you can preview markdown files in VSCode? If not check out my short ["VSCode markdown preview" chapter](/web_development/posts/vscode#vscode-markdown-and-mdx-preview) in the VSCode post  
 
 Now save the file (to save the file you can use the VSCode shortcut `Ctrl+S` (macOS: `⌘S`, Linux: `Ctrl+S`))
 
@@ -1589,48 +1589,7 @@ And then visit your newly created MDX page in the browser at `http://localhost:3
 
 ### Tips when using MDX
 
-Now that our MDX setup is done, I want to make show you a few tricks that make life easier when writing MDX / markdown in VSCode, that you might not know yet
-
-#### VSCode markdown preview
-
-MDX (`*.mdx`) files (as well as markdown (`*.md`) files) can be previewed in VSCode by clicking on the **Open preview** icon in the top right of VSCode:
-
-![](../../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/mdx/vscode/vscode_markdown_preview.png)
-
-#### easy way to add images to MDX content (using VSCODE)
-
-A great feature of VSCode is that it is very easy to add image to MDX (or markdown) content
-
-All you need to do is select the file in the explorer on the right, then drag it over the MDX (or markdown) document, then press `Shift` and drop the file into the document where you want it to be displayed, VSCode will automatically generate the mardown image syntax for you and add the correct path
-
-> [!TIP]  
-> to select the image and be able to drag it into the document, click on the image using the left mouse button and **keep it pressed**, then move the file over the document and then release the mouse button when at the position in the document where you want to insert it, if you just do a single click on the image then it will open the image in preview window
-
-When you do that VSCode will automatically generate the correct markdown image code and insert the relative path to the image, now if you want you can manually add an alt text and / or a title, which gives you something like this:
-
-```md
-![MY_ALT_TEXT](../../public/assets/images/foo.png 'MY_IMAGE_TITLE')
-```
-
-#### VSCode fix for markdown highliting in mdx files
-
-Depending on what theme you use, markdown highliting will be broken when viewing the content of MDX files
-
-This is due to a problem where not all themes are up to date and have colors set for MDX, for example I use the [SynthWave '84](https://marketplace.visualstudio.com/items?itemName=RobbOwen.synthwave-vscode) which I like a lot, unfortunatly all my content in MDX files is just getting displayed used the standard text color
-
-If you have this problem too, there is a little trick you can apply, which is to tell VSCode via the `.vscode/settings.json` file to use the **markdown** VSCode language service for MDX files instead of **mdx**
-
-If you have already set custom settings for your VSCode workspace then you will have a `.vscode` folder in your project root, if not create that folder, then inside of that folder you will have a `settings.json` file, if that file is not there create it
-
-Then edit the `.vscode/settings.json` file and add the following setting for **files.associations**:
-
-```json title=".vscode/settings.json"
-{
-    "files.associations": {
-        "*.mdx": "markdown"
-    },
-}
-```
+Now that our MDX setup is done, you might be interested in a few tips that make life easier when writing MDX / markdown in VSCode, if you do check out the ["VSCode markdown (and MDX) related tips" chapter](/web_development/posts/vscode#vscode-markdown-and-mdx-related-tips) in the VSCode post
 
 ## ESLint
 
@@ -2340,5 +2299,7 @@ in MDX files it can be done using JSX comments like so:
 
 > [!MORE]  
 > [remark-lint "ignore warnings" documentation](https://github.com/remarkjs/remark-lint#ignore-warnings)  
+
+
 
 </article>
