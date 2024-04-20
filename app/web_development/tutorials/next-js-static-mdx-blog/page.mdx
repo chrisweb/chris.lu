@@ -2273,33 +2273,37 @@ console.log('foo')
 console.log('bar')
 ```
 
+To disable more than one rule in a single comment you need to seperate the rule names with a comma
+
+For example if you use an `<img>` element with no `alt` attribute you will get two warnings, to disable them both you do it like this:
+
+```ts
+// eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element
+<img src="./foo.gif">
+```
+
 > [!MORE]  
 > [ESLint "disabling rules using comments" documentation](https://eslint.org/docs/latest/use/configure/rules#disabling-rules)  
 
 ### remark-lint "ignore warnings" comments
 
-disabling a remark lint warning for the next line
-
-in markdown files it can be done using html comments:
-
-```md
-<!--lint ignore no-undefined-references-->
-> [Info  - 8:41:03 PM] ESLint server is running.
-```
-
-> [!NOTE]  
-> For HTML comments in markdown files you need to have a blank line between the comment and markdown  
-
-in MDX files it can be done using JSX comments like so:
+To disable remark-lint rules we added by using MDX plugin you do **NOT** specify the rule name:
 
 ```mdx
-{/* lint ignore no-undefined-references */}
-> [Info - 8:41:03 PM] ESLint server is running.
+{/* eslint-disable-next-line remark-lint-no-undefined-references) */}
 ```
 
-> [!MORE]  
-> [remark-lint "ignore warnings" documentation](https://github.com/remarkjs/remark-lint#ignore-warnings)  
+If you do you will get an error like this:
 
+> Error: Definition for rule 'remark-lint-no-undefined-references)' was not found
 
+So instead you need to use **mdx/remark** for **ANY** rule you want to disable
+
+In MDX files to add an eslint-disable comment you need to use JSX comments, like so:
+
+```mdx
+{/* eslint-disable-next-line mdx/remark */}
+> [Info - 8:41:03 PM] ESLint server is running.
+```
 
 </article>
