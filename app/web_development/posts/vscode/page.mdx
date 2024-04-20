@@ -371,19 +371,6 @@ Even though VSCode is written in Javascript and hence uses CSS for styling, the 
 > [!MORE]  
 > [VSCode "Custom CSS and JS Loader" extension](https://marketplace.visualstudio.com/items?itemName=be5invis.vscode-custom-css)
 
-## VSCode markdown preview
-
-Because I work a lot with markdown (and MDX) I really like the markdown preview feature in VSCode
-
-> [!NOTE]  
-> make sure you have a markdown (*.md) file open when doing this or the icon will not show up  
-
-To preview your markdown click on the icon in the top right of the IDE that consists two panels and magnifying glass
-
-![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_markdown_preview.png)
-
-This will put your markdown document side by side with the preview, now you can edit your markdown and it will update the preview in realtime
-
 ## VSCode (ESLint) output channel
 
 To view the content of the **output** in VSCode you have to options:
@@ -409,6 +396,75 @@ To change the eslint extension settings, click on the "Extensions" icon on the r
 
 ![VScode extensions view icon](../../../../public/assets/images/app/web_development/posts/vscode/vscode_extensions_view_icon.png)
 
-Or press `Ctrl` + `Shift` + `X` 
+Or press `Ctrl` + `Shift` + `X`
+
+## VSCode markdown (and MDX) related tips
+
+Here are a few tips which can make your life easier when editing markdown (like README.md files) or MDX content
+
+### easy way to add images to MDX content (using VSCODE)
+
+A great feature of VSCode is that it is very easy to add image to MDX (or markdown) content
+
+All you need to do is select the file in the explorer on the right, then drag it over the MDX (or markdown) document, then press `Shift` and drop the file into the document where you want it to be displayed, VSCode will automatically generate the mardown image syntax for you and add the correct path
+
+> [!TIP]  
+> to select the image and be able to drag it into the document, click on the image using the left mouse button and **keep it pressed**, then move the file over the document and then release the mouse button when at the position in the document where you want to insert it, if you just do a single click on the image then it will open the image in preview window
+
+When you do that VSCode will automatically generate the correct markdown image code and insert the relative path to the image, now if you want you can manually add an alt text and / or a title, which gives you something like this:
+
+```md
+![MY_ALT_TEXT](../../public/assets/images/foo.png 'MY_IMAGE_TITLE')
+```
+
+### VSCode fix for markdown highliting in mdx files
+
+Depending on what theme you use, markdown highliting will be broken when viewing the content of MDX files
+
+This is due to a problem where not all themes are up to date and have colors set for MDX, for example I use the [SynthWave '84](https://marketplace.visualstudio.com/items?itemName=RobbOwen.synthwave-vscode) which I like a lot, unfortunatly all my content in MDX files is just getting displayed used the standard text color
+
+If you have this problem too, there is a little trick you can apply, which is to tell VSCode via the `.vscode/settings.json` file to use the **markdown** VSCode language service for MDX files instead of **mdx**
+
+If you have already set custom settings for your VSCode workspace then you will have a `.vscode` folder in your project root, if not create that folder, then inside of that folder you will have a `settings.json` file, if that file is not there create it
+
+Then edit the `.vscode/settings.json` file and add the following setting for **files.associations**:
+
+```json title=".vscode/settings.json"
+{
+    "files.associations": {
+        "*.mdx": "markdown"
+    },
+}
+```
+
+### VSCode markdown (and MDX) preview
+
+Because I work a lot with markdown (and MDX) I really like the markdown preview feature in VSCode
+
+> [!NOTE]  
+> make sure you have a markdown (*.md) file open when doing this or the icon will not show up  
+
+To preview your markdown click on the icon in the top right of the IDE that consists two panels and magnifying glass
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_markdown_preview.png)
+
+This will put your markdown document side by side with the preview, now you can edit your markdown and it will update the preview in realtime
+
+When opening an MDX file you will notice that there is no preview icon in the top left, this is because VSCode seperates markdown from MDX, there is however a trick to make it work, which is to set the language service to markdown for the .mdx extension:
+
+(Same as we did in the previous chapter) we need to edit the `.vscode/settings.json` file and add the following setting for **files.associations**:
+
+```json title=".vscode/settings.json"
+{
+    "files.associations": {
+        "*.mdx": "markdown"
+    },
+}
+```
+
+Now save the settings file and open an .mdx file and you should have the preview icon
+
+> [!NOTE]  
+> Of course in the preview you will only see markdown and HTML getting previewed, it will however NOT preview React components you might have imported in your MDX document, for that we need to wait for a VSCode MDX preview feature, but even though React components are not getting displayed I like the preview feature to quickly check if my markdown syntax is ok and maybe you do too 😉
 
 </article>
