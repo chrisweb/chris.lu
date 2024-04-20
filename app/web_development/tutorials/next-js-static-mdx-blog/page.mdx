@@ -1587,17 +1587,83 @@ Make sure your dev server is running, if it is not start it using `npm run dev`
 
 And then visit your newly created MDX page in the browser at `http://localhost:3000/mdx_in_a_component`
 
+### Tips when using MDX
+
+Now that our MDX setup is done, I want to make show you a few tricks that make life easier when writing MDX / markdown in VSCode, that you might not know yet
+
+#### VSCode markdown preview
+
+MDX (`*.mdx`) files (as well as markdown (`*.md`) files) can be previewed in VSCode by clicking on the **Open preview** icon in the top right of VSCode:
+
+![](../../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/mdx/vscode/vscode_markdown_preview.png)
+
+#### easy way to add images to MDX content (using VSCODE)
+
+A great feature of VSCode is that it is very easy to add image to MDX (or markdown) content
+
+All you need to do is select the file in the explorer on the right, then drag it over the MDX (or markdown) document, then press `Shift` and drop the file into the document where you want it to be displayed, VSCode will automatically generate the mardown image syntax for you and add the correct path
+
+> [!TIP]  
+> to select the image and be able to drag it into the document, click on the image using the left mouse button and **keep it pressed**, then move the file over the document and then release the mouse button when at the position in the document where you want to insert it, if you just do a single click on the image then it will open the image in preview window
+
+When you do that VSCode will automatically generate the correct markdown image code and insert the relative path to the image, now if you want you can manually add an alt text and / or a title, which gives you something like this:
+
+```md
+![MY_ALT_TEXT](../../public/assets/images/foo.png 'MY_IMAGE_TITLE')
+```
+
+#### VSCode fix for markdown highliting in mdx files
+
+Depending on what theme you use, markdown highliting will be broken when viewing the content of MDX files
+
+This is due to a problem where not all themes are up to date and have colors set for MDX, for example I use the [SynthWave '84](https://marketplace.visualstudio.com/items?itemName=RobbOwen.synthwave-vscode) which I like a lot, unfortunatly all my content in MDX files is just getting displayed used the standard text color
+
+If you have this problem too, there is a little trick you can apply, which is to tell VSCode via the `.vscode/settings.json` file to use the **markdown** VSCode language service for MDX files instead of **mdx**
+
+If you have already set custom settings for your VSCode workspace then you will have a `.vscode` folder in your project root, if not create that folder, then inside of that folder you will have a `settings.json` file, if that file is not there create it
+
+Then edit the `.vscode/settings.json` file and add the following setting for **files.associations**:
+
+```json title=".vscode/settings.json"
+{
+    "files.associations": {
+        "*.mdx": "markdown"
+    },
+}
+```
+
 ## ESLint
 
 Adding linting to a project is something I recommend doing as early as possible, similar to adding CSP to a project, those are things that if you postpone them then you will have a lot more work later, that's why it is best to add linting as early as possible and then fix linting related problems one by one as soon as they come up
 
-> [!NOTE]  
-> The following ESLint setup uses the [ESLint "Classic" configuration files](https://eslint.org/docs/latest/use/configure/configuration-files-deprecated) which is the default for all ESLint versions below 9, in ESLint 9 those configuration files are now **deprecated** and it is recommended to use the new [flat config files](https://eslint.org/docs/latest/use/configure/configuration-files) which are the new default since the release of ESLint 9, I use the classic configuration files with overrides as this is what is currently supported by Next.js, a lot of plugins like typescript-eslint have started working on support for **ESLint 9 flat config files** as you can see in [typescript-eslint Issue #8211](https://github.com/typescript-eslint/typescript-eslint/issues/8211), so expect the new flat config files to become the new default in a foreseeable future
+### Why not use ESLint flat config files?
+
+The following ESLint setup uses the [ESLint "Classic" configuration files](https://eslint.org/docs/latest/use/configure/configuration-files-deprecated) which is the default for all ESLint versions below 9, in ESLint 9 those configuration files are now **deprecated** and it is recommended to use the new [flat config files](https://eslint.org/docs/latest/use/configure/configuration-files) which are the new default since the release of ESLint 9
+
+ESLint mentions in their documentation:
+
+> We are transitioning to a new config system in ESLint v9.0.0. The config system shared on this page is currently the default but will be deprecated in v9.0.0. You can opt-in to the new config system by following the instructions in the documentation.
+
+Also support for [eslintrc configuration files will be removed in version 10.0.0](https://eslint.org/blog/2023/10/flat-config-rollout-plans/#eslintrc-removed-in-eslint-v10.0.0)
+
+> [!WARN]  
+> I however will use the classic configuration files with overrides in this tutorial, as this is what is currently supported by Next.js
+
+A lot of plugins like typescript-eslint have started working on support for **ESLint 9 flat config files** as you can see in [typescript-eslint Issue #8211](https://github.com/typescript-eslint/typescript-eslint/issues/8211) but a lot of plugins have not completed the transition to flat config yet, there is an Issue in the ESLint repository that keeps track of the [flat config rollout](https://github.com/eslint/eslint/issues/18093) for many packages
+
+Even though we won't use them yet (I will update the ESLint chapter when Next.js add support for flat config) expect the new flat config files to become the new default in a foreseeable future
+
+> [!MORE]  
+> [ESLint "flat config rollout" issue](https://github.com/eslint/eslint/issues/18093)  
+> [ESLint "flag config part 1" blog post](https://eslint.org/blog/2022/08/new-config-system-part-1/)  
+> [ESLint "flag config part 2" blog post](https://eslint.org/blog/2022/08/new-config-system-part-2/)  
+> [ESLint "flag config part 3" blog post](https://eslint.org/blog/2022/08/new-config-system-part-3/)  
+> [ESLint "flat config files" RFC](https://github.com/eslint/rfcs/tree/main/designs/2019-config-simplification)  
 
 ### But didn't Next.js already set up linting?
 
 > [!NOTE]  
-> The next 3 chaoters contain a lot of theory, the 1st chapter explains what **create-next-app** did in regards to linting, the 2nd chapter explains what packages related to linting Next.js has and the 3rd explains why we do want to modify the current ESLint setup, so if you prefer to get straight to the solution (code) then skip ahead to the ["Installing the MDX ESLint plugin and parser" chapter](#installing-the-mdx-eslint-plugin-and-parser), if you have the time and are interested in understanding the *"Why"** then I recommend reading on
+> The next 3 chapters contain a lot of theory, the 1st chapter explains what **create-next-app** did in regards to linting, the 2nd chapter explains what packages related to linting Next.js has and the 3rd explains why we do want to modify the current ESLint setup, so if you prefer to get straight to the solution (code) then skip ahead to the ["Installing the MDX ESLint plugin and parser" chapter](#installing-the-mdx-eslint-plugin-and-parser), if you have the time and are interested in understanding the *"Why"** then I recommend reading on
 
 Yes, Next.js has built in linting support, this chapter is a recap of what Next.js has done so far
 
@@ -1631,6 +1697,9 @@ Package 1: **eslint-config-next** (ESLint Config) intends to make it easier to g
 Package 2: Is called **eslint-plugin-next** and it is the actual ESLint plugin for Nextjs (called **@next/eslint-plugin-next** on npmjs), it aims to catch common problems in a Next.js application
 
 for a full list of rules that the Next.js ESLint plugin adds check out the [Nextjs "ESLint rules" documentation](https://nextjs.org/docs/app/building-your-application/configuring/eslint#eslint-plugin) or have a look at the [eslint-plugin-next rules directory on github](https://github.com/vercel/next.js/tree/canary/packages/eslint-plugin-next/src/rules)
+
+> [!MORE]  
+> [Next.js "ESLint" documentation](https://nextjs.org/docs/app/building-your-application/configuring/eslint)  
 
 ### Why are we changing the Next.js linting setup?
 
@@ -1907,14 +1976,28 @@ There are a lot more rules than the ones listed here that get used, but for all 
 
 The next thing we need to do (as I explained in the ["Why are we changing the Next.js linting setup?" chapter](#why-are-we-changing-the-nextjs-linting-setup)) is to change the lint script in our `package.json`
 
-Instead of using **Next lint** CLI command for linting we will create our own command using the **ESLint CLI**
+Instead of using the **next lint** command line interface (CLI) command for linting we will create our own command using the **ESLint** CLI, 
 
-Change the **lint script** in the  to this:
+When using the **next lint** CLI command, several things were done for us in the background, however as we want to use the **ESLint** CLI we need to set those flags ourself
+
+For example to enable ESLint cache we need to use the option `--cache` and then we tell ESLint to use the same cache directory that Next.js would use, using the `--cache-location` flag, like so:
+
+```shell
+npx eslint ./ --cache --cache-location .next/cache/eslint
+```
+
+To specify what files (extensions) get linted we need will use the ext flag like so:
+
+```shell
+npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md
+```
+
+Now we need to put those commands into our `package.json`, because we are in the `package.json` we don't need to use `npx`, change the **lint script** in the to this:
 
 ```mjs title="package.json" {3}
 {
     "scripts": {
-        "lint": "npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint",
+        "lint": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint",
     },
 }
 ```
@@ -1926,18 +2009,26 @@ I have two more scripts that can be useful, that you might to add too:
 ```mjs title="package.json" {4-5}#special
 {
     "scripts": {
-        "lint": "npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint",
-        "lint-nocache": "npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md",
-        "lint-debug": "npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint --debug",
+        "lint": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint",
+        "lint-nocache": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md",
+        "lint-debug": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --debug",
+        "lint-fix": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --fix",
     },
 }
 ```
 
 The **lint-nocache** script is the same linting command but it does **NOT** use the ESLint **cache**, this is useful when tweaking the ESLint configuration and not wanting ESLint to use the cache but instead always do a fresh start
 
-The **lint-debug** script is again the same linting command but this time we add the `--debug` flag, this will print a lot of useful information about what ESLint does in the **OUTPUT** tab in VSCode, which is again useful if you tweak your configuration and want to verify the things ESLint is doing or to debug a problem with your setup, like checking if your plugins get loaded correctly and much more
+The **lint-debug** script is again the same linting command but this time we add the `--debug` flag (which you can't use when using the **next lint** CLI but as we now use the **ESLint** CLI we can), this will print a lot of useful information about what ESLint does in the **OUTPUT** tab in VSCode, which is again useful if you tweak your configuration and want to verify the things ESLint is doing or to debug a problem with your setup, like checking if your plugins get loaded correctly and much more
 
 If you don't know (yet) how to open the output channel, check out the ["VSCode (ESLint) output channel" chapter](/web_development/posts/vscode#vscode-eslint-output-channel) in the VSCode post
+
+The **lint-fix** script will attempt to automatically fix linting problems for you, however this can be tricky on big repositories with a lot of code, so if you run this later and have potentially a lot of fixes that get applied, then I recommend to first create a new branch, run the command and then use the commit list to check the changes manually for each file, then do some testing to ensure nothing is broken and then finally merge the changes into your main branch
+
+Btw the --fix flag works when using the **ESLint** CLI but it can also be used when using the **next lint** CLI
+
+> [!MORE]  
+> [ESLint "command line interface (CLI)" reference](https://eslint.org/docs/v8.x/use/command-line-interface)  
 
 ### package.json build script update
 
@@ -1975,7 +2066,7 @@ Now as we still want linting to happen before a build, we need to add the **lint
 }
 ```
 
-When we now use our `npm run build` command (or when our deployment script uses it), it will first execute `npm run lint` and if there are no linting errors it will then execute `next build`
+When we now use our `npm run build` command (or when our deployment script uses it), it will first execute `npm run lint` and if there are NO linting errors it will then execute `next build`, this means that if you a deployment tool like Vercel and linting fails then the build process will abort, so the same behavior as we had when using the default next lint and next build commands
 
 ### VSCode ESLint and MDX extensions
 
@@ -2045,26 +2136,6 @@ Every time you make changes to your ESLint setup, for example after editing eith
 
 To restart the eslint server in VSCode press `ctrl` + `shift` + `p` to open the command palette, then type `ESLint` and choose the command called **ESLint: Restart ESLint Server**
 
-#### VSCode fix for markdown highliting in mdx files
-
-Depending on what theme you use, markdown highliting will be broken when viewing the content of MDX files
-
-This is due to a problem where not all themes are up to date and have colors set for MDX, for example I use the [SynthWave '84](https://marketplace.visualstudio.com/items?itemName=RobbOwen.synthwave-vscode) which I like a lot, unfortunatly all my content in MDX files is just getting displayed used the standard text color
-
-If you have this problem too, there is a little trick you can apply, which is to tell VSCode via the `.vscode/settings.json` file to use the **markdown** VSCode language service for MDX files instead of **mdx**
-
-If you have already set custom settings for your VSCode workspace then you will have a `.vscode` folder in your project root, if not create that folder, then inside of that folder you will have a `settings.json` file, if that file is not there create it
-
-Then edit the `.vscode/settings.json` file and add the following setting for **files.associations**:
-
-```json title=".vscode/settings.json"
-{
-    "files.associations": {
-        "*.mdx": "markdown"
-    },
-}
-```
-
 ### linting tests to ensure everything works
 
 We are finally done with out ESLint setup 🎉 we now have a linting command for our code as well as MDX content, we did install 2 extensions so that we now have full ESLint and MDX support inside of our VSCode IDE, but does it work?
@@ -2072,5 +2143,60 @@ We are finally done with out ESLint setup 🎉 we now have a linting command for
 To test if everything works as intended, we will create some errors in both tsx and mdx files and if we did the setup correctly we should get linting errors both in VSCode as well as in the command line output
 
 
+
+
+
+
+
+
+
+## disabling rules (warnings) using comments
+
+Now that the linting setup is done you will start seeing warning in your code and at some point you might wonder how you can **disable / ignore** certain **warnings** within files, sometimes you might encounter warnings that you want to suppress because it is an exception to the rule (but you don't want to disable the rule completely in your configuration), then you can use comments to disable the rule for example for an entire file or just the next line
+
+### eslint "disable rule(s)" comment
+
+Disabling an eslint rule for the **next line** (works for plugins too, except remark, see below):
+
+```ts
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const foo = 'bar'
+```
+
+To disable a rule for an entire file (and NOT just the next line) you can use:
+
+```ts
+/* eslint-disable no-console */
+console.log('foo')
+
+console.log('bar')
+```
+
+> [!MORE]  
+> [ESLint "disabling rules using comments" documentation](https://eslint.org/docs/latest/use/configure/rules#disabling-rules)  
+
+### remark-lint "ignore warnings" comments
+
+disabling a remark lint warning for the next line
+
+in markdown files it can be done using html comments:
+
+```md
+<!--lint ignore no-undefined-references-->
+> [Info  - 8:41:03 PM] ESLint server is running.
+```
+
+> [!NOTE]  
+> For HTML comments in markdown files you need to have a blank line between the comment and markdown  
+
+in MDX files it can be done using JSX comments like so:
+
+```mdx
+{/* lint ignore no-undefined-references */}
+> [Info - 8:41:03 PM] ESLint server is running.
+```
+
+> [!MORE]  
+> [remark-lint "ignore warnings" documentation](https://github.com/remarkjs/remark-lint#ignore-warnings)  
 
 </article>
