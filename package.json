@@ -10,9 +10,10 @@
         "build-debug": "next build --debug",
         "start": "next start",
         "next-lint": "next lint",
-        "lint": "npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint",
-        "lint-nocache": "npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md",
-        "lint-debug": "npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint --debug",
+        "lint": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint",
+        "lint-nocache": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md",
+        "lint-debug": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --debug",
+        "lint-fix": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --fix",
         "info": "next info"
     },
     "repository": {
