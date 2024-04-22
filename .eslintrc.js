@@ -26,14 +26,14 @@ module.exports = {
         {
             files: ['**/*.ts?(x)', '**/*.md?(x)'],
             extends: [
-                'eslint:recommended',
                 'next/core-web-vitals',
             ],
         },
         {
             files: ['**/*.ts?(x)'],
             extends: [
-                'plugin:@typescript-eslint/recommended',
+                'plugin:@typescript-eslint/recommended-type-checked',
+                'plugin:@typescript-eslint/stylistic-type-checked',
                 'plugin:@react-three/recommended',
             ],
             parser: '@typescript-eslint/parser',
@@ -43,6 +43,7 @@ module.exports = {
                     jsx: true,
                 },
                 warnOnUnsupportedTypeScriptVersion: true,
+                project: './tsconfig.json',
             },
             plugins: [
                 '@typescript-eslint',
@@ -70,6 +71,7 @@ module.exports = {
                         },
                     }
                 ],
+                '@typescript-eslint/consistent-indexed-object-style': 'off',
                 '@typescript-eslint/ban-ts-comment': [
                     'error',
                     {
