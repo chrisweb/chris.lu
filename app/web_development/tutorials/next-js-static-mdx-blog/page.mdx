@@ -1606,7 +1606,7 @@ ESLint mentions in their documentation:
 Also support for [eslintrc configuration files will be removed in version 10.0.0](https://eslint.org/blog/2023/10/flat-config-rollout-plans/#eslintrc-removed-in-eslint-v10.0.0)
 
 > [!WARN]  
-> I however will use the classic configuration files with overrides in this tutorial, as this is what is currently supported by Next.js
+> I however will use the classic configuration files with **overrides** in this tutorial, as this is what is currently supported by Next.js
 
 A lot of plugins like typescript-eslint have started working on support for **ESLint 9 flat config files** as you can see in [typescript-eslint Issue #8211](https://github.com/typescript-eslint/typescript-eslint/issues/8211) but a lot of plugins have not completed the transition to flat config yet, there is an Issue in the ESLint repository that keeps track of the [flat config rollout](https://github.com/eslint/eslint/issues/18093) for many packages
 
@@ -1670,11 +1670,11 @@ This is why we are going to 3 packages to do the linting of markdown style as we
 * the second one is an **ESLint plugin** called [eslint-plugin-mdx](https://github.com/mdx-js/eslint-mdx/tree/master/packages/eslint-plugin-mdx) which will lint MDX
 * the third one is a **parser** called [eslint-mdx](https://www.npmjs.com/package/eslint-mdx) which will parse the content of MDX files
 
-**The recommended way** to add [eslint-plugin-mdx as described in their README](https://github.com/mdx-js/eslint-mdx#notice) is to use the overrides feature of ESLint (if you want to know more about the parsing issues you might have if not using overrides check out the [eslint-plugin-mdx GitHub issue #251](https://github.com/mdx-js/eslint-mdx/issues/251#issuecomment-736139224))
+**The recommended way** to add [eslint-plugin-mdx as described in their README](https://github.com/mdx-js/eslint-mdx#notice) is to use the **overrides** feature of ESLint (if you want to know more about the parsing issues you might have if not using **overrides** to check out the [eslint-plugin-mdx GitHub issue #251](https://github.com/mdx-js/eslint-mdx/issues/251#issuecomment-736139224))
 
 However even though Next.js has created an `.eslintrc.json` for us that lets us do some fine tuning of rules, adding a new **overrides** for markdown will not work due to a limitation how the **next lint** CLI works (there is open discussion [next lint command doesn't support overrides #35228](https://github.com/vercel/next.js/issues/35228) where the limitation gets discussed), **next lint** actually doesn't use the `.eslintrc.json` that **create-next-app** added to the root of project, it just added that file so that our IDE (VSCode) can do linting in files using the same setup as Next.js
 
-So because **next lint** does ignore custom overrides in `.eslintrc.json`, this unfortunatly means that we will not be able to use **next lint** CLI anymore and instead we will to create a custom **lint** command in our `package.json` scripts, by using our own command we ensure that the eslint configuration file in the root of our project gets used for linting, both in the IDE while coding and then also when using the `npm run lint` command
+So because **next lint** does ignore custom **overrides** that are in your `.eslintrc.json`, this unfortunatly means that we will not be able to use **next lint** CLI anymore and instead we will to create a custom **lint** command in our `package.json` scripts, by using our own command we ensure that the eslint configuration file in the root of our project gets used for linting, both in the IDE while coding and then also when using the `npm run lint` command
 
 Finally there is yet another problem, the Next.js CLI **build** command does not use the `package.json` **lint** script but uses the Next.js **lint** CLI directly, this means that we will need to tell the **build** CLI to not do linting during builds and then we will manually re-add linting by changing the `package.json` **build** script so that it uses our `package.json` **lint** script before doing an actual build
 
@@ -1738,41 +1738,91 @@ I also added some entries in the **ignorePatterns** to make sure ESLint is not g
 
 I then enabled the option **reportUnusedDisableDirectives** to make sure ESLint will trigger a [warning if it finds unused disable eslint comments](https://eslint.org/docs/v8.x/use/configure/rules#report-unused-eslint-disable-comments), which can happen when code gets deleted or moved around and suddenly an `// eslint-disable-next-line` comment becomes useless
 
-### ESLint configuration step 2: ESLint ts(x) and md(x) files overrides
+### ESLint configuration step 2: ESLint ts(x) and md(x) files override
 
-The 1st **overrides** we add to the array, it is fairly short as its only purpose is to tell ESLint which **rule sets** we want to use no matter if it is mdx / markdown content in md(x) files or typescript code in ts(x) files
+The 1st override we add to the array, it is fairly short as its only purpose is to tell ESLint which **rule sets** we want to use no matter if it is mdx / markdown content in md(x) files or typescript code in ts(x) files
 
 We do this because that a rule from Next.js ESLint plugin that recommends using next/image instead of a regular `<img>` element can be useful in both MDX files as well as Typescript code in one of our React components or Next.js pages
 
-Add the following object to the overrides array:
+Add the following object to the **overrides** array:
 
 ```js title=".eslintrc.js"
 overrides: [
     {
         files: ['**/*.ts?(x)', '**/*.md?(x)'],
         extends: [
-            'eslint:recommended',
             'next/core-web-vitals',
         ],
     },
 ],
 ```
 
-what this **overrides** does:
+What this override does:
 
-* **files** is set so that it will lint any file that is a **ts** or **tsx** file and also any file that is a **md** or **mdx** file, meaning this overrides is for both code in our typescript files as well as content in our MDX files
+* **files** is set so that it will lint any file that is a **ts** or **tsx** file and also any file that is a **md** or **mdx** file, meaning this override is for both code in our typescript files as well as content in our MDX files
 * **extends** is set so that we will include the **recommended** rules from the **eslint** plugin, it will also use the rules from the **core-web-vitals**, **core-web-vitals** will add a few rules related to core web vitals but also extends the next base rules (so there is no need to add 'next' to the extends too)
 
-### ESLint configuration step 3: ESLint ts(x) files only overrides
+### ESLint configuration step 3: ESLint ts(x) files only override
 
-The 2nd overrides is specifically for **typescript** code, its main purpuse is to tell ESLint to use the **@typescript-eslint/parser** parser to parse ts(x) files:
+The 2nd override is specifically for **typescript** code, its main purpuse is to tell ESLint to use the **@typescript-eslint/parser** parser to parse ts(x) files
+
+I have 2 options here:
+
+* the 1st one is what Next.js uses in **eslint-config-next** WITHOUT any of the **@typescript-eslint** rule sets enabled 
+* the 2nd option is more **strict** version that
+  * by using the **@typescript-eslint/recommended** rule set, we will add a bunch of typescript related rules, like the [no-unnecessary-type-assertion](https://typescript-eslint.io/rules/no-unnecessary-type-assertion/) that checks if you have type assertions that are not needed
+  * you can even enable a stricter version if you also enable the **stylistic-type-checked** rule set, which will for example use [prefer-nullish-coalescing](https://typescript-eslint.io/rules/prefer-nullish-coalescing/) in cases where you could have but did NOT use the [Nullish coalescing operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing)
+
+if you chose option 1 (the less strict version) then add the following override into your `.eslintrc.js`:
+
+```js title=".eslintrc.js"
+overrides: [
+    {
+        files: ['**/*.ts?(x)'],
+        parser: '@typescript-eslint/parser',
+        parserOptions: {
+            sourceType: 'module',
+            ecmaFeatures: {
+                jsx: true,
+            },
+            warnOnUnsupportedTypeScriptVersion: true,
+        },
+        rules: {
+            quotes: [
+                'error',
+                'single',
+                { "allowTemplateLiterals": true },
+            ],
+            semi: [
+                'error',
+                'never',
+            ],
+        },
+    },
+],
+```
+
+What this override does:
+
+* **files** is set to **ts(x)**, meaning this override is only for **ts** and **tsx** files
+* there is no **extends** defined, as it will already use the **extends** of the previous override in which we extended **next/core-web-vitals** (next/core-web-vitals will then extend the base **next** rule set)
+* because this **overrides** is specifically for **typescript** files we set the parser to use the **@typescript-eslint** parser (instead of the default eslint parser which only supports parsing javascript)
+
+If you chose option 1 (the less strict version) then we first need to install the **@typescript-eslint/eslint-plugin** package:
+
+```shell
+npm install @typescript-eslint/eslint-plugin@latest --save-exact --save-dev
+```
+
+And then we put the following override into our **overrides** array:
 
 ```js title=".eslintrc.js"
 overrides: [
     {
         files: ['**/*.ts?(x)'],
         extends: [
-            'plugin:@typescript-eslint/recommended',
+            'plugin:@typescript-eslint/recommended-type-checked',
+            'plugin:@typescript-eslint/stylistic-type-checked',
         ],
         parser: '@typescript-eslint/parser',
         parserOptions: {
@@ -1781,6 +1831,7 @@ overrides: [
                 jsx: true,
             },
             warnOnUnsupportedTypeScriptVersion: true,
+            project: './tsconfig.json',
         },
         plugins: [
             '@typescript-eslint',
@@ -1795,6 +1846,7 @@ overrides: [
                 'error',
                 'never',
             ],
+            '@typescript-eslint/consistent-indexed-object-style': 'off',
             '@typescript-eslint/ban-ts-comment': [
                 'error',
                 {
@@ -1810,13 +1862,17 @@ overrides: [
 ],
 ```
 
-what this **overrides** does:
+What this override does:
 
-* **files** is set to **ts(x)**, meaning this **overrides** is only for **ts** and **tsx** files
-* **extends** is set to extend the recommended **@typescript-eslint** rules
+* **files** is set to **ts(x)**, meaning this override is only for **ts** and **tsx** files
+* **extends** is set to extend the **recommended** rules of the **@typescript-eslint** plugin as well as the **stylistic** rules, if you only want the recommended rules but NOT the stylistic, then comment the `'plugin:@typescript-eslint/stylistic-type-checked',` line out
 * because this **overrides** is specifically for **typescript** files we set the parser to use the **@typescript-eslint** parser (instead of the default eslint parser which only supports parsing javascript)
 * **plugins** is set to typescript-eslint, but this is not the only plugin that will be used for typescript files, in the previous overrides we already added the Next.js eslint plugin so no need to add it again here (also the Next.js eslint config will include a bunch of other plugins like react, react-hooks and some more)
-* finally we have the **rules** option, here you can add what ever rules you need in your project, I like to single quotes and not double quotes in my javascript code this is why I set **quotes** to **single** (feel free to set it to **double** if you prefer), then I set the rule for semicolons at the end of a javascript line to **never** because I don't use semicolons at the end of lines in my code (as long as they are optional, in the few cases where they are required I of course use them, but those cases are very rare) and finally I added a third rule to allow the **ts-expect-error** and **ts-ignore** comments but only when there is a description as to why those comments got added to the code, by default no comments are allowed, there is more info in the [typescript-eslint "ban-ts-comment" documentation](https://typescript-eslint.io/rules/ban-ts-comment/) if you are interested
+* finally we have the **rules** option, here you can add what ever rules you need in your project
+  * I like to single quotes and not double quotes in my javascript code this is why I set **quotes** to **single** (feel free to set it to **double** if you prefer)
+  * then I set the rule for semicolons at the end of a javascript line to **never** because I don't use semicolons at the end of lines in my code (as long as they are optional, in the few cases where they are required I of course use them, but those cases are very rare)
+  * next I also disable the [consistent-indexed-object-style](https://typescript-eslint.io/rules/consistent-indexed-object-style/), I usually like consistency but in this case I think the rule goes too far, the different variants are supported by typescript and as long as there their syntax is right I feel like letting the dev chose which one he prefers, feel free to remove this line if you prefer enforcing the consistency
+  * finally I added the rule [ban-ts-comment](https://typescript-eslint.io/rules/ban-ts-comment/) to allow the **ts-expect-error** and **ts-ignore** comments but only when there is a description as to why those comments got added to the code (by default no comments are allowed)
 
 > [!MORE]  
 > [typescript-eslint "rules" overview](https://typescript-eslint.io/rules/)  
@@ -1865,10 +1921,10 @@ This was the last **overrides** which means our configuration file is now comple
 
 We have now created an `.eslintrc.js` ESLint configuration file, we have added the MDX plugin which has installed [remark-lint](https://www.npmjs.com/package/remark-lint) for us as it is a dependency of the **eslint-plugin-mdx** package
 
-The next step is to configure **remark-lint**, but first let's install 3 packages that contain presets for remark-lint, those presets will install a bunch of rules for us and will add a default configuration for those rules, use the following command to install them:
+The next step is to configure **remark-lint**, but first we need to install remark-lint as well as 3 packages that contain presets for remark-lint, those presets will install a bunch of rules for us and will add a default configuration for those rules, use the following command to install all 4:
 
 ```shell
-npm i remark-preset-lint-consistent@latest remark-preset-lint-recommended@latest remark-preset-lint-markdown-style-guide@latest --save-exact --save-dev
+npm i remark-lint@latest remark-preset-lint-consistent@latest remark-preset-lint-recommended@latest remark-preset-lint-markdown-style-guide@latest --save-exact --save-dev
 ```
 
 Remark-lint rules don't get added to `.eslintrc.js`, but instead we create a new file called `.remarkrc.mjs` (in the root of our project) and add the following content:
@@ -1956,7 +2012,7 @@ Now we need to put those commands into our `package.json`, because we are in the
 ```mjs title="package.json" {3}
 {
     "scripts": {
-        "lint": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint",
+        "lint": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint"
     },
 }
 ```
@@ -1971,7 +2027,7 @@ I have two more scripts that can be useful, that you might to add too:
         "lint": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint",
         "lint-nocache": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md",
         "lint-debug": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --debug",
-        "lint-fix": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --fix",
+        "lint-fix": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --fix"
     },
 }
 ```
@@ -2020,7 +2076,7 @@ Now as we still want linting to happen before a build, we need to add the **lint
 ```mjs title="package.json" {10-12}#special
 {
     "scripts": {
-        "build": "npm run lint && next build",
+        "build": "npm run lint && next build"
     },
 }
 ```
