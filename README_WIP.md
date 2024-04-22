@@ -7,15 +7,15 @@ next chapters?
 * [DONE] CSP
 * [DONE] articles (pages) using MDX (@next/mdx)
 * [DONE] eslint for MDX
+* layout
+* navigation / next/link
+* styling
 * next/mdx "mdx-components" file
 * optimizing images with next/image
 * all the MDX plugins
 * mdx homepage articles list by date (newest first)
-* next/link
-* navigation
-* styling
 * optimizing fonts with next/font
-* SEO (metadat)
+* SEO (metadata)
 * github: pull request from preview into main branch (automatically link / close tickets)
 * vercel prod release (custom domain)
 * vercel analytics
