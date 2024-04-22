@@ -76,7 +76,7 @@ const findAndTransformRows = (children: React.ReactNode, activeIdState: string, 
                 if (liChild.type === 'li') {
 
                     const liChildProps = liChild.props as React.PropsWithChildren
-                    const liChildChildren = liChildProps as React.ReactNode
+                    const liChildChildren = liChildProps.children
 
                     const liChildLinkInput = findFirstNodeThatHasProp(liChildChildren, 'href') as React.ReactElement<HTMLAnchorElement>
 
@@ -100,7 +100,7 @@ const findAndTransformRows = (children: React.ReactNode, activeIdState: string, 
                                 ...liChildProps,
                                 key: level + '_' + index ?? liChild.key,
                                 className: activeIdState === liChildLinkId ? styles.active : styles.notActive,
-                                children: moreRows ? [clonedLinkChild, moreRows] : clonedLinkChild
+                                children: moreRows ? [clonedLinkChild, moreRows] : [clonedLinkChild]
                             } as unknown as React.PropsWithChildren<HTMLLIElement>
                         )
 
