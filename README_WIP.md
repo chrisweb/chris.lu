@@ -1,12 +1,10 @@
-
-
 next chapters?
 
-* [DONE] setting up vercel account
-* [DONE] vercel preview (staging environment) with github commit triggers auto deploy
-* [DONE] CSP
-* [DONE] articles (pages) using MDX (@next/mdx)
-* [DONE] eslint for MDX
+* \[DONE] setting up vercel account
+* \[DONE] vercel preview (staging environment) with github commit triggers auto deploy
+* \[DONE] CSP
+* \[DONE] articles (pages) using MDX (@next/mdx)
+* \[DONE] eslint for MDX
 * layout
 * navigation / next/link
 * styling
@@ -19,9 +17,6 @@ next chapters?
 * github: pull request from preview into main branch (automatically link / close tickets)
 * vercel prod release (custom domain)
 * vercel analytics
-
-
-
 
 ## using plugins to extend MDX
 
@@ -48,8 +43,6 @@ read more:
 * [list of rehype plugins](https://github.com/rehypejs/rehype/blob/main/doc/plugins.md#list-of-plugins)
 * [list of remark plugins](https://github.com/remarkjs/remark/blob/main/doc/plugins.md#list-of-plugins)
 
-
-
 ### MDX code blocks
 
 [rehype pretty code](https://www.npmjs.com/package/rehype-pretty-code) is a rehype plugin for markdown that adds "VSCode like" code highlighting to your code blocs and the best part is it has support support for VSCode themes
@@ -60,7 +53,7 @@ Note: **rehype pretty code** uses shiki <https://shiki.matsu.io/> under the hood
 
 first let's create a demo page, with the following markdown content:
 
-```md
+````md
     # first article
 
     this is the code block:
@@ -71,9 +64,9 @@ first let's create a demo page, with the following markdown content:
         console.log('Hello World!')
     }
     ```
-```
+````
 
-now run the dev server and look at the code block, you will see that the markdown code block syntax got converted into an html &lt;pre&gt; tag with an &lt;code class="language-js"&gt; html tag inside, but there is no syntax colored highlighting ye, this is why we will now add the *rehype pretty code** plugin
+now run the dev server and look at the code block, you will see that the markdown code block syntax got converted into an html \<pre> tag with an \<code class="language-js"> html tag inside, but there is no syntax colored highlighting ye, this is why we will now add the *rehype pretty code*\* plugin
 
 let's install the **rehype pretty code** package, by using this command:
 
@@ -285,9 +278,9 @@ next we add even more css, but this time the css we add is to style the custom c
 }
 ```
 
-Note: that for the code element I use the attribute selector [data-line-numbers], this ensures that we only display line numbers for code blocks where you used **showLineNumbers**, if showLineNumbers is set rehype pretty code will add the data attribute **data-line-numbers** else it won't
+Note: that for the code element I use the attribute selector \[data-line-numbers], this ensures that we only display line numbers for code blocks where you used **showLineNumbers**, if showLineNumbers is set rehype pretty code will add the data attribute **data-line-numbers** else it won't
 
-now run the dev server again and look at the what got generated this time, you will see that the same html &lt;pre&gt; tag and html &lt;code class="language-js"&gt; tag are there (with an attribute that defines which theme is being used) but inside of those two we now have a bunch of span tags with style attribute for the text color
+now run the dev server again and look at the what got generated this time, you will see that the same html \<pre> tag and html \<code class="language-js"> tag are there (with an attribute that defines which theme is being used) but inside of those two we now have a bunch of span tags with style attribute for the text color
 
 now what can you do with all this:
 
@@ -347,7 +340,7 @@ next we used the caption option, this is the similar to the title with the diffe
 
 now we are done with the code blocks, but there is one last thing we can do use rehype pretty code and that is style inline code, so code inside of our article text, for example let assume we have the following MDX content:
 
-> [!NOTE]  
+> \[!NOTE]\
 > you will notice that the generated HTML has put our inline code into a `<code>` element but the code has no styling, this is because the code highliter package does not know which language to use
 
 there are two ways to define the language, one way is to add a default language to the configuration of the **rehype pretty code** plugin, like so:
@@ -392,8 +385,10 @@ I will make a short list here with the most common token (for javascript / types
 * Object property: .meta.object-literal.key
 
 TODO:
+
 * check out my examples page: <http://localhost:3000/web_development/test>
 * add not about rehype pretty code token maps in rehypePrettyCodeOptions:
+
 ```js
 tokensMap: {
     'function': 'entity.name.function',
@@ -401,6 +396,7 @@ tokensMap: {
     'key': '.meta.object-literal.key',
 },
 ```
+
 * make a tip box explaining that if you want to use html comments in code boxes you need to encode the html entities or the comment will not show, the browser considers it a real html comment if not encoded, so `<` needs to be encoded as `&lt;` and `>` encoded as `&gt;`, like so `&lt;!-- MY HTML COMMENT --&gt;`
 * check out what shiki transformers are <https://shiki.style/guide/transformers#transformers>, can they be useful for our blog <https://www.npmjs.com/package/@shikijs/transformers>
 
@@ -593,7 +589,7 @@ Note: using rehype-autolink-headings options you can configure the behavior of t
 
 there are many ways that lead to rome, but here is my suggestion to add an link icon for the autolink heading:
 
-First I we need an SVG icon, when I need an icon I like to check out Google's [Material Symbols](https://fonts.google.com/icons) collection, the entire collection of icons is available as font on <https://fonts.google.com/icons> and there you can also visualize and search for material symbols, I found one called "Link" but as far as I could see you can't just get the SVG file from there, so I headed over to github, into the [material icons/symbols repository](https://github.com/google/material-design-icons/) directory, from there I opened the **symbols** directory, then **web**, here are all the material web symbols, I then downloaded the Link SVG ([/link/materialsymbolsoutlined/link_24px.svg](https://github.com/google/material-design-icons/blob/master/symbols/web/link/materialsymbolsoutlined/link_24px.svg)) and finally opened it in vscode, this is the original source of that file:
+First I we need an SVG icon, when I need an icon I like to check out Google's [Material Symbols](https://fonts.google.com/icons) collection, the entire collection of icons is available as font on <https://fonts.google.com/icons> and there you can also visualize and search for material symbols, I found one called "Link" but as far as I could see you can't just get the SVG file from there, so I headed over to github, into the [material icons/symbols repository](https://github.com/google/material-design-icons/) directory, from there I opened the **symbols** directory, then **web**, here are all the material web symbols, I then downloaded the Link SVG ([/link/materialsymbolsoutlined/link\_24px.svg](https://github.com/google/material-design-icons/blob/master/symbols/web/link/materialsymbolsoutlined/link_24px.svg)) and finally opened it in vscode, this is the original source of that file:
 
 ```xml
 <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M11 17H7q-2.075 0-3.537-1.463Q2 14.075 2 12t1.463-3.538Q4.925 7 7 7h4v2H7q-1.25 0-2.125.875T4 12q0 1.25.875 2.125T7 15h4Zm-3-4v-2h8v2Zm5 4v-2h4q1.25 0 2.125-.875T20 12q0-1.25-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.462Q22 9.925 22 12q0 2.075-1.462 3.537Q19.075 17 17 17Z"/></svg>
@@ -747,7 +743,6 @@ h6 {
 }
 ```
 
-
 read more:
 
 * ["rehype-slug" npm page](https://www.npmjs.com/package/rehype-slug)
@@ -849,10 +844,6 @@ should I use https://www.npmjs.com/package/remark-emoji
 OR use https://github.com/rehypejs/rehype-github/tree/main/packages/emoji
 
 emoji cheat sheet: https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md
-
-
-
-
 
 ### MDX custom components introduction
 
@@ -1244,10 +1235,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
 we have used [JSX conditanal rendering](https://react.dev/learn/conditional-rendering) to check if the aside is the one of the toc, if it is we use our component if it is not we render a basic aside
 
-now it time to modify the styling and placement of our **table of contents* by adding some css into `app/layout.module.css` file:
+now it time to modify the styling and placement of our \**table of contents* by adding some css into `app/layout.module.css` file:
 
 ```css
-
 ```
 
 read more:
@@ -1256,8 +1246,6 @@ read more:
 * [react "JSX conditanal rendering" documentation](https://react.dev/learn/conditional-rendering)
 * [MDN "Intersection Observer API" documentation](https://www.smashingmagazine.com/2021/07/dynamic-header-intersection-observer/)
 * [Smashing Magazine "Intersection Observer API" article](https://www.smashingmagazine.com/2021/07/dynamic-header-intersection-observer/)
-
-
 
 #### custom component for images using next/image
 
@@ -1273,24 +1261,14 @@ read more:
 
 #### custom component for links using next/link
 
-
-
 read more:
 
 * [next.js "next/link" documentation](https://nextjs.org/docs/app/api-reference/components/link)
-
-
 
 ## MDX VSCode plugin
 
 <https://github.com/mdx-js/vscode-mdx>
 <https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx>
-
-
-
-
-
-
 
 ## styling
 
@@ -1556,7 +1534,6 @@ read more:
 
 * ["CSS-animated hamburger icons" github repository](https://github.com/jonsuh/hamburgers)
 
-
 ## vercel analytics
 
 next you can enable [vercel analytics](https://vercel.com/docs/concepts/analytics/audiences/quickstart) for your project, by visiting your dashboard and then clicking on top on the **analytics** tab
@@ -1576,21 +1553,9 @@ also to check out your env variables (that you have added to the project via the
 
 Note: if using vercel and also next.js, you don't need to use their cli command vercel dev as next dev does already handle serverless on localhost: <https://vercel.com/blog/vercel-dev>
 
-
-
 ## add authentification, sign up, activation, re-sending activation and lost password
 
 blitz is a framework on top of next.js, check out their login, sign up, lost password forms and pages, maybe they did things I missed or are better than my implementation: <https://github.com/blitz-js/blitz/commit/6ec020c6d67d18c074d4064c2a4d63bfa9c83d5c>
-
-
-
-
-
-
-
-
-
-
 
 ## CSP (content security policy)
 
@@ -1626,11 +1591,11 @@ now if you look at **network tab in the developer tools** of your browser, you w
 
 ![vscode notification typescript version](./documentation/assets/images/content_security_policy_http_response_headers.png)
 
-if you then take a look at the **console tab in the developers tools** of your browser, you will notice a bunch of errors that all start with **[Report Only]**:
+if you then take a look at the **console tab in the developers tools** of your browser, you will notice a bunch of errors that all start with **\[Report Only]**:
 
 ![vscode notification typescript version](./documentation/assets/images/content_security_policy_console_log_error.png)
 
-> [Report Only] Refused to apply inline style because it violates the following Content Security Policy directive: "default-src 'self'". Either the 'unsafe-inline' keyword, a hash ('sha256-4wlRC2TOnsW3Xin5lbw+ySsI8bemY+fAjGHKM2j9GMM='), or a nonce ('nonce-...') is required to enable inline execution. Note that hashes do not apply to event handlers, style attributes and javascript: navigations unless the 'unsafe-hashes' keyword is present. Note also that 'style-src' was not explicitly set, so 'default-src' is used as a fallback.
+> \[Report Only] Refused to apply inline style because it violates the following Content Security Policy directive: "default-src 'self'". Either the 'unsafe-inline' keyword, a hash ('sha256-4wlRC2TOnsW3Xin5lbw+ySsI8bemY+fAjGHKM2j9GMM='), or a nonce ('nonce-...') is required to enable inline execution. Note that hashes do not apply to event handlers, style attributes and javascript: navigations unless the 'unsafe-hashes' keyword is present. Note also that 'style-src' was not explicitly set, so 'default-src' is used as a fallback.
 
 this error tells us that our **inline style(s)** violate our CSP, to lift the ban on **inline style(s)** we have several options, we the rule use **unsafe-inline** but this would allow all inline styles and hence reduce the security increase we gained by using a CSP, so it is better to online allow the inline styles we know are safe and which have been created by us and not another source, this is done by using a **nonce**
 
@@ -1642,7 +1607,6 @@ TODO: continue this chapter
 <https://stackoverflow.com/questions/67001167/add-nonce-to-style-inline>
 <https://github.com/vercel/next.js/discussions/18451>
 <https://mui.com/material-ui/guides/content-security-policy/>
-
 
 TODO: here is an interesting example that shows how to configure CSP on local dev, make an example using the phase in next.config: <https://github.com/vercel/next.js/commit/c1b2b3f91fd8b858e76353a631c7890a95db6875#diff-3861ba614175e73a7d699fdec42765310799a4416a44597a78da5d2d2e066aec>
 TODO: next.js seems to have a built in test for malformed CSP strings, make an example that triggers this error: <https://github.com/vercel/next.js/commit/c6ef857d5792bc201c85e73ebaea8f6b83cdf643>
@@ -1793,7 +1757,7 @@ read more:
 
 #### button or box with angled corner(s) using pure css
 
-1) this first technique does not work for every situation, for example if the background behind the box (or button) is not a solid color but for example an image
+1. this first technique does not work for every situation, for example if the background behind the box (or button) is not a solid color but for example an image
 
 the second major disadvantage is that you can only use this technique if you want a button or box that has 1 or 2 **angled corners**, you can use the **pseudo element ::after** for one corner and then the **pseudo element ::before** for the second corner, but there is NO pseudo element to do the third of fourth corner
 
@@ -1911,10 +1875,9 @@ read more:
 
 * [MDN "css gradiant" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Images/Using_CSS_gradients)
 
-
 #### button or box using an SVG as background-image to create angled corners
 
-2) using a SVG as background image, works especially well for buttons with a fixed size
+2. using a SVG as background image, works especially well for buttons with a fixed size
 
 Note: this technique is quite complex and will require some time to get it done, so it is for sure not the easiest and fastest solution, but one big advantage is that your SVG image can have an as complex shape as you wish, in this example we will just cut out one corner of the rectangle but you could create an SVG with a much more complex shape, the second advantage of this technique is that it will always work even in older browser (yes even IE 9) as long as the browser or webview has support for the css property **background-image** and the css file scheme **data URL**
 
@@ -2074,7 +2037,7 @@ next step we can finally do the css for our button, the first thing we do is cre
 }
 ```
 
-now take the URL encoded SVG markup and replace the placeholder **URL_ENCODED_SVG_MARKUP** with it, so that you end up with this:
+now take the URL encoded SVG markup and replace the placeholder **URL\_ENCODED\_SVG\_MARKUP** with it, so that you end up with this:
 
 ```css
 .btn {
@@ -2379,8 +2342,8 @@ I then added my clip path polygon to the css of the button:
 Note: TODO: explain why we use "will-change: transform;" source for chrome "hairline bug": https://stackoverflow.com/a/65132846/656689
 things like ("margin-bottom: -1px" OR "setting the polygon 100% values to 101%" OR "transform: skewY(0.001deg)" OR "transform: translateZ(0)" OR "backface-visibility: hidden;") in these 3 stackoverflows did not fix the problem:
 https://stackoverflow.com/questions/45054056/why-there-is-a-gap-between-div-and-rotated-div-triangle/45303840#45303840
-https://stackoverflow.com/questions/51542919/clip-path-on-chrome-leaves-a-strange-line-on-the-edge?noredirect=1&lq=1
-https://stackoverflow.com/questions/53396831/clip-path-horizontal-white-line-in-chrome?noredirect=1&lq=1
+https://stackoverflow.com/questions/51542919/clip-path-on-chrome-leaves-a-strange-line-on-the-edge?noredirect=1\&lq=1
+https://stackoverflow.com/questions/53396831/clip-path-horizontal-white-line-in-chrome?noredirect=1\&lq=1
 
 next we just need to create an html button (you can use a div or a real button element, I will use a link element for this example):
 
@@ -2865,24 +2828,9 @@ read more:
 * [MDN "operator attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/operator)
 * [MDN "radius attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/radius)
 
-
-
-
-
-
-
 #### boxes or buttons with angled corners using css and SVG filter(s) (with fake border and a glow effect on the outside as well as the inside) (part2)
 
 now that we have seen a step by step guide on how to create the inner glow SVG filter, let's apply the filter to our html element and produce the final result of a box (or button) with a border and a glow effect on the outside as well as the inside
-
-
-
-
-
-
-
-
-
 
 text neon glow:
 
@@ -2931,7 +2879,7 @@ then this is the "free solid" icons package:
 npm i @fortawesome/free-solid-svg-icons --save-exact
 ```
 
-you can search for icons using the tags ["free" + "solid"](https://fontawesome.com/v6/search?o=r&m=free&s=solid) on the fontawesome search page
+you can search for icons using the tags ["free" + "solid"](https://fontawesome.com/v6/search?o=r\&m=free\&s=solid) on the fontawesome search page
 
 to check out the different styles just change the tags used above
 
@@ -2964,15 +2912,13 @@ read more:
 
 [fontawesome add icons with react documentation](https://fontawesome.com/v6/docs/web/use-with/react/add-icons)
 
-
 ## waveform command
 
-node cli ./downloads Double_Dragon_Neon_City_Streets_1_-_Jake_Kaufman mp3 50 local json false
-
+node cli ./downloads Double\_Dragon\_Neon\_City\_Streets\_1\_-\_Jake\_Kaufman mp3 50 local json false
 
 ## TODOs
 
-* build authentification: <https://authjs.dev/>, can have a look at how 
+* build authentification: <https://authjs.dev/>, can have a look at how
 * add all sorts of meta data to head.tsx <https://github.com/whoisryosuke/r3f-next-starter/blob/main/src/components/dom/Header.tsx>, also check out <https://beta.nextjs.org/docs/guides/seo>, create a chapter "head.js: SEO and metadata", also check out <https://beta.nextjs.org/docs/api-reference/metadata#generatemetadata>
 * improve accessibility: <https://vercel.com/blog/improving-the-accessibility-of-our-nextjs-site>
 * add tests <https://2022.stateofjs.com/en-US/libraries/testing/>
@@ -2980,23 +2926,16 @@ node cli ./downloads Double_Dragon_Neon_City_Streets_1_-_Jake_Kaufman mp3 50 loc
 * add "protect main branch" instructions to github chapter
 * add a chapter (in next.js config page) about "react strict mode in nextjs" [Next.js "reactStrictMode" documentation](https://nextjs.org/docs/pages/api-reference/next-config-js/reactStrictMode) [react.dev "StrictMode" documentation](https://react.dev/reference/react/StrictMode)
 
-
-
 ## future articles
 
 * view transitions:
-<https://developer.chrome.com/docs/web-platform/view-transitions/>
-<https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API>
-<https://www.w3.org/TR/css-view-transitions-1/>
-<https://caniuse.com/mdn-api_viewtransition>
+  <https://developer.chrome.com/docs/web-platform/view-transitions/>
+  <https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API>
+  <https://www.w3.org/TR/css-view-transitions-1/>
+  <https://caniuse.com/mdn-api_viewtransition>
 * setup cronjobs on vercel <https://vercel.com/docs/cron-jobs>
 * vercel rollback a deployment <https://vercel.com/docs/cli/rollback>
 * revert a schema change with planetscale <https://planetscale.com/blog/behind-the-scenes-how-schema-reverts-work>
-
-
-
-
-
 
 mdx component for images:
 
@@ -3007,8 +2946,8 @@ the solution I chose has the advantage that:
 
 we will use:
 
-1) [remark mdx images](https://www.npmjs.com/package/remark-mdx-images) will take the path and do an import
-2) because the image is now an import, next/image will be able to define the height and width, which means we can always use the placeholder=blur feature
+1. [remark mdx images](https://www.npmjs.com/package/remark-mdx-images) will take the path and do an import
+2. because the image is now an import, next/image will be able to define the height and width, which means we can always use the placeholder=blur feature
 
 I use 3 default configurations for images:
 
@@ -3020,60 +2959,62 @@ import Image, { ImageProps } from 'next/image'
 
 const ImageArticle: React.FC<ImageProps> = (props): JSX.Element => {
 
-    let placeholder = true
+```
+let placeholder = true
 
-    // something is odd here, but I have not found the reason yet
-    // src is either of type string or StaticImport and somehow ts
-    // thinks that when it is of type StaticImport that the object
-    // has no properties
-    // @ts-expect-error: because the library definition is wrong
-    if (props.src?.src.slice(-3) === 'gif') {
-        placeholder = false
-    }
+// something is odd here, but I have not found the reason yet
+// src is either of type string or StaticImport and somehow ts
+// thinks that when it is of type StaticImport that the object
+// has no properties
+// @ts-expect-error: because the library definition is wrong
+if (props.src?.src.slice(-3) === 'gif') {
+    placeholder = false
+}
 
-    return (
-        <>
-            {props.alt.startsWith('banner') ? (
-                <Image
-                    style={{
-                        width: '100%',
-                        height: 'auto',
-                    }}
-                    sizes="100vw"
-                    priority
-                    placeholder={ placeholder ? 'blur' : 'empty' }
-                    //quality={90} // default is 75
-                    {...(props as ImageProps)}
-                />
-            ) : (props.alt.startsWith('photo') || props.alt.startsWith('screenshot')) ? (
-                <Image
-                    style={{
-                        width: '100%',
-                        height: 'auto',
-                    }}
-                    sizes="100vw"
-                    placeholder={ placeholder ? 'blur' : 'empty' }
-                    {...(props as ImageProps)}
-                />
-            ) : (
-                <Image
-                    style={{
-                        maxWidth: '100%',
-                        height: 'auto',
-                    }}
-                    placeholder={ placeholder ? 'blur' : 'empty' }
-                    {...(props as ImageProps)}
-                />
-            )}
-        </>
-    )
+return (
+    <>
+        {props.alt.startsWith('banner') ? (
+            <Image
+                style={{
+                    width: '100%',
+                    height: 'auto',
+                }}
+                sizes="100vw"
+                priority
+                placeholder={ placeholder ? 'blur' : 'empty' }
+                //quality={90} // default is 75
+                {...(props as ImageProps)}
+            />
+        ) : (props.alt.startsWith('photo') || props.alt.startsWith('screenshot')) ? (
+            <Image
+                style={{
+                    width: '100%',
+                    height: 'auto',
+                }}
+                sizes="100vw"
+                placeholder={ placeholder ? 'blur' : 'empty' }
+                {...(props as ImageProps)}
+            />
+        ) : (
+            <Image
+                style={{
+                    maxWidth: '100%',
+                    height: 'auto',
+                }}
+                placeholder={ placeholder ? 'blur' : 'empty' }
+                {...(props as ImageProps)}
+            />
+        )}
+    </>
+)
+```
+
 }
 
 export default ImageArticle
 
-
-
 new chapter: final touches
+
 * robots.txt: https://nextjs.org/docs/app/api-reference/file-conventions/metadata/robots
 * sitemap.xml: https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap
 * manifest.json: https://nextjs.org/docs/app/api-reference/file-conventions/metadata/manifest
@@ -3159,8 +3100,6 @@ read more:
 
 [next.js next/font beta documentation](https://beta.nextjs.org/docs/optimizing/fonts)
 
-
-
 ### setting up vercel account
 
 vercel website: <https://vercel.com/>
@@ -3226,9 +3165,9 @@ first add a good title to describe what is in the PR
 
 then you can add an optional description
 
-Note: to [automatically link your PRs to one or more tickets](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue), edit the PR description, type hashtag and then select your ticket from the list or manually type #TICKET_NUMBER
+Note: to [automatically link your PRs to one or more tickets](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue), edit the PR description, type hashtag and then select your ticket from the list or manually type #TICKET\_NUMBER
 
-Note: if you want the linked ticket to get automatically **closed** by the PR, put a word like **closes** or **fixes** (for a full list of keywords check out the [github "ticket linking" documentation page](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword)) in front of the #TICKET_NUMBER in your PR description, so for example `fixes #1`, then after doing the PR the ticket will get automatically set to **closed** by github
+Note: if you want the linked ticket to get automatically **closed** by the PR, put a word like **closes** or **fixes** (for a full list of keywords check out the [github "ticket linking" documentation page](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword)) in front of the #TICKET\_NUMBER in your PR description, so for example `fixes #1`, then after doing the PR the ticket will get automatically set to **closed** by github
 
 ![github: this PR closes the issue(s)](./documentation/assets/images/PR_closes_issue.png)
 
@@ -3241,8 +3180,6 @@ Note: after the PR is done, if you listed your ticket(s) in the description of t
 ![github: linked PR message](./documentation/assets/images/linked_PR_and_ticket_closed.png)
 
 now that the PR into the **main** branch is done, vercel will do a new production deployment for you
-
-
 
 ## metadata
 
@@ -3261,14 +3198,14 @@ now that the PR into the **main** branch is done, vercel will do a new productio
 
 ### opengraph
 
-> [!MORE]  
-> [The Open Graph protocol website](https://ogp.me/)  
+> \[!MORE]\
+> [The Open Graph protocol website](https://ogp.me/)\
 > [Facebook "Sharing Debugger" website](https://developers.facebook.com/tools/debug/)
 
 #### opengraph image
 
-> [!WARN]  
-> If like me you are on the vercel free plan (Hobby plan), be careful to not use images that are very heavy or use a lot of images (or other assets like fonts) in your og image script, because functions have a limit of 1MB, so if your PNG background image is 1.5 MB you will get this error during the build process: "Error: The Edge Function "web_development/opengraph-image" size is 1.68 MB and your plan size limit is 1 MB. Learn More: [https://vercel.link/edge-function-size](https://vercel.link/edge-function-size)", in case you wonder Hobby: 1 MB, Pro: 2 MB, Enterprise: 4 MB
+> \[!WARN]\
+> If like me you are on the vercel free plan (Hobby plan), be careful to not use images that are very heavy or use a lot of images (or other assets like fonts) in your og image script, because functions have a limit of 1MB, so if your PNG background image is 1.5 MB you will get this error during the build process: "Error: The Edge Function "web\_development/opengraph-image" size is 1.68 MB and your plan size limit is 1 MB. Learn More: <https://vercel.link/edge-function-size>", in case you wonder Hobby: 1 MB, Pro: 2 MB, Enterprise: 4 MB
 
 [Next.js "opengraph image" documentation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image)
 [Vercel "OG image generation" documentation](https://vercel.com/docs/functions/og-image-generation)
