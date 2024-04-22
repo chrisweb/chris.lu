@@ -531,7 +531,7 @@ Now go back to VSCode and look at the list of files in the sidebar and you will 
 
 If you open the file you will see that on top it has added a metadata object, this Next.js metadata API is what we will use in layouts and pages to modify the tags in the `<head>` element of our page(s), like the **title** and **description** (I will go more in detail in a future chapter)
 
-The second part it has added is just a basic React setup
+The second part it has added is just a basic typed React setup
 
 ```tsx title="/app/layout.tsx" {1-4} showLineNumbers
 export const metadata = {
@@ -769,7 +769,7 @@ export default function GlobalError({
 }
 ```
 
-Now we have error handling and logging, for pages as well as a global error handling file that will handle root layout error and act as a catch all for app errors, time to save, commit and sync
+Now we have error handling and logging, for pages as well as a global error handling file that will handle root layout errors and act as a catch all for app errors, time to save, commit and sync
 
 ## Content Security Policy (CSP)
 
@@ -2305,5 +2305,7 @@ In MDX files to add an eslint-disable comment you need to use JSX comments, like
 {/* eslint-disable-next-line mdx/remark */}
 > [Info - 8:41:03 PM] ESLint server is running.
 ```
+
+
 
 </article>
