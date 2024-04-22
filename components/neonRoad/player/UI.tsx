@@ -285,16 +285,28 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
 
     }, [playerRef])
 
-    const onClickTogglePlayPauseCallback = async () => {
+    const onClickTogglePlayPauseCallback = () => {
         if (isPlayingState) {
-            getPlayer()?.pause()
+            getPlayer()?.pause().catch((error): void => {
+                if (process.env.NODE_ENV === 'development') {
+                    console.log('player pause() error: ', error)
+                }
+            })
         } else {
-            getPlayer()?.play()
+            getPlayer()?.play().catch((error): void => {
+                if (process.env.NODE_ENV === 'development') {
+                    console.log('player play() error: ', error)
+                }
+            })
         }
     }
 
     const onClickNextHandler = () => {
-        getPlayer()?.next()
+        getPlayer()?.next().catch((error): void => {
+            if (process.env.NODE_ENV === 'development') {
+                console.log('player next() error: ', error)
+            }
+        })
     }
 
     const onClickEjectHandler = () => {
@@ -346,7 +358,11 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
     }
 
     const onWaveClickHandler = useCallback((clickHorizontalPositionInPercent: number) => {
-        getPlayer()?.setPosition(clickHorizontalPositionInPercent)
+        getPlayer()?.setPosition(clickHorizontalPositionInPercent).catch((error): void => {
+            if (process.env.NODE_ENV === 'development') {
+                console.log('player setPosition() error: ', error)
+            }
+        })
     }, [getPlayer])
 
     useEffect(() => {
@@ -367,7 +383,11 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
 
         return () => {
             if (typeof playerRef !== 'function' && playerRef !== null) {
-                playerRef.current?.disconnect()
+                playerRef.current?.disconnect().catch((error): void => {
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('player disconnect() error: ', error)
+                    }
+                })
             }
         }
 

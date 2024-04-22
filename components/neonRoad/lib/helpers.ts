@@ -21,9 +21,7 @@ const moveFromAToBInLoop = ({ delta, objectsRef, cameraZPosition, distanceToNext
     const newZPosition = delta * speed
 
     // move all the objects by newZPosition
-    for (let i = 0; i < objectsRef.current.length; i++) {
-
-        const object = objectsRef.current[i]
+    for (const object of objectsRef.current) {
 
         object.position.z += newZPosition
 
@@ -41,7 +39,7 @@ const moveFromAToBInLoop = ({ delta, objectsRef, cameraZPosition, distanceToNext
 
     }
 
-    for (let i = 0; i < objectsBehindCamera.length; i++) {
+    for (const nextObject of objectsBehindCamera) {
 
         // order objecta by their z position
         // from highest z position to lowest
@@ -51,8 +49,6 @@ const moveFromAToBInLoop = ({ delta, objectsRef, cameraZPosition, distanceToNext
         // last object is the one closest to the sun
         // and hence furthest away from the camera
         const lastObject = objectsRef.current[objectsRef.current.length - 1]
-
-        const nextObject = objectsBehindCamera[i]
 
         // if there are no visible objects (if deltatime is very big
         // it might happen that all objects are out of the field of view)

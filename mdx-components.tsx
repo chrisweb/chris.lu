@@ -53,7 +53,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         img: (props) => (<ImageDispatch {...props as ImageProps} />),
         aside: ({ children, ...props }) => (
             <>
-                {props['id'] === 'articleToc' ? (
+                {props.id === 'articleToc' ? (
                     <aside>
                         <div className='asideCore sticky'>
                             <HeadingsObserver>

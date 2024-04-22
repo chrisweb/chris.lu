@@ -63,10 +63,10 @@ const Terrain = forwardRef<Mesh, IProps>((props, terrainRef) => {
 
                 const ny = y / width
 
-                let frequency: number = 0
-                let amplitude: number = 0
-                let seaLevelModifier: number = 0
-                let limitHeightSteps: number = 0
+                let frequency = 0
+                let amplitude = 0
+                let seaLevelModifier = 0
+                let limitHeightSteps = 0
 
                 if (x <= 4 || x >= 27) {
 

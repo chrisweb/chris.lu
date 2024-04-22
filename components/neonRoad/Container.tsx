@@ -34,18 +34,26 @@ const Container: React.FC = () => {
     const playerRef = useRef<PlayerCore>(null)
     const powerOffButtonRef = useRef<HTMLButtonElement>(null)
 
-    const playCallback = useCallback(async (playMusic: boolean) => {
+    const playCallback = useCallback((playMusic: boolean) => {
         setAnimationState(true)
         if (playMusic) {
-            await playerRef.current?.play()
+            playerRef.current?.play().catch((error): void => {
+                if (process.env.NODE_ENV === 'development') {
+                    console.log('player play() error: ', error)
+                }
+            })
         }
         // preventScroll is false by default (so NOT prevented)
         powerOffButtonRef.current?.focus({ preventScroll: true })
     }, [])
 
-    const powerOffCallback = useCallback(async () => {
+    const powerOffCallback = useCallback(() => {
         setAnimationState(false)
-        await playerRef.current?.stop()
+        playerRef.current?.stop().catch((error): void => {
+            if (process.env.NODE_ENV === 'development') {
+                console.log('player stop() error: ', error)
+            }
+        })
     }, [])
 
     const altText = 'Chris.lu header image, displaying an 80s style landscape and sunset'

@@ -70,11 +70,11 @@ const UIModal: React.FC<IUIModalProps> = (props): JSX.Element => {
     const dimensionsStyles: { width?: string, height?: string } = {}
 
     if (typeof props.width !== 'undefined') {
-        dimensionsStyles['width'] = props.width + 'px'
+        dimensionsStyles.width = props.width + 'px'
     }
 
     if (typeof props.height !== 'undefined') {
-        dimensionsStyles['height'] = props.height + 'px'
+        dimensionsStyles.height = props.height + 'px'
     }
 
     return createPortal(

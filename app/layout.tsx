@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     // added this just to make the console message go away
     metadataBase: process.env.VERCEL_URL
         ? new URL(`https://${process.env.VERCEL_URL}`)
-        : new URL(`http://localhost:${process.env.PORT || 3000}`),
+        : new URL(`http://localhost:${3000 ?? process.env.PORT}`),
     title: 'Home | chris.lu',
     description: 'chrisweb\'s blog about web development, games, Lego, music, memes, ... | chris.lu',
     manifest: '/manifest.json',

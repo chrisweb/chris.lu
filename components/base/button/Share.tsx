@@ -21,39 +21,37 @@ const ShareButton = forwardRef<ButtonWithIconRefType, IProps>((props, buttonRef)
 
     const [shareDataState, setShareDataState] = useState<IShareData | null>(null)
 
-    const buttonClickHandler = async (/*event: React.MouseEvent<HTMLButtonElement>*/) => {
+    const buttonClickHandler = (/*event: React.MouseEvent<HTMLButtonElement>*/) => {
 
         if (typeof clickCallback === 'function') {
             clickCallback()
         }
 
         if (shareDataState !== null) {
-            try {
-                await window.navigator
-                    .share(shareDataState)
-                    .then(() => {
-                        if (process.env.NODE_ENV === 'development') {
-                            console.log('shared')
-                        }
-                    })
-            } catch (error) {
-                if (process.env.NODE_ENV === 'development') {
-                    console.log(`error: ${error}`)
-                }
-            }
+            window.navigator
+                .share(shareDataState)
+                .then(() => {
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('shared')
+                    }
+                }).catch((error) => {
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log(error)
+                    }
+                })
         }
 
     }
 
     useEffect(() => {
 
-        const ogUrl = document.querySelector('meta[property=\'og:url\']') as HTMLMetaElement
+        const ogUrl = document.querySelector('meta[property=\'og:url\']') as HTMLMetaElement | undefined
         const url = ogUrl ? ogUrl.content : document.location.href
 
-        const ogTitle = document.querySelector('meta[property=\'og:title\']') as HTMLMetaElement
+        const ogTitle = document.querySelector('meta[property=\'og:title\']') as HTMLMetaElement | undefined
         const title = ogTitle ? ogTitle.content : 'Chris.lu'
 
-        const ogDescription = document.querySelector('meta[property=\'og:description\']') as HTMLMetaElement
+        const ogDescription = document.querySelector('meta[property=\'og:description\']') as HTMLMetaElement | undefined
         const defaultDescription = 'chrisweb\'s blog about web development, games, Lego, music, memes, ... | chris.lu'
         const description = ogDescription ? ogDescription.content : defaultDescription
 

@@ -23,7 +23,8 @@ const getRandomColor = (): string => {
 
 const Button: React.FC<IProps> = ({ children }) => {
 
-    const wordsList = children ? children.toString() : ''
+    const stringChildren = children as string[]
+    const wordsList = children ? stringChildren.toString() : ''
     const parts = wordsList.split(', ')
     const requestAnimationFrameRef = useRef(0)
     const animationTimestampRef = useRef(0)

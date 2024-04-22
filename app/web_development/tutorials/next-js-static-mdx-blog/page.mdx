@@ -1477,7 +1477,7 @@ export default Counting
 Now lets edit the `/app/first_page/page.mdx` page we created earlier and add our Counting component to it, like so:
 
 ```mdx title="/app/first_page/page.mdx"
-import Counting from '@/components//buttons/Counting'
+import Counting from '@/components/buttons/Counting'
 
 # Hello 👋 with MDX!
 
@@ -1485,11 +1485,11 @@ import Counting from '@/components//buttons/Counting'
 
 ## headline 2nd level
 
-*italic*
+*italic* text
 
-**bold**
+**bold** text
 
-***bold and italic***
+***bold and italic*** text
 
 > a quote
 
@@ -1500,6 +1500,7 @@ import Counting from '@/components//buttons/Counting'
 * baz
 
 ![This is an octocat image](https://myoctocat.com/assets/images/base-octocat.svg 'I\'m the title of the octocat image')
+
 ```
 
 Make sure your dev server is running, if it is not start it using `npm run dev`

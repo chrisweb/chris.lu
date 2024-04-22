@@ -68,7 +68,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
         return (<>3D Canvas not supported on this device</>)
     }
 
-    const aspect = (typeof props.containerRef !== 'undefined' && props.containerRef.current !== null) ? props.containerRef?.current.clientWidth / props.containerRef?.current.clientHeight : 2
+    const aspect = (props.containerRef?.current !== null && props.containerRef?.current.clientWidth) ? props.containerRef?.current.clientWidth / props.containerRef?.current.clientHeight : 2
 
     return (
         <>
@@ -84,7 +84,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 //frameloop="never"
                 //onCreated={onCanvasCreatedHandler}
                 //ref={canvasRef}
-                camera={cameraRef.current !== null ? cameraRef.current : {}}
+                camera={{} ?? cameraRef.current}
             >
                 {/*<Suspense fallback={<Loader />}>*/}
                 <PerspectiveCamera

@@ -24,9 +24,9 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
     }, [])
 
     // @ts-expect-error: because the library definition is wrong
-    const modalWidth = props.src?.width
+    const modalWidth = props.src?.width as number
     // @ts-expect-error: because the library definition is wrong
-    const modalHeight = props.src?.height
+    const modalHeight = props.src?.height as number
 
     return (
         <>
@@ -40,7 +40,7 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
                     className={styles.thumbnail}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 15vw"
                     placeholder="blur"
-                    {...(props as ImageProps)}
+                    {...props}
                 />
                 {withOpenButton && (
                     <FontAwesomeIcon icon={faMagnifyingGlass} size="xl" color='white' className={`${styles.iconPositioning}  ${styles.icon}`} />
@@ -56,7 +56,7 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
                         maxHeight: '100%',
                     }}
                     placeholder="blur"
-                    {...(props as ImageProps)}
+                    {...props}
                 />
             </UIModal>
         </>

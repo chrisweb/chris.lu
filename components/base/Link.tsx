@@ -21,7 +21,7 @@ const isExternalUrl = (url: string, domain: string): boolean => {
         return false
     }
 
-    if (urlLowerCase.slice(0,7) === 'http://' || urlLowerCase.slice(0,8) === 'https://') {
+    if (urlLowerCase.startsWith('http://') || urlLowerCase.startsWith('https://')) {
 
         const urlNoProtocol = urlLowerCase.replace('http://','').replace('https://','')
 
