@@ -38,7 +38,7 @@ const findFirstNodeThatHasProp = (children: React.ReactNode, prop: string) => {
 
 }
 
-const onClickLinkHandler = (event: MouseEvent<HTMLAnchorElement>) => {
+const onClickLinkHandler = (event: MouseEvent<HTMLAnchorElement>): void => {
 
     event.preventDefault()
 
@@ -69,31 +69,40 @@ const findAndTransformRows = (children: React.ReactNode, activeIdState: string, 
             liChildrenInput = ulChildInput.props.children as React.ReactElement[]
         }
 
-        const liChildrenOutput = liChildrenInput.map((liChild: React.ReactNode, index: number) => {
+        const liChildrenOutput = liChildrenInput.map((liChild: React.ReactElement<HTMLLIElement>, index: number) => {
 
             if (isValidElement(liChild)) {
 
                 if (liChild.type === 'li') {
 
-                    const liChildLinkInput = findFirstNodeThatHasProp(liChild.props.children, 'href')
+                    const liChildProps = liChild.props as React.PropsWithChildren
+                    const liChildChildren = liChildProps as React.ReactNode
+
+                    const liChildLinkInput = findFirstNodeThatHasProp(liChildChildren, 'href') as React.ReactElement<HTMLAnchorElement>
 
                     if (typeof liChildLinkInput !== 'undefined') {
 
                         const liChildLinkId = liChildLinkInput.props.href.slice(1)
-                        const moreRows = findAndTransformRows(liChild.props.children, activeIdState, level)
+                        const moreRows = findAndTransformRows(liChildProps.children, activeIdState, level)
 
-                        const clonedLinkChild = cloneElement(liChildLinkInput, {
-                            ...liChildLinkInput.props,
-                            className: 'animatedUnderline noUnderline',
-                            onClick: onClickLinkHandler,
-                        })
+                        const clonedLinkChild = cloneElement(
+                            liChildLinkInput,
+                            {
+                                ...liChildLinkInput?.props,
+                                className: 'animatedUnderline noUnderline',
+                                onClick: onClickLinkHandler,
+                            } as React.PropsWithChildren<HTMLAnchorElement>
+                        )
 
-                        const clonedLiChild = cloneElement(liChild, {
-                            ...liChild.props,
-                            key: liChild.key !== null ? liChild.key : level + '_' + index,
-                            className: activeIdState === liChildLinkId ? styles.active : styles.notActive,
-                            children: moreRows ? [clonedLinkChild, moreRows] : clonedLinkChild
-                        })
+                        const clonedLiChild = cloneElement(
+                            liChild,
+                            {
+                                ...liChildProps,
+                                key: level + '_' + index ?? liChild.key,
+                                className: activeIdState === liChildLinkId ? styles.active : styles.notActive,
+                                children: moreRows ? [clonedLinkChild, moreRows] : clonedLinkChild
+                            } as unknown as React.PropsWithChildren<HTMLLIElement>
+                        )
 
                         return clonedLiChild
 
@@ -108,9 +117,12 @@ const findAndTransformRows = (children: React.ReactNode, activeIdState: string, 
 
         if (typeof ulChildInput.props === 'object' && ulChildInput.props !== null) {
 
-            ulChildOutput = cloneElement(ulChildInput,
+            const ulChildInputProps = ulChildInput.props as React.PropsWithChildren<{ className: string }>
+
+            ulChildOutput = cloneElement(
+                ulChildInput,
                 {
-                    className: 'className' in ulChildInput.props ? ulChildInput.props.className + styles.list : styles.list
+                    className: 'className' in ulChildInput.props ? ulChildInputProps.className + styles.list : styles.list
                 } as React.PropsWithChildren,
                 liChildrenOutput,
             )

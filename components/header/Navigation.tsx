@@ -23,7 +23,7 @@ const HeaderNavigation: React.FC = () => {
     // on click on the hamburger toggle navigation open/close
     const onClickHamburgerHandler = () => {
         setNavigationIsOpenState((previousState) => {
-            return previousState === (null || true) ? false : true
+            return previousState === (true || null) ? false : true
         })
     }
 

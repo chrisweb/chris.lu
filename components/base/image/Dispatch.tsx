@@ -9,8 +9,9 @@ const ImageDispatch: React.FC<ImageProps> = (props): JSX.Element => {
     // src is either of type string or StaticImport and somehow ts
     // thinks that when it is of type StaticImport that the object
     // has no properties
-    // @ts-expect-error: because the library definition is wrong
-    if (props.src?.src.slice(-3) === 'gif') {
+    // @ts-ignore: because the library definition is wrong
+    const src = props.src?.src as string
+    if (src.endsWith('gif')) {
         optimizable = false
     }
 
@@ -27,11 +28,11 @@ const ImageDispatch: React.FC<ImageProps> = (props): JSX.Element => {
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         priority
                         placeholder={optimizable ? 'blur' : 'empty'}
-                        {...(props as ImageProps)}
+                        {...(props)}
                     />
                 </>
             ) : (props.alt.startsWith('meme') || props.alt.startsWith('photo') || props.alt.startsWith('screenshot')) ? (
-                <ImageWithDialog {...(props as ImageProps)} />
+                <ImageWithDialog {...(props)} />
             ) : (
                 <>
                     {/* eslint-disable-next-line jsx-a11y/alt-text */}
@@ -42,7 +43,7 @@ const ImageDispatch: React.FC<ImageProps> = (props): JSX.Element => {
                         }}
                         placeholder={optimizable ? 'blur' : 'empty'}
                         unoptimized={optimizable ? false : true}
-                        {...(props as ImageProps)}
+                        {...(props)}
                     />
                 </>
             )}
