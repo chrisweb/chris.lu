@@ -12,7 +12,7 @@ const TestButton = forwardRef<ButtonRefType, PropsInterface>((props, buttonRef) 
 
     const { clickCallback, ...rest } = props
 
-    const buttonClickHandler = async (/*event: React.MouseEvent<HTMLButtonElement>*/) => {
+    const buttonClickHandler = (/*event: React.MouseEvent<HTMLButtonElement>*/) => {
 
         if (typeof clickCallback === 'function') {
             clickCallback()
