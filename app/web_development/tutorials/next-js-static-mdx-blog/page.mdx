@@ -1709,8 +1709,8 @@ The ESLint MDX plugin has the [ESLint MDX parser (called eslint-mdx)](https://ww
 npm i eslint@latest eslint-config-next@latest --save-exact --save-dev
 ```
 
-> [!NOTE]  
-> I chose javascript for my eslint configuration file, I usually use javascript over json as it allows me to add comments, however if you prefer json feel free to create an `.eslintrc.json` instead of an `.eslintrc.js` or use one of the many other [ESLint configuration file formats](https://eslint.org/docs/latest/use/configure/configuration-files-deprecated#configuration-file-formats) that are supported
+> [!WARN]
+> as the new ESLint 9 now got released you might encounter backward compatibility problems when using the latest version in combination with next config eslint or other plugins, in that case I recommend using the latest version of the 8.x branch until the flat config is more widely supproted, as of now this is [ESLint 8.57.0](https://www.npmjs.com/package/eslint/v/8.57.0)
 
 Then create a new `.eslintrc.js` and add the following content:
 
@@ -1737,6 +1737,9 @@ module.exports = {
     ],
 }
 ```
+
+> [!NOTE]  
+> I chose javascript for my eslint configuration file, I usually use javascript over json as it allows me to add comments, however if you prefer json feel free to create an `.eslintrc.json` instead of an `.eslintrc.js` or use one of the many other [ESLint configuration file formats](https://eslint.org/docs/latest/use/configure/configuration-files-deprecated#configuration-file-formats) that are supported
 
 The above is the basic setup is inspired by what you get if you use the [eslint init](https://eslint.org/docs/v8.x/use/getting-started) script to setup ESLint in a new project, using **eslint init** in an sandbox folder is a good way to see what kind of basic setup the ESLint team recommends
 
@@ -1781,6 +1784,8 @@ I have 2 options here:
   * by using the **@typescript-eslint/recommended** rule set, we will add a bunch of typescript related rules, like the [no-unnecessary-type-assertion](https://typescript-eslint.io/rules/no-unnecessary-type-assertion/) that checks if you have type assertions that are not needed
   * you can even enable a stricter version if you also enable the **stylistic-type-checked** rule set, which will for example use [prefer-nullish-coalescing](https://typescript-eslint.io/rules/prefer-nullish-coalescing/) in cases where you could have but did NOT use the [Nullish coalescing operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing)
 
+#### option 1: typescript only parser + Next.js config (which includes react, react-hooks, ...)
+
 if you chose option 1 (the less strict version) then add the following override into your `.eslintrc.js`:
 
 ```js title=".eslintrc.js"
@@ -1816,13 +1821,33 @@ What this override does:
 * there is no **extends** defined, as it will already use the **extends** of the previous override in which we extended **next/core-web-vitals** (next/core-web-vitals will then extend the base **next** rule set)
 * because this **overrides** is specifically for **typescript** files we set the parser to use the **@typescript-eslint** parser (instead of the default eslint parser which only supports parsing javascript)
 
-If you chose option 1 (the less strict version) then we first need to install the **@typescript-eslint/eslint-plugin** package:
+#### option 2: all that is in option 1 + typescript code rules
+
+I like option 2 best as it adds a lot of good rules that will check your typescript code and give you feedback if needed, if it finds too much problems in your code maybe set the rules to warn instead of error until you have time to fix them all and then enforce the rules by using error again (or don't use them at all, it is up to you)
+
+If you chose option 2 (the stricter version with more typescript related rules) then we first need to install the additional **@typescript-eslint/eslint-plugin** package, but to ensure that this package uses the same version as the **@typescript-eslint/parser** package I recommend installing both, like so:
 
 ```shell
-npm install @typescript-eslint/eslint-plugin@latest --save-exact --save-dev
+npm i @typescript-eslint/parser@latest @typescript-eslint/eslint-plugin@latest --save-exact --save-dev
 ```
 
-And then we put the following override into our **overrides** array:
+> [!WARN]  
+> If you get an NPM error because the version of installed typescript-eslint/parser and the typescript-eslint/plugin version don't match:  
+>
+>> npm ERR! code ERESOLVE  
+>> npm ERR! ERESOLVE could not resolve  
+>> Conflicting peer dependency: @typescript-eslint/parser
+>
+> Then use the following command to remove the parser:  
+>
+>```shell
+> npm remove @typescript-eslint/parser  
+> ```
+>
+> Then delete your `package-lock.json` (NOT the `package.json` file) file in the root in the repository  
+> And finally try out the installation command (above) again  
+
+Next we put the following override into our **overrides** array (instead of the one in option 1):
 
 ```js title=".eslintrc.js"
 overrides: [
@@ -1870,6 +1895,9 @@ overrides: [
 ],
 ```
 
+> [!WARN]
+> this overrides is not additionally to the overrides in option 1, it is a full replacement, you chose to either add option 1 or option 2 but NOT BOTH
+
 What this override does:
 
 * **files** is set to **ts(x)**, meaning this override is only for **ts** and **tsx** files
@@ -1879,8 +1907,8 @@ What this override does:
 * finally we have the **rules** option, here you can add what ever rules you need in your project
   * I like to single quotes and not double quotes in my javascript code this is why I set **quotes** to **single** (feel free to set it to **double** if you prefer)
   * then I set the rule for semicolons at the end of a javascript line to **never** because I don't use semicolons at the end of lines in my code (as long as they are optional, in the few cases where they are required I of course use them, but those cases are very rare)
-  * next I also disable the [consistent-indexed-object-style](https://typescript-eslint.io/rules/consistent-indexed-object-style/), I usually like consistency but in this case I think the rule goes too far, the different variants are supported by typescript and as long as there their syntax is right I feel like letting the dev chose which one he prefers, feel free to remove this line if you prefer enforcing the consistency
-  * finally I added the rule [ban-ts-comment](https://typescript-eslint.io/rules/ban-ts-comment/) to allow the **ts-expect-error** and **ts-ignore** comments but only when there is a description as to why those comments got added to the code (by default no comments are allowed)
+  * next I also disable the [consistent-indexed-object-style](https://typescript-eslint.io/rules/consistent-indexed-object-style/) rule, I usually like consistency but in this case I think the rule goes too far, the different variants are supported by typescript and as long as there their syntax is right I feel like letting the dev chose which one he prefers, feel free to remove this line if you prefer enforcing the consistency
+  * finally I added a configuration for rule [ban-ts-comment](https://typescript-eslint.io/rules/ban-ts-comment/) to allow the **ts-expect-error** and **ts-ignore** comments but only when there is a description as to why those comments got added to the code (by default no comments are allowed)
 
 > [!MORE]  
 > [typescript-eslint "rules" overview](https://typescript-eslint.io/rules/)  
@@ -2222,7 +2250,7 @@ const TestButton = forwardRef<ButtonRefType, PropsInterface>((props, buttonRef) 
 
     const { clickCallback, ...rest } = props
 
-    const buttonClickHandler = async (/*event: React.MouseEvent<HTMLButtonElement>*/) => {
+    const buttonClickHandler = (/*event: React.MouseEvent<HTMLButtonElement>*/) => {
 
         if (typeof clickCallback === 'function') {
             clickCallback()
@@ -2255,13 +2283,13 @@ export default TestButton
 */
 ```
 
-The first thing ESLint should have spotted in this test is the **buttonRef** variable, it should have a wavy red underline because it is an error, if you hover over it you will see in the modal that the [@typescript-eslint/no-unused-vars](https://typescript-eslint.io/rules/no-unused-vars/) rule got triggered, this rule is recommend by the **@typescript-eslint** plugin, it extends the base rule [eslint/no-unused-vars](https://eslint.org/docs/latest/rules/no-unused-vars) from the **eslint** plugin and tells you that you have a variable in your code is unused 
+This test only shows an error if you chose option 2 when adding the overrides to the eslint configuration: The first thing ESLint should have spotted in this test is the **buttonRef** variable, it should have a wavy red underline because it is an error, if you hover over it you will see in the modal that the [@typescript-eslint/no-unused-vars](https://typescript-eslint.io/rules/no-unused-vars/) rule got triggered, this rule is recommend by the **@typescript-eslint** plugin, it extends the base rule [eslint/no-unused-vars](https://eslint.org/docs/latest/rules/no-unused-vars) from the **eslint** plugin and tells you that you have a variable in your code is unused 
 
 Then we have another error, this time it is the [react/no-unescaped-entities](https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/no-unescaped-entities.md) rule from the **eslint-plugin-react** (the React ESLint plugin) that tells us to escape entities
 
 Finally line 37 there is the following line: `TestButton.displayName = 'TestButton'` that you need to comment out to see the actual error, like this `//TestButton.displayName = 'TestButton'`
 
-This is another error triggered by the [react/display-name](https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/display-name.md) rule from the **eslint-plugin-react**, telling you to set a displayName, because we used **forwardRef** and because by using a displayName debugging will be easier
+If you comment out line 37 (I left it uncommented as the error adds un underline wave to add the code making it hard to see the other errors), then there will be another error triggered by the [react/display-name](https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/display-name.md) rule from the **eslint-plugin-react**, telling you to set a displayName, because we used **forwardRef** and because by using a displayName debugging will be easier
 
 So as you can see linting of typescript code is working too, we got an error from the **@typescript-eslint** and two from the **eslint-plugin-react**
 
