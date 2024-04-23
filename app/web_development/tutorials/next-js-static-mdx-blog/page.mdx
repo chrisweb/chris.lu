@@ -2308,11 +2308,11 @@ By adding 'tests/eslint/' to the **ignorePatterns** we ensure that the linting p
 
 When you want to run the tests again (in development) just comment this line out
 
-## disabling rules (warnings) using comments
+## disabling rules using comments
 
 Now that the linting setup is done you will start seeing warning in your code and at some point you might wonder how you can **disable / ignore** certain **warnings** within files, sometimes you might encounter warnings that you want to suppress because it is an exception to the rule (but you don't want to disable the rule completely in your configuration), then you can use comments to disable the rule for example for an entire file or just the next line
 
-### eslint "disable rule(s)" comment
+### eslint "disable" comment
 
 Disabling an eslint rule for the **next line** (works for plugins too, except remark, see below):
 
@@ -2342,21 +2342,20 @@ For example if you use an `<img>` element with no `alt` attribute you will get t
 > [!MORE]  
 > [ESLint "disabling rules using comments" documentation](https://eslint.org/docs/latest/use/configure/rules#disabling-rules)  
 
-### remark-lint "ignore warnings" comments
+### remark-lint disable comments (in MDX)
 
-To disable remark-lint rules we added by using MDX plugin you do **NOT** specify the rule name:
+To **disable remark-lint rules** we added by using **MDX plugin** you do **NOT** specify the **rule name**:
 
-```mdx
+```mdx title="THIS EXAMPLE IS WRONG"
 {/* eslint-disable-next-line remark-lint-no-undefined-references) */}
+> [Info - 8:41:03 PM] ESLint server is running.
 ```
 
 If you do you will get an error like this:
 
-> Error: Definition for rule 'remark-lint-no-undefined-references)' was not found
+> Error: Definition for rule **remark-lint-no-undefined-references** was not found
 
-So instead you need to use **mdx/remark** for **ANY** rule you want to disable
-
-In MDX files to add an eslint-disable comment you need to use JSX comments, like so:
+So instead you need to use **mdx/remark** for **ANY** rule you want to disable and in **MDX** files to add an **eslint-disable** comment you need to use **JSX comments**, so all together means we need to do it like this:
 
 ```mdx
 {/* eslint-disable-next-line mdx/remark */}
