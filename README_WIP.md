@@ -838,6 +838,12 @@ let's add some "GitHub Flavored Markdown" (GFM) examples to mdx document:
 [ ] checkbox
 ```
 
+## example of my rehype github alerts plugin
+
+here is even an example of a code block as well as a blockquote inside an alert:
+
+![alt text](public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/custom-alert-with-blockquote-and-code-block.png)
+
 ## remark emoji
 
 should I use https://www.npmjs.com/package/remark-emoji
