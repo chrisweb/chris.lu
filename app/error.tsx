@@ -12,7 +12,7 @@ export default function Error({
 }) {
 
     useEffect(() => {
-        // Log the error to Sentry.io
+        // log the error to Sentry.io
         Sentry.captureException(error)
     }, [error])
 
@@ -20,10 +20,7 @@ export default function Error({
         <div>
             <h2>Sorry, something went wrong 😞</h2>
             <button
-                onClick={
-                    // Attempt to recover by trying to re-render the segment
-                    () => reset()
-                }
+                onClick={() => reset()} // attempt to recover by trying to re-render the segment
             >
                 Try again
             </button>

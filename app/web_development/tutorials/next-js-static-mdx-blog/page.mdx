@@ -705,7 +705,7 @@ export default function Error({
 }) {
 
     useEffect(() => {
-        // Log the error to Sentry.io
+        // log the error to Sentry.io
         Sentry.captureException(error)
     }, [error])
 
@@ -713,8 +713,7 @@ export default function Error({
         <div>
             <h2>Sorry, something went wrong 😞</h2>
             <button
-                // Attempt to recover by trying to re-render the segment
-                onClick={() => reset()} 
+                onClick={() => reset()} // attempt to recover by trying to re-render the segment
             >
                 Try again
             </button>
@@ -741,7 +740,7 @@ But because Sentry created a **javascript** file but our project uses **typescri
 After renaming the file we edit it and replace its content with the code for a global error page from the Next.js documentation, which is a good start as it is strictly typed, the only difference is that we also modify the code to add the Sentry.io `captureException(){:.fn}` function, that will capture exceptions and send them to Sentry.io, the final version looks like this:
 
 ```ts title="app/global-error.tsx" showLineNumbers
-'use client'
+'use client' // Error components must be Client Components
 
 import * as Sentry from '@sentry/nextjs'
 import { useEffect } from 'react'
@@ -755,14 +754,19 @@ export default function GlobalError({
 }) {
 
     useEffect(() => {
+        // log the error to Sentry.io
         Sentry.captureException(error)
     }, [error])
 
     return (
         <html>
             <body>
-                <h2>Something went wrong!</h2>
-                <button onClick={() => reset()}>Try again</button>
+                <h2>Sorry, something went wrong 😞</h2>
+                <button
+                    onClick={() => reset()} // attempt to recover by trying to re-render the segment
+                >
+                    Try again
+                </button>
             </body>
         </html>
     )
@@ -770,6 +774,9 @@ export default function GlobalError({
 ```
 
 Now we have error handling and logging, for pages as well as a global error handling file that will handle root layout errors and act as a catch all for app errors, time to save, commit and sync
+
+> [!MORE]  
+> [Next.js "handling errors in root layouts" documentation](https://nextjs.org/docs/app/building-your-application/routing/error-handling#handling-errors-in-root-layouts)
 
 ## Content Security Policy (CSP)
 

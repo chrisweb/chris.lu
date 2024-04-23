@@ -1,9 +1,8 @@
-'use client'
+'use client' // Error components must be Client Components
 
 import * as Sentry from '@sentry/nextjs'
 import { useEffect } from 'react'
 
-// https://nextjs.org/docs/app/building-your-application/routing/error-handling#handling-errors-in-root-layouts
 export default function GlobalError({
     error,
     reset,
@@ -13,6 +12,7 @@ export default function GlobalError({
 }) {
 
     useEffect(() => {
+        // log the error to Sentry.io
         Sentry.captureException(error)
     }, [error])
 
@@ -20,7 +20,11 @@ export default function GlobalError({
         <html>
             <body>
                 <h2>Sorry, something went wrong 😞</h2>
-                <button onClick={() => reset()}>Try again</button>
+                <button
+                    onClick={() => reset()} // attempt to recover by trying to re-render the segment
+                >
+                    Try again
+                </button>
             </body>
         </html>
     )
