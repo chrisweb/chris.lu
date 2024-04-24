@@ -5,43 +5,21 @@ next chapters?
 * \[DONE] CSP
 * \[DONE] articles (pages) using MDX (@next/mdx)
 * \[DONE] eslint for MDX
-* layout
-* navigation / next/link
-* styling
 * next/mdx "mdx-components" file
 * optimizing images with next/image
 * all the MDX plugins
-* mdx homepage articles list by date (newest first)
+* metadata
+* [experimental rust compiler](https://nextjs.org/docs/app/building-your-application/configuring/mdx#using-the-rust-based-mdx-compiler-experimental)
+* layout
+* navigation / next/link
+* styling
 * optimizing fonts with next/font
 * SEO (metadata)
 * github: pull request from preview into main branch (automatically link / close tickets)
-* vercel prod release (custom domain)
 * vercel analytics
+* vercel prod release (custom domain)
 
-## using plugins to extend MDX
 
-The two mains flawors of plugins supported by MDX are [remark](https://www.npmjs.com/package/remark) plugins and [rehype](https://www.npmjs.com/package/rehype) plugins
-
-the difference between the two is that:
-
-quote from the remark readme:
-
-> remark is a tool that transforms markdown with plugins. These plugins can inspect and change your markup
-
-quote from the rehype readme:
-
-> rehype is a tool that transforms HTML with plugins. These plugins can inspect and change the HTML
-
-this means that **remark** plugins will transform your markdown (mdx) before it gets compiled into HTML, while **rehype** plugins will transform the compiled HTML before it gets rendered in the browser
-
-you will sometimes find plugins for **remark** and  that do the same thing, for example a plugin that would make a table of contents by listing all headings in your content, if it is a **remark** plugin it would search for headings `# foo`, `## bar`, `### baz`, while a similar **rehype** plugin would look for headings `<h1>foo</h1>`, `<h2>bar</h2>`, `<h3>baz</h3>`
-
-Note: not all **remark** plugins will work with MDX, because MDX is not just markdown, for example one difference is that HTML tags in markdown are just HTML, but in MDX they are not HTML, they look like HTML but are actually JSX, this means that if the remark plugin finds for example a `<div>` tag and the content is markdown then the type will be 'html', if however the content is MDX then the type would be 'mdxJsxFlowElement'
-
-read more:
-
-* [list of rehype plugins](https://github.com/rehypejs/rehype/blob/main/doc/plugins.md#list-of-plugins)
-* [list of remark plugins](https://github.com/remarkjs/remark/blob/main/doc/plugins.md#list-of-plugins)
 
 ### MDX code blocks
 
@@ -851,190 +829,12 @@ OR use https://github.com/rehypejs/rehype-github/tree/main/packages/emoji
 
 emoji cheat sheet: https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md
 
-### MDX custom components introduction
 
-in MDX every HTML-like tag is a JSX compoennt, so even a `<div>` or `<h1>` heading is a JSX component
 
-you can tell MDX to use one of your custom components for the HTML-like tags you use in your content, a list of which tags are supported can be found in the [MDX "table of components" documentation](https://mdxjs.com/table-of-components/)
 
-here is the quick example of a custom components for all our h1 elements (more on this in the following chapter(s)):
 
-```tsx
-    const mdxComponents = {
-        h1: (props) => (
-            <h1 className="foo" {...props}>
-                {props.children}
-            </h1>
-        ),
-    }
-```
 
-in a previous chapter we added the **remark GFM** plugin, if you did this in your project too, then there are even more HTML-like tags you can replace with custom components, the list is at the end of the [MDX "table of components" documentation](https://mdxjs.com/table-of-components/) page
 
-TODO: need to verify if the next example even works
-
-of course besides the HTML-like tags supported by MDX (or remark GFM) you can add any other custom tag you want to the custom components configuration and assign it any custom component you want
-
-```tsx
-    import type { MyComponent } from 'components/MyComponent'
-
-    const mdxComponents = {
-        MyComponent: MyComponent
-    }
-```
-
-or you can use a variant of the previous example called [shortcodes](https://mdxjs.com/blog/shortcodes/), the difference is that you don't assign your component to a tag, but just import the component, add it to the custom components object and then you use it as is in your content
-
-```tsx
-    import type { MyComponent } from 'components/MyComponent'
-
-    const mdxComponents = {
-        MyComponent
-    }
-```
-
-and then in your MDX content you use it like this:
-
-```md
-    <MyComponent />
-```
-
-TODO: hmmmm I have a problem, if I create a simple test component:
-
-```tsx
-interface IProps {
-    children?: React.ReactNode
-}
-
-const Test: React.FC<IProps> = (props): JSX.Element => {
-
-    console.log(props)
-
-    return (
-        <>
-            <p>{props.children}</p>
-        </>
-    )
-}
-
-export default Test
-```
-
-and then add it to the mdxComponents as shortcode:
-
-```tsx
-import Test from './components/test/Test'
-
-export function useMDXComponents(components: MDXComponents): MDXComponents {
-    return {
-        // Allows customizing built-in components, e.g. to add styling.
-        Test,
-        ...components,
-    }
-}
-```
-
-then I have a type error:
-
-```shell
-Type 'FC<IProps>' is not assignable to type 'NestedMDXComponents | Component<any>'.
-  Type 'FunctionComponent<IProps>' is not assignable to type 'FunctionComponent<any>'.
-    Type 'ReactNode' is not assignable to type 'Element'.
-      Type 'string' is not assignable to type 'ReactElement<any, any>'.ts(2322)
-types.d.ts(11, 5): The expected type comes from this index signature.
-```
-
-removing the return type for useMDXComponents is the only solution I found so far (but it is obviously not a real solution)
-
-```tsx
-export function useMDXComponents(components: MDXComponents) {
-```
-
-TODO: need to investigate why React.FC and MDXComponents seem to be incompatible
-
-#### custom components when using @next/mdx
-
-We are now going to explore what custom components are, MDX is markdown + JSX which means you can import any react (custom) component and then use it in your content
-
-with @next/mdx there are two ways of using custom components in MDX content:
-
-* the first one is to simply import a react component inside an mdx page, same as you would do in a typescript (javascript) page, this solution is good if you have a very specific component that you only want to use in one page, if you want to re-use a component over and over again (for example in all or most of your pages) than the second option is probably better
-* the second option is to use a file called `mdx-components.tsx` which needs to be at the root of your project, this means that if you want to use a component in every page it is best to add it to your `mdx-components.tsx` because then you will not have to import it in every page, just add your component to the mdx-components file and it will be available in every mdx page of your project
-
-Note: we already created the `mdx-components.tsx` earlier, because if you don't create it but run the dev server to compile an mdx page then next.js will complain the file is missing, in that file you specify which tags will get replaced by what components
-
-let's edit our `mdx-components.tsx` and change the code to this:
-
-```tsx
-import type { MDXComponents } from 'mdx/types'
-
-// This file is required to use MDX in `app` directory.
-export function useMDXComponents(components: MDXComponents) {
-    return {
-        // Allows customizing built-in components, e.g. to add styling.
-        h1: (props) => (
-            <h1 className="foo" {...props}>
-                {props.children}
-            </h1>
-        ),
-        ...components,
-    }
-}
-```
-
-here we have created a simple custom component for **h1 headers**, now every h1 HTML-like tag that we will use in our MDX content will have a class called foo
-
-of course you can extend `MDXComponents` and add as much custom components as you wish to alter how your content will get rendered, you can of course also create external files for each component, import them and then use them in `MDXComponents`
-
-try it out for yourself, ensure the dev server is running and then in the browser navigate to <http://localhost:3000/articles/option3>, then use your browser developper tools inspect tool and you will see that the `<h1>` element now has a **class** attribute containing the value `foo`
-
-#### custom components when using next-mdx-remote
-
-Note: in next.js a file called `mdx-components.tsx` is being used to manage custom components in MDX content, when using **next-mdx-remote** however this is done creating an `mdxComponents` object and then passing it to the `MDXRemote` component
-
-we are again going to edit `Article` function in the file `/app/articles/[slug]/page.tsx`:
-
-```tsx
-export default async function Article(props: IPageProps) {
-
-    const { params: { slug } } = props
-
-    const fileName = slug + '.mdx'
-
-    const directoryPath = dirname(fileURLToPath(import.meta.url))
-
-    const filePath = join(directoryPath, fileName)
-
-    const contentMDX = fs.readFileSync(filePath, 'utf8')
-
-    const mdxComponents = {
-        h1: (props: React.PropsWithChildren) => (
-            <h1 className="foo" {...props} >
-                {props.children}
-            </h1>
-        ),
-    }
-
-    return (
-        <>
-            {/* @ts-expect-error Server Component */}
-            <MDXRemote source={contentMDX} components={mdxComponents} />
-        </>
-    )
-}
-```
-
-here we have created a simple custom component for **h1 headers** inside of an `mdxComponents` object, now every h1 HTML-like tag that we will use in our MDX content will have a class called foo
-
-we then pass the `mdxComponents` object to the `MDXRemote` component
-
-of course you can extend `mdxComponents` and add as much custom components as you wish to alter how your content will get rendered, you can of course also create external files for each component, import them and then use them in `mdxComponents`
-
-try it out for yourself, ensure the dev server is running and then in the browser navigate to <http://localhost:3000/articles/option3>, then use your browser developper tools inspect tool and you will see that the `<h1>` element now has a **class** attribute containing the value `foo`
-
-Read more:
-
-* [MDX HTML elements that can be replaced with custom components](https://mdxjs.com/table-of-components/)
 
 #### custom component to highlight the currently active heading in the table of contents
 
@@ -1276,21 +1076,19 @@ read more:
 <https://github.com/mdx-js/vscode-mdx>
 <https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx>
 
-## styling
 
-### ui / styling framework choice
-
-when it comes to styling (like so many other things) I'm happy that Next.js is NOT opinated and instead lets you chose the solution you like best...
-
-TODO: read: <https://leerob.io/blog/css>
 
 #### mui (react material ui styled components) (evaluation)
 
-In my previous projects I have used [**material ui (mui)**](https://mui.com/material-ui/getting-started/overview/) which is a popular react UI framework, I have loved how quickly I could build interfaces and forms and how well documented the project is
+In my previous projects I have used [**material ui (mui)**](https://mui.com/material-ui/getting-started/overview/), from [mui.com](https://mui.com/material-ui/):
 
-However as of right now, several css-in-js projects are not working out of the box with the new **server components**, which in documented in the [next.js 13 "css-in-js" beta docs](https://beta.nextjs.org/docs/styling/css-in-js)
+> Material UI is an open-source React component library that implements Google's Material Design
 
-Material ui uses the css-in-js library called [emotion](https://emotion.sh/docs/introduction) which as of now (05.03.2023) does not fully work with server components and especially streaming
+I liked it a lot because of how quickly I could build interfaces and forms and how well documented the project is
+
+However as of right now, several css-in-js projects are not working out of the box with the new **server components**, for more check out their [Next.js "CSS-in-JS" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-in-js)
+
+Material ui 5 (the current release) uses the css-in-js library called [emotion](https://emotion.sh/docs/introduction), after the release of Next.js 13 a lot of tickets got opened because of things not working when using MUI and server components but in the mean time a lot of those problems could get solved, the MUI team even [released a Next.js package]() to help devs use Material ui 5 with the Next.js App Router
 
 * [material ui ticket "Improve Next.js 13 support"](https://github.com/mui/material-ui/issues/34905)
 * [emotion ticket "Plans to support Next.js 13 - /app directory"](https://github.com/emotion-js/emotion/issues/2928)
@@ -1321,6 +1119,8 @@ Update: on 11.12.2023 the MUI team released MUI v5.15.0 which has a new package:
 > 🚀 Added a new [package for a better Material UI integration with Next.js](https://mui.com/material-ui/guides/nextjs/) ([#39947](https://github.com/mui/material-ui/pull/39947))
 
 the [@mui/material-nextjs](https://github.com/mui/material-ui/tree/master/packages/mui-material-nextjs) package helps when using MUI and the new version 13 and 14 of next.js with either the pages or the app router, read more about how to install and use it in the [MUI "Next.js integration" guide](https://mui.com/material-ui/guides/nextjs/)
+
+Zero-runtime CSS in JS RFC https://github.com/mui/material-ui/issues/38137
 
 #### stylex
 
