@@ -54,9 +54,9 @@ To be able to create a Javascript backend and run our Javascript code locally we
 
 ## The road to server components and server actions
 
-React and Next.js have evolved a lot lately, the most notable additions are **server components** and **server actions**, on this page I try to list all the updates that happend during the last +-2 years in the React and Next.js ecosystem, so if you did not build a project with Next.js 13/14 yet I recommend you check it out, but if you are already an expert feel free to skip this chapter 😉
+React and Next.js have evolved a lot lately, the most notable additions are **server components** and **server actions**, on this page I try to list all the updates that happend during the last +-2 years in the React and Next.js ecosystem, so if you did not build a project with Next.js 13/14 and React 18/19 yet I recommend you check it out, but if you are already an expert feel free to skip this chapter 😉
 
-* [the road to React and Next.js server components and server actions](/web_development/posts/road-to-react-next-js-server-side-features)
+* [The road to React 19 and Next.js 14](/web_development/posts/road-to-react-19-next-js-14)
 
 ## Getting started
 
@@ -2397,6 +2397,126 @@ So instead you need to use **mdx/remark** for **ANY** rule you want to disable a
 > [Info - 8:41:03 PM] ESLint server is running.
 ```
 
+## Styling and UI libraries
 
+When it comes to styling and UI libraries (like so many other things) I'm happy that Next.js is NOT opinated and instead lets you chose the solution you like best, but that brings us to the question, so what should I use?
+
+Spoler alert! I will use css modules in this tutorial for reasons I will explain the next chapter
+
+![banner showing in which sponge bob and patrick panic, asking "Why not UI library name here?"](public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/spongebob_panic_ui_library_meme.png)
+
+
+
+
+
+## MDX components
+
+Before we experiment with plugins in the next chapter I wanted to first come back to the `mdx-components.tsx` we briefly saw when setting up MDX support
+
+**next/mdx** uses a file called `mdx-components.tsx` which you can use to quickly and easily to use **components**, but there are other use cases that make it great choice, for example lets's say you want to quickly add a class to headlines, you can't do that in markdown the same way you would set a class for an HTML element, you could find and install an MDX (rehype) plugin do so, but instead we are going to use our `mdx-components.tsx` as it is an easy and quick way of solving our problem
+
+First lets create a new test playground to test the components, inside of the `app` fodler create new folder `mdx-components_example` and in it a file called `page.mdx`, like so:
+
+```mdx title="/app/mdx-components_example/page.tsx"
+# headline 1
+
+## headline 2
+
+### headline 3
+
+#### headline 4
+
+##### headline 5
+
+###### headline 6
+```
+
+Now open the `mdx-components.tsx` that is in the root of your project and we add an entry for each headline, like so:
+
+```mdx title="mdx-components.tsx"
+import type { MDXComponents } from 'mdx/types'
+
+// This file allows you to provide custom React components
+// to be used in MDX files. You can import and use any
+// React component you want, including components from
+// other libraries.
+
+// This file is required to use MDX in `app` directory.
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+    return {
+        // Allows customizing built-in components, e.g. to add styling.
+        h1: ({ children, ...props }) => (
+            <h1 className="h1" {...props}>
+                {children}
+            </h1>
+        ),
+        h2: ({ children, ...props }) => (
+            <h2 className="h2" {...props}>
+                {children}
+            </h2>
+        ),
+        h3: ({ children, ...props }) => (
+            <h3 className="h3" {...props}>
+                {children}
+            </h3>
+        ),
+        h4: ({ children, ...props }) => (
+            <h4 className="h4" {...props}>
+                {children}
+            </h4>
+        ),
+        h5: ({ children, ...props }) => (
+            <h5 className="h5" {...props}>
+                {children}
+            </h5>
+        ),
+        h6: ({ children, ...props }) => (
+            <h6 className="h6" {...props}>
+                {children}
+            </h6>
+        ),
+        ...components,
+    }
+}
+```
+
+here we have created a simple custom component for **h1 headers**, now every h1 HTML-like tag that we will use in our MDX content will have a class called foo
+
+of course you can extend `MDXComponents` and add as much custom components as you wish to alter how your content will get rendered, you can of course also create external files for each component, import them and then use them in `MDXComponents`
+
+try it out for yourself, ensure the dev server is running and then in the browser navigate to [http://localhost:3000/articles/option3](http://localhost:3000/articles/option3), then use your browser developper tools inspect tool and you will see that the `<h1>` element now has a **class** attribute containing the value `foo`
+
+> [!MORE]  
+> [MDX "components" documentation](https://mdxjs.com/table-of-components/)
+
+## MDX plugins
+
+The two mains flawors of plugins supported by MDX are [remark](https://www.npmjs.com/package/remark) plugins and [rehype](https://www.npmjs.com/package/rehype) plugins
+
+The difference between the two is that:
+
+Quote from the remark readme:
+
+> remark is a tool that transforms markdown with plugins. These plugins can inspect and change your markup
+
+Quote from the rehype readme:
+
+> rehype is a tool that transforms HTML with plugins. These plugins can inspect and change the HTML
+
+This means that **remark** plugins do their work they are processing your markdown before it gets transformed into HTML, while **rehype** plugins will process HTML, when the plugin is done that HTML gets transformed into JSX, then other JSX like a React component you imported into your MDX page gets added, you experiment with this workflow using the [MDX playground](https://mdxjs.com/playground/) (modify the input and then use the select field to switch between different modes, to see the corresponding output on the right)
+
+You will sometimes find plugin for **remark** and then another plugin for **rehype** but both do the same thing, for example a plugin that would make a table of contents by listing all headings in your content, if it is a **remark** plugin it would search for headings like `# foo`, `## bar`, `### baz` in your markdown, while a similar **rehype** plugin would look for headings `<h1>foo</h1>`, `<h2>bar</h2>`, `<h3>baz</h3>` in the the HTML (after markdown got converted to HTML), in such a case it is up to you which one you want to use, there is no right or wrong here, just take the one that has the features you need, the one with more detailed documentation, the most stars on GitHub or the one with the least open Issues (it is up to you to define what criteria you want to use to judge which one is better)
+
+In the next several chapters we will add a bunch of interesting plugins to our project
+
+> [!MORE]  
+> [list of rehype plugins](https://github.com/rehypejs/rehype/blob/main/doc/plugins.md#list-of-plugins)  
+> [list of remark plugins](https://github.com/remarkjs/remark/blob/main/doc/plugins.md#list-of-plugins)  
+
+### Code blocks plugin
+
+It's time to add our first plugin for MDX 🙂, a rehype plugin to turn our code blocks into nicely highlighted code displays
+
+## Imports and React components in MDX
 
 </article>
