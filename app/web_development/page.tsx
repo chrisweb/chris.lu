@@ -43,9 +43,9 @@ export default function WebDevelopmentPage() {
                 </div>
                 <h2 className="h2">Posts</h2>
                 <div className="grid">
-                    <Link href="/web_development/posts/road-to-react-next-js-server-side-features" className={styles.preview}>
-                        <Image src="/assets/images/app/web_development/posts/road-to-react-next-js-server-side-features/banner.png" alt="" fill sizes="400px" style={{ objectFit: 'cover' }} />
-                        <div className={styles.title}>The road to server components and server actions</div>
+                    <Link href="/web_development/posts/road-to-react-19-next-js-14" className={styles.preview}>
+                        <Image src="/assets/images/app/web_development/posts/road-to-react-19-next-js-14/banner.png" alt="" fill sizes="400px" style={{ objectFit: 'cover' }} />
+                        <div className={styles.title}>The road to React 19 and Next.js 14</div>
                     </Link>
                     <Link href="/web_development/posts/csp" className={styles.preview}>
                         <Image src="/assets/images/app/web_development/posts/csp/banner.png" alt="" fill sizes="400px" style={{ objectFit: 'cover' }} />
