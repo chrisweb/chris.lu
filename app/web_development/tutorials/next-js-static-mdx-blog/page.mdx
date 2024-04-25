@@ -2399,14 +2399,57 @@ So instead you need to use **mdx/remark** for **ANY** rule you want to disable a
 
 ## Styling and UI libraries
 
+### CSS-in-JS introduction
+
 When it comes to styling and UI libraries (like so many other things) I'm happy that Next.js is NOT opinated and instead lets you chose the solution you like best, but that brings us to the question, so what should I use?
 
-Spoler alert! I will use css modules in this tutorial for reasons I will explain the next chapter
-
-![banner showing in which sponge bob and patrick panic, asking "Why not UI library name here?"](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/spongebob_panic_ui_library_meme.png)
+Spoiler alert! I will use [CSS Modules](https://github.com/css-modules/css-modules) in this tutorial, for the simple reason that a lot of libraries had problems with **Server** components but even with **Client** components and I did NOT want to add an experimental library to my project. CSS Modules were already part of Next.js when I started with tutorial and fully compatibel with both Server & Client components. Actually it is not just Next.js, many other frameworks have out of the box support for CSS Modules, like [Create React App](https://create-react-app.dev/docs/adding-a-css-modules-stylesheet/), [Gatsby](https://www.gatsbyjs.com/docs/how-to/styling/css-modules/) or [Remix](https://remix.run/docs/en/main/styling/css-modules)
 
 
+> [!NOTE]  
+> I'm glad I did chose to use CSS Modules, because I rediscovered how convinient it can be to NOT have to learn a new library and be able to just write plain CSS. Of course by NOT using a library it meant I had to create styles for everything myself, from a little button, to full forms, page layouts, typography and more. So even though I don't recommend this solution for teams that are in a hurry or working on very big projects, for me it was very enjoyable to discover all the new CSS features that have come out during the last 5 years. If you don't know CSS Modules yet, I recommend using this tutorial to get an idea of what they are and how they work and after that feel free to come back to this introduction chapter and have a better look at the other libraries I listed below.
 
+![banner showing spongebob and patrick panicking, asking "Why not UI library name here?"](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/spongebob_panic_ui_library_meme.png)
+
+When Next.js 13 got released, several **CSS-in-JS** projects were NOT working properly, but most libraries started fixing those problems, the Next.js team has put up a [Next.js "CSS-in-JS" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-in-js) page that lists those who work with client components
+
+Material UI for example had some problems (as you can read in the [Material UI support for App Router #34905)](https://github.com/mui/material-ui/issues/34905) after the initial Next.js 13 release, those were partially due to emotion (the CSS-in-JS library Material is primaraly using) having problems with Next.js (as you can read in their [Emotion support for App Router Issue #2928](https://github.com/emotion-js/emotion/issues/2928)), to solve those problems the MUI team announced on the 11.12.2023 the release of a new [@mui/material-nextjs](https://mui.com/material-ui/integrations/nextjs/) package (part of Material UI v5.15.0):
+
+> 🚀 Added a new [package for a better Material UI integration with Next.js](https://mui.com/material-ui/integrations/nextjs/)
+
+Having most **CSS-in-JS** libraries being now client component compatible is already great, but it would be even better if they would also work with the new **React Server Components (RSC)** but unfortunatly only a few do (as of now).
+
+The problem is that before **React Server Components (RSC)** were a thing, it was ok for **CSS-in-JS** libraries to use Javascript in the client to extract the CSS from components at **run-time** and then inject it back into the HTML page. This is why some libraries have started to switch to compiling CSS at **compile-time** (aslo often called **zero-runtime**). If you want to know more about why this matters, have a look at the initial [Material UI Zero-Runtime RFC](https://github.com/mui/material-ui/issues/38137) which explains well what the challenges are.
+
+Today we have several libraries that are becoming more and more popular because they have support for **React Server Components (RSC)**. One of the first was [Panda CSS](https://panda-css.com/) (by the team behind [Chakra UI](https://chakra-ui.com)) which has a good documentation page about how to use [Panda CSS with Next.js](https://panda-css.com/docs/installation/nextjs). Another library with NO **run-time** style injection, that bundles styles at **compile-time** is [StyleX](https://stylexjs.com/) (by Facebook), they have some documentation about how to add [StyleX to Next.js](https://stylexjs.com/docs/learn/installation/#production) using a custom plugin they created. Material UI is also working on a solution called [Pigment CSS](https://github.com/mui/material-ui/tree/master/packages/pigment-css-react#pigmentcss) and they also have a guide in the project README about [how to get started with Pigment CSS when using Next.js](https://github.com/mui/material-ui/tree/master/packages/pigment-css-react#start-with-nextjs). Regarding the Pigment CSS library, I would advise to wait until the release of [Material UI 6](https://mui.com/blog/2023-material-ui-v6-and-beyond/) before attempting to use it in production.
+
+Just one last note before we start coding, in the release of [Next.js 14.2](https://nextjs.org/blog/next-14-2#turbopack-for-development-release-candidate) the Next.js team started using [Lightning CSS](https://github.com/parcel-bundler/lightningcss) in the rust compiler ([Turbopack](https://turbo.build/pack)) which is great news as it will for greatly improve CSS compilation speeds (if you already use the `--turbo` flag in development)
+
+> [!MORE]  
+> [Next.js "CSS-in-JS" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-in-js)
+> [Panda CSS "Next.js" documentation](https://panda-css.com/docs/installation/nextjs)  
+> [StyleX "Next.js plugin" documentation](https://stylexjs.com/docs/learn/installation/#production)
+> [Material UI "Next.js integration" documentation](https://mui.com/material-ui/integrations/nextjs/)
+> [Pigment CSS "Next.js" documentation](https://github.com/mui/material-ui/tree/master/packages/pigment-css-react#start-with-nextjs)
+> [Next.js "CSS Modules and Global Styles" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-modules)
+
+### Getting started with CSS Modules and the global.css
+
+As I already mentioned in the introduction [CSS Modules](https://github.com/css-modules/css-modules) work out of the box when using Next.js, so no need to install any extra packages and they are **React Server Components (RSC)** compatible. They let you write vanilla CSS in *.module.css files that you then import into your components. 
+
+A big advantage of CSS Modules is that you don't have to worry about unique names, the library makes them unique for you by adding a hash to the name, meaning you can have two classes named **button** in two different files as they are **component scoped** by default and hence will be unique after compilation. The disadvantage with CSS Modules is that when you look at their name using the developer tools, the class and animation names won't be exactly what you have defined, instead the format for names will be: `[filename]\_[classname]\_\_[hash]`, so they will still be recognizable. If you don't want the css modules to create unique class names for you, you have the option to set a [stable** class name](https://www.gatsbyjs.com/docs/how-to/styling/css-modules/#enabling-user-stylesheets-with-a-stable-class-name).
+
+Let's start with a simple example, 
+
+
+
+
+
+
+
+
+> [!MORE]  
+> [Next.js "CSS Modules and Global Styles" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-modules)
 
 ## MDX components
 
