@@ -1071,82 +1071,11 @@ read more:
 
 * [next.js "next/link" documentation](https://nextjs.org/docs/app/api-reference/components/link)
 
-## MDX VSCode plugin
-
-<https://github.com/mdx-js/vscode-mdx>
-<https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx>
 
 
 
-#### mui (react material ui styled components) (evaluation)
 
-In my previous projects I have used [**material ui (mui)**](https://mui.com/material-ui/getting-started/overview/), from [mui.com](https://mui.com/material-ui/):
 
-> Material UI is an open-source React component library that implements Google's Material Design
-
-I liked it a lot because of how quickly I could build interfaces and forms and how well documented the project is
-
-However as of right now, several css-in-js projects are not working out of the box with the new **server components**, for more check out their [Next.js "CSS-in-JS" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-in-js)
-
-Material ui 5 (the current release) uses the css-in-js library called [emotion](https://emotion.sh/docs/introduction), after the release of Next.js 13 a lot of tickets got opened because of things not working when using MUI and server components but in the mean time a lot of those problems could get solved, the MUI team even [released a Next.js package]() to help devs use Material ui 5 with the Next.js App Router
-
-* [material ui ticket "Improve Next.js 13 support"](https://github.com/mui/material-ui/issues/34905)
-* [emotion ticket "Plans to support Next.js 13 - /app directory"](https://github.com/emotion-js/emotion/issues/2928)
-
-seems to have problems with **next.js 13**: <https://github.com/mui/material-ui/issues/34905>
-mostly because of CSS in JS <https://beta.nextjs.org/docs/styling/css-in-js> server side rendering (SRR) with **emotion**: <https://github.com/emotion-js/emotion/issues/2928>, the biggest problem seems to be if your app uses streaming of components
-
-so right now MUI is a problem, because of their style engine **emotion** which has trouble to create the css on runtime when using streaming
-
-a former contributor of emotion explains why they moved away from emotion to use sass modules (css modules + sass): <https://dev.to/srmagura/why-were-breaking-up-wiht-css-in-js-4g9b>
-
-mui is discussing adding a new engine: <https://github.com/mui/material-ui/issues/34826>
-the author of mui thinks static extration would be best, but static extraction got removed from emotion: <https://github.com/emotion-js/emotion/blob/main/docs/extract-static.mdx>
-static css extraction explained: <https://andreipfeiffer.dev/blog/2021/css-in-js-styles-output>
-
-using tailwind css would be a solution, as it doesn't have the problems that css-in-js libraries have and there is a mui documentation page about using tailwind, but this does not mean tailwind is replacing emotion as a peer dependency of mui, you just have it alongside mui: <https://mui.com/material-ui/guides/interoperability/#tailwind-css>
-
-here is a very long, but interesting article about what kind of css experiments the author of tailwind did before he created tailwind: <>
-
-why I'm not a tailwind fan because I don't like class composition, if I look at tailwind ui and I see that to style a button they add like 15 classes which you need to know exactly which one does what (so have a good understanding or each class) then this makes me feel like a team using this would not be hyper productive
-
-as the author of mui mentioned in a [comment](https://github.com/mui/material-ui/issues/34826#issuecomment-1284567364), mui needs a package that supports css static generation, to be able to move away from the emotion "css in js" generated at runtime (or emotion adds static css generation to their library, but as far I as I know the latest info I have is that they don't plan on adding static generation as a feature in emtion), the feature for static generation in mui got added to the list of TODOs in the [mui 6 discussion on github](https://github.com/mui/material-ui/issues/30660), one such css package which supports static generation and much more is [panda css](https://panda-css.com/), panda css is from the [chakra ui](https://chakra-ui.com/) team as you can see on the [panda css github repository](https://github.com/chakra-ui/panda) which is under the [chakra ui organisation](https://github.com/chakra-ui), so maybe chakra ui would be an alternative to mui today, because (as of 05.03.2023) I assume that mui 6 is not going to be released anytime soon
-
-The PR with an [example of mui with nextjs 13 app directory](https://github.com/mui/material-ui/pull/37315) has been merged, but I did not check it out yet, questions I'm asking myself are the ones mentioned above, so is this client components only or also server components, does this solve the problems of runtime generated css in combination with streaming, does this mean we do not have to wait for a static genrated solution (mui 6) and can use this today? meaning this solution works today but static generation could still be an improvement in terms of loading speeds
-
-Update: on 11.12.2023 the MUI team released MUI v5.15.0 which has a new package:
-
-> 🚀 Added a new [package for a better Material UI integration with Next.js](https://mui.com/material-ui/guides/nextjs/) ([#39947](https://github.com/mui/material-ui/pull/39947))
-
-the [@mui/material-nextjs](https://github.com/mui/material-ui/tree/master/packages/mui-material-nextjs) package helps when using MUI and the new version 13 and 14 of next.js with either the pages or the app router, read more about how to install and use it in the [MUI "Next.js integration" guide](https://mui.com/material-ui/guides/nextjs/)
-
-Zero-runtime CSS in JS RFC https://github.com/mui/material-ui/issues/38137
-
-#### stylex
-
-TODO: [stylex](https://github.com/facebook/stylex) just popped up out of nowhere, Meta announced Stylex via a [blog post](https://stylexjs.com/blog/introducing-stylex/) on the [Stylex website](https://stylexjs.com/) on the 5 december 2023, mui will not use it, but maybe I should use it in this project to experiment with it, maybe two tutorials, one for css modules and one for stylex?
-
-if like you wonder what stylex is, the stylex website says the following:
-
-> StyleX has become the preferred way to style components for every web surface within Meta
-
-Read more:
-
-[stylexjs website](https://stylexjs.com/)
-
-#### css modules (my current choice)
-
-this is why I have decided that for now I would use the [css modules](https://github.com/css-modules/css-modules), many frameworks have built-in support for css modules like [Create React App](https://create-react-app.dev/docs/adding-a-css-modules-stylesheet/), [Gatsby (css modules support)](https://www.gatsbyjs.com/docs/how-to/styling/css-modules/) or [Remix (css modules support)](https://remix.run/docs/en/1.14.0/guides/styling#css-modules) and so does [Next.js (css modules support)](https://beta.nextjs.org/docs/styling/css-modules)
-
-in one of the following chapters I will do a deeper dive into how to use css modules with examples
-
-#### other UI frameworks comparison
-
-if you prefer to use something else than css modules, here is a comparison of some popular react UI frameworks (@blueprintjs/core vs @chakra-ui/react vs @mui/joy vs @mui/material vs @nextui-org/react vs antd vs react-bootstrap vs semantic-ui-react): <https://npmtrends.com/@blueprintjs/core-vs-@chakra-ui/react-vs-@mui/joy-vs-@mui/material-vs-@nextui-org/react-vs-antd-vs-react-bootstrap-vs-semantic-ui-react>, you might also want to have a look at tailwind UI (which is not a package so I can't compare it to the others in same way): <https://tailwindui.com/documentation>
-
-read more:
-
-* [next.js 13 "css-in-js" beta documentation](https://nextjs.org/docs/app/building-your-application/styling/css-in-js)
 
 #### global styles
 
