@@ -111,7 +111,7 @@ That's it the **Create Next App** will now install Next.js and React (and React 
 > [!MORE]  
 > [Next.js "create-next-app" documentation](https://nextjs.org/docs/app/api-reference/create-next-app)  
 > [VSCode "jsconfig.json" documentation](https://code.visualstudio.com/docs/languages/jsconfig)  
-> [Next.js "Absolute Imports and Module Path Aliases" documentation](https://nextjs.org/docs/app/building-your-application/configuring/absolute-imports-and-module-aliases)
+> [Next.js "Absolute Imports and Module Path Aliases" documentation](https://nextjs.org/docs/app/building-your-application/configuring/absolute-imports-and-module-aliases)  
 
 ### first commit
 
@@ -372,7 +372,7 @@ npm run
 This will show you the 4 run-scripts commands that got added by create next app
 
 > [!MORE]  
-> [NPM "run scripts" documentation](https://docs.npmjs.com/cli/v10/commands/npm-run-script)
+> [NPM "run scripts" documentation](https://docs.npmjs.com/cli/v10/commands/npm-run-script)  
 
 #### Edit run scripts
 
@@ -390,7 +390,7 @@ There you will find the existing commands:
 ```
 
 > [!MORE]  
-> [NPM "package.json run scripts" documentation](https://docs.npmjs.com/cli/v10/commands/npm-run-script)
+> [NPM "package.json run scripts" documentation](https://docs.npmjs.com/cli/v10/commands/npm-run-script)  
 
 #### Changing the Next.js dev server port
 
@@ -776,7 +776,7 @@ export default function GlobalError({
 Now we have error handling and logging, for pages as well as a global error handling file that will handle root layout errors and act as a catch all for app errors, time to save, commit and sync
 
 > [!MORE]  
-> [Next.js "handling errors in root layouts" documentation](https://nextjs.org/docs/app/building-your-application/routing/error-handling#handling-errors-in-root-layouts)
+> [Next.js "handling errors in root layouts" documentation](https://nextjs.org/docs/app/building-your-application/routing/error-handling#handling-errors-in-root-layouts)  
 
 ## Content Security Policy (CSP)
 
@@ -1181,7 +1181,7 @@ In this example we check if the phase is **development** by using the **PHASE_DE
 > [!MORE]  
 > [Node.js "environment variables" documentation](https://nodejs.org/en/learn/command-line/how-to-read-environment-variables-from-nodejs)  
 > [Next.js "configuration" documentation](https://nextjs.org/docs/app/api-reference/next-config-js)  
-> [Vercel "system environment variables" documentation](https://vercel.com/docs/projects/environment-variables/system-environment-variables)
+> [Vercel "system environment variables" documentation](https://vercel.com/docs/projects/environment-variables/system-environment-variables)  
 
 #### next configuration security headers
 
@@ -1260,16 +1260,16 @@ We also add 3 more headers by to the end of our headers array:
 > [MDN "Strict-Transport-Security" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)  
 > [MDN "Referrer-Policy" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy)  
 > [MDN "X-Content-Type-Options" documentation]()  
-> [MDN "X-Frame-Options" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options)
+> [MDN "X-Frame-Options" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options)  
 
 ## Why use markdown (MDX)?
 
 As a developer using markdown to format content makes sense, as most of us probably already know Markdown because we have been using it when formatting our project READMEs, or when opening Issues or participating in Discussions on GitHub, or when formatting questions and answers on [Stack Overflow](https://stackoverflow.com/editing-help), or even in messages on a [Discord](https://support.discord.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline) server, this is why I chose to use MDX (markdown + JSX) for this "static Next.js blog" project
 
 > [!MORE]  
-> [GitHub "markdown" formatting](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
+> [GitHub "markdown" formatting](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)  
 > [Stack Overflow "markdown" help](https://stackoverflow.com/editing-help)  
-> [Discord "markdown" formatting](https://support.discord.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline)
+> [Discord "markdown" formatting](https://support.discord.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline)  
 
 ## Adding MDX support using @next/mdx
 
@@ -1374,7 +1374,7 @@ Because we used **create next app** in our tsconfig.json we **already** have the
 
 > [!MORE]  
 > ["@next/mdx package" README](https://github.com/vercel/next.js/tree/canary/packages/next-mdx)  
-> [mdxjs.com "Types" documentation](https://mdxjs.com/docs/getting-started/#types)
+> [mdxjs.com "Types" documentation](https://mdxjs.com/docs/getting-started/#types)  
 
 #### (optional) adding support for more markdown extensions
 
@@ -1645,7 +1645,7 @@ When you [install ESLint for Next.js manually](https://nextjs.org/docs/app/build
 Finally **create-next-app** will has also add the line `"lint": "next lint"{:json}` to your package.json `scripts`, which means that you now can use the command `npm run lint`, which will execute `next lint`, next lint is the Next.js CLI command for linting
 
 > [!MORE]  
-> [web.dev "Core Web Vitals" page](https://web.dev/articles/vitals)
+> [web.dev "Core Web Vitals" page](https://web.dev/articles/vitals)  
 
 ### Why does Next.js have two packages related to ESLINT?
 
@@ -1687,7 +1687,7 @@ So because **next lint** does ignore custom **overrides** that are in your `.esl
 Finally there is yet another problem, the Next.js CLI **build** command does not use the `package.json` **lint** script but uses the Next.js **lint** CLI directly, this means that we will need to tell the **build** CLI to not do linting during builds and then we will manually re-add linting by changing the `package.json` **build** script so that it uses our `package.json` **lint** script before doing an actual build
 
 > [!MORE]  
-> [ESLint "how eslint overrides work" documentation](https://eslint.org/docs/v8.x/use/configure/configuration-files#how-do-overrides-work)
+> [ESLint "how eslint overrides work" documentation](https://eslint.org/docs/v8.x/use/configure/configuration-files#how-do-overrides-work)  
 
 ### Installing the MDX ESLint plugin and parser
 
@@ -2405,9 +2405,10 @@ When it comes to styling and UI libraries (like so many other things) I'm happy 
 
 Spoiler alert! I will use [CSS Modules](https://github.com/css-modules/css-modules) in this tutorial, for the simple reason that a lot of libraries had problems with **Server** components but even with **Client** components and I did NOT want to add an experimental library to my project. CSS Modules were already part of Next.js when I started with tutorial and fully compatibel with both Server & Client components. Actually it is not just Next.js, many other frameworks have out of the box support for CSS Modules, like [Create React App](https://create-react-app.dev/docs/adding-a-css-modules-stylesheet/), [Gatsby](https://www.gatsbyjs.com/docs/how-to/styling/css-modules/) or [Remix](https://remix.run/docs/en/main/styling/css-modules)
 
-
 > [!NOTE]  
-> I'm glad I did chose to use CSS Modules, because I rediscovered how convinient it can be to NOT have to learn a new library and be able to just write plain CSS. Of course by NOT using a library it meant I had to create styles for everything myself, from a little button, to full forms, page layouts, typography and more. So even though I don't recommend this solution for teams that are in a hurry or working on very big projects, for me it was very enjoyable to discover all the new CSS features that have come out during the last 5 years. If you don't know CSS Modules yet, I recommend using this tutorial to get an idea of what they are and how they work and after that feel free to come back to this introduction chapter and have a better look at the other libraries I listed below.
+> I'm glad I did chose to use CSS Modules, because I rediscovered how convinient it can be to NOT have to learn a new library and be able to just write plain CSS. Of course by NOT using a library it meant I had to create styles for everything myself, from a little button, to full forms, page layouts, typography and more.  
+> 
+> So even though I don't recommend this solution for teams that are in a hurry or working on very big projects, for me it was very enjoyable to discover all the new CSS features that have come out during the last 5 years. If you don't know CSS Modules yet, I recommend using this tutorial to get an idea of what they are and how they work and after that feel free to come back to this introduction chapter and have a better look at the other libraries I listed below.
 
 ![banner showing spongebob and patrick panicking, asking "Why not UI library name here?"](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/spongebob_panic_ui_library_meme.png)
 
@@ -2426,12 +2427,12 @@ Today we have several libraries that are becoming more and more popular because 
 Just one last note before we start coding, in the release of [Next.js 14.2](https://nextjs.org/blog/next-14-2#turbopack-for-development-release-candidate) the Next.js team started using [Lightning CSS](https://github.com/parcel-bundler/lightningcss) in the rust compiler ([Turbopack](https://turbo.build/pack)) which is great news as it will for greatly improve CSS compilation speeds (if you already use the `--turbo` flag in development)
 
 > [!MORE]  
-> [Next.js "CSS-in-JS" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-in-js)
+> [Next.js "CSS-in-JS" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-in-js)  
 > [Panda CSS "Next.js" documentation](https://panda-css.com/docs/installation/nextjs)  
-> [StyleX "Next.js plugin" documentation](https://stylexjs.com/docs/learn/installation/#production)
-> [Material UI "Next.js integration" documentation](https://mui.com/material-ui/integrations/nextjs/)
-> [Pigment CSS "Next.js" documentation](https://github.com/mui/material-ui/tree/master/packages/pigment-css-react#start-with-nextjs)
-> [Next.js "CSS Modules and Global Styles" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-modules)
+> [StyleX "Next.js plugin" documentation](https://stylexjs.com/docs/learn/installation/#production)  
+> [Material UI "Next.js integration" documentation](https://mui.com/material-ui/integrations/nextjs/)  
+> [Pigment CSS "Next.js" documentation](https://github.com/mui/material-ui/tree/master/packages/pigment-css-react#start-with-nextjs)  
+> [Next.js "CSS Modules and Global Styles" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-modules)  
 
 ### Getting started with CSS Modules and the global.css
 
@@ -2449,7 +2450,7 @@ Let's start with a simple example,
 
 
 > [!MORE]  
-> [Next.js "CSS Modules and Global Styles" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-modules)
+> [Next.js "CSS Modules and Global Styles" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-modules)  
 
 ## MDX components
 
@@ -2529,7 +2530,7 @@ of course you can extend `MDXComponents` and add as much custom components as yo
 try it out for yourself, ensure the dev server is running and then in the browser navigate to [http://localhost:3000/articles/option3](http://localhost:3000/articles/option3), then use your browser developper tools inspect tool and you will see that the `<h1>` element now has a **class** attribute containing the value `foo`
 
 > [!MORE]  
-> [MDX "components" documentation](https://mdxjs.com/table-of-components/)
+> [MDX "components" documentation](https://mdxjs.com/table-of-components/)  
 
 ## MDX plugins
 
