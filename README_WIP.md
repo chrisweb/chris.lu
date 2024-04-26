@@ -1145,89 +1145,8 @@ read more:
 * [MDN "CSS" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS)
 * [normalize.css (a good css reset example)](https://github.com/necolas/normalize.css)
 
-#### css modules
 
-##### css modules features
 
-* the most important feature of css modules is that it will automatically create unnique class names for you, for even if you have two modules that each uses a different css module but have the same class names, there will be no clashes because css modules has converted the class name to something unique for us, the format it will use is as follows: `[filename]\_[classname]\_\_[hash]`
-* if you don't want the css modules to create unique class names for you, you have the option to set a **stable** class name: <https://www.gatsbyjs.com/docs/how-to/styling/css-modules/#enabling-user-stylesheets-with-a-stable-class-name>
-* css modules allow you to do composition by using the compose keyword, this works like an import in javascript and allows you to include one css module into another css module
-* you don't have to call your css module styles.module.css, this is just an example, you can replace the first part **styles** by whatever you want
-* you can use css modules everywhere, they are not just for pages and work outside of the app or pages directories too, which means that each component in your components directory can have their own css module, for example if you have a component in /components/UI/Button.tsx then next to it you can have a corresponding css module /components/UI/button.module.css
-
-read more:
-
-[css modules documentation about "composition"](https://github.com/css-modules/css-modules#composition)
-
-##### css modules in action
-
-Note: for [naming](https://github.com/css-modules/css-modules#naming) classes the css modules team recommends using camelcase, a class name with a hyphen (kebab-case) is possible but you will need to put the name into square braquests
-
-to get started we create a file `styles.module.css` in our `app` directory and add the following content:
-
-```css
-.layoutNavbar {
-    position: fixed;
-}
-
-.layoutHeader {
-    width: '100vw';
-    height: 'calc(100vh/2)';
-    max-width: '100%';
-    position: 'relative';
-}
-```
-
-next we will import our css module into our main layout file `/app/layout.tsx`:
-
-```tsx
-import styles from './styles.module.css'
-```
-
-and then we will use the layoutNavbar class from our css module by passing it to the className attribute of our nav element:
-
-```tsx
-import styles from './styles.module.css'
-
-export default function RootLayout({
-    children,
-}: {
-    children: React.ReactNode
-}) {
-
-    return (
-        <html lang="en">
-            <head />
-            <body>
-                <nav className={styles.layoutNavbar}>
-
-                </nav>
-                <main>{children}</main>
-            </body>
-        </html>
-    )
-}
-```
-
-if you want to use the element **id** instead of a **class** to style an element, do this:
-
-```tsx
-<nav id={styles.myIdStyle}>
-```
-
-and in the css module you add:
-
-```css
-#myIdStyle {
-    position: fixed;
-}
-```
-
-read more:
-
-* [css modules github repository](https://github.com/css-modules/css-modules)
-* [css modules "naming" documentation](https://github.com/css-modules/css-modules#naming)
-* [next.js "css modules" beta documentation)](https://beta.nextjs.org/docs/styling/css-modules)
 
 ### hex to rgb and rgb to hex
 
