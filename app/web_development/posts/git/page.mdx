@@ -109,4 +109,62 @@ git remote set-url origin https://DEFAULT_GIT_USER_NAME@github.com/GITHUB_USER_N
 > [GitHub "git-credential-manager" repository](https://github.com/git-ecosystem/git-credential-manager)  
 > [git-credential-manager documentation](https://github.com/git-ecosystem/git-credential-manager/blob/release/docs/README.md)  
 
+## renaming branches
+
+### rename local branch
+
+If you didn't push the branch yet, then renaming a local branch is easy, just use the following command in your terminal (command line tool):
+
+```shell
+git branch --move OLD_BRANCH_NAME NEW_BRANCH_NAME
+```
+
+> [!MORE]  
+> [Git "Git Branching" documentation](https://git-scm.com/book/en/v2/Git-Branching-Branch-Management)
+
+### renaming a remote branch
+
+To rename a remote branch (a remote branch that has already been pushed), first use the command from the previous chapter to rename it locally
+
+Then use the following command in your terminal (command line tool) to push it:
+
+```shell
+git push -u origin NEW_BRANCH_NAME
+```
+
+The `-u` (alias for `--set-upstream-to`) option is there to tell the local branch to track changes from the remote branch
+
+Now the branch with the new name is also available remotly, but git has copied the branch to rename the old one, meaning the old branch is also still present remotly
+
+A this point it is recommended to let everyone know in the team that you renamed the branch as they might still have open commits, tell them to execute the following commands, so that they too switch to the new branch (those are the commands GitHub recommends after you rename a remote branch on GitHub):
+
+```shell
+git checkout OLD_BRANCH_NAME
+git branch -m NEW_BRANCH_NAME
+git fetch origin
+git branch -u origin/NEW_BRANCH_NAME
+```
+
+First they use checkout to switch to the old branch, then they rename it locally too, then they fetch the origin to update their local branches list, then they get the new branch
+
+If it is the default branch that got renamed also update origin/HEAD:
+
+```shell
+git remote set-head origin -a
+```
+
+After the other members in your team have updated their local environment too, then you can go ahead an delete the old branch, using this command:
+
+```shell
+git push origin --delete OLD_BRANCH_NAME
+```
+
+## get an overview of all local and remote branches
+
+To get an overview of all branches that exist, use this command:
+
+```shell
+git remote show origin
+```
+
 </article>
