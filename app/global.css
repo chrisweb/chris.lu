@@ -712,8 +712,12 @@ h6 .headingAnchor {
     font-size: var(--main-fontSize-smaller);
 }
 
-.fontDarker {
-    color: rgba(var(--main-text-value), 0.9);
+.fontBig {
+    font-size: var(--main-fontSize-big6);
+}
+
+.fontBigger {
+    font-size: var(--main-fontSize-big5);
 }
 
 /* if the color-mix css feature is supported
@@ -722,6 +726,16 @@ make the text color a bit darker */
 
     .fontDarker {
         color: color-mix(in srgb, var(--main-text-color), black 20%);
+    }
+
+}
+
+/* if the color-mix css feature is supported
+make the text color a bit darker */
+@supports (color: color-mix(in srgb, var(--main-text-color), white 20%)) {
+
+    .fontDarker {
+        color: color-mix(in srgb, var(--main-text-color), white 20%);
     }
 
 }

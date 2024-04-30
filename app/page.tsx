@@ -9,7 +9,7 @@ export default function Homepage() {
             <section className="core">
                 <h1 className="h1">Hello, World! <span className="emoji">🚀</span></h1>
                 <p>Welcome to my blog, my name is Chris Weber (aka chrisweb)</p>
-                <p>I like <Typing>Web development, Lego bricks, Music, Games, Cooking, Movies & TV shows, Memes</Typing></p>
+                <p className="fontBig fontLighter">I like <Typing>Web development, Lego bricks, Music, Games, Cooking, Movies & TV shows, Memes</Typing></p>
                 <div className={styles.portalsGrid}>
                     <div className={styles.cyberPortalOuterGlow} id="web_development">
                         <div className={styles.cyberPortalBorder}>
