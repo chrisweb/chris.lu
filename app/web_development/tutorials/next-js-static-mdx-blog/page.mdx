@@ -2404,15 +2404,25 @@ So instead you need to use **mdx/remark** for **ANY** rule you want to disable a
 > [Info - 8:41:03 PM] ESLint server is running.
 ```
 
-## Styling and UI libraries
+## Styling and CSS libraries
 
-Spoiler alert! I will use [CSS Modules](https://github.com/css-modules/css-modules) in this tutorial, for the simple reason that a lot of libraries had problems with **Server** components but even with **Client** components and I did NOT want to add an experimental library to my project. CSS Modules were already part of Next.js when I started with tutorial and fully compatibel with both Server & Client components. 
+Spoiler alert! I will use [CSS Modules](https://github.com/css-modules/css-modules) in this tutorial, for the simple reason that a lot of CSS libraries had problems with **Server** components but even with **Client** components and I did NOT want to add an experimental library to my project. When I started writing this tutorial CSS Modules where one of the few choices that worked well with Server Components, which is the main reason I decided to give it a try and I'm glad I did because it was very enjoyable to be able to write vanilla CSS without having to spend a lot of time reading a documentation to understand how the CSS library works.
 
-Why did I not use Tailwind? I'm sorry, but I don't like Tailwind 
+On the other hand it is true that I spent a lot of time reading MDN documentation about modern CSS features, like using [custom properties (CSS variables)](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties), navtive [CSS nesting](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_nesting) (it is great to see this feature that you might know from pre-processors like SASS coming to CSS, but for this one I decided to not use it yet as it is maybe still a bit early in terms of [browsers that support it](https://caniuse.com/?search=css%20nesting)), [calc()](https://developer.mozilla.org/en-US/docs/Web/CSS/calc) and [color-mix()](https://developer.chrome.com/docs/css-ui/css-color-mix) functions, pure CSS [on scroll animations](https://developer.chrome.com/docs/css-ui/scroll-driven-animations) and a bunch more
+
+Why did I not use Tailwind? I'm sorry, but for this tutorial I wanted to try out CSS Modules to see if writing vanilla CSS in CSS Modules is a good alternative or not, I know buuuh me 😢. A lot of people indeed do like Tailwind and this is totally fine, I'm just not one of them. Feel free to skip the few chapters about styling in this tutorial if you already know CSS Modules and don't like them, if you haven't used CSS Modules yet then maybe use this tutorial to get an introduction and then later decide for yourself if you like that solution or not
+
+If you like Tailwind and want to use it with Next.js 13/14 the good news is that because Tailwind introduced a new just-in-time [(JIT) compiler in version 2.1](https://v2.tailwindcss.com/docs/just-in-time-mode) and then used JIT by default starting with [version 3](https://tailwindcss.com/blog/tailwindcss-v3#just-in-time-all-the-time), Tailwind will not have problems in regards to server components compared to a lot of other CSS libraries that did or still do have problems. So if you prefer Tailwind then using Tailwind (instead of the CSS Modules I will use here) then yes go ahead, it is good alternative. If you want to use an UI library instead, then maybe have a look at [Next UI](https://github.com/nextui-org/nextui) which is a beautiful UI based on Tailwind CSS
+
+> [!MORE]  
+> [Next.js "CSS-in-JS" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-in-js)  
+> [Tailwind CSS "with Next.js" documentation](https://tailwindcss.com/docs/guides/nextjs)  
 
 ### Getting started with CSS Modules and the global.css
 
-As I already mentioned in the introduction [CSS Modules](https://github.com/css-modules/css-modules) work out of the box when using Next.js, so no need to install any extra packages and they are **React Server Components (RSC)** compatible. They let you write vanilla CSS in `*.module.css` files that you then import into your components
+Next.js supports [CSS Modules](https://github.com/css-modules/css-modules) out of the box, which means there is NO need to install any extra packages and CSS Modules are **React Server Components (RSC)** compatible which these days should be a requirement for CSS libraries that you intend to use with Next.js 13 / 14. 
+
+**CSS Modules** let you write vanilla CSS in `*.module.css` files that you then import into your components
 
 Let's start with a simple example, first we create a file `styles.module.css` in our `app` directory and add the following content:
 
