@@ -145,7 +145,7 @@ git fetch origin
 git branch -u origin/NEW_BRANCH_NAME
 ```
 
-First they use checkout to switch to the old branch, then they rename it locally too, then they fetch the origin to update their local branches list, then they get the new branch
+First they use **checkout** to switch to the old branch, then they rename it locally too using **branch -m**, then they **fetch the origin** to fetch the ref of all branches in origin, then they need to use the **branch -u** (which is an alias for set-upstream we used earlier) to tell the local branch to track the origin/NEW_BRANCH_NAME
 
 If it is the default branch that got renamed also update origin/HEAD:
 
@@ -159,9 +159,17 @@ After the other members in your team have updated their local environment too, t
 git push origin --delete OLD_BRANCH_NAME
 ```
 
+## update the list of remote branches (locally)
+
+To update / refresh the list of remote branches locally, use this command:
+
+```shell
+git remote update origin --prune
+```
+
 ## get an overview of all local and remote branches
 
-To get an overview of all branches that exist, use this command:
+To get an overview of all branches that exist remotly and locally, what remote branches are tracked by local branches, ... use this command:
 
 ```shell
 git remote show origin
