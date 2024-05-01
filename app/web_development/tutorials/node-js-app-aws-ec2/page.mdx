@@ -165,7 +165,7 @@ node -v
 ```
 
 > [!MORE]  
-> [AWS "Setting Up Node.js on an Amazon EC2 Instance" documentation](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html)
+> [AWS "Setting Up Node.js on an Amazon EC2 Instance" documentation](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html)  
 
 ## NGINX installation
 
@@ -442,10 +442,10 @@ To exit the file without saving enter `:q!` and then press `Enter` to exit the f
 
 Now if you want to test the quality of your SSL certificate setup, you can do so using the free [Qualys SSL Server Test](https://www.ssllabs.com/ssltest/index.html)
 
-> [!MORE]
-> [certbot "domain (default) certificate, certbot setup" documentation](https://certbot.eff.org/instructions?ws=nginx&os=pip)
-> [certbot "wildcard certificate, certbot setup" documentation](https://certbot.eff.org/instructions?ws=nginx&os=pip&tab=wildcard)
-> [python.org "Installing Packages" documentation](https://packaging.python.org/en/latest/tutorials/installing-packages/)
+> [!MORE]  
+> [certbot "domain (default) certificate, certbot setup" documentation](https://certbot.eff.org/instructions?ws=nginx&os=pip)  
+> [certbot "wildcard certificate, certbot setup" documentation](https://certbot.eff.org/instructions?ws=nginx&os=pip&tab=wildcard)  
+> [python.org "Installing Packages" documentation](https://packaging.python.org/en/latest/tutorials/installing-packages/)  
 
 ### Periodically check for expired certificate(s) and automatically renew them
 
@@ -464,7 +464,7 @@ If successful you will see a message that says:
 #### systemd timer OR cronjob
 
 > [!NOTE]  
-> Amazon Linux 2023 does pre-install cronie (as they explained in a [ticket on github](https://github.com/amazonlinux/amazon-linux-2023/issues/300#issuecomment-1481592973)), instead they use [systemd timers](https://wiki.archlinux.org/title/systemd/Timers)
+> Amazon Linux 2023 does pre-install cronie (as they explained in a [ticket on github](https://github.com/amazonlinux/amazon-linux-2023/issues/300#issuecomment-1481592973)), instead they use [systemd timers](https://wiki.archlinux.org/title/systemd/Timers)  
 
 I documentated both ways of doing it, either using a **systemd timer** or a **cronjob** (cronie), chose which you like best:
 
