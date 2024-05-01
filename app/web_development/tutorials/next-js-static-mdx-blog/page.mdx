@@ -1517,6 +1517,9 @@ import Counting from '@/components/buttons/Counting'
 
 ```
 
+> [!NOTE]  
+> did you notice how we did NOT use the relative path that would be '../components/buttons/Counting', but instead we used the **@/** alias which we added when creating the project (using creat-next-app), the advantage of using the alias is that no matter where we move our page the path to the Button will always stay the same (of course if we move the button then we also need to update the import(s))
+
 Make sure your dev server is running, if it is not start it using `npm run dev`
 
 And then visit the updated MDX page in the browser at `http://localhost:3000/first_page` and try out the counting button
@@ -2428,7 +2431,7 @@ Let's start with a simple example, in the `components` folder start by creating 
 
 Next in the `UI` folder we create a new `button.module.css` file and add the following content:
 
-```css
+```css title="/components/UI/button.module.css"
 .reset {
     background: none;
     border: none;
@@ -2438,7 +2441,7 @@ Next in the `UI` folder we create a new `button.module.css` file and add the fol
 
 And then a second `Button.tsx` file (also in the `UI` folder), with the following content:
 
-```tsx
+```tsx title="/components/UI/Button.tsx"
 'use client'
 
 import styles from './styles.module.css'
@@ -2457,7 +2460,7 @@ export default UIButton
 
 Then we open our homepage (the page in the app folder) and import /use the button:
 
-```tsx
+```tsx title="/app/page.tsx"
 import UIButton from '@/components/UI/Button'
 
 export default function Home() {
@@ -2475,7 +2478,7 @@ export default function Home() {
 Tada 🎉 we now know how to use CSS Modules
 
 > [!TIP]  
-> For [naming](https://github.com/css-modules/css-modules#naming) classes the css modules team recommends using camelcase, a class name with a hyphen (kebab-case) is possible but you will need to put the name into square braquests  
+> For [naming](https://github.com/css-modules/css-modules#naming) classes the css modules team recommends using camelcase, a class name with a hyphen (kebab-case) is possible but you will need to put the name into square braquests, if for example you have a class named `.foo-bar{:css}`, then in your component you use it like this `className={styles['foo-bar']}{:jsx}`  
 
 A big advantage of CSS Modules is that you don't have to worry about unique names, the library makes them unique for you by adding a hash to the name, meaning you can have two classes named **button** in two different files as they are **component scoped** by default and hence will be unique after compilation. The disadvantage with CSS Modules is that when you look at their name using the developer tools, the class and animation names won't be exactly what you have defined, instead the format for names will be: `[filename]\_[classname]\_\_[hash]`, so they will still be recognizable. If you don't want the css modules to create unique class names for you, you have the option to set a [stable** class name](https://www.gatsbyjs.com/docs/how-to/styling/css-modules/#enabling-user-stylesheets-with-a-stable-class-name).
 
@@ -2485,11 +2488,41 @@ Then right click, chose **Inspect** or press `F12` to open the dev tools, then o
 
 ![chrome dev tools elemts tab showing how css modules class names look after compilation](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_inspect_css_modules.png)
 
-Things about CSS Modules worth knowing:
+If you want to add more than one class, either use a package like [classnames](https://www.npmjs.com/package/classnames) or just use [native javascript template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) like so:
 
-* CSS modules allow you to do composition by using the compose keyword, this works like an import in javascript and allows you to include one css module into another css module
-* you can change to first part of the CSS Modules style files (*.module.css) to what ever you want (I usually use the same name as the component)
-* you can use CSS modules everywhere, they are not just for components, you can use them for pages and layouts and you can place them anywhere, here we put them into the components folder but you can also place them in the app folder if you prefer
+```tsx title="/components/UI/Button.tsx" "&#x60;${styles.reset} ${styles.core}&#x60;"
+'use client'
+
+import styles from './styles.module.css'
+
+const UIButton: React.FC = (): JSX.Element => {
+
+    return (
+        <button className={`${styles.reset} ${styles.core}`}>
+            I'm a UI button
+        </button>
+    )
+}
+
+export default UIButton
+```
+
+Then we add the second class to our CSS Module:
+
+```css title="/components/UI/button.module.css"
+.reset {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.core {
+    --button-padding: 6px;
+
+    padding: var(--button-padding);
+    border: 1px dashed orange;
+}
+```
 
 If you want to use the element **id** instead of a **class** to style an element, you can do it like this:
 
@@ -2500,11 +2533,17 @@ If you want to use the element **id** instead of a **class** to style an element
 and in the css module file you add the corresponding css like this:
 
 ```css
-#myIdStyle {
-    color: white;
-    background-color: blue;
+#myIdStyle:hover {
+    color: red;
+    background-color: yellow;
 }
 ```
+
+A few more things about CSS Modules worth knowing:
+
+* CSS modules allow you to do composition by using the compose keyword, this works like an import in javascript and allows you to include one css module into another css module
+* you can change to first part of the CSS Modules style files (*.module.css) to what ever you want (I usually use the same name as the component)
+* you can use CSS modules everywhere, they are not just for components, you can use them for pages and layouts and you can place them anywhere, here we put them into the components folder but you can also place them in the app folder if you prefer
 
 > [!MORE]  
 > [Next.js "CSS Modules and Global Styles" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-modules)  
