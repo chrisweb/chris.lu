@@ -2421,7 +2421,7 @@ If you like Tailwind and want to use it with Next.js 13 / 14 the good news is th
 > [Next.js "CSS-in-JS" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-in-js)  
 > [Tailwind CSS "with Next.js" documentation](https://tailwindcss.com/docs/guides/nextjs)  
 
-### Getting started with CSS Modules and the global.css
+### Getting started with CSS Modules
 
 Next.js supports [CSS Modules](https://github.com/css-modules/css-modules) out of the box, which means there is NO need to install any extra packages and CSS Modules are **React Server Components (RSC)** compatible which these days should be a requirement for CSS libraries that you intend to use with Next.js 13 / 14
 
@@ -2549,6 +2549,146 @@ A few more things about CSS Modules worth knowing:
 > [Next.js "CSS Modules and Global Styles" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-modules)  
 > [CSS Modules "composition" documentation](https://github.com/css-modules/css-modules#composition)  
 > [CSS Modules "naming" documentation](https://github.com/css-modules/css-modules#naming)  
+
+### Adding a global.css
+
+CSS Modules are perfect to style components and even the content in your pages but at some point you might want to add a class that can be used everywhere in your app, like for example have a global style for links, this is when you use the global.css
+
+As we saw in the previous chapter you can add classes and use the id in CSS Modules, but there is one thing you can't use in CSS Modules and that's the Element type
+
+Let's (re-)open the CSS Module we used for our button and styling for the button by using the Element type, like so:
+
+```css title="/components/UI/button.module.css" {14-16}
+.reset {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.core {
+    --button-padding: 6px;
+
+    padding: var(--button-padding);
+    border: 1px dashed orange;
+}
+
+button {
+    color: blue;
+}
+```
+
+Then make sure your dev server is running (using the `npm run dev` command) and you will see that you get an error in your terminal:
+
+> Syntax error: Selector "button" is not pure (pure selectors must contain at least one local class or id)
+
+So instead if you want to style all Elements that match a certain type, or if you want to add universal selectors (`*`), or set global css variables using the [:root](https://developer.mozilla.org/en-US/docs/Web/CSS/:root) pseudo class, then you do it in the `global.css`, which we will create in the `/app` folder, with the following content:
+
+```css title="/app/global.css"
+:root {
+    --main-background-light-value: 15, 0, 25;
+    --main-background-light-color: rgb(var(--main-background-value));
+    --main-text-light-value: 245, 240, 245;
+    --main-text-light-color: rgb(var(--main-text-value));
+    --primary-light-value: ;
+    --primary-light-color: rgb(var(--primary-light-value));
+    --secondary-light-value: ;
+    --secondary-light-color: rgb(var(--secondary-light-value));
+    --main-spacing: 2rem;
+    --main-maxWidth: 70rem;
+}
+
+/* high contrast mode */
+@media (prefers-contrast: more) {
+    :root {
+        --main-background-value: 0, 0, 0;
+        --main-text-value: 255, 255, 255;
+    }
+}
+
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+}
+
+html {
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-size-adjust */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/tab-size */
+    tab-size: 4;
+}
+
+body {
+    /* remove any margin that browsers add to body */
+    margin: 0;
+    /* default values */
+    background-color: var(--main-background-light-color);
+    color: var(--main-text-light-color);
+}
+
+header {
+    margin-bottom: var(--main-spacing);
+}
+
+footer {
+    margin-top: var(--main-spacing);
+    min-height: calc(var(--main-spacing) * 2);
+}
+
+main {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: calc(var(--main-spacing) * 4);
+    max-width: var(--main-maxWidth);
+}
+
+/* on phones put aside below article */
+@media all and (max-width: 48rem) {
+    main {
+        margin-bottom: calc(var(--main-spacing) * 2);
+        flex-flow: column;
+    }
+}
+
+a {
+    color: var(--primary-light-color);
+}
+
+a:hover {
+    color: var(--secondary-light-color);
+}
+```
+
+This is our base `global.css`, where we set some variables (inside of the [:root](https://developer.mozilla.org/en-US/docs/Web/CSS/:root) pseudo class) that can be used everywhere (even in any of our CSS Modules), we reset browser styling using the Element [type selector](https://developer.mozilla.org/en-US/docs/Web/CSS/Type_selectors), add a basic page layout using [Flexbox](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Flexbox) and finally add some color to all our links and use the [:hover](https://developer.mozilla.org/en-US/docs/Web/CSS/:hover) pseudo class to change the color of links on hover
+
+Now to apply the global styles to our content we our going to import the `global.css` inside of our **root layout** (located in the `/app` folder), like so:
+
+```tsx title="/app/layout.tsx"
+import './global.css'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+    title: 'Next.js',
+    description: 'Generated by Next.js',
+}
+
+export default function RootLayout({
+    children,
+}: {
+    children: React.ReactNode
+}) {
+    return (
+        <html lang="en">
+            <body>{children}</body>
+        </html>
+    )
+}
+```
 
 ## MDX components
 
