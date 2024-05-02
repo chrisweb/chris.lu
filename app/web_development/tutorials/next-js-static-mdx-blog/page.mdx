@@ -2664,7 +2664,13 @@ a:hover {
 }
 ```
 
-This is our base `global.css`, where we set some variables (inside of the [:root](https://developer.mozilla.org/en-US/docs/Web/CSS/:root) pseudo class) that can be used everywhere (even in any of our CSS Modules), we reset browser styling using the Element [type selector](https://developer.mozilla.org/en-US/docs/Web/CSS/Type_selectors), add a basic page layout using [Flexbox](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Flexbox) and finally add some color to all our links and use the [:hover](https://developer.mozilla.org/en-US/docs/Web/CSS/:hover) pseudo class to change the color of links on hover
+This is our base `global.css` which now contains a basic [CSS (Cascading Style Sheet)](https://developer.mozilla.org/en-US/docs/Web/CSS) used to style and layout our app:
+
+* first we set some variables (inside of the [:root](https://developer.mozilla.org/en-US/docs/Web/CSS/:root) pseudo class) that can be used everywhere (even in any of our CSS Modules), it is recommended to use CSS variables when ever possible as in the future it will be faster to change the value of a variable in the globall css instead of having to go into every file where that variable gets used and change the value there
+* next we reset some browser styling using the **body** Element [type selector](https://developer.mozilla.org/en-US/docs/Web/CSS/Type_selectors)
+* then we add some margin to the **footer** and **header** using the respective type selectors
+* then we add a basic page layout using [Flexbox](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Flexbox)
+* finally add some color to all our links using the css [var()](https://developer.mozilla.org/en-US/docs/Web/CSS/var) function to use the variables we set earlier and we also use the [:hover](https://developer.mozilla.org/en-US/docs/Web/CSS/:hover) pseudo class to change the color of links on hover
 
 Now to apply the global styles to our content we our going to import the `global.css` inside of our **root layout** (located in the `/app` folder), like so:
 
@@ -2684,11 +2690,27 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body>{children}</body>
+            <body>
+                <header>
+                    <p>My Header</p>
+                </header>
+                <main>{children}</main>
+                <footer>
+                    <p>My Footer</p>
+                </footer>
+            </body>
         </html>
     )
 }
 ```
+
+> [!MORE]  
+> [Next.js "global styles" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-modules#global-styles)  
+> [MDN "CSS" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS)  
+> [MDN "Using CSS custom properties (variables)" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)  
+> [MDN "Flexbox" documentation](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Flexbox)
+
+
 
 ## MDX components
 
