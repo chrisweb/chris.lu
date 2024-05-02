@@ -195,15 +195,19 @@ finally I recommend you commit / sync the new `.vscode/settings.json`
 
 To ensure we benefit from **statically typed links** there is one more step needed, open the `next.config.mjs` and then add the **experimental** typedRoutes to your Next.js configuration file like so:
 
-```js title="next.config.mjs" showLineNumbers {3-5}
+```mjs title="next.config.mjs" showLineNumbers {3-5}
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     experimental: {
+        // experimental typescript "statically typed links"
+        // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
+        // currently false in prod until Issue #62335 is fixed
+        // https://github.com/vercel/next.js/issues/62335
         typedRoutes: true,
     },
 };
 
-export default nextConfig;
+export default nextConfig
 ```
 
 Line 1 you can see that the Next.js configuration file uses [jsdoc](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html) with the `@type` Typescript script, which allows us to have types even though the configuration file is not Typescript (but Javascript), which means if you start typing inside of the nextConfig object you will benefit from autocompletation for the Next.js configuration options
@@ -218,14 +222,25 @@ then save your `next.config.mjs` and commit / sync your latest changes
 > [!MORE]  
 > [Next.js "configuration options" reference](https://nextjs.org/docs/app/api-reference/next-config-js)  
 > [Typescript "JSDoc" reference](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html)  
+> [Next.js "Statically Typed Links" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript)  
 > [Next.js "typedRoutes (experimental)" reference](https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes)  
 
-###### typedRoutes bug and Next.js phases parameter
+###### typedRoutes bug
 
 > [!WARN]  
 > right now there is a bug in Next.js that prevents MDX pages (page.mdx) to be recognized as routes when doing a production build (in development the typed routes work well), I opened a [ticket #62335 on GitHub](https://github.com/vercel/next.js/issues/62335), until the bug is fixed I suggested only enabling the **typedRoutes in development**, you can do so by using the next config **phase** parameter, to check if current phase is **PHASE_DEVELOPMENT_SERVER**
 
-```js title="next.config.mjs" showLineNumbers {1} {3} {10}#special
+##### convert nextConfig into a function
+
+To be able to know what the current environement is, you could use Node.js [process.env](https://nodejs.org/en/learn/command-line/how-to-read-environment-variables-from-nodejs) **NODE_ENV** environment variable, however you need to know that this variable will on only ever have two states, when using the `npm run dev` command (the dev server) then this variable is development, this is still ok and else Next.js will always set **NODE_ENV** to production
+
+Another option if like me you deploy on Vercel, then you can use the **VERCEL_ENV** variable, which is **devlopment** when running your project locally or **preview** when devploying a preview on Vercel and **production** when deploying a production build on Vercel
+
+The third option to know the current context, is to use the Next.js config property called **phase**, to get the phase **phase** property we need to convert **nextConfig** into a **function**
+
+We are going to use the 3rd option, go back your `next.config.mjs` and change the code to this:
+
+```mjs title="next.config.mjs" showLineNumbers {1} {3} {12}#special
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 
 const nextConfig = (phase) => {
@@ -233,8 +248,10 @@ const nextConfig = (phase) => {
     /** @type {import('next').NextConfig} */
     const nextConfigOptions = {
         experimental: {
-            // experimental typescript "statically typed links (routes)"
+            // experimental typescript "statically typed links"
             // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
+            // currently false in prod until Issue #62335 is fixed
+            // https://github.com/vercel/next.js/issues/62335
             typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
         },
     }
@@ -243,15 +260,18 @@ const nextConfig = (phase) => {
 
 }
 
-export default nextConfig;
+export default nextConfig
 ```
 
-Line 3 we have converted our next config object into a function, this allows us to use the Next.js configuration **phase** parameter, phase allows us to check what the current context of our Next.js app is, in our configuration we import the `PHASE_DEVELOPMENT_SERVER` constant and then line 10 we check if the phase is **development server**, if it is we enable typedRoutes and if it is NOT we disable the typedRoutes option
+Line 1 we import the **PHASE_DEVELOPMENT_SERVER** constant from the [next/constants](https://github.com/vercel/next.js/blob/5e6b008b561caf2710ab7be63320a3d549474a5b/packages/next/shared/lib/constants.ts#L19-L23)
 
-Next.js has some constants to make it easier to check what phase the app is in, those constants can be found in [src/shared/lib/constants](https://github.com/vercel/next.js/blob/canary/packages/next/src/shared/lib/constants.ts#L38-L43)
+Line 3 we have converted our next config object into a function, which means we now have access to the **phase** parameter, it will allow us to check what the current context of our Next.js app is
+
+Line 10 we check if the phase is **development** server by checking if the content of our phase variable is equal to **PHASE_DEVELOPMENT_SERVER**, if it is we enable typedRoutes and if it is NOT we disable the typedRoutes option
 
 > [!MORE]  
-> [Next.js "Statically Typed Links" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript)  
+> [Node.js "environment variables" documentation](https://nodejs.org/en/learn/command-line/how-to-read-environment-variables-from-nodejs)  
+> [Vercel "system environment variables" documentation](https://vercel.com/docs/projects/environment-variables/system-environment-variables)  
 > [Next.js "next.config.js phase" documentation](https://nextjs.org/docs/pages/api-reference/next-config-js)  
 
 ### React (Next.js) strict mode configuration
@@ -272,15 +292,32 @@ What surprises developers the most when they use React Strict Mode for the first
 
 > React components you write must always return the same JSX given the same inputs (props, state, and context). Components breaking this rule behave unpredictably and cause bugs.
 
-So if for some reason you don't want it to be enabled in your entire app or if you need to disable it temporarely, then you can do it in the Next.js configuration file:
+So if for some reason you don't want it to be enabled in your entire app or if you need to disable it temporarely, then you can do it in the Next.js configuration file
 
-```js title="next.config.mjs" showLineNumbers {3}
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-    reactStrictMode: false,
-};
+We will however leave the strict mode enabled as this is recommended:
 
-export default nextConfig;
+```mjs title="next.config.mjs" showLineNumbers {8}#special
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+
+const nextConfig = (phase) => {
+
+    /** @type {import('next').NextConfig} */
+    const nextConfigOptions = {
+        experimental: {
+            reactStrictMode: true,
+            // experimental typescript "statically typed links"
+            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
+            // currently false in prod until Issue #62335 is fixed
+            // https://github.com/vercel/next.js/issues/62335
+            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        },
+    }
+
+    return nextConfigOptions
+
+}
+
+export default nextConfig
 ```
 
 ### Next.js powered by header configuration
@@ -295,14 +332,29 @@ Why would you want to turn this configuration option off?
 
 When I get asked this, my first thought is to ask myself the opposite "why would I want to turn it on?" and honestly I have not yet found a reason as to why I would want to have it turned on. Another reason why I personally prefer to turn it off is because unfortunatly some people on the web have malicious intentions and the less they know about your apps technology stack the more difficult it will be for them to find vulnerabilities that have been disclosed but are not yet patched in the version you are using. Yes it does not make a huge difference, because hackers usually just launch batteries of tests that will check for a wide range of known vulnerabilities, few will use a bot that checks for **x-powered-by** headers to specifically target the exact version you are using. Also true, hackers can use profilling tools to get approximative information about what tech stack you are using. So yes, disabling the poweredByHeader option is not a miracle solution, that will prevent all potential attacks, but if there is a chance (no matter how small) that turning it off will make my app just a little bit safer then that's good enough for me and as I said earlier the second reason is that I see no reason why I would want to turn it on.
 
-```js title="next.config.mjs" showLineNumbers {3}
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-    reactStrictMode: true,
-    poweredByHeader: false,
-};
+```mjs title="next.config.mjs" showLineNumbers {9}#special
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 
-export default nextConfig;
+const nextConfig = (phase) => {
+
+    /** @type {import('next').NextConfig} */
+    const nextConfigOptions = {
+        reactStrictMode: true,
+        poweredByHeader: false,
+        experimental: {
+            // experimental typescript "statically typed links"
+            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
+            // currently false in prod until Issue #62335 is fixed
+            // https://github.com/vercel/next.js/issues/62335
+            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        },
+    }
+
+    return nextConfigOptions
+
+}
+
+export default nextConfig
 ```
 
 If you did any of the two changes I mentioned above , then save your `next.config.mjs` and commit / sync your latest changes
@@ -810,11 +862,13 @@ Using [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/W
 
 ### Adding CSP Headers in Next.js configuration
 
-To add CSP rules to our Next.js project we need to edit the `next.config.mjs` in the root of our project
+To add CSP rules to our Next.js project we need to edit the `next.config.mjs` (that is in the root of our project)
 
 Add the following lines to your configuration:
 
-```js title="next.config.mjs"
+```js title="next.config.mjs" showLineNumbers {5}#special {84-96}
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+
 // CSP headers here is set based on Next.js recommendations:
 // https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
 const cspReportOnly = true;
@@ -850,7 +904,7 @@ const cspHeader = () => {
             font-src 'self' https://vercel.live/ https://assets.vercel.com https://fonts.gstatic.com;
             style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
             script-src 'self' 'unsafe-inline' https://vercel.live/;
-            connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/ ${reportingDomainWildcard};
+            connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/;
             img-src 'self' data: https://vercel.com/ https://vercel.live/;
             frame-src 'self' https://vercel.live/;
         `
@@ -864,7 +918,7 @@ const cspHeader = () => {
             font-src 'self';
             style-src 'self' 'unsafe-inline';
             script-src 'self';
-            connect-src 'self' https://vitals.vercel-insights.com ${reportingDomainWildcard};
+            connect-src 'self' https://vitals.vercel-insights.com;
             img-src 'self';
             frame-src 'none';
         `
@@ -883,31 +937,69 @@ const cspHeader = () => {
 
 }
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-    reactStrictMode: true,
-    poweredByHeader: false,
-    experimental: {
-        // currently false in prod as there is currently a bug: Issue  #
-        typedRoutes: false,
-    },
-    headers: async () => {
-        return [
-            {
-                source: '/(.*)',
-                headers: [
-                    {
-                        key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
-                        value: cspHeader().replace(/\n/g, ''),
-                    },
-                ],
-            },
-        ]
-    },
-};
+const nextConfig = (phase) => {
+
+    /** @type {import('next').NextConfig} */
+    const nextConfigOptions = {
+        experimental: {
+            reactStrictMode: false,
+            poweredByHeader: false,
+            // experimental typescript "statically typed links"
+            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
+            // currently false in prod until Issue #62335 is fixed
+            // https://github.com/vercel/next.js/issues/62335
+            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        },
+        headers: async () => {
+            return [
+                {
+                    source: '/(.*)',
+                    headers: [
+                        {
+                            key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
+                            value: cspHeader().replace(/\n/g, ''),
+                        },
+                    ],
+                },
+            ]
+        },
+    }
+
+    return nextConfigOptions
+
+}
+
+export default nextConfig
 ```
 
+Line 5 on the top of the configuration file we have added a variable **cspReportOnly** and have set it to **true**, we will use this variable to decide if want to only report CSP violations or enforce CSP rules and report them
+
+Line 7 to 69 we have added a quite long function **cspHeader()** which will create 4 sets of CSP rules:
+
+* the first set of CSP rules are the default rules that we will enable no matter the environment
+* the second set of rules is for when the environment is **preview**, which is for example the case when you deploy the preview branch on vercel, this is why this part contains a lot of URLs related to Vercel, those are sources for scripts that Vercel uses for example to add a comment system to your previews
+* the next set contains the rules for the production environment, this part is very important as you need to ensure that you are NOT blocking any legitamate sources here or it will create bugs in production that will impact your users
+* the last set has the rules we use for our local development environment, if for example you look at the `script-src` directive you will see that we added `'unsafe-inline' 'unsafe-eval'`, now compare it with the `script-src` for the production rules and you will see that those two values, this is because we need to be more permissive in development as Next.js uses tools like the Hot Reload package to do fast refreshs, which is a tool that is not being used in production, so in production we are more restrictive
+
+> [!TIP]  
+> I recommend you always start with the most restrictive rules possible, for example if you look at the top of default CSP rules, I have set the **form-action** to none, this is because in this tutorial we will not have any forms so there is no reason to allow them, however if you add forms to your project in the future then you will of course want to adjust the directive and for example set it to 'self' instead of 'none'
+
+Line 84 to 96 at the end of the configuration file we use the **cspReportOnly** variable we added at the top, depending on the value of **cspReportOnly** we either set the CSP header to **Content-Security-Policy-Report-Only** (if cspReportOnly = true) or we set it to **Content-Security-Policy** (if cspReportOnly = false), this means that if **cspReportOnly** is true we will only report violations but not enforce them, so if for example you try to load a script from a source that is forbidden it will still get loaded but the browser will alert you about the violation, this mode is useful for as long as we are unsure about our CSP setup and want to watch for potential violations but do NOT enforce them yet, when we are sure that our CSP rules have been fine tuned and will not block legit sources then we set **cspReportOnly** to false, meaning from now on we do NOT just report but actually also enforce the rules
+
+> [!NOTE]  
+> when enforcing is enabled it will still report the violations (besides enforcing them)  
+
+For now we set the CSP mode to only report violations, however as soon as are confident that there are no more violations it is recommend to set our custom variable **cspReportOnly** to **false**, especially when you are done testing and decide to put everything into production
+
 If you now start your development server (using `npm run dev`), open `http://localhost:3000` in your browser, then open the browsers developer tools and then click on the Console tab, then you should see no CSP violations messages
+
+> [!MORE]  
+> [MDN "Content Security Policy (CSP)" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)  
+> [MDN "CSP Headers" reference](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy)  
+> [Next.js "Configuring CSP" documentation](https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy)  
+> [Vercel "Using a Content Security Policy" documentation](https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy)  
+
+#### example of a CSS violation
 
 > [!NOTE]  
 > To check for best practices I used a tool by google called [CSP Evaluator](https://csp-evaluator.withgoogle.com/), it showed a green checkmark for every directive except the **script-src** directive, where it mentioned that it would be better to remove **'unsafe-inline'**, however unsafe-inline is there because next.js uses inline scripts a lot
@@ -933,66 +1025,6 @@ Go back into the browser and check the console again, you should now be able to 
 > [Report Only] Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self' 'unsafe-inline'".
 
 Those violations are there because Next.js attempts to inject javascript code used by development scripts like the Hot Module Reload (HMR) tool, which is a tool that reloads our page every time we save a file, for HMR to work we need to re-add the **'unsafe-eval'** value to the **script-src** rule, do that now and then save the file to fix violations again
-
-If you look closer at what rule sets we created, there are a total of 4, the first one contains several default rules that we will use for our 3 environments, then we have some rules that we will only apply if the environment is **preview** which is the case when we deploy the preview branch on vercel, the next group contains the rules for the production environment and the last group has the rules we use for our local development environment
-
-If you look at the `script-src 'self' 'unsafe-eval' 'unsafe-inline'` rule we just edited for **development** you will see that we added the `'unsafe-eval'` value, now compare it with the `script-src` we use for the **production** and the rule we use for the **preview** environments and you will see that there we don't add that value, this is because scripts like HMR are only used in development, by not adding that exception to production and preview we make those two environments safer
-
-> [!TIP]  
-> I recommend you always start with the most restrictive rules possible, for example if you look at the top of CSP rules, I have set the **form-action** to none, this is because in this tutorial we will not have any forms so there is no reason to allow them, however if you add forms to your project in the future then you will of course want to adjust the directive and for example set it to 'self' instead of 'none'
-
-Next if we look at the top of the configuration you will see that we set a variable **cspReportOnly** to **true**:
-
-```js title="next.config.mjs" showLineNumbers {3}
-// CSP headers here is set based on Next.js recommendations:
-// https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
-const cspReportOnly = true;
-```
-
-and then at the end of the configuration file we use that variable, like so:
-
-```js title="next.config.mjs" {14}
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-    reactStrictMode: true,
-    poweredByHeader: false,
-    experimental: {
-        // currently false in prod until Issue #62335 is fixed
-        // https://github.com/vercel/next.js/issues/62335
-        typedRoutes: false,
-    },
-    headers: async () => {
-        return [
-            {
-                source: '/(.*)',
-                headers: [
-                    {
-                        key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
-                        value: cspHeader().replace(/\n/g, ''),
-                    },
-                ],
-            },
-        ]
-    },
-};
-
-export default nextConfig;
-```
-
-Depending on the value of **cspReportOnly**, we either set the CSP header to **Content-Security-Policy-Report-Only** mode (if cspReportOnly = true) or we set it to **Content-Security-Policy** (if cspReportOnly = false)
-
-This is because CSP has two modes, one that will ONLY report violations, this is good for testing your rules before actually enforcing them and a second mode which will enforce the rules
-
-> [!NOTE]  
-> when enforcing is enabled it will still report the violations (besides enforcing them)  
-
-For now we set the CSP mode to only report violations, however as soon as are confident that there are no more violations it is recommend to set our custom variable **cspReportOnly** to **false**
-
-> [!MORE]  
-> [MDN "Content Security Policy (CSP)" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)  
-> [MDN "CSP Headers" reference](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy)  
-> [Next.js "Configuring CSP" documentation](https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy)  
-> [Vercel "Using a Content Security Policy" documentation](https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy)  
 
 ### logging CSP violations
 
@@ -1031,16 +1063,16 @@ First you need to visit Sentry.io and copy the CSP reporting URL of your project
 * Click on the project name
 * Then in navigation on the left, under **SDK SETUP**, click on **Security Headers**
 * On the **Security Header Reports** page, copy the URL under **REPORT URI**
-* finally replace the URL for the **const reportingUrl = ''** in the following code by the CSP reporting URL of your project
+* finally replace the URL for the **const reportingUrl = ''** in the following code by the CSP **REPORT URI** from your Sentry account
 
-To make sure violations are being sent to Sentry.io (logged like any other error), we need to edit our CSP headers in the next.config.mjs file, like so:
+Next make sure violations are being sent to Sentry.io (logged like any other error), we need to edit our CSP setup in the next.config.mjs file, like so:
 
-```js title="next.config.mjs" {5-6} {13-15} {45} {60}
+```js title="next.config.mjs" {7-8} {14-17} {46}#special {60}#special
 // CSP headers here is set based on Next.js recommendations:
 // https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
 const cspReportOnly = true;
 
-const reportingUrl = 'https://o4504017992482816.ingest.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
+const reportingUrl = 'https://xxxxxxxxx.ingest.sentry.io/api/0000000000/security/?sentry_key=yyyyyyyyyyyy'
 const reportingDomainWildcard = 'https://*.ingest.sentry.io'
 
 const cspHeader = () => {
@@ -1115,102 +1147,30 @@ const cspHeader = () => {
 }
 ```
 
-> [!WARN]  
-> It is very important to add report url to the connect-src directive or it will get blocked by your CSP setup
+Line 7 to 8 we have added two new variables to store the Sentry.io CSP logging URL and a wildcard for the Sentry.io ingest sub-domain
 
-What we have done is adding two variables, to store the Sentry.io CSP logging URL and a wildcard for the Sentry.io ingest sub-domain
+* the first variable contains the CSP logging URL **https://foo123.ingest.sentry.io/api/bar456/security/?sentry_key=baz789** is the same for preview and prod, it is the endpoint URL where the reports will get sent to, which means we use that variable to tell the report-uri directive where to send CSP violations reports
+* the second variable contains a wildcard for the sentry domain so that we can add the domain to our connect-src directive
 
-The first variable contains the CSP logging URL **https://foo123.ingest.sentry.io/api/bar456/security/?sentry_key=baz789** is the same for preview and prod, it is the endpoint URL where the reports will get sent to, which means we use that variable to tell the report-uri directive where to send CSP violations reports
+Then line 17 to 17 we use a template literal to create the reporting uri directive, this directive will tell the browser what URL it should use when sending the CSP reports
 
-The second variable contains a wildcard for the sentry domain so that we can add the domain to our connect-src directive
-
-We use the second varibale at the our our connect-src directive to whitelist the Sentry CSP logging URL, if we would not add the sub-domain wildcard to connect-src then the browser would block the CSP reports
+Next line 46 and also line 60 we have added the reportingDomainWildcard to the connect-src directive
 
 > [!NOTE]  
-> I only added the report-uri directive to preview and production but NOT development as Sentry.io will filter out reports from localhost anyway, if you want to debug your code you might want to add the reporting also for development, in that case add the `${reportCSPViolations}` variable to the development directives too (same as for preview and production) and then check out the chapter about [disableng the "reports from locahost" filter](/web_development/posts/sentry-io/#disable-the-reports-from-locahost-filter) in my Sentry.io post
+> It is very important to add the **reportingDomainWildcard** to the connect-src directive or CSP will block the reporting URL and hence not send reports to Sentry, we only add the **reportingDomainWildcard** to the connect-src for preview and production, but NOT development as Sentry.io will filter out reports from localhost anyway, if you want to debug your code you might want to add the reporting also for development, in that case add the `${reportCSPViolations}` variable to the development directives too (same as for preview and production) and then check out the chapter about [disableng the "reports from locahost" filter](/web_development/posts/sentry-io/#disable-the-reports-from-locahost-filter) in my Sentry.io post
 
 > [!MORE]  
 > [Sentry.io "CSP violations logging" documentation](https://docs.sentry.io/product/security-policy-reporting/)  
 
-### Adding security headers in Next.js configuration
+### Adding security headers
 
-While at it, lets add a 3 more security headers to our Next.js configuration...
-
-#### convert nextConfig into a function
-
-To be able to know what the current environement is, you could use Node.js [process.env](https://nodejs.org/en/learn/command-line/how-to-read-environment-variables-from-nodejs) **NODE_ENV** environment variable, however you need to know that this variable will on only ever have two states, when using the `npm run dev` command (the dev server) then this variable is development, this is still ok and else Next.js will always set **NODE_ENV** to production
-
-Another option if like me you deploy on Vercel, then you can use the **VERCEL_ENV** variable, which is **devlopment** when running your project locally or **preview** when devploying a preview on Vercel and **production** when deploying a production build on Vercel
-
-The third way to know the current context, is to use the Next.js config property called **phase**, to access the phase property we need to convert our configuration from an object into a function
-
-In the previous examples the **nextConfig** variable was an **object**, we had a configuration that looked like this:
-
-```mjs
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-    reactStrictMode: true,
-    poweredByHeader: false,
-}
-
-export default nextConfig;
-```
-
-To get the phase **phase** property we need to convert **nextConfig** into a **function**, so that we get a configuration that looks like this:
-
-```mjs
-const nextConfig = (phase) => {
-
-    /** @type {import('next').NextConfig} */
-    const nextConfigOptions = {
-        reactStrictMode: true,
-        poweredByHeader: false,
-    }
-
-    return nextConfigOptions
-}
-
-export default nextConfig;
-```
-
-Now that we have access to the **phase** we can use the [next/constants](https://github.com/vercel/next.js/blob/5e6b008b561caf2710ab7be63320a3d549474a5b/packages/next/shared/lib/constants.ts#L19-L23) to check what the current context is, like so:
-
-```mjs
-import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
-
-const nextConfig = (phase) => {
-
-    /** @type {import('next').NextConfig} */
-    const nextConfigOptions = {
-        reactStrictMode: true,
-        poweredByHeader: false,
-        experimental: {
-            // experimental typescript "statically typed links"
-            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
-            // currently false in prod until Issue #62335 is fixed
-            // https://github.com/vercel/next.js/issues/62335
-            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
-        },
-    }
-
-    return nextConfigOptions
-}
-
-export default nextConfig;
-```
-
-In this example we check if the phase is **development** by using the **PHASE_DEVELOPMENT_SERVER** constant and if it is we enable the typedRoutes and if it is not the development server we disable the routes types
-
-> [!MORE]  
-> [Node.js "environment variables" documentation](https://nodejs.org/en/learn/command-line/how-to-read-environment-variables-from-nodejs)  
-> [Next.js "configuration" documentation](https://nextjs.org/docs/app/api-reference/next-config-js)  
-> [Vercel "system environment variables" documentation](https://vercel.com/docs/projects/environment-variables/system-environment-variables)  
+While at it, lets add a 3 more security headers to our Next.js configuration
 
 #### next configuration security headers
 
-Now that we have access to the phase property we can change the config to this:
+We just added the CSP setup to every page header by altering the Next.js configuration file and now we are going to add 4 more security headers:
 
-```js title="next.config.mjs" {1} {3-4} {6-13} {26-51}
+```js title="next.config.mjs" showLineNumbers{79} {3-13} {31}#special {36-47}
 const nextConfig = (phase) => {
 
     // security headers for preview & production
@@ -1254,30 +1214,30 @@ const nextConfig = (phase) => {
                             key: 'X-Content-Type-Options',
                             value: 'nosniff',
                         },
-                        {
-                            key: 'X-Frame-Options',
-                            value: 'deny',
-                        },
                     ],
                 },
-            ];
+            ]
         },
     }
 
     return nextConfigOptions
 
 }
+
+export default nextConfig
 ```
 
-First we added a new variable `extraSecurityHeaders` to store the HSTS header as we want to exclude it in development where we don't have an SSL certificate
+Line 3 to 13 we added a new variable `extraSecurityHeaders` to store the HSTS header as we want to exclude it in development where we don't have an SSL certificate
 
 The HSTS header (`Strict-Transport-Security`) will tell the browser that this app only supports HTTPS, meaning that we want the browser to always use HTTPS for every page request even if in the page URL the scheme is HTTP
 
-We also add 3 more headers by to the end of our headers array:
+Line 31 we use the `extraSecurityHeaders` to add the `Strict-Transport-Security` header to the list of headers
+
+Line 36 to 47 we add the 3 security headers to the list of headers:
 
 * the first one is a `Referrer-Policy` header tells the browser when and when NOT to include information about the origin in referrer header, the [MDN "Referrer-Policy" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy) does a very good at explaining the different values, I like to only set the referrer for internal pages but not for external pages, that's why I use the value **same-origin**
 * the second **X-Content-Type-Options** header tells the browser to not attempt to guess the MIME type of resource by itself 
-* and finally the third `X-Frame-Options` header when set to **deny** does the same thing as the **frame-ancestors** directive (we added earlier) when set to **none**, but it is for older browsers that did not have support for the directive
+* The third one is the `X-Frame-Options` header when set to **deny** does the same thing as the **frame-ancestors** directive (we added earlier) when set to **none**, but it is for older browsers that did not have support for the directive
 
 > [!MORE]  
 > [MDN "Strict-Transport-Security" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)  
@@ -1285,7 +1245,9 @@ We also add 3 more headers by to the end of our headers array:
 > [MDN "X-Content-Type-Options" documentation]()  
 > [MDN "X-Frame-Options" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options)  
 
-## Why use markdown (MDX)?
+## Next.js MDX support
+
+### Why use markdown (MDX)?
 
 As a developer using markdown to format content makes sense, as most of us probably already know Markdown because we have been using it when formatting our project READMEs, or when opening Issues or participating in Discussions on GitHub, or when formatting questions and answers on [Stack Overflow](https://stackoverflow.com/editing-help), or even in messages on a [Discord](https://support.discord.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline) server, this is why I chose to use MDX (markdown + JSX) for this "static Next.js blog" project
 
@@ -1294,7 +1256,7 @@ As a developer using markdown to format content makes sense, as most of us proba
 > [Stack Overflow "markdown" help](https://stackoverflow.com/editing-help)  
 > [Discord "markdown" formatting](https://support.discord.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline)  
 
-## Adding MDX support using @next/mdx
+### Adding MDX support using @next/mdx
 
 To add MDX support to the Next.js blog I will use [@next/mdx](https://www.npmjs.com/package/@next/mdx) which is an MDX package by the same team that is behind Next.js, but there are other alternatives that work well too, I listed some of them in the [@next/mdx alternatives chapter](/web_development/posts/mdx/#nextmdx-alternatives) in my MDX post, if you prefer you can also create your own package in which case I recommend you start by reading the **Deep Dive: How do you transform markdown into HTML?** section of the [next.js "Markdown and MDX" documentation](https://nextjs.org/docs/app/building-your-application/configuring/mdx#deep-dive-how-do-you-transform-markdown-into-html)
 
