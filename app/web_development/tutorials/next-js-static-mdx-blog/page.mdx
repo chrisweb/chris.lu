@@ -1067,12 +1067,12 @@ First you need to visit Sentry.io and copy the CSP reporting URL of your project
 
 Next make sure violations are being sent to Sentry.io (logged like any other error), we need to edit our CSP setup in the next.config.mjs file, like so:
 
-```js title="next.config.mjs" {7-8} {14-17} {46}#special {60}#special
+```js title="next.config.mjs" showLineNumbers {7-8} {14-17} {46}#special {61}#special
 // CSP headers here is set based on Next.js recommendations:
 // https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
 const cspReportOnly = true;
 
-const reportingUrl = 'https://xxxxxxxxx.ingest.sentry.io/api/0000000000/security/?sentry_key=yyyyyyyyyyyy'
+const reportingUrl = 'https://foo123.ingest.sentry.io/api/bar456/security/?sentry_key=baz789'
 const reportingDomainWildcard = 'https://*.ingest.sentry.io'
 
 const cspHeader = () => {
@@ -1152,9 +1152,11 @@ Line 7 to 8 we have added two new variables to store the Sentry.io CSP logging U
 * the first variable contains the CSP logging URL **https://foo123.ingest.sentry.io/api/bar456/security/?sentry_key=baz789** is the same for preview and prod, it is the endpoint URL where the reports will get sent to, which means we use that variable to tell the report-uri directive where to send CSP violations reports
 * the second variable contains a wildcard for the sentry domain so that we can add the domain to our connect-src directive
 
-Then line 17 to 17 we use a template literal to create the reporting uri directive, this directive will tell the browser what URL it should use when sending the CSP reports
+Then line 14 to 17 we use a template literal to create the reporting uri directive, this directive will tell the browser what URL it should use when sending the CSP reports
 
-Next line 46 and also line 60 we have added the reportingDomainWildcard to the connect-src directive
+Next line 46 and also line 61 we have added the **reportingDomainWildcard** to the connect-src directive
+
+Finally line 49 and 64 we **reportCSPViolations** variable which contains reporting directive
 
 > [!NOTE]  
 > It is very important to add the **reportingDomainWildcard** to the connect-src directive or CSP will block the reporting URL and hence not send reports to Sentry, we only add the **reportingDomainWildcard** to the connect-src for preview and production, but NOT development as Sentry.io will filter out reports from localhost anyway, if you want to debug your code you might want to add the reporting also for development, in that case add the `${reportCSPViolations}` variable to the development directives too (same as for preview and production) and then check out the chapter about [disableng the "reports from locahost" filter](/web_development/posts/sentry-io/#disable-the-reports-from-locahost-filter) in my Sentry.io post
@@ -1170,7 +1172,7 @@ While at it, lets add a 3 more security headers to our Next.js configuration
 
 We just added the CSP setup to every page header by altering the Next.js configuration file and now we are going to add 4 more security headers:
 
-```js title="next.config.mjs" showLineNumbers{79} {3-13} {31}#special {36-47}
+```js title="next.config.mjs" showLineNumbers{81} {3-13} {31}#special {36-47}
 const nextConfig = (phase) => {
 
     // security headers for preview & production
@@ -1227,11 +1229,11 @@ const nextConfig = (phase) => {
 export default nextConfig
 ```
 
-Line 3 to 13 we added a new variable `extraSecurityHeaders` to store the HSTS header as we want to exclude it in development where we don't have an SSL certificate
+Line 82 to 92 we added a new variable `extraSecurityHeaders` to store the HSTS header as we want to exclude it in development where we don't have an SSL certificate
 
 The HSTS header (`Strict-Transport-Security`) will tell the browser that this app only supports HTTPS, meaning that we want the browser to always use HTTPS for every page request even if in the page URL the scheme is HTTP
 
-Line 31 we use the `extraSecurityHeaders` to add the `Strict-Transport-Security` header to the list of headers
+Line 110 we use the `extraSecurityHeaders` to add the `Strict-Transport-Security` header to the list of headers
 
 Line 36 to 47 we add the 3 security headers to the list of headers:
 
