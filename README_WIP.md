@@ -346,7 +346,7 @@ now even though we specified the language, the color is wrong, this is because b
 to fix this and tell the highlighter explicitly that this is a function, we need to use a **.token** instead of the language, like so:
 
 ```mdx
-Lorem ipsum dolor sit amet, `helloWorld{:.entity.name.function}`. Praesent vehicula sem ac erat sagittis, eget dapibus eros cursus.
+Lorem ipsum dolor sit amet, `helloWorld{:.function}`. Praesent vehicula sem ac erat sagittis, eget dapibus eros cursus.
 ```
 
 and the color is fixed.

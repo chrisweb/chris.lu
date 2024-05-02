@@ -195,7 +195,7 @@ finally I recommend you commit / sync the new `.vscode/settings.json`
 
 To ensure we benefit from **statically typed links** there is one more step needed, open the `next.config.mjs` and then add the **experimental** typedRoutes to your Next.js configuration file like so:
 
-```mjs title="next.config.mjs" showLineNumbers {3-5}
+```js title="next.config.mjs" showLineNumbers {3-9}
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     experimental: {
@@ -212,7 +212,7 @@ export default nextConfig
 
 Line 1 you can see that the Next.js configuration file uses [jsdoc](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html) with the `@type` Typescript script, which allows us to have types even though the configuration file is not Typescript (but Javascript), which means if you start typing inside of the nextConfig object you will benefit from autocompletation for the Next.js configuration options
 
-Line 3-5 we use the typedRoutes (experimental) option and enabled it, which means that when using `npm run dev` or when building for production, Next.js will generate a `.next/types/link.d.ts` file that contains information about all existing routes in our application, the advantage of this is that if we now use [next/link](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#link-component) but set the href to a route that doesn't exist we will see an error in VSCode getting displayed and builds will fail until we fix the typo in our URL
+Line 3-9 we use the typedRoutes (experimental) option and enabled it, which means that when using `npm run dev` or when building for production, Next.js will generate a `.next/types/link.d.ts` file that contains information about all existing routes in our application, the advantage of this is that if we now use [next/link](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#link-component) but set the href to a route that doesn't exist we will see an error in VSCode getting displayed and builds will fail until we fix the typo in our URL
 
 > [!NOTE]  
 > You might have noticed that in the latest Next.js the configuration file is now an [ECMAScript module](https://nodejs.org/api/esm.html) (ES modules / ESM) and not a [CommonJS module](https://nodejs.org/api/modules.html#modules-commonjs-modules) like in previous versions, which is why the extension is now `.mjs` and not `.js` anymore, this means that instead of using a require function to import other modules we now use the same import statement we use in client code, this change also matters because more and packages on npm are migrating to an ESM only format, which reduces the amount of code needed as they can drop CommonJS backward compatibility, but for us it means we must use import statements and can't NOT use the require function anymore  
@@ -240,7 +240,7 @@ The third option to know the current context, is to use the Next.js config prope
 
 We are going to use the 3rd option, go back your `next.config.mjs` and change the code to this:
 
-```mjs title="next.config.mjs" showLineNumbers {1} {3} {12}#special
+```js title="next.config.mjs" showLineNumbers {1} {3} {12}#special
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 
 const nextConfig = (phase) => {
@@ -267,7 +267,7 @@ Line 1 we import the **PHASE_DEVELOPMENT_SERVER** constant from the [next/consta
 
 Line 3 we have converted our next config object into a function, which means we now have access to the **phase** parameter, it will allow us to check what the current context of our Next.js app is
 
-Line 10 we check if the phase is **development** server by checking if the content of our phase variable is equal to **PHASE_DEVELOPMENT_SERVER**, if it is we enable typedRoutes and if it is NOT we disable the typedRoutes option
+Line 12 we check if the phase is **development** server by checking if the content of our phase variable is equal to **PHASE_DEVELOPMENT_SERVER**, if it is we enable typedRoutes and if it is NOT we disable the typedRoutes option
 
 > [!MORE]  
 > [Node.js "environment variables" documentation](https://nodejs.org/en/learn/command-line/how-to-read-environment-variables-from-nodejs)  
@@ -296,7 +296,7 @@ So if for some reason you don't want it to be enabled in your entire app or if y
 
 We will however leave the strict mode enabled as this is recommended:
 
-```mjs title="next.config.mjs" showLineNumbers {8}#special
+```js title="next.config.mjs" showLineNumbers {8}#special
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 
 const nextConfig = (phase) => {
@@ -332,7 +332,7 @@ Why would you want to turn this configuration option off?
 
 When I get asked this, my first thought is to ask myself the opposite "why would I want to turn it on?" and honestly I have not yet found a reason as to why I would want to have it turned on. Another reason why I personally prefer to turn it off is because unfortunatly some people on the web have malicious intentions and the less they know about your apps technology stack the more difficult it will be for them to find vulnerabilities that have been disclosed but are not yet patched in the version you are using. Yes it does not make a huge difference, because hackers usually just launch batteries of tests that will check for a wide range of known vulnerabilities, few will use a bot that checks for **x-powered-by** headers to specifically target the exact version you are using. Also true, hackers can use profilling tools to get approximative information about what tech stack you are using. So yes, disabling the poweredByHeader option is not a miracle solution, that will prevent all potential attacks, but if there is a chance (no matter how small) that turning it off will make my app just a little bit safer then that's good enough for me and as I said earlier the second reason is that I see no reason why I would want to turn it on.
 
-```mjs title="next.config.mjs" showLineNumbers {9}#special
+```js title="next.config.mjs" showLineNumbers {8}#special
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 
 const nextConfig = (phase) => {
@@ -409,7 +409,7 @@ Go back to VSCode and look at the list of files in the sidebar and you will noti
 
 If you open the file you will see that on top it has added a metadata object, this Next.js metadata API is what we will use in layouts and pages to modify the tags in the `<head>` element of our page(s), like the **title** and **description** (I will go more in detail in a future chapter)
 
-```tsx title="/app/layout.tsx" showLineNumbers
+```tsx title="/app/layout.tsx"
 export const metadata = {
     title: 'Next.js',
     description: 'Generated by Next.js',
@@ -418,7 +418,7 @@ export const metadata = {
 
 The second part it has added is just a basic typed React / Next.js layout setup
 
-```tsx title="/app/layout.tsx" showLineNumbers{5}
+```tsx title="/app/layout.tsx"
 export default function RootLayout({
     children,
 }: {
@@ -742,7 +742,7 @@ export default function Error({
 }
 ```
 
-As you can see the Next.js documentation example uses a `useEffect(){:.fn}` function to log the error in our console, but what happens if the error is getting triggered on a users computer, then we won't know about, so as Next.js suggests, in the second part of this chapter, we will use a third party service called [Sentry.io](https://sentry.io) to do the logging for us (of course if you prefer you can also develop and run your own logging service instead)
+As you can see the Next.js documentation example uses a `useEffect(){:.function}` function to log the error in our console, but what happens if the error is getting triggered on a users computer, then we won't know about, so as Next.js suggests, in the second part of this chapter, we will use a third party service called [Sentry.io](https://sentry.io) to do the logging for us (of course if you prefer you can also develop and run your own logging service instead)
 
 > [!MORE]  
 > [Next.js "Handling Errors" documentation](https://nextjs.org/docs/app/building-your-application/routing/error-handling)  
@@ -763,7 +763,7 @@ Finally now that you have installed the SDK you might want to some fine tuning o
 
 ### Error logging using Sentry.io
 
-Now that Sentry.io is set up we can modify the error file we created earlier and add import the Sentry SDK and add the Sentry.io logging function inside of the `useEffect(){:.fn}` to replace the example console.log, like so:
+Now that Sentry.io is set up we can modify the error file we created earlier and add import the Sentry SDK and add the Sentry.io logging function inside of the `useEffect(){:.function}` to replace the example console.log, like so:
 
 ```tsx title="app/error.tsx" showLineNumbers {3} {14-17}
 'use client' // Error components must be Client Components
@@ -812,7 +812,7 @@ The Sentry.io wizard we just used has created a Next.js `app/global-error.jsx` f
 
 But because Sentry created a **javascript** file but our project uses **typescript**, we will start by converting the file into a typescript file, by renaming `app/global-error.jsx` to `app/global-error.tsx`
 
-After renaming the file we edit it and replace its content with the code for a global error page from the Next.js documentation, which is a good start as it is strictly typed, the only difference is that we also modify the code to add the Sentry.io `captureException(){:.fn}` function, that will capture exceptions and send them to Sentry.io, the final version looks like this:
+After renaming the file we edit it and replace its content with the code for a global error page from the Next.js documentation, which is a good start as it is strictly typed, the only difference is that we also modify the code to add the Sentry.io `captureException(){:.function}` function, that will capture exceptions and send them to Sentry.io, the final version looks like this:
 
 ```ts title="app/global-error.tsx" showLineNumbers
 'use client' // Error components must be Client Components
@@ -974,7 +974,7 @@ export default nextConfig
 
 Line 5 on the top of the configuration file we have added a variable **cspReportOnly** and have set it to **true**, we will use this variable to decide if want to only report CSP violations or enforce CSP rules and report them
 
-Line 7 to 69 we have added a quite long function **cspHeader()** which will create 4 sets of CSP rules:
+Line 84 to 96 we have added a quite long function **cspHeader()** which will create 4 sets of CSP rules:
 
 * the first set of CSP rules are the default rules that we will enable no matter the environment
 * the second set of rules is for when the environment is **preview**, which is for example the case when you deploy the preview branch on vercel, this is why this part contains a lot of URLs related to Vercel, those are sources for scripts that Vercel uses for example to add a comment system to your previews
@@ -1067,7 +1067,9 @@ First you need to visit Sentry.io and copy the CSP reporting URL of your project
 
 Next make sure violations are being sent to Sentry.io (logged like any other error), we need to edit our CSP setup in the next.config.mjs file, like so:
 
-```js title="next.config.mjs" showLineNumbers {7-8} {14-17} {46}#special {61}#special
+```js title="next.config.mjs" showLineNumbers {7-8} {14-17} {46}#special {61}#special {49} {64}
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+
 // CSP headers here is set based on Next.js recommendations:
 // https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
 const cspReportOnly = true;
@@ -1216,6 +1218,10 @@ const nextConfig = (phase) => {
                             key: 'X-Content-Type-Options',
                             value: 'nosniff',
                         },
+                        {
+                            key: 'X-Frame-Options',
+                            value: 'DENY'
+                        },
                     ],
                 },
             ]
@@ -1229,13 +1235,13 @@ const nextConfig = (phase) => {
 export default nextConfig
 ```
 
-Line 82 to 92 we added a new variable `extraSecurityHeaders` to store the HSTS header as we want to exclude it in development where we don't have an SSL certificate
+Line 83 to 93 we added a new variable `extraSecurityHeaders` to store the HSTS header as we want to exclude it in development where we don't have an SSL certificate
 
 The HSTS header (`Strict-Transport-Security`) will tell the browser that this app only supports HTTPS, meaning that we want the browser to always use HTTPS for every page request even if in the page URL the scheme is HTTP
 
-Line 110 we use the `extraSecurityHeaders` to add the `Strict-Transport-Security` header to the list of headers
+Line 111 we use the `extraSecurityHeaders` to add the `Strict-Transport-Security` header to the list of headers
 
-Line 36 to 47 we add the 3 security headers to the list of headers:
+Line 116 to 127 we add the 3 security headers to the list of headers:
 
 * the first one is a `Referrer-Policy` header tells the browser when and when NOT to include information about the origin in referrer header, the [MDN "Referrer-Policy" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy) does a very good at explaining the different values, I like to only set the referrer for internal pages but not for external pages, that's why I use the value **same-origin**
 * the second **X-Content-Type-Options** header tells the browser to not attempt to guess the MIME type of resource by itself 
@@ -1306,7 +1312,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
 Now we need to update the content our `next.config.mjs` file (in the root of our project), to this:
 
-```mjs title="next.config.mjs"
+```js title="next.config.mjs"
 import createMdx from '@next/mdx'
 
 const nextConfig = (phase) => {
@@ -1367,7 +1373,7 @@ Because we used **create next app** in our tsconfig.json we **already** have the
 
 The configuration we just did adds support for MDX in pages that have the extension `*.mdx`, if you want to also add support for pages with the `*.md` extension, then add the extension in two places like so:
 
-```mjs title="next.config.mjs" {4} {24}
+```js title="next.config.mjs" {4} {24}
 const nextConfig = (phase) => {
 
     const withMDX = createMdx({
@@ -1955,7 +1961,7 @@ npm i remark-lint@latest remark-preset-lint-consistent@latest remark-preset-lint
 
 Remark-lint rules don't get added to `.eslintrc.js`, but instead we create a new file called `.remarkrc.mjs` (in the root of our project) and add the following content:
 
-```mjs title=".remarkrc.mjs"
+```js title=".remarkrc.mjs"
 // presets imports
 import remarkPresetLintRecommended from 'remark-preset-lint-consistent'
 import remarkPresetLintConsistent from 'remark-preset-lint-recommended'
@@ -2035,7 +2041,7 @@ npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md
 
 Now we need to put those commands into our `package.json`, because we are in the `package.json` we don't need to use `npx`, change the **lint script** in the to this:
 
-```mjs title="package.json" {3}
+```js title="package.json" {3}
 {
     "scripts": {
         "lint": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint"
@@ -2047,7 +2053,7 @@ Now when we use the `npm run lint` command in our terminal, it will use our new 
 
 I have two more scripts that can be useful, that you might to add too:
 
-```mjs title="package.json" {4-5}#special
+```js title="package.json" {4-5}#special
 {
     "scripts": {
         "lint": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint",
@@ -2077,7 +2083,7 @@ Another script we need to change is the **build** script (as I explained in the 
 
 We need to ensure the **build** script will **NOT** use the **Next lint** CLI by default, by editing the our `next.config.mjs`, we then add the **ignoreDuringBuilds** option and set it to **true**, like so:
 
-```mjs title="next.config.mjs" {10-12}#special
+```js title="next.config.mjs" {10-12}#special
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 import createMdx from '@next/mdx'
 
@@ -2099,7 +2105,7 @@ const nextConfig = (phase) => {
 
 Now as we still want linting to happen before a build, we need to add the **lint** script we did in the previous chapter to the **build** script in our `package.json`, like so:
 
-```mjs title="package.json" {10-12}#special
+```json title="package.json" {10-12}#special
 {
     "scripts": {
         "build": "npm run lint && next build"

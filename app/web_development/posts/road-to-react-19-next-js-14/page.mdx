@@ -217,7 +217,7 @@ export default async function MyPage({ params: { id } }) {
 
 In version 14.1 Next.js got some improvements for [custom cache handlers](https://nextjs.org/docs/app/building-your-application/deploying#configuring-caching) which got released as stable version, (most useful when not deploying your project on Vercel and when using your own custom cache storage), the two configuration options are now called [cacheHandler](https://nextjs.org/docs/app/api-reference/next-config-js/incrementalCacheHandlerPath) and **cacheMaxMemorySize**:
 
-```mjs title="next.config.mjs"
+```js title="next.config.mjs"
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     cacheHandler: require.resolve('./MY_CUSTOM_CACHE_HANDLER.js'),
@@ -227,7 +227,7 @@ const nextConfig = {
 
 In version 14.2 the Next.js team added a new experimental option to called [staleTimes](https://nextjs.org/docs/app/api-reference/next-config-js/staleTimes) to let developers to set custom revalidation times for the [Router Cache](https://nextjs.org/docs/app/building-your-application/caching#router-cache):
 
-```mjs title="next.config.mjs"
+```js title="next.config.mjs"
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     experimental: {
