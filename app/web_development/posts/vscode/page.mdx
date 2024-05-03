@@ -389,8 +389,7 @@ Both options will open the output channel, which will then show you all ESLint r
 
 If you see that line it means the ESLint server is running in your workspace:
 
-{/* lint ignore no-undefined-references */}
-> [Info  - 8:41:03 PM] ESLint server is running.
+> \[Info  - 8:41:03 PM] ESLint server is running.
 
 ## VSCode extensions view
 
@@ -418,6 +417,8 @@ When you do that VSCode will automatically generate the correct markdown image c
 ```md
 ![MY_ALT_TEXT](../../public/assets/images/foo.png 'MY_IMAGE_TITLE')
 ```
+
+Also good to know, [VSCode version 1.89 (april 2024)](https://code.visualstudio.com/updates/v1_89#_image-previews-in-markdown-path-completions) added a new feature that allows you to preview images and videos, just hover over the image path and VSCode will show a preview
 
 ### VSCode fix for markdown highliting in mdx files
 
@@ -468,6 +469,19 @@ Now save the settings file and open an .mdx file and you should have the preview
 
 > [!NOTE]  
 > Of course in the preview you will only see markdown and HTML getting previewed, it will however NOT preview React components you might have imported in your MDX document, for that we need to wait for a VSCode MDX preview feature, but even though React components are not getting displayed I like the preview feature to quickly check if my markdown syntax is ok and maybe you do too 😉
+
+### VSCode markdown headings links
+
+To add links to headings inside a document just use the default syntax, meaning you start with square braquets (`[]`) and between them you add the link text (`[LINK_TEXT]`), then after the square braquets you use add regular braquets (`()`) for the inline link URL or a relative path (`(https://example.com)`), as path start with a number sign (`#`) and a modal will open listing all your headline IDs, just chose the ID you want the link to point to and it will get inserted for you
+
+You can also link to headings in other documents, to do so just follow the previous steps but instead of adding a single number sign (`#`) inside of the regular braquets (`()`) you add 2, like this (`(##)`) this will again open a modal but this time it will not only list the headings IDs of the current file but also those it found in other files
+
+#### renaming headings (links)
+
+To change a heading and update all the links that point to it, just click inside of the heading or link path and then press `F2`, it will open a modal with the current heading title, modify it and then press `ENTER`
+
+> [!MORE]  
+> [VSCode "Rename headers and links" documentation](https://code.visualstudio.com/docs/languages/markdown#_rename-headers-and-links)  
 
 ## Git commands
 
