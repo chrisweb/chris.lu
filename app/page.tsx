@@ -1,13 +1,16 @@
 import Typing from '@/components/animated/Typing'
 import styles from './page.module.css'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Homepage() {
 
     return (
         <>
             <section className="core">
-                <h1 className="h1">Hello, World! <span className="emoji">🚀</span></h1>
+                <h1 className="h1">Hello, World!&nbsp;
+                    <Image src="/assets/images/noto_emoji_animated/wave_64.gif" unoptimized alt="🚀" width="32" height="32" />
+                </h1>
                 <p>Welcome to my blog, my name is Chris Weber (aka chrisweb)</p>
                 <p className="fontBig fontLighter">I like <Typing>Web development, Lego bricks, Music, Games, Cooking, Movies & TV shows, Memes</Typing></p>
                 <div className={styles.portalsGrid}>
