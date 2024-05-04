@@ -822,6 +822,9 @@ here is even an example of a code block as well as a blockquote inside an alert:
 
 ![alt text](public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/custom-alert-with-blockquote-and-code-block.png)
 
+> [!TIP]
+> when adding **github alerts** you use square braquets (`[!ALERT_TYPE]`), however in VSCode (if you have link validation enabled) then the markdown language service will assume this is an invalid link <QUOTE_VSCODE_ERROR>, and show an error <SCRENNSHOT_HERE>, to exclude the alerts from validation put a backslash (`\`) in front of the square braquets, like so `\[!NOTE]` and the error will be gone <SCRENNSHOT_2_HERE>
+
 ## remark emoji
 
 should I use https://www.npmjs.com/package/remark-emoji
@@ -1064,12 +1067,6 @@ also it should allow to set image height and width (next to the alt text) via a 
 read more:
 
 * [next.js "next/image" documentation](https://nextjs.org/docs/app/api-reference/components/image)
-
-#### custom component for links using next/link
-
-read more:
-
-* [next.js "next/link" documentation](https://nextjs.org/docs/app/api-reference/components/link)
 
 ### hex to rgb and rgb to hex
 
