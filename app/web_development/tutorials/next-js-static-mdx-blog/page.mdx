@@ -1425,9 +1425,11 @@ Because we used **create next app** in our tsconfig.json we **already** have the
 
 ## Our first MDX page
 
-In the `app` folder, create a new `first_page` folder and then add a page using the mdx extension, with the following content:
+In the `app` folder, create a new `tutorial_examples` folder and then in it another `first_page` folder
 
-```md title="/app/first_page/page.mdx"
+Then inside of the `first_page` folder add a `page.mdx` (note that we set **extension** to **mdx** and NOT tsx) and in it paste the following content:
+
+```md title="/app/tutorial_examples/first_page/page.mdx"
 # Hello 👋 with MDX!
 
 ## headline 2nd level
@@ -1451,9 +1453,34 @@ In the `app` folder, create a new `first_page` folder and then add a page using 
 
 Make sure your dev server is running, if it is not start it using `npm run dev`
 
-And then visit your newly created MDX page in the browser at `http://localhost:3000/first_page`
+And then visit your newly created MDX page in the browser at `http://localhost:3000/tutorial_examples/first_page`
 
-Congratulations you now can create Next.js pages using MDX 🎉 and the best part is that they are fully static, which means they will render blazingly fast
+Congratulations you just learned how to create MDX pages 🎉 
+
+### static routes (pages)
+
+By putting our content into the first MDX page instead of fetching it from a database means we have just created our own static site generator with MDX support
+
+To check if a page is fully **static** you can do a build using the `npm run build` command:
+
+```shell
+npm run build
+```
+
+After the build is done look at the output in your terminal:
+
+![build terminal output showing that pages are static](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/nextjs_build_static_page.png)
+
+The empty circle (`○`) in front of our `/tutorial_examples/first_page` indicates that Next.js will statically generate routes (pages) at build time instead of on-demand at request time
+
+Because Next.js will automatically choose the [server rendering strategy](https://nextjs.org/docs/app/building-your-application/rendering/server-components#server-rendering-strategies) for each route based on the features you use, your page at some point might not be **static** anymore, for example when you use a **dynamic function** like [searchParams](https://nextjs.org/docs/app/api-reference/file-conventions/page#searchparams-optional) or when you fetch data and do NOT use [generateStaticParams](https://nextjs.org/docs/app/api-reference/functions/generate-static-params) then your page becomes **dynamic**, which is why it is recommended to launch the build locally from time to time and check if the pages you want to be static still are, if they are not static anymore you might want to find the cause and for example use **generateStaticParams** to make it fully static again
+
+If all of your pages are static, you have the possibility to do a [static export](https://nextjs.org/docs/app/building-your-application/deploying/static-exports), meaning Next.js build will create an `out` folder and put all the HTML/CSS/JS static assets into it, then you can take that folder and for example deploy your app on [GitHub pages](https://pages.github.com/)
+
+> [!MORE]  
+> [Next.js "Server Rendering Strategies" documentation](https://nextjs.org/docs/app/building-your-application/rendering/server-components#server-rendering-strategies)  
+> [Next.js "generateStaticParams" documentation](https://nextjs.org/docs/app/api-reference/functions/generate-static-params)  
+> [Next.js "Static Exports" documentation](https://nextjs.org/docs/app/building-your-application/deploying/static-exports)
 
 ### React components in MDX content
 
@@ -1461,9 +1488,11 @@ Of course the big advantage of MDX over regular markdown is that we use any Reac
 
 First create a new folder `components` in the root of your project
 
-Inside of the `components` folder create another folder `buttons` and inside of that folder create a file `Counting.tsx` and insert the following code:
+Inside of the `components` folder create a `tutorial_examples` folder and inside of that folder another `buttons` folder
 
-```tsx title="/components/buttons/Counting.tsx"
+Now inside of the `buttons` folder create a `Counting.tsx` file and insert the following code:
+
+```tsx title="/components/tutorial_examples/buttons/Counting.tsx"
 'use client'
 
 import { useState } from 'react'
@@ -1488,10 +1517,10 @@ const Counting: React.FC = () => {
 export default Counting
 ```
 
-Now lets edit the `/app/first_page/page.mdx` page we created earlier and add our Counting component to it, like so:
+Now lets edit the `/app/tutorial_examples/first_page/page.mdx` page we created earlier and add our Counting component to it, like so:
 
-```mdx title="/app/first_page/page.mdx"
-import Counting from '@/components/buttons/Counting'
+```mdx title="/app/tutorial_examples/first_page/page.mdx"
+import Counting from '@/components/tutorial_examples/buttons/Counting'
 
 # Hello 👋 with MDX!
 
@@ -1518,7 +1547,7 @@ import Counting from '@/components/buttons/Counting'
 ```
 
 > [!NOTE]  
-> did you notice how we did NOT use the relative path that would be '../components/buttons/Counting', but instead we used the **@/** alias which we added when creating the project (using creat-next-app), the advantage of using the alias is that no matter where we move our page the path to the Button will always stay the same (of course if we move the button then we also need to update the import(s))
+> did you notice how we did NOT use the relative path that would be '../components/tutorial_examples/buttons/Counting', but instead we used the **@/** alias which we added when creating the project (using creat-next-app), the advantage of using the alias is that no matter where we move our page the path to the Button will always stay the same (of course if we move the button then we also need to update the import(s))
 
 Make sure your dev server is running, if it is not start it using `npm run dev`
 
@@ -1532,9 +1561,11 @@ Besides turning a whole page into an MDX page as we saw in the previous chapter,
 
 ### MDX in a page
 
-First create a new folder `mdx_in_a_page` inside of the `app` folder and then create a file called `content.mdx` with the following content:
+First inside of the `/app/tutorial_examples` folder create a new `mdx_in_a_page` folder
 
-```md title="/app/mdx_in_a_page/content.mdx"
+Then in the `mdx_in_a_page` folder create a file called `content.mdx` with the following content:
+
+```md title="/app/tutorial_examples/mdx_in_a_page/content.mdx"
 # Hello 👋 World!
 
 I'm MDX content that got imported in a regular page.tsx file
@@ -1542,7 +1573,7 @@ I'm MDX content that got imported in a regular page.tsx file
 
 And then in the same folder create a `page.tsx` with the following content:
 
-```tsx title="/app/mdx_in_a_page/page.tsx"
+```tsx title="/app/tutorial_examples/mdx_in_a_page/page.tsx"
 import ContentMDX from './content.mdx'
 
 export default function Page() {
@@ -1557,13 +1588,15 @@ export default function Page() {
 
 Make sure your dev server is running, if it is not start it using `npm run dev`
 
-And then visit your newly created page in the browser at `http://localhost:3000/mdx_in_a_page`
+And then visit your newly created page in the browser at `http://localhost:3000/tutorial_examples/mdx_in_a_page`
 
 ### MDX in a component
 
-First inside of the `components` folder create another folder called `mdx` and inside of that folder a file called `content.mdx` and insert the following content:
+First go into the `/components/tutorial_examples` folder and then create another folder called `mdx`
 
-```md title="/components/mdx/content.mdx"
+Inside of the `mdx` folder create a `content.mdx` file and insert the following content:
+
+```md title="/components/tutorial_examples/mdx/content.mdx"
 # Hello 👋 World!
 
 I'm MDX content that got imported in a Component
@@ -1571,7 +1604,7 @@ I'm MDX content that got imported in a Component
 
 And then in the same folder create a `Example.tsx` file, with the following content:
 
-```tsx title="/components/mdx/Example.tsx"
+```tsx title="/components/tutorial_examples/mdx/Example.tsx"
 import ContentMDX from './content.mdx'
 
 const MDXExample: React.FC = () => {
@@ -1586,10 +1619,10 @@ const MDXExample: React.FC = () => {
 export default MDXExample
 ```
 
-Then inside of `app` folder, create another new folder `mdx_in_a_component` and finally in that folder create a page file `page.tsx` with the following content:
+Then inside of `/app/tutorial_examples` folder, create another new folder `mdx_in_a_component` and finally in that folder create a page file `page.tsx` with the following content:
 
-```tsx title="/app/mdx_in_a_component/page.tsx"
-import MDXExample from '@/components/mdx/Example'
+```tsx title="/app/tutorial_examples/mdx_in_a_component/page.tsx"
+import MDXExample from '@/components/tutorial_examples/mdx/Example'
 
 export default function Page() {
 
@@ -1603,7 +1636,7 @@ export default function Page() {
 
 Make sure your dev server is running, if it is not start it using `npm run dev`
 
-And then visit your newly created MDX page in the browser at `http://localhost:3000/mdx_in_a_component`
+And then visit your newly created MDX page in the browser at `http://localhost:3000/tutorial_examples/mdx_in_a_component`
 
 ### Tips when using MDX
 
@@ -2427,11 +2460,11 @@ Next.js supports [CSS Modules](https://github.com/css-modules/css-modules) out o
 
 **CSS Modules** let you write vanilla CSS in `*.module.css` files that you then import into your components
 
-Let's start with a simple example, in the `components` folder start by creating a new folder `UI`
+Let's start with a simple example, go into the `/components/tutorial_examples` folder and create a new `UI` folder
 
 Next in the `UI` folder we create a new `button.module.css` file and add the following content:
 
-```css title="/components/UI/button.module.css"
+```css title="/components/tutorial_examples/UI/button.module.css"
 .reset {
     background: none;
     border: none;
@@ -2441,7 +2474,7 @@ Next in the `UI` folder we create a new `button.module.css` file and add the fol
 
 And then a second `Button.tsx` file (also in the `UI` folder), with the following content:
 
-```tsx title="/components/UI/Button.tsx"
+```tsx title="/components/tutorial_examples/UI/Button.tsx"
 'use client'
 
 import styles from './styles.module.css'
@@ -2458,9 +2491,11 @@ const UIButton: React.FC = (): JSX.Element => {
 export default UIButton
 ```
 
-Then we open our homepage (the page in the app folder) and import /use the button:
+Then we go into the `/app/tutorial_examples` folder and create a new `styling` folder
 
-```tsx title="/app/page.tsx"
+Then in the `styling` folder we create a new `page.tsx` file and paste the following content into it:
+
+```tsx title="/app/tutorial_examples/styling/page.tsx"
 import UIButton from '@/components/UI/Button'
 
 export default function Home() {
@@ -2490,7 +2525,7 @@ Then right click, chose **Inspect** or press `F12` to open the dev tools, then o
 
 If you want to add more than one class, either use a package like [classnames](https://www.npmjs.com/package/classnames) or just use [native javascript template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) like so:
 
-```tsx title="/components/UI/Button.tsx" "&#x60;${styles.reset} ${styles.core}&#x60;"
+```tsx title="/components/tutorial_examples/UI/Button.tsx" "&#x60;${styles.reset} ${styles.core}&#x60;"
 'use client'
 
 import styles from './styles.module.css'
@@ -2509,7 +2544,7 @@ export default UIButton
 
 Then we add the second class to our CSS Module:
 
-```css title="/components/UI/button.module.css"
+```css title="/components/tutorial_examples/UI/button.module.css"
 .reset {
     background: none;
     border: none;
@@ -2558,7 +2593,7 @@ As we saw in the previous chapter you can add classes and use the id in CSS Modu
 
 Let's (re-)open the CSS Module we used for our button and styling for the button by using the Element type, like so:
 
-```css title="/components/UI/button.module.css" {14-16}
+```css title="/components/tutorial_examples/UI/button.module.css" {14-16}
 .reset {
     background: none;
     border: none;
@@ -2714,15 +2749,21 @@ export default function RootLayout({
 
 
 
+> [!MORE]  
+> [Next.js "Linking and Navigating" documentation](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating)  
+> [Next.js "next/link" documentation](https://nextjs.org/docs/app/api-reference/components/link)  
+
 ## MDX components
 
 Before we experiment with plugins in the next chapter I wanted to first come back to the `mdx-components.tsx` we briefly saw when setting up MDX support
 
 **next/mdx** uses a file called `mdx-components.tsx` which you can use to quickly and easily to use **components**, but there are other use cases that make it great choice, for example lets's say you want to quickly add a class to headlines, you can't do that in markdown the same way you would set a class for an HTML element, you could find and install an MDX (rehype) plugin do so, but instead we are going to use our `mdx-components.tsx` as it is an easy and quick way of solving our problem
 
-First lets create a new test playground to test the components, inside of the `app` fodler create new folder `mdx-components_example` and in it a file called `page.mdx`, like so:
+First lets create a new test playground to test the components, inside of the `/app/tutorial_examples` folder create a `mdx-components_example` folder
 
-```mdx title="/app/mdx-components_example/page.tsx"
+Then in the `mdx-components_example` folder create a `page.mdx` file and paste the following content into it:
+
+```mdx title="/app/tutorial_examples/mdx-components_example/page.tsx"
 # headline 1
 
 ## headline 2
