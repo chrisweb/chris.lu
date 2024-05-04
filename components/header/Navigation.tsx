@@ -9,7 +9,7 @@ import { useSwipeable } from 'react-swipeable'
 import { Route } from 'next'
 
 interface IMainMenuItem {
-    href: string
+    pathname: string
     text: string
 }
 
@@ -65,14 +65,33 @@ const HeaderNavigation: React.FC = () => {
     }
 
     const mainMenuItems: IMainMenuItem[] = [
-        { href: '/', text: 'Home' },
-        { href: '/web_development', text: 'Web development' },
-        { href: '/lego', text: 'Lego' },
-        { href: '/games', text: 'Games' },
-        { href: '/music', text: 'Music' },
-        { href: '/memes', text: 'Memes' },
-        { href: '/about_me', text: 'About me' },
+        { pathname: '/', text: 'Home' },
+        { pathname: '/web_development', text: 'Web development' },
+        { pathname: '/lego', text: 'Lego' },
+        { pathname: '/games', text: 'Games' },
+        { pathname: '/music', text: 'Music' },
+        { pathname: '/memes', text: 'Memes' },
+        { pathname: '/about_me', text: 'About me' },
     ]
+
+    const isActiveCheck = (menuItemPathname: string) => {
+
+        let isActiveClass = ''
+
+        if (menuItemPathname.length > 1) {
+            if (currentPagePathname.startsWith(menuItemPathname)) {
+                isActiveClass = styles.active
+            }
+        } else {
+            // exception for homepage path which is "/"
+            // in that case the page path needs to be equal
+            if (currentPagePathname === menuItemPathname) {
+                isActiveClass = styles.active
+            }
+        }
+
+        return isActiveClass
+    }
 
     return (
         <>
@@ -81,30 +100,16 @@ const HeaderNavigation: React.FC = () => {
             </button>
             <div className={`${styles.layoutNavbarContainer} ${navigationIsOpenState === null ? '' : (navigationIsOpenState ? styles.openNavbar : styles.closeNavbar)}`} {...swipeHandlers} ref={swipeableRefPassthrough}>
                 <nav id="navigation" className={`${styles.layoutNavbar}`} >
-                    {mainMenuItems.map((mainMenuItem) => {
-                        let isActiveClass = ''
-                        if (typeof window !== 'undefined') {
-                            // window existd, we are in client
-                            const linkPathname = new URL(mainMenuItem.href, window.location.href).pathname
-                            if (linkPathname === currentPagePathname) {
-                                isActiveClass = styles.active
-                            }
-                        } else {
-                            // window does NOT exist, we are on server
-                            const linkPathname = new URL(mainMenuItem.href, 'http://localhost:3000').pathname
-                            if (linkPathname === currentPagePathname) {
-                                isActiveClass = styles.active
-                            }
-                        }
+                    {mainMenuItems.map((menuItem) => {
                         return (
                             <Link
-                                href={mainMenuItem.href  as Route}
-                                key={mainMenuItem.href}
+                                href={menuItem.pathname  as Route}
+                                key={menuItem.pathname}
                                 onClick={onClickLinkHandler}
-                                className={isActiveClass}
-                                title={mainMenuItem.text}
+                                className={isActiveCheck(menuItem.pathname)}
+                                title={menuItem.text}
                             >
-                                {mainMenuItem.text}
+                                {menuItem.text}
                             </Link>
                         )
                     })}

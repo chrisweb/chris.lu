@@ -123,9 +123,6 @@
 
 .layoutNavbar a.active {
     font-weight: var(--main-fontWeight-activeLinks);
-    transition: none;
-    background: none;
-    cursor: url(/assets/cursors/secondary_mouse_default.cur), default;
 }
 
 /* source for the hamburger css styling & animation: https://github.com/jonsuh/hamburgers */
