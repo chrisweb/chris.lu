@@ -74,13 +74,13 @@ const Button: React.FC<IProps> = ({ children }) => {
             pauseIndexRef.current--
         } else {
             // pause done, remove current part
-            actionRef.current = 'undo'
+            actionRef.current = 'backspace'
             // reset the pause index
             pauseIndexRef.current = 20
         }
     }, [])
 
-    const undo = useCallback(() => {
+    const backspace = useCallback(() => {
         if (characterIndexRef.current > 0) {
             // we have NOT removed all characters yet
             characterIndexRef.current--
@@ -94,9 +94,12 @@ const Button: React.FC<IProps> = ({ children }) => {
     }, [])
 
     const animate = useCallback((timeStamp: number) => {
-        // only once every 130ms
-        // increase to slow animation down
-        if (timeStamp - animationTimestampRef.current >= 1 * 130) {
+
+        const elapsed = timeStamp - animationTimestampRef.current
+
+        // only once every 150ms (for typing & pause)
+        // increase value to slow animation down
+        if (elapsed >= 150) {
             switch (actionRef.current) {
                 case 'type':
                     type()
@@ -104,14 +107,19 @@ const Button: React.FC<IProps> = ({ children }) => {
                 case 'pause':
                     pause()
                     break
-                case 'undo':
-                    undo()
-                    break
             }
             animationTimestampRef.current = timeStamp
         }
+        
+        // faster for backspace, once every 50ms
+        if (elapsed >= 50) {
+            if (actionRef.current === 'backspace') {
+                backspace()
+                animationTimestampRef.current = timeStamp
+            }
+        }
         requestAnimationFrameRef.current = requestAnimationFrame(animate)
-    }, [type, undo, pause])
+    }, [type, backspace, pause])
 
     useEffect(() => {
         requestAnimationFrameRef.current = requestAnimationFrame(animate)
