@@ -1068,10 +1068,6 @@ read more:
 
 * [next.js "next/image" documentation](https://nextjs.org/docs/app/api-reference/components/image)
 
-### hex to rgb and rgb to hex
-
-I found this [google search color convertor widget](https://g.co/kgs/EaqMkb), you might want to bookmark it too, it allows you to convert colors from formats like rgb to hex and vice versa (and other formats), which can be useful for working with colors in stylesheets and for example needing to quickly convert a hex color to a rgba value
-
 ### styling loading page and buttons
 
 nice loading animation (pure css) <https://codepen.io/amit_sheen/pen/JjBLaGG> for nextjs loading.tsx
