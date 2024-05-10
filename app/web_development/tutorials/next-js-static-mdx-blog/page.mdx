@@ -370,11 +370,38 @@ If you did any of the two changes I mentioned above , then save your `next.confi
 
 ## Next.js development basics
 
+Hope you are still there, because it is finally time to start coding (a bit) 🙂, but first a bit of theory about routing 😉 (feel free to skip the first chapter if you know it already)
+
+### Next.js routing / pages
+
+If you used the Next.js **pages router** in the past but did not yet use the **app router** then here is a short introduction
+
+With the **pages router** if you wanted to have a page at `www.example.com/foo` then you would create a file named foo.tsx inside of the `pages` folder
+
+With the **app router** if you want a page at that same `www.example.com/foo` path, then you create a folder named `foo` inside of the `app` folder
+
+Let's assume the path is now `www.example.com/foo/bar`, when using the **pages router** for path, `foo` would be a folder inside of `pages` but `bar` would be a file, with the **app router** every segment is a folder
+
+The other difference is the page files, with the **pages router** the name of the file gets used for the last segment, in the **app router** every page is always named **page**(.jsx/.tsx)
+
+The advantage of using a folder as last segment and having a convention that says that every page needs to be named page, is that with the introduction of the **app router** Next.js added a bunch of other [file conventions](https://nextjs.org/docs/app/building-your-application/routing#file-conventions), for example you can have a layout in every segment folder, you can have a not-found file in every folder and so on, meaning you can create different layouts for different parts of the website easily, or even create different error, loading, not-found, ... files for different parts of your project (without having to add logic inside those files to check what the current path is and then show a different layout, UI or content based on it)
+
+A feature you will already know if you used the **pages router** are [dynamic routes](https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes), to create a dynamic route segment you wrap the folder's name in square brackets, for example with a folder structure like this `/app/articles/[slug]`, the **slug** could be anything, so the URL `www.example.com/articlers/foo` the slug would be foo and for another URL `www.example.com/articlers/bar` the slug would be bar, to retrieve the slug value you would use a page with the following code:
+
+```tsx title="/app/articles/[slug]/page.tsx"
+export default function Page({ params }: { params: { slug: string } }) {
+  return <div>My article slug is: {params.slug}</div>
+}
+```
+
+There are other useful features that got introduced with the new folder based routing, like [route groups](https://nextjs.org/docs/app/building-your-application/routing/route-groups) or [parallel routes](https://nextjs.org/docs/app/building-your-application/routing/parallel-routes) but those I will not cover them in this tutorial, but it is good to know they exist as they might become useful sooner or later as your project grows
+
+> [!MORE]  
+> [Next.js "routing" documentation](https://nextjs.org/docs/app/building-your-application/routing)  
+
 ### Our 1st typescript page
 
-Hope you are still there, because it is finally time to start coding (a bit) 🙂
-
-But first lets open the app directory create next app has created for us, if you have a bit of time have a look at what they put in there (it's always good to have a look at what the Next.js team recommends) but after that delete all the files in the `/app` directory as I want to go step by step through the process of creating a Next.js blog, you can also delete the content in the `/public` directory as we won't need the assets of the demo project anymore
+Start by opening the app directory which create-next-app has created for us during the intial setup of our project, if you have a bit of time have a look at what Next.js has put in there (it's always good to have a look at what the Next.js team recommends) but after that delete all the files in the `/app` directory as I want to go step by step through the process of creating a Next.js blog, you can also delete the content in the `/public` directory as we won't need the assets of the demo project anymore
 
 Next create a new file in the app directory and name it `page.tsx` (or `page.jsx` if you chose to use javascript)
 
@@ -397,7 +424,7 @@ Congratulations you just coded your first Next.js page 🎉
 
 ### Start the dev(elopment) server
 
-Now open the VSCode terminal if it isn't open yet (or use your favorite command line tool) and let's use one of the 4 commands we added to our README.md earlier to start the development server:
+Now open the VSCode terminal if it isn't open yet (or use your favorite command line tool) and let's use one of the 4 commands create-next-app did add to the package.json scripts (and which we documented in README.md earlier) to start the development server:
 
 ```shell
 npm run dev
@@ -407,7 +434,7 @@ Now in the terminal, press `Ctrl` and then click on the Next.js local server URL
 
 ### The root layout is required
 
-Go back to VSCode and look at the list of files in the sidebar and you will notice that Next.js re-added the `/app/layout.tsx` file we just deleted earlier, because this layout file is called the **root layout** and it is **required** (and that's because Next.js is a clever framework that in many places helps you do the right thing 😉), also if you look at your VSCode terminal you will see that Next.js printed the following line, informing us that it created the layout file for us:
+Go back to VSCode and look at the list of files in the sidebar and you will notice that Next.js re-added the `/app/layout.tsx` file (when we started the dev server) we just deleted earlier, because this layout file is called the **root layout** and it is **required** (and that's because Next.js is a clever framework that in many places helps you do the right thing 😉), also if you look at your VSCode terminal you will see that Next.js printed the following line, informing us that it created the layout file for us:
 
 > Your page app/page.tsx did not have a root layout. We created app\layout.tsx for you.
 
@@ -2635,24 +2662,28 @@ So instead if you want to style all Elements that match a certain type, or if yo
 
 ```css title="/app/global.css"
 :root {
-    --main-background-light-value: 15, 0, 25;
-    --main-background-light-color: rgb(var(--main-background-value));
-    --main-text-light-value: 245, 240, 245;
-    --main-text-light-color: rgb(var(--main-text-value));
-    --primary-light-value: ;
-    --primary-light-color: rgb(var(--primary-light-value));
-    --secondary-light-value: ;
-    --secondary-light-color: rgb(var(--secondary-light-value));
-    --main-spacing: 2rem;
-    --main-maxWidth: 70rem;
-}
-
-/* high contrast mode */
-@media (prefers-contrast: more) {
-    :root {
-        --main-background-value: 0, 0, 0;
-        --main-text-value: 255, 255, 255;
-    }
+    color-scheme: light dark;
+    /* light color scheme */
+    --background-light-value: 19 71% 97%;
+    --background-light-color: hsl(var(--background-light-value));
+    --text-light-value: 288 23% 25%;
+    --text-light-color: hsl(var(--text-light-value));
+    --primary-light-value: 315 31% 32%;
+    --primary-light-color: hsl(var(--primary-light-value));
+    --secondary-light-value: 212 33% 33%;
+    --secondary-light-color: hsl(var(--secondary-light-value));
+    /* dark color scheme */
+    --background-dark-value: 288 23% 25%;
+    --background-dark-color: hsl(var(--background-dark-value));
+    --text-dark-value: 19 71% 97%;
+    --text-dark-color: hsl(var(--text-dark-value));
+    --primary-dark-value: 315 30% 82%;
+    --primary-dark-color: hsl(var(--primary-dark-value));
+    --secondary-dark-value: 211 33% 83%;
+    --secondary-dark-color: hsl(var(--secondary-dark-value));
+    /* sizes */
+    --spacing: 2rem;
+    --maxWidth: 70rem;
 }
 
 *,
@@ -2670,47 +2701,55 @@ html {
     text-size-adjust: 100%;
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/tab-size */
     tab-size: 4;
+    /* light dark scheme */
+    background-color: var(--background-dark-color);
+    color: var(--text-dark-color);
+}
+
+@media (prefers-color-scheme: light) {
+    html {
+        /* dark color scheme */
+        background-color: var(--background-light-color);
+        color: var(--text-light-color);
+    }
 }
 
 body {
     /* remove any margin that browsers add to body */
     margin: 0;
-    /* default values */
-    background-color: var(--main-background-light-color);
-    color: var(--main-text-light-color);
 }
 
 header {
-    margin-bottom: var(--main-spacing);
+    margin-bottom: var(--spacing);
 }
 
 footer {
-    margin-top: var(--main-spacing);
-    min-height: calc(var(--main-spacing) * 2);
+    margin-top: var(--spacing);
+    min-height: calc(var(--spacing) * 2);
 }
 
 main {
     display: flex;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: calc(var(--main-spacing) * 4);
-    max-width: var(--main-maxWidth);
+    margin-bottom: calc(var(--spacing) * 4);
+    max-width: var(--maxWidth);
 }
 
 /* on phones put aside below article */
 @media all and (max-width: 48rem) {
     main {
-        margin-bottom: calc(var(--main-spacing) * 2);
+        margin-bottom: calc(var(--spacing) * 2);
         flex-flow: column;
     }
 }
 
 a {
-    color: var(--primary-light-color);
+    color: var(--primary-color);
 }
 
 a:hover {
-    color: var(--secondary-light-color);
+    color: var(--secondary-color);
 }
 ```
 
@@ -2760,7 +2799,75 @@ export default function RootLayout({
 > [MDN "Using CSS custom properties (variables)" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)  
 > [MDN "Flexbox" documentation](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Flexbox)
 
+#### website / app color palette
+
+In the global.css we just created I chose some colors, but you probably want to chose your own color palette, but if like me you are no expert in picking colors that look good together to create a color palette for your website or app, then here is a trick I often use
+
+I first try to find an image that has a mix of colors that I find appealing and then I use an [image to color palette tool](https://coolors.co/image-picker), that will pick colors from an image and create a palette for me
+
+![banner showing the coolors.co image to color palette tool](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/image_to_color_palette.png)
+
+After uploading the image the tool will suggest a palette based on the colors in the image
+
+1. Click on **Browse Image** and upload the image you like
+1. Using the **slider** on top to make the tool pick different colors and suggest different palettes
+1. Ajust the picked color manually by clicking on the circle(s) and then dragging it to desired spot
+1. Use the **+** / **-** to adjust the amount of colors you want to have in the palette
+1. After you have found a palette you like, click on the **down arrow** next of the **Export palette** button, then chose **Quick view** and then click on any of the colors, the tool will offer you a wide range of formats, from HEX to RGB or HSL, click on the format you prefer to copy it, you could also just click on **Export palette** button itself (instead of the down arrow) which will open a modal and give you several options to copy paste, however not all formats are there, for example if you like to use RGB
+
+You might be wondering what color format you should use? Like colors themself, what ever you prefer is best but if you have no preference use HSL. What is nice about HSL because it allows you to quickly make variants of a color by manually tweaking the values, for example you want to use one of your colors but 10% lighter then you can just change the third value of your HSL color to 10% less. This makes it easy to create a whole range of shades for a given color:
+
+```css
+:root {
+    --lighter-color: ;
+    --light-color: ;
+    --base-color: ;
+    --dark-color: ;
+    --darker-color: ;
+}
+```
+
+> [!MORE]  
+> [coolors.co "image colors picker"](https://coolors.co/image-picker)  
+> [MDN "CSS colors" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_colors)
+
+#### color code converter
+
+If working with colors and you need to quickly convert a color from HEX to RGB or HSL but don't want to open a heavy paint tool, just type ["color picker"](https://www.google.com/search?q=color+picker) into google search
+
+> [!MORE]  
+> [google.com "color picker" widget](https://www.google.com/search?q=color+picker)  
+
 ## Navigation and next/link
+
+!!! demonstrate how not using next/link will cause the browser to fetch whole page: [https://github.com/chrisweb/react-nextjs-nodejs-typescript-grapql-tutorial/blob/386a0e15224f9a34b34e284c36097a3373ab9faf/documentation/SSR_AND_CSR.md?plain=1#L12]()
+
+
+In this chapter we will create a react navigation component for our Next.js project
+
+* we want it to be responsive
+  * on desktop:
+    * we want it to a regular navbar on top of every page inside our header element
+    * on mobile:
+      * we want to use a hamburger menu button that on click will toggle the open / close mode of our navigation panel
+      * on open we want the panel to slide in from top to bottom and on close we want it to slide back from bottom to top
+      * we want to leave a little bit of space on the bottom so that if the user clicks outside of the panel it gets closed
+      * we want the panel to be swipeable, so that when the user swipes up it closes the panel
+      * we want that on click on link that the page gets loaded and the navigation panel gets closed
+      * we want to use a css class to style a link differently if the link is the current page which is open
+
+
+
+!important: this example is for the new next.js (>= 13) app router and not the pages router, [https://nextjs.org/docs/app/building-your-application/routing#the-app-router](), meaning that we will use 'next/navigation' (for /app) and NOT 'next/router' (for /pages)
+
+source for the hamburger css styling & animation: ["CSS-animated hamburger icons" github repository](https://github.com/jonsuh/hamburgers)
+
+I read this article titled ["Don’t Use ARIA Menu Roles for Site Nav"](https://adrianroselli.com/2017/10/dont-use-aria-menu-roles-for-site-nav.html), which basically says that if you can not ensure you do all the aria things right then it is better to not add any aria at all, if you check out the [w3c aria "Menu and Menubar Pattern" page](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) you will see that there are indeed a lot of rules to follow and if you do one or more wrong then you might do more harm than good, this is why as of now I decided not to add any aria, but if you like to discuss this topics then please use the [discussion board of the chris.lu repository on GitHub](https://github.com/chrisweb/chris.lu/discussions)
+
+read more:
+
+* ["CSS-animated hamburger icons" github repository](https://github.com/jonsuh/hamburgers)
+
 
 
 
