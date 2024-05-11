@@ -48,7 +48,7 @@
 
 .border:hover {
     color: var(--secondary-light-color);
-    background-color: var(--secondary-light-color);
+    text-shadow: 0px 0px 10px var(--secondary-light-color), 0px 0px 20px var(--secondary-light-color);
 }
 
 .core {
