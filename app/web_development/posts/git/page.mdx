@@ -36,7 +36,7 @@ sudo apt install git-all
 
 If you have the Xcode command line tools already installed on your machien then you already have git
 
-You can check if installed using this command:
+You can check if it is already installed using this command:
 
 ```shell
 git --version
@@ -109,9 +109,97 @@ git remote set-url origin https://DEFAULT_GIT_USER_NAME@github.com/GITHUB_USER_N
 > [GitHub "git-credential-manager" repository](https://github.com/git-ecosystem/git-credential-manager)  
 > [git-credential-manager documentation](https://github.com/git-ecosystem/git-credential-manager/blob/release/docs/README.md)  
 
-## renaming branches
+## git status
 
-### rename local branch
+To list the local files that differ from the ones in the remote repository and list files that are not tracked, use the following command:
+
+```shell
+git status
+```
+
+> [!MORE]  
+> [git "status" documentation](https://git-scm.com/docs/git-status)  
+
+## switch to another branch
+
+To switch to another branch, use the following command:
+
+```shell
+git checkout BRANCH_NAME
+```
+
+Or you can use the new **git switch**, like so:
+
+```shell
+git switch BRANCH_NAME
+```
+
+> [!MORE]  
+> [git "checkout" documentation](https://git-scm.com/docs/git-checkout)  
+> [git "switch" documentation](https://git-scm.com/docs/git-switch)  
+
+### shortcut to return to previous branch
+
+There is a shortcut to switch back to the previous branch:
+
+```shell
+git checkout -
+```
+
+or using the new switch:
+
+```shell
+git switch -
+```
+
+### stash your changes before switching
+
+If you want to switch to another branch but have uncommited changes then either commit them or stash them away using this command:
+
+```shell
+git stash
+```
+
+Now if you want to see the changes that are currently stashed, use this command:
+
+```shell
+git stash show
+```
+
+And finally to restore the files use:
+
+```shell
+git stash apply
+```
+
+## create a new branch
+
+To create a new branch (and stay on the current branch), use the following command:
+
+```shell
+git branch BRANCH_NAME
+```
+
+To create a new branch and also switch to it, we use **checkout** with the `-b` option, like so:
+
+```shell
+git checkout -b BRANCH_NAME
+```
+
+Or we can use the new git **switch** with the `-c` option, like so:
+
+```shell
+git switch -c BRANCH_NAME
+```
+
+> [!MORE]  
+> [git "branch" documentation](https://git-scm.com/docs/git-branch)  
+> [git "checkout" documentation](https://git-scm.com/docs/git-checkout)  
+> [git "switch" documentation](https://git-scm.com/docs/git-switch)  
+
+## renaming a branche
+
+### rename a local branch
 
 If you didn't push the branch yet, then renaming a local branch is easy, just use the following command in your terminal (command line tool):
 
