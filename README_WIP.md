@@ -378,6 +378,9 @@ tokensMap: {
 * make a tip box explaining that if you want to use html comments in code boxes you need to encode the html entities or the comment will not show, the browser considers it a real html comment if not encoded, so `<` needs to be encoded as `&lt;` and `>` encoded as `&gt;`, like so `&lt;!-- MY HTML COMMENT --&gt;`
 * check out what shiki transformers are <https://shiki.style/guide/transformers#transformers>, can they be useful for our blog <https://www.npmjs.com/package/@shikijs/transformers>
 
+> [!TIP]  
+> You can use language aliases like js and jsx, ts and tsx and also md and mdx, but for example esm is not a supported alias, you can check out the full list of languages / aliases by looking at the [shiki languages file](https://github.com/shikijs/shiki/blob/d5b04703e6237ad660e7d9ab0e6025f10b5c2e95/packages/shiki/src/assets/langs-bundle-full.ts)
+
 read more:
 
 [rehype "pretty code plugin" npm page](https://www.npmjs.com/package/rehype-pretty-code)
