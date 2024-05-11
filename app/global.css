@@ -56,6 +56,16 @@
     --cursor-pointer: url(/assets/cursors/secondary_mouse_pointer.cur), pointer;
 }
 
+/* experimental: p3 colors */
+@media (color-gamut: p3) {
+    :root {
+        --primary-light-color: color(display-p3 1.00 0.00 0.67);
+        --secondary-light-color: color(display-p3 0.00 1.00 0.94);
+        --tertiary-light-color: color(display-p3 1.00 0.73 0.00);
+        --quaternary-light-color: color(display-p3 0.84 0.43 1.00);
+    }
+}
+
 /* high contrast mode */
 @media (prefers-contrast: more) {
     :root {
