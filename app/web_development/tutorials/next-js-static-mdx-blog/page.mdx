@@ -2801,7 +2801,7 @@ export default function RootLayout({
 
 #### website / app color palette
 
-In the global.css we just created I chose some colors, but you probably want to chose your own color palette, but if like me you are no expert in picking colors that look good together to create a color palette for your website or app, then here is a trick I often use
+In the global.css we just created, I chose some colors, but you probably want to chose use a different color palette, but if like me you are no expert in picking colors that look good together to create a color palette for your website or app, then here is a trick I often use
 
 I first try to find an image that has a mix of colors that I find appealing and then I use an [image to color palette tool](https://coolors.co/image-picker), that will pick colors from an image and create a palette for me
 
@@ -2819,17 +2819,34 @@ You might be wondering what color format you should use? Like colors themself, w
 
 ```css
 :root {
-    --lighter-color: ;
-    --light-color: ;
-    --base-color: ;
-    --dark-color: ;
-    --darker-color: ;
+    /* 70% lighter than base */
+    --lighter-color: hsl(217 100% 70%);
+    /* 60% lighter than base */
+    --light-color: hsl(217 100% 60%);
+    /* base */
+    --base-color: hsl(217 100% 50%);
+    /* 40% darker than base */
+    --dark-color: hsl(217 100% 40%);
+    /* 30% darker than base */
+    --darker-color: hsl(217 100% 30%);
 }
 ```
 
+<div style={{
+    display: 'grid',
+    gridGap: '1.5rem',
+    gridAutoFlow: 'column'
+}}>
+    <div style={{ backgroundColor: 'hsl(217 100% 70%)', width: '100px', height: '100px' }}>lighter</div>
+    <div style={{ backgroundColor: 'hsl(217 100% 60%)', width: '100px', height: '100px' }}>light</div>
+    <div style={{ backgroundColor: 'hsl(217 100% 50%)', width: '100px', height: '100px' }}>base</div>
+    <div style={{ backgroundColor: 'hsl(217 100% 40%)', width: '100px', height: '100px' }}>dark</div>
+    <div style={{ backgroundColor: 'hsl(217 100% 30%)', width: '100px', height: '100px' }}>darker</div>
+</div>
+
 > [!MORE]  
 > [coolors.co "image colors picker"](https://coolors.co/image-picker)  
-> [MDN "CSS colors" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_colors)
+> [MDN "CSS colors" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_colors)  
 
 #### color code converter
 
