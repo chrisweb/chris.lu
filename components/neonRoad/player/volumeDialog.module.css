@@ -7,13 +7,20 @@
 
 .dialog {
     box-shadow: 0 0 10px 5px var(--primary-light-color);
-    background: rgba(var(--primary-light-value), 0.3);
+    background-color: rgba(var(--primary-light-value) / 0.3);
     width: 40px;
     height: 170px;
     right: 85px;
     left: auto;
     top: -300px;
     z-index: 41;
+}
+
+/* experimental: p3 colors */
+@media (color-gamut: p3) {
+    .dialog {
+        background-color: color(display-p3 var(--primary-light-value) / 0.3);
+    }
 }
 
 .dialog[open] {

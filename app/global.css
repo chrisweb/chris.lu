@@ -1,8 +1,8 @@
 /* https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties */
 :root {
-    --main-background-value: 15, 0, 25;
+    --main-background-value: 15 0 25;
     --main-background-color: rgb(var(--main-background-value));
-    --main-text-value: 245, 240, 245;
+    --main-text-value: 245 240 245;
     --main-text-color: rgb(var(--main-text-value));
     /* https://bitsofco.de/the-new-system-font-stack/ */
     --main-frontFamily-default: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -42,13 +42,13 @@
     https://www.canva.com/colors/color-wheel/
     https://www.google.com/search?q=google+color+picker
     */
-    --primary-light-value: 255, 0, 170;
+    --primary-light-value: 255 0 170;
     --primary-light-color: rgb(var(--primary-light-value));
-    --secondary-light-value: 0, 255, 240;
+    --secondary-light-value: 0 255 240;
     --secondary-light-color: rgb(var(--secondary-light-value));
-    --tertiary-light-value: 255, 185, 0;
+    --tertiary-light-value: 255 185 0;
     --tertiary-light-color: rgb(var(--tertiary-light-value));
-    --quaternary-light-value: 215, 110, 255;
+    --quaternary-light-value: 215 110 255;
     --quaternary-light-color: rgb(var(--quaternary-light-value));
     --codebloc-font-family: var(--font-sourceCodePro), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     --header-navbar-height: 50px;
@@ -59,10 +59,18 @@
 /* experimental: p3 colors */
 @media (color-gamut: p3) {
     :root {
-        --primary-light-color: color(display-p3 1.00 0.00 0.67);
-        --secondary-light-color: color(display-p3 0.00 1.00 0.94);
-        --tertiary-light-color: color(display-p3 1.00 0.73 0.00);
-        --quaternary-light-color: color(display-p3 0.84 0.43 1.00);
+        --main-background-value: 0.06 0.00 0.10;
+        --main-background-color: color(display-p3 var(--main-background-value));
+        --main-text-value: 0.96 0.94 0.96;
+        --main-text-color: color(display-p3 var(--main-text-value));
+        --primary-light-value: 1.00 0.00 0.67;
+        --primary-light-color: color(display-p3 var(--primary-light-value));
+        --secondary-light-value: 0.00 1.00 0.94;
+        --secondary-light-color: color(display-p3 var(--secondary-light-value));
+        --tertiary-light-value: 1.00 0.73 0.00;
+        --tertiary-light-color: color(display-p3 var(--tertiary-light-value));
+        --quaternary-light-value: 0.84 0.43 1.00;
+        --quaternary-light-color: color(display-p3 var(--quaternary-light-value));
     }
 }
 
@@ -349,6 +357,7 @@ a {
 
     a:hover {
         color: var(--secondary-light-color);
+        text-shadow: 0px 0px 10px var(--secondary-light-color), 0px 0px 20px var(--secondary-light-color);
     }
 
     .animatedUnderline {
@@ -392,6 +401,7 @@ a {
     .hyperLink:hover {
         text-decoration-thickness: 2px;
         text-decoration-color: var(--secondary-light-color);
+        text-shadow: none;
     }
 }
 

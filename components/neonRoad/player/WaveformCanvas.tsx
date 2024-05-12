@@ -31,7 +31,7 @@ const WaveformCanvas = forwardRef<Waveform, IProps>(({ onWaveClickHandler, waveD
         if (waveCanvasRef.current !== null) {
             waveform.setCanvasElement(waveCanvasRef.current)
         }
-        
+
         waveform.setLayoutOptions({
             peakTopFillStyle: 'rgba(255,255,255,0.7)',
             peakBottomFillStyle: 'rgba(255,255,255,0.5)',

@@ -20,7 +20,7 @@
     .dialog {
         transform: scale(0.8);
         right: auto;
-        background-color: rgba(0, 0, 0, 0.7)
+        background-color: rgba(0 0 0 / 0.7)
     }
 }
 

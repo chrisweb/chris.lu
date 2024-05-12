@@ -23,6 +23,7 @@
 .active>a {
     color: var(--secondary-light-color);
     font-weight: var(--main-fontWeight-activeLinks);
+    text-shadow: 0px 0px 10px var(--secondary-light-color), 0px 0px 20px var(--secondary-light-color);
 }
 
 .notActive>a {

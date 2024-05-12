@@ -23,9 +23,16 @@
     display: flex;
     align-items: center;
     z-index: 1;
-    background-color: rgba(0, 0, 0, .6);
+    background-color: rgba(var(--main-background-value) / 0.6);
     width: 100%;
     padding: calc(var(--main-spacing) / 2);
+}
+
+/* experimental: p3 colors */
+@media (color-gamut: p3) {
+    .title {
+        background-color: color(display-p3 var(--main-background-value) / 0.6);
+    }
 }
 
 .link {

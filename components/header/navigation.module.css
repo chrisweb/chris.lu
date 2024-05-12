@@ -2,7 +2,7 @@
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter */
     backdrop-filter: saturate(200%) blur(5px);
     -webkit-backdrop-filter: saturate(200%) blur(5px);
-    background-color: rgba(var(--primary-light-value), 0.01);
+    background-color: rgba(var(--primary-light-value) / 0.01);
     position: fixed;
     top: 0;
     bottom: 0;
@@ -10,6 +10,13 @@
     right: 0;
     z-index: 9998;
     height: var(--header-navbar-height);
+}
+
+/* experimental: p3 colors */
+@media (color-gamut: p3) {
+    .layoutNavbarContainer {
+        background-color: color(display-p3 var(--primary-light-value) / 0.01);
+    }
 }
 
 .layoutNavbar {
@@ -39,38 +46,61 @@
         gap: calc(var(--main-spacing) / 2);
     }
 
-    @keyframes moveDown {
-        from {
-            top: calc(-85vh + var(--header-navbar-height));
-            background-color: rgba(var(--primary-light-value), 0.01);
-        }
-
-        to {
-            top: 0;
-            background-color: rgba(var(--primary-light-value), 0.8);
-        }
-    }
-
     .openNavbar {
         animation: moveDown 1s ease forwards;
-    }
-
-    @keyframes moveUp {
-        from {
-            top: 0;
-            background-color: rgba(var(--primary-light-value), 0.8);
-        }
-
-        to {
-            top: calc(-85vh + var(--header-navbar-height));
-            background-color: rgba(var(--primary-light-value), 0.01);
-        }
     }
 
     .closeNavbar {
         animation: moveUp 1s ease forwards;
     }
 
+}
+
+@keyframes moveDown {
+    from {
+        top: calc(-85vh + var(--header-navbar-height));
+        background-color: rgba(var(--primary-light-value) / 0.01);
+    }
+
+    to {
+        top: 0;
+        background-color: rgba(var(--primary-light-value) / 0.8);
+    }
+}
+
+@keyframes moveUp {
+    from {
+        top: 0;
+        background-color: rgba(var(--primary-light-value) / 0.8);
+    }
+
+    to {
+        top: calc(-85vh + var(--header-navbar-height));
+        background-color: rgba(var(--primary-light-value) / 0.01);
+    }
+}
+
+/* experimental: p3 colors */
+@media (color-gamut: p3) {
+    @keyframes moveDown {
+        from {
+            background-color: color(display-p3 var(--primary-light-value) / 0.01);
+        }
+    
+        to {
+            background-color: color(display-p3 var(--primary-light-value) / 0.8);
+        }
+    }
+
+    @keyframes moveUp {
+        from {
+            background-color: color(display-p3 var(--primary-light-value) / 0.8);
+        }
+    
+        to {
+            background-color: color(display-p3 var(--primary-light-value) / 0.01);
+        }
+    }
 }
 
 .layoutNavbar a {
@@ -91,6 +121,7 @@
 
 .layoutNavbar a:hover {
     color: #fff;
+    text-shadow: none;
 }
 
 .layoutNavbar a::before {

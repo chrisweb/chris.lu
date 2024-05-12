@@ -15,6 +15,13 @@
     background-color: rgba(var(--primary-light-value), 0.01);
 }
 
+/* experimental: p3 colors */
+@media (color-gamut: p3) {
+    .modal::backdrop {
+        background-color: color(display-p3 var(--primary-light-value) / 0.01);
+    }
+}
+
 .core {
     position: relative;
     z-index: 99;

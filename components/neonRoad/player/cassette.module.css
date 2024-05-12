@@ -18,10 +18,18 @@
     display: block;
     cursor: var(--cursor-pointer);
     letter-spacing: 1px;
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(var(--main-background-value) / 0.2);
     border-radius: 7px;
     padding: 3px 0;
     margin: 0 auto;
+}
+
+/* experimental: p3 colors */
+@media (color-gamut: p3) {
+    .songTitle,
+    .artistName {
+        background-color: color(display-p3 var(--main-background-value) / 0.2);
+    }
 }
 
 .songTitle {
@@ -54,7 +62,7 @@
     border-top: 2px solid var(--primary-light-color);
     border-left: 2px solid var(--primary-light-color);
     border-right: 2px solid var(--primary-light-color);
-    box-shadow: rgba(0, 0, 0, 0.6) 0px 0px 20px;
+    box-shadow: rgba(0 0 0 / 0.6) 0px 0px 20px;
     content: '';
     left: 0;
     top: 0;
@@ -110,7 +118,7 @@
 }
 
 .front {
-    background: rgba(var(--primary-light-value), 0.6);
+    background: rgba(var(--primary-light-value) / 0.6);
     transform: rotateY(0deg) translateZ(24px);
     mask-image: radial-gradient(circle 20px at 115px 110px,
             transparent 19px,
@@ -127,26 +135,33 @@
 }
 
 .back {
-    background: rgba(var(--primary-light-value), 0);
     transform: rotateX(180deg) translateZ(24px);
 }
 
 .right {
-    background: rgba(var(--primary-light-value), 0);
     transform: rotateY(90deg) translateZ(193px);
 }
 
 .left {
-    background: rgba(var(--primary-light-value), 0);
     transform: rotateY(-90deg) translateZ(193px);
 }
 
 .top {
-    background: rgba(var(--primary-light-value), 0);
     transform: rotateX(90deg) translateZ(119px);
 }
 
 .bottom {
-    background: rgba(var(--primary-light-value), 0.4);
+    background: rgba(var(--primary-light-value) / 0.4);
     transform: rotateX(-90deg) translateZ(119px);
+}
+
+/* experimental: p3 colors */
+@media (color-gamut: p3) {
+    .front {
+        background: color(display-p3 var(--primary-light-value) / 0.6);
+    }
+
+    .bottom {
+        background: color(display-p3 var(--primary-light-value) / 0.4);
+    }
 }
