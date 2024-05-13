@@ -67,31 +67,18 @@ const UIModal: React.FC<IUIModalProps> = (props): JSX.Element => {
         }
     }, [isModalOpenState])
 
-    const dimensionsStyles: { width?: string, height?: string } = {}
-
-    if (typeof props.width !== 'undefined') {
-        dimensionsStyles.width = props.width + 'px'
-    }
-
-    if (typeof props.height !== 'undefined') {
-        dimensionsStyles.height = props.height + 'px'
-    }
-
     return createPortal(
         <dialog
             ref={modalRef}
             onCancel={closeHandler}
             onAnimationEnd={animationEndHandler}
             className={`${styles.reset} ${styles.modal} disablePageScroll ${closeAnimationState === true ? styles.hide : ''}`}
-            style={dimensionsStyles}
             onClick={closeHandler}
         >
-            <div className={styles.core}>
-                {withCloseButton && (
-                    <ButtonWithIcon clickCallback={closeHandler} whichIcon={faClose} />
-                )}
-                {children}
-            </div>
+            {withCloseButton && (
+                <ButtonWithIcon clickCallback={closeHandler} whichIcon={faClose} />
+            )}
+            {children}
         </dialog>,
         document.body
     )

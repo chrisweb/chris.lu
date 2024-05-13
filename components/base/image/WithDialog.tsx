@@ -24,9 +24,9 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
     }, [])
 
     // @ts-expect-error: because the library definition is wrong
-    const modalWidth = props.src?.width as number
+    const intrinsicImageWidth = props.src?.width as number
     // @ts-expect-error: because the library definition is wrong
-    const modalHeight = props.src?.height as number
+    const intrinsicImageHeight = props.src?.height as number
 
     return (
         <>
@@ -46,18 +46,21 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
                     <FontAwesomeIcon icon={faMagnifyingGlass} size="xl" color='white' className={`${styles.iconPositioning}  ${styles.icon}`} />
                 )}
             </button>
-            <UIModal isOpen={imageDialogIsOpenState} onCloseCallback={closeDialogCallback} hasCloseButton={false} width={modalWidth} height={modalHeight}>
-                {/* eslint-disable-next-line jsx-a11y/alt-text */}
-                <Image
-                    style={{
-                        objectFit: 'contain',
-                        width: '100%',
-                        height: 'auto',
-                        maxHeight: '90%',
-                    }}
-                    placeholder="blur"
-                    {...props}
-                />
+            <UIModal isOpen={imageDialogIsOpenState} onCloseCallback={closeDialogCallback} hasCloseButton={false}>
+                <div className={styles.imageContainer}>
+                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                    <Image
+                        style={{
+                            objectFit: 'contain',
+                            width: '100%',
+                            height: '100%',
+                            maxWidth: intrinsicImageWidth ? intrinsicImageWidth + 'px' : '100%',
+                            maxHeight: intrinsicImageHeight ? intrinsicImageHeight + 'px' : '100%'
+                        }}
+                        placeholder="blur"
+                        {...props}
+                    />
+                </div>
             </UIModal>
         </>
     )

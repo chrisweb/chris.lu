@@ -4,11 +4,6 @@
     background-color: transparent;
 }
 
-.modal {
-    max-width: calc(100vw - 2em - 6px);
-    max-height: calc(100vh - 2em - 6px);
-}
-
 .modal::backdrop {
     backdrop-filter: saturate(200%) blur(40px);
     -webkit-backdrop-filter: saturate(200%) blur(40px);
@@ -20,17 +15,6 @@
     .modal::backdrop {
         background-color: color(display-p3 var(--primary-light-value) / 0.01);
     }
-}
-
-.core {
-    position: relative;
-    z-index: 99;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    cursor: var(--cursor-pointer);
 }
 
 .modal[open] {
