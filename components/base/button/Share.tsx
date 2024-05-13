@@ -57,7 +57,7 @@ const ShareButton = forwardRef<ButtonWithIconRefType, IProps>((props, buttonRef)
 
         const shareData = { url, title, description }
 
-        if (window.navigator.canShare(shareData)) {
+        if (typeof window.navigator.canShare === 'function' && window.navigator.canShare(shareData)) {
             setShareDataState(shareData)
         }
     }, [])
