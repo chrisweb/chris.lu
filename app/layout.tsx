@@ -30,7 +30,9 @@ export const metadata: Metadata = {
 import type { Viewport } from 'next'
 
 export const viewport: Viewport = {
-    themeColor: '#ff00aa',
+    /* on older safari this is used as background color
+    for the top safari UI, use dark color instead of primary */
+    themeColor: '#2e102f',
 }
 
 import '@fortawesome/fontawesome-svg-core/styles.css'
