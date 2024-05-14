@@ -117,7 +117,14 @@ html {
         https://developer.chrome.com/docs/css-ui/scrollbar-styling */
         scrollbar-width: auto;
         /* scrollbar-color: the first color is for the thumb of the scrollbar and the second color for the track */
-        scrollbar-color: rgba(var(--secondary-light-value), 0.9) rgba(var(--secondary-light-value), 0.02);
+        scrollbar-color: rgba(var(--secondary-light-value) / 0.9) black;
+    }
+
+    /* experimental: p3 colors */
+    @media (color-gamut: p3) {
+        * {
+            scrollbar-color: color(display-p3 var(--secondary-light-value) / 0.9) black;
+        }
     }
 }
 
@@ -132,15 +139,15 @@ html {
     }
 
     *::-webkit-scrollbar-track {
-        background-color: rgba(var(--secondary-light-value), 0.02);
+        background-color: black;
     }
 
     *::-webkit-scrollbar-thumb {
-        background: linear-gradient(var(--secondary-light-color) 0%, var(--primary-light-color) 95%);
+        background: linear-gradient(in srgb, var(--secondary-light-color) 0%, var(--primary-light-color) 95%);
     }
 
     *::-webkit-scrollbar-thumb:horizontal {
-        background: linear-gradient(95deg, var(--secondary-light-color) 0%, var(--primary-light-color) 95%);
+        background: linear-gradient(95deg in srgb, var(--secondary-light-color) 0%, var(--primary-light-color) 95%);
     }
 }
 
@@ -226,7 +233,7 @@ main {
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
     background-size: 200% 100%;
-    background-image: linear-gradient(90deg, var(--primary-light-color) 5%, var(--tertiary-light-color) 50%, var(--primary-light-color) 95%);
+    background-image: linear-gradient(90deg in srgb, var(--primary-light-color) 5%, var(--tertiary-light-color) 50%, var(--primary-light-color) 95%);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -363,7 +370,7 @@ a {
     .animatedUnderline {
         /* underline animation */
         /* https://nickymeuleman.netlify.app/blog/css-animated-wrapping-underline */
-        background-image: linear-gradient(var(--secondary-light-color) 0%, var(--secondary-light-color) 100%);
+        background-image: linear-gradient(in srgb, var(--secondary-light-color) 0%, var(--secondary-light-color) 100%);
         background-size: 0% 1px;
         background-position-y: 100%;
         background-position-x: 0%;
@@ -390,7 +397,8 @@ a {
     text-decoration-thickness: 2px;
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-thickness */
     text-underline-offset: var(--main-textUnderlineOffset-links);
-    background: -webkit-linear-gradient(45deg, var(--primary-light-color), var(--tertiary-light-color));
+    /* warning! don't add "in srgb" to this gradient, will fail to render in safari */
+    background: linear-gradient(45deg, var(--primary-light-color), var(--tertiary-light-color));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;

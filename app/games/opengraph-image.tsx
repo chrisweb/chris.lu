@@ -72,7 +72,7 @@ export default async function OGImage(/*props: IImageProps*/) {
                         fontWeight: 400,
                         fontStyle: 'normal',
                         fontSize: '150',
-                        backgroundImage: 'linear-gradient(45deg, rgb(255, 0, 170) 20%, rgb(0, 255, 240) 80%)',
+                        backgroundImage: 'linear-gradient(45deg in srgb, rgb(255, 0, 170) 20%, rgb(0, 255, 240) 80%)',
                         backgroundClip: 'text',
                         filter: 'drop-shadow(0px 0px 15px #2f0f30)',
                         color: 'transparent',

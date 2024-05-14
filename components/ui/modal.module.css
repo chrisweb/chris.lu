@@ -7,7 +7,7 @@
 .modal::backdrop {
     backdrop-filter: saturate(200%) blur(40px);
     -webkit-backdrop-filter: saturate(200%) blur(40px);
-    background-color: rgba(var(--primary-light-value), 0.01);
+    background-color: rgba(var(--primary-light-value) / 0.01);
 }
 
 /* experimental: p3 colors */
