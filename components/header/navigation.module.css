@@ -54,50 +54,56 @@
         animation: moveUp 1s ease forwards;
     }
 
-}
-
-@keyframes moveDown {
-    from {
-        top: calc(-85vh + var(--header-navbar-height));
-        background-color: rgba(var(--primary-light-value) / 0.01);
+    @keyframes moveDown {
+        from {
+            top: calc(-85vh + var(--header-navbar-height));
+            background-color: rgba(var(--primary-light-value) / 0.01);
+        }
+    
+        to {
+            top: 0;
+            background-color: rgba(var(--primary-light-value) / 0.8);
+        }
+    }
+    
+    @keyframes moveUp {
+        from {
+            top: 0;
+            background-color: rgba(var(--primary-light-value) / 0.8);
+        }
+    
+        to {
+            top: calc(-85vh + var(--header-navbar-height));
+            background-color: rgba(var(--primary-light-value) / 0.01);
+        }
     }
 
-    to {
-        top: 0;
-        background-color: rgba(var(--primary-light-value) / 0.8);
-    }
-}
-
-@keyframes moveUp {
-    from {
-        top: 0;
-        background-color: rgba(var(--primary-light-value) / 0.8);
-    }
-
-    to {
-        top: calc(-85vh + var(--header-navbar-height));
-        background-color: rgba(var(--primary-light-value) / 0.01);
-    }
 }
 
 /* experimental: p3 colors */
-@media (color-gamut: p3) {
+/* max-width: 70rem / 1120px (mobile breakpoint) */
+@media all and (max-width: 70rem) and (color-gamut: p3) {
+
     @keyframes moveDown {
         from {
+            top: calc(-85vh + var(--header-navbar-height));
             background-color: color(display-p3 var(--primary-light-value) / 0.01);
         }
     
         to {
+            top: 0;
             background-color: color(display-p3 var(--primary-light-value) / 0.8);
         }
     }
 
     @keyframes moveUp {
         from {
+            top: 0;
             background-color: color(display-p3 var(--primary-light-value) / 0.8);
         }
     
         to {
+            top: calc(-85vh + var(--header-navbar-height));
             background-color: color(display-p3 var(--primary-light-value) / 0.01);
         }
     }
