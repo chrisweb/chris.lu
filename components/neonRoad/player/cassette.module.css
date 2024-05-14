@@ -1,10 +1,16 @@
 .cassette {
     position: absolute;
+    left: 7px;
+    top: 3px;
     /* perspective is set on walkman, use preserve-3d to ensure the children of cassette are in the same 3d space as the one created by the walkman perspective*/
     transform-style: preserve-3d;
-    /* 100% to ensure the transform-origin is the center of the walkman */
-    width: 100%;
-    height: 100%;
+}
+
+/* max-width: 70rem / 1120px (mobile breakpoint) */
+@media all and (max-width: 70rem) {
+    .cassette {
+        transform: scale(0.8);
+    }
 }
 
 .songTitle,

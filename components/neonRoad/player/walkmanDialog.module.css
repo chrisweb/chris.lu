@@ -6,11 +6,11 @@
 }
 
 .dialog {
-    width: 386px;
-    height: 238px;
+    width: 400px;
+    height: 244px;
     right: var(--main-spacing);
     left: auto;
-    top: -300px;
+    top: -238px;
     perspective: 600px;
     z-index: 40;
 }
@@ -18,9 +18,12 @@
 /* max-width: 70rem / 1120px (mobile breakpoint) */
 @media all and (max-width: 70rem) {
     .dialog {
-        transform: scale(0.8);
-        right: auto;
-        background-color: rgba(0 0 0 / 0.7)
+        background-color: rgba(0 0 0 / 0.7);
+        width: 322px;
+        height: 197px;
+        right: 0;
+        left: 0;
+        margin: 0 auto;
     }
 }
 
