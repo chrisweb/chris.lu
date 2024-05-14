@@ -55,7 +55,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
             <>
                 {props.id === 'articleToc' ? (
                     <aside>
-                        <div className='asideCore sticky'>
+                        <div className='asideCore'>
                             <HeadingsObserver>
                                 {children}
                             </HeadingsObserver>

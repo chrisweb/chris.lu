@@ -625,9 +625,15 @@ article,
     }
 }
 
+article {
+    order: 1;
+}
+
 aside {
     width: var(--main-aside-maxWidth);
-    order: 9999;
+    /* aside is first in the HTML
+    but displayed after <article> */
+    order: 2;
 }
 
 @media all and (max-width: 48rem) {
@@ -639,6 +645,8 @@ aside {
 }
 
 .asideCore {
+    position: -webkit-sticky;
+    position: sticky;
     top: calc(var(--header-navbar-height) + var(--main-spacing));
     overflow-y: auto;
     height: calc(100vh - var(--header-navbar-height) - var(--main-spacing));
@@ -646,6 +654,7 @@ aside {
 
 @media all and (max-width: 48rem) {
     .asideCore {
+        position: relative;
         top: 0;
         overflow-y: none;
         height: auto;
@@ -692,11 +701,6 @@ aside {
 .alignLeft {
     text-align: left;
     width: 100%;
-}
-
-.sticky {
-    position: -webkit-sticky;
-    position: sticky
 }
 
 .noUnderline {

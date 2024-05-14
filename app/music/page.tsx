@@ -17,7 +17,7 @@ export default function MusicPage() {
     return (
         <>
             <aside>
-                <div className='asideCore sticky'>
+                <div className='asideCore'>
                     <ul className="linksList">
                         <li>
                             <FontAwesomeIcon icon={faSpotify} color='white' size="2x" className="social" /> <BaseLink href="https://open.spotify.com/user/chriswwweb/playlists">My Spotify Playlists</BaseLink>

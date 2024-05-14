@@ -11,7 +11,7 @@ export default function WebDevelopmentPage() {
     return (
         <>
             <aside>
-                <div className='asideCore sticky'>
+                <div className='asideCore'>
                     <ul className="linksList">
                         <li>
                             <FontAwesomeIcon icon={faGithub} color='white' size="2x" className="social" /> <BaseLink href="https://github.com/chrisweb">My GitHub Projects</BaseLink>
