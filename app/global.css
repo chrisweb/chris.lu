@@ -1,6 +1,6 @@
 /* https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties */
 :root {
-    --main-background-value: 15 0 25;
+    --main-background-value: 20 0 35;
     --main-background-color: rgb(var(--main-background-value));
     --main-text-value: 245 240 245;
     --main-text-color: rgb(var(--main-text-value));
@@ -59,17 +59,17 @@
 /* experimental: p3 colors */
 @media (color-gamut: p3) {
     :root {
-        --main-background-value: 0.06 0.00 0.10;
+        --main-background-value: 0.07 0.00 0.13;
         --main-background-color: color(display-p3 var(--main-background-value));
         --main-text-value: 0.96 0.94 0.96;
         --main-text-color: color(display-p3 var(--main-text-value));
-        --primary-light-value: 1.00 0.00 0.67;
+        --primary-light-value: 1.00 0.00 0.63;
         --primary-light-color: color(display-p3 var(--primary-light-value));
-        --secondary-light-value: 0.00 1.00 0.94;
+        --secondary-light-value: 0.00 1.00 0.91;
         --secondary-light-color: color(display-p3 var(--secondary-light-value));
-        --tertiary-light-value: 1.00 0.73 0.00;
+        --tertiary-light-value: 1.00 0.76 0.23;
         --tertiary-light-color: color(display-p3 var(--tertiary-light-value));
-        --quaternary-light-value: 0.84 0.43 1.00;
+        --quaternary-light-value: 0.81 0.45 1.00;
         --quaternary-light-color: color(display-p3 var(--quaternary-light-value));
     }
 }
@@ -117,13 +117,13 @@ html {
         https://developer.chrome.com/docs/css-ui/scrollbar-styling */
         scrollbar-width: auto;
         /* scrollbar-color: the first color is for the thumb of the scrollbar and the second color for the track */
-        scrollbar-color: rgba(var(--secondary-light-value) / 0.9) black;
+        scrollbar-color: rgba(var(--secondary-light-value) / 0.9) rgba(var(--secondary-light-value) / 0.1);
     }
 
     /* experimental: p3 colors */
     @media (color-gamut: p3) {
         * {
-            scrollbar-color: color(display-p3 var(--secondary-light-value) / 0.9) black;
+            scrollbar-color: color(display-p3 var(--secondary-light-value) / 0.9) color(display-p3 var(--secondary-light-value) / 0.1);
         }
     }
 }
@@ -139,7 +139,14 @@ html {
     }
 
     *::-webkit-scrollbar-track {
-        background-color: black;
+        background-color: rgba(var(--secondary-light-value) / 0.1);
+    }
+
+    /* experimental: p3 colors */
+    @media (color-gamut: p3) {
+        *::-webkit-scrollbar-track {
+            background-color: color(display-p3 var(--secondary-light-value) / 0.1);
+        }
     }
 
     *::-webkit-scrollbar-thumb {
@@ -149,6 +156,7 @@ html {
     *::-webkit-scrollbar-thumb:horizontal {
         background: linear-gradient(95deg in srgb, var(--secondary-light-color) 0%, var(--primary-light-color) 95%);
     }
+
 }
 
 body {
@@ -876,20 +884,16 @@ make the text color a bit darker */
     background-color: var(--quaternary-light-color);
 }
 
-.markdown-alert-note .markdown-alert-header,
-.markdown-alert-warn .markdown-alert-header,
-.markdown-alert-tip .markdown-alert-header {
-    color: var(--main-background-color);
-}
-
 .markdown-alert-more,
 .markdown-alert-more .markdown-alert-header {
     background-color: var(--primary-light-color);
 }
 
-.markdown-alert-more ul {
-    list-style-type: none;
-    padding: 0px;
+.markdown-alert-note .markdown-alert-header,
+.markdown-alert-warn .markdown-alert-header,
+.markdown-alert-tip .markdown-alert-header,
+.markdown-alert-more .markdown-alert-header {
+    color: var(--main-background-color);
 }
 
 .grid {
