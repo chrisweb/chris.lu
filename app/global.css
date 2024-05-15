@@ -200,8 +200,6 @@ footer {
     position: relative;
     font-size: var(--main-fontSize-default);
     line-height: var(--main-lineHeight-default);
-    /* width fix for mobile when word is extremly long */
-    overflow-x: clip;
 }
 
 header {
@@ -606,6 +604,8 @@ article,
     width: 100%;
     padding-left: var(--main-spacing);
     padding-right: var(--main-spacing);
+    /* width fix for mobile when word is extremly long */
+    overflow-x: clip;
 }
 
 article,
@@ -634,6 +634,15 @@ aside {
     /* aside is first in the HTML
     but displayed after <article> */
     order: 2;
+    /* this sticky is a hack to fix a nextjs bug
+    https://github.com/vercel/next.js/issues/45187
+    because this element has an order 2 next/link will
+    scroll to it, but because it it on the bottom of the page
+    it will result in the opposite of what is intended (a scroll to top)
+    if an element is sticky or fixed nextjs will ignore it
+    this is why I set this element to be sticky but I don't 
+    set a top value so the sticky will actually have no effect */
+    position: sticky;
 }
 
 @media all and (max-width: 48rem) {
@@ -645,7 +654,6 @@ aside {
 }
 
 .asideCore {
-    position: -webkit-sticky;
     position: sticky;
     top: calc(var(--header-navbar-height) + var(--main-spacing));
     overflow-y: auto;

@@ -108,7 +108,6 @@ const HeaderNavigation: React.FC = () => {
                                 onClick={onClickLinkHandler}
                                 className={isActiveCheck(menuItem.pathname)}
                                 title={menuItem.text}
-                                scroll={false}
                             >
                                 {menuItem.text}
                             </Link>
