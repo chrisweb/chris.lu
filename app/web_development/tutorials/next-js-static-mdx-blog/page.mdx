@@ -789,7 +789,7 @@ First you need to have or create an account on [Sentry.io](https://sentry.io) (i
 
 Now we need create a new project on Sentry.io (if you need help with that step, check out my chapter [Create a Sentry.io project](/web_development/posts/sentry-io#create-a-sentryio-project) in the Sentry.io post)
 
-Now that the project is created we will use the Sentry.io Wizard tool to install the Sentry.io SDK for Next.js (if you need help with that step, check out my chapter [Sentry.io SDK for Next.js projects](/web_development/posts/sentry-io#sentryio-sdk-for-nextjs-projects) in the Sentry.io post)
+Now that the project is created we will use the Sentry.io Wizard tool to install the Sentry.io SDK for Next.js (if you need help with that step, check out my chapter [Sentry.io SDK for Next.js installation](/web_development/posts/sentry-io#sentryio-sdk-for-nextjs-installation) in the Sentry.io post)
 
 After creating a Sentry.io project and setting up the SDK I recommend also using the [Sentry.io integration on Vercel](https://vercel.com/integrations/sentry) as this will automate the part **"Adding the Sentry authentication token as an environment variable to your CI setup"** that we just saw when using the Sentry.io wizard (if you need help with that step, check out my chapter [Sentry integration for Vercel](/web_development/posts/vercel#sentry-integration-for-vercel) in the Vercel post)
 
@@ -822,14 +822,14 @@ export default function Error({
     }, [error])
 
     return (
-        <div>
+        <>
             <h2>Sorry, something went wrong 😞</h2>
             <button
                 onClick={() => reset()} // attempt to recover by trying to re-render the segment
             >
                 Try again
             </button>
-        </div>
+        </>
     )
 }
 ```

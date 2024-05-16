@@ -51,9 +51,9 @@ Finally click on **Create Project**
 
 Now click on **Configure SDK**
 
-## Sentry.io SDK for Next.js projects
+## Sentry.io SDK for Next.js installation
 
-You can either use the recommended sentry command or follow their manual [setup toturial](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/), I chose to use the command, if you chose manual you may want to copy the DSN they give you at the end of the page (a Sentry DSN is an API key you will use when setting up your SDK)
+You can either use the Sentry Wizard or follow their manual [setup toturial](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/), I chose to use the Wizard as it guides you through setting up Sentry and will also install some test files to ensure everything is working, if you chose manual you may want to copy the DSN they give you at the end of the page (a Sentry DSN is an API key you will use when setting up your SDK)
 
 > [!TIP]  
 > before using the wizard, I recommend commiting your latest changes (if you haven't already) and do a last sync before launching the sentry wizard, this way you will be able to clearly see what stuff Sentry.io will add to your project and you will see what got changed in exsiting files like the next.config.mjs file
@@ -64,25 +64,33 @@ In your VSCode terminal (or your preferred command line tool), type the followin
 npx @sentry/wizard@latest -i nextjs
 ```
 
+Or if you prefer to use the wizard without sending telemetry data to sentry.io (usage statics and crash reports) then add the `--disable-telemetry` option to the command, like so:
+
+```shell
+npx @sentry/wizard@latest -i nextjs --disable-telemetry
+```
+
 First you will get asked if you accept installing the sentry wizard npm package, press `y` to accept and press `Enter` move on
 
-**Are you using Sentry SaaS or self-hosted Sentry?** you probably want to chose SaaS like me (if you are a company though you might want to have a look at the hosted version) then press `Enter`
+After the installation the wizard will automatically get launched and it will start asking you questions about your setup preferences: 
 
-**Do you already have an account?** Yes (if you did follow the previous chapter or already had an account before) then press `Enter`
+**Are you using Sentry SaaS or self-hosted Sentry?** you probably want to chose **Sentry SaaS (sentry.io)** like I did (but if you are a company though you might want to have a look at the hosted version) then press `Enter`
 
-Then the sentry wizard will ask you to login, which will open the sentry login page in your default browser, now login into your account (or create one if you haven't one yet), then go back to your terminal
+**Do you already have an account?** chose **Yes** (if you did follow the previous chapter or already had an account before) then press `Enter` (or chose **No** if you have no account yet and follow the [account creation](#create-an-account-sign-up) process)
+
+Then the sentry wizard will ask you to login, which will open the sentry login page in your default browser, now login into your account, then go back to your terminal
 
 **Select your Sentry project**, chose the your Sentry Project from the list (when using the wizard Sentry will have automatically created a project for the SDK you chose earlier for you, if however you don't see a Project listed here, you can check out the [Create a Sentry.io project](#create-a-sentryio-project) chapter to create a project first)
 
-Now sentry will install the Sentry SDK for Next.js
+Now sentry will install the latest Sentry SDK for Next.js
 
-**Do you want to route Sentry requests in the browser through your NextJS server to avoid ad blockers?**, Sentry wants to know if it should route the requests it sends out through your Next.js server, by doing so Sentry attempts to bypass the block lists of adblocker addons that are installed in some browsers, this means Sentry will first send the client-side requests to a URL on your server and then your server will forward the request to the Sentry API, I personally chose **Yes** as I want to increase the chance of getting bug reports, but feel free to answer **No** if for example you don't like to have the extra traffic this redirect will cause
+**Do you want to route Sentry requests in the browser through your NextJS server to avoid ad blockers?**, Sentry wants to know if it should route the requests it sends out through your Next.js server, by doing so Sentry attempts to bypass the block lists of adblocker addons that are installed in some browsers, this means Sentry will first send the client-side requests to a URL on your server and then your server will forward the request to the Sentry API, I personally chose **Yes** as I want to increase the chance of getting bug reports, but feel free to answer **No** if for example you don't want to have the extra traffic (on your server backend) that this redirect will cause
 
 **Do you want to create an example page** chose **YES** (we will later use it to test the Sentry setup and then we will delete it)
 
 **Are you using a CI/CD tool to build and deploy your application?** chose **YES** (if you are using Vercel, GitHub actions or any other CI/CD deployment tool, if you are NOT chose **NO**)
 
-Sentry.io Wizard will give you a **SENTRY_AUTH_TOKEN** string, if you use a CI/CD for your deployments, copy the token and save it in a secure location, you will need this token later if for example if you set up a custom GitHub action, then you will want to add that token environement variable to your GitHub secrets and if you use another CI/CD service you should check out their documentation to learn how to use that token to automatically upload sourcemaps to Sentry
+If you chose yes, then the Sentry.io Wizard will give you a **SENTRY_AUTH_TOKEN** string, if you use a CI/CD for your deployments, copy the token and save it in a secure location, you will need this token later if for example if you set up a custom GitHub action, then you will want to add that token environement variable to your GitHub secrets and if you use another CI/CD service you should check out their documentation to learn how to use that token to automatically upload sourcemaps to Sentry
 
 CI/CD tools can authenticate themself to Sentry.io using the **SENTRY_AUTH_TOKEN** environment variable and then use the Sentry.io API to automatically upload the sourcemaps of your build to Sentry.io, so that later if there is a bug report on Sentry.io it will be able to use the sourcemaps instead of the minified build files, to show you where the error occured
 
@@ -101,7 +109,7 @@ Now wait for the backend and frontend errors to appear (this can take a few minu
 
 As soon as the two errors appear, feel free to click on them and have a look at what error logging on Sentry.io looks like
 
-Before we commit / sync all the changes Sentry.io did in our project, **delete** the `app\sentry-example-page\page.jsx` **test page** and the `app\api\sentry-example-api\route.js` **API test route** files that Sentry.io created to test the error logging, you will not need them anymore
+Before we commit / sync all the changes Sentry.io did in our project, **delete** the `app\sentry-example-page\` folder including the `page.jsx` **test page** and the also delete the `app\api\sentry-example-api\` folder inclusing the `route.js` **API test route** file that Sentry.io created to test the error logging, you will not need them anymore
 
 ## Sentry.io for Next.js configuration
 
@@ -121,11 +129,12 @@ export default withSentryConfig(nextConfig, {
     // For all available options, see:
     // https://github.com/getsentry/sentry-webpack-plugin#options
 
-    // Suppresses source map uploading logs during build
-    silent: true,
     org: "YOUR_ORGANISATION_NAME",
     project: "YOUR_PROJECT_NAME",
-}, {
+
+    // Only print logs for uploading source maps in CI
+    silent: !process.env.CI,
+
     // For all available options, see:
     // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
 
@@ -147,7 +156,7 @@ export default withSentryConfig(nextConfig, {
     // Automatically tree-shake Sentry logger statements to reduce bundle size
     disableLogger: true,
 
-    // Enables automatic instrumentation of Vercel Cron Monitors.
+    // Enables automatic instrumentation of Vercel Cron Monitors. (Does not yet work with App Router route handlers.)
     // See the following for more information:
     // https://docs.sentry.io/product/crons/
     // https://vercel.com/docs/cron-jobs
@@ -175,7 +184,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 Sentry.init({
-    dsn: 'https://daf0befe66519725bbe2ad707a11bbb3@o4504017992482816.ingest.sentry.io/4506763918770176',
+    dsn: 'YOUR_SENTRY_DSN_URL',
 
     // Adjust this value in production, or use tracesSampler for greater control
     tracesSampleRate: tracesSampleRate,
@@ -208,13 +217,75 @@ Line 27 I completly disabled **replaysSessionSampleRate**, meaning there will be
 
 Line 38 I pass the environment to Sentry, meaning Sentry will know if the environment is preview or production (that value is based on the Vercel environment on which Next.js got deployed)
 
+> [!WARN]  
+> If you copy paste the `sentry.client.config.ts` above into your project make sure you update the **YOUR_SENTRY_DSN_URL** placeholder with your own Sentry DSN  
+
 `sentry.edge.config.ts` are the options for when Next.js uses the [Vercel Edge Network](https://vercel.com/docs/edge-network/overview), I kept that file as, but feel free to adjust any values to fit your use case
 
 `sentry.server.config.ts` is again similar to the previous two, just this one is specifically for Next.js server side options, I also kept this file as is
 
+There is however one option in the server configuration that is commented out that you might want to consider, the option lets you use the [Spotlight js](https://spotlightjs.com/) package by Sentry. If you want to use it I recommend checking out the documentation to [install and setup Spotlight in a Next.js project](https://spotlightjs.com/setup/nextjs/)
+
 > [!MORE]  
 > [Sentry.io "Extend your Next.js Configuration" documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration)  
 > [Sentry.io "Next.js SDK Configuration" documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/)  
+> [Spotlight js "Using Spotlight with Next.js" documentation](https://spotlightjs.com/setup/nextjs/)  
+
+### Sentry v8 update
+
+On [May 13 2024 Sentry released v8](https://github.com/getsentry/sentry-javascript/releases/tag/8.0.0) of their Javascript SDK, version 8 now makes use of the [Next.js "Instrumentation"](https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation) to integrate monitoring and logging tools into a Next.js app, if after using the Wizard and the starting the development server (using npm run dev) you get the following message(s) in your terminal (command line tool):
+
+> \[@sentry/nextjs] It appears you've configured a `sentry.server.config.ts` file. Please ensure to put this file's content into the `register()` function of a Next.js instrumentation hook instead. To ensure correct functionality of the SDK, `Sentry.init` must be called inside `instrumentation.ts`. Learn more about setting up an instrumentation hook in Next.js: https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation. You can safely delete the `sentry.server.config.ts` file afterward.
+> \[@sentry/nextjs] It appears you've configured a `sentry.edge.config.ts` file. Please ensure to put this file's content into the `register()` function of a Next.js instrumentation hook instead. To ensure correct functionality of the SDK, `Sentry.init` must be called inside `instrumentation.ts`. Learn more about setting up an instrumentation hook in Next.js: https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation. You can safely delete the `sentry.edge.config.ts` file afterward.
+
+Then you need to do a little bit of manual work to fully upgrade to **Sentry v8** and support **Next.js "Instrumentation"**, this because the Sentry Wizard has not yet been fully updated yet, it will create a instrumentation.ts file but it will import the two configuration file instead of actually putting the content of those 2 configuration files into the instrumentation.ts file
+
+First open the `instrumentations.ts` file in the root of your project and then open the 2 Sentry configuration files `sentry.edge.config.ts` and `sentry.server.config.ts` (that are also in the root of your poject) as well
+
+Now copy the **Sentry.init** code of the `sentry.edge.config.ts` file and replace the `await import('./sentry.edge.config')` in the `instrumentations.ts` file with the code you just copied, then do the same with the `sentry.server.config.ts`, next add `import * as Sentry from '@sentry/nextjs'` on top of the `instrumentations.ts` file and finally remove the **async** from the `export function register() {` line
+
+When done, your final `instrumentations.ts` file should look like this:
+
+```ts title="instrumentation.ts"
+import * as Sentry from '@sentry/nextjs'
+
+export function register() {
+    if (process.env.NEXT_RUNTIME === 'nodejs') {
+        Sentry.init({
+            dsn: 'YOUR_SENTRY_DSN_URL',
+
+            // Adjust this value in production, or use tracesSampler for greater control
+            tracesSampleRate: 1,
+
+            // Setting this option to true will print useful information to the console while you're setting up Sentry.
+            debug: false,
+
+            // Uncomment the line below to enable Spotlight (https://spotlightjs.com)
+            // spotlight: process.env.NODE_ENV === 'development',
+
+        })
+    }
+
+    if (process.env.NEXT_RUNTIME === 'edge') {
+        Sentry.init({
+            dsn: 'YOUR_SENTRY_DSN_URL',
+
+            // Adjust this value in production, or use tracesSampler for greater control
+            tracesSampleRate: 1,
+
+            // Setting this option to true will print useful information to the console while you're setting up Sentry.
+            debug: false,
+        })
+    }
+}
+```
+
+> [!WARN]  
+> If you copy paste the `sentry.client.config.ts` above into your project make sure you update the **YOUR_SENTRY_DSN_URL** placeholder with your own Sentry DSN  
+
+One final step is to delete both `sentry.edge.config.ts` and `sentry.server.config.ts` files as they are not needed anymore
+
+That's it, congratulations you just upgraded to Sentry v8 🎉
 
 ## Investigating Sentry.io dropped requests
 
