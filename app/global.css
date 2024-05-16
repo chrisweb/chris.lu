@@ -634,15 +634,6 @@ aside {
     /* aside is first in the HTML
     but displayed after <article> */
     order: 2;
-    /* this sticky is a hack to fix a nextjs bug
-    https://github.com/vercel/next.js/issues/45187
-    because this element has an order 2 next/link will
-    scroll to it, but because it it on the bottom of the page
-    it will result in the opposite of what is intended (a scroll to top)
-    if an element is sticky or fixed nextjs will ignore it
-    this is why I set this element to be sticky but I don't 
-    set a top value so the sticky will actually have no effect */
-    position: sticky;
 }
 
 @media all and (max-width: 48rem) {
@@ -650,6 +641,15 @@ aside {
         width: 100%;
         padding-left: var(--main-spacing);
         padding-right: var(--main-spacing);
+        /* this sticky is a hack to fix a nextjs bug
+        https://github.com/vercel/next.js/issues/45187
+        because this element has an order 2 next/link will
+        scroll to it, but because it it on the bottom of the page
+        it will result in the opposite of what is intended (a scroll to top)
+        if an element is sticky or fixed nextjs will ignore it
+        this is why I set this element to be sticky but I don't 
+        set a top value so the sticky will actually have no effect */
+        position: sticky;
     }
 }
 
@@ -662,8 +662,8 @@ aside {
 
 @media all and (max-width: 48rem) {
     .asideCore {
-        position: relative;
-        top: 0;
+        position: revert;
+        top: unset;
         overflow-y: none;
         height: auto;
     }
