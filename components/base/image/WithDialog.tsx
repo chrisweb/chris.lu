@@ -57,7 +57,7 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
                             maxWidth: intrinsicImageWidth ? intrinsicImageWidth + 'px' : '100%',
                             maxHeight: intrinsicImageHeight ? intrinsicImageHeight + 'px' : '100%'
                         }}
-                        sizes="100vw"
+                        sizes="(max-width: 1200px) 25vw, 100vw"
                         placeholder="blur"
                         {...props}
                     />
