@@ -1182,8 +1182,8 @@ the solution I chose has the advantage that:
 
 we will use:
 
-1. [remark mdx images](https://www.npmjs.com/package/remark-mdx-images) will take the path and do an import
-2. because the image is now an import, next/image will be able to define the height and width, which means we can always use the placeholder=blur feature
+1. [rehype-mdx-import-media](https://www.npmjs.com/package/rehype-mdx-import-media) will take the path and do an import (don't use [remark-mdx-images](https://github.com/remcohaszing/remark-mdx-images) it is deprecated)
+1. because the image is now an import, next/image will be able to define the height and width, which means we can always use the placeholder=blur feature
 
 I use 3 default configurations for images:
 
