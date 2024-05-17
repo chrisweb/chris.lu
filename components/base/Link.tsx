@@ -58,18 +58,20 @@ const BaseLink: React.FC<IBaseLinkProps> = (props): JSX.Element => {
     const isExternal = isExternalUrl(href.toString(), 'chris.lu')
     const isMe = isUrlMe(href.toString())
 
+    const newLinkProps = {...linkProps}
+
     if (isExternal) {
-        linkProps.rel = 'nofollow noopener noreferrer'
-        linkProps.target = '_blank'
+        newLinkProps.rel = 'nofollow noopener noreferrer'
+        newLinkProps.target = '_blank'
     }
 
     if (isMe) {
-        linkProps.rel = 'me'
+        newLinkProps.rel = 'me'
     }
 
     return (
         <>
-            <Link href={href} {...linkProps}>
+            <Link href={href} {...newLinkProps}>
                 {children}
             </Link>
             {isExternal && <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="sm" className='externalLinkIcon' />}
