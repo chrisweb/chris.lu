@@ -330,7 +330,7 @@ const nextConfig = (phase) => {
         },
         // file formats for next/image
         images: {
-            formats: ['image/avif', 'image/webp']
+            formats: ['image/avif', 'image/webp'],
         },
         // TODO: is this needed for app directory
         // Configure pageExtensions to include md and mdx
