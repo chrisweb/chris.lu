@@ -1755,9 +1755,9 @@ for a full list of rules that the Next.js ESLint plugin adds check out the [Next
 
 ### Why are we changing the Next.js linting setup?
 
-Because the Next.js setup lints code in `.ts` and `.tsx` files using the typescript-eslint parser, it however does not lint markdown syntax and code in MDX files for which you need to have an MDX parser installed
+The Next.js linting setup lints code in `.ts` and `.tsx` files using the typescript-eslint parser, it however does not lint markdown syntax and code in MDX files for which you need to have an MDX parser installed
 
-This is why we are going to 3 packages to do the linting of markdown style as well as ES syntax in MDX pages:
+This is why we are going to add 3 packages to do the linting of markdown content in MDX pages:
 
 * the first one is a **remark plugin** called [remark lint](https://github.com/remarkjs/remark-lint) that will lint the markdown style we use to format our content in MDX pages
 * the second one is an **ESLint plugin** called [eslint-plugin-mdx](https://github.com/mdx-js/eslint-mdx/tree/master/packages/eslint-plugin-mdx) which will lint MDX
