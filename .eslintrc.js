@@ -32,9 +32,10 @@ module.exports = {
         {
             files: ['**/*.ts?(x)'],
             extends: [
+                'plugin:@react-three/recommended',
+                // https://typescript-eslint.io/users/configs#recommended-configurations
                 'plugin:@typescript-eslint/recommended-type-checked',
                 'plugin:@typescript-eslint/stylistic-type-checked',
-                'plugin:@react-three/recommended',
             ],
             parser: '@typescript-eslint/parser',
             parserOptions: {
