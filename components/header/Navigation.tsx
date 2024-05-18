@@ -6,7 +6,7 @@ import Link from 'next/link'
 import useClickOutside, { TypeCallback } from '@/hooks/useClickOutside'
 import { useRouter, usePathname } from 'next/navigation'
 import { useSwipeable } from 'react-swipeable'
-import { Route } from 'next'
+import type { Route } from 'next'
 
 interface IMainMenuItem {
     pathname: string
@@ -103,7 +103,7 @@ const HeaderNavigation: React.FC = () => {
                     {mainMenuItems.map((menuItem) => {
                         return (
                             <Link
-                                href={menuItem.pathname  as Route}
+                                href={menuItem.pathname as Route}
                                 key={menuItem.pathname}
                                 onClick={onClickLinkHandler}
                                 className={isActiveCheck(menuItem.pathname)}
