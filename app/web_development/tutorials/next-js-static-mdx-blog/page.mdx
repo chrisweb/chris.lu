@@ -2745,11 +2745,21 @@ main {
 }
 
 a {
-    color: var(--primary-color);
+    color: var(--primary-dark-color);
 }
 
 a:hover {
-    color: var(--secondary-color);
+    color: var(--secondary-dark-color);
+}
+
+@media (prefers-color-scheme: light) {
+    a {
+        color: var(--primary-light-color);
+    }
+
+    a:hover {
+        color: var(--secondary-light-color);
+    }
 }
 ```
 
@@ -2815,6 +2825,15 @@ After uploading the image the tool will suggest a palette based on the colors in
 1. Use the **+** / **-** to adjust the amount of colors you want to have in the palette
 1. After you have found a palette you like, click on the **down arrow** next of the **Export palette** button, then chose **Quick view** and then click on any of the colors, the tool will offer you a wide range of formats, from HEX to RGB or HSL, click on the format you prefer to copy it, you could also just click on **Export palette** button itself (instead of the down arrow) which will open a modal and give you several options to copy paste, however not all formats are there, for example if you like to use RGB
 
+Another nice tool to create color palettes is the free online tool called [palettte.app](https://palettte.app/), if you want to give it a try I recommend first reading the [tutorial](https://gabrielschneider.de/palettte-app/)
+
+> [!MORE]  
+> [coolors.co "image colors picker"](https://coolors.co/image-picker)  
+> [MDN "CSS colors" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_colors)  
+> [palettte.app](https://palettte.app/)  
+
+##### Hue, Saturation, Lightness (HSL) colors
+
 You might be wondering what color format you should use? Like colors themself, what ever you prefer is best but if you have no preference use HSL. What is nice about HSL because it allows you to quickly make variants of a color by manually tweaking the values, for example you want to use one of your colors but 10% lighter then you can just change the third value of your HSL color to 10% less. This makes it easy to create a whole range of shades for a given color:
 
 ```css
@@ -2845,15 +2864,40 @@ You might be wondering what color format you should use? Like colors themself, w
 </div>
 
 > [!MORE]  
-> [coolors.co "image colors picker"](https://coolors.co/image-picker)  
-> [MDN "CSS colors" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_colors)  
+> [MDN "hsl()" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/hsl)  
+> [caniuse "hsl() (HSL color model)" page](https://caniuse.com/mdn-css_types_color_hsl)  
 
-#### color code converter
+##### color code converter(s)
 
-If working with colors and you need to quickly convert a color from HEX to RGB or HSL but don't want to open a heavy paint tool, just type ["color picker"](https://www.google.com/search?q=color+picker) into google search
+If working with colors and you need to quickly convert a color from HEX to RGB or HSL but don't want to open a heavy paint tool, just type ["color picker"](https://www.google.com/search?q=color+picker) into google search, then paste your hex or rgb or hsl color code into the picker or just use the sliders to chose a color, then the picker will show you that color in several formats, now you just need copy the format you want to use
+
+Another easy and quick way of converting colors from one format to another is using the developer tools, for example in chrome after opening the developer tools (using the `F12` key or by right clicking into the page and then selecting **Inspect**), open the **Elements** tab, then on the right you can see the css of the page, when there is a color in the css the developer tools will show a small rectangle with that color inside, click on that rectangle to open the color picker
+
+In the color picker you have an icon that consists of two angle brackets (pointing up and down) which has a tooltip that says **Change color format**:
+
+![picture showing the chrome developer tools color picker icon](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_color_picker_change_format_icon.png)
+
+Click on it to open a menu with a list of alternative formats and chose the one you want to use:
+
+![picture showing the chrome developer tools color picker change format menu](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_color_picker_change_format_menu.png)
+
+The last option in the color formats list is the CSS [color()](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/color) functional notation that allows you to switch to another [color space](https://developer.mozilla.org/en-US/docs/Glossary/Color_space) other than the default sRGB color space, be careful though when using the CSS color() function as it got introduced in the [W3C "CSS Color Module Level 4" specification](https://drafts.csswg.org/css-color/), meaning the browser support is still quite low as you can see on the [caniuse "color()" page](https://caniuse.com/css-color-function)
 
 > [!MORE]  
 > [google.com "color picker" widget](https://www.google.com/search?q=color+picker)  
+> [developer.chrome.com "color picker" documentation](https://developer.chrome.com/docs/devtools/css/color)  
+
+##### color contrast
+
+The most important thing when chosing colors for you websites / app is to make sure the contrast between background and text colors is hight enough
+
+To check if your contrast is high enough, there is a very nice free [Color Contrast Checker](https://coolors.co/contrast-checker/fdf5f2-385270) online tool you might want to try, just paste the color you intend to use as background color as well as the color you intend to use for your text and the tool will tell you how good the contrast is, a good contrast starts at 3, however if you want to have really high contrast a value above 7 is recommended
+
+If you want to know more about why color contrast matters and why it is an important accessibility feature then I recommend reading the [W3C "contrast" accessibility guidelines](https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html)
+
+> [!MORE]  
+> [coolors.co "Color Contrast Checker"](https://coolors.co/contrast-checker/fdf5f2-385270)  
+> [W3C "contrast" accessibility guidelines](https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html)  
 
 ## Navigation and next/link
 
