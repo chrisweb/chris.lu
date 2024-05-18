@@ -1195,7 +1195,7 @@ import Image, { ImageProps } from 'next/image'
 
 const ImageArticle: React.FC<ImageProps> = (props): JSX.Element => {
 
-```
+```tsx
 let placeholder = true
 
 // something is odd here, but I have not found the reason yet
@@ -1243,25 +1243,38 @@ return (
         )}
     </>
 )
-```
 
 }
 
 export default ImageArticle
+```
 
-new chapter: final touches
+Accessibility
 
-* robots.txt: https://nextjs.org/docs/app/api-reference/file-conventions/metadata/robots
-* sitemap.xml: https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap
-* manifest.json: https://nextjs.org/docs/app/api-reference/file-conventions/metadata/manifest
+alt is now required so make sure you pass a good value
 
-https://web.dev/explore/progressive-web-apps
-https://web.dev/articles/add-manifest
-https://web.dev/articles/maskable-icon
-https://w3c.github.io/manifest/
-https://developer.mozilla.org/en-US/docs/Web/Manifest
-manifest generator: https://manifest-gen.netlify.app/
-favicon generator: https://realfavicongenerator.net/
+to learn how to write good alt texts for images check out these [w3c "Resources on Alternative Text for Images" list](https://www.w3.org/WAI/alt/)
+
+edit the Next.js config
+
+```mjs
+        // file formats for next/image
+        images: {
+            formats: ['image/avif', 'image/webp'],
+        },
+```
+
+NextJS lazy loads image components by default, so you don’t need to do anything special.
+
+It is advised to disable lazy-loading for images above the fold, though. To do this, you can set the loading priority higher, or switch to eager loading:
+
+```tsx
+<Image
+  src="/foo.png"
+  loading="eager"
+  priority={true}
+/>
+```
 
 ### optimizing images with next/image
 
