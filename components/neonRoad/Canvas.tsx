@@ -3,7 +3,8 @@
 import { useRef/*, Suspense, useState*/ } from 'react'
 import type { PerspectiveCamera as PerspectiveCameraType } from 'three'
 import { Canvas } from '@react-three/fiber'
-import { PerspectiveCamera/*, OrbitControls, PerformanceMonitor, PerformanceMonitorApi, StatsGl, Hud, useDetectGPU, useProgress*/ } from '@react-three/drei'
+import { PerspectiveCamera,/*, OrbitControls, PerformanceMonitor, PerformanceMonitorApi, StatsGl, Hud, useDetectGPU, useProgress*/ 
+SoftShadows} from '@react-three/drei'
 import NightSky from './NightSky'
 import Sun from './Sun'
 import SunLight from './SunLight'
@@ -70,17 +71,24 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
 
     const aspect = (props.containerRef?.current !== null && props.containerRef?.current.clientWidth) ? props.containerRef?.current.clientWidth / props.containerRef?.current.clientHeight : 2
 
+    // https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/unpackColorSpace
+    const rendererProps = {
+        drawingBufferColorSpace: 'display-p3',
+        unpackColorSpace: 'display-p3',
+        antialias: false,
+    }
+
     return (
         <>
             <Canvas
                 // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#new-pixel-ratio-default
                 //dpr={Math.min(window.devicePixelRatio, 2)} // pixel ratio, should be 1 or 2
                 // https://docs.pmnd.rs/react-three-fiber/api/canvas#render-defaults
-                shadows={true} // true will set shadows to PCFsoft
+                shadows={'soft'} // PCFsoft
                 fallback={<Fallback />}
                 aria-label={props.altText}
                 role="img"
-                gl={{ antialias: false }}
+                gl={rendererProps}
                 //frameloop="never"
                 //onCreated={onCanvasCreatedHandler}
                 //ref={canvasRef}
@@ -99,6 +107,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 {/*<PerformanceMonitor onChange={onPerformanceChangeHandler} />*/}
                 <color attach="background" args={['#2f0f30']} />
                 <ambientLight color={'#ecd7e2'} intensity={15} />
+                <SoftShadows />
                 <NightSky
                     position={[0, 1, -2.1]}
                     scale={[20, 3, 1]}
