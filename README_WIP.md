@@ -1276,6 +1276,15 @@ It is advised to disable lazy-loading for images above the fold, though. To do t
 />
 ```
 
+placeholder
+
+The placeholder helps to reduce layout shifts that occur when there is no reserved space for an image that has not been loaded yet, by filling the space the image will take when loaded using the placeholder
+without a placeholder the space the image will use would be non existing but then when the image has finished loading the page layout would shift, which could be bad for the user visiting your page as the layout shift could happen at the same moment the user tries to interact with your page and hence cause a misclick
+There is a cumulative layout shift (CLS) metric in Core Web Vitals that tracks the amount of shifts that occur, the more layout shifts the less stable a page is considered to be, if there are a lot of shift you will get a low core web vitals score, indicating there is room for improvement
+
+[web.dev "Cumulative Layout Shift (CLS)" documentation](https://web.dev/articles/cls)
+
+
 ### optimizing images with next/image
 
 images go into the public directory, but `public` is not part of the src path, only what comes after
