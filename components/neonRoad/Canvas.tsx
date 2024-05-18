@@ -3,8 +3,7 @@
 import { useRef/*, Suspense, useState*/ } from 'react'
 import type { PerspectiveCamera as PerspectiveCameraType } from 'three'
 import { Canvas } from '@react-three/fiber'
-import { PerspectiveCamera,/*, OrbitControls, PerformanceMonitor, PerformanceMonitorApi, StatsGl, Hud, useDetectGPU, useProgress*/ 
-SoftShadows} from '@react-three/drei'
+import { PerspectiveCamera/*, OrbitControls, PerformanceMonitor, PerformanceMonitorApi, StatsGl, Hud, useDetectGPU, useProgress, SoftShadows*/} from '@react-three/drei'
 import NightSky from './NightSky'
 import Sun from './Sun'
 import SunLight from './SunLight'
@@ -73,9 +72,9 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
 
     // https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/unpackColorSpace
     const rendererProps = {
-        drawingBufferColorSpace: 'display-p3',
-        unpackColorSpace: 'display-p3',
-        antialias: false,
+        //drawingBufferColorSpace: 'display-p3',
+        //unpackColorSpace: 'display-p3',
+        //antialias: false,
     }
 
     return (
@@ -107,7 +106,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 {/*<PerformanceMonitor onChange={onPerformanceChangeHandler} />*/}
                 <color attach="background" args={['#2f0f30']} />
                 <ambientLight color={'#ecd7e2'} intensity={15} />
-                <SoftShadows />
+                {/*<SoftShadows />*/}
                 <NightSky
                     position={[0, 1, -2.1]}
                     scale={[20, 3, 1]}
