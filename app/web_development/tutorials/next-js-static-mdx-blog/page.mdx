@@ -3014,6 +3014,7 @@ Then click on the **Blog** link in the top navigation to go to the second page w
 
 Now look at the Network tab logs and you should see something similar to this:
 
+![chrome developer tools clear networking when using the anchor element](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_clear_networking_log_anchor_tag.png)
 
 The most important information is the first row of the logs, where it says that the **Blog** page got fetched using a **GET** request (I will explain in a bit why we did this initial test)
 
@@ -3068,15 +3069,15 @@ Now click again on the **Blog** link in the top navigation
 
 Now look at the logs of the Networking tab once again:
 
+![chrome developer tools clear networking when using the next link](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_clear_networking_log_next_link.png)
 
+Have a look at the first line (actually also second line because there are now two rsc fetches being made), remember last time when we used the anchor we had a page request on the first line loading the entire Blog **document**, but this time we just have two **fetch** requests getting some RSC (react server component) data from the server
 
-Have a look at the first line, remember last time when we used the anchor we had a page request on the first line loading the entire Blog document, but this time we just have a fetch request getting some RSC (react server component) data from the server
-
-As you can see the difference is huge when using the next/link component compared to using a regular anchor element, 
+As you can see the difference is huge when using the next/link component compared to using a regular anchor element, the exact values don't matter this is just simple example, but as you can the difference between the values on the first screen and the second are substancial
 
 When you use next/link Next.js will only fetch the data it needs instead of loading the full page, for example the layout has not changed between the homepage and the blog page so Next.js won't fetch it again
 
-
+Faster loading times are of course important because the user will be able to navigate faster and if an app is fast the user is happy, but it also great because your server running Next.js will spend less time building pages and responding to requests which means it will be able to handle more requests and finally faster loading times will also improve your SEO score
 
 
 ```tsx title="/components/header/Navigation.tsx"
