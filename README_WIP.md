@@ -724,6 +724,8 @@ h6 {
 }
 ```
 
+TODO: not on accessibility: [Are your Anchor Links Accessible?](https://amberwilson.co.uk/blog/are-your-anchor-links-accessible/)
+
 read more:
 
 * ["rehype-slug" npm page](https://www.npmjs.com/package/rehype-slug)
