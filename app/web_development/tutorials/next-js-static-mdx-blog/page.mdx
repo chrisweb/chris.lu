@@ -1464,11 +1464,11 @@ Because we used **create next app** in our tsconfig.json we **already** have the
 
 ## Our first MDX page
 
-In the `app` folder, create a new `tutorial_examples` folder and then in it another `first_page` folder
+In the `app` folder, create a new `tutorial_examples` folder and then in it another `first_mdx_page` folder
 
-Then inside of the `first_page` folder add a `page.mdx` (note that we set **extension** to **mdx** and NOT tsx) and in it paste the following content:
+Then inside of the `first_mdx_page` folder add a `page.mdx` (note that we set **extension** to **mdx** and NOT tsx) and in it paste the following content:
 
-```md title="/app/tutorial_examples/first_page/page.mdx"
+```md title="/app/tutorial_examples/first_mdx_page/page.mdx"
 # Hello 👋 with MDX!
 
 ## headline 2nd level
@@ -1492,7 +1492,7 @@ Then inside of the `first_page` folder add a `page.mdx` (note that we set **exte
 
 Make sure your dev server is running, if it is not start it using `npm run dev`
 
-And then visit your newly created MDX page in the browser at `http://localhost:3000/tutorial_examples/first_page`
+And then visit your newly created MDX page in the browser at `http://localhost:3000/tutorial_examples/first_mdx_page`
 
 Congratulations you just learned how to create MDX pages 🎉 
 
@@ -1510,7 +1510,7 @@ After the build is done look at the output in your terminal:
 
 ![build terminal output showing that pages are static](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/nextjs_build_static_page.png)
 
-The empty circle (`○`) in front of our `/tutorial_examples/first_page` indicates that Next.js will statically generate routes (pages) at build time instead of on-demand at request time
+The empty circle (`○`) in front of our `/tutorial_examples/first_mdx_page` indicates that Next.js will statically generate routes (pages) at build time instead of on-demand at request time
 
 Because Next.js will automatically choose the [server rendering strategy](https://nextjs.org/docs/app/building-your-application/rendering/server-components#server-rendering-strategies) for each route based on the features you use, your page at some point might not be **static** anymore, for example when you use a **dynamic function** like [searchParams](https://nextjs.org/docs/app/api-reference/file-conventions/page#searchparams-optional) or when you fetch data and do NOT use [generateStaticParams](https://nextjs.org/docs/app/api-reference/functions/generate-static-params) then your page becomes **dynamic**, which is why it is recommended to launch the build locally from time to time and check if the pages you want to be static still are, if they are not static anymore you might want to find the cause and for example use **generateStaticParams** to make it fully static again
 
@@ -1556,9 +1556,9 @@ const Counting: React.FC = () => {
 export default Counting
 ```
 
-Now lets edit the `/app/tutorial_examples/first_page/page.mdx` page we created earlier and add our Counting component to it, like so:
+Now lets edit the `/app/tutorial_examples/first_mdx_page/page.mdx` page we created earlier and add our Counting component to it, like so:
 
-```mdx title="/app/tutorial_examples/first_page/page.mdx"
+```mdx title="/app/tutorial_examples/first_mdx_page/page.mdx"
 import Counting from '@/components/tutorial_examples/buttons/Counting'
 
 # Hello 👋 with MDX!
@@ -1596,9 +1596,9 @@ Of course this is just an example, you can import any component you want, for ex
 
 ## MDX in pages and components
 
-Besides turning a whole page into an MDX page as we saw in the previous chapter, you can also use MDX in pages or components
+Besides turning a whole page into an MDX page as we saw in the previous chapter, you can also import MDX into typescript pages and components
 
-### MDX in a page
+### import MDX into a typescript page
 
 First inside of the `/app/tutorial_examples` folder create a new `mdx_in_a_page` folder
 
@@ -1629,7 +1629,7 @@ Make sure your dev server is running, if it is not start it using `npm run dev`
 
 And then visit your newly created page in the browser at `http://localhost:3000/tutorial_examples/mdx_in_a_page`
 
-### MDX in a component
+### import MDX into a component
 
 First go into the `/components/tutorial_examples` folder and then create another folder called `mdx`
 
@@ -2294,7 +2294,7 @@ First lets create a `tests` folder in the root of our project and inside of that
 The linting errors that should be shown in this file:
 - On line 3: Unexpected duplicate toplevel heading (remark-lint-no-multiple-toplevel-headings)
 - On line 5: error no image element use next/image
-- This line should trigger: Unexpected missing final newline character (remark-lint-final-newline)
+- On line 10 (this line): should trigger: Unexpected missing final newline character, the last character of this line should have a wavy underline (remark-lint-final-newline)
 ```
 
 If your ESLint setup is working as intended you should now see that several lines are underlined with a green wave, if you hover over the part that is underlined a modal box should show you details about the warning
@@ -2341,8 +2341,6 @@ const TestButton = forwardRef<ButtonRefType, PropsInterface>((props, buttonRef) 
             clickCallback()
         }
 
-
-
     }
 
     return (
@@ -2363,8 +2361,8 @@ export default TestButton
 
 /* linting errors I should see in this test component
 - line 11:  buttonRef is declared but its value is never read (@typescript-eslint/no-unused-vars)
-- line 31: the "'" should be escaped (react/no-unescaped-entities)
-- line 37: comment that line out, then you should get: Component definition is missing display name (react/display-name)
+- line 29: the "'" should be escaped (react/no-unescaped-entities)
+- line 35: first you need to comment that line out by adding `//` at the beginning and then you should get: Component definition is missing display name (react/display-name)
 */
 ```
 
@@ -2517,8 +2515,6 @@ Next in the `UI` folder we create a new `button.module.css` file and add the fol
 And then a second `Button.tsx` file (also in the `UI` folder), with the following content:
 
 ```tsx title="/components/tutorial_examples/UI/Button.tsx"
-'use client'
-
 import styles from './styles.module.css'
 
 const UIButton: React.FC = (): JSX.Element => {
@@ -2568,8 +2564,6 @@ Then right click, chose **Inspect** or press `F12` to open the dev tools, then o
 If you want to add more than one class, either use a package like [classnames](https://www.npmjs.com/package/classnames) or just use [native javascript template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) like so:
 
 ```tsx title="/components/tutorial_examples/UI/Button.tsx" "&#x60;${styles.reset} ${styles.core}&#x60;"
-'use client'
-
 import styles from './styles.module.css'
 
 const UIButton: React.FC = (): JSX.Element => {
@@ -2631,9 +2625,9 @@ A few more things about CSS Modules worth knowing:
 
 CSS Modules are perfect to style components and even the content in your pages but at some point you might want to add a class that can be used everywhere in your app, like for example have a global style for links, this is when you use the global.css
 
-As we saw in the previous chapter you can add classes and use the id in CSS Modules, but there is one thing you can't use in CSS Modules and that's the Element type
+As we saw in the previous chapter you can add classes and use the id in CSS Modules, but there is one thing you can't use in CSS Modules and that's the [Element type selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/Type_selectors)
 
-Let's (re-)open the CSS Module we used for our button and styling for the button by using the Element type, like so:
+Let's (re-)open the CSS Module (that we created for our button) and add some styling for the button by using the **`button` type selector**, like so:
 
 ```css title="/components/tutorial_examples/UI/button.module.css" {14-16}
 .reset {
@@ -2809,96 +2803,6 @@ export default function RootLayout({
 > [MDN "Using CSS custom properties (variables)" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)  
 > [MDN "Flexbox" documentation](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Flexbox)
 
-#### website / app color palette
-
-In the global.css we just created, I chose some colors, but you probably want to chose use a different color palette, but if like me you are no expert in picking colors that look good together to create a color palette for your website or app, then here is a trick I often use
-
-I first try to find an image that has a mix of colors that I find appealing and then I use an [image to color palette tool](https://coolors.co/image-picker), that will pick colors from an image and create a palette for me
-
-![banner showing the coolors.co image to color palette tool](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/image_to_color_palette.png)
-
-After uploading the image the tool will suggest a palette based on the colors in the image
-
-1. Click on **Browse Image** and upload the image you like
-1. Using the **slider** on top to make the tool pick different colors and suggest different palettes
-1. Ajust the picked color manually by clicking on the circle(s) and then dragging it to desired spot
-1. Use the **+** / **-** to adjust the amount of colors you want to have in the palette
-1. After you have found a palette you like, click on the **down arrow** next of the **Export palette** button, then chose **Quick view** and then click on any of the colors, the tool will offer you a wide range of formats, from HEX to RGB or HSL, click on the format you prefer to copy it, you could also just click on **Export palette** button itself (instead of the down arrow) which will open a modal and give you several options to copy paste, however not all formats are there, for example if you like to use RGB
-
-Another nice tool to create color palettes is the free online tool called [palettte.app](https://palettte.app/), if you want to give it a try I recommend first reading the [tutorial](https://gabrielschneider.de/palettte-app/)
-
-> [!MORE]  
-> [coolors.co "image colors picker"](https://coolors.co/image-picker)  
-> [MDN "CSS colors" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_colors)  
-> [palettte.app](https://palettte.app/)  
-
-##### Hue, Saturation, Lightness (HSL) colors
-
-You might be wondering what color format you should use? Like colors themself, what ever you prefer is best but if you have no preference use HSL. What is nice about HSL because it allows you to quickly make variants of a color by manually tweaking the values, for example you want to use one of your colors but 10% lighter then you can just change the third value of your HSL color to 10% less. This makes it easy to create a whole range of shades for a given color:
-
-```css
-:root {
-    /* 70% lighter than base */
-    --lighter-color: hsl(217 100% 70%);
-    /* 60% lighter than base */
-    --light-color: hsl(217 100% 60%);
-    /* base */
-    --base-color: hsl(217 100% 50%);
-    /* 40% darker than base */
-    --dark-color: hsl(217 100% 40%);
-    /* 30% darker than base */
-    --darker-color: hsl(217 100% 30%);
-}
-```
-
-<div style={{
-    display: 'grid',
-    gridGap: '1.5rem',
-    gridAutoFlow: 'column'
-}}>
-    <div style={{ backgroundColor: 'hsl(217 100% 70%)', width: '100px', height: '100px' }}>lighter</div>
-    <div style={{ backgroundColor: 'hsl(217 100% 60%)', width: '100px', height: '100px' }}>light</div>
-    <div style={{ backgroundColor: 'hsl(217 100% 50%)', width: '100px', height: '100px' }}>base</div>
-    <div style={{ backgroundColor: 'hsl(217 100% 40%)', width: '100px', height: '100px' }}>dark</div>
-    <div style={{ backgroundColor: 'hsl(217 100% 30%)', width: '100px', height: '100px' }}>darker</div>
-</div>
-
-> [!MORE]  
-> [MDN "hsl()" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/hsl)  
-> [caniuse "hsl() (HSL color model)" page](https://caniuse.com/mdn-css_types_color_hsl)  
-
-##### color code converter(s)
-
-If working with colors and you need to quickly convert a color from HEX to RGB or HSL but don't want to open a heavy paint tool, just type ["color picker"](https://www.google.com/search?q=color+picker) into google search, then paste your hex or rgb or hsl color code into the picker or just use the sliders to chose a color, then the picker will show you that color in several formats, now you just need copy the format you want to use
-
-Another easy and quick way of converting colors from one format to another is using the developer tools, for example in chrome after opening the developer tools (using the `F12` key or by right clicking into the page and then selecting **Inspect**), open the **Elements** tab, then on the right you can see the css of the page, when there is a color in the css the developer tools will show a small rectangle with that color inside, click on that rectangle to open the color picker
-
-In the color picker you have an icon that consists of two angle brackets (pointing up and down) which has a tooltip that says **Change color format**:
-
-![picture showing the chrome developer tools color picker icon](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_color_picker_change_format_icon.png)
-
-Click on it to open a menu with a list of alternative formats and chose the one you want to use:
-
-![picture showing the chrome developer tools color picker change format menu](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_color_picker_change_format_menu.png)
-
-The last option in the color formats list is the CSS [color()](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/color) functional notation that allows you to switch to another [color space](https://developer.mozilla.org/en-US/docs/Glossary/Color_space) other than the default sRGB color space, be careful though when using the CSS color() function as it got introduced in the [W3C "CSS Color Module Level 4" specification](https://drafts.csswg.org/css-color/), meaning the browser support is still quite low as you can see on the [caniuse "color()" page](https://caniuse.com/css-color-function)
-
-> [!MORE]  
-> [google.com "color picker" widget](https://www.google.com/search?q=color+picker)  
-> [developer.chrome.com "color picker" documentation](https://developer.chrome.com/docs/devtools/css/color)  
-
-##### color contrast
-
-The most important thing when chosing colors for you websites / app is to make sure the contrast between background and text colors is hight enough
-
-To check if your contrast is high enough, there is a very nice free [Color Contrast Checker](https://coolors.co/contrast-checker/fdf5f2-385270) online tool you might want to try, just paste the color you intend to use as background color as well as the color you intend to use for your text and the tool will tell you how good the contrast is, a good contrast starts at 3, however if you want to have really high contrast a value above 7 is recommended
-
-If you want to know more about why color contrast matters and why it is an important accessibility feature then I recommend reading the [W3C "contrast" accessibility guidelines](https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html)
-
-> [!MORE]  
-> [coolors.co "Color Contrast Checker"](https://coolors.co/contrast-checker/fdf5f2-385270)  
-> [W3C "contrast" accessibility guidelines](https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html)  
-
 ## Navigation and next/link
 
 In this chapter we will build a basic navigation to navigate between two pages the home(page) and a second page
@@ -2943,6 +2847,7 @@ const HeaderNavigation: React.FC = () => {
 
     return (
         <>
+            <p>{new Date().toString()}</p>
             <nav id="navigation">
                 {mainMenuItems.map((menuItem) => {
                     return (
@@ -2965,7 +2870,7 @@ export default HeaderNavigation
 
 And finally we open the `layout.tsx` that is in the `app` folder to import / use the navigation component, like so:
 
-```tsx title="/app/layout.tsx" showLineNumbers {3} {19}#special
+```tsx title="/app/layout.tsx" showLineNumbers {3} {19} {20}#special
 import './global.css'
 import { Metadata } from 'next'
 import HeaderNavigation from '@/components/header/Navigation'
@@ -2997,8 +2902,9 @@ export default function RootLayout({
 }
 ```
 
-Line 3 we import our new **HeaderNavigation** component
-Line 19 we replace the placeholder paragraph we had earlier with our new **HeaderNavigation** component
+Line 3 we import our new **HeaderNavigation** component  
+Line 19 we replace the placeholder paragraph we had earlier with our new **HeaderNavigation** component  
+Line 20 we display the current date & time  
 
 Then save the file and launch the dev server if it isn't already running (using the `npm run dev` command)
 
@@ -3016,7 +2922,9 @@ Now look at the Network tab logs and you should see something similar to this:
 
 ![chrome developer tools clear networking when using the anchor element](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_clear_networking_log_anchor_tag.png)
 
-The most important information is the first row of the logs, where it says that the **Blog** page got fetched using a **GET** request (I will explain in a bit why we did this initial test)
+The most important information is the first row of the logs, where it says that the **Blog** page is actually a **document** GET request (I will explain in a bit why we did this initial test)
+
+Now have a look at the time we print on top of the navigation, click on the navigation links and notice how every time we navigate to a page the time gets updated, which makes sense as we reload the entire page every time we navigate (we will see in the next chapter how this is different when using next/link)
 
 ### using next/link instead of anchor elements
 
@@ -3060,6 +2968,9 @@ const HeaderNavigation: React.FC = () => {
 export default HeaderNavigation
 ```
 
+Line 2 we import next/link  
+Line 21 and 27 we replace the anchor with the **Link** component  
+
 Now we repeat the steps we did in the previous chapter, ensure dev is running, open chrome, navigate to [http://localhost:3000/](http://localhost:3000/), open the developer tools, click on the **Network** tab and clear the networking logs
 
 > [!WARN]  
@@ -3071,16 +2982,26 @@ Now look at the logs of the Networking tab once again:
 
 ![chrome developer tools clear networking when using the next link](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_clear_networking_log_next_link.png)
 
-Have a look at the first line (actually also second line because there are now two rsc fetches being made), remember last time when we used the anchor we had a page request on the first line loading the entire Blog **document**, but this time we just have two **fetch** requests getting some RSC (react server component) data from the server
+Have a look at the first line (actually also second line because there are now two rsc fetches being made), remember last time when we used the anchor we had a page request on the first line requesting the entire Blog **document**, this time we just have two **fetch** requests getting some RSC (react server component) data from the server, the total of requests is now 2 compared to the previous test where we had a total of 7, less requests means faster loading times, but less traffic from your server also means reduced costs
 
-As you can see the difference is huge when using the next/link component compared to using a regular anchor element, the exact values don't matter this is just simple example, but as you can the difference between the values on the first screen and the second are substancial
+Faster loading times are of course important because the user will be able to navigate faster and if an app is fast the user is happy, but it is also great because your server running Next.js will spend less time working on responses which means it will be able to handle more requests and finally faster loading times will also improve your SEO score
 
-When you use next/link Next.js will only fetch the data it needs instead of loading the full page, for example the layout has not changed between the homepage and the blog page so Next.js won't fetch it again
+Finally look again at the time we print on top of the navigation and you will notice that this time it doesn't get updated anymore, this is because our layout does not get re-rendered every time we navigate to a new page, which is because Next.js has only replaced the main section of the page but did not make any changes to the layout (this is why on my blog, in the top header if you hit play the songs will continue playing even if you visit a new page, 20 years ago to achieve the same thing I had to put the player into an iFrame, but today with Next.js / React this has become effortless)
 
-Faster loading times are of course important because the user will be able to navigate faster and if an app is fast the user is happy, but it also great because your server running Next.js will spend less time building pages and responding to requests which means it will be able to handle more requests and finally faster loading times will also improve your SEO score
+You can now remove the `<p>{new Date().toString()}</p>` test (in `/app/layout.tsx` at line 20), which we added to demonstrate that the navigation does NOT re-render, we will not need it anymore
 
+> [!MORE]  
+> [Next.js "next/link" documentation](https://nextjs.org/docs/app/api-reference/components/link)  
+
+### highlight active path using next/navigation
+
+Next we are going to use the [pathname](https://developer.mozilla.org/en-US/docs/Web/API/URL/pathname) of the current page that we can get using **next/navigation** to check if the first segment of the current path matches one of the entries in our navigation
+
+Update the `Navigation.tsx` like so:
 
 ```tsx title="/components/header/Navigation.tsx"
+'use client'
+
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import type { Route } from 'next'
@@ -3096,7 +3017,7 @@ const HeaderNavigation: React.FC = () => {
 
     const mainMenuItems: IMainMenuItem[] = [
         { pathname: '/', text: 'Home' },
-        { pathname: '/web_development', text: 'Web development' },
+        { pathname: '/blog', text: 'Blog' },
     ]
 
     const isActiveCheck = (menuItemPathname: string) => {
@@ -3105,13 +3026,13 @@ const HeaderNavigation: React.FC = () => {
 
         if (menuItemPathname.length > 1) {
             if (currentPagePathname.startsWith(menuItemPathname)) {
-                isActiveClass = styles.active
+                isActiveClass = 'active'
             }
         } else {
             // exception for homepage path which is "/"
             // in that case the page path needs to be equal
             if (currentPagePathname === menuItemPathname) {
-                isActiveClass = styles.active
+                isActiveClass = 'active'
             }
         }
 
@@ -3120,20 +3041,20 @@ const HeaderNavigation: React.FC = () => {
 
     return (
         <>
-                <nav id="navigation">
-                    {mainMenuItems.map((menuItem) => {
-                        return (
-                            <Link
-                                href={menuItem.pathname as Route}
-                                key={menuItem.pathname}
-                                className={isActiveCheck(menuItem.pathname)}
-                                title={menuItem.text}
-                            >
-                                {menuItem.text}
-                            </Link>
-                        )
-                    })}
-                </nav>
+            <nav id="navigation">
+                {mainMenuItems.map((menuItem) => {
+                    return (
+                        <Link
+                            href={menuItem.pathname as Route}
+                            key={menuItem.pathname}
+                            className={isActiveCheck(menuItem.pathname)}
+                            title={menuItem.text}
+                        >
+                            {menuItem.text}
+                        </Link>
+                    )
+                })}
+            </nav>
         </>
     )
 }
@@ -3141,35 +3062,27 @@ const HeaderNavigation: React.FC = () => {
 export default HeaderNavigation
 ```
 
-> [!MORE]  
-> [Next.js "next/link" documentation](https://nextjs.org/docs/app/api-reference/components/link)  
-
-
-!!! demonstrate how not using next/link will cause the browser to fetch whole page: [https://github.com/chrisweb/react-nextjs-nodejs-typescript-grapql-tutorial/blob/386a0e15224f9a34b34e284c36097a3373ab9faf/documentation/SSR_AND_CSR.md?plain=1#L12]()
-
-
-In this chapter we will create a react navigation component for our Next.js project
-
-* we want it to be responsive
-  * on desktop:
-    * we want it to a regular navbar on top of every page inside our header element
-    * on mobile:
-      * we want to use a hamburger menu button that on click will toggle the open / close mode of our navigation panel
-      * on open we want the panel to slide in from top to bottom and on close we want it to slide back from bottom to top
-      * we want to leave a little bit of space on the bottom so that if the user clicks outside of the panel it gets closed
-      * we want the panel to be swipeable, so that when the user swipes up it closes the panel
-      * we want that on click on link that the page gets loaded and the navigation panel gets closed
-      * we want to use a css class to style a link differently if the link is the current page which is open
-
-
-
-
-
-
+Line 1 we add the `use client` directive because we are going to use [usePathname](https://nextjs.org/docs/app/api-reference/functions/use-pathname) which is a hook so the component needs to be a client component, we do this only now because it is recommended to turn as few server components into client components, we only do it when we need the component to be interactive or require things like the hook we are about to use
+Line 4 we import **usePathname** from **next/navigation**
+Line 14 we get the **pathname** for the current page
+Line 21 to 38 we have added a function that will check if the pathname starts with the path of one of the items in our navigation, if it does then we add an active class to the className of that item
+Line 48 we use our **isActiveCheck** function to check if that item if active, if it the function will add a class else className will stay empty
 
 > [!MORE]  
 > [Next.js "Linking and Navigating" documentation](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating)  
-> [Next.js "next/link" documentation](https://nextjs.org/docs/app/api-reference/components/link)  
+
+### making the navigation fancy using next/font
+
+Now that our Navigation is working we will add a few touches of color and use next/font to add an custom font
+
+The advantage when using next/font is that it will reduce layout shifts because the text initially uses a default font until the custom font has loaded
+
+
+
+
+
+
+
 
 ## MDX components
 
