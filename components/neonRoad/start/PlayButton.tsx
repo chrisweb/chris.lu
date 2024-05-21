@@ -34,6 +34,7 @@ const PlayButton: React.FC<IProps> = (props) => {
             onClick={pressStartClickHandler}
             onKeyDown={pressStartKeyPressHandler}
             className={playButtonStyles}
+            aria-label="Play 3d animation"
         >
             {children}
         </button>
