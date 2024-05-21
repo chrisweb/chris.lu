@@ -20,6 +20,7 @@ import remarkGfm from 'remark-gfm'
 import { rehypeGithubAlerts } from 'rehype-github-alerts'
 import rehypeMDXImportMedia from 'rehype-mdx-import-media'
 import remarkUnwrapImages from 'remark-unwrap-images'
+import { h } from 'hastscript'
 
 const nextConfig = (phase) => {
 
@@ -70,25 +71,17 @@ const nextConfig = (phase) => {
 
     // https://github.com/rehypejs/rehype-autolink-headings#api
     const rehypeAutolinkHeadingsOptions = {
-        /*behavior: 'wrap',
-        properties: {
-            class: 'headingAnchor',
-        },
-        content: (node) => {
-            const svgIcon = fromHtmlIsomorphic(
-                '<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 17H7q-2.075 0-3.537-1.463Q2 14.075 2 12t1.463-3.538Q4.925 7 7 7h4v2H7q-1.25 0-2.125.875T4 12q0 1.25.875 2.125T7 15h4Zm-3-4v-2h8v2Zm5 4v-2h4q1.25 0 2.125-.875T20 12q0-1.25-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.462Q22 9.925 22 12q0 2.075-1.462 3.537Q19.075 17 17 17Z"/></svg>',
-                { fragment: true }
-            )
-            return [
-                h(null, toString(node)),
-                svgIcon
-            ]
-        }*/
-        properties: {
-            class: 'headingAnchor',
+        behavior: 'append',
+        properties: (node) => {
+            //console.log(node)
+            return {
+                class: 'headingAnchor',
+                'aria-label': 'Heading permalink for: ' + node.children[0].value,
+                title: 'Heading permalink for: ' + node.children[0].value,
+            }
         },
         content: fromHtmlIsomorphic(
-            '<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" class="icon iconLink"><path d="M11 17H7q-2.075 0-3.537-1.463Q2 14.075 2 12t1.463-3.538Q4.925 7 7 7h4v2H7q-1.25 0-2.125.875T4 12q0 1.25.875 2.125T7 15h4Zm-3-4v-2h8v2Zm5 4v-2h4q1.25 0 2.125-.875T20 12q0-1.25-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.462Q22 9.925 22 12q0 2.075-1.462 3.537Q19.075 17 17 17Z"/></svg>',
+            '<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" class="icon iconLink" aria-hidden="true"><path d="M11 17H7q-2.075 0-3.537-1.463Q2 14.075 2 12t1.463-3.538Q4.925 7 7 7h4v2H7q-1.25 0-2.125.875T4 12q0 1.25.875 2.125T7 15h4Zm-3-4v-2h8v2Zm5 4v-2h4q1.25 0 2.125-.875T20 12q0-1.25-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.462Q22 9.925 22 12q0 2.075-1.462 3.537Q19.075 17 17 17Z"/></svg>',
             { fragment: true }
         ).children,
     }
