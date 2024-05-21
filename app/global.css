@@ -927,3 +927,20 @@ make the text color a bit darker */
     }
 
 }
+
+#skipToc {
+    width: 0px;
+    height: 0px;
+}
+
+.skipToc {
+    color: transparent;
+    display: block;
+    height: 0px;
+}
+
+.skipToc:focus-visible {
+    color: var(--primary-light-color);
+    height: 30px;
+    padding-left: calc(var(--main-spacing) / 2);
+}

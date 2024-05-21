@@ -54,7 +54,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         aside: ({ children, ...props }) => (
             <>
                 {props.id === 'articleToc' ? (
+                    <>
                     <aside>
+                        <BaseLink href="#skipToc" className="skipToc">Skip table of contents</BaseLink>
                         <div className='asideCore'>
                             <HeadingsObserver>
                                 {children}
@@ -62,6 +64,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                             <AsideContent />
                         </div>
                     </aside>
+                    <div id="skipToc" tabIndex={-1} />
+                    </>
                 ) : (
                     <aside>
                         {children}
