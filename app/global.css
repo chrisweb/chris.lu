@@ -281,6 +281,7 @@ h6 {
     scroll-margin-top: 80px;
     overflow-wrap: break-word;
     position: relative;
+    font-family: var(--font-kodeMono);
 }
 
 /* helper middle line */
