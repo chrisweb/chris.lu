@@ -3274,33 +3274,42 @@ Congratulations, you now know what next/navigation, next/link and next/font are 
 > [MDN "font-display" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display)  
 > [developer.chrome.com "font-display" blog post](https://developer.chrome.com/blog/font-display)  
 
-## MDX components
+## using the mdx-components file
 
-Before we experiment with plugins in the next chapter I wanted to first come back to the `mdx-components.tsx` we briefly saw when setting up MDX support
+Before we experiment with plugins in the next chapter I wanted to first come back to the `mdx-components.tsx` file which we briefly saw when setting up MDX support (at the very beginning) as the file is required to make MDX work
 
-**next/mdx** uses a file called `mdx-components.tsx` which you can use to quickly and easily to use **components**, but there are other use cases that make it great choice, for example lets's say you want to quickly add a class to headlines, you can't do that in markdown the same way you would set a class for an HTML element, you could find and install an MDX (rehype) plugin do so, but instead we are going to use our `mdx-components.tsx` as it is an easy and quick way of solving our problem
+`mdx-components.tsx` is great to quickly and easily replace an HTML Element with a React component
 
-First lets create a new test playground to test the components, inside of the `/app/tutorial_examples` folder create a `mdx-components_example` folder
+For example how can we quickly add a CSS class to all our `<ul>` [unordered list elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ul), because the markdown syntax does NOT let us add a class in a similar way to how we add a class to an HTML element, actually we don't even have access to that element when writing the list using markdown:
 
-Then in the `mdx-components_example` folder create a `page.mdx` file and paste the following content into it:
-
-```mdx title="/app/tutorial_examples/mdx-components_example/page.tsx"
-# headline 1
-
-## headline 2
-
-### headline 3
-
-#### headline 4
-
-##### headline 5
-
-###### headline 6
+```md
+* foo
+* bar
 ```
 
-Now open the `mdx-components.tsx` that is in the root of your project and we add an entry for each headline, like so:
+Or for example in the previous chapter we replaced anchor elements in our navigation component with next/link, how do we now replace markdown links (that will be turned into HTML anchors) with next/link, or how can we use next/image to make sure that all images we put into the markdown of our MDX pages use next/image so that they are optimized too
 
-```mdx title="mdx-components.tsx"
+For those 3 examples you could write custom react component that you import into the MDX document an that you use instead of the default markdown syntax, or another solution would be to find a remark or rehype plugin that solves our problem, but both solutions would require more work (compared to using the mdx-components file) and would reduce the compatibility of our markdown content, for example if at some point we decide to use it in a product that has a markdown parser that does not have those components or plugins installed then that parser could not cope with the extra syntax we added to our markdown or for example if we use the VSCode feature to drop an image into a markdown or MDX document and VSCode automatically creates the markdown image sysntax for you would be lost if we use a react component or a special syntax that is required for a plugin to work
+
+This is why using the **mdx-components** file has the advantage that it lets us keep using default markdown syntax while still enhancing the (HTML) output that we get
+
+### adding a CSS class lists using mdx-components
+
+First lets create a new playground to experiment with the **mdx-components** file
+
+Inside of the `/app/tutorial_examples` folder create a `mdx-components_playground` folder
+
+Then in the `mdx-components_playground` folder create a `page.mdx` file and paste the following content into it:
+
+```mdx title="/app/tutorial_examples/mdx-components_playground/page.mdx"
+* foo
+* bar
+
+```
+
+Now open the `mdx-components.tsx` (which is in the root of your project) and add an entry for each headline, like so:
+
+```mdx title="mdx-components.tsx" showLineNumbers {12-16}
 import type { MDXComponents } from 'mdx/types'
 
 // This file allows you to provide custom React components
@@ -3312,78 +3321,28 @@ import type { MDXComponents } from 'mdx/types'
 export function useMDXComponents(components: MDXComponents): MDXComponents {
     return {
         // Allows customizing built-in components, e.g. to add styling.
-        h1: ({ children, ...props }) => (
-            <h1 className="h1" {...props}>
+        ul: ({ children, ...props }) => (
+            <ul className="listContainer" {...props}>
                 {children}
-            </h1>
-        ),
-        h2: ({ children, ...props }) => (
-            <h2 className="h2" {...props}>
-                {children}
-            </h2>
-        ),
-        h3: ({ children, ...props }) => (
-            <h3 className="h3" {...props}>
-                {children}
-            </h3>
-        ),
-        h4: ({ children, ...props }) => (
-            <h4 className="h4" {...props}>
-                {children}
-            </h4>
-        ),
-        h5: ({ children, ...props }) => (
-            <h5 className="h5" {...props}>
-                {children}
-            </h5>
-        ),
-        h6: ({ children, ...props }) => (
-            <h6 className="h6" {...props}>
-                {children}
-            </h6>
+            </ul>
         ),
         ...components,
     }
 }
 ```
 
-here we have created a simple custom component for **h1 headers**, now every h1 HTML-like tag that we will use in our MDX content will have a class called foo
+Line 12 to 16 we have created a simple custom component for **ul lists**, now the markdown parser will turn the list into HTML and then mdx-components will add a class called `listContainer` to each ul element
 
-of course you can extend `MDXComponents` and add as much custom components as you wish to alter how your content will get rendered, you can of course also create external files for each component, import them and then use them in `MDXComponents`
-
-try it out for yourself, ensure the dev server is running and then in the browser navigate to [http://localhost:3000/articles/option3](http://localhost:3000/articles/option3), then use your browser developper tools inspect tool and you will see that the `<h1>` element now has a **class** attribute containing the value `foo`
+Try it out for yourself, ensure the dev server is running and then in the browser navigate to [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground), then use your browser developper tools inspect tool and you will see that the `<ul>` element now has a **class** attribute containing the value `listContainer`
 
 > [!MORE]  
-> [MDX "components" documentation](https://mdxjs.com/table-of-components/)  
+> [mdxjs.com "components" documentation](https://mdxjs.com/table-of-components/)  
+> [Next.js "MDX custom elements" documentation](https://nextjs.org/docs/app/building-your-application/configuring/mdx#custom-elements)  
 
-## MDX plugins
+### optimizing links in MDX using next/link
 
-The two mains flawors of plugins supported by MDX are [remark](https://www.npmjs.com/package/remark) plugins and [rehype](https://www.npmjs.com/package/rehype) plugins
 
-The difference between the two is that:
 
-Quote from the remark readme:
-
-> remark is a tool that transforms markdown with plugins. These plugins can inspect and change your markup
-
-Quote from the rehype readme:
-
-> rehype is a tool that transforms HTML with plugins. These plugins can inspect and change the HTML
-
-This means that **remark** plugins do their work they are processing your markdown before it gets transformed into HTML, while **rehype** plugins will process HTML, when the plugin is done that HTML gets transformed into JSX, then other JSX like a React component you imported into your MDX page gets added, you experiment with this workflow using the [MDX playground](https://mdxjs.com/playground/) (modify the input and then use the select field to switch between different modes, to see the corresponding output on the right)
-
-You will sometimes find plugin for **remark** and then another plugin for **rehype** but both do the same thing, for example a plugin that would make a table of contents by listing all headings in your content, if it is a **remark** plugin it would search for headings like `# foo`, `## bar`, `### baz` in your markdown, while a similar **rehype** plugin would look for headings `<h1>foo</h1>`, `<h2>bar</h2>`, `<h3>baz</h3>` in the the HTML (after markdown got converted to HTML), in such a case it is up to you which one you want to use, there is no right or wrong here, just take the one that has the features you need, the one with more detailed documentation, the most stars on GitHub or the one with the least open Issues (it is up to you to define what criteria you want to use to judge which one is better)
-
-In the next several chapters we will add a bunch of interesting plugins to our project
-
-> [!MORE]  
-> [list of rehype plugins](https://github.com/rehypejs/rehype/blob/main/doc/plugins.md#list-of-plugins)  
-> [list of remark plugins](https://github.com/remarkjs/remark/blob/main/doc/plugins.md#list-of-plugins)  
-
-### Code blocks plugin
-
-It's time to add our first plugin for MDX 🙂, a rehype plugin to turn our code blocks into nicely highlighted code displays
-
-## Imports and React components in MDX
+### optimizing images in MDX using next/link
 
 </article>
