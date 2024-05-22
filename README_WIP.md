@@ -16,6 +16,36 @@ next chapters?
 * vercel analytics
 * vercel prod release (custom domain)
 
+
+
+## MDX plugins
+
+The two mains flawors of plugins supported by MDX are [remark](https://www.npmjs.com/package/remark) plugins and [rehype](https://www.npmjs.com/package/rehype) plugins
+
+The difference between the two is that:
+
+Quote from the remark readme:
+
+> remark is a tool that transforms markdown with plugins. These plugins can inspect and change your markup
+
+Quote from the rehype readme:
+
+> rehype is a tool that transforms HTML with plugins. These plugins can inspect and change the HTML
+
+This means that **remark** plugins do their work they are processing your markdown before it gets transformed into HTML, while **rehype** plugins will process HTML, when the plugin is done that HTML gets transformed into JSX, then other JSX like a React component you imported into your MDX page gets added, you experiment with this workflow using the [MDX playground](https://mdxjs.com/playground/) (modify the input and then use the select field to switch between different modes, to see the corresponding output on the right)
+
+You will sometimes find plugin for **remark** and then another plugin for **rehype** but both do the same thing, for example a plugin that would make a table of contents by listing all headings in your content, if it is a **remark** plugin it would search for headings like `# foo`, `## bar`, `### baz` in your markdown, while a similar **rehype** plugin would look for headings `<h1>foo</h1>`, `<h2>bar</h2>`, `<h3>baz</h3>` in the the HTML (after markdown got converted to HTML), in such a case it is up to you which one you want to use, there is no right or wrong here, just take the one that has the features you need, the one with more detailed documentation, the most stars on GitHub or the one with the least open Issues (it is up to you to define what criteria you want to use to judge which one is better)
+
+In the next several chapters we will add a bunch of interesting plugins to our project
+
+> [!MORE]  
+> [list of rehype plugins](https://github.com/rehypejs/rehype/blob/main/doc/plugins.md#list-of-plugins)  
+> [list of remark plugins](https://github.com/remarkjs/remark/blob/main/doc/plugins.md#list-of-plugins)  
+
+### Code blocks plugin
+
+It's time to add our first plugin for MDX 🙂, a rehype plugin to turn our code blocks into nicely highlighted code displays
+
 ### MDX code blocks
 
 [rehype pretty code](https://www.npmjs.com/package/rehype-pretty-code) is a rehype plugin for markdown that adds "VSCode like" code highlighting to your code blocs and the best part is it has support support for VSCode themes
@@ -1043,7 +1073,7 @@ here is even an example of a code block as well as a blockquote inside an alert:
 > [!TIP]
 > when adding **github alerts** you use square braquets (`[!ALERT_TYPE]`), however in VSCode (if you have link validation enabled) then the markdown language service will assume this is an invalid link <QUOTE_VSCODE_ERROR>, and show an error <SCRENNSHOT_HERE>, to exclude the alerts from validation put a backslash (`\`) in front of the square braquets, like so `\[!NOTE]` and the error will be gone <SCRENNSHOT_2_HERE>
 
-
+## Importing custom React components into MDX pages
 
 ## vercel analytics
 
