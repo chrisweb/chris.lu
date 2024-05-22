@@ -1191,11 +1191,11 @@ Line 7 to 8 we have added two new variables to store the Sentry.io CSP logging U
 * the first variable contains the CSP logging URL **https://foo123.ingest.sentry.io/api/bar456/security/?sentry_key=baz789** is the same for preview and prod, it is the endpoint URL where the reports will get sent to, which means we use that variable to tell the report-uri directive where to send CSP violations reports
 * the second variable contains a wildcard for the sentry domain so that we can add the domain to our connect-src directive
 
-Then line 14 to 17 we use a template literal to create the reporting uri directive, this directive will tell the browser what URL it should use when sending the CSP reports
+Line 14 to 17 we use a template literal to create the reporting uri directive, this directive will tell the browser what URL it should use when sending the CSP reports
 
-Next line 46 and also line 61 we have added the **reportingDomainWildcard** to the connect-src directive
+Line 46 and also line 61 we have added the **reportingDomainWildcard** to the connect-src directive
 
-Finally line 49 and 64 we **reportCSPViolations** variable which contains reporting directive
+Line 49 and 64 we **reportCSPViolations** variable which contains reporting directive
 
 > [!NOTE]  
 > It is very important to add the **reportingDomainWildcard** to the connect-src directive or CSP will block the reporting URL and hence not send reports to Sentry, we only add the **reportingDomainWildcard** to the connect-src for preview and production, but NOT development as Sentry.io will filter out reports from localhost anyway, if you want to debug your code you might want to add the reporting also for development, in that case add the `${reportCSPViolations}` variable to the development directives too (same as for preview and production) and then check out the chapter about [disableng the "reports from locahost" filter](/web_development/posts/sentry-io/#disable-the-reports-from-locahost-filter) in my Sentry.io post
@@ -2257,14 +2257,20 @@ Now open the `.vscode/settings.json` file and add the following settings for our
 
 This will tell the ESLint extension to include files with the ts(x) as well as md(x) extension and it will make sure that it validates markdown, mdx, javscript, typescript and also react code
 
+> [!MORE]  
+> [VSCode "ESLint" extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)  
+
 #### MDX extension
 
-The second VSCode extension I recommend installing is the [VSCode language support extension for MDX](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx), when working with MDX content as this extension will add IntelliSense support for MDX files to VSCode
+The second VSCode extension I recommend installing is the VSCode [MDX (Language support for MDX)](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx), when working with MDX content as this extension will add IntelliSense support for MDX files to VSCode
+
+> [!Note]  
+> this extension is still experimental, but I had no problems when using it  
 
 The unlike the ESLint extension, the MDX extension does not require any custom settings configuration, you are all set
 
-> [!Note]  
-> this extension is still experimental, but I had no problems when using it
+> [!MORE]  
+> [VSCode "MDX (Language support for MDX)" extension](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx)  
 
 ### Restart the ESLint server in VSCode
 
@@ -2760,7 +2766,7 @@ a:hover {
 This is our base `global.css` which now contains a basic [CSS (Cascading Style Sheet)](https://developer.mozilla.org/en-US/docs/Web/CSS) used to style and layout our app:
 
 * first we set some variables (inside of the [:root](https://developer.mozilla.org/en-US/docs/Web/CSS/:root) pseudo class) that can be used everywhere (even in any of our CSS Modules), it is recommended to use CSS variables when ever possible as in the future it will be faster to change the value of a variable in the globall css instead of having to go into every file where that variable gets used and change the value there
-* next we reset some browser styling using the **body** Element [type selector](https://developer.mozilla.org/en-US/docs/Web/CSS/Type_selectors)
+* next we reset some browser styling using the **body** (element) [type selector](https://developer.mozilla.org/en-US/docs/Web/CSS/Type_selectors)
 * then we add some margin to the **footer** and **header** using the respective type selectors
 * then we add a basic page layout using [Flexbox](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Flexbox)
 * finally add some color to all our links using the css [var()](https://developer.mozilla.org/en-US/docs/Web/CSS/var) function to use the variables we set earlier and we also use the [:hover](https://developer.mozilla.org/en-US/docs/Web/CSS/:hover) pseudo class to change the color of links on hover
@@ -2903,7 +2909,9 @@ export default function RootLayout({
 ```
 
 Line 3 we import our new **HeaderNavigation** component  
+
 Line 19 we replace the placeholder paragraph we had earlier with our new **HeaderNavigation** component  
+
 Line 20 we display the current date & time  
 
 Then save the file and launch the dev server if it isn't already running (using the `npm run dev` command)
@@ -2925,6 +2933,9 @@ Now look at the Network tab logs and you should see something similar to this:
 The most important information is the first row of the logs, where it says that the **Blog** page is actually a **document** GET request (I will explain in a bit why we did this initial test)
 
 Now have a look at the time we print on top of the navigation, click on the navigation links and notice how every time we navigate to a page the time gets updated, which makes sense as we reload the entire page every time we navigate (we will see in the next chapter how this is different when using next/link)
+
+> [!MORE]  
+> [developer.chrome.com "Inspect network activity" documentation](https://developer.chrome.com/docs/devtools/network)  
 
 ### using next/link instead of anchor elements
 
@@ -2969,6 +2980,7 @@ export default HeaderNavigation
 ```
 
 Line 2 we import next/link  
+
 Line 21 and 27 we replace the anchor with the **Link** component  
 
 Now we repeat the steps we did in the previous chapter, ensure dev is running, open chrome, navigate to [http://localhost:3000/](http://localhost:3000/), open the developer tools, click on the **Network** tab and clear the networking logs
@@ -2991,11 +3003,11 @@ Finally look again at the time we print on top of the navigation and you will no
 You can now remove the `<p>{new Date().toString()}</p>` test (in `/app/layout.tsx` at line 20), which we added to demonstrate that the navigation does NOT re-render, we will not need it anymore
 
 > [!MORE]  
-> [Next.js "next/link" documentation](https://nextjs.org/docs/app/api-reference/components/link)  
+> [Next.js "next/link" api reference](https://nextjs.org/docs/app/api-reference/components/link)  
 
 ### highlight active path using next/navigation
 
-Next we are going to use the [pathname](https://developer.mozilla.org/en-US/docs/Web/API/URL/pathname) of the current page that we can get using **next/navigation** to check if the first segment of the current path matches one of the entries in our navigation
+Next we are going to use the [pathname](https://developer.mozilla.org/en-US/docs/Web/API/URL/pathname) of the current page that we can get using **next/navigation**, then we will check if the first segment of the current path matches one of the entries in our navigation items list
 
 Update the `Navigation.tsx` like so:
 
@@ -3062,27 +3074,205 @@ const HeaderNavigation: React.FC = () => {
 export default HeaderNavigation
 ```
 
-Line 1 we add the `use client` directive because we are going to use [usePathname](https://nextjs.org/docs/app/api-reference/functions/use-pathname) which is a hook so the component needs to be a client component, we do this only now because it is recommended to turn as few server components into client components, we only do it when we need the component to be interactive or require things like the hook we are about to use
-Line 4 we import **usePathname** from **next/navigation**
-Line 14 we get the **pathname** for the current page
-Line 21 to 38 we have added a function that will check if the pathname starts with the path of one of the items in our navigation, if it does then we add an active class to the className of that item
-Line 48 we use our **isActiveCheck** function to check if that item if active, if it the function will add a class else className will stay empty
+Line 1 we add the `use client` directive because we are going to use [usePathname](https://nextjs.org/docs/app/api-reference/functions/use-pathname) which is a hook so the component needs to be a client component, we do this only now because it is recommended to turn as few server components into client components, we only do it when we need the component to be interactive or require things like the hook we are about to use  
+
+Line 4 we import **usePathname** from **next/navigation**  
+
+Line 14 we get the **pathname** for the current page  
+
+Line 21 to 38 we have added a function that will check if the pathname starts with the path of one of the items in our navigation, if it does then we add an active class to the className of that item  
+
+Line 48 we use our **isActiveCheck** function to check if that item if active, if it the function will add a class else className will stay empty  
 
 > [!MORE]  
 > [Next.js "Linking and Navigating" documentation](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating)  
+> [Next.js "usePathname" api reference](https://nextjs.org/docs/app/api-reference/functions/use-pathname)  
 
-### making the navigation fancy using next/font
+### styling the navigation and using next/font
 
-Now that our Navigation is working we will add a few touches of color and use next/font to add an custom font
+Now that our Navigation is working we will add a few touches of color and use [next/font](https://nextjs.org/docs/app/api-reference/components/font) to add an custom web font to our project
 
-The advantage when using next/font is that it will reduce layout shifts because the text initially uses a default font until the custom font has loaded
+When using **next/font** you can use any font available on [google fonts](https://fonts.google.com/) or use your own local font(s), the best part about using next/font is that it will optimize the loading of the font to make sure that there are zero layout shifts, also when using next/font we are self hosting the font(s), which means we will NOT need to do an external network request to fetch the font, which will decrease loading times but also increase privacy as NO request is done to google servers
 
+Because we are using the font for our navigation, let's start by editing our `layout.tsx` file (that is in the `app` folder) and import the font from there:
 
+```tsx title="/app/layout.tsx" showLineNumbers {4} {11-16} /className={pixelifySans.variable}/#special
+import './global.css'
+import { Metadata } from 'next'
+import HeaderNavigation from '@/components/header/Navigation'
+import { Kablammo } from 'next/font/google'
 
+export const metadata: Metadata = {
+    title: 'Next.js',
+    description: 'Generated by Next.js',
+}
 
+const pixelifySans = Kablammo({
+    subsets: ['latin'],
+    variable: '--font-pixelifySans',
+    weight: ['400'],
+    display: 'swap',
+})
 
+export default function RootLayout({
+    children,
+}: {
+    children: React.ReactNode
+}) {
+    return (
+        <html lang="en" className={pixelifySans.variable}>
+            <body>
+                <header>
+                    <HeaderNavigation />
+                </header>
+                <main>{children}</main>
+                <footer>
+                    <p>My Footer</p>
+                </footer>
+            </body>
+        </html>
+    )
+}
+```
 
+Line 4 we import the font called **Kablammo** from **next/font**, you can find [Kablammo on google fonts](https://fonts.google.com/specimen/Kablammo)  
 
+Line 11-16 we set some options for the font:
+
+* like what [subset](https://fonts.google.com/knowledge/glossary/subsetting) do we want to use
+* the CSS variable (**--font-pixelifySans**) we want to use for the font
+* the (font-)[weight](https://fonts.google.com/knowledge/glossary/weight) will we use
+* the [display](https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display) strategy defines what happens during the period where the font is still getting fetched and not ready to be used, Next.js sets it to swap by default, so if you chose **swap** as in this example you could also just not set it or if you prefer to let the browser chose the display strategy then use **auto** as value, as described on the [chrome developer "font-display" page](https://developer.chrome.com/blog/font-display) when you chose auto most browsers will use a technique similar to **block**, meaning that for a short period of time the browser will use an invisible fallback font face (to avoid layout shifts) and then when the font is ready it will swap in the font
+
+> [!TIP]  
+> Chosing a subset is important to make the font load quickly because Next.js will inject a link preload tag into the head (when the preload option is true, which is the default)  
+>  
+> Also because the fonts are fully typed you can just type an option name and will get a list of values that you can chose from  
+
+Finally line 24 we add the font style to our HTML element via the className attribute
+
+Next we are going to add a stylesheet for our Naviation component and use the new font for the navigation items
+
+Create a new `navigation.module.css` file the `/components/header` folder and insert the following content:
+
+```tsx title="/components/header/navigation.module.css" showLineNumbers /--font-pixelifySans/
+.navigation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 60px;
+    background-color: hsl(var(--background-dark-value) / 0.9);
+    border-bottom: 1px solid hsl(var(--text-dark-value) / 0.5);
+    position: fixed;
+    top: 0;
+}
+
+.link {
+    padding: 0 var(--spacing);
+    font-size: xx-large;
+    text-decoration: none;
+    font-family: var(--font-pixelifySans);
+}
+
+.active {
+    font-weight: bold;
+}
+```
+
+As you can see at line 17 this is where we use the **--font-pixelifySans** variable we defined when setting the options for the font in the `layout.tsx` file
+
+The final step is to edit our `Navigation.tsx` file in the `/components/header` folder and start using the styles we just created, like so:
+
+```tsx title="/components/header/Navigation.tsx" showLineNumbers {6} /styles.active/#special /styles.navigation/#special /styles.link/#special
+'use client'
+
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import type { Route } from 'next'
+import styles from './navigation.module.css'
+
+interface IMainMenuItem {
+    pathname: string
+    text: string
+}
+
+const HeaderNavigation: React.FC = () => {
+
+    const currentPagePathname = usePathname()
+
+    const mainMenuItems: IMainMenuItem[] = [
+        { pathname: '/', text: 'Home' },
+        { pathname: '/blog', text: 'Blog' },
+    ]
+
+    const isActiveCheck = (menuItemPathname: string) => {
+
+        let isActiveClass = ''
+
+        if (menuItemPathname.length > 1) {
+            if (currentPagePathname.startsWith(menuItemPathname)) {
+                isActiveClass = styles.active
+            }
+        } else {
+            // exception for homepage path which is "/"
+            // in that case the page path needs to be equal
+            if (currentPagePathname === menuItemPathname) {
+                isActiveClass = styles.active
+            }
+        }
+
+        return isActiveClass
+    }
+
+    return (
+        <>
+            <nav id="navigation" className={styles.navigation}>
+                {mainMenuItems.map((menuItem) => {
+                    return (
+                        <Link
+                            href={menuItem.pathname as Route}
+                            key={menuItem.pathname}
+                            className={`${isActiveCheck(menuItem.pathname)} ${styles.link}`}
+                            title={menuItem.text}
+                        >
+                            {menuItem.text}
+                        </Link>
+                    )
+                })}
+            </nav>
+        </>
+    )
+}
+
+export default HeaderNavigation
+```
+
+Line 6 we import the new CSS Module containing the Navigation component stylesheet  
+
+Line 28 / 34 / 43 / 49 we use the 3 CSS rules, the `.active` rule will be used to make the Navigation entry that matches the current pathname bold, the `.navigation` rule uses **position fixed** so that the navigation bar always stays on top and finally the `.link` rule will use the custom font to change the font of our navigation items  
+
+Just one last little change needed, because we made the navigation fixed, it means that it will NOT take up any space anymore in the document as it will be floating above the content, this will cause the page content to move up and eventually be under the navigation, this is why we will edit the file in the folder, like so:
+
+```css title="/app/global.css" showLineNumbers{66} {4-5}
+body {
+    /* remove any margin that browsers add to body */
+    margin: 0;
+    /* compensate for the fixed navigation height */
+    padding-top: 60px;
+}
+```
+
+Line 69 to 70 we add a padding-top property and set its value to the same size to be equivalent to the height of the navigation, this will ensure that when the page has loaded there is no content displayed under the navigation (later when scrolling the content will move under the navigation)
+
+Congratulations, you now know what next/navigation, next/link and next/font are usefull for and finished the navigation component 🎉
+
+> [!MORE]  
+> [Next.js "Font Optimization" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/fonts)  
+> [Next.js "next/font" api reference](https://nextjs.org/docs/app/api-reference/components/font)  
+> [Google Fonts](https://fonts.google.com)  
+> [MDN "font-display" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display)  
+> [developer.chrome.com "font-display" blog post](https://developer.chrome.com/blog/font-display)  
 
 ## MDX components
 
