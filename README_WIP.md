@@ -5,21 +5,16 @@ next chapters?
 * \[DONE] CSP
 * \[DONE] articles (pages) using MDX (@next/mdx)
 * \[DONE] eslint for MDX
+* \[DONE] CSS modules for styling
+* \[DONE] navigation / next/link (optimizing fonts with next/font)
 * next/mdx "mdx-components" file
 * optimizing images with next/image
 * all the MDX plugins
-* metadata
-* [experimental rust compiler](https://nextjs.org/docs/app/building-your-application/configuring/mdx#using-the-rust-based-mdx-compiler-experimental)
-* layout
-* navigation / next/link
-* styling
-* optimizing fonts with next/font
 * SEO (metadata)
+* about the [experimental rust compiler](https://nextjs.org/docs/app/building-your-application/configuring/mdx#using-the-rust-based-mdx-compiler-experimental)
 * github: pull request from preview into main branch (automatically link / close tickets)
 * vercel analytics
 * vercel prod release (custom domain)
-
-
 
 ### MDX code blocks
 
@@ -475,6 +470,224 @@ read more:
 * [remark-table-of-contents](https://www.npmjs.com/package/remark-table-of-contents)
 * [unified documentation "creating a plugin with unified (remark / rehype plugins)"](https://unifiedjs.com/learn/guide/create-a-plugin/)
 
+
+#### custom component to highlight the currently active heading in the table of contents
+
+In a previous post we added a remark plugin that generates a toc, now we are going to create a custom component that will use the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) to check which heading is currently visible in our viewport (screen) and then mark it as active in the table of contents
+
+First add an observer to our headings we will create a custom react hook at `hooks/useObserver.tsx`, with the following code:
+
+```tsx
+import { useEffect, useState, useRef } from 'react'
+
+export function useObserver(elementsToObserve: string, rootMargin: string) {
+
+    const [activeIdState, setActiveIdState] = useState('')
+    const observerRef = useRef<IntersectionObserver>()
+
+    useEffect(() => {
+
+        const handleObsever = (entries: IntersectionObserverEntry[]) => {
+
+            entries.forEach((entry) => {
+                if (entry?.isIntersecting) {
+                    
+                    setActiveIdState(entry.target.id)
+                }
+            })
+        }
+
+        if (observerRef !== undefined) {
+            observerRef.current = new IntersectionObserver(handleObsever, {
+                rootMargin: rootMargin
+            })
+
+            const elements = document.querySelectorAll(elementsToObserve)
+
+            elements.forEach((elem) => observerRef.current.observe(elem))
+        }
+
+        return () => {
+            observerRef.current?.disconnect()
+        }
+    }, [elementsToObserve, rootMargin])
+
+    return { activeIdState }
+
+}
+```
+
+now that we have our custom hook lets create our custom component at `components/headings/Observer.tsx`, with the following code:
+
+```tsx
+'use client'
+
+import { ErrorBoundary } from 'react-error-boundary'
+import { useObserver } from '../../hooks/useObserver'
+import { ReactNode, ReactElement, Children, isValidElement, cloneElement, MouseEvent } from 'react'
+
+interface IProps {
+    id?: string
+    children?: ReactNode | ReactNode[]
+}
+
+const findFirstNodeThatMatchesType = (children: ReactNode, type: string): ReactElement => {
+
+    const childrenArray = Children.toArray(children)
+
+    for (const child of childrenArray) {
+        if (isValidElement(child)) {
+            if (child.type === type) {
+                return child
+            }
+        }
+    }
+
+}
+
+const findFirstNodeThatHasProp = (children: ReactNode, prop: string): ReactElement => {
+
+    const childrenArray = Children.toArray(children)
+
+    for (const child of childrenArray) {
+        if (isValidElement(child)) {
+            if (prop in child.props) {
+                return child
+            }
+        }
+    }
+
+}
+
+const onClickLinkHandler = (event: MouseEvent<HTMLAnchorElement>) => {
+
+    event.preventDefault()
+
+    const targetUrl = event.currentTarget.href
+    const targetId = targetUrl.slice(targetUrl.indexOf('#'))
+    const heading = document.querySelector(targetId)
+
+    if (heading) {
+        heading.scrollIntoView({
+            behavior: 'smooth',
+        })
+    }
+}
+
+const findAndTransformRows = (children: ReactNode, activeIdState: string, level = 0): ReactNode => {
+
+    const ulChildInput = findFirstNodeThatMatchesType(children, 'ul')
+
+    let ulChildOutput: ReactNode
+
+    if (ulChildInput !== undefined) {
+
+        level++
+
+        const liChildrenInput = ulChildInput.props.children
+
+        const liChildrenOutput = liChildrenInput.map((liChild: ReactNode, index: number) => {
+
+            if (isValidElement(liChild)) {
+                if (liChild.type === 'li') {
+
+                    const liChildLinkInput = findFirstNodeThatHasProp(liChild.props.children, 'href')
+                    const liChildLinkId = liChildLinkInput.props.href.slice(1)
+                    const moreRows = findAndTransformRows(liChild.props.children, activeIdState, level)
+
+                    const clonedLinkChild = cloneElement(liChildLinkInput, {
+                        ...liChildLinkInput.props,
+                        className: 'a',
+                        onClick: onClickLinkHandler,
+                    })
+
+                    const clonedLiChild = cloneElement(liChild, {
+                        ...liChild.props,
+                        key: liChild.key !== null ? liChild.key : level + '_' + index,
+                        className: activeIdState === liChildLinkId ? 'active' : 'not-active',
+                        children: moreRows ? [clonedLinkChild, moreRows] : clonedLinkChild
+                    })
+
+                    return clonedLiChild
+                }
+            }
+
+            return liChild
+
+        })
+
+        ulChildOutput = cloneElement(ulChildInput, {
+            ...ulChildInput.props,
+            children: liChildrenOutput
+        })
+
+    }
+
+    return ulChildOutput
+
+}
+
+const HeadingsObserver: React.FC<IProps> = (props): JSX.Element => {
+
+    const { activeIdState } = useObserver('h1, h2, h3, h4, h5, h6', '-20% 0% -35% 0px')
+    const navChild = findFirstNodeThatMatchesType(props.children, 'nav')
+    const toc = findAndTransformRows(navChild.props.children, activeIdState)
+
+    console.log(props)
+
+    return (
+        <>
+            <ErrorBoundary fallback={<aside {...props}><div className="error">Toc error</div></aside>}>
+                <aside {...props}>
+                    <nav {...props.children[0].props}>
+                        {toc}
+                    </nav>
+                </aside>
+            </ErrorBoundary>
+        </>
+    )
+}
+
+export default HeadingsObserver
+```
+
+next we need to edit the `mdx-components.tsx` file, like so:
+
+```tsx
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+    return {
+        aside: ({ children, id, ...props }) => (
+            <>
+                {props.id === 'articleToc' ? (
+                    <HeadingsObserver {...props}>
+                        {children}
+                    </HeadingsObserver>
+                ) : (
+                    <aside {...props}>
+                        {children}
+                    </aside>
+                )}
+            </>
+        ),
+        ...components,
+    }
+}
+```
+
+we have used [JSX conditanal rendering](https://react.dev/learn/conditional-rendering) to check if the aside is the one of the toc, if it is we use our component if it is not we render a basic aside
+
+now it time to modify the styling and placement of our \**table of contents* by adding some css into `app/layout.module.css` file:
+
+```css
+```
+
+read more:
+
+* [react "custom hooks" documentation](https://react.dev/learn/reusing-logic-with-custom-hooks)
+* [react "JSX conditanal rendering" documentation](https://react.dev/learn/conditional-rendering)
+* [MDN "Intersection Observer API" documentation](https://www.smashingmagazine.com/2021/07/dynamic-header-intersection-observer/)
+* [Smashing Magazine "Intersection Observer API" article](https://www.smashingmagazine.com/2021/07/dynamic-header-intersection-observer/)
+
 ## rehypeSlug and rehypeAutolinkHeadings plugins
 
 To improve our headings even more we are going to add another two plugins, [rehype-slug](https://www.npmjs.com/package/rehype-slug) and [rehype-autolink-headings](https://www.npmjs.com/package/rehype-autolink-headings)
@@ -745,7 +958,7 @@ Note: if you are cusrious to know what github uses on their own website checkout
 
 **rehype "GitHub" plugins repository** is a collection of plugins, some are remark plugins but most are rehype plugins, this repository for example contains **rehype-github-color** which will add a color preview rectangle to your hex color codes, check out the repository for a full list of plugins it has to offer
 
-### "remark-gfm" plugin
+### GitHub flavored markdown (gfm) plugin
 
 warning: the latest version of remark-gfm is version 4.0.0 but that version is as of now (11.10.2023) not compatible with the latest version of @next/mdx which currently is 13.5.4, the only solution at the moment is to downgrade remark-gfm which means you should use remark-gfm 3.0.1 (as mentioned in this [github remark-gfm ticket #57](https://github.com/remarkjs/remark-gfm/issues/57)), if you use remark-gfm v4 you will see the following error:
 
@@ -830,254 +1043,6 @@ here is even an example of a code block as well as a blockquote inside an alert:
 > [!TIP]
 > when adding **github alerts** you use square braquets (`[!ALERT_TYPE]`), however in VSCode (if you have link validation enabled) then the markdown language service will assume this is an invalid link <QUOTE_VSCODE_ERROR>, and show an error <SCRENNSHOT_HERE>, to exclude the alerts from validation put a backslash (`\`) in front of the square braquets, like so `\[!NOTE]` and the error will be gone <SCRENNSHOT_2_HERE>
 
-## remark emoji
-
-should I use https://www.npmjs.com/package/remark-emoji
-OR use https://github.com/rehypejs/rehype-github/tree/main/packages/emoji
-
-emoji cheat sheet: https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md
-
-
-
-
-
-
-
-
-#### custom component to highlight the currently active heading in the table of contents
-
-In a previous post we added a remark plugin that generates a toc, now we are going to create a custom component that will use the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) to check which heading is currently visible in our viewport (screen) and then mark it as active in the table of contents
-
-First add an observer to our headings we will create a custom react hook at `hooks/useObserver.tsx`, with the following code:
-
-```tsx
-import { useEffect, useState, useRef } from 'react'
-
-export function useObserver(elementsToObserve: string, rootMargin: string) {
-
-    const [activeIdState, setActiveIdState] = useState('')
-    const observerRef = useRef<IntersectionObserver>()
-
-    useEffect(() => {
-
-        const handleObsever = (entries: IntersectionObserverEntry[]) => {
-
-            entries.forEach((entry) => {
-                if (entry?.isIntersecting) {
-                    
-                    setActiveIdState(entry.target.id)
-                }
-            })
-        }
-
-        if (observerRef !== undefined) {
-            observerRef.current = new IntersectionObserver(handleObsever, {
-                rootMargin: rootMargin
-            })
-
-            const elements = document.querySelectorAll(elementsToObserve)
-
-            elements.forEach((elem) => observerRef.current.observe(elem))
-        }
-
-        return () => {
-            observerRef.current?.disconnect()
-        }
-    }, [elementsToObserve, rootMargin])
-
-    return { activeIdState }
-
-}
-```
-
-now that we have our custom hook lets create our custom component at `components/headings/Observer.tsx`, with the following code:
-
-```tsx
-'use client'
-
-import { ErrorBoundary } from 'react-error-boundary'
-import { useObserver } from '../../hooks/useObserver'
-import { ReactNode, ReactElement, Children, isValidElement, cloneElement, MouseEvent } from 'react'
-
-interface IProps {
-    id?: string
-    children?: ReactNode | ReactNode[]
-}
-
-const findFirstNodeThatMatchesType = (children: ReactNode, type: string): ReactElement => {
-
-    const childrenArray = Children.toArray(children)
-
-    for (const child of childrenArray) {
-        if (isValidElement(child)) {
-            if (child.type === type) {
-                return child
-            }
-        }
-    }
-
-}
-
-const findFirstNodeThatHasProp = (children: ReactNode, prop: string): ReactElement => {
-
-    const childrenArray = Children.toArray(children)
-
-    for (const child of childrenArray) {
-        if (isValidElement(child)) {
-            if (prop in child.props) {
-                return child
-            }
-        }
-    }
-
-}
-
-const onClickLinkHandler = (event: MouseEvent<HTMLAnchorElement>) => {
-
-    event.preventDefault()
-
-    const targetUrl = event.currentTarget.href
-    const targetId = targetUrl.slice(targetUrl.indexOf('#'))
-    const heading = document.querySelector(targetId)
-
-    if (heading) {
-        heading.scrollIntoView({
-            behavior: 'smooth',
-        })
-    }
-}
-
-const findAndTransformRows = (children: ReactNode, activeIdState: string, level = 0): ReactNode => {
-
-    const ulChildInput = findFirstNodeThatMatchesType(children, 'ul')
-
-    let ulChildOutput: ReactNode
-
-    if (ulChildInput !== undefined) {
-
-        level++
-
-        const liChildrenInput = ulChildInput.props.children
-
-        const liChildrenOutput = liChildrenInput.map((liChild: ReactNode, index: number) => {
-
-            if (isValidElement(liChild)) {
-                if (liChild.type === 'li') {
-
-                    const liChildLinkInput = findFirstNodeThatHasProp(liChild.props.children, 'href')
-                    const liChildLinkId = liChildLinkInput.props.href.slice(1)
-                    const moreRows = findAndTransformRows(liChild.props.children, activeIdState, level)
-
-                    const clonedLinkChild = cloneElement(liChildLinkInput, {
-                        ...liChildLinkInput.props,
-                        className: 'a',
-                        onClick: onClickLinkHandler,
-                    })
-
-                    const clonedLiChild = cloneElement(liChild, {
-                        ...liChild.props,
-                        key: liChild.key !== null ? liChild.key : level + '_' + index,
-                        className: activeIdState === liChildLinkId ? 'active' : 'not-active',
-                        children: moreRows ? [clonedLinkChild, moreRows] : clonedLinkChild
-                    })
-
-                    return clonedLiChild
-                }
-            }
-
-            return liChild
-
-        })
-
-        ulChildOutput = cloneElement(ulChildInput, {
-            ...ulChildInput.props,
-            children: liChildrenOutput
-        })
-
-    }
-
-    return ulChildOutput
-
-}
-
-const HeadingsObserver: React.FC<IProps> = (props): JSX.Element => {
-
-    const { activeIdState } = useObserver('h1, h2, h3, h4, h5, h6', '-20% 0% -35% 0px')
-    const navChild = findFirstNodeThatMatchesType(props.children, 'nav')
-    const toc = findAndTransformRows(navChild.props.children, activeIdState)
-
-    console.log(props)
-
-    return (
-        <>
-            <ErrorBoundary fallback={<aside {...props}><div className="error">Toc error</div></aside>}>
-                <aside {...props}>
-                    <nav {...props.children[0].props}>
-                        {toc}
-                    </nav>
-                </aside>
-            </ErrorBoundary>
-        </>
-    )
-}
-
-export default HeadingsObserver
-```
-
-next we need to edit the `mdx-components.tsx` file, like so:
-
-```tsx
-export function useMDXComponents(components: MDXComponents): MDXComponents {
-    return {
-        aside: ({ children, id, ...props }) => (
-            <>
-                {props.id === 'articleToc' ? (
-                    <HeadingsObserver {...props}>
-                        {children}
-                    </HeadingsObserver>
-                ) : (
-                    <aside {...props}>
-                        {children}
-                    </aside>
-                )}
-            </>
-        ),
-        ...components,
-    }
-}
-```
-
-we have used [JSX conditanal rendering](https://react.dev/learn/conditional-rendering) to check if the aside is the one of the toc, if it is we use our component if it is not we render a basic aside
-
-now it time to modify the styling and placement of our \**table of contents* by adding some css into `app/layout.module.css` file:
-
-```css
-```
-
-read more:
-
-* [react "custom hooks" documentation](https://react.dev/learn/reusing-logic-with-custom-hooks)
-* [react "JSX conditanal rendering" documentation](https://react.dev/learn/conditional-rendering)
-* [MDN "Intersection Observer API" documentation](https://www.smashingmagazine.com/2021/07/dynamic-header-intersection-observer/)
-* [Smashing Magazine "Intersection Observer API" article](https://www.smashingmagazine.com/2021/07/dynamic-header-intersection-observer/)
-
-#### custom component for images using next/image
-
-a plugin (or via custom component) that allows you to use [next/image](https://nextjs.org/docs/app/api-reference/components/image) for images
-
-also it should allow to set image height and width (next to the alt text) via a markdown style image, instead of having to use the html img element
-
-<https://www.codeconcisely.com/posts/nextjs-image-in-markdown/>
-
-read more:
-
-* [next.js "next/image" documentation](https://nextjs.org/docs/app/api-reference/components/image)
-
-### styling loading page and buttons
-
-nice loading animation (pure css) <https://codepen.io/amit_sheen/pen/JjBLaGG> for nextjs loading.tsx
-button click effect: <https://codepen.io/nourabusoud/pen/ypZzMM>
-
 
 
 ## vercel analytics
@@ -1102,344 +1067,6 @@ Note: if using vercel and also next.js, you don't need to use their cli command 
 ## metadata support and SEO optimization
 
 <https://nextjs.org/blog/next-13-2#built-in-seo-support-with-new-metadata-api>
-
-## adding Icon pack (free fontawesome regular)
-
-this will add the fontawesome SVG icons core which is required for all versions of fontawesome:
-
-```shell
-npm i @fortawesome/fontawesome-svg-core --save-exact
-```
-
-then this is the "free solid" icons package:
-
-```shell
-npm i @fortawesome/free-solid-svg-icons --save-exact
-```
-
-you can search for icons using the tags ["free" + "solid"](https://fontawesome.com/v6/search?o=r\&m=free\&s=solid) on the fontawesome search page
-
-to check out the different styles just change the tags used above
-
-and finally the fontawesome react component:
-
-```shell
-npm i @fortawesome/react-fontawesome --save-exact
-```
-
-Note: I read that their react component has support for react forwardRef, which is great as it might be useful in the future
-
-to use fontawesome in our project we first edit the main layout.tsx file and add the following lines to include the fontawesome css:
-
-```ts
-import '@fortawesome/fontawesome-svg-core/styles.css'
-import { config } from '@fortawesome/fontawesome-svg-core'
-// disable the fontawesome feature which adds a style tag with the css inside to a page
-// this is not needed as we also import the css into our project and next.js will bundle it
-config.autoAddCss = false
-```
-
-then in our component we add the following code to use an icon:
-
-```ts
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay, faPause, faForwardStep } from '@fortawesome/free-solid-svg-icons'
-```
-
-read more:
-
-[fontawesome add icons with react documentation](https://fontawesome.com/v6/docs/web/use-with/react/add-icons)
-
-## waveform command
-
-node cli ./downloads Double\_Dragon\_Neon\_City\_Streets\_1\_-\_Jake\_Kaufman mp3 50 local json false
-
-## TODOs
-
-* build authentification: <https://authjs.dev/>, can have a look at how
-* add all sorts of meta data to head.tsx <https://github.com/whoisryosuke/r3f-next-starter/blob/main/src/components/dom/Header.tsx>, also check out <https://beta.nextjs.org/docs/guides/seo>, create a chapter "head.js: SEO and metadata", also check out <https://beta.nextjs.org/docs/api-reference/metadata#generatemetadata>
-* improve accessibility: <https://vercel.com/blog/improving-the-accessibility-of-our-nextjs-site>
-* add tests <https://2022.stateofjs.com/en-US/libraries/testing/>
-* optimize the images of the documentation (readme.md)
-* add "protect main branch" instructions to github chapter
-* add a chapter (in next.js config page) about "react strict mode in nextjs" [Next.js "reactStrictMode" documentation](https://nextjs.org/docs/pages/api-reference/next-config-js/reactStrictMode) [react.dev "StrictMode" documentation](https://react.dev/reference/react/StrictMode)
-
-## future articles
-
-* view transitions:
-  <https://developer.chrome.com/docs/web-platform/view-transitions/>
-  <https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API>
-  <https://www.w3.org/TR/css-view-transitions-1/>
-  <https://caniuse.com/mdn-api_viewtransition>
-* setup cronjobs on vercel <https://vercel.com/docs/cron-jobs>
-* vercel rollback a deployment <https://vercel.com/docs/cli/rollback>
-* revert a schema change with planetscale <https://planetscale.com/blog/behind-the-scenes-how-schema-reverts-work>
-
-mdx component for images:
-
-the solution I chose has the advantage that:
-
-* you DON'T need to import all images for each page manually, you don't need to use an image html element in markdown or even the next/image component in mdx and set all the attributes like width, height, loading,   fetchpriority, ... for each image
-* you JUST drag and drop an image in VSCode into your markdown and you are done
-
-we will use:
-
-1. [rehype-mdx-import-media](https://www.npmjs.com/package/rehype-mdx-import-media) will take the path and do an import (don't use [remark-mdx-images](https://github.com/remcohaszing/remark-mdx-images) it is deprecated)
-1. because the image is now an import, next/image will be able to define the height and width, which means we can always use the placeholder=blur feature
-
-I use 3 default configurations for images:
-
-* only the banner (images on top of pages) have the priority set, meaning their [fetchpriority attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/fetchPriority) is set to high, they are responsive images, they fill 100% of their container width
-* photo and screenshot are also responsive images, they fill 100% of their container width, but have no priority set, meaning that the [loading attribute](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading) gets set to lazy
-* the last one is a fallback for all other images, the size if those images is their actual size, but their is also a maxWodth set to 100% to make them responsive for mobile screens
-
-import Image, { ImageProps } from 'next/image'
-
-const ImageArticle: React.FC<ImageProps> = (props): JSX.Element => {
-
-```tsx
-let placeholder = true
-
-// something is odd here, but I have not found the reason yet
-// src is either of type string or StaticImport and somehow ts
-// thinks that when it is of type StaticImport that the object
-// has no properties
-// @ts-expect-error: because the library definition is wrong
-if (props.src?.src.slice(-3) === 'gif') {
-    placeholder = false
-}
-
-return (
-    <>
-        {props.alt.startsWith('banner') ? (
-            <Image
-                style={{
-                    width: '100%',
-                    height: 'auto',
-                }}
-                sizes="100vw"
-                priority
-                placeholder={ placeholder ? 'blur' : 'empty' }
-                //quality={90} // default is 75
-                {...(props as ImageProps)}
-            />
-        ) : (props.alt.startsWith('photo') || props.alt.startsWith('screenshot')) ? (
-            <Image
-                style={{
-                    width: '100%',
-                    height: 'auto',
-                }}
-                sizes="100vw"
-                placeholder={ placeholder ? 'blur' : 'empty' }
-                {...(props as ImageProps)}
-            />
-        ) : (
-            <Image
-                style={{
-                    maxWidth: '100%',
-                    height: 'auto',
-                }}
-                placeholder={ placeholder ? 'blur' : 'empty' }
-                {...(props as ImageProps)}
-            />
-        )}
-    </>
-)
-
-}
-
-export default ImageArticle
-```
-
-Accessibility
-
-alt is now required so make sure you pass a good value
-
-to learn how to write good alt texts for images check out these [w3c "Resources on Alternative Text for Images" list](https://www.w3.org/WAI/alt/)
-
-edit the Next.js config
-
-```mjs
-        // file formats for next/image
-        images: {
-            formats: ['image/avif', 'image/webp'],
-        },
-```
-
-NextJS lazy loads image components by default, so you don’t need to do anything special.
-
-It is advised to disable lazy-loading for images above the fold, though. To do this, you can set the loading priority higher, or switch to eager loading:
-
-```tsx
-<Image
-  src="/foo.png"
-  loading="eager"
-  priority={true}
-/>
-```
-
-placeholder
-
-The placeholder helps to reduce layout shifts that occur when there is no reserved space for an image that has not been loaded yet, by filling the space the image will take when loaded using the placeholder
-without a placeholder the space the image will use would be non existing but then when the image has finished loading the page layout would shift, which could be bad for the user visiting your page as the layout shift could happen at the same moment the user tries to interact with your page and hence cause a misclick
-There is a cumulative layout shift (CLS) metric in Core Web Vitals that tracks the amount of shifts that occur, the more layout shifts the less stable a page is considered to be, if there are a lot of shift you will get a low core web vitals score, indicating there is room for improvement
-
-[web.dev "Cumulative Layout Shift (CLS)" documentation](https://web.dev/articles/cls)
-
-
-### optimizing images with next/image
-
-images go into the public directory, but `public` is not part of the src path, only what comes after
-
-so an image called `foo.jpg` located in `/public/images/` would have an src like this: `/images/foo.jpg`
-
-Note: if you used next/image prior to **next.js 13** you might want to check out the migration guide as there are some major changes as to how some options work: <https://nextjs.org/docs/messages/next-image-upgrade-to-13>
-
-for the layout header, we will add a fallback image for the canvas element, the goal is to use the [css property object fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) to make it as large as the canvas container:
-
-```ts
-<Image
-    src="/assets/images/neonroad/fallback-min.png"
-    alt="Chris.lu header image, displaying an 80s style landscape and sunset"
-    fill
-    style={{objectFit:'cover'}}
-    sizes="100vw"
-    priority
-    quality={80}
-/>
-```
-
-if now open the page in your browser and inspect the html you will see that next.js add a lot of different srcset attributes to the img tag
-
-Note: when you start your server with `npm run dev`, next.js will automatically create files with different dimensions of your image and store them into the directory `\.next\cache\images`
-
-our original image is a PNG image, so it's quite heavy, because modern browser support formats like [AVIF](https://developer.mozilla.org/docs/Web/Media/Formats/Image_types#avif_image) or [WebP](https://developer.mozilla.org/docs/Web/Media/Formats/Image_types#webp_image) we want next.js to convert our original file into these formats and depending on what format the browser supports we want next.js to either ship .avif files to the user (best compression / smallest size) or else ship .webp files (good compression / smaller size) and only if none of those two is formats is supported it should ship .png files (worst compression / bigger size)
-
-to add support for webp and avif we need to add the following code to our next.config.js:
-
-```js
-const nextConfig = () => {
-
-    /** @type {import('next').NextConfig} */
-    const nextConfig = {
-        experimental: {
-            // experimental support for next.js > 13 app directory
-            appDir: true,
-        },
-        // file formats for next/image
-        images: {
-            formats: ['image/avif', 'image/webp']
-        },
-    }
-
-    return nextConfig
-
-}
-
-export default nextConfig
-```
-
-no need to change any code of the `<Image>` component we added previously, next.js will handle the conversion to the different formats automatically now that we have added them to the configuration file and will store the different versions into `\.next\cache\images`
-
-Note: next/image uses sharp <https://www.npmjs.com/package/sharp> to convert images to other formats
-
-Note: when using next/image for the first time, check out the browser dev tools console, next.js might give you tips about how to improve the usage you make of it, for example if your image is on top of the page but you have not set the attribute ["priority"](https://beta.nextjs.org/docs/api-reference/components/image#priority) then next.js will tell you to do so:
-
-> Image with src "/assets/images/neonroad/fallback-min.png" was detected as the Largest Contentful Paint (LCP). Please add the "priority" property if this image is above the fold.
-
-read more:
-
-* next.js next/image documentation: <https://beta.nextjs.org/docs/api-reference/components/image>
-* use avif in next.js: <https://avif.io/blog/tutorials/nextjs/>
-
-### optimizing fonts with next/font
-
-next.js 13.2 has some next/font improvements: <https://nextjs.org/blog/next-13-2#other-improvements>
-
-read more:
-
-[next.js next/font beta documentation](https://beta.nextjs.org/docs/optimizing/fonts)
-
-### setting up vercel account
-
-vercel website: <https://vercel.com/>
-vercel is free for personal prjects, like your blog: <https://vercel.com/pricing>
-
-first one your dashboard: <https://vercel.com/dashboard>, if haven't connected your git account (github, gitlab, ...) do that first
-
-click on "Add new project", then select your git account
-
-now for the repositories you can chose to enable vercel on all of them or just a selection (I chose to select which ones I want to use with vercel as I have a bunch of accounts which are either forks, own packages or just experiments I created)
-
-then click on "Install"
-
-on the next page, click the "import" button next to the project you want to set up
-
-Note: if like me in this project, you use next.js, vercel will set up your project using default values for projects using next.js with will reduce the time you spend on configuring the next step
-
-now you must configure the project, you will notice that most values have default values but feel free to edit them if you need to
-
-when I look at the "Build and Output Settings" section, I see vercel says they will use "npm install" by default to install the projects dependencies, I'm a bit surprised that they don't use `npm ci` [(npm ci documentation)](https://docs.npmjs.com/cli/commands/npm-ci)
-
-TODO: for now I did not change the install command to `npm ci`, I let the default value, I will do a deployment and see if I can see in the logs which command is really being used
-
-one section we will need to make some changes at some point is the [environment variables section](https://vercel.com/docs/concepts/projects/environment-variables), but for now we have no environment variables, so we skip it for now
-
-finally click on "Deploy"
-
-wait for the deployment to finish
-
-if the deployment was successfull it will show you a preview image of the homepage, click on that image to visit your deployment
-
-## vercel preview (staging environment)
-
-if you have a repository with a **main** and do a commit vercel will do a new deployment of your production environment
-
-some people like to live dangerously:
-
-![I don't always test my code, but when I do, I do it in production](./documentation/assets/images/test_in_production.png)
-
-it is useful to have **preview** deployments, so that you can check out changes you made before pushing those into production
-
-to have vercel create **preview** deployments we create a new branch in our repository and call it **preview**, then we switch to that branch in VSCode
-
-now every change we do, we commit it into our **preview** branch, this will trigger a **preview** deployment by vercel
-
-open your repository on github and now on the right side you should see a section environments, you now have two environments listed here, **production** and **preview**
-
-![github / vercel deployment environments](./documentation/assets/images/github_vercel_deployment_environments.png)
-
-click on **preview** to go to the deployments history page, there you can click on **View deployment** and then you can test the deployment
-
-## github: pull request from preview into main branch (automatically link / close tickets)
-
-if everything is ok, you need to merge the changes from your **preview** branch into the **main** branch, or even better do a [PR (pull request)](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)
-
-go to your repository on github, if you are on the **main** branch switch to the **preview** branch
-
-if you did a commit not long ago github will automatically show a message on top "preview had recent pushes", if that the case click on **Compare and pull request**, if the latest commits are a bit older you will have a button **Pull request** on the top right side of your branch files list, click it to go to the PR page
-
-github creates a PR brings you to the PR page
-
-first add a good title to describe what is in the PR
-
-then you can add an optional description
-
-Note: to [automatically link your PRs to one or more tickets](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue), edit the PR description, type hashtag and then select your ticket from the list or manually type #TICKET\_NUMBER
-
-Note: if you want the linked ticket to get automatically **closed** by the PR, put a word like **closes** or **fixes** (for a full list of keywords check out the [github "ticket linking" documentation page](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword)) in front of the #TICKET\_NUMBER in your PR description, so for example `fixes #1`, then after doing the PR the ticket will get automatically set to **closed** by github
-
-![github: this PR closes the issue(s)](./documentation/assets/images/PR_closes_issue.png)
-
-if you are part of a team and want to have other people check out your PR, you also assign one or more reviewers on the right side of the PR page
-
-when your PR is ready to get merged into the **main** branch, click the button **Merge pull request** on the bottom of the page
-
-Note: after the PR is done, if you listed your ticket(s) in the description of the PR, then on the page of your ticket you will see that it automatically got linked to your PR and if you used one of the keywords that automatically closes the ticket then you will notice that it also got closed
-
-![github: linked PR message](./documentation/assets/images/linked_PR_and_ticket_closed.png)
-
-now that the PR into the **main** branch is done, vercel will do a new production deployment for you
 
 ## metadata
 
