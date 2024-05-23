@@ -5,23 +5,60 @@ import styles from './typing.module.css'
 
 interface IProps {
     children: React.ReactNode
+    colorChange?: boolean
+    randomize?: boolean
 }
 
-const colors = ['#09f7ee', '#2dd2e3', '#649bd5', '#9d63c5', '#d628b5', '#ff00aa']
-let lastColor = ''
+interface IColorGradient {
+    start: string
+    end: string
+}
 
-const getRandomColor = (): string => {
-    const random = Math.floor(Math.random() * colors.length)
-    const color = colors[random]
-    if (color !== lastColor) {
-        lastColor = color
-        return color
-    } else {
-        return getRandomColor()
+const colors: IColorGradient[] = [
+    {
+        start: '185 100% 60%',
+        end: '300 100% 60%',
+    },
+    {
+        start: '65 100% 60%',
+        end: '150 100% 60%',
+    },
+    {
+        start: '50 100% 60%',
+        end: '340 100% 60%',
+    },
+    {
+        start: '275 100% 60%',
+        end: '310 100% 60%',
+    },
+    {
+        start: '185 100% 60%',
+        end: '60 100% 60%',
+    },
+]
+
+const availableColors: IColorGradient[] = []
+
+const getRandomColors = (): IColorGradient => {
+
+    if (availableColors.length === 0) {
+        availableColors.push(...colors)
     }
+
+    const random = Math.floor(Math.random() * availableColors.length)
+    return availableColors[random]
 }
 
-const Button: React.FC<IProps> = ({ children }) => {
+const getColors = (): IColorGradient => {
+
+    if (availableColors.length === 0) {
+        availableColors.push(...colors)
+    }
+
+    return availableColors.shift() ?? { start: '', end: '' }
+}
+
+const Button: React.FC<IProps> = ({ children, colorChange, randomize }) => {
 
     const stringChildren = children as string[]
     const wordsList = children ? stringChildren.toString() : ''
@@ -32,10 +69,11 @@ const Button: React.FC<IProps> = ({ children }) => {
     const characterIndexRef = useRef(0)
     const pauseIndexRef = useRef(20)
     const actionRef = useRef('type')
-    const withColorChange = true
+    const withColorChange =  true ?? colorChange
+    const randomizeColors = false ?? randomize
 
     const [wordState, setWordState] = useState('')
-    const [colorState, setColorState] = useState('#fff')
+    const [colorState, setColorState] = useState<IColorGradient | null>(null)
 
     const updatePartIndex = useCallback(() => {
         if (partIndexRef.current < parts.length - 1) {
@@ -51,8 +89,11 @@ const Button: React.FC<IProps> = ({ children }) => {
         const character = charactersArray[characterIndexRef.current]
         // set a new color
         if (withColorChange && characterIndexRef.current === 0) {
-            const color = getRandomColor()
-            setColorState(color)
+            if (randomizeColors) {
+                setColorState(getRandomColors())
+            } else {
+                setColorState(getColors())
+            }
         }
         if (characterIndexRef.current < charactersArray.length - 1) {
             // we have NOT reached the end of the characters array
@@ -66,7 +107,7 @@ const Button: React.FC<IProps> = ({ children }) => {
         setWordState((previousState) => {
             return previousState += character
         })
-    }, [parts, updatePartIndex, withColorChange])
+    }, [parts, updatePartIndex, withColorChange, randomizeColors])
 
     const pause = useCallback(() => {
         if (pauseIndexRef.current >= 0) {
@@ -110,7 +151,7 @@ const Button: React.FC<IProps> = ({ children }) => {
             }
             animationTimestampRef.current = timeStamp
         }
-        
+
         // faster for backspace, once every 50ms
         if (elapsed >= 50) {
             if (actionRef.current === 'backspace') {
@@ -130,7 +171,7 @@ const Button: React.FC<IProps> = ({ children }) => {
 
     return (
         <>
-            <span className={styles.blinkingCarret} style={{ color: colorState }}>{wordState}</span>
+            <span className={`${styles.blinkingCarret} ${styles.clip}`} style={{ backgroundImage: `linear-gradient(to right, hsl(${colorState?.start}) 0%, hsl(${colorState?.end}) 100%)` }}>{wordState}</span>
         </>
     )
 }

@@ -12,7 +12,7 @@ export default function Homepage() {
                     <Image src="/assets/images/noto_emoji_animated/wave_64.gif" unoptimized alt="🚀" width="32" height="32" />
                 </h1>
                 <p>Welcome to my blog, my name is Chris Weber (aka chrisweb)</p>
-                <p className="fontBig fontLighter">I like <Typing>Web development, Lego bricks, Music, Games, Cooking, Movies & TV shows, Memes</Typing></p>
+                <p className="fontBigger fontLighter">I like <Typing>Web development, Lego bricks, Music, Games, Cooking, Movies & TV shows, Memes</Typing></p>
                 <div className={styles.portalsGrid}>
                     <div className={styles.cyberPortalOuterGlow} id="web_development">
                         <div className={styles.cyberPortalBorder}>
@@ -45,7 +45,7 @@ export default function Homepage() {
                         <div className={styles.cyberPortalBorder}>
                             <div className={styles.cyberPortalInnerGlow}>
                                 <div className={styles.cyberPortalCore}>
-                                    <p><Link href="/music" className="hyperLink">Playlists:</Link> There are a lot of different activities during which I like listening to music, hence the music genres I listen to vary depending on what I do. I have my road trip playlists for when I&apos;m in my car, my work playlist I listen to while coding, my chill playlists when building with bricks, ...</p>
+                                    <p><Link href="/music" className="hyperLink">Music:</Link> There are a lot of different activities during which I like listening to music, hence the music genres I listen to vary depending on what I do. I have my road trip playlists for when I&apos;m in my car, my work playlist I listen to while coding, my chill playlists when building with bricks, ...</p>
                                 </div>
                             </div>
                         </div>
@@ -54,7 +54,7 @@ export default function Homepage() {
                         <div className={styles.cyberPortalBorder}>
                             <div className={styles.cyberPortalInnerGlow}>
                                 <div className={styles.cyberPortalCore}>
-                                    <p><Link href="/memes" className="hyperLink">Memes:</Link> A growing collection of memes that make me laugh.</p>
+                                    <p><Link href="/memes" className="hyperLink">Memes:</Link> A growing collection of memes that make me laugh. The most important ingredient for a good meme is humor, without it a meme is just a quote on a picture. A good meme can be used as a source of light relief during a tense situation.</p>
                                 </div>
                             </div>
                         </div>

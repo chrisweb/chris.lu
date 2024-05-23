@@ -13,6 +13,12 @@
     display: inline-block;
 }
 
+.clip {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 @media (prefers-reduced-motion: no-preference) {
     .blinkingCarret::after {
         animation: blinkingCarretAnimation 1s steps(2) infinite;
