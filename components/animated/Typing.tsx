@@ -32,8 +32,8 @@ const colors: IColorGradient[] = [
         end: '310 100% 60%',
     },
     {
-        start: '185 100% 60%',
-        end: '60 100% 60%',
+        start: '120 100% 60%',
+        end: '185 100% 60%',
     },
 ]
 
