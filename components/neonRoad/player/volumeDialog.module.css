@@ -10,6 +10,7 @@
     background-color: rgba(var(--primary-light-value) / 0.3);
     width: 40px;
     height: 170px;
+    position: fixed;
     right: 85px;
     left: auto;
     top: -300px;

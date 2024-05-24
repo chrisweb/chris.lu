@@ -9,6 +9,7 @@
     width: 400px;
     height: 244px;
     right: var(--main-spacing);
+    position: fixed;
     left: auto;
     top: -238px;
     perspective: 600px;
