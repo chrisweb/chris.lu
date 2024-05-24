@@ -3296,14 +3296,16 @@ Before we experiment with plugins in the next chapter I wanted to first come bac
 
 `mdx-components.tsx` is great to quickly and easily replace an HTML Element with a React component
 
-For example how can we quickly add a CSS class to all our `<ul>` [unordered list elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ul), because the markdown syntax does NOT let us add a class in a similar way to how we add a class to an HTML element, actually we don't even have access to that element when writing the list using markdown:
+For example how can we quickly add a CSS class to all our `<ul>` [unordered list elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ul), because the markdown syntax does NOT let us add a class in a similar way to how we add a class to an HTML element, in fact the ul is not even part of the markdown syntax:
 
 ```md
 * foo
 * bar
 ```
 
-To solve this you could write custom react component that you import into the MDX document an that you use instead of the default markdown syntax, or another solution would be to find a remark or rehype plugin that solves that problem for us, but both solutions would require more work (compared to using the mdx-components file) and also by using the mdx-components file allows us to customize the output without altering the markdown syntax, meaning our content is still compatible with other markdown parsers
+To solve this you add a remark plugin which would extend the base markdown syntax, but if you that and want to move your content to another platform someday, then that platform might not understand your custom markdown sysntax as the plugin you used to add classes to lists is not installed, as we will see in the next chapter using **mdx-components** file we can add a class to all of our lists without using an extra plugin and without having to introduce any new markdown syntax
+
+Or you could write custom react component, but then you would need to import and use that react component in every single MDX page, when using the **mdx-components** file however you only import the component once, for example in the second chapter we will create a custom link component, we import it once into **mdx-components** file and then use it for all the links in all our pages
 
 ### adding a CSS class lists using mdx-components
 
