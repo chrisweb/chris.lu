@@ -3287,11 +3287,7 @@ For example how can we quickly add a CSS class to all our `<ul>` [unordered list
 * bar
 ```
 
-Or for example in the previous chapter we replaced anchor elements in our navigation component with next/link, how do we now replace markdown links (that will be turned into HTML anchors) with next/link, or how can we use next/image to make sure that all images we put into the markdown of our MDX pages use next/image so that they are optimized too
-
-For those 3 examples you could write custom react component that you import into the MDX document an that you use instead of the default markdown syntax, or another solution would be to find a remark or rehype plugin that solves our problem, but both solutions would require more work (compared to using the mdx-components file) and would reduce the compatibility of our markdown content, for example if at some point we decide to use it in a product that has a markdown parser that does not have those components or plugins installed then that parser could not cope with the extra syntax we added to our markdown or for example if we use the VSCode feature to drop an image into a markdown or MDX document and VSCode automatically creates the markdown image sysntax for you would be lost if we use a react component or a special syntax that is required for a plugin to work
-
-This is why using the **mdx-components** file has the advantage that it lets us keep using default markdown syntax while still enhancing the (HTML) output that we get
+To solve this you could write custom react component that you import into the MDX document an that you use instead of the default markdown syntax, or another solution would be to find a remark or rehype plugin that solves that problem for us, but both solutions would require more work (compared to using the mdx-components file) and also by using the mdx-components file allows us to customize the output without altering the markdown syntax, meaning our content is still compatible with other markdown parsers
 
 ### adding a CSS class lists using mdx-components
 
@@ -3341,8 +3337,64 @@ Try it out for yourself, ensure the dev server is running and then in the browse
 
 ### optimizing links in MDX using next/link
 
+When building our navigation earlier we saw why it is beneficial to use next/link instead of regular HTML anchors, so now we want to do the same for all the markdown links that we will insert into our MDX pages, because without using the **mdx-components** the parser would just transform the markdown links into regular HTML anchors
 
+First we are going to create a custom Link component that will use next/link, next/link extends the HTML `<a>` element to provide prefetching and client-side navigation between routes and we are going to create a component that will use next/link for internal URLs and use a regular `<a>` element for external URLs, we will also add an icon to external URLs to give users a visible hint that if they click on that link they will leave the our app
+
+In the `/components` folder add a new `base` folder
+
+Then in the `base` folder create a new `Link.tsx` file and add the following code:
+
+```mdx title="/components/base/Link.tsx" showLineNumbers
+import type { MDXComponents } from 'mdx/types'
+
+// This file allows you to provide custom React components
+// to be used in MDX files. You can import and use any
+// React component you want, including components from
+// other libraries.
+
+// This file is required to use MDX in `app` directory.
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+    return {
+        // Allows customizing built-in components, e.g. to add styling.
+        ul: ({ children, ...props }) => (
+            <ul className="listContainer" {...props}>
+                {children}
+            </ul>
+        ),
+        ...components,
+    }
+}
+```
+
+Next open the `mdx-components.tsx` (which is in the root of your project) again and and lets add a second markdown component to customize the anchor elements, like so:
+
+```mdx title="mdx-components.tsx" showLineNumbers {12-16}
+import type { MDXComponents } from 'mdx/types'
+
+// This file allows you to provide custom React components
+// to be used in MDX files. You can import and use any
+// React component you want, including components from
+// other libraries.
+
+// This file is required to use MDX in `app` directory.
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+    return {
+        // Allows customizing built-in components, e.g. to add styling.
+        ul: ({ children, ...props }) => (
+            <ul className="listContainer" {...props}>
+                {children}
+            </ul>
+        ),
+        ...components,
+    }
+}
+```
 
 ### optimizing images in MDX using next/link
+
+can we use next/image to make sure that all images we put into the markdown of our MDX pages use next/image so that they are optimized too
+
+our second goal is to not lose the VSCode feature that allows us to just drag an drop images into a document
 
 </article>
