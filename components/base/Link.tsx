@@ -14,7 +14,7 @@ export interface IBaseLinkProps extends PropsWithChildren {
 const isExternalUrl = (url: string, domain: string): boolean => {
 
     const urlLowerCase = url.toLowerCase()
-    
+
     const firstCharacter = urlLowerCase.charAt(0)
 
     if (firstCharacter === '#' || firstCharacter === '/') {
@@ -23,7 +23,7 @@ const isExternalUrl = (url: string, domain: string): boolean => {
 
     if (urlLowerCase.startsWith('http://') || urlLowerCase.startsWith('https://')) {
 
-        const urlNoProtocol = urlLowerCase.replace('http://','').replace('https://','')
+        const urlNoProtocol = urlLowerCase.replace('http://', '').replace('https://', '')
 
         const potentialDomain = urlNoProtocol.split('/')[0]
 
@@ -41,9 +41,9 @@ const isUrlMe = (url: string): boolean => {
 
     const urlLowerCase = url.toLowerCase()
 
-    const urlNoProtocol = urlLowerCase.replace('http://','').replace('https://','')
-    
-    if (urlNoProtocol.startsWith('github.com/chrisweb')) {
+    const urlNoProtocol = urlLowerCase.replace('http://', '').replace('https://', '')
+
+    if (urlNoProtocol === 'github.com/chrisweb') {
         return true
     }
 
@@ -58,7 +58,7 @@ const BaseLink: React.FC<IBaseLinkProps> = (props): JSX.Element => {
     const isExternal = isExternalUrl(href.toString(), 'chris.lu')
     const isMe = isUrlMe(href.toString())
 
-    const newLinkProps = {...linkProps}
+    const newLinkProps = { ...linkProps }
 
     if (isExternal) {
         newLinkProps.rel = 'nofollow noopener noreferrer'
@@ -71,10 +71,18 @@ const BaseLink: React.FC<IBaseLinkProps> = (props): JSX.Element => {
 
     return (
         <>
-            <Link href={href} {...newLinkProps}>
-                {children}
-            </Link>
-            {isExternal && <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="sm" className='externalLinkIcon' />}
+            {isExternal ? (
+                <>
+                    <a href={href.toString()} {...newLinkProps}>
+                        {children}
+                    </a>
+                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="sm" className='externalLinkIcon' />
+                </>
+            ) : (
+                <Link href={href} {...newLinkProps}>
+                    {children}
+                </Link>
+            )}
         </>
     )
 }
