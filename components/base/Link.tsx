@@ -1,8 +1,8 @@
-import { PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
 import Link from 'next/link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
-import { Route } from 'next'
+import type { Route } from 'next'
 
 export interface IBaseLinkProps extends PropsWithChildren {
     href: Route<string> | URL

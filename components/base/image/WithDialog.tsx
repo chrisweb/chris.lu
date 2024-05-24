@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import Image, { ImageProps } from 'next/image'
+import Image from 'next/image'
+import type { ImageProps } from 'next/image'
 import dynamic from 'next/dynamic'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
