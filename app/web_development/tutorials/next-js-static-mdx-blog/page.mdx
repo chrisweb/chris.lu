@@ -2701,17 +2701,25 @@ html {
     text-size-adjust: 100%;
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/tab-size */
     tab-size: 4;
-    /* light dark scheme */
     background-color: var(--background-dark-color);
     color: var(--text-dark-color);
 }
 
 @media (prefers-color-scheme: light) {
     html {
-        /* dark color scheme */
         background-color: var(--background-light-color);
         color: var(--text-light-color);
     }
+}
+
+html[data-color-scheme="light"] {
+    background-color: var(--background-light-color);
+    color: var(--text-light-color);
+}
+
+html[data-color-scheme="dark"] {
+    background-color: var(--background-dark-color);
+    color: var(--text-dark-color);
 }
 
 body {
@@ -2736,12 +2744,20 @@ main {
     max-width: var(--maxWidth);
 }
 
-/* on phones put aside below article */
+/* on small screens */
 @media all and (max-width: 48rem) {
     main {
         margin-bottom: calc(var(--spacing) * 2);
+        /* place one under the other */
         flex-flow: column;
     }
+}
+
+article,
+section {
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing);
 }
 
 a {
@@ -3254,7 +3270,7 @@ Line 28 / 34 / 43 / 49 we use the 3 CSS rules, the `.active` rule will be used t
 
 Just one last little change needed, because we made the navigation fixed, it means that it will NOT take up any space anymore in the document as it will be floating above the content, this will cause the page content to move up and eventually be under the navigation, this is why we will edit the file in the folder, like so:
 
-```css title="/app/global.css" showLineNumbers{66} {4-5}
+```css title="/app/global.css" showLineNumbers{65} {4-5}
 body {
     /* remove any margin that browsers add to body */
     margin: 0;
@@ -3298,10 +3314,17 @@ Inside of the `/app/tutorial_examples` folder create a `mdx-components_playgroun
 Then in the `mdx-components_playground` folder create a `page.mdx` file and paste the following content into it:
 
 ```mdx title="/app/tutorial_examples/mdx-components_playground/page.mdx"
+<article>
+
 * foo
 * bar
 
+</article>
+
 ```
+
+> [!NOTE]  
+> We wrap our content with the `article` HTML element so that the content is not placed directly into the `main` HTML element (of our layout) which has a **flex-direction** set to **row**, the `article` element has a flex-direction of **column** (we defined all this in our `global.css` file which is in the `app` folder when we created it)  
 
 Now open the `mdx-components.tsx` (which is in the root of your project) and add an entry for each headline, like so:
 
@@ -3345,32 +3368,89 @@ In the `/components` folder add a new `base` folder
 
 Then in the `base` folder create a new `Link.tsx` file and add the following code:
 
-```mdx title="/components/base/Link.tsx" showLineNumbers
-import type { MDXComponents } from 'mdx/types'
+```tsx title="/components/base/Link.tsx" showLineNumbers
+import type { PropsWithChildren } from 'react'
+import Link from 'next/link'
+import { Route } from 'next'
 
-// This file allows you to provide custom React components
-// to be used in MDX files. You can import and use any
-// React component you want, including components from
-// other libraries.
-
-// This file is required to use MDX in `app` directory.
-export function useMDXComponents(components: MDXComponents): MDXComponents {
-    return {
-        // Allows customizing built-in components, e.g. to add styling.
-        ul: ({ children, ...props }) => (
-            <ul className="listContainer" {...props}>
-                {children}
-            </ul>
-        ),
-        ...components,
-    }
+export interface IBaseLinkProps extends PropsWithChildren {
+    href: Route<string> | URL
+    target?: string
+    rel?: string
+    className?: string
 }
+
+const isExternalUrl = (url: string, domain: string): boolean => {
+
+    const urlLowerCase = url.toLowerCase()
+
+    const firstCharacter = urlLowerCase.charAt(0)
+
+    if (firstCharacter === '#' || firstCharacter === '/') {
+        return false
+    }
+
+    if (urlLowerCase.startsWith('http://') || urlLowerCase.startsWith('https://')) {
+
+        const urlNoProtocol = urlLowerCase.replace('http://', '').replace('https://', '')
+
+        const potentialDomain = urlNoProtocol.split('/')[0]
+
+        if (potentialDomain !== domain) {
+            return true
+        }
+
+    }
+
+    return false
+
+}
+
+const BaseLink: React.FC<IBaseLinkProps> = (props): JSX.Element => {
+
+    const { href, children, ...linkProps } = props
+
+    const isExternal = isExternalUrl(href.toString(), 'chris.lu')
+
+    const newLinkProps = { ...linkProps }
+
+    if (isExternal) {
+        newLinkProps.rel = 'nofollow noopener noreferrer'
+        newLinkProps.target = '_blank'
+    }
+
+    return (
+        <>
+            {isExternal ? (
+                <>
+                    <a href={href.toString()} {...newLinkProps}>
+                        {children}
+                    </a>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="iconSmall" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5" />
+                        <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z" />
+                    </svg>
+                </>
+            ) : (
+                <Link href={href} {...newLinkProps}>
+                    {children}
+                </Link>
+            )}
+        </>
+    )
+}
+
+export default BaseLink
 ```
+
+The SVG icon that I used is from [icons.getbootstrap.com](https://icons.getbootstrap.com/), they are [MIT licensed](https://github.com/twbs/icons/blob/main/LICENSE), the icon I chose to use here is the [Box arrow up-right](https://icons.getbootstrap.com/icons/box-arrow-up-right/) icon
 
 Next open the `mdx-components.tsx` (which is in the root of your project) again and and lets add a second markdown component to customize the anchor elements, like so:
 
-```mdx title="mdx-components.tsx" showLineNumbers {12-16}
+```mdx title="mdx-components.tsx" showLineNumbers {2-3} {19-23}
 import type { MDXComponents } from 'mdx/types'
+import BaseLink from '@/components/base/Link'
+import type { Route } from 'next'
 
 // This file allows you to provide custom React components
 // to be used in MDX files. You can import and use any
@@ -3386,10 +3466,48 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                 {children}
             </ul>
         ),
+        a: ({ children, href, ...props }) => (
+            <BaseLink href={href as Route} {...props}>
+                {children}
+            </BaseLink>
+        ),
         ...components,
     }
 }
 ```
+
+Next we edit the `global.css` file in the `app` folder to add the styles for the svg icon(s), like so:
+
+```css title="/app/global.css" showLineNumbers{120} {1-8}
+.iconSmall {
+    margin-left: calc(var(--spacing) / 4);
+    display: inline-block;
+    fill: currentcolor;
+    font-size: 1em;
+    height: 1em;
+    vertical-align: -.125em;
+}
+```
+
+And finally we update our playground `page.mdx` file (that is in the `/app/tutorial_examples/mdx-components_playground` folder) with two links to showcase internal and external links, like so:
+
+```mdx title="/app/tutorial_examples/mdx-components_playground/page.mdx"
+<article>
+
+* foo
+* bar
+
+[internal link](/internal)
+
+[external link](https://example.com)
+
+</article>
+
+```
+
+launch dev server...
+
+congratulations...
 
 ### optimizing images in MDX using next/link
 
