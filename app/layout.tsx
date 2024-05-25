@@ -69,9 +69,9 @@ const sourceCodePro = Source_Code_Pro({
     display: 'auto',
 })
 
-const kodeMono = Anta({
+const anta = Anta({
     subsets: ['latin'],
-    variable: '--font-kodeMono',
+    variable: '--font-anta',
     weight: ['400'],
     display: 'auto',
 })
@@ -81,7 +81,7 @@ export default function RootLayout({ children }: {
 }) {
 
     return (
-        <html lang="en" className={`${permanentMarkerFont.variable} ${vt323.variable} ${architectsDaughter.variable} ${sourceCodePro.variable} ${kodeMono.variable}`}>
+        <html lang="en" className={`${permanentMarkerFont.variable} ${vt323.variable} ${architectsDaughter.variable} ${sourceCodePro.variable} ${anta.variable}`}>
             <head />
             <body>
                 <header className={styles.layoutHeader}>
