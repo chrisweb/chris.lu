@@ -3364,16 +3364,18 @@ Try it out for yourself, ensure the dev server is running and then in the browse
 
 When building our navigation earlier we saw why it is beneficial to use next/link instead of regular HTML anchors, so now we want to do the same for all the markdown links that we will insert into our MDX pages, because without using the **mdx-components** the parser would just transform the markdown links into regular HTML anchors
 
+#### React component for external and internal links
+
 First we are going to create a custom Link component that will use next/link, next/link extends the HTML `<a>` element to provide prefetching and client-side navigation between routes and we are going to create a component that will use next/link for internal URLs and use a regular `<a>` element for external URLs, we will also add an icon to external URLs to give users a visible hint that if they click on that link they will leave the our app
 
 In the `/components` folder add a new `base` folder
 
 Then in the `base` folder create a new `Link.tsx` file and add the following code:
 
-```tsx title="/components/base/Link.tsx" showLineNumbers
+```tsx title="/components/base/Link.tsx" showLineNumbers /example.com/
 import type { PropsWithChildren } from 'react'
 import Link from 'next/link'
-import { Route } from 'next'
+import type { Route } from 'next'
 
 export interface IBaseLinkProps extends PropsWithChildren {
     href: Route<string> | URL
@@ -3412,7 +3414,7 @@ const BaseLink: React.FC<IBaseLinkProps> = (props): JSX.Element => {
 
     const { href, children, ...linkProps } = props
 
-    const isExternal = isExternalUrl(href.toString(), 'chris.lu')
+    const isExternal = isExternalUrl(href.toString(), 'example.com')
 
     const newLinkProps = { ...linkProps }
 
@@ -3445,7 +3447,21 @@ const BaseLink: React.FC<IBaseLinkProps> = (props): JSX.Element => {
 export default BaseLink
 ```
 
+For this component we import [next/link](https://nextjs.org/docs/app/api-reference/components/link) and two types to help us strictly type our variables
+
+First we create an interface for the props of the component by extending the react type **PropsWithChildren**
+
+Then we create a **isExternalUrl** function that gets the URL for our link as input and then checks if the URL is internal or external, if the URL is external it returns true else false, I used a quite naive approach to make the test but I didn't need more for my own URLs (if this is not complex enough for your own needs then feel free to improve that part, for example if you have more than one domain then you may want to use an array instead), for my use cases I just check if a URL starts with a slash or # hashtag which indicates it is an internal URL and I check if a URL starts with http or https in which case it is an external URL, except if the domain matches a value I pass as parameter which is the domain name the app will use in production
+
+Next we add the code for the component itself, first we use the interface we created earlier to strictly type the props, this is useful when you intend to re-use the component somewhere other than in the mdx-components file and want to pass props manually to the component
+
+The core code is pretty self explanatory, we first use the **isExternalUrl** function to check if the URL is an external or internal URL, the first paramater is the URL of the current link and the second parameter is the domain of our project (replace example.com with the domain you intend to use in production), then for (external domains) we set the values for two attributes rel and target
+
+Finally in the return statement we check if the link is external in which case we use a HTML anchor element and add the **external icon** behind it and if it is an internal link then we use next/link
+
 The SVG icon that I used is from [icons.getbootstrap.com](https://icons.getbootstrap.com/), they are [MIT licensed](https://github.com/twbs/icons/blob/main/LICENSE), the icon I chose to use here is the [Box arrow up-right](https://icons.getbootstrap.com/icons/box-arrow-up-right/) icon
+
+#### Using the BaseLink component for all markdown links
 
 Next open the `mdx-components.tsx` (which is in the root of your project) again and and lets add a second markdown component to customize the anchor elements, like so:
 
@@ -3478,6 +3494,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 }
 ```
 
+#### external icon styling in the global.css
+
 Next we edit the `global.css` file in the `app` folder to add the styles for the svg icon(s), like so:
 
 ```css title="/app/global.css" showLineNumbers{120} {1-8}
@@ -3491,6 +3509,8 @@ Next we edit the `global.css` file in the `app` folder to add the styles for the
 }
 ```
 
+#### examples in the MDX playground page
+
 And finally we update our playground `page.mdx` file (that is in the `/app/tutorial_examples/mdx-components_playground` folder) with two links to showcase internal and external links, like so:
 
 ```mdx title="/app/tutorial_examples/mdx-components_playground/page.mdx"
@@ -3499,15 +3519,19 @@ And finally we update our playground `page.mdx` file (that is in the `/app/tutor
 * foo
 * bar
 
-[internal link](/internal)
+[internal link that has our production domain](https://example.com)
 
-[external link](https://example.com)
+[internal link starting with a slash](/internal)
+
+[internal link starting with a hash](#internal)
+
+[external link](https://google.com)
 
 </article>
 
 ```
 
-launch dev server...
+launch dev server... [http://localhost:3001/tutorial_examples/mdx-components_playground](http://localhost:3001/tutorial_examples/mdx-components_playground)
 
 congratulations...
 
