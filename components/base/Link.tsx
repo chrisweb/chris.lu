@@ -61,7 +61,7 @@ const BaseLink: React.FC<IBaseLinkProps> = (props): JSX.Element => {
     const newLinkProps = { ...linkProps }
 
     if (isExternal) {
-        newLinkProps.rel = 'nofollow noopener noreferrer'
+        newLinkProps.rel = 'noopener noreferrer'
         newLinkProps.target = '_blank'
     }
 
