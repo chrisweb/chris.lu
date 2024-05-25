@@ -40,11 +40,13 @@
     from {
         top: -238px;
         transform: perspective(400px) rotateX(20deg);
+        -webkit-transform: perspective(400px) rotateX(20deg);
     }
 
     to {
         top: calc(var(--main-spacing) + var(--header-navbar-height));
         transform: perspective(400px) rotateX(0deg);
+        -webkit-transform: perspective(400px) rotateX(0deg);
     }
 }
 
@@ -52,10 +54,12 @@
     from {
         top: calc(var(--main-spacing) + var(--header-navbar-height));
         transform: perspective(400px) rotateX(0deg);
+        -webkit-transform: perspective(400px) rotateX(0deg);
     }
 
     to {
         top: -238px;
         transform: perspective(400px) rotateX(20deg);
+        -webkit-transform: perspective(400px) rotateX(20deg);
     }
 }
