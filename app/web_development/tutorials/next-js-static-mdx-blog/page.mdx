@@ -2662,24 +2662,14 @@ So instead if you want to style all Elements that match a certain type, or if yo
 
 ```css title="/app/global.css"
 :root {
-    color-scheme: light dark;
-    /* light color scheme */
-    --background-light-value: 19 71% 97%;
-    --background-light-color: hsl(var(--background-light-value));
-    --text-light-value: 288 23% 25%;
-    --text-light-color: hsl(var(--text-light-value));
-    --primary-light-value: 315 31% 32%;
-    --primary-light-color: hsl(var(--primary-light-value));
-    --secondary-light-value: 212 33% 33%;
-    --secondary-light-color: hsl(var(--secondary-light-value));
-    /* dark color scheme */
-    --background-dark-value: 288 23% 25%;
+    /* colors */
+    --background-dark-value: 288 23% 20%;
     --background-dark-color: hsl(var(--background-dark-value));
     --text-dark-value: 19 71% 97%;
     --text-dark-color: hsl(var(--text-dark-value));
-    --primary-dark-value: 315 30% 82%;
+    --primary-dark-value: 315 60% 82%;
     --primary-dark-color: hsl(var(--primary-dark-value));
-    --secondary-dark-value: 211 33% 83%;
+    --secondary-dark-value: 211 63% 83%;
     --secondary-dark-color: hsl(var(--secondary-dark-value));
     /* sizes */
     --spacing: 2rem;
@@ -2701,23 +2691,6 @@ html {
     text-size-adjust: 100%;
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/tab-size */
     tab-size: 4;
-    background-color: var(--background-dark-color);
-    color: var(--text-dark-color);
-}
-
-@media (prefers-color-scheme: light) {
-    html {
-        background-color: var(--background-light-color);
-        color: var(--text-light-color);
-    }
-}
-
-html[data-color-scheme="light"] {
-    background-color: var(--background-light-color);
-    color: var(--text-light-color);
-}
-
-html[data-color-scheme="dark"] {
     background-color: var(--background-dark-color);
     color: var(--text-dark-color);
 }
@@ -2766,16 +2739,6 @@ a {
 
 a:hover {
     color: var(--secondary-dark-color);
-}
-
-@media (prefers-color-scheme: light) {
-    a {
-        color: var(--primary-light-color);
-    }
-
-    a:hover {
-        color: var(--secondary-light-color);
-    }
 }
 ```
 
@@ -3270,7 +3233,7 @@ Line 28 / 34 / 43 / 49 we use the 3 CSS rules, the `.active` rule will be used t
 
 Just one last little change needed, because we made the navigation fixed, it means that it will NOT take up any space anymore in the document as it will be floating above the content, this will cause the page content to move up and eventually be under the navigation, this is why we will edit the file in the folder, like so:
 
-```css title="/app/global.css" showLineNumbers{65} {4-5}
+```css title="/app/global.css" showLineNumbers{38} {4-5}
 body {
     /* remove any margin that browsers add to body */
     margin: 0;
@@ -3502,7 +3465,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
 Next we edit the `global.css` file in the `app` folder to add the styles for the svg icon(s), like so:
 
-```css title="/app/global.css" showLineNumbers{120} {1-8}
+```css title="/app/global.css" showLineNumbers{83} {1-8}
 .iconSmall {
     margin-left: calc(var(--spacing) / 4);
     display: inline-block;
@@ -3535,9 +3498,9 @@ And finally we update our playground `page.mdx` file (that is in the `/app/tutor
 
 ```
 
-launch dev server... [http://localhost:3001/tutorial_examples/mdx-components_playground](http://localhost:3001/tutorial_examples/mdx-components_playground)
+Now launch dev server (using the `npm run dev` command) and then visit [http://localhost:3001/tutorial_examples/mdx-components_playground](http://localhost:3001/tutorial_examples/mdx-components_playground) in your browser to see the result
 
-congratulations...
+Congratulations you just created a link component that will now get used for all markdown links, which means they will now all benefit from the next/link features like prefetching and optimized client-side navigation between routes 🎉
 
 ### optimizing images in MDX using next/link
 
