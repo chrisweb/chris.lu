@@ -1,16 +1,14 @@
-import Image, { ImageProps } from 'next/image'
+import Image from 'next/image'
+import type { ImageProps } from 'next/image'
 import ImageWithDialog from '@/components/base/image/WithDialog'
 
 const ImageDispatch: React.FC<ImageProps> = (props): JSX.Element => {
 
     let optimizable = true
 
-    // something is odd here, but I have not found the reason yet
-    // src is either of type string or StaticImport and somehow ts
-    // thinks that when it is of type StaticImport that the object
-    // has no properties
-    // @ts-ignore: because the library definition is wrong
-    const src = props.src?.src as string
+    const imageProps = props.src as ImageProps
+    const src = imageProps.src as string
+
     if (src.endsWith('gif')) {
         optimizable = false
     }
