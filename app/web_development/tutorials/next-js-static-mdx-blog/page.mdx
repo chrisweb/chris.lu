@@ -1838,7 +1838,7 @@ I then enabled the option **reportUnusedDisableDirectives** to make sure ESLint 
 
 The 1st override we add to the array, it is fairly short as its only purpose is to tell ESLint which **rule sets** we want to use no matter if it is mdx / markdown content in md(x) files or typescript code in ts(x) files
 
-We do this because that a rule from Next.js ESLint plugin that recommends using next/image instead of a regular `<img>` element can be useful in both MDX files as well as Typescript code in one of our React components or Next.js pages
+We do this because that a rule from Next.js ESLint plugin that recommends using [next/image](https://nextjs.org/docs/app/api-reference/components/image) instead of a regular `<img>` element can be useful in both MDX files as well as Typescript code in one of our React components or Next.js pages
 
 Add the following object to the **overrides** array:
 
@@ -3253,7 +3253,7 @@ Congratulations, you now know what next/navigation, next/link and next/font are 
 > [MDN "font-display" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display)  
 > [developer.chrome.com "font-display" blog post](https://developer.chrome.com/blog/font-display)  
 
-## using the mdx-components file
+## The mdx-components file
 
 Before we experiment with plugins in the next chapter I wanted to first come back to the `mdx-components.tsx` file which we briefly saw when setting up MDX support (at the very beginning) as the file is required to make MDX work
 
@@ -3270,28 +3270,13 @@ To solve this you add a remark plugin which would extend the base markdown synta
 
 Or you could write custom react component, but then you would need to import and use that react component in every single MDX page, when using the **mdx-components** file however you only import the component once, for example in the second chapter we will create a custom link component, we import it once into **mdx-components** file and then use it for all the links in all our pages
 
-### adding a CSS class lists using mdx-components
+> [!MORE]  
+> [mdxjs.com "components" documentation](https://mdxjs.com/table-of-components/)  
+> [Next.js "MDX custom elements" documentation](https://nextjs.org/docs/app/building-your-application/configuring/mdx#custom-elements)  
 
-First lets create a new playground to experiment with the **mdx-components** file
+### Adding a CSS class to lists using mdx-components
 
-Inside of the `/app/tutorial_examples` folder create a `mdx-components_playground` folder
-
-Then in the `mdx-components_playground` folder create a `page.mdx` file and paste the following content into it:
-
-```mdx title="/app/tutorial_examples/mdx-components_playground/page.mdx"
-<article>
-
-* foo
-* bar
-
-</article>
-
-```
-
-> [!NOTE]  
-> We wrap our content with the `article` HTML element so that the content is not placed directly into the `main` HTML element (of our layout) which has a **flex-direction** set to **row**, the `article` element has a flex-direction of **column** (we defined all this in our `global.css` file which is in the `app` folder when we created it)  
-
-Now open the `mdx-components.tsx` (which is in the root of your project) and add an entry for each headline, like so:
+First open the `mdx-components.tsx` (which is in the root of your project) and add an entry for each headline, like so:
 
 ```mdx title="mdx-components.tsx" showLineNumbers {12-16}
 import type { MDXComponents } from 'mdx/types'
@@ -3317,19 +3302,42 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
 Line 12 to 16 we have created a simple custom component for **ul lists**, now the markdown parser will turn the list into HTML and then mdx-components will add a class called `listContainer` to each ul element
 
-Try it out for yourself, ensure the dev server is running and then in the browser navigate to [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground), then use your browser developper tools inspect tool and you will see that the `<ul>` element now has a **class** attribute containing the value `listContainer`
+### CSS class example using a MDX playground page
+
+Next lets create a new playground to experiment with the **mdx-components** file
+
+Inside of the `/app/tutorial_examples` folder create a `mdx-components_playground` folder
+
+Then in the `mdx-components_playground` folder create a `page.mdx` file and paste the following content into it:
+
+```mdx title="/app/tutorial_examples/mdx-components_playground/page.mdx"
+<article>
+
+* foo
+* bar
+
+</article>
+
+```
+
+> [!NOTE]  
+> We wrap our content with the `article` HTML element so that the content is not placed directly into the `main` HTML element (of our layout) which has a **flex-direction** set to **row**, the `article` element has a flex-direction of **column** (we defined all this in our `global.css` file which is in the `app` folder when we created it)  
+
+Now ensure the dev server is running (or launch it using the `npm run dev` command) and then in the browser navigate to [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground), then use your browser developper tools inspect tool and you will see that the `<ul>` element now has a **class** attribute containing the value `listContainer`
+
+Congratulations you just learned how to use the **mdx-components** file 🎉
+
+### Optimizing links in MDX using next/link
+
+When building our navigation earlier we saw why it is beneficial to use [next/link](https://nextjs.org/docs/app/api-reference/components/link) (for internal links) instead of regular HTML anchors, so now we want to do the same for all the markdown links that we will insert into our MDX pages, because without using the **mdx-components** the parser would just transform the markdown links into regular HTML anchors
 
 > [!MORE]  
-> [mdxjs.com "components" documentation](https://mdxjs.com/table-of-components/)  
-> [Next.js "MDX custom elements" documentation](https://nextjs.org/docs/app/building-your-application/configuring/mdx#custom-elements)  
-
-### optimizing links in MDX using next/link
-
-When building our navigation earlier we saw why it is beneficial to use next/link instead of regular HTML anchors, so now we want to do the same for all the markdown links that we will insert into our MDX pages, because without using the **mdx-components** the parser would just transform the markdown links into regular HTML anchors
+> [Next.js "next/link" api reference](https://nextjs.org/docs/app/api-reference/components/link)  
+> [Next.js "linking and navigation" documentation](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating)  
 
 #### React component for external and internal links
 
-First we are going to create a custom Link component that will use next/link, next/link extends the HTML `<a>` element to provide prefetching and client-side navigation between routes and we are going to create a component that will use next/link for internal URLs and use a regular `<a>` element for external URLs, we will also add an icon to external URLs to give users a visible hint that if they click on that link they will leave the our app
+First we are going to create a custom Link component that will use **next/link**, **next/link** extends the HTML `<a>` element to provide prefetching and client-side navigation between routes and we are going to create a component that will use **next/link** for internal URLs and use a regular `<a>` element for external URLs, we will also add an icon to external URLs to give users a visible hint that if they click on that link they will leave the our app
 
 In the `/components` folder add a new `base` folder
 
@@ -3476,7 +3484,7 @@ Next we edit the `global.css` file in the `app` folder to add the styles for the
 }
 ```
 
-#### examples in the MDX playground page
+#### Links examples using the MDX playground page
 
 And finally we update our playground `page.mdx` file (that is in the `/app/tutorial_examples/mdx-components_playground` folder) with two links to showcase internal and external links, like so:
 
@@ -3502,10 +3510,77 @@ Now launch dev server (using the `npm run dev` command) and then visit [http://l
 
 Congratulations you just created a link component that will now get used for all markdown links, which means they will now all benefit from the next/link features like prefetching and optimized client-side navigation between routes 🎉
 
-### optimizing images in MDX using next/link
+### optimizing images in MDX using next/image
 
-can we use next/image to make sure that all images we put into the markdown of our MDX pages use next/image so that they are optimized too
+For the third and last part we are going to use [next/image](https://nextjs.org/docs/app/api-reference/components/image) to make sure that all images we put into the markdown of our MDX pages get optimized
 
-our second goal is to not lose the VSCode feature that allows us to just drag an drop images into a document
+Our second goal is to make sure we do NOT lose the VSCode feature which allows us to just drag an drop images into a MDX document and have VSCode create the markdown image element
+
+> [!MORE]  
+> [Next.js "next/image" api reference](https://nextjs.org/docs/app/api-reference/components/image)  
+> [Next.js "Image Optimization" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/images)  
+
+#### Custom React component for images
+
+Lets start by 
+
+Go into the `/components/base` folder we created earlier, then create a new `Image.tsx` file and add the following code:
+
+```tsx title="/components/base/Link.tsx" showLineNumbers {11-13}#special /props.alt.startsWith('banner')/#special
+import Image from 'next/image'
+import type { ImageProps } from 'next/image'
+
+const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
+
+    const imageProps = props.src as ImageProps
+    const src = imageProps.src as string
+
+    const imageProps = {...props}
+
+    if (src.endsWith('gif')) {
+        
+    }
+
+    return (
+        <>
+            {props.alt.startsWith('banner') ? (
+                <>
+                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                    <Image
+                        style={{
+                            width: '100%',
+                            height: 'auto',
+                        }}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        priority
+                        placeholder={'blur'}
+                        {...(props)}
+                    />
+                </>
+            ) : (
+                <>
+                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                    <Image
+                        style={{
+                            maxWidth: '100%',
+                            height: 'auto',
+                        }}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 15vw"
+                        placeholder={'blur'}
+
+                        {...(props)}
+                    />
+                </>
+            )}
+        </>
+    )
+}
+
+export default BaseImage
+```
+
+This component is fairly simple, it is mostly a wrapper using next/image but with two small features, the first feature is line 11-13 where we check if the image is a gif, if the image is a gif then we don't use the next/image placeholder (blur) feature as animated images are not supported, if you don't exclude animated images like Gifs you will get an error that no [blurDataURL](https://nextjs.org/docs/messages/placeholder-blur-data-url) is present
+
+The 
 
 </article>
