@@ -7,7 +7,7 @@ const ImageDispatch: React.FC<ImageProps> = (props): JSX.Element => {
     const staticImageData = props.src as StaticImageData
     const src = staticImageData.src
 
-    const imageProps = {...props}
+    const imageProps = { ...props }
 
     // Pixel GIF code adapted from https://stackoverflow.com/a/33919020/266535
     const keyStr =
@@ -23,8 +23,8 @@ const ImageDispatch: React.FC<ImageProps> = (props): JSX.Element => {
         `data:image/gif;base64,R0lGODlhAQABAPAA${triplet(0, r, g) + triplet(b, 255, 255)
         }/yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==`
 
-    if (src.endsWith('gif')) {
-        imageProps.blurDataURL = rgbDataURL(255,0,125)
+    if (src?.endsWith('gif')) {
+        imageProps.blurDataURL = rgbDataURL(255, 0, 125)
     }
 
     return (
@@ -37,7 +37,7 @@ const ImageDispatch: React.FC<ImageProps> = (props): JSX.Element => {
                             width: '100%',
                             height: 'auto',
                         }}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        sizes="(max-width: 48rem) 100vw, 704px"
                         priority
                         placeholder={'blur'}
                         {...(imageProps)}
@@ -45,6 +45,20 @@ const ImageDispatch: React.FC<ImageProps> = (props): JSX.Element => {
                 </>
             ) : (imageProps.alt.startsWith('meme') || imageProps.alt.startsWith('photo') || imageProps.alt.startsWith('screenshot')) ? (
                 <ImageWithDialog {...(imageProps)} />
+            ) : (imageProps.alt.startsWith('card')) ? (
+                <>
+                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                    <Image
+                        style={{
+                            width: '100%',
+                            height: 'auto',
+                            objectFit: 'cover',
+                        }}
+                        sizes="(max-width: 48rem) 100vw, 336px"
+                        placeholder="blur"
+                        {...props}
+                    />
+                </>
             ) : (
                 <>
                     {/* eslint-disable-next-line jsx-a11y/alt-text */}
@@ -53,6 +67,7 @@ const ImageDispatch: React.FC<ImageProps> = (props): JSX.Element => {
                             maxWidth: '100%',
                             height: 'auto',
                         }}
+                        sizes="(max-width: 48rem) 100vw, 704px"
                         placeholder={'blur'}
                         {...(imageProps)}
                     />

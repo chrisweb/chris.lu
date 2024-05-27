@@ -24,11 +24,6 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
         setImageDialogIsOpenState(false)
     }, [])
 
-    // @ts-expect-error: because the library definition is wrong
-    const intrinsicImageWidth = props.src?.width as number
-    // @ts-expect-error: because the library definition is wrong
-    const intrinsicImageHeight = props.src?.height as number
-
     return (
         <>
             <button onClick={imageButtonClickHandler} className={`${styles.buttonReset}  ${styles.buttonCore}`}>
@@ -38,8 +33,7 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
                         width: '100%',
                         height: 'auto',
                     }}
-                    className={styles.thumbnail}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 15vw"
+                    sizes="(max-width: 48rem) 100vw, 336px"
                     placeholder="blur"
                     {...props}
                 />
@@ -48,21 +42,16 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
                 )}
             </button>
             <UIModal isOpen={imageDialogIsOpenState} onCloseCallback={closeDialogCallback} hasCloseButton={false}>
-                <div className={styles.imageContainer}>
-                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
-                    <Image
-                        style={{
-                            objectFit: 'contain',
-                            width: '100%',
-                            height: '100%',
-                            maxWidth: intrinsicImageWidth ? intrinsicImageWidth + 'px' : '100%',
-                            maxHeight: intrinsicImageHeight ? intrinsicImageHeight + 'px' : '100%'
-                        }}
-                        sizes="(max-width: 1200px) 25vw, 100vw"
-                        placeholder="blur"
-                        {...props}
-                    />
-                </div>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                <Image
+                    style={{
+                        width: '100%',
+                        height: 'auto',
+                    }}
+                    sizes="100vw"
+                    placeholder="blur"
+                    {...props}
+                />
             </UIModal>
         </>
     )
