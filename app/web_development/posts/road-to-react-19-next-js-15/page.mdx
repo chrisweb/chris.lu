@@ -2,9 +2,9 @@
 
 <article>
 
-# The road to React 19 and Next.js 14
+# The road to React 19 and Next.js 15
 
-![banner image of a futuristic city with two signs "react" and "next.js"](../../../../public/assets/images/app/web_development/posts/road-to-react-19-next-js-14/banner.png)
+![banner image of a futuristic city with two signs "react" and "next.js"](../../../../public/assets/images/app/web_development/posts/road-to-react-19-next-js-15/banner.png)
 
 This post is based on research I did a while ago when I first heard about Server Components, I wanted to understand what makes them different from what I was using at that time, I have kept track of the React and Next.js releases which are the first few chapters, then I had some discussions with other devs about the need or not to migrate this is why I wrote the ["do I need to migrate all my code today?"](#do-i-need-to-migrate-all-my-code-today) chapter and finally the last chapters are about finding out what the major changes between the Next.js pages directory and app directory are
 
@@ -31,10 +31,13 @@ React updates recap:
 
 * On april 25 2024 the react team released the **first beta** 🚀 of **React 19** on [npmjs.com](https://www.npmjs.com/package/react/v/19.0.0-beta-94eed63c49-20240425), they announced the [release of React 19 (beta)](https://react.dev/blog/2024/04/25/react-19) in a blog post that same day, the post contains a recap of the most interesting features that are included in React 19, the new **client Actions** that are the counterpart to Server Actions but the client ones are just called Actions (not Client Actions), the new **use** API, **Server Components** and **Server Actions** that you might already be using as frameworks like Next.js and Remix (to just name those two) has already access to those features via the canary releases, support for document metadata and a lot more that I won't list here as I recommend you check out their [release of React 19 (beta)](https://react.dev/blog/2024/04/25/react-19) blog post for a more complete list and details
 * In april 2024 the react team published the first React 19 migration guide which list the upcoming changes in React 19, there is also a valuable [chapter about codemods](https://react.dev/blog/2024/04/25/react-19-upgrade-guide#typescript-changes), codemods are a great help especially when you intend to migrate the types and already have a big codebase
+* During [React Conf 2024](https://react.dev/blog/2024/05/22/react-conf-2024-recap) in april 2024 the React team announced the release of the first [React 19 RC](https://react.dev/blog/2024/04/25/react-19) (release candidate), another big announcement was the experimental release of the [React Compiler](https://react.dev/learn/react-compiler)
 
 > [!MORE]  
 > [react.dev "React 19 (beta)" post](https://react.dev/blog/2024/04/25/react-19)  
 > [react.dev "React 19 migration" guide](https://react.dev/blog/2024/04/25/react-19-upgrade-guide)  
+> [react.dev "React 19 RC" post](https://react.dev/blog/2024/04/25/react-19)  
+> [react.dev "React 19 RC" post](https://react.dev/learn/react-compiler)  
 
 ## new features in Next.js prior to v13
 
@@ -50,26 +53,32 @@ Starting with version 12 Next.js typescript compilation is now much faster thx t
 
 In may 2022 the next.js team released the [Layouts RFC](https://nextjs.org/blog/layouts-rfc) and sketched out their ideas for server components, but also improved data fetching and things like nested layouts, alongside the RFC posted on their blog they opened a [github discussion regarding the layouts RFC](https://github.com/vercel/next.js/discussions/37136)
 
-Next.js 13 releases in 2022:
+Next.js 13 releases:
 
-* in october 2022 the next.js team released [Next.js 13](https://nextjs.org/blog/next-13) which included the first beta version of the new `app` directory (**App Router**), with the new app router and thanks to React 18 Next.js now also comes with a new feature called **React Server Components**, in this release we also got the first alpha of [Turbopack](https://turbo.build/pack) a new bundler written in Rust that someday will replace webpack in Next.js projects, next/image got a complete overhaul in that version and the previous version got renamed to [next/legacy/image](https://nextjs.org/docs/pages/api-reference/components/image-legacy) (which means that if you migrate your code to a newer Next.js version you can use the legacy image component but for new projects it is highly recommended that you use the new version of next/image), another new component they introduced in that version is the next/font (in beta), next/font is similar to next/image but for fonts, meaning it will optimize your font usage by making them soft hosted (compared to fetching them from a remote CDN) which reduces layout shifts when using fonts that are not installed on the users device, yet another new component they updated is next/link which now does not require your to add `<a>{:html}` element as child
-* two months later in december 2022 [Next.js 13.1](https://nextjs.org/blog/next-13-1) which brought a lot of improvements for the new app directory but also for middlewares, Turbopack as well as [SWC](https://swc.rs/) a tool written in Rust to replace babel
-* in february 2023 we got [Next.js 13.2](https://nextjs.org/blog/next-13-2) which brought the new [Metadata Files API](https://nextjs.org/docs/app/api-reference/file-conventions/metadata) for built SEO support and [MDX](https://mdxjs.com/) for Server Components ([MDX app directory support](https://nextjs.org/docs/app/building-your-application/configuring/mdx))
-* in april 2023 we got [Next.js 13.3](https://nextjs.org/blog/next-13-3) which brought improvements for SEO tools like the [Metadata Files API](https://nextjs.org/docs/app/api-reference/file-conventions/metadata) and automatically generated OpenGraph Images, as well as a new routes feature that looks very promising called [Parallel Routes](https://nextjs.org/docs/app/building-your-application/routing/parallel-routes) which allows you to render the content of two (or more) routes in a single layout, which is probably going to be very helpfull when building things like dashboards or complex admin panels
-* in may 203 we got [Next.js 13.4](https://nextjs.org/blog/next-13-4) which is the first version of next.js 13 in which the **App Router** is considered being stable (meaning it has left beta) another big new feature in Next.js 13.4 was the introduction of **Server Actions** in alpha, the goal is the new [Server Actions](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations) is to allow devs to mutate data without the use of an API and also make it possible to create progressively enhanced forms (forms that work even if javascript has not been loaded yet), Turbopack got updated too and is now considered beta (previously alpha)
-* the last 13.x version the Next.js team released was [Next.js 13.5](https://nextjs.org/blog/next-13-5) in september 2023, this version had almost no new features but a lot of performance optimisations as well as bug fixes
+* In october 2022 the next.js team released [Next.js 13](https://nextjs.org/blog/next-13) which included the first beta version of the new `app` directory (**App Router**), with the new app router and thanks to React 18 Next.js now also comes with a new feature called **React Server Components**, in this release we also got the first alpha of [Turbopack](https://turbo.build/pack) a new bundler written in Rust that someday will replace webpack in Next.js projects, next/image got a complete overhaul in that version and the previous version got renamed to [next/legacy/image](https://nextjs.org/docs/pages/api-reference/components/image-legacy) (which means that if you migrate your code to a newer Next.js version you can use the legacy image component but for new projects it is highly recommended that you use the new version of next/image), another new component they introduced in that version is the next/font (in beta), next/font is similar to next/image but for fonts, meaning it will optimize your font usage by making them soft hosted (compared to fetching them from a remote CDN) which reduces layout shifts when using fonts that are not installed on the users device, yet another new component they updated is next/link which now does not require your to add `<a>{:html}` element as child
+* Two months later in december 2022 [Next.js 13.1](https://nextjs.org/blog/next-13-1) which brought a lot of improvements for the new app directory but also for middlewares, Turbopack as well as [SWC](https://swc.rs/) a tool written in Rust to replace babel
+* In february 2023 we got [Next.js 13.2](https://nextjs.org/blog/next-13-2) which brought the new [Metadata Files API](https://nextjs.org/docs/app/api-reference/file-conventions/metadata) for built SEO support and [MDX](https://mdxjs.com/) for Server Components ([MDX app directory support](https://nextjs.org/docs/app/building-your-application/configuring/mdx))
+* In april 2023 we got [Next.js 13.3](https://nextjs.org/blog/next-13-3) which brought improvements for SEO tools like the [Metadata Files API](https://nextjs.org/docs/app/api-reference/file-conventions/metadata) and automatically generated OpenGraph Images, as well as a new routes feature that looks very promising called [Parallel Routes](https://nextjs.org/docs/app/building-your-application/routing/parallel-routes) which allows you to render the content of two (or more) routes in a single layout, which is probably going to be very helpfull when building things like dashboards or complex admin panels
+* In may 203 we got [Next.js 13.4](https://nextjs.org/blog/next-13-4) which is the first version of next.js 13 in which the **App Router** is considered being stable (meaning it has left beta) another big new feature in Next.js 13.4 was the introduction of **Server Actions** in alpha, the goal is the new [Server Actions](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations) is to allow devs to mutate data without the use of an API and also make it possible to create progressively enhanced forms (forms that work even if javascript has not been loaded yet), Turbopack got updated too and is now considered beta (previously alpha)
+* The last 13.x version the Next.js team released was [Next.js 13.5](https://nextjs.org/blog/next-13-5) in september 2023, this version had almost no new features but a lot of performance optimisations as well as bug fixes
 
-## Next.js 14 and beyond
+## Next.js 14
 
-Next.js 14 release(s) in 2023:
-
-* in october 2023 (one year after the release of Next.js 13) the Next.js team released the first [Next.js 14](https://nextjs.org/blog/next-14) version, in this version the **Server Actions** feature (that they introduced in version 13.4 as alpha) is now considered being stable (meaning you can safely use it in production now), this version also another interesting new feature called **Partial Prerendering** (currently in preview / experimental), [Partial Prerendering](https://nextjs.org/docs/app/api-reference/next-config-js/partial-prerendering) will allow us to mix static and dynamic content, as of now if you call a dynamic function like noStore or cookies inside your route then you opt out of static rendering, with means that with partial rendering you will be able to include dynamic components without the whole page becoming dynamic
+* In october 2023 (one year after the release of Next.js 13) the Next.js team released the first [Next.js 14](https://nextjs.org/blog/next-14) version, in this version the **Server Actions** feature (that they introduced in version 13.4 as alpha) is now considered being stable (meaning you can safely use it in production now), this version also another interesting new feature called **Partial Prerendering (PPR)** (currently in preview / experimental), [Partial Prerendering](https://nextjs.org/docs/app/api-reference/next-config-js/partial-prerendering) will allow us to mix static and dynamic content in a route (page), as of now if you use the noStore cache option or the cookies() function then your entire route will opt out of static rendering (and become dynamic), however with partial rendering you will be able to include dynamic components into a page and if you wrap them into a suspense boundary then the component will be dynamic but the rest will still be static, **PPR** is only available for testing and should not be used for production, if you want to try it out **you MUST use next@canary** and enable it manually in the Next.js configuration
 * In january 2024 the Next.js team released [Next.js 14.1](https://nextjs.org/blog/next-14-1) providing a stable version of custom cache handlers and there is now a configuration option to instruct Next.js to log cache **HITs** and **SKIPs** when running in development mode, this version also came with many improvements for fast refresh, error messages, parallel & intercepted routes and Turbo
 * In april 2024 the Next.js team released [Next.js 14.2](https://nextjs.org/blog/next-14-2) added a new experimental option to called [staleTimes](https://nextjs.org/docs/app/api-reference/next-config-js/staleTimes) to let developers to set custom revalidation times for the [Router Cache](https://nextjs.org/docs/app/building-your-application/caching#router-cache), this version also came with some changes intended to improve Tree-shaking and builds should now use less memory
 
 > [!MORE]  
-> [Next.js blog](https://nextjs.org/blog)  
+> [Next.js 13 to 14 upgrade guide](https://rc.nextjs.org/docs/app/building-your-application/upgrading/version-14)  
+> [Next.js "partiel prerendering" documentation](https://nextjs.org/docs/app/api-reference/next-config-js/partial-prerendering)  
 > [Turbopack "are we turbo yet" (percentage of tests Turbopack passes)](https://areweturboyet.com/)  
+
+## Next.js 15
+
+* In may 2024 the Next.js team released the first [Next.js 15 RC](https://nextjs.org/blog/next-15-rc) (release candidate) which included a big change for [caching](https://nextjs.org/blog/next-15-rc#caching-updates), the Next.js team decided that from now on all caching would be opt-in instead of being enabled by default, the problem with with caching enabled by default was that in development even though caching was enabled the content (fetch requests, routes, client navigation) would not get cached, caching would only happen during the build process, this made it hard to detect problems linked to caching before publishing the app, another change is that Next.js now includes React 19 RC (see my [React 19 chapter](#react-19) for details about what's new in React 19), **Partial Prerendering (PPR)** which previously was only available when using the release candidates is not included in this release and there is a new **experimental_ppr** feature that allows you to enable PPR only on certain pages, included is also a new feature called **next/after** which is an experimental API to execute code after your content got streamed to the user, a new layout for **create-next-app** as well as new configuration options to opt out of bundling for certain packages
+
+> [!MORE]  
+> [Next.js 14 to 15 upgrade guide](https://rc.nextjs.org/docs/app/building-your-application/upgrading/version-15)  
 
 ## do I need to migrate all my code today?
 
@@ -239,6 +248,8 @@ const nextConfig = {
 }
 ```
 
+In version 15 Next.js changed [caching](https://nextjs.org/blog/next-15-rc#caching-updates) to be disabled by default, meaning you now need to opt-in caching manually
+
 > [!MORE]  
 > [Next.js "Data Fetching, Caching, and Revalidating" documentation](https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating)  
 > [Next.js "unstable_cache" API reference](https://nextjs.org/docs/app/api-reference/functions/unstable_cache)  
@@ -246,6 +257,7 @@ const nextConfig = {
 > [Vercel "Fetching data faster with the App Router" article](https://vercel.com/blog/nextjs-app-router-data-fetching)  
 > [Next.js "Configuring Caching" documentation](https://nextjs.org/docs/app/building-your-application/deploying#configuring-caching)  
 > [Next.js "Router Cache" documentation](https://nextjs.org/docs/app/building-your-application/caching#router-cache)  
+> [Next.js 15 "caching changes" blog post](https://nextjs.org/blog/next-15-rc#caching-updates)  
 
 ### server components and server actions
 

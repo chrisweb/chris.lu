@@ -52,12 +52,12 @@ To be able to create a Javascript backend and run our Javascript code locally we
 > [!NOTE]  
 > the **Next.js 14** "app directory features" require nodejs v18.17 or later, so if you skipped the Node.js installation document because you already have Node.js installed, then just make sure you have a version installed that is high enough, to do that you can for example use the following command: `node -v`
 
-## The road to React 19 and Next.js 14
+## The road to React 19 and Next.js 15
 
-React and Next.js have evolved a lot lately, the most notable additions are **server components** and **(server) actions**. With those new features came a lot of changes for how we devs build Next.js apps / websites, which is why I did a seperate blog post ["The road to React 19 and Next.js 14"](/web_development/posts/road-to-react-19-next-js-14) where I list what changed during the last +-2 years in the React and Next.js ecosystem. If you did not build a project with Next.js 13/14 and React 18/19 yet I recommend you check it out, but if you are already an expert feel free to skip it 😉
+React and Next.js have evolved a lot lately, the most notable additions are **server components** and **(server) actions**. With those new features came a lot of changes for how we devs build Next.js apps / websites, which is why I did a seperate blog post ["The road to React 19 and Next.js 15"](/web_development/posts/road-to-react-19-next-js-15) where I list what changed during the last +-3 years in the React and Next.js ecosystem. If you did not build a project with Next.js 13/14/15 and React 18/19 yet I recommend you check it out, but if you are already an expert feel free to skip it 😉
 
 > [!MORE]  
-> [chris.lu "The road to React 19 and Next.js 14" post](/web_development/posts/road-to-react-19-next-js-14)
+> [chris.lu "The road to React 19 and Next.js 14" post](/web_development/posts/road-to-react-19-next-js-15)
 
 ## Basic project setup
 
@@ -276,7 +276,7 @@ Line 12 we check if the phase is **development** server by checking if the conte
 > [!MORE]  
 > [Node.js "environment variables" documentation](https://nodejs.org/en/learn/command-line/how-to-read-environment-variables-from-nodejs)  
 > [Vercel "system environment variables" documentation](https://vercel.com/docs/projects/environment-variables/system-environment-variables)  
-> [Next.js "next.config.js phase" documentation](https://nextjs.org/docs/pages/api-reference/next-config-js)  
+> [Next.js "next.config.js phase" documentation](https://nextjs.org/docs/app/api-reference/next-config-js)  
 
 ### React strict mode configuration
 
@@ -2978,6 +2978,9 @@ Have a look at the first line (actually also second line because there are now t
 Faster loading times are of course important because the user will be able to navigate faster and if an app is fast the user is happy, but it is also great because your server running Next.js will spend less time working on responses which means it will be able to handle more requests and finally faster loading times will also improve your SEO score
 
 Finally look again at the time we print on top of the navigation and you will notice that this time it doesn't get updated anymore, this is because our layout does not get re-rendered every time we navigate to a new page, which is because Next.js has only replaced the main section of the page but did not make any changes to the layout (this is why on my blog, in the top header if you hit play the songs will continue playing even if you visit a new page, 20 years ago to achieve the same thing I had to put the player into an iFrame, but today with Next.js / React this has become effortless)
+
+> [!NOTE]  
+> to be clear, server component layouts **DO NOT** re-render on navigation but client components (when using the 'use client' directive in a layout) **DO** re-render
 
 You can now remove the `<p>{new Date().toString()}</p>` test (in `/app/layout.tsx` at line 20), which we added to demonstrate that the navigation does NOT re-render, we will not need it anymore
 
