@@ -14,11 +14,12 @@ export interface IUIModalProps extends PropsWithChildren {
     onCloseCallback?: () => void
     width?: number
     height?: number
+    className?: string
 }
 
 const UIModal: React.FC<IUIModalProps> = (props): JSX.Element => {
 
-    const { isOpen, hasCloseButton, onCloseCallback, children } = props
+    const { isOpen, hasCloseButton, onCloseCallback, children, ...rest } = props
 
     const [isModalOpenState, setIsModalOpenState] = useState(isOpen)
     const [closeAnimationState, setCloseAnimationState] = useState(false)
@@ -74,6 +75,7 @@ const UIModal: React.FC<IUIModalProps> = (props): JSX.Element => {
             onAnimationEnd={animationEndHandler}
             className={`${styles.reset} ${styles.modal} disablePageScroll ${closeAnimationState === true ? styles.hide : ''}`}
             onClick={closeHandler}
+            {...rest}
         >
             {withCloseButton && (
                 <ButtonWithIcon clickCallback={closeHandler} whichIcon={faClose} />
