@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react'
 import Image from 'next/image'
-import type { ImageProps } from 'next/image'
+import type { ImageProps, StaticImageData } from 'next/image'
 import dynamic from 'next/dynamic'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -24,6 +24,11 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
         setImageDialogIsOpenState(false)
     }, [])
 
+    const staticImageData = props.src as StaticImageData
+
+    const intrinsicWidth = staticImageData.width
+    const intrinsicHeight = staticImageData.height
+
     return (
         <>
             <button onClick={imageButtonClickHandler} className={`${styles.buttonReset}  ${styles.buttonCore}`}>
@@ -41,17 +46,26 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
                     <FontAwesomeIcon icon={faMagnifyingGlass} size="xl" color='white' className={`${styles.iconPositioning}  ${styles.icon}`} />
                 )}
             </button>
-            <UIModal isOpen={imageDialogIsOpenState} onCloseCallback={closeDialogCallback} hasCloseButton={false}>
-                {/* eslint-disable-next-line jsx-a11y/alt-text */}
-                <Image
-                    style={{
-                        width: '100%',
-                        height: 'auto',
-                    }}
-                    sizes="100vw"
-                    placeholder="blur"
-                    {...props}
-                />
+            <UIModal
+                isOpen={imageDialogIsOpenState}
+                onCloseCallback={closeDialogCallback}
+                hasCloseButton={false}
+            >
+                <div className={styles.imageContainer}>
+                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                    <Image
+                        style={{
+                            objectFit: 'contain',
+                            width: '100%',
+                            height: '100%',
+                            maxWidth: intrinsicWidth,
+                            maxHeight: intrinsicHeight,
+                        }}
+                        sizes="100vw"
+                        placeholder="blur"
+                        {...props}
+                    />
+                </div>
             </UIModal>
         </>
     )

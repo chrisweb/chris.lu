@@ -25,6 +25,16 @@
     color: var(--secondary-light-color);
 }
 
+.imageContainer {
+    width: 90vw;
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+    cursor: var(--cursor-pointer);
+}
+
 .iconPositioning {
     position: absolute;
     bottom: 0;
@@ -48,12 +58,4 @@
     .icon {
         background-color: color(display-p3 var(--primary-light-value) / 0.01);
     }
-}
-
-.imageContainer {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: var(--cursor-pointer);
 }
