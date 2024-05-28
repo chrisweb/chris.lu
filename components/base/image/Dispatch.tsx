@@ -39,7 +39,7 @@ const ImageDispatch: React.FC<ImageProps> = (props): JSX.Element => {
                         }}
                         sizes="(max-width: 48rem) 100vw, 704px"
                         priority
-                        placeholder={'blur'}
+                        placeholder="blur"
                         {...(imageProps)}
                     />
                 </>
@@ -68,7 +68,7 @@ const ImageDispatch: React.FC<ImageProps> = (props): JSX.Element => {
                             height: 'auto',
                         }}
                         sizes="(max-width: 48rem) 100vw, 704px"
-                        placeholder={'blur'}
+                        placeholder="blur"
                         {...(imageProps)}
                     />
                 </>
