@@ -11,7 +11,7 @@ const AsideContent: React.FC = (): JSX.Element => {
         <div className={styles.content}>
             <ShareButton />
             <a href="https://www.buymeacoffee.com/chriswwweb" className='shake'>
-                <Image src="/assets/images/buy_me_a_coffee_button.png" alt="button buy me a coffee" width="240" height="48" />
+                <Image src="/assets/images/buy_me_a_coffee_button.png" alt="button buy me a coffee" width="240" height="48" priority unoptimized />
             </a>
             <br />
             <span className="fontDarker">* Please 😉</span>
