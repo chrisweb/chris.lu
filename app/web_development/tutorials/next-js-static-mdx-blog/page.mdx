@@ -3524,19 +3524,23 @@ And finally we update our playground `page.mdx` file (that is in the `/app/tutor
 
 ```
 
-Now launch dev server (using the `npm run dev` command) and then open the [http://localhost:3001/tutorial_examples/mdx-components_playground](http://localhost:3001/tutorial_examples/mdx-components_playground) playground page URL in your browser to see the result
+Now launch dev server (using the `npm run dev` command) and then open the [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground) playground page URL in your browser to see the result
 
 Congratulations you just created a link component that will now get used for all markdown links, which means they will now all benefit from the next/link features like prefetching and optimized client-side navigation between routes 🎉
 
 ### optimizing images in MDX using next/image
 
-For the third and last part we are going to use [next/image](https://nextjs.org/docs/app/api-reference/components/image) to make sure that all images we put into the markdown of our MDX pages get optimized
+For the third and last part we are going to use [next/image](https://nextjs.org/docs/app/api-reference/components/image) to make sure that all images we put into the markdown of our MDX pages get optimized, which means that:
 
-Our second goal is to make sure we do NOT lose the VSCode feature which allows us to just drag an drop images into a MDX document and have VSCode create the markdown image element
+* next/image will be configured to convert our [PNG](https://web.dev/learn/images/png) or [JPG](https://web.dev/learn/images/jpeg) images into formats like [WEBP](https://web.dev/learn/images/webp) and [AVIF](https://web.dev/learn/images/avif), this will reduce the file sizes of images without them losing in quality, which means our images will consume less bandwidth and load faster
+* next/image will make our images [responsive](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images) by using an srcset to define multiple versions of an image with different dimensions so that on small screens we don't load images that are bigger and hence heavier than necessary
+
+Our second goal is to make sure that adding images to a document is easy and quick by using VSCode to drag and drop images into a document, which will then create the markdown element with the path to the image, we will also use a remark plugin to make sure the path gets turned into an import so that next/image can automatically generate placeholders for our images
 
 > [!MORE]  
 > [Next.js "next/image" api reference](https://nextjs.org/docs/app/api-reference/components/image)  
 > [Next.js "Image Optimization" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/images)  
+> [MDN "Responsive images" documentation](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images)
 
 #### Custom React component for images
 
@@ -3561,7 +3565,6 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
                     height: 'auto',
                 }}
                 sizes="(max-width: 70rem) 100vw, 70rem"
-                placeholder={'blur'}
                 {...(imageProps)}
             />
         </>
@@ -3575,18 +3578,51 @@ Line 1 we **import** the [next/image](https://nextjs.org/docs/app/api-reference/
 
 Line 2 we import the **ImageProps** type to be able to strictly type the props of the image
 
-Line 11 to 20 we use Next.js **Image** component and set some attributes, the **style** attribute is used to make our image as wide as the main section, the **sizes** is used to tell the browser that if our screen width is below 70rem then we want the browser to chose an image that is as large as the screen, the second part tells the browser that if the screen is wider than 70rem then we want to always use an image that has a width of 70rem, next we set the **placeholder** attribute to **blur** which tells Next.js that we want it to create a blurry placeholder for every image and display that placeholder while the image loads and finally we add the remaining **imageProps** to the image, which are props like the width and height of the image, the alt text and eventually an image title attribute
+Line 11 to 20 we use Next.js **Image** component and set some attributes, the **style** attribute is used to make our image as wide as the main section, the **sizes** is used to tell the browser that if our screen width is below 70rem then we want the browser to chose an image that is as large as the screen, the second part tells the browser that if the screen is wider than 70rem then we want to always use an image that has a width of 70rem and finally we add the remaining **imageProps** to the image, which are props like the width and height of the image, the alt text and eventually an image title attribute
 
-> [!TIP]  
-> the [placeholder](https://nextjs.org/docs/app/api-reference/components/image#placeholder) option is a very important feature of **next/image** as it helps preventing **cumulative layout shifts** (CLS) which is a **Core Web Vital metric**, without a **placeholder** the space where the image will be displayed would be empty until the image has finished loading, meaning that as soon as the image appears it would push down the content of the page
->
-> this can be bad if in that same moment the user for example attempts to click on something but the content moves down, this is why a placeholder is great because it reserves the space the image will need when it has finished loading, as soon as the image is ready next/image will replace the placeholder with the actual image
->
-> if the images get statically imported then next/image will even create those blurry placeholder automatically for us
+#### How to NOT add images to a document
 
-> [!MORE]  
-> [web.dev "Optimize Cumulative Layout Shifts (CLS)" article](https://web.dev/articles/optimize-cls)  
-> [web.dev "Core Web Vitals" article](https://web.dev/articles/vitals#core_web_vitals)  
+I will show you an example and explain why you should NOT do this, feel free to skip this chapter as this is NOT the right solution, if however you are interested in knowing more then read on
+
+In this example we will use BaseImage to add an image manually to our MDX playground
+
+To test the images feature we first need an image, I created a test image using the funny [GitHub **octocat** image generator](https://myoctocat.com/), if you do so too, first create your own octocat and then click on the **share** button to download the image or use a royalty free photo from a website like [pexels.com](https://www.pexels.com/creative-commons-images/)
+
+Now in the `public` folder (which is at the root of your project) create a new `images` folder
+
+Then move the image / photo you just downloaded into `/public/images` folder and rename the image to `playground_test.png` (you can rename the file using the files explorer that is in the sidebar, open the `/public/images` folder, then right click on the name and chose **rename**, then type in the new name and then press `ENTER`)
+
+Then open the `page.mdx` file (that is in the `/app/tutorial_examples/mdx-components_playground` folder) we created earlier and add the following content:
+
+```mdx title="/app/tutorial_examples/mdx-components_playground/page.tsx" showLineNumbers {1} {16}
+import BaseImage from '@/components/base/Image'
+
+<article>
+
+* foo
+* bar
+
+[internal link that has our production domain](https://example.com)
+
+[internal link starting with a slash](/internal)
+
+[internal link starting with a hash](#internal)
+
+[external link](https://google.com)
+
+<BaseImage src="/images/playground_test.png" />
+
+</article>
+```
+
+Line 1 we import the **BaseImage** component we just created
+
+Line 16 we use the **BaseImage** component, the path of our image is `/public/images/playground_test.png`, but we set the `src` to `/images/playground_test.png` (we omit the `/images` folder) as Next.js will assume the files are in the public folder
+
+Now let's start the development server and then open the [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground) playground page URL in your browser to see the result
+
+
+
 
 #### Using the BaseImage component for all markdown images
 
@@ -3628,15 +3664,22 @@ Line 4 to 5 we import the custom **BaseImage** component that we just created an
 
 Line 26 we specify that for each markdown image that got transformed into an HTML `<img>` element we want to use our custom BaseImage component
 
-#### Images examples using the MDX playground page
+#### 
 
-To test the images feature we first need an image, I created a test image using the funny [GitHub octocat image generator](https://myoctocat.com/), if you do so too, first create your own octocat and then click on the **share** button to download the image or use a royalty free photo from a website like [pexels.com](https://www.pexels.com/creative-commons-images/)
 
-Now in the `public` folder (which is at the root of your project) create a new `images` folder
 
-Then move the image / photo you just downloaded into `/public/images` folder
+Next open the `page.mdx` file (that is in the `/app/tutorial_examples/mdx-components_playground` folder) we created earlier
 
-Next open the `page.mdx` file (that is in the `/app/tutorial_examples/mdx-components_playground` folder) we created earlier in VSCode so that we can inset our new image using the following steps:
+
+
+
+
+
+
+
+
+
+in VSCode so that we can inset our new image using the following steps:
 
 * Keep the `page.mdx` file open and then in the VSCode file explorer (on the right) expand the `public` folder and then the `images` folder, you should now see the file you added to `/public/images` being listed
 * Now do a left click on the image name and keep the button pressed
@@ -3665,7 +3708,7 @@ Now save the `.vscode/settings.json` file and then to make sure that VSCode take
 You should now have a markdown image element that looks like this:
 
 ```md
-![alt text](../../../public/octocat-1717177375104.png)
+![alt text](../../../public/images/octocat-1717177375104.png)
 ```
 
 > [!TIP]  
@@ -3673,17 +3716,37 @@ You should now have a markdown image element that looks like this:
 >
 > ![vscode image preview](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_image_preview.png)
 
-Now let's start the development server and then open the [http://localhost:3001/tutorial_examples/mdx-components_playground](http://localhost:3001/tutorial_examples/mdx-components_playground) playground page URL in your browser to see the result
+Now let's start the development server and then open the [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground) playground page URL in your browser to see the result
+
+So far so good, the image gets displayed, but if you now click
+
+
+
+
+#### image placeholder
+
+Next we set the **placeholder** attribute to **blur** which tells Next.js that we want it to create a blurry placeholder for every image and display that placeholder while the image loads 
+
+> [!TIP]  
+> the [placeholder](https://nextjs.org/docs/app/api-reference/components/image#placeholder) option is a very important feature of **next/image** as it helps preventing **cumulative layout shifts** (CLS) which is a **Core Web Vital metric**, without a **placeholder** the space where the image will be displayed would be empty until the image has finished loading, meaning that as soon as the image appears it would push down the content of the page
+>
+> this can be bad if in that same moment the user for example attempts to click on something but the content moves down, this is why a placeholder is great because it reserves the space the image will need when it has finished loading, as soon as the image is ready next/image will replace the placeholder with the actual image
+>
+> if the images get statically imported then next/image will even create those blurry placeholder automatically for us
 
 Bummer we get an error like this one:
 
 > Error: Image with src "../../../public/octocat-1717177375104.png" is missing required "width" property.
 
-Why is that? Well when we used the **next/image** component we told to create our **BaseImage** component we told next/image that we want a **placeholder** and we did set the placeholder option to **blur**, to be able to create the blurry placeholder Next.js needs to know the **width** and **height** of the placeholder and those dimensions need to match the image dimensions to avoid layout shifts, after you provide those two values next/image will ask you to provide a **blurDataURL** which is a base64 encoded image it will use as placeholder 
+Why is that? Well when we used the **next/image** component we told to create our **BaseImage** component we told next/image that we want a **placeholder** and we did set the placeholder option to **blur**, to be able to create the blurry placeholder Next.js needs to know the **width** and **height** of the placeholder and those dimensions need to match the image dimensions to avoid layout shifts, after you provide those two values next/image will ask you to provide a **blurDataURL** which is a base64 encoded image it will use as placeholder
 
 You could measure the width and height of the image and also create a blurDataURL manually and then set those 3 values, there is however a more dynamic solution which is to import the images, if you statically import an image then next/image will be able to know the width and height and it will also automatically generate a blurDataURL for us
 
 Finally we could write all the imports for the images we will display in a page ourself, but there is an easier and quicker solution which is to use a remark plugin called that will do it for us
+
+> [!MORE]  
+> [web.dev "Optimize Cumulative Layout Shifts (CLS)" article](https://web.dev/articles/optimize-cls)  
+> [web.dev "Core Web Vitals" article](https://web.dev/articles/vitals#core_web_vitals)  
 
 #### remark plugin to turn image (media) paths into imports
 
