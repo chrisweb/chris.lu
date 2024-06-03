@@ -50,10 +50,9 @@ const ImageDispatch: React.FC<ImageProps> = (props): JSX.Element => {
                     {/* eslint-disable-next-line jsx-a11y/alt-text */}
                     <Image
                         style={{
-                            width: '100%',
-                            height: 'auto',
                             objectFit: 'cover',
                         }}
+                        fill
                         sizes="(max-width: 48rem) 100vw, 336px"
                         placeholder="blur"
                         {...props}
