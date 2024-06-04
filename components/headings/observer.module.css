@@ -45,6 +45,20 @@ make the text color a bit darker */
 @media (hover: hover) {
 
     .active>a:hover {
+        background-image: linear-gradient(var(--secondary-light-color) 0%, var(--secondary-light-color) 100%);
+    }
+
+    .notActive>a:hover {
+        color: var(--secondary-light-color);
+        background-image: linear-gradient(var(--secondary-light-color) 0%, var(--secondary-light-color) 100%);
+    }
+
+}
+
+/* experimental: p3 colors */
+@media (hover: hover) and (color-gamut: p3) {
+
+    .active>a:hover {
         background-image: linear-gradient(in srgb, var(--secondary-light-color) 0%, var(--secondary-light-color) 100%);
     }
 

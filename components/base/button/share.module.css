@@ -31,10 +31,17 @@
             100% calc(100% - var(--cornerSideLength)),
             calc(100% - var(--cornerSideLength)) 100%,
             0 100%);
-    background: linear-gradient(90deg in srgb, var(--quaternary-light-color) 0%, var(--primary-light-color) 95%);
+    background: linear-gradient(90deg, var(--quaternary-light-color) 0%, var(--primary-light-color) 95%);
     border: 0;
     color: var(--primary-light-color);
     font-weight: 600;
+}
+
+/* experimental: p3 colors */
+@media (color-gamut: p3) {
+    .border {
+        background: linear-gradient(90deg in srgb, var(--quaternary-light-color) 0%, var(--primary-light-color) 95%);
+    }
 }
 
 /* max-width: 70rem / 1120px (mobile breakpoint) */

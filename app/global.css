@@ -150,11 +150,24 @@ html {
     }
 
     *::-webkit-scrollbar-thumb {
-        background: linear-gradient(in srgb, var(--secondary-light-color) 0%, var(--primary-light-color) 95%);
+        background: linear-gradient(var(--secondary-light-color) 0%, var(--primary-light-color) 95%);
     }
 
     *::-webkit-scrollbar-thumb:horizontal {
-        background: linear-gradient(95deg in srgb, var(--secondary-light-color) 0%, var(--primary-light-color) 95%);
+        background: linear-gradient(95deg, var(--secondary-light-color) 0%, var(--primary-light-color) 95%);
+    }
+
+    /* experimental: p3 colors */
+    @media (color-gamut: p3) {
+
+        *::-webkit-scrollbar-thumb {
+            background: linear-gradient(in srgb, var(--secondary-light-color) 0%, var(--primary-light-color) 95%);
+        }
+
+        *::-webkit-scrollbar-thumb:horizontal {
+            background: linear-gradient(95deg in srgb, var(--secondary-light-color) 0%, var(--primary-light-color) 95%);
+        }
+
     }
 
 }
@@ -235,11 +248,26 @@ main {
 .h6 {
     background-clip: text;
     -webkit-background-clip: text;
+    color: transparent;
     -webkit-text-fill-color: transparent;
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
     background-size: 200% 100%;
-    background-image: linear-gradient(90deg in srgb, var(--primary-light-color) 5%, var(--tertiary-light-color) 50%, var(--primary-light-color) 95%);
+    background-image: linear-gradient(90deg, var(--primary-light-color) 5%, var(--tertiary-light-color) 50%, var(--primary-light-color) 95%);
+}
+
+/* experimental: p3 colors */
+@media (color-gamut: p3) {
+
+    .h1,
+    .h2,
+    .h3,
+    .h4,
+    .h5,
+    .h6 {
+        background-image: linear-gradient(90deg in srgb, var(--primary-light-color) 5%, var(--tertiary-light-color) 50%, var(--primary-light-color) 95%);
+    }
+
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -252,6 +280,13 @@ main {
     .h6 {
         animation: colorwave 10s infinite linear;
         -webkit-animation: colorwave 10s infinite linear;
+        -moz-animation: colorwave 10s infinite linear;
+    }
+}
+
+@-moz-keyframes colorwave {
+    100% {
+        background-position: 200% 0
     }
 }
 
@@ -281,7 +316,7 @@ h6 {
     scroll-margin-top: 80px;
     overflow-wrap: break-word;
     position: relative;
-    font-family: var(--font-anta);
+    font-family: var(--font-anta), sans-serif;
 }
 
 /* helper middle line */
@@ -377,7 +412,7 @@ a {
     .animatedUnderline {
         /* underline animation */
         /* https://nickymeuleman.netlify.app/blog/css-animated-wrapping-underline */
-        background-image: linear-gradient(in srgb, var(--secondary-light-color) 0%, var(--secondary-light-color) 100%);
+        background-image: linear-gradient(var(--secondary-light-color) 0%, var(--secondary-light-color) 100%);
         background-size: 0% 1px;
         background-position-y: 100%;
         background-position-x: 0%;
@@ -387,6 +422,15 @@ a {
 
     .animatedUnderline:hover {
         background-size: 100% 1px;
+    }
+
+}
+
+/* experimental: p3 colors */
+@media (hover: hover) and (color-gamut: p3) {
+
+    .animatedUnderline {
+        background-image: linear-gradient(in srgb, var(--secondary-light-color) 0%, var(--secondary-light-color) 100%);
     }
 
 }

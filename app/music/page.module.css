@@ -1,4 +1,4 @@
-.preview {
+.preview>p {
     --innerCornerSize: 39px;
     /* next line is a hack: in chrome a small line sometimes appears */
     will-change: transform;
@@ -14,12 +14,14 @@
     display: flex;
     align-items: flex-start;
     flex-direction: column;
-    height: 320px;
+    height: 219px;
     width: 100%;
     color: #fff;
 }
 
 .title {
+    position: absolute;
+    top: 0;
     display: flex;
     align-items: center;
     z-index: 1;
