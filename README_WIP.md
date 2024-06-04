@@ -1007,6 +1007,7 @@ npm i remark-gfm --save-exact
 next we edit our next.config.mjs file to add the plugin to the next/mdx configuration, like so:
 
 ```js
+import createMdx from '@next/mdx'
 import remarkGfm from 'remark-gfm'
 
 const nextConfig = (/*phase*/) => {
