@@ -160,7 +160,7 @@ html {
 }
 
 body {
-    /* remove any margin that browsers add to body */
+    /* reset default margin added by browser(s) */
     margin: 0;
     /* default values */
     background-color: var(--main-background-color);
@@ -433,6 +433,14 @@ video {
     height: auto;
 }
 
+audio {
+    margin: calc(var(--main-spacing) / 2) 0;
+}
+
+audio::-webkit-media-controls-enclosure {
+    border-radius: 0px;
+}
+
 b,
 strong {
     font-weight: var(--main-fontWeight-bolder);
@@ -442,11 +450,16 @@ button,
 input,
 optgroup,
 select,
-textarea {
+textarea,
+figure {
     font-family: inherit;
     font-size: 100%;
     line-height: 1.15;
     margin: 0;
+}
+
+figcaption {
+    font-weight: var(--main-fontWeight-bold);
 }
 
 blockquote {
