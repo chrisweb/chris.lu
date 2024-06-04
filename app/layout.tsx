@@ -45,35 +45,35 @@ const permanentMarkerFont = Permanent_Marker({
     subsets: ['latin'],
     variable: '--font-permanentMarker',
     weight: ['400'],
-    display: 'auto',
+    display: 'swap',
 })
 
 const vt323 = VT323({
     subsets: ['latin'],
     variable: '--font-vt323',
     weight: ['400'],
-    display: 'auto',
+    display: 'swap',
 })
 
 const architectsDaughter = Architects_Daughter({
     subsets: ['latin'],
     variable: '--font-architectsDaughter',
     weight: ['400'],
-    display: 'auto',
+    display: 'swap',
 })
 
 const sourceCodePro = Source_Code_Pro({
     subsets: ['latin'],
     variable: '--font-sourceCodePro',
     weight: ['400'],
-    display: 'auto',
+    display: 'swap',
 })
 
 const anta = Anta({
     subsets: ['latin'],
     variable: '--font-anta',
     weight: ['400'],
-    display: 'auto',
+    display: 'swap',
 })
 
 export default function RootLayout({ children }: {
