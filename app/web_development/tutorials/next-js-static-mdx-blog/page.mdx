@@ -335,7 +335,9 @@ export default nextConfig
 
 **Next.js powered by header** is another Next.js configuration option, that if enabled will add an **x-powered-by** header to all of your pages
 
-Here is an example of the headers showing the **x-powered-by** header Next.js adds to pages, I used the **chrome dev tools**, opened the **Network tab** and then clicked on the row of the page to inspect the **response headers**:
+To see the **x-powered-by** header for yourself, first open the **chrome dev tools** (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**), then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) and then click on the row for the page, then click on **Headers** and look at the entries for the **response headers** where you should have an entry for x-powered-by:
+
+Here is an example of the headers showing the **x-powered-by** header Next.js adds to pages:
 
 ![chrome dev tools network tab showing the powered by header](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/network_headers_powered_by.png)
 
@@ -1501,7 +1503,7 @@ Make sure your dev server is running, if it is not start it using `npm run dev`
 
 And then visit your newly created MDX page in the browser at `http://localhost:3000/tutorial_examples/first_mdx_page`
 
-Congratulations you just learned how to create MDX pages 🎉 
+Congratulations you just added MDX support to your Next.js project and learned how to create MDX pages 🎉 
 
 ### static routes (pages)
 
@@ -2904,7 +2906,7 @@ Then save the file and launch the dev server if it isn't already running (using 
 
 Next open your browser and go to the projects homepage at [http://localhost:3000/](http://localhost:3000/)
 
-Then open the developer tools (by pressing the `F12` key or right clicking inside of the page and selecting `Inspect`) and make sure the `Network` tab is open
+Then open the developer tools (by pressing the `F12` key or right clicking inside of the page and selecting `Inspect`) and make sure the [Network Tab](https://developer.chrome.com/docs/devtools/network) is open
 
 Make sure the network tab is empty by clicking on the **Clear networking log** icon in the top left corner of the developer tools (or press `Ctrl+L` (macOS: `⌘L`, Linux: `Ctrl+L`) to clear the networking log):
 
@@ -2922,6 +2924,7 @@ Now have a look at the time we print on top of the navigation, click on the navi
 
 > [!MORE]  
 > [developer.chrome.com "Inspect network activity" documentation](https://developer.chrome.com/docs/devtools/network)  
+> [developer.chrome.com "Network Tab" documentation](https://developer.chrome.com/docs/devtools/network)
 
 ### using next/link instead of anchor elements
 
@@ -3548,7 +3551,7 @@ Lets start by
 
 Go into the `/components/base` folder we created earlier, then create a new `Image.tsx` file and add the following code:
 
-```tsx title="/components/base/Image.tsx" showLineNumbers
+```tsx title="/components/base/Image.tsx" showLineNumbers {1} {2} {11-20}
 import Image from 'next/image'
 import type { ImageProps } from 'next/image'
 
@@ -3617,9 +3620,56 @@ import BaseImage from '@/components/base/Image'
 
 Line 1 we import the **BaseImage** component we just created
 
-Line 16 we use the **BaseImage** component, the path of our image is `/public/images/playground_test.png`, but we set the `src` to `/images/playground_test.png` (we omit the `/images` folder) as Next.js will assume the files are in the public folder
+Line 16 we use the **BaseImage** component, although our image is in the `/public/images` folder, but we set the `src` to `/images/playground_test.png` (we omit the `/public` folder) as Next.js will assume the files are in the public folder
 
 Now let's start the development server and then open the [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground) playground page URL in your browser to see the result
+
+Bummer we get an error:
+
+> Error: Image with src "/images/playground_test.png" is missing required "width" property.
+
+As the documentation for next/image tells us:
+
+> width is required, except for statically imported images or images with the fill property
+
+Ok so let's edit our **BaseImage** component and set the fill property, however if we use fill next/image will set the position to absolute, it will also set the height and width to 100%, so what we need is a container which has a position set to relative and our container needs a height and width:
+
+```tsx title="/components/base/Image.tsx" showLineNumbers {}
+import Image from 'next/image'
+import type { ImageProps } from 'next/image'
+
+const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
+
+    const imageProps = { ...props }
+
+    return (
+        <div
+            style={{
+                position: 'relative',
+                width: '400px',
+                height: '200px',
+            }}
+        >
+            {/* eslint-disable-next-line jsx-a11y/alt-text */}
+            <Image
+                style={{
+                    objectFit: 'contain',
+                }}
+                sizes="(max-width: 70rem) 100vw, 70rem"
+                fill={true}
+                {...(imageProps)}
+            />
+        </div>
+    )
+}
+
+export default BaseImage
+```
+
+, we are going to set the width to 400px and the height to 200px, which means the width to height ratio will NOT be 1, this is why we will also set the CSS property [object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) on the image
+
+So far so good, the image gets displayed, but let's have a look at the [Network Tab](https://developer.chrome.com/docs/devtools/network), open the **chrome dev tools** (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**), then open the **Network tab** and then click on the row for the image, then click on **Headers** and look at the entries for the **response headers** where you should have an entry for 
+
 
 
 
@@ -3716,9 +3766,7 @@ You should now have a markdown image element that looks like this:
 >
 > ![vscode image preview](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_image_preview.png)
 
-Now let's start the development server and then open the [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground) playground page URL in your browser to see the result
 
-So far so good, the image gets displayed, but if you now click
 
 
 
