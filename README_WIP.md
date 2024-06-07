@@ -7,7 +7,7 @@ next chapters?
 * \[DONE] eslint for MDX
 * \[DONE] CSS modules for styling
 * \[DONE] navigation / next/link (optimizing fonts with next/font)
-* next/mdx "mdx-components" file
+* \[DONE] next/mdx "mdx-components" file
 * optimizing images with next/image
 * all the MDX plugins
 * SEO (metadata)
