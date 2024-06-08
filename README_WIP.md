@@ -11,6 +11,7 @@ next chapters?
 * optimizing images with next/image
 * all the MDX plugins
 * SEO (metadata)
+* list articles (read frontmatter / glob library)
 * about the [experimental rust compiler](https://nextjs.org/docs/app/building-your-application/configuring/mdx#using-the-rust-based-mdx-compiler-experimental)
 * github: pull request from preview into main branch (automatically link / close tickets)
 * vercel analytics
