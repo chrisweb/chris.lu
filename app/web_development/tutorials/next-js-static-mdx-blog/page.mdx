@@ -3538,7 +3538,12 @@ For the third and last part we are going to use [next/image](https://nextjs.org/
 * next/image will be configured to convert our [PNG](https://web.dev/learn/images/png) or [JPG](https://web.dev/learn/images/jpeg) images into formats like [WEBP](https://web.dev/learn/images/webp) and [AVIF](https://web.dev/learn/images/avif), this will reduce the file sizes of images without them losing in quality, which means our images will consume less bandwidth and load faster
 * next/image will make our images [responsive](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images) by using an srcset to define multiple versions of an image with different dimensions so that on small screens we don't load images that are bigger and hence heavier than necessary
 
-Our second goal is to make sure that adding images to a document is easy and quick by using VSCode to drag and drop images into a document, which will then create the markdown element with the path to the image, we will also use a remark plugin to make sure the path gets turned into an import so that next/image can automatically generate placeholders for our images
+> [!TIP]  
+> Statically importing images at build time is important as it allows next/image to automatically determine their width and height, by sizing the images next/image will help prevent **cumulative layout shifts** (CLS) which is a **Core Web Vital metric**, without a width and heigt value the image would get displayed as an empty element until it has has finished loading, then when the image appears it uses some space in the document, meaning other content will get down pushed around and this is what is called a layout shift  
+>  
+> layout shifts are bad because if they happen at a moment where the user attempts to for example click on something then there is a chance that the user will misclick, this is why making sure make sure that all images reserve the space they will need when finsished loading  
+
+Our main goal is to make sure that adding images to a document is easy and quick by using VSCode to drag and drop images into a document, VSCode will create the markdown element with the path to the image for us, we will also use a remark plugin to make sure the path gets turned into an import
 
 > [!MORE]  
 > [Next.js "next/image" api reference](https://nextjs.org/docs/app/api-reference/components/image)  
@@ -3547,9 +3552,7 @@ Our second goal is to make sure that adding images to a document is easy and qui
 
 #### Custom React component for images
 
-Lets start by 
-
-Go into the `/components/base` folder we created earlier, then create a new `Image.tsx` file and add the following code:
+Lets start by going into the `/components/base` folder we created earlier, then create a new `Image.tsx` file and add the following code:
 
 ```tsx title="/components/base/Image.tsx" showLineNumbers {1} {2} {11-20}
 import Image from 'next/image'
@@ -3581,11 +3584,15 @@ Line 1 we **import** the [next/image](https://nextjs.org/docs/app/api-reference/
 
 Line 2 we import the **ImageProps** type to be able to strictly type the props of the image
 
-Line 11 to 20 we use Next.js **Image** component and set some attributes, the **style** attribute is used to make our image as wide as the main section, the **sizes** is used to tell the browser that if our screen width is below 70rem then we want the browser to chose an image that is as large as the screen, the second part tells the browser that if the screen is wider than 70rem then we want to always use an image that has a width of 70rem and finally we add the remaining **imageProps** to the image, which are props like the width and height of the image, the alt text and eventually an image title attribute
+Line 11 to 20 we use Next.js **Image** component and set some attributes:
+
+* the **style** attribute is used to always display our image as wide as the main section
+* the **sizes** attribute is used to tell the browser that if our screen width is below 70rem then we want the browser to chose an image that is at least as large as the screen (100vw = 100% of the view width), then after the comma the second part tells the browser that if the screen is wider than 70rem then we want to always use an image that has a width of 70rem
+* then we also we add the remaining **imageProps** to the image, which are props like the width and height, the alt text and other optional attributes like the title
 
 #### How to NOT add images to a document
 
-I will show you an example and explain why you should NOT do this, feel free to skip this chapter as this is NOT the right solution, if however you are interested in knowing more then read on
+This first example is to demonstrate how you should **NOT** add images to document
 
 In this example we will use BaseImage to add an image manually to our MDX playground
 
@@ -3774,13 +3781,6 @@ You should now have a markdown image element that looks like this:
 #### image placeholder
 
 Next we set the **placeholder** attribute to **blur** which tells Next.js that we want it to create a blurry placeholder for every image and display that placeholder while the image loads 
-
-> [!TIP]  
-> the [placeholder](https://nextjs.org/docs/app/api-reference/components/image#placeholder) option is a very important feature of **next/image** as it helps preventing **cumulative layout shifts** (CLS) which is a **Core Web Vital metric**, without a **placeholder** the space where the image will be displayed would be empty until the image has finished loading, meaning that as soon as the image appears it would push down the content of the page
->
-> this can be bad if in that same moment the user for example attempts to click on something but the content moves down, this is why a placeholder is great because it reserves the space the image will need when it has finished loading, as soon as the image is ready next/image will replace the placeholder with the actual image
->
-> if the images get statically imported then next/image will even create those blurry placeholder automatically for us
 
 Bummer we get an error like this one:
 
