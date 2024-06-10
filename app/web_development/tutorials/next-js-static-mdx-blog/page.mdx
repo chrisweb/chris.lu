@@ -331,19 +331,29 @@ const nextConfig = (phase) => {
 export default nextConfig
 ```
 
+> [!MORE]  
+> [React "Strict Mode" documentation](https://react.dev/reference/react/StrictMode)  
+> [Next.js "Strict Mode" API reference](https://nextjs.org/docs/app/api-reference/next-config-js/reactStrictMode)  
+
 ### Next.js powered by header configuration
 
 **Next.js powered by header** is another Next.js configuration option, that if enabled will add an **x-powered-by** header to all of your pages
 
-To see the **x-powered-by** header for yourself, first open the **chrome dev tools** (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**), then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) and then click on the row for the page, then click on **Headers** and look at the entries for the **response headers** where you should have an entry for x-powered-by:
-
-Here is an example of the headers showing the **x-powered-by** header Next.js adds to pages:
+To see the **x-powered-by** header for yourself, first open the **chrome dev tools** (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**), then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) and then click on the row for the page, then click on **Headers** and look at the entries for the **response headers** where you should have an entry for x-powered-by, like in this screenshot:
 
 ![chrome dev tools network tab showing the powered by header](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/network_headers_powered_by.png)
 
-Why would you want to turn this configuration option off?
+#### Why would you want to hide the x-powered-by header?
 
-When I get asked this, my first thought is to ask myself the opposite "why would I want to turn it on?" and honestly I have not yet found a reason as to why I would want to have it turned on. Another reason why I personally prefer to turn it off is because unfortunatly some people on the web have malicious intentions and the less they know about your apps technology stack the more difficult it will be for them to find vulnerabilities that have been disclosed but are not yet patched in the version you are using. Yes it does not make a huge difference, because hackers usually just launch batteries of tests that will check for a wide range of known vulnerabilities, few will use a bot that checks for **x-powered-by** headers to specifically target the exact version you are using. Also true, hackers can use profilling tools to get approximative information about what tech stack you are using. So yes, disabling the poweredByHeader option is not a miracle solution, that will prevent all potential attacks, but if there is a chance (no matter how small) that turning it off will make my app just a little bit safer then that's good enough for me and as I said earlier the second reason is that I see no reason why I would want to turn it on.
+When I get asked this, my first thought is to ask myself the opposite "why would I want to turn it on?" and honestly I have not yet found a reason as to why I would want to have it turned on
+
+I personally prefer to turn it off is because unfortunatly some people on the web have malicious intentions and the less they know about your apps technology stack the more difficult it will be for them to find vulnerabilities that have been disclosed but are not yet patched in the version you are using
+
+I agree that it does NOT make a huge difference if you turn it on or off, because hackers usually just launch batteries of tests against your website, which will probe it for a wide range of known vulnerabilities, few will use a bot that checks for **x-powered-by** headers to specifically target the exact version you are using and it is also true that hackers can use profilling tools to get approximative information about what tech stack you are using
+
+Setting the poweredByHeader option in the Next.js configuration to off is not a miracle solution that will prevent all potential attacks, but if there is a chance (no matter how small) that turning it off will make my app just a little bit safer then that's good enough for me and as I said earlier the second reason is that I see no reason why I would want to turn it on
+
+So if you also want to turn the poweredByHeader option off, open the Next.js configuration file and change it to this:
 
 ```js title="next.config.mjs" showLineNumbers {8}#special
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
@@ -370,11 +380,9 @@ const nextConfig = (phase) => {
 export default nextConfig
 ```
 
-If you did any of the two changes I mentioned above , then save your `next.config.mjs` and commit / sync your latest changes
+If you did any of the two changes I mentioned above, then save your `next.config.mjs` and commit / sync your latest changes to your git repository with a clear commit message like "turning off powered by header as I see no reason to have it enabled"
 
 > [!MORE]  
-> [React "Strict Mode" documentation](https://react.dev/reference/react/StrictMode)  
-> [Next.js "Strict Mode" API reference](https://nextjs.org/docs/app/api-reference/next-config-js/reactStrictMode)  
 > [Next.js "Powered By Header" API reference](https://nextjs.org/docs/app/api-reference/next-config-js/poweredByHeader)  
 
 ## Next.js development basics
@@ -499,13 +507,13 @@ HMR starts watching for file changes as soon as you start the development server
 
 ### Stop the dev(elopment) server
 
-Earlier we started the development server but how do we stop it? If you have never done it before it might not be obvious how to do it, the easiest way to stop the development is to press `Ctrl+S`
+Earlier we started the development server but how do we stop it? If you have never done it before it might not be obvious how to do it, the easiest way to stop the development is to press `Ctrl+S` (macOS: `⌘S`, Linux: `Ctrl+S`)
 
 Then you will get asked of you really want to quit:
 
 > Terminate batch job (Y/N)?
 
-To confirm press enter either `Y` and press `ENTER` or just press `Ctrl+S` again
+To confirm press enter either `Y` and press `ENTER` or just press `Ctrl+S` (macOS: `⌘S`, Linux: `Ctrl+S`) again
 
 ### package.json (npm run) scripts
 
@@ -3533,79 +3541,34 @@ Congratulations you just created a link component that will now get used for all
 
 ### optimizing images in MDX using next/image
 
-For the third and last part we are going to use [next/image](https://nextjs.org/docs/app/api-reference/components/image) to make sure that all images we put into the markdown of our MDX pages get optimized, which means that:
+For the third and last part we are going to use [next/image](https://nextjs.org/docs/app/api-reference/components/image) an image component that got created by the [Aurora team at Google](https://developer.chrome.com/docs/aurora/image-component) in cooperation with the Next.js team, by using next/image we will make sure that all images we put into our MDX pages get optimized, which means that:
 
-* next/image will be configured to convert our [PNG](https://web.dev/learn/images/png) or [JPG](https://web.dev/learn/images/jpeg) images into formats like [WEBP](https://web.dev/learn/images/webp) and [AVIF](https://web.dev/learn/images/avif), this will reduce the file sizes of images without them losing in quality, which means our images will consume less bandwidth and load faster
-* next/image will make our images [responsive](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images) by using an srcset to define multiple versions of an image with different dimensions so that on small screens we don't load images that are bigger and hence heavier than necessary
+* we will update the configuration to make sure our [PNG](https://web.dev/learn/images/png) or [JPG](https://web.dev/learn/images/jpeg) images get converted automatically into formats like [WEBP](https://web.dev/learn/images/webp) and [AVIF](https://web.dev/learn/images/avif), this will reduce the file sizes of images without them losing in quality, which means our images will consume less bandwidth and load faster
+* we will use next/image which will make our images [responsive](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images) by creating an srcset to define multiple versions of an image with different dimensions so that on small screens we don't load images that are bigger and hence heavier than necessary
+* we will also use a remark plugin to make sure the path of each image gets turned into an import, which will allow next/image to automatically determine the width and height of our images
 
-> [!TIP]  
-> Statically importing images at build time is important as it allows next/image to automatically determine their width and height, by sizing the images next/image will help prevent **cumulative layout shifts** (CLS) which is a **Core Web Vital metric**, without a width and heigt value the image would get displayed as an empty element until it has has finished loading, then when the image appears it uses some space in the document, meaning other content will get down pushed around and this is what is called a layout shift  
->  
-> layout shifts are bad because if they happen at a moment where the user attempts to for example click on something then there is a chance that the user will misclick, this is why making sure make sure that all images reserve the space they will need when finsished loading  
-
-Our main goal is to make sure that adding images to a document is easy and quick by using VSCode to drag and drop images into a document, VSCode will create the markdown element with the path to the image for us, we will also use a remark plugin to make sure the path gets turned into an import
+We will also keep developer experience (DX) feature of VSCode intact, by making sure that adding images to a document is easy and quick when using VSCode, meaning it should be possible to simply drag and drop images into a document and then have VSCode  create the markdown element with the path to the image for us
 
 > [!MORE]  
 > [Next.js "next/image" api reference](https://nextjs.org/docs/app/api-reference/components/image)  
 > [Next.js "Image Optimization" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/images)  
-> [MDN "Responsive images" documentation](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images)
+> [MDN "Responsive images" documentation](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images)  
+> [Aurora team "Building an effective Image Component" article](https://developer.chrome.com/docs/aurora/image-component)  
 
-#### Custom React component for images
-
-Lets start by going into the `/components/base` folder we created earlier, then create a new `Image.tsx` file and add the following code:
-
-```tsx title="/components/base/Image.tsx" showLineNumbers {1} {2} {11-20}
-import Image from 'next/image'
-import type { ImageProps } from 'next/image'
-
-const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
-
-    const imageProps = { ...props }
-
-    return (
-        <>
-            {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image
-                style={{
-                    width: '100%',
-                    height: 'auto',
-                }}
-                sizes="(max-width: 70rem) 100vw, 70rem"
-                {...(imageProps)}
-            />
-        </>
-    )
-}
-
-export default BaseImage
-```
-
-Line 1 we **import** the [next/image](https://nextjs.org/docs/app/api-reference/components/image) component which we then use in the return, where we set a few attribtes
-
-Line 2 we import the **ImageProps** type to be able to strictly type the props of the image
-
-Line 11 to 20 we use Next.js **Image** component and set some attributes:
-
-* the **style** attribute is used to always display our image as wide as the main section
-* the **sizes** attribute is used to tell the browser that if our screen width is below 70rem then we want the browser to chose an image that is at least as large as the screen (100vw = 100% of the view width), then after the comma the second part tells the browser that if the screen is wider than 70rem then we want to always use an image that has a width of 70rem
-* then we also we add the remaining **imageProps** to the image, which are props like the width and height, the alt text and other optional attributes like the title
-
-#### How to NOT add images to a document
+#### How to NOT add images to an MDX document
 
 This first example is to demonstrate how you should **NOT** add images to document
 
-In this example we will use BaseImage to add an image manually to our MDX playground
-
-To test the images feature we first need an image, I created a test image using the funny [GitHub **octocat** image generator](https://myoctocat.com/), if you do so too, first create your own octocat and then click on the **share** button to download the image or use a royalty free photo from a website like [pexels.com](https://www.pexels.com/creative-commons-images/)
+To experiment with images we first need an image, I created a test image using the funny [GitHub **octocat** image generator](https://myoctocat.com/), to create your own octocat image visit [myoctocat.com](https://myoctocat.com/), then create your own octocat and finally click on the **share** button to download the image, another option is to use a royalty free photo from a website like [pexels.com](https://www.pexels.com/creative-commons-images/) and download one you like
 
 Now in the `public` folder (which is at the root of your project) create a new `images` folder
 
-Then move the image / photo you just downloaded into `/public/images` folder and rename the image to `playground_test.png` (you can rename the file using the files explorer that is in the sidebar, open the `/public/images` folder, then right click on the name and chose **rename**, then type in the new name and then press `ENTER`)
+Then move the image or photo you just downloaded into `/public/images` folder and rename the image to `playground_test.png` (you can rename the file using the files explorer that is in the sidebar, open the `/public/images` folder, then right click on the name and chose **rename**, then type in the new name and then press `ENTER`)
 
 Then open the `page.mdx` file (that is in the `/app/tutorial_examples/mdx-components_playground` folder) we created earlier and add the following content:
 
 ```mdx title="/app/tutorial_examples/mdx-components_playground/page.tsx" showLineNumbers {1} {16}
-import BaseImage from '@/components/base/Image'
+import Image from 'next/image'
 
 <article>
 
@@ -3620,16 +3583,30 @@ import BaseImage from '@/components/base/Image'
 
 [external link](https://google.com)
 
-<BaseImage src="/images/playground_test.png" />
+<Image src="/images/playground_test.png" />
 
 </article>
 ```
 
-Line 1 we import the **BaseImage** component we just created
+Line 1 we import the **next/image** component
 
-Line 16 we use the **BaseImage** component, although our image is in the `/public/images` folder, but we set the `src` to `/images/playground_test.png` (we omit the `/public` folder) as Next.js will assume the files are in the public folder
+Line 16 we use the **next/image** component, note that although our image is in the `/public/images` folder we have set the `src` to `/images/test.png`, we have omitted the `/public` folder as Next.js will assume that [static assets](https://nextjs.org/docs/app/building-your-application/optimizing/static-assets) like images are in the public folder
 
-Now let's start the development server and then open the [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground) playground page URL in your browser to see the result
+If you now look at the code you will notice that the markdown image element is underline:
+
+![screenshot showing the eslint message "Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images."](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_eslint_modal_missing_image_alt.png 'Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.')
+
+This is the eslint plugin jsx-a11y telling us that it is recommended to always add an alt text to images, not only is this a best practice for accessibility reasons but it can also improve your SEO
+
+So let's first that by adding an alt text, like this:
+
+```mdx title="/app/tutorial_examples/mdx-components_playground/page.tsx" showLineNumbers{16} /alt="purple octocat wearing a diadem, a teal dress, orange bunny slippers and holding a gaming console pad"/#special
+<Image src="/images/playground_test.png" alt="purple octocat wearing a diadem, a teal dress, orange bunny slippers and holding a gaming console pad" />
+```
+
+Now let's save our `page.mdx` file (using the VSCode keyboard shortcut `Ctrl+S` (macOS: `⌘S`, Linux: `Ctrl+S`)) and then start the development server
+
+Then open the [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground) playground page URL in your browser to see the result
 
 Bummer we get an error:
 
@@ -3639,43 +3616,58 @@ As the documentation for next/image tells us:
 
 > width is required, except for statically imported images or images with the fill property
 
-Ok so let's edit our **BaseImage** component and set the fill property, however if we use fill next/image will set the position to absolute, it will also set the height and width to 100%, so what we need is a container which has a position set to relative and our container needs a height and width:
+Actually if we would fix this error we would get another one that tells us that the height is required too, so let's set the width and height values manually like so:
 
-```tsx title="/components/base/Image.tsx" showLineNumbers {}
-import Image from 'next/image'
-import type { ImageProps } from 'next/image'
-
-const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
-
-    const imageProps = { ...props }
-
-    return (
-        <div
-            style={{
-                position: 'relative',
-                width: '400px',
-                height: '200px',
-            }}
-        >
-            {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image
-                style={{
-                    objectFit: 'contain',
-                }}
-                sizes="(max-width: 70rem) 100vw, 70rem"
-                fill={true}
-                {...(imageProps)}
-            />
-        </div>
-    )
-}
-
-export default BaseImage
+```mdx title="/app/tutorial_examples/mdx-components_playground/page.tsx" showLineNumbers{16} /width="2000" height="2000"/#special
+<Image src="/images/playground_test.png" alt="purple octocat wearing a diadem, a teal dress, orange bunny slippers and holding a gaming console pad" width="2000" height="2000" />
 ```
 
-, we are going to set the width to 400px and the height to 200px, which means the width to height ratio will NOT be 1, this is why we will also set the CSS property [object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) on the image
+> [!NOTE]  
+> I set the width and height to 200 pixels as I used the octocat image I mentioned at the beginning of this chapter, if you are using another image you that is not square then you might want to look at the details of image by hovering over the image in your operating system or by using an image editor like [Gimp](https://www.gimp.org/) and then depending on the ratio you might want to set other values for the width and height
 
-So far so good, the image gets displayed, but let's have a look at the [Network Tab](https://developer.chrome.com/docs/devtools/network), open the **chrome dev tools** (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**), then open the **Network tab** and then click on the row for the image, then click on **Headers** and look at the entries for the **response headers** where you should have an entry for 
+Now let's save our `page.mdx` file again (assuming our development server is still running) and then we have another look at the [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground) page in our browser
+
+This time the page got compiled and we can see the result, the image is huge because it obviously gets displayed full size as we did not add any CSS whatsoever to style it, but this is just a test so this is fine
+
+Now the reason why the title says "How to NOT add images", is because even though it works, there are actually several problems with this solution, to understand the first one, first open the **chrome dev tools** (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**), then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) and then click on the row for the image, then click on **Headers** and look at the entries for the **response headers** where you should have an entry for **Cache-Control**, like in this screenshot:
+
+![screenshot showing the Cache-Control header having max-age set to zero and must-revalidate](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_response_headers_cache.png)
+
+As you can see next/image has set the [Cache-Control](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control) header to **public, max-age=0, must-revalidate**, Next.js uses this [caching values](https://nextjs.org/docs/app/building-your-application/optimizing/static-assets#caching) for the **Cache-Control** header because it can NOT guarantee that the image will NOT change after a build, for example if the image is a user avatar then the user could change the image at any time, there are several ways to change the Next.js [caching behavior](https://nextjs.org/docs/pages/api-reference/components/image#caching-behavior) for images, we will see one solution in the next chapter using static imports
+
+There is something else about this solution that is not great, by using react component (next/image component) we get a bad DX as we need to add an next/image import to all our MDX documents, we also need to write the code to use next/image ourself and finally we need to set the path to the image manually, which is bad because if we have a typo in the path then we will get a 404 instead of an image, in the next chapter we will see a better solution which uses the VSCode drag and drop feature to insert images into a document
+
+Finally there is yet another thing that makes our DX worse, which is that we had to set the width and height of our image manually, in the next chapter we will see a solution so that those values get determined automatically
+
+> [!MORE]  
+> [MDN "Cache-Control" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)  
+> [Next.js "static assets" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/static-assets)  
+> [Next.js "image caching behavior" documentation](https://nextjs.org/docs/pages/api-reference/components/image#caching-behavior)  
+
+#### Image sizing
+
+As we saw in the previous chapter one of things next/image helps you get right is [image sizing](https://nextjs.org/docs/app/building-your-application/optimizing/images#image-sizing), meaning it needs to know the width and height of an image to be able to reserve the space the image will use when it has finished loading
+
+> [!TIP]  
+> By correctly sizing the images next/image will help prevent [cumulative layout shifts (CLS)](https://web.dev/articles/cls) which is a **Core Web Vital metric**, without a width and heigt value the image would get displayed as an empty element until it has has finished loading, then when the image appears it would some space in the document, meaning other content would then get pushed around
+>  
+> layout shifts are bad because if they happen at a moment where the user attempts to for example click on something then there is a chance that the user will misclick, this is why it is important to make sure that all images reserve the space they will need as soon as the HTML document gets rendered in the browser  
+
+next/image offers you 3 options to tell it what the display size will be:
+
+* one option is to use the next/image [fill](https://nextjs.org/docs/pages/api-reference/components/image#fill) property, in which case the image would fill the parent image container (which needs to a CSS position set to either relative, fixed or absolute), meaning that the space used by the image would actually be the size of the parent container (next/image will set width and height of the image to 100% and set the CSS position to absolute), this is a great solution for a header image and you want it to fit inside of a header container by setting the [CSS object-fit property](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) on the image to either cover or contain, but in our case we don't have a container for each image that will get displayed inside of our document
+* setting the width and height manually is an another option, but for use case this is also not the one we want to chose, because we want a solution that automate most of the work so that we end up having a great DX and also because setting the width and height of an image when using markdown only works if you install an extra plugin
+* finally the third option is to statically import the images so that next/image can automatically determine the width and height at build time
+
+In the previous example we have set the width and height manually, of course if you have to manage lots of images this is just bad for the DX, so what we want is to have next/image detect the width and height automatically, this is why we are going to use static imports
+
+
+
+> [!MORE]  
+> [Next.js "Image Sizing" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/images#image-sizing)  
+> [web.dev "cumulative layout shifts (CLS)" article](https://web.dev/articles/cls)  
+
+
 
 
 
