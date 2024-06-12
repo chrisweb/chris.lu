@@ -1338,7 +1338,7 @@ To add MDX 3 support to the Next.js blog I will use [@next/mdx](https://www.npmj
 First we will add the `@next/mdx` package and the MDX types to our Next.js project, the **@next/mdx** package will add support for MDX files to our Next.js project, to install the package execute the following command in your VSCode terminal:
 
 ```shell
-npm install @next/mdx @types/mdx --save-exact
+npm i @next/mdx @types/mdx --save-exact
 ```
 
 > [!MORE]  
@@ -3539,6 +3539,9 @@ Now launch dev server (using the `npm run dev` command) and then open the [http:
 
 Congratulations you just created a link component that will now get used for all markdown links, which means they will now all benefit from the next/link features like prefetching and optimized client-side navigation between routes 🎉
 
+> [!MORE]  
+> [VSCode "Markdown editing" documentation](https://code.visualstudio.com/docs/languages/markdown#_inserting-images-and-links-to-files)  
+
 ### optimizing images in MDX using next/image
 
 For the third and last part we are going to use [next/image](https://nextjs.org/docs/app/api-reference/components/image) an image component that got created by the [Aurora team at Google](https://developer.chrome.com/docs/aurora/image-component) in cooperation with the Next.js team, by using next/image we will make sure that all images we put into our MDX pages get optimized, which means that:
@@ -3618,8 +3621,8 @@ As the documentation for next/image tells us:
 
 Actually if we would fix this error we would get another one that tells us that the height is required too, so let's set the width and height values manually like so:
 
-```mdx title="/app/tutorial_examples/mdx-components_playground/page.tsx" showLineNumbers{16} /width="2000" height="2000"/#special
-<Image src="/images/playground_test.png" alt="purple octocat wearing a diadem, a teal dress, orange bunny slippers and holding a gaming console pad" width="2000" height="2000" />
+```mdx title="/app/tutorial_examples/mdx-components_playground/page.tsx" showLineNumbers{16} /width="200" height="200"/#special
+<Image src="/images/playground_test.png" alt="purple octocat wearing a diadem, a teal dress, orange bunny slippers and holding a gaming console pad" width="200" height="200" />
 ```
 
 > [!NOTE]  
@@ -3629,7 +3632,7 @@ Now let's save our `page.mdx` file again (assuming our development server is sti
 
 This time the page got compiled and we can see the result, the image is huge because it obviously gets displayed full size as we did not add any CSS whatsoever to style it, but this is just a test so this is fine
 
-Now the reason why the title says "How to NOT add images", is because even though it works, there are actually several problems with this solution, to understand the first one, first open the **chrome dev tools** (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**), then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) and then click on the row for the image, then click on **Headers** and look at the entries for the **response headers** where you should have an entry for **Cache-Control**, like in this screenshot:
+The reason why the title of this chapter says "How to NOT add images", is because even though it works, there are actually several problems with this solution, to understand the first one, first open the **chrome dev tools** (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**), then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) and then click on the row for the image, then click on **Headers** and look at the entries for the **response headers** where you should have an entry for **Cache-Control**, like in this screenshot:
 
 ![screenshot showing the Cache-Control header having max-age set to zero and must-revalidate](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_response_headers_cache.png)
 
@@ -3644,7 +3647,65 @@ Finally there is yet another thing that makes our DX worse, which is that we had
 > [Next.js "static assets" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/static-assets)  
 > [Next.js "image caching behavior" documentation](https://nextjs.org/docs/pages/api-reference/components/image#caching-behavior)  
 
-#### Image sizing
+#### VSCode image drag & drop
+
+VSCode makes it easy to add images as markdown elements into MDX documents because it has a feature that lets you **drag & drop** images into a MDX document, it then creates the markdown element for you, sets the path to the image and if you hover over the path it shows you a preview of the image
+
+We go back to our `page.mdx` file (that is in the `/app/tutorial_examples/mdx-components_playground` folder) in VSCode and first remove the next/image import as well as the image component itself, we will not need them anymore
+
+Then to drag & drop our image we do the following steps:
+
+* Keep the `page.mdx` file open and then in the VSCode file explorer (on the right) expand the `public` folder and then the `images` folder, you should now see the file you added to `/public/images` being listed
+* Now do a left click on the image name and keep the button pressed
+* Then drag the image into the `page.mdx` to the location where you want to insert it
+* While dragging the image over the page VSCode will show you a message that says **Hold `shift` to drop into editor", so let's do just that (while still keeping the left mouse key pressed) also press the `shift` key and finally release the left mouse key to drop the image
+* You will notice that VSCode will automatically generate the markdown image element for you
+
+If you now look at the image markdown element that VSCode has created, you will notice that there is a **drop options** icon, like this:
+
+![image of the the vscode drop options icon](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_image_drop_options_icon.png)
+
+Now click on that icon or as VSCode suggests you can use the keyboard shortcut by pressing `Ctrl+.` (macOS: `⌘.`, Linux: `Ctrl+.`), it should open a modal with 3 options where the first option should be **Insert Markdown Image**:
+
+![image of the the vscode drop options menu](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_image_drop_menu_option_markdown_image.png)
+
+If the first option is NOT **Insert Markdown Image** then I recommend you open the `.vscode/settings.json` VSCode workspace settings file (that we already used in one of the first steps of this tutorial to the tell VSCode to use the typescript version that is in our workspace) and add the following entry to it:
+
+```json title=".vscode/settings.json"
+    "files.associations": {
+        "*.mdx": "markdown"
+    },
+```
+
+Now save the `.vscode/settings.json` file and then to make sure that VSCode takes the changes into account I recommend closing the `page.mdx` file and reopening it, then delete the image path and repeat the drag and drop of the image into the `page.mdx` file, then click again on the **drop options** icon and finally select **Insert Markdown Image**
+
+You should now have a markdown image element that looks like this:
+
+```md
+![alt text](../../../public/images/playground_test.png)
+```
+
+> [!TIP]  
+> VSCode recently added a new feature that let's you preview your images, to see the preview hover over the image path with your mouse and a modal box should open with a preview of the image
+>
+> ![vscode image preview](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_image_preview.png)
+
+We then replace the **alt text** placeholder with the alt text we already used in the previous chapter:
+
+```md
+![purple octocat wearing a diadem, a teal dress, orange bunny slippers and holding a gaming console pad](../../../public/images/playground_test.png)
+```
+
+And if you want to have a title you can add it like so:
+
+```md
+![purple octocat wearing a diadem, a teal dress, orange bunny slippers and holding a gaming console pad](../../../public/images/playground_test.png 'this is the image title')
+```
+
+> [!MORE]  
+> [VSCode "Markdown editing" documentation](https://code.visualstudio.com/docs/languages/markdown#_inserting-images-and-links-to-files)  
+
+#### Automatic image sizing using image imports
 
 As we saw in the previous chapter one of things next/image helps you get right is [image sizing](https://nextjs.org/docs/app/building-your-application/optimizing/images#image-sizing), meaning it needs to know the width and height of an image to be able to reserve the space the image will use when it has finished loading
 
@@ -3659,23 +3720,97 @@ next/image offers you 3 options to tell it what the display size will be:
 * setting the width and height manually is an another option, but for use case this is also not the one we want to chose, because we want a solution that automate most of the work so that we end up having a great DX and also because setting the width and height of an image when using markdown only works if you install an extra plugin
 * finally the third option is to statically import the images so that next/image can automatically determine the width and height at build time
 
-In the previous example we have set the width and height manually, of course if you have to manage lots of images this is just bad for the DX, so what we want is to have next/image detect the width and height automatically, this is why we are going to use static imports
-
-
+In the first example we did set the width and height manually, of course if you have to manage lots of images this is just bad for the DX, so what we want is to have next/image detect the width and height automatically, next/image can do this if we use static imports, but if we would add the static imports manually this would again be bad for our DX, so this is why (in the next chapter) we will install and configure a rehype plugin that will scan our MDX documents and automatically convert all image paths it finds to static imports and then next/image will be able to detect the width and height of our images
 
 > [!MORE]  
 > [Next.js "Image Sizing" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/images#image-sizing)  
 > [web.dev "cumulative layout shifts (CLS)" article](https://web.dev/articles/cls)  
 
+#### Rehype plugin to convert all image paths to static imports
 
+This chapter consists of 4 steps, first we will add the rehype plugin package to our project, which will convert the path of our markdown images into an import, next we will update our Next.js configuration file to use the rehype plugin to our MDX setup, then we will create a simple image component that will use next/image so that our images get optimized and finally we will add our image component to the mdx-components file to make sure every markdown element uses our image plugin
 
+First we install the rehype plugin called [rehype-mdx-import-media](https://www.npmjs.com/package/rehype-mdx-import-media) using the following command in your VSCode terminal:
 
+```shell
+npm i rehype-mdx-import-media --save-exact
+```
 
+> [!WARN]  
+> there is another plugin to automatically convert image paths into imports called [remark-mdx-images](https://github.com/remcohaszing/remark-mdx-images), but do NOT use it as it is **deprecated**
 
+Now that the plugin is installed we need to update the Next.js configuration `next.config.mjs` file (which is at the root of the project) file to add it to the MDX plugins list
 
-#### Using the BaseImage component for all markdown images
+```js title="next.config.mjs" showLineNumbers {3} /rehypePlugins: [rehypeMDXImportMedia]/
+import { withSentryConfig } from '@sentry/nextjs'
+import createMdx from '@next/mdx'
+import rehypeMDXImportMedia from 'rehype-mdx-import-media'
 
-Next open the `mdx-components.tsx` (which is in the root of your project) again and and lets add a third mdx component to customize the image elements, like so:
+const nextConfig = (phase) => {
+
+    const withMDX = createMdx({
+        extension: /\.(md|mdx)$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [],
+            rehypePlugins: [rehypeMDXImportMedia],
+        },
+    })
+
+    /** @type {import('next').NextConfig} */
+    const nextConfigOptions = {
+        reactStrictMode: true,
+        poweredByHeader: false,
+        // configure `pageExtensions` to include MDX files
+        pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx', 'md'],
+        // disable linting during builds using "next lint"
+        // we have manually added our lint script in package.json to the build command
+        eslint: {
+            ignoreDuringBuilds: true,
+        },
+    }
+
+    return withMDX(nextConfigOptions)
+
+}
+```
+
+Line 3 we import the **remark-mdx-images** plugin
+
+Line 12 we add the **rehypeMDXImportMedia** plugin to the **rehypePlugins** list of our MDX configuration
+
+Next we are going to create a simple **BaseImage** component, similar to what we did earlier for the links, go into the `/components/base` folder we created earlier, then create a new `Image.tsx` file and add the following code:
+
+```tsx title="/components/base/Image.tsx" showLineNumbers {1} {2} {4} {11} {11-13}
+import Image from 'next/image'
+import type { ImageProps } from 'next/image'
+
+const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
+
+    const imageProps = { ...props }
+
+    return (
+        <>
+            {/* eslint-disable-next-line jsx-a11y/alt-text */}
+            <Image
+                {...(imageProps)}
+            />
+        </>
+    )
+}
+
+export default BaseImage
+```
+
+Line 1 we **import** the [next/image](https://nextjs.org/docs/app/api-reference/components/image) component which we then use in the return, where we set a few attribtes
+
+Line 2 we import the **ImageProps** type to be able to strictly type the props of the image
+
+Line 4 we create a functional react component and use the imported **ImageProps** as type for our component props
+
+Line 11 to 13 we use Next.js **Image** component and pass the **imageProps** to it
+
+Finally we open the `mdx-components.tsx` file (which is in the root of your project) again to add a third mdx component that will use our new **BaseImage** component, like so:
 
 ```mdx title="mdx-components.tsx" showLineNumbers {4-5} {26}
 import type { MDXComponents } from 'mdx/types'
@@ -3709,61 +3844,30 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 }
 ```
 
-Line 4 to 5 we import the custom **BaseImage** component that we just created and we strictly type the props using the **ImageProps** type from next/image 
+Line 4 to 5 we import our custom **BaseImage** component that we just created and we import the **ImageProps** type from next/image
 
 Line 26 we specify that for each markdown image that got transformed into an HTML `<img>` element we want to use our custom BaseImage component
 
-#### 
+Congratulations you just created a complete workflow where every image you drag & drop into your MDX documents will have its path automazically converted to an import so that next/image can determine the width and height (without you having to set it manually) and you created a custom react image component that will automatically optimize every markdown image 🎉
 
+> [!MORE]  
+> ["rehype-mdx-import-media" repository](https://github.com/remcohaszing/rehype-mdx-import-media)  
 
-
-Next open the `page.mdx` file (that is in the `/app/tutorial_examples/mdx-components_playground` folder) we created earlier
-
-
-
-
-
+#### Image formats & priority
 
 
 
 
 
-in VSCode so that we can inset our new image using the following steps:
 
-* Keep the `page.mdx` file open and then in the VSCode file explorer (on the right) expand the `public` folder and then the `images` folder, you should now see the file you added to `/public/images` being listed
-* Now do a left click on the image name and keep the button pressed
-* Then drag the image into the `page.mdx` to the location where you want to insert it
-* While dragging the image over the page VSCode will show you a message that says **Hold `shift` to drop into editor", so let's do just that (while still keeping the left mouse key pressed) also press the `shift` key and finally release the left mouse key to drop the image
-* You will notice that VSCode will automatically generate the markdown image syntax for you
 
-At the end of the image markdown element you VSCode will display an **drop options** icon like this:
 
-![image of the the vscode drop options icon](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_image_drop_options_icon.png)
 
-Now click on that icon or as VSCode suggests you can use the keyboard shortcut by pressing `Ctrl+.` (macOS: `⌘.`, Linux: `Ctrl+.`), it should open a modal with 3 options where the first option should be **Insert Markdown Image**:
 
-![alt text](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_image_drop_menu_option_markdown_image.png)
 
-If the first option is NOT **Insert Markdown Image** then I recommend you open the `.vscode/settings.json` VSCode workspace settings file (that we already used in one of the first steps of this tutorial to the tell VSCode to use the typescript version that is in our workspace) and add the following entry to it:
 
-```json title=".vscode/settings.json"
-    "files.associations": {
-        "*.mdx": "markdown"
-    },
-```
 
-Now save the `.vscode/settings.json` file and then to make sure that VSCode takes the changes into account I recommend closing the `page.mdx` file and reopening it, then delete the image path and repeat the drag and drop of the image into the `page.mdx` file, then click again on the **drop options** icon and finally select **Insert Markdown Image**
 
-You should now have a markdown image element that looks like this:
-
-```md
-![alt text](../../../public/images/octocat-1717177375104.png)
-```
-
-> [!TIP]  
-> VSCode recently added a new feature that let's you preview your images, to see the preview hover over the image path with your mouse and a modal box should open with a preview of the image
->
-> ![vscode image preview](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_image_preview.png)
 
 
 
@@ -3788,12 +3892,7 @@ Finally we could write all the imports for the images we will display in a page 
 > [web.dev "Optimize Cumulative Layout Shifts (CLS)" article](https://web.dev/articles/optimize-cls)  
 > [web.dev "Core Web Vitals" article](https://web.dev/articles/vitals#core_web_vitals)  
 
-#### remark plugin to turn image (media) paths into imports
 
-To solve the problem we encountered in the previous chapter we will now install and use a remark plugin called [rehype-mdx-import-media](https://www.npmjs.com/package/rehype-mdx-import-media), this plugin will find the markdown image elements in our documents and then use the path of our image(s) to add a static import
-
-> [!WARN]  
-> there is another plugin to automatically add imports MDX images called [remark-mdx-images](https://github.com/remcohaszing/remark-mdx-images), but do NOT use it as it is **deprecated**
 
 
 
