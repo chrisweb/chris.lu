@@ -339,7 +339,7 @@ export default nextConfig
 
 **Next.js powered by header** is another Next.js configuration option, that if enabled will add an **x-powered-by** header to all of your pages
 
-To see the **x-powered-by** header for yourself, first open the **chrome dev tools** (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**), then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) and then click on the row for the page, then click on **Headers** and look at the entries for the **response headers** where you should have an entry for x-powered-by, like in this screenshot:
+To see the **x-powered-by** header for yourself, first open the **browser dev tools** (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**), then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) and then click on the row for the page, then click on **Headers** and look at the entries for the **response headers** where you should have an entry for x-powered-by, like in this screenshot:
 
 ![chrome dev tools network tab showing the powered by header](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/network_headers_powered_by.png)
 
@@ -498,7 +498,7 @@ Now go back into your browser to check the page ([https://localhost:3000/](https
 
 Let's go back to our project, make sure the dev server is running or use the `npm run dev` command to start it and then open [http://localhost:3000/](http://localhost:3000/) in your browser
 
-In your browser **right click** somewhere in the page and then select **Inspect** (or by using the dev tools (to open the dev tools press `F12` key) and then open the `Elments` tab), you will see that Next.js injects a bunch of Javascript code into our page and some of those javascript files are really heavy, this is because Next.js adds for example a tool called **Hot Module Reload** (HMR) (all the HMR code won't get loaded in production, Next.js only adds those files to our page when in development mode)
+In your browser **right click** somewhere in the page and then select **Inspect** (or open the **browser dev tools** by pressing the `F12` and then open the `Elments` tab), you will see that Next.js injects a bunch of Javascript code into our page and some of those javascript files are really heavy, this is because Next.js adds for example a tool called **Hot Module Reload** (HMR) (all the HMR code won't get loaded in production, Next.js only adds those files to our page when in development mode)
 
 HMR starts watching for file changes as soon as you start the development server, if we edit and save (or add a new file) HMR will detect the change and tell Next.js to (re-)compile the files, then Next.js [fast refresh](https://nextjs.org/docs/architecture/fast-refresh) will update the output in the browser for us
 
@@ -1045,7 +1045,7 @@ Line 84 to 96 at the end of the configuration file we use the **cspReportOnly** 
 
 For now we set the CSP mode to only report violations, however as soon as are confident that there are no more violations it is recommend to set our custom variable **cspReportOnly** to **false**, especially when you are done testing and decide to put everything into production
 
-If you now start your development server (using `npm run dev`), open `http://localhost:3000` in your browser, then open the browsers developer tools and then click on the Console tab, then you should see no CSP violations messages
+If you now start your development server (using `npm run dev`), open `http://localhost:3000` in your browser, then open the browsers developer tools and then click on the [Console Tab](https://developer.chrome.com/docs/devtools/console), then you should see no CSP violations messages
 
 > [!MORE]  
 > [MDN "Content Security Policy (CSP)" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)  
@@ -1073,7 +1073,7 @@ Lets edit the CSP rules we just added an make the **script-src** directive stric
     `
 ```
 
-Go back into the browser and check the console again, you should now be able to see a bunch of errors like these:
+Go back into the browser and check the [Console Tab](https://developer.chrome.com/docs/devtools/console) again, you should now be able to see a bunch of errors like these:
 
 {/* eslint-disable-next-line mdx/remark */}
 > [Report Only] Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self' 'unsafe-inline'".
@@ -3550,7 +3550,7 @@ For the third and last part we are going to use [next/image](https://nextjs.org/
 * we will use next/image which will make our images [responsive](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images) by creating an srcset to define multiple versions of an image with different dimensions so that on small screens we don't load images that are bigger and hence heavier than necessary
 * we will also use a remark plugin to make sure the path of each image gets turned into an import, which will allow next/image to automatically determine the width and height of our images
 
-We will also keep developer experience (DX) feature of VSCode intact, by making sure that adding images to a document is easy and quick when using VSCode, meaning it should be possible to simply drag and drop images into a document and then have VSCode  create the markdown element with the path to the image for us
+We will also keep developer experience (DX) feature of VSCode intact, by making sure that adding images to a document is easy and quick when using VSCode, meaning it should be possible to simply drag and drop images into a document and have VSCode create the markdown element with the path to the image for us
 
 > [!MORE]  
 > [Next.js "next/image" api reference](https://nextjs.org/docs/app/api-reference/components/image)  
@@ -3632,7 +3632,7 @@ Now let's save our `page.mdx` file again (assuming our development server is sti
 
 This time the page got compiled and we can see the result, the image is huge because it obviously gets displayed full size as we did not add any CSS whatsoever to style it, but this is just a test so this is fine
 
-The reason why the title of this chapter says "How to NOT add images", is because even though it works, there are actually several problems with this solution, to understand the first one, first open the **chrome dev tools** (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**), then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) and then click on the row for the image, then click on **Headers** and look at the entries for the **response headers** where you should have an entry for **Cache-Control**, like in this screenshot:
+The reason why the title of this chapter says "How to NOT add images", is because even though it works, there are actually several problems with this solution, to understand the first one, first open the **browser dev tools** (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**), then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) and then click on the row for the image, then click on **Headers** and look at the entries for the **response headers** where you should have an entry for **Cache-Control**, like in this screenshot:
 
 ![screenshot showing the Cache-Control header having max-age set to zero and must-revalidate](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_response_headers_cache.png)
 
@@ -3705,7 +3705,7 @@ And if you want to have a title you can add it like so:
 > [!MORE]  
 > [VSCode "Markdown editing" documentation](https://code.visualstudio.com/docs/languages/markdown#_inserting-images-and-links-to-files)  
 
-#### Automatic image sizing using image imports
+#### Automatic image sizing using image imports to optimize CLS
 
 As we saw in the previous chapter one of things next/image helps you get right is [image sizing](https://nextjs.org/docs/app/building-your-application/optimizing/images#image-sizing), meaning it needs to know the width and height of an image to be able to reserve the space the image will use when it has finished loading
 
@@ -3808,6 +3808,8 @@ Line 2 we import the **ImageProps** type to be able to strictly type the props o
 
 Line 4 we create a functional react component and use the imported **ImageProps** as type for our component props
 
+Line 10 we have an **eslint disable** comment that tells the **jsx-a11y** to ignore that the alt attribute is missing because what the plugin can not know is that we set the alt for images in the markdown element of the image and this means that the alt will be inside of **imageProps**
+
 Line 11 to 13 we use Next.js **Image** component and pass the **imageProps** to it
 
 Finally we open the `mdx-components.tsx` file (which is in the root of your project) again to add a third mdx component that will use our new **BaseImage** component, like so:
@@ -3848,31 +3850,114 @@ Line 4 to 5 we import our custom **BaseImage** component that we just created an
 
 Line 26 we specify that for each markdown image that got transformed into an HTML `<img>` element we want to use our custom BaseImage component
 
+Now start the dev server (using the `npm run dev` command) and then open the [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground) playground page URL in your browser
+
+In the first chapter when we launched the dev server we got an error from Next.js telling us to set the image height and width manually, this time we don't have such an error because we now use the rehype plugin to convert the image path to an import and this allows next/image to automatically detect the width and height
+
+Another problem we saw in first chapter was that our image response had a **Cache-Control header** with the value set to **public, max-age=0, must-revalidate**, now if we open the **browser dev tools** again (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**), then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) then click on the row for the image, then click on **Headers** and look at the entries for the **response headers** we can see that the **Cache-Control** value changed:
+
+![screenshot showing the Cache-Control header having max-age set to high value and immutable](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_response_headers_cache_control_fixed.png)
+
+As we can see the max-age now has a very high value and is not zero anymore and the [immutable directive](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control) got added too, telling the browser that this resource will not change, which is another benefit we get from using static import
+
 Congratulations you just created a complete workflow where every image you drag & drop into your MDX documents will have its path automazically converted to an import so that next/image can determine the width and height (without you having to set it manually) and you created a custom react image component that will automatically optimize every markdown image 🎉
 
 > [!MORE]  
 > ["rehype-mdx-import-media" repository](https://github.com/remcohaszing/rehype-mdx-import-media)  
 
-#### Image formats & priority
+#### Image formats & priority to optimize LCP
 
+In this chapter we will do two things that will improve the [Largest Contentful Paint (LCP)](https://web.dev/articles/lcp) which is a **Core Web Vital metric**
 
+If the dev server is not already running first start the dev server (using the `npm run dev` command) and then open the [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground) playground page URL in your browser
 
+We see that the image gets displayed which is good (it is just too big but we will handle the size with CSS later), now open **browser dev tools** (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**) and then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) and look at the row of the image, if you look at the [Content-Disposition](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition) and [Content-Type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type) response headers you will notice that the extension of the image is **.webp** and the type is **image/webp**:
 
+![screenshot showing the Content-Disposition and Content-Type headers for a webp image](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_response_headers_content_type_and_disposition.png)
 
+If you do NOT define any formats for images in your Next.js configuration file then Next.js will use [default image config](https://github.com/vercel/next.js/blob/292fd4eb3f7a774c17990e3349b91ae5630db821/packages/next/src/shared/lib/image-config.ts) value which (as of now 01.05.2024) is `['image/webp']`
 
+This means that even though our source file is a [PNG](https://web.dev/learn/images/png) image **next/image** has automatically converted it to a [WEBP](https://web.dev/learn/images/webp) image, this is already great as webp images are smaller than png files but we want to use another **format** that creates even smaller files and that format is [AVIF](https://web.dev/learn/images/avif), as we can see on the [avif caniuse page](https://caniuse.com/avif) **avif** is a format that is supported by most modern browsers but some older browsers don't, which is why we will also keep **webp** as a fallback
 
+To tell next/image to also convert images to **avif** we need to edit our **nextConfigOptions** in the `next.config.mjs` like this:
 
+```js title="next.config.mjs" showLineNumbers{16} {19-22}
+    /** @type {import('next').NextConfig} */
+    const nextConfigOptions = {
+        reactStrictMode: true,
+        poweredByHeader: false,
+        // configure `pageExtensions` to include MDX files
+        pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx', 'md'],
+        // disable linting during builds using "next lint"
+        // we have manually added our lint script in package.json to the build command
+        eslint: {
+            ignoreDuringBuilds: true,
+        },
+        experimental: {
+            // experimental use rust compiler for MDX
+            // as of now (07.10.2023) there is no support for rehype plugins
+            // this is why it is currently disabled
+            // https://nextjs.org/docs/app/api-reference/next-config-js/mdxRs
+            mdxRs: false,
+        },
+        images: {
+            // file formats for next/image
+            formats: ['image/avif', 'image/webp'],
+        },
+    }
+```
 
+Line 34 to 37 we add a new entry for images to our configuration and set the format property to `['image/avif', 'image/webp']`
 
+If you now open the playground page in your a browser (that has support for avif files) and look at the response headers of the image you will notice that the **Content-Disposition** has a filename with the .avif extension and the **Content-Type** is now **image/avif**:
 
+![screenshot showing the Content-Disposition and Content-Type headers for an avif image](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_response_headers_content_type_image_avif.png)
 
+This is the first optimisation that will reduce the size our images, making them load faster, which will improve the Largest Contentful Paint (LCP) score
 
+For the second LCP optimisation go back to the **browser dev tools** and then switch to the [Console Tab](https://developer.chrome.com/docs/devtools/console), as you can see there is a warning about our image:
 
+> Image with src "/_next/static/media/playground_test.50052472.png" was detected as the Largest Contentful Paint (LCP). Please add the "priority" property if this image is above the fold.
 
+This is a warning from **next/image** telling us that it has detected that our image is above the fold, meaning the image is inside the first part of our HTML document that is visible when the page loads and because of that it is recommended to use the [priority](https://nextjs.org/docs/pages/api-reference/components/image#priority) property
 
+But wait if we now add the **priority** property to next/image then our **BaseImage** component will set the property to all images no matter if they are on top of the page or further down, which is why we need a way to distinguish between images that should be high priority and images that should be low priority
 
+> [!WARN]  
+> The solution I'm about to show you is clearly a hack, it works well in my blog [chris.lu](https://chris.lu) for the usage I have but might not work well for you depending on what your use case is, so you might want to find another solution that better suits your needs, if you want something more "elaborate" maybe the [remark-directive](https://github.com/remarkjs/remark-directive) plugin is what you need
+>
+> what I like about my solution is that it does require yet another plugin that would also require that we use a modified markdown image syntax
 
+To add the priority property we first need to update our **BaseImage** component to this:
 
+```tsx title="/components/base/Image.tsx" showLineNumbers {12}
+import Image from 'next/image'
+import type { ImageProps } from 'next/image'
+
+const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
+
+    const imageProps = { ...props }
+
+    return (
+        <>
+            {/* eslint-disable-next-line jsx-a11y/alt-text */}
+            <Image
+                priority
+                {...(imageProps)}
+            />
+        </>
+    )
+}
+
+export default BaseImage
+```
+
+Line 12 we add the next/image **priority** property
+
+> [!MORE]  
+> [Next.js "image component" reference](https://nextjs.org/docs/pages/api-reference/components/image)
+> [web.dev "Largest Contentful Paint (LCP)" article](https://web.dev/articles/lcp)  
+> [caniuse "avif" page](https://caniuse.com/avif)  
 
 #### image placeholder
 
@@ -3888,9 +3973,7 @@ You could measure the width and height of the image and also create a blurDataUR
 
 Finally we could write all the imports for the images we will display in a page ourself, but there is an easier and quicker solution which is to use a remark plugin called that will do it for us
 
-> [!MORE]  
-> [web.dev "Optimize Cumulative Layout Shifts (CLS)" article](https://web.dev/articles/optimize-cls)  
-> [web.dev "Core Web Vitals" article](https://web.dev/articles/vitals#core_web_vitals)  
+
 
 
 

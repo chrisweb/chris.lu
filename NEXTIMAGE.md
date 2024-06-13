@@ -40,9 +40,7 @@ Line 26 we specify that for each markdown image that got transformed into an HTM
 
 
 
-LCP , this is important to ensure we get a good score as it helps https://web.dev/articles/lcp
 
-https://web.dev/articles/lcp
 
 
 
@@ -52,7 +50,7 @@ explain how 3 things: style width 100%, sizes attribute and the values we config
 explain that static import is not the only solution to avoid cumulative layout shifts, you can also use fill, in which case the container helps preventing the layout size as the container has a size or by manually setting the width and height, which is often not a feasable option as you might fetch images dynamically and not know their width and height
 
 
-our file is a png, now right click on the image and select save as and you will notice it is a webp image (you can also see that the file is a webp image if you look at the [Content-Type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type) and [Content-Disposition](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition) response headers)
+
 
 
 
@@ -69,17 +67,30 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
     const imageProps = { ...props }
 
     return (
-        <>
+        <div
+            style={{
+                position: 'relative',
+                width: '400px',
+                height: '200px',
+            }}
+        >
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
             <Image
-                style={{
+                /*style={{
                     width: '100%',
                     height: 'auto',
+                }}*/
+                style={{
+                    objectFit: 'contain',
                 }}
                 sizes="(max-width: 70rem) 100vw, 70rem"
+                //placeholder="blur"
+                //width="2000"
+                //height="2000"
+                fill={true}
                 {...(imageProps)}
             />
-        </>
+        </div>
     )
 }
 
