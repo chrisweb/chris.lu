@@ -3657,13 +3657,39 @@ Then to drag & drop our image we do the following steps:
 
 * Keep the `page.mdx` file open and then in the VSCode file explorer (on the right) expand the `public` folder and then the `images` folder, you should now see the file you added to `/public/images` being listed
 * Now do a left click on the image name and keep the button pressed
-* Then drag the image into the `page.mdx` to the location where you want to insert it
+* Then drag the image into the `page.mdx` to the location where you want to insert it (for this example I will drop the image at line 16)
 * While dragging the image over the page VSCode will show you a message that says **Hold `shift` to drop into editor", so let's do just that (while still keeping the left mouse key pressed) also press the `shift` key and finally release the left mouse key to drop the image
 * You will notice that VSCode will automatically generate the markdown image element for you
 
-If you now look at the image markdown element that VSCode has created, you will notice that there is a **drop options** icon, like this:
+After dropping the image into the page your content should be like this:
+
+```mdx title="/app/tutorial_examples/mdx-components_playground/page.tsx" showLineNumbers {16}#special
+<article>
+
+* foo
+* bar
+
+[internal link that has our production domain](https://example.com)
+
+[internal link starting with a slash](/internal)
+
+[internal link starting with a hash](#internal)
+
+[external link](https://google.com)
+
+![alt text](../../../public/images/playground_test.png)
+
+</article>
+
+```
+
+Line 16 is the image markdown element that VSCode created after we drag & dropped the image into the page
+
+If you now look at the image markdown element that VSCode has created, you will notice that there is a **drop options** icon at the end, like this:
 
 ![image of the the vscode drop options icon](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_image_drop_options_icon.png)
+
+(the icon tends to disappear after a while, if you don't see the icon, delete the image element and do a new drag & drop)
 
 Now click on that icon or as VSCode suggests you can use the keyboard shortcut by pressing `Ctrl+.` (macOS: `⌘.`, Linux: `Ctrl+.`), it should open a modal with 3 options where the first option should be **Insert Markdown Image**:
 
@@ -3865,7 +3891,7 @@ Congratulations you just created a complete workflow where every image you drag 
 > [!MORE]  
 > ["rehype-mdx-import-media" repository](https://github.com/remcohaszing/rehype-mdx-import-media)  
 
-#### Image formats & priority to optimize LCP
+#### Image formats to optimize LCP
 
 In this chapter we will do two things that will improve the [Largest Contentful Paint (LCP)](https://web.dev/articles/lcp) which is a **Core Web Vital metric**
 
@@ -3915,35 +3941,72 @@ If you now open the playground page in your a browser (that has support for avif
 
 This is the first optimisation that will reduce the size our images, making them load faster, which will improve the Largest Contentful Paint (LCP) score
 
+> [!MORE]  
+> [Next.js "image component" reference](https://nextjs.org/docs/pages/api-reference/components/image)  
+> [web.dev "Largest Contentful Paint (LCP)" article](https://web.dev/articles/lcp)  
+> [caniuse "avif" page](https://caniuse.com/avif)  
+
+#### Image priority property to optimize LCP
+
 For the second LCP optimisation go back to the **browser dev tools** and then switch to the [Console Tab](https://developer.chrome.com/docs/devtools/console), as you can see there is a warning about our image:
 
 > Image with src "/_next/static/media/playground_test.50052472.png" was detected as the Largest Contentful Paint (LCP). Please add the "priority" property if this image is above the fold.
 
 This is a warning from **next/image** telling us that it has detected that our image is above the fold, meaning the image is inside the first part of our HTML document that is visible when the page loads and because of that it is recommended to use the [priority](https://nextjs.org/docs/pages/api-reference/components/image#priority) property
 
+> [!NOTE]  
+> By default next/image will add the [loading](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#loading) attribute to every image and set the value to **lazy**, this is great for images that are down the page because they will only get [lazy loaded](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading) when the user scrolls down, however for images that are above the fold it is better to add the **priority** property, which tells next/image that this image should not get loaded but instead should have the attribute [fetchpriority](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/fetchPriority) set to **high**
+
 But wait if we now add the **priority** property to next/image then our **BaseImage** component will set the property to all images no matter if they are on top of the page or further down, which is why we need a way to distinguish between images that should be high priority and images that should be low priority
 
-> [!WARN]  
-> The solution I'm about to show you is clearly a hack, it works well in my blog [chris.lu](https://chris.lu) for the usage I have but might not work well for you depending on what your use case is, so you might want to find another solution that better suits your needs, if you want something more "elaborate" maybe the [remark-directive](https://github.com/remarkjs/remark-directive) plugin is what you need
->
-> what I like about my solution is that it does require yet another plugin that would also require that we use a modified markdown image syntax
+What we will do first, is add a function to our **BaseImage** component that will read a special information that we add at the end of our title and based on the information we will modify the image properties, like this:
 
-To add the priority property we first need to update our **BaseImage** component to this:
-
-```tsx title="/components/base/Image.tsx" showLineNumbers {12}
+```tsx title="/components/base/Image.tsx" showLineNumbers {4-33}
 import Image from 'next/image'
 import type { ImageProps } from 'next/image'
 
+function updateProps(imageProps: ImageProps) {
+
+    if (imageProps !== null) {
+
+        let imageType = ''
+
+        const imageTypeMatch = imageProps.title?.match(/\{(.*?)\}/)
+
+        if (imageTypeMatch) {
+            // the full match, for example "{ banner }"
+            const imageTypeFull = imageTypeMatch[0]
+            // the type only, for example "banner"
+            imageType = imageTypeMatch[1].trim()
+            // remove the image type info from the title
+            const newTitle = imageProps.title?.replace(imageTypeFull, '').trim()
+
+            if (newTitle !== '') {
+                imageProps.title = newTitle
+            } else {
+                delete imageProps.title
+            }
+        }
+
+        if (imageType === 'banner') {
+            imageProps.priority = true
+        }
+
+    }
+
+}
+
 const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 
-    const imageProps = { ...props }
+    const newImageProps = { ...props }
+
+    updateProps(newImageProps)
 
     return (
         <>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
             <Image
-                priority
-                {...(imageProps)}
+                {...newImageProps}
             />
         </>
     )
@@ -3952,26 +4015,77 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 export default BaseImage
 ```
 
-Line 12 we add the next/image **priority** property
+Line 4 to 33 we add a function called **updateProps** that will extract some information that we call **imageType** that we add at the end the title inside of curly braquets and then removes the braquets and their content from the title, we then use the  **imageType** to add extra props to the image, if the imageType equals **banner** then we set the **priority** prop
+
+What we did here is add a new feature that allows us to specify an **image type** for each image, for now we only check if the type is **banner** and if it is we set the **priority** property on the image, we can later extend this feature to check for other types, like for example if an image is of type **header** we could decide to set the **fill** property as well as some CSS, how you name the types and what you do based on a type is up to you
+
+Now all we need to do is update the title of our markdown image element and use our new feature, like so:
+
+```mdx title="/app/tutorial_examples/mdx-components_playground/page.tsx" showLineNumbers /{ banner }/#special
+<article>
+
+* foo
+* bar
+
+[internal link that has our production domain](https://example.com)
+
+[internal link starting with a slash](/internal)
+
+[internal link starting with a hash](#internal)
+
+[external link](https://google.com)
+
+![purple octocat wearing a diadem, a teal dress, orange bunny slippers and holding a gaming console pad](../../../public/images/playground_test.png 'this is the image title { banner }')
+
+</article>
+
+```
+
+We added the `{ banner }`#special information to our image title to tell our **BaseImage** component that this image needs the **priority** property
+
+If you now go back into the browser and hover over the image you should see the title appear but with the `{ banner }`#special information, if you open the developer tools you should see in the console tab that the warning is gone and if you open the elements tab (or right click on the image and then select inspect) you should see that image now has an the attribute **fetchpriority** set to **high**
+
+This is the second LCP optimisation, it will make sure that images that are above the fold get loaded quickly, which should ensure that the main content of our web page finishes loading as early as possible 
 
 > [!MORE]  
-> [Next.js "image component" reference](https://nextjs.org/docs/pages/api-reference/components/image)
-> [web.dev "Largest Contentful Paint (LCP)" article](https://web.dev/articles/lcp)  
-> [caniuse "avif" page](https://caniuse.com/avif)  
+> [MDN "lazy loading" documentation](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading)  
+> [MDN "image loading attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#loading)  
+> [MDN "image fetchPriority attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/fetchPriority)  
 
-#### image placeholder
+#### Image styling
 
-Next we set the **placeholder** attribute to **blur** which tells Next.js that we want it to create a blurry placeholder for every image and display that placeholder while the image loads 
+As you probably noticed the image is way to big, this is because right now the height and width are set to the original dimensions of the image, however we want to display a smaller version of the image and this is why we will add some CSS to limit the potential width of the image
 
-Bummer we get an error like this one:
 
-> Error: Image with src "../../../public/octocat-1717177375104.png" is missing required "width" property.
 
-Why is that? Well when we used the **next/image** component we told to create our **BaseImage** component we told next/image that we want a **placeholder** and we did set the placeholder option to **blur**, to be able to create the blurry placeholder Next.js needs to know the **width** and **height** of the placeholder and those dimensions need to match the image dimensions to avoid layout shifts, after you provide those two values next/image will ask you to provide a **blurDataURL** which is a base64 encoded image it will use as placeholder
+#### Image placeholder
 
-You could measure the width and height of the image and also create a blurDataURL manually and then set those 3 values, there is however a more dynamic solution which is to import the images, if you statically import an image then next/image will be able to know the width and height and it will also automatically generate a blurDataURL for us
+Next we are going to set the **placeholder** property to **blur** which tells Next.js that we want it to create a blurry placeholder for every image and display that placeholder while the image loads, by using a placeholder to fill the space the image will take when it has finished loading we indicate to the user there something will appear soon instead of having the user wonder why there is big empty spot in the page
 
-Finally we could write all the imports for the images we will display in a page ourself, but there is an easier and quicker solution which is to use a remark plugin called that will do it for us
+To set the **placeholder** property we are going to edit our **BaseImage** component and update the code to this:
+
+```tsx title="/components/base/Image.tsx" showLineNumbers {4-33}
+const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
+
+    const newImageProps = { ...props }
+
+    updateProps(newImageProps)
+
+    return (
+        <>
+            {/* eslint-disable-next-line jsx-a11y/alt-text */}
+            <Image
+                placeholder="blur"
+                {...newImageProps}
+            />
+        </>
+    )
+}
+
+export default BaseImage
+```
+
+
 
 
 
