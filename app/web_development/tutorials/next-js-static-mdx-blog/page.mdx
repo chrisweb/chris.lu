@@ -3155,7 +3155,7 @@ Next we are going to add a stylesheet for our Naviation component and use the ne
 
 Create a new `navigation.module.css` file the `/components/header` folder and insert the following content:
 
-```tsx title="/components/header/navigation.module.css" showLineNumbers /--font-pixelifySans/
+```css title="/components/header/navigation.module.css" showLineNumbers /--font-pixelifySans/
 .navigation {
     display: flex;
     align-items: center;
@@ -3299,7 +3299,7 @@ Or you could write custom react component, but then you would need to import and
 
 First open the `mdx-components.tsx` (which is in the root of your project) and add an entry for each headline, like so:
 
-```mdx title="mdx-components.tsx" showLineNumbers {12-16}
+```tsx title="mdx-components.tsx" showLineNumbers {12-16}
 import type { MDXComponents } from 'mdx/types'
 
 // This file allows you to provide custom React components
@@ -3465,7 +3465,7 @@ The SVG icon that I used is from [icons.getbootstrap.com](https://icons.getboots
 
 Next open the `mdx-components.tsx` (which is in the root of your project) again and and lets add a second mdx component to customize the anchor elements, like so:
 
-```mdx title="mdx-components.tsx" showLineNumbers {2-3} {19-23}
+```tsx title="mdx-components.tsx" showLineNumbers {2-3} {19-23}
 import type { MDXComponents } from 'mdx/types'
 import BaseLink from '@/components/base/Link'
 import type { Route } from 'next'
@@ -3517,7 +3517,7 @@ Next we edit the `global.css` file in the `app` folder to add the styles for the
 
 And finally we update our playground `page.mdx` file (that is in the `/app/tutorial_examples/mdx-components_playground` folder) with two links to showcase internal and external links, like so:
 
-```mdx title="/app/tutorial_examples/mdx-components_playground/page.mdx"
+```md title="/app/tutorial_examples/mdx-components_playground/page.mdx"
 <article>
 
 * foo
@@ -3570,7 +3570,7 @@ Then move the image or photo you just downloaded into `/public/images` folder an
 
 Then open the `page.mdx` file (that is in the `/app/tutorial_examples/mdx-components_playground` folder) we created earlier and add the following content:
 
-```mdx title="/app/tutorial_examples/mdx-components_playground/page.tsx" showLineNumbers {1} {16}
+```md title="/app/tutorial_examples/mdx-components_playground/page.mdx" showLineNumbers {1} {16}
 import Image from 'next/image'
 
 <article>
@@ -3663,7 +3663,7 @@ Then to drag & drop our image we do the following steps:
 
 After dropping the image into the page your content should be like this:
 
-```mdx title="/app/tutorial_examples/mdx-components_playground/page.tsx" showLineNumbers {16}#special
+```md title="/app/tutorial_examples/mdx-components_playground/page.mdx" showLineNumbers {16}#special
 <article>
 
 * foo
@@ -3840,7 +3840,7 @@ Line 11 to 13 we use Next.js **Image** component and pass the **imageProps** to 
 
 Finally we open the `mdx-components.tsx` file (which is in the root of your project) again to add a third mdx component that will use our new **BaseImage** component, like so:
 
-```mdx title="mdx-components.tsx" showLineNumbers {4-5} {26}
+```tsx title="mdx-components.tsx" showLineNumbers {4-5} {26}
 import type { MDXComponents } from 'mdx/types'
 import BaseLink from '@/components/base/Link'
 import type { Route } from 'next'
@@ -3961,7 +3961,7 @@ But wait if we now add the **priority** property to next/image then our **BaseIm
 
 What we will do first, is add a function to our **BaseImage** component that will read a special information that we add at the end of our title and based on the information we will modify the image properties, like this:
 
-```tsx title="/components/base/Image.tsx" showLineNumbers {4-33}
+```tsx title="/components/base/Image.tsx" showLineNumbers {4-33} {39}
 import Image from 'next/image'
 import type { ImageProps } from 'next/image'
 
@@ -4017,11 +4017,13 @@ export default BaseImage
 
 Line 4 to 33 we add a function called **updateProps** that will extract some information that we call **imageType** that we add at the end the title inside of curly braquets and then removes the braquets and their content from the title, we then use the  **imageType** to add extra props to the image, if the imageType equals **banner** then we set the **priority** prop
 
+Line 39 we use our new **updateProps** function
+
 What we did here is add a new feature that allows us to specify an **image type** for each image, for now we only check if the type is **banner** and if it is we set the **priority** property on the image, we can later extend this feature to check for other types, like for example if an image is of type **header** we could decide to set the **fill** property as well as some CSS, how you name the types and what you do based on a type is up to you
 
 Now all we need to do is update the title of our markdown image element and use our new feature, like so:
 
-```mdx title="/app/tutorial_examples/mdx-components_playground/page.tsx" showLineNumbers /{ banner }/#special
+```md title="/app/tutorial_examples/mdx-components_playground/page.mdx" showLineNumbers {16} /{ banner }/#special
 <article>
 
 * foo
@@ -4052,19 +4054,13 @@ This is the second LCP optimisation, it will make sure that images that are abov
 > [MDN "image loading attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#loading)  
 > [MDN "image fetchPriority attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/fetchPriority)  
 
-#### Image styling
+#### Image sizes
 
-As you probably noticed the image is way to big, this is because right now the height and width are set to the original dimensions of the image, however we want to display a smaller version of the image and this is why we will add some CSS to limit the potential width of the image
+As you probably noticed the image is way to big, this is because right now the height and width are set to the original dimensions of the image, however we want to display a smaller version of the image
 
 
 
-#### Image placeholder
-
-Next we are going to set the **placeholder** property to **blur** which tells Next.js that we want it to create a blurry placeholder for every image and display that placeholder while the image loads, by using a placeholder to fill the space the image will take when it has finished loading we indicate to the user there something will appear soon instead of having the user wonder why there is big empty spot in the page
-
-To set the **placeholder** property we are going to edit our **BaseImage** component and update the code to this:
-
-```tsx title="/components/base/Image.tsx" showLineNumbers {4-33}
+```tsx title="/components/base/Image.tsx" showLineNumbers{35} {11-15}
 const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 
     const newImageProps = { ...props }
@@ -4075,6 +4071,42 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
         <>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
             <Image
+                style={{
+                    width: '100%',
+                    height: 'auto',
+                }}
+                sizes="(max-width: 70rem) 100vw, 1056px"
+                {...newImageProps}
+            />
+        </>
+    )
+}
+
+export default BaseImage
+```
+
+#### Image placeholder
+
+Next we are going to set the **placeholder** property to **blur** which tells Next.js that we want it to create a blurry placeholder for every image and display that placeholder while the image loads, by using a placeholder to fill the space the image will take when it has finished loading we indicate to the user there something will appear soon instead of having the user wonder why there is big empty spot in the page
+
+To set the **placeholder** property we are going to edit our **BaseImage** component and update the code to this:
+
+```tsx title="/components/base/Image.tsx" showLineNumbers{35} {16}
+const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
+
+    const newImageProps = { ...props }
+
+    updateProps(newImageProps)
+
+    return (
+        <>
+            {/* eslint-disable-next-line jsx-a11y/alt-text */}
+            <Image
+                style={{
+                    width: '100%',
+                    height: 'auto',
+                }}
+                sizes="(max-width: 70rem) 100vw, 1056px"
                 placeholder="blur"
                 {...newImageProps}
             />
