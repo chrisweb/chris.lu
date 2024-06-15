@@ -1,6 +1,8 @@
 next chapters?
 
-* \[DONE] setting up vercel account
+* \[DONE] Prerequisites
+* \[DONE] project setup
+* \[DONE] typescript setup
 * \[DONE] vercel preview (staging environment) with github commit triggers auto deploy
 * \[DONE] CSP
 * \[DONE] articles (pages) using MDX (@next/mdx)
@@ -504,7 +506,7 @@ read more:
 
 #### custom component to highlight the currently active heading in the table of contents
 
-In a previous post we added a remark plugin that generates a toc, now we are going to create a custom component that will use the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) to check which heading is currently visible in our viewport (screen) and then mark it as active in the table of contents
+In a previous chapter we added a remark plugin that generates a toc, now we are going to create a custom component that will use the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) to check which heading is currently visible in our viewport (screen) and then mark it as active in the table of contents
 
 First add an observer to our headings we will create a custom react hook at `hooks/useObserver.tsx`, with the following code:
 
@@ -995,7 +997,7 @@ warning: the latest version of remark-gfm is version 4.0.0 but that version is a
 
 > TypeError: page.mdx:TypeError: Cannot read properties of undefined (reading 'inTable')
 
-by adding the [remark "GitHub Flavored Markdown" (GFM) plugin](https://www.npmjs.com/package/remark-gfm) we extend the syntax features provided by the original markdown with the extensions (for autolink literals, footnotes, strikethrough, tables, tasklists) to markdown that you may know from github (for example when writing an issue or a discussion post on github)
+by adding the [remark "GitHub Flavored Markdown" (GFM) plugin](https://www.npmjs.com/package/remark-gfm) we extend the syntax features provided by the original markdown with the extensions (for autolink literals, footnotes, strikethrough, tables, tasklists) to markdown that you may know from github (for example when writing an issue or a discussion on github)
 
 Note: if you use **remark-gfm** and if you haven't already transformed your next.config.js to a next.config.mjs (ESM version) you will need to do so now, because as mentioned in their [install instrcutions](https://github.com/remarkjs/remark-gfm#install) the **remark-gfm** package is ESM only
 
