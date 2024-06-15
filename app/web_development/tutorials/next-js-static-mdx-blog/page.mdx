@@ -7,7 +7,7 @@ import { faBug, faComments } from '@fortawesome/free-solid-svg-icons'
 
 # Tutorial: Next.js static MDX blog
 
-![banner image displaying a voodoo lady mixing potions in a big cauldron, it represents a dev using different packages to build a project using an IDE](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/banner.png 'when two files meet in git diff')
+![a voodoo lady mixing potions in a big cauldron, it represents a dev using different packages to build a project using an IDE](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/banner.png '{ banner }')
 
 I tried to make this tutorial as beginner friendly as possible, if however you have a question feel free to ask on the <FontAwesomeIcon icon={faComments} size="1x" color='rgb(255, 0, 170)' /> [discussion](https://github.com/chrisweb/chris.lu/discussions) page and if you find a bug please report it using the <FontAwesomeIcon icon={faBug} size="1x" color='rgb(255, 0, 170)' /> [issues](https://github.com/chrisweb/chris.lu/issues)
 
@@ -3595,9 +3595,9 @@ Line 1 we import the **next/image** component
 
 Line 16 we use the **next/image** component, note that although our image is in the `/public/images` folder we have set the `src` to `/images/test.png`, we have omitted the `/public` folder as Next.js will assume that [static assets](https://nextjs.org/docs/app/building-your-application/optimizing/static-assets) like images are in the public folder
 
-If you now look at the code you will notice that the markdown image element is underline:
+If you now look at the code you will notice that the markdown image element is underlined:
 
-![screenshot showing the eslint message "Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images."](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_eslint_modal_missing_image_alt.png 'Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.')
+![eslint message "Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images."](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_eslint_modal_missing_image_alt.png 'Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.')
 
 This is the eslint plugin jsx-a11y telling us that it is recommended to always add an alt text to images, not only is this a best practice for accessibility reasons but it can also improve your SEO
 
@@ -3634,7 +3634,7 @@ This time the page got compiled and we can see the result, the image is huge bec
 
 The reason why the title of this chapter says "How to NOT add images", is because even though it works, there are actually several problems with this solution, to understand the first one, first open the **browser dev tools** (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**), then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) and then click on the row for the image, then click on **Headers** and look at the entries for the **response headers** where you should have an entry for **Cache-Control**, like in this screenshot:
 
-![screenshot showing the Cache-Control header having max-age set to zero and must-revalidate](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_response_headers_cache.png)
+![Cache-Control header having max-age set to zero and must-revalidate](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_response_headers_cache.png)
 
 As you can see next/image has set the [Cache-Control](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control) header to **public, max-age=0, must-revalidate**, Next.js uses this [caching values](https://nextjs.org/docs/app/building-your-application/optimizing/static-assets#caching) for the **Cache-Control** header because it can NOT guarantee that the image will NOT change after a build, for example if the image is a user avatar then the user could change the image at any time, there are several ways to change the Next.js [caching behavior](https://nextjs.org/docs/pages/api-reference/components/image#caching-behavior) for images, we will see one solution in the next chapter using static imports
 
@@ -3882,7 +3882,7 @@ In the first chapter when we launched the dev server we got an error from Next.j
 
 Another problem we saw in first chapter was that our image response had a **Cache-Control header** with the value set to **public, max-age=0, must-revalidate**, now if we open the **browser dev tools** again (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**), then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) then click on the row for the image, then click on **Headers** and look at the entries for the **response headers** we can see that the **Cache-Control** value changed:
 
-![screenshot showing the Cache-Control header having max-age set to high value and immutable](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_response_headers_cache_control_fixed.png)
+![Cache-Control header having max-age set to high value and immutable](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_response_headers_cache_control_fixed.png)
 
 As we can see the max-age now has a very high value and is not zero anymore and the [immutable directive](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control) got added too, telling the browser that this resource will not change, which is another benefit we get from using static import
 
@@ -3899,7 +3899,7 @@ If the dev server is not already running first start the dev server (using the `
 
 We see that the image gets displayed which is good (it is just too big but we will handle the size with CSS later), now open **browser dev tools** (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**) and then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) and look at the row of the image, if you look at the [Content-Disposition](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition) and [Content-Type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type) response headers you will notice that the extension of the image is **.webp** and the type is **image/webp**:
 
-![screenshot showing the Content-Disposition and Content-Type headers for a webp image](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_response_headers_content_type_and_disposition.png)
+![Content-Disposition and Content-Type headers for a webp image](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_response_headers_content_type_and_disposition.png)
 
 If you do NOT define any formats for images in your Next.js configuration file then Next.js will use [default image config](https://github.com/vercel/next.js/blob/292fd4eb3f7a774c17990e3349b91ae5630db821/packages/next/src/shared/lib/image-config.ts) value which (as of now 01.05.2024) is `['image/webp']`
 
@@ -3937,7 +3937,7 @@ Line 34 to 37 we add a new entry for images to our configuration and set the for
 
 If you now open the playground page in your a browser (that has support for avif files) and look at the response headers of the image you will notice that the **Content-Disposition** has a filename with the .avif extension and the **Content-Type** is now **image/avif**:
 
-![screenshot showing the Content-Disposition and Content-Type headers for an avif image](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_response_headers_content_type_image_avif.png)
+![Content-Disposition and Content-Type headers for an avif image](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_response_headers_content_type_image_avif.png)
 
 This is the first optimisation that will reduce the size our images, making them load faster, which will improve the Largest Contentful Paint (LCP) score
 
