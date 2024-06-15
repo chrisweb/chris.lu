@@ -241,7 +241,7 @@ then save your `next.config.mjs` and commit / sync your latest changes
 > [!WARN]  
 > right now there is a bug in Next.js that prevents MDX pages (page.mdx) to be recognized as routes when doing a production build (in development the typed routes work well), I opened a [ticket #62335 on GitHub](https://github.com/vercel/next.js/issues/62335), until the bug is fixed I suggested only enabling the **typedRoutes in development**, you can do so by using the next config **phase** parameter, to check if current phase is **PHASE_DEVELOPMENT_SERVER**
 
-##### convert nextConfig into a function
+##### next config phases (env alternative)
 
 To be able to know what the current environement is, you could use Node.js [process.env](https://nodejs.org/en/learn/command-line/how-to-read-environment-variables-from-nodejs) **NODE_ENV** environment variable, however you need to know that this variable will on only ever have two states, when using the `npm run dev` command (the dev server) then this variable is development, this is still ok and else Next.js will always set **NODE_ENV** to production
 
