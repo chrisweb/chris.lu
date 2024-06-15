@@ -662,6 +662,7 @@ article,
     width: 100%;
     padding-left: var(--main-spacing);
     padding-right: var(--main-spacing);
+    margin-bottom: calc(var(--main-spacing) * 2);
     /* width fix for mobile when word is extremly long */
     overflow-x: clip;
 }
@@ -669,7 +670,6 @@ article,
 article,
 .middle {
     max-width: var(--main-middle-maxWidth);
-    margin-bottom: calc(var(--main-spacing) * 2);
 }
 
 .core {

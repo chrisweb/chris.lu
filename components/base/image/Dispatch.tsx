@@ -54,7 +54,7 @@ const ImageDispatch: React.FC<ImageProps> = (props): JSX.Element => {
     const staticImageData = props.src as StaticImageData
     const src = staticImageData.src
 
-    if (src?.endsWith('gif')) {
+    if (src?.endsWith('gif') || imageType === 'animated') {
         newImageProps.blurDataURL = rgbDataURL(255, 0, 125)
     }
 
