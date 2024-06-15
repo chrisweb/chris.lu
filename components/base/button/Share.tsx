@@ -1,7 +1,7 @@
 'use client'
 
 import { forwardRef, useState, useEffect } from 'react'
-import styles from './share.module.css'
+import styles from './button.module.css'
 
 interface IProps {
     clickCallback?: () => void
