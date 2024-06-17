@@ -12,8 +12,8 @@ const Loop: React.FC<IProps> = (props) => {
     const three = useThree()
 
     // animation request animation frame
-    const requestAnimationFrameRef = useRef<number | null>(null)
-    const timeRef = useRef<number | null>(null)
+    const requestAnimationFrameRef = useRef(0)
+    const timeRef = useRef(0)
 
     // custom loop
     const loop = useCallback(() => {
