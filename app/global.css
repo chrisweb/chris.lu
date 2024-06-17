@@ -89,6 +89,7 @@
 }
 
 html {
+    scroll-behavior: smooth;
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
