@@ -100,6 +100,7 @@ html {
     cursor: var(--cursor-default);
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/tab-size */
     tab-size: 4;
+    position: relative;
 }
 
 /* not on mobile */
