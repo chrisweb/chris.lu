@@ -2,7 +2,8 @@
 
 import { useRef, useEffect, useCallback } from 'react'
 import { useInView, scroll } from 'framer-motion'
-//import poster from '/public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/banner.png'
+import Image from 'next/image'
+import poster from '/public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/banner.png'
 
 const VideoScroll: React.FC = () => {
 
@@ -53,15 +54,23 @@ const VideoScroll: React.FC = () => {
 
     }, [calculateChunkSize])
 
+    const altText = 'a voodoo lady mixing potions in a big cauldron, it represents a dev using different packages to build a project using an IDE'
+
     return (
-        <>
-            <video ref={videoElementRef} muted playsInline preload="auto" title="a voodoo lady mixing potions in a big cauldron, it represents a dev using different packages to build a project using an IDE" poster="/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/poster.jpg">
+        <div className="videoContainer" style={{ width: '100%', position: 'relative' }}>
+            <video style={{ position: 'absolute', zIndex: '10' }} ref={videoElementRef} muted playsInline preload="auto" title={altText} poster="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
                 <source src="/assets/video/app/web_development/tutorials/next-js-static-mdx-blog/banner.webm" type="video/webm" />
                 <source src="/assets/video/app/web_development/tutorials/next-js-static-mdx-blog/banner.mp4" type="video/mp4" />
-
                 <p>Your browser doesn&apos;t support HTML5 video.</p>
             </video>
-        </>
+            <Image
+                src={poster}
+                alt={altText}
+                sizes="(max-width: 48rem) 100vw, 704px"
+                priority
+                placeholder='blur'
+            />
+        </div>
     )
 }
 
