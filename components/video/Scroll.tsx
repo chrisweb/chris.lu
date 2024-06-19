@@ -1,41 +1,13 @@
 'use client'
 
 import { useRef, useEffect, useCallback } from 'react'
-//import { useScroll } from 'framer-motion'
 import { useInView, scroll } from 'framer-motion'
 //import poster from '/public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/banner.png'
 
 const VideoScroll: React.FC = () => {
 
     const videoElementRef = useRef<HTMLVideoElement>(null)
-    const videoDurationRef = useRef(0)
-
-    /*const { scrollY } = useScroll({
-        target: videoElementRef,
-        offset: ['start end', 'end end'],
-    })
-
-    useEffect(() => {
-
-        const video = videoElementRef.current
-
-        console.log('@@@@ scrollYProgress', scrollY.get())
-        console.log('video !== null', video !== null)
-        console.log('video.duration', video?.duration)
-
-        if (video !== null && video.duration > 0) {
-
-            const frameFloat = video.duration * scrollY.get()
-
-            const frame = Math.round((frameFloat + Number.EPSILON) * 100) / 100
-
-            console.log('@@@@ frame', frame)
-
-            video.currentTime = frame
-
-        }
-
-    }, [scrollY])*/
+    const chunkSizeRef = useRef(0)
 
     const isInView = useInView(videoElementRef)
 
@@ -43,19 +15,13 @@ const VideoScroll: React.FC = () => {
 
         const video = videoElementRef.current
 
-        scroll(() => {
+        const cancel = scroll(() => {
 
-            if (video !== null && videoDurationRef.current > 0) {
+            if (video !== null && chunkSizeRef.current > 0) {
 
-                let frame = 0
-                let chunkLength = 0
-                const modifier = 0.7
+                const frameFloat = window.scrollY * chunkSizeRef.current
 
-                chunkLength = videoDurationRef.current / (window.innerHeight * modifier)
-
-                const frameFloat = window.scrollY * chunkLength
-
-                frame = Math.round((frameFloat + Number.EPSILON) * 100) / 100
+                const frame = Math.round((frameFloat + Number.EPSILON) * 100) / 100
 
                 video.currentTime = frame
 
@@ -63,11 +29,17 @@ const VideoScroll: React.FC = () => {
 
         })
 
+        return () => {
+            cancel()
+        }
+
     }, [isInView])
 
-    const setDuration = useCallback(() => {
+    const calculateChunkSize = useCallback(() => {
 
-        videoDurationRef.current = videoElementRef.current!.duration
+        const modifier = 0.7
+
+        chunkSizeRef.current = videoElementRef.current!.duration / (window.innerHeight * modifier)
 
     }, [])
 
@@ -75,15 +47,15 @@ const VideoScroll: React.FC = () => {
 
         const video = videoElementRef.current
 
-        video?.addEventListener('loadedmetadata', setDuration)
+        video?.addEventListener('loadedmetadata', calculateChunkSize)
 
         video?.load()
 
         return () => {
-            video?.removeEventListener('loadedmetadata', setDuration)
+            video?.removeEventListener('loadedmetadata', calculateChunkSize)
         }
 
-    }, [setDuration])
+    }, [calculateChunkSize])
 
     return (
         <>
