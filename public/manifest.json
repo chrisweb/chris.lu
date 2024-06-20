@@ -18,33 +18,27 @@
         },
         {
             "purpose": "any",
-            "src": "/apple-touch-icon2.png",
+            "src": "/apple-icon2.png",
             "sizes": "167x167",
             "type": "image/png"
         },
         {
             "purpose": "any",
-            "src": "/apple-touch-icon3.png",
+            "src": "/apple-icon3.png",
             "sizes": "180x180",
             "type": "image/png"
         },
         {
             "purpose": "any",
-            "src": "/apple-touch-icon4.png",
+            "src": "/apple-icon4.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
             "purpose": "any",
-            "src": "/apple-touch-icon5.png",
+            "src": "/apple-icon5.png",
             "sizes": "512x512",
             "type": "image/png"
-        },
-        {
-            "purpose": "maskable",
-            "src": "/maskable-icon-152x152.svg",
-            "sizes": "512x512",
-            "type": "image/svg+xml"
         }
     ],
     "shortcuts": [
