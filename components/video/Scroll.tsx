@@ -32,7 +32,7 @@ const VideoScroll: React.FC = () => {
 
         const currentTime = performance.now()
 
-        // delta time in seconds
+        // delta time in milliseconds
         const deltaTime = currentTime - (timeRef.current ? timeRef.current : 0)
 
         if (!isInView('banner_video')) {

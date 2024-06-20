@@ -20,7 +20,7 @@ const Loop: React.FC<IProps> = (props) => {
 
         const currentTime = performance.now()
 
-        // delta time in seconds
+        // delta time in milliseconds
         const deltaTime = currentTime - (timeRef.current ? timeRef.current : 0)
 
         // extra measure for when the delta time is very high
