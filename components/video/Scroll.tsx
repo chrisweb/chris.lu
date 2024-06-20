@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useCallback } from 'react'
 import { useInView, scroll } from 'framer-motion'
-import Image from 'next/image'
+import ImageDispatch from '@/components/base/image/Dispatch'
 import poster from '/public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/banner.png'
 
 const VideoScroll: React.FC = () => {
@@ -63,12 +63,10 @@ const VideoScroll: React.FC = () => {
                 <source src="/assets/video/app/web_development/tutorials/next-js-static-mdx-blog/banner.mp4" type="video/mp4" />
                 <p>Your browser doesn&apos;t support HTML5 video.</p>
             </video>
-            <Image
+            <ImageDispatch
                 src={poster}
                 alt={altText}
-                sizes="(max-width: 48rem) 100vw, 704px"
-                priority
-                placeholder='blur'
+                title="{ banner }"
             />
         </div>
     )
