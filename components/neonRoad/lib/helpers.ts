@@ -11,12 +11,6 @@ interface IProps {
 const moveFromAToBInLoop = ({ delta, objectsRef, cameraZPosition, distanceToNextObject }: IProps) => {
 
     const objectsBehindCamera = []
-
-    // when using "frameloop = never", the delta is not
-    // in seconds but milliseconds so need to ajust the speed
-    /*if (three.frameloop === 'never') {
-        speed = 0.00005
-    }*/
     const speed = 0.05
     const newZPosition = delta * speed
 
