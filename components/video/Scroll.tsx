@@ -9,33 +9,53 @@ const VideoScroll: React.FC = () => {
     const videoElementRef = useRef<HTMLVideoElement>(null)
     const chunkSizeRef = useRef(0)
     const timeRef = useRef(0)
+    const firstScrollRef = useRef(true)
 
-    const isInView = (elementId: string) => {
-
-        const element = document.getElementById(elementId)
+    const isInViewCheck = (element: HTMLElement) => {
 
         if (element === null) {
             throw new Error('invalid element id')
         }
 
+        // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
         const rect = element.getBoundingClientRect()
-    
+
+        // to also check for left right add these checks
+        // rect.left >= 0 &&
+        // rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+
         return (
-            rect.top >= 0 &&
-            rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            rect.bottom >= 0 &&
+            rect.top <= (window.innerHeight || document.documentElement.clientHeight)
         )
     }
 
     const scrollPlay = useCallback(() => {
 
+        const video = videoElementRef.current
+
+        if (video === null) {
+            return
+        }
+
+        if (firstScrollRef.current) {
+            firstScrollRef.current = false
+            // when scroll starts set first frame
+            // this will remove the poster making the video visible
+            // it will also make sure that the video dimensions (especially height)
+            // are set to the correct values
+            // until the video starts the browser assumes it is a rectangle
+            video.currentTime = 0
+        }
+
         const currentTime = performance.now()
 
         // delta time in milliseconds
         const deltaTime = currentTime - (timeRef.current ? timeRef.current : 0)
+        
+        const isInView = isInViewCheck(video)
 
-        if (!isInView('banner_video')) {
+        if (!isInView) {
             return
         }
 
@@ -43,9 +63,7 @@ const VideoScroll: React.FC = () => {
             return
         }
 
-        const video = videoElementRef.current
-
-        if (video !== null && chunkSizeRef.current > 0) {
+        if (chunkSizeRef.current > 0) {
             const frameFloat = window.scrollY * chunkSizeRef.current
             const frame = Math.round((frameFloat + Number.EPSILON) * 100) / 100
             video.currentTime = frame
@@ -84,8 +102,8 @@ const VideoScroll: React.FC = () => {
     const altText = 'a voodoo lady mixing potions in a big cauldron, it represents a dev using different packages to build a project using an IDE'
 
     return (
-        <div className="videoContainer" style={{ width: '100%', position: 'relative' }}>
-            <video id="banner_video" style={{ position: 'absolute', zIndex: '10' }} ref={videoElementRef} muted playsInline preload="auto" title={altText} poster="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
+        <div className="videoContainer" style={{ width: '100%', position: 'relative', display: 'flex', flexDirection: 'column' }}>
+            <video id="banner_video" style={{ position: 'absolute', zIndex: 10, flexShrink: 1 }} ref={videoElementRef} muted playsInline preload="auto" title={altText} poster="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
                 <source src="/assets/video/app/web_development/tutorials/next-js-static-mdx-blog/banner.webm" type="video/webm" />
                 <source src="/assets/video/app/web_development/tutorials/next-js-static-mdx-blog/banner.mp4" type="video/mp4" />
                 <p>Your browser doesn&apos;t support HTML5 video.</p>
