@@ -3551,7 +3551,7 @@ For the third and last part we are going to use [next/image](https://nextjs.org/
 * we will use next/image which will make our images [responsive](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images) by creating an srcset to define multiple versions of an image with different dimensions so that on small screens we don't load images that are bigger and hence heavier than necessary
 * we will also use a remark plugin to make sure the path of each image gets turned into an import, which will allow next/image to automatically determine the width and height of our images
 
-We will also keep developer experience (DX) feature of VSCode intact, by making sure that adding images to a document is easy and quick when using VSCode, meaning it should be possible to simply drag and drop images into a document and have VSCode create the markdown element with the path to the image for us
+We will also keep **developer experience (DX)** feature of VSCode intact, by making sure that adding images to a document is easy and quick when using VSCode, meaning it should be possible to simply **drag and drop** images into a document and have VSCode create the markdown element with the path to the image for us
 
 > [!MORE]  
 > [Next.js "next/image" api reference](https://nextjs.org/docs/app/api-reference/components/image)  
@@ -4055,13 +4055,62 @@ This is the second LCP optimisation, it will make sure that images that are abov
 > [MDN "image loading attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#loading)  
 > [MDN "image fetchPriority attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/fetchPriority)  
 
-#### Image sizes
+#### Image width
 
-As you probably noticed the image is way to big, this is because right now the height and width are set to the original dimensions of the image, however we want to display a smaller version of the image
+Make sure the development server is running and then check out the image in our playground page [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground), as you can see the image is way to big, this is because right now the height and width are set to the original dimensions of the image, however we want to display an image that has the same width as the container it is in
 
+For that reason we add going to use the [style attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/style) and set the width for our image(s) to 100%, like so:
 
+```tsx title="/components/base/Image.tsx" showLineNumbers{35} {11-14}
+const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 
-```tsx title="/components/base/Image.tsx" showLineNumbers{35} {11-15}
+    const newImageProps = { ...props }
+
+    updateProps(newImageProps)
+
+    return (
+        <>
+            {/* eslint-disable-next-line jsx-a11y/alt-text */}
+            <Image
+                style={{
+                    width: '100%',
+                    height: 'auto',
+                }}
+                {...newImageProps}
+            />
+        </>
+    )
+}
+
+export default BaseImage
+```
+
+Line 11 to 14 we set the width to 100% so that the image width matches the width of our container and we set the [height to auto](https://developer.mozilla.org/en-US/docs/Web/CSS/height#auto) to keep the original ratio of the image, hence the browser will decide what the height should be based on the images width
+
+Now go back to the playground in the browser and now the rendered image should be smaller
+
+Next right click on the image and chose **Inspect** to open the developer tools, you will notice that next/image has added used the [srcset attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/srcset) and set a value that does NOT contain only one source but 2, behind the URL of the image you can see the pixel density descriptor 1x or 2x where 1x is for regular screens and 2x is for high density screens
+
+Next hover over one of the image URLs in the srcset and you the developer tools will show you a modal that looks like this:
+
+![chrome dev tools elements tab showing the image modal box](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_inspect_image_modal.png)
+
+There are two important informations in here, the first one is the **Rendered size** which is 1056 pixel (if you have a high density screen this value will be higher), this corresponds to the size the image gets displayed on screen and the second important information is the **Instrinsic size** which is the original size of the image, as you can see in this example the rendered size is half the original size, this shows us that we are fetching an image that is not only two times wider but also two times higher than what we need, meaning the image is 4 times bigger than what we need and this is going to lead to a bad LCP score
+
+In the next chapter will apply a third LCP optimisation to our images to ensure we are NOT loading images that are too big, which would harm the loading speed of our page
+
+> [!MORE]  
+> [MDN "srcset attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/srcset)  
+
+#### Image sizes attribute
+
+As we saw in the previous chapter, we told the browser to make the displayed size of our image smaller but we are still loading an image that is larger than what we need, however not every screen has the same size, which means we will have to get different versions of our image, for example bigger versions that get displayed on desktop computers and smaller versions that get used for mobile devices
+
+But wait there is more, today our users don't just have screens of different sizes but also screens with different pixel densities, for example some high density screens can have a resolution of 2 device pixels per CSS pixel (2x), which means that for those high density screens we will need an image that is twice the size of an image we use for a lower density screen
+
+To ensure we don't use images that are too big (which would waste bandwidth and result in a low LCP score) or images that are too small (which would get scaled up by the browser and end up being blurry) we are going to use the [sizes attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/sizes) and set some rules to help the browser chose the image with the most appropriate dimensions:
+
+```tsx title="/components/base/Image.tsx" showLineNumbers{35} {15}
 const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 
     const newImageProps = { ...props }
@@ -4085,6 +4134,15 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 
 export default BaseImage
 ```
+
+In our global.css we did set a maximum width for the `main` element to 70rem, to convert REMs to pixels you need to know the root font size, in our case it is 16 pixel (the default browser font size), which means the max-width of the container in which our image gets displayed is 70 x 16 = 1120 pixels
+
+
+
+TODO: explain that if we have an image with an intrinsic size that is smaller than the width of the container it will not get stretched to 100% but get displayed as large as it original width is, that is because the width attribute on the image is what matters most
+
+> [!MORE]  
+> [MDN "sizes attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/sizes)  
 
 #### Image placeholder
 
