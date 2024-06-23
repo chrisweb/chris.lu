@@ -308,15 +308,15 @@ So if for some reason you don't want it to be enabled in your entire app or if y
 
 We will however leave the strict mode enabled as this is recommended:
 
-```js title="next.config.mjs" showLineNumbers {8}#special
+```js title="next.config.mjs" showLineNumbers {7}#special
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 
 const nextConfig = (phase) => {
 
     /** @type {import('next').NextConfig} */
     const nextConfigOptions = {
+        reactStrictMode: true,
         experimental: {
-            reactStrictMode: true,
             // experimental typescript "statically typed links"
             // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
             // currently false in prod until Issue #62335 is fixed
@@ -354,7 +354,7 @@ I agree that it does NOT make a huge difference if you turn it on or off, becaus
 
 Setting the poweredByHeader option in the Next.js configuration to off is not a miracle solution that will prevent all potential attacks, but if there is a chance (no matter how small) that turning it off will make my app just a little bit safer then that's good enough for me and as I said earlier the second reason is that I see no reason why I would want to turn it on
 
-So if you also want to turn the poweredByHeader option off, open the Next.js configuration file and change it to this:
+So if you also want to turn the `poweredByHeader` option off, open the Next.js configuration file and change it to this:
 
 ```js title="next.config.mjs" showLineNumbers {8}#special
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
@@ -565,9 +565,9 @@ You can however also change the port manually if needed, to do so you need to us
 For example to use the port 4000 edit your `package.json` change `next dev` to this:
 
 ```json title="package.json"
-  "scripts": {
-    "dev": "next dev -p 4000",
-  },
+    "scripts": {
+        "dev": "next dev -p 4000",
+    },
 ```
 
 Then run the npm command to execute that script like so:
@@ -649,10 +649,10 @@ After experimenting with Next.js CLI in your terminal, you can of course add tho
 To add the info CLI command to your `package.json`, open the `package.json` and edit it like this:
 
 ```json title="package.json" {3}#special
-  "scripts": {
-    "dev": "next dev -p 4000",
-    "info": "next info",
-  },
+    "scripts": {
+        "dev": "next dev -p 4000",
+        "info": "next info",
+    },
 ```
 
 As you can see because the command is inside of the scripts of the `package.json` we do NOT need to use **npx** anymore, as NPM will do that for us
@@ -794,6 +794,8 @@ export default function Error({
 }
 ```
 
+Every time the component recieves an error it will use `console.log` to print the error in the console, the second feature of this component is that there is a `button` which will trigger the `reset` function we got from the component props, this function provided by Next.js will attempt to rerender the segment that triggered an error, this is helpful if the error was caused by something that occurs sporadically and might allow the user to continue
+
 As you can see the Next.js documentation example uses a `useEffect(){:.function}` function to log the error in our console, but what happens if the error is getting triggered on a users computer, then we won't know about, so as Next.js suggests, in the second part of this chapter, we will use a third party service called [Sentry.io](https://sentry.io) to do the logging for us (of course if you prefer you can also develop and run your own logging service instead)
 
 > [!MORE]  
@@ -917,88 +919,18 @@ Using [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/W
 
 ### Adding CSP Headers in Next.js configuration
 
-To add CSP rules to our Next.js project we need to edit the `next.config.mjs` (that is in the root of our project)
+In this chapter we are to add CSP rules to our `next.config.mjs` configuration file (which is in the root of the project), like so:
 
-Add the following lines to your configuration:
-
-```js title="next.config.mjs" showLineNumbers {5}#special {84-96}
+```js title="next.config.mjs" showLineNumbers {16-23} /cspReportOnly/#special /upgradeInsecure/#special {34-96} {98-103}
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
-
-// CSP headers here is set based on Next.js recommendations:
-// https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
-const cspReportOnly = true;
-
-const cspHeader = () => {
-
-    const upgradeInsecure = cspReportOnly ? '' : 'upgrade-insecure-requests;'
-
-    // worker-src is for sentry replay
-    // child-src is because safari <= 15.4 does not support worker-src
-    const defaultCSPDirectives = `
-        default-src 'none';
-        media-src 'self';
-        object-src 'none';
-        worker-src 'self' blob:;
-        child-src 'self' blob:;
-        manifest-src 'self';
-        base-uri 'none';
-        form-action 'none';
-        require-trusted-types-for 'script';
-        frame-ancestors 'none';
-        ${upgradeInsecure}
-    `
-
-    // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
-    // and whitelist vercel's domains based on:
-    // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
-    // and white-list vitals.vercel-insights
-    // based on: https://vercel.com/docs/speed-insights#content-security-policy
-    if (process.env.VERCEL_ENV === 'preview') {
-        return `
-            ${defaultCSPDirectives}
-            font-src 'self' https://vercel.live/ https://assets.vercel.com https://fonts.gstatic.com;
-            style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
-            script-src 'self' 'unsafe-inline' https://vercel.live/;
-            connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/;
-            img-src 'self' data: https://vercel.com/ https://vercel.live/;
-            frame-src 'self' https://vercel.live/;
-        `
-    }
-
-    // for production environment white-list vitals.vercel-insights
-    // based on: https://vercel.com/docs/speed-insights#content-security-policy
-    if (process.env.VERCEL_ENV === 'production') {
-        return `
-            ${defaultCSPDirectives}
-            font-src 'self';
-            style-src 'self' 'unsafe-inline';
-            script-src 'self';
-            connect-src 'self' https://vitals.vercel-insights.com;
-            img-src 'self';
-            frame-src 'none';
-        `
-    }
-
-    // for dev environment enable unsafe-eval for hot-reload
-    return `
-        ${defaultCSPDirectives}
-        font-src 'self';
-        style-src 'self' 'unsafe-inline';
-        script-src 'self' 'unsafe-inline' 'unsafe-eval';
-        connect-src 'self';
-        img-src 'self' data:;
-        frame-src 'none';
-    `
-
-}
 
 const nextConfig = (phase) => {
 
     /** @type {import('next').NextConfig} */
     const nextConfigOptions = {
+        reactStrictMode: true,
+        poweredByHeader: false,
         experimental: {
-            reactStrictMode: false,
-            poweredByHeader: false,
             // experimental typescript "statically typed links"
             // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
             // currently false in prod until Issue #62335 is fixed
@@ -1009,14 +941,9 @@ const nextConfig = (phase) => {
             return [
                 {
                     source: '/(.*)',
-                    headers: [
-                        {
-                            key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
-                            value: cspHeader().replace(/\n/g, ''),
-                        },
-                    ],
+                    headers: securityHeadersConfig(phase)
                 },
-            ]
+            ];
         },
     }
 
@@ -1024,12 +951,93 @@ const nextConfig = (phase) => {
 
 }
 
-export default nextConfig
+const securityHeadersConfig = (phase) => {
+
+    const cspReportOnly = true;
+
+    const cspHeader = () => {
+
+        const upgradeInsecure = (phase !== PHASE_DEVELOPMENT_SERVER) ? 'upgrade-insecure-requests;' : ''
+
+        // worker-src is for sentry replay
+        // child-src is because safari <= 15.4 does not support worker-src
+        const defaultCSPDirectives = `
+            default-src 'none';
+            media-src 'self';
+            object-src 'none';
+            worker-src 'self' blob:;
+            child-src 'self' blob:;
+            manifest-src 'self';
+            base-uri 'none';
+            form-action 'none';
+            require-trusted-types-for 'script';
+            frame-ancestors 'none';
+            ${upgradeInsecure}
+        `
+
+        // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
+        // and whitelist vercel's domains based on:
+        // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
+        // and white-list vitals.vercel-insights
+        // based on: https://vercel.com/docs/speed-insights#content-security-policy
+        if (process.env.VERCEL_ENV === 'preview') {
+            return `
+                ${defaultCSPDirectives}
+                font-src 'self' https://vercel.live/ https://assets.vercel.com https://fonts.gstatic.com;
+                style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
+                script-src 'self' 'unsafe-inline' https://vercel.live/;
+                connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/;
+                img-src 'self' data: https://vercel.com/ https://vercel.live/;
+                frame-src 'self' https://vercel.live/;
+            `
+        }
+
+        // for production environment white-list vitals.vercel-insights
+        // based on: https://vercel.com/docs/speed-insights#content-security-policy
+        if (process.env.VERCEL_ENV === 'production') {
+            return `
+                ${defaultCSPDirectives}
+                font-src 'self';
+                style-src 'self' 'unsafe-inline';
+                script-src 'self';
+                connect-src 'self' https://vitals.vercel-insights.com;
+                img-src 'self';
+                frame-src 'none';
+            `
+        }
+
+        // for dev environment enable unsafe-eval for hot-reload
+        return `
+            ${defaultCSPDirectives}
+            font-src 'self';
+            style-src 'self' 'unsafe-inline';
+            script-src 'self' 'unsafe-inline' 'unsafe-eval';
+            connect-src 'self';
+            img-src 'self' data:;
+            frame-src 'none';
+        `
+
+    }
+
+    const headers = [
+        {
+            key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
+            value: cspHeader().replace(/\n/g, ''),
+        },
+    ]
+
+    return headers
+
+}
+
+export default securityHeadersConfig
 ```
 
-Line 5 on the top of the configuration file we have added a variable **cspReportOnly** and have set it to **true**, we will use this variable to decide if want to only report CSP violations or enforce CSP rules and report them
+Line 17 to 24 we add a `headers` configuration where we use the `source` property to tell Next.js that it should add those headers to every page, then we set a second `headers` property and as value we make a call to our `securityHeadersConfig` function
 
-Line 84 to 96 we have added a quite long function **cspHeader()** which will create 4 sets of CSP rules:
+Line 32 we have added a `cspReportOnly` variable and have set it to **true**, we will use this variable to decide if want to **only report** CSP violations or **enforce** CSP rules and report them, in the beginning we start with true so that violations get reported but not enforced and later when we are sure that we have set out rules correctly and fixed potential violations then we will set this to false to start not only reporting but also enforcing CSP rules
+
+Line 34 to 96 we have added a quite long `cspHeader(){:fn}` function which will create 4 sets of CSP rules:
 
 * the first set of CSP rules are the default rules that we will enable no matter the environment
 * the second set of rules is for when the environment is **preview**, which is for example the case when you deploy the preview branch on vercel, this is why this part contains a lot of URLs related to Vercel, those are sources for scripts that Vercel uses for example to add a comment system to your previews
@@ -1039,12 +1047,17 @@ Line 84 to 96 we have added a quite long function **cspHeader()** which will cre
 > [!TIP]  
 > I recommend you always start with the most restrictive rules possible, for example if you look at the top of default CSP rules, I have set the **form-action** to none, this is because in this tutorial we will not have any forms so there is no reason to allow them, however if you add forms to your project in the future then you will of course want to adjust the directive and for example set it to 'self' instead of 'none'
 
-Line 84 to 96 at the end of the configuration file we use the **cspReportOnly** variable we added at the top, depending on the value of **cspReportOnly** we either set the CSP header to **Content-Security-Policy-Report-Only** (if cspReportOnly = true) or we set it to **Content-Security-Policy** (if cspReportOnly = false), this means that if **cspReportOnly** is true we will only report violations but not enforce them, so if for example you try to load a script from a source that is forbidden it will still get loaded but the browser will alert you about the violation, this mode is useful for as long as we are unsure about our CSP setup and want to watch for potential violations but do NOT enforce them yet, when we are sure that our CSP rules have been fine tuned and will not block legit sources then we set **cspReportOnly** to false, meaning from now on we do NOT just report but actually also enforce the rules
+Line 36 we have added a variable that we will only populate with the [CSP: upgrade-insecure-requests](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/upgrade-insecure-requests) directive if we are not in development mode, this is because most often dev servers use HTTP requests as they have no SSL certificate installed, but for preview and production mode we add the directive, the directive tells the browser that it should assume that every request is a secure HTTPS request
+
+Line 98 to 103 we create a header for our CSP rules, for the header **key** we use the **cspReportOnly** variable we added at the top, depending on the value of **cspReportOnly** we either set the CSP header to **Content-Security-Policy-Report-Only** (if cspReportOnly = true) or we set it to **Content-Security-Policy** (if cspReportOnly = false), this means that if **cspReportOnly** is true we will only report violations but not enforce them, so if for example you try to load a script from a source that is forbidden it will still get loaded but the browser will alert you about the violation, this mode is useful for as long as we are unsure about our CSP setup and want to watch for potential violations but do NOT enforce them yet, when we are sure that our CSP rules have been fine tuned and will not block legit sources then we set **cspReportOnly** to false, meaning from now on we do NOT just report but actually also enforce the rules, finally as the header **value** we make a call to our `cspHeader(){:fn}` function which returns a string, we also use `replace{:fn}` to remove all line breaks
 
 > [!NOTE]  
 > when enforcing is enabled it will still report the violations (besides enforcing them)  
 
 For now we set the CSP mode to only report violations, however as soon as are confident that there are no more violations it is recommend to set our custom variable **cspReportOnly** to **false**, especially when you are done testing and decide to put everything into production
+
+> [!NOTE]  
+> The CSP headers I added in the tutorial are based on Next.js recommendations that can be found in the [Next.js "Configuring CSP" documentation](https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy)
 
 If you now start your development server (using `npm run dev`), open `http://localhost:3000` in your browser, then open the browsers developer tools and then click on the [Console Tab](https://developer.chrome.com/docs/devtools/console), then you should see no CSP violations messages
 
@@ -1059,9 +1072,9 @@ If you now start your development server (using `npm run dev`), open `http://loc
 > [!NOTE]  
 > To check for best practices I used a tool by google called [CSP Evaluator](https://csp-evaluator.withgoogle.com/), it showed a green checkmark for every directive except the **script-src** directive, where it mentioned that it would be better to remove **'unsafe-inline'**, however unsafe-inline is there because Next.js uses inline scripts a lot
 
-Lets edit the CSP rules we just added an make the **script-src** directive stricter by not using **'unsafe-eval'** as recommended by the CSP Evaluator service, like so:
+Lets edit the CSP rules we just added in our `next.config.mjs` file and make the **script-src** directive stricter by not using **'unsafe-eval'** as recommended by the CSP Evaluator service, like so:
 
-```js title="next.config.mjs" {6}#special
+```js title="security.config.mjs" showLineNumbers{85} {6}#special
     // for dev environment enable unsafe-eval for hot-reload
     return `
         ${defaultCSPDirectives}
@@ -1122,127 +1135,10 @@ First you need to visit Sentry.io and copy the CSP reporting URL of your project
 
 Next make sure violations are being sent to Sentry.io (logged like any other error), we need to edit our CSP setup in the next.config.mjs file, like so:
 
-```js title="next.config.mjs" showLineNumbers {7-8} {14-17} {46}#special {61}#special {49} {64}
+```js title="next.config.mjs" showLineNumbers {34-35} {41-42} /${reportingDomainWildcard}/#special /${reportCSPViolations}/#special
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 
-// CSP headers here is set based on Next.js recommendations:
-// https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
-const cspReportOnly = true;
-
-const reportingUrl = 'https://foo123.ingest.sentry.io/api/bar456/security/?sentry_key=baz789'
-const reportingDomainWildcard = 'https://*.ingest.sentry.io'
-
-const cspHeader = () => {
-
-    const upgradeInsecure = cspReportOnly ? '' : 'upgrade-insecure-requests;'
-
-    // reporting uri (CSP v1)
-    const reportCSPViolations = `
-        report-uri ${reportingUrl};
-    `
-
-    // worker-src is for sentry replay
-    // child-src is because safari <= 15.4 does not support worker-src
-    const defaultCSPDirectives = `
-        default-src 'none';
-        media-src 'self';
-        object-src 'none';
-        worker-src 'self' blob:;
-        child-src 'self' blob:;
-        manifest-src 'self';
-        base-uri 'none';
-        form-action 'none';
-        require-trusted-types-for 'script';
-        frame-ancestors 'none';
-        ${upgradeInsecure}
-    `
-
-    // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
-    // and whitelist vercel's domains based on:
-    // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
-    // and white-list vitals.vercel-insights
-    // based on: https://vercel.com/docs/speed-insights#content-security-policy
-    if (process.env.VERCEL_ENV === 'preview') {
-        return `
-            ${defaultCSPDirectives}
-            font-src 'self' https://vercel.live/ https://assets.vercel.com https://fonts.gstatic.com;
-            style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
-            script-src 'self' 'unsafe-inline' https://vercel.live/;
-            connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/ ${reportingDomainWildcard};
-            img-src 'self' data: https://vercel.com/ https://vercel.live/;
-            frame-src 'self' https://vercel.live/;
-            ${reportCSPViolations}
-        `
-    }
-
-    // for production environment white-list vitals.vercel-insights
-    // based on: https://vercel.com/docs/speed-insights#content-security-policy
-    if (process.env.VERCEL_ENV === 'production') {
-        return `
-            ${defaultCSPDirectives}
-            font-src 'self';
-            style-src 'self' 'unsafe-inline';
-            script-src 'self';
-            connect-src 'self' https://vitals.vercel-insights.com ${reportingDomainWildcard};
-            img-src 'self';
-            frame-src 'none';
-            ${reportCSPViolations}
-        `
-    }
-
-    // for dev environment enable unsafe-eval for hot-reload
-    return `
-        ${defaultCSPDirectives}
-        font-src 'self';
-        style-src 'self' 'unsafe-inline';
-        script-src 'self' 'unsafe-inline' 'unsafe-eval';
-        connect-src 'self';
-        img-src 'self' data:;
-        frame-src 'none';
-    `
-
-}
-```
-
-Line 7 to 8 we have added two new variables to store the Sentry.io CSP logging URL and a wildcard for the Sentry.io ingest sub-domain
-
-* the first variable contains the CSP logging URL **https://foo123.ingest.sentry.io/api/bar456/security/?sentry_key=baz789** is the same for preview and prod, it is the endpoint URL where the reports will get sent to, which means we use that variable to tell the report-uri directive where to send CSP violations reports
-* the second variable contains a wildcard for the sentry domain so that we can add the domain to our connect-src directive
-
-Line 14 to 17 we use a template literal to create the reporting uri directive, this directive will tell the browser what URL it should use when sending the CSP reports
-
-Line 46 and also line 61 we have added the **reportingDomainWildcard** to the connect-src directive
-
-Line 49 and 64 we **reportCSPViolations** variable which contains reporting directive
-
-> [!NOTE]  
-> It is very important to add the **reportingDomainWildcard** to the connect-src directive or CSP will block the reporting URL and hence not send reports to Sentry, we only add the **reportingDomainWildcard** to the connect-src for preview and production, but NOT development as Sentry.io will filter out reports from localhost anyway, if you want to debug your code you might want to add the reporting also for development, in that case add the `${reportCSPViolations}` variable to the development directives too (same as for preview and production) and then check out the chapter about [disableng the "reports from locahost" filter](/web_development/posts/sentry-io/#disable-the-reports-from-locahost-filter) in my Sentry.io post
-
-> [!MORE]  
-> [Sentry.io "CSP violations logging" documentation](https://docs.sentry.io/product/security-policy-reporting/)  
-
-### Adding security headers
-
-While at it, lets add a 3 more security headers to our Next.js configuration
-
-#### next configuration security headers
-
-We just added the CSP setup to every page header by altering the Next.js configuration file and now we are going to add 4 more security headers:
-
-```js title="next.config.mjs" showLineNumbers{81} {3-13} {31}#special {36-47}
 const nextConfig = (phase) => {
-
-    // security headers for preview & production
-    const extraSecurityHeaders = []
-
-    if (phase !== PHASE_DEVELOPMENT_SERVER) {
-        extraSecurityHeaders.push(
-            {
-                key: 'Strict-Transport-Security',
-                value: 'max-age=31536000', // 1 year
-            },
-        )
-    }
 
     /** @type {import('next').NextConfig} */
     const nextConfigOptions = {
@@ -1259,27 +1155,9 @@ const nextConfig = (phase) => {
             return [
                 {
                     source: '/(.*)',
-                    headers: [
-                        ...extraSecurityHeaders,
-                        {
-                            key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
-                            value: cspHeader().replace(/\n/g, ''),
-                        },
-                        {
-                            key: 'Referrer-Policy',
-                            value: 'same-origin',
-                        },
-                        {
-                            key: 'X-Content-Type-Options',
-                            value: 'nosniff',
-                        },
-                        {
-                            key: 'X-Frame-Options',
-                            value: 'DENY'
-                        },
-                    ],
+                    headers: securityHeadersConfig(phase)
                 },
-            ]
+            ];
         },
     }
 
@@ -1287,16 +1165,244 @@ const nextConfig = (phase) => {
 
 }
 
-export default nextConfig
+const securityHeadersConfig = (phase) => {
+
+    const cspReportOnly = true;
+	
+	const reportingUrl = 'https://foo123.ingest.sentry.io/api/bar456/security/?sentry_key=baz789'
+	const reportingDomainWildcard = 'https://*.ingest.sentry.io'
+
+    const cspHeader = () => {
+
+        const upgradeInsecure = (phase !== PHASE_DEVELOPMENT_SERVER) ? 'upgrade-insecure-requests;' : ''
+		
+		// reporting uri (CSP v1)
+		const reportCSPViolations = `report-uri ${reportingUrl};`
+
+        // worker-src is for sentry replay
+        // child-src is because safari <= 15.4 does not support worker-src
+        const defaultCSPDirectives = `
+            default-src 'none';
+            media-src 'self';
+            object-src 'none';
+            worker-src 'self' blob:;
+            child-src 'self' blob:;
+            manifest-src 'self';
+            base-uri 'none';
+            form-action 'none';
+            require-trusted-types-for 'script';
+            frame-ancestors 'none';
+            ${upgradeInsecure}
+        `
+
+        // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
+        // and whitelist vercel's domains based on:
+        // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
+        // and white-list vitals.vercel-insights
+        // based on: https://vercel.com/docs/speed-insights#content-security-policy
+        if (process.env.VERCEL_ENV === 'preview') {
+            return `
+                ${defaultCSPDirectives}
+                font-src 'self' https://vercel.live/ https://assets.vercel.com https://fonts.gstatic.com;
+                style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
+                script-src 'self' 'unsafe-inline' https://vercel.live/;
+                connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/ ${reportingDomainWildcard};
+                img-src 'self' data: https://vercel.com/ https://vercel.live/;
+                frame-src 'self' https://vercel.live/;
+				${reportCSPViolations}
+            `
+        }
+
+        // for production environment white-list vitals.vercel-insights
+        // based on: https://vercel.com/docs/speed-insights#content-security-policy
+        if (process.env.VERCEL_ENV === 'production') {
+            return `
+                ${defaultCSPDirectives}
+                font-src 'self';
+                style-src 'self' 'unsafe-inline';
+                script-src 'self';
+                connect-src 'self' https://vitals.vercel-insights.com ${reportingDomainWildcard};
+                img-src 'self';
+                frame-src 'none';
+				${reportCSPViolations}
+            `
+        }
+
+        // for dev environment enable unsafe-eval for hot-reload
+        return `
+            ${defaultCSPDirectives}
+            font-src 'self';
+            style-src 'self' 'unsafe-inline';
+            script-src 'self' 'unsafe-inline' 'unsafe-eval';
+            connect-src 'self';
+            img-src 'self' data:;
+            frame-src 'none';
+        `
+
+    }
+
+    const headers = [
+        {
+            key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
+            value: cspHeader().replace(/\n/g, ''),
+        },
+    ]
+
+    return headers
+
+}
+
+export default securityHeadersConfig
 ```
 
-Line 83 to 93 we added a new variable `extraSecurityHeaders` to store the HSTS header as we want to exclude it in development where we don't have an SSL certificate
+Line 34 to 35 we add two new variables to store the Sentry.io CSP logging URL and a wildcard for the Sentry.io ingest sub-domain
+
+* the first variable contains the CSP logging URL **https://foo123.ingest.sentry.io/api/bar456/security/?sentry_key=baz789** is the same for preview and prod, it is the endpoint URL where the reports will get sent to, which means we use that variable to tell the report-uri directive where to send CSP violations reports
+* the second variable contains a wildcard for the sentry domain so that we can add the domain to our connect-src directive
+
+Line 41 to 42 we use a template literal to create the reporting uri directive, this directive will tell the browser what URL it should use when sending the CSP reports
+
+Line 71 and also line 86 we add the **reportingDomainWildcard** to the connect-src directive
+
+Line 74 and also line 89 we add the **reportCSPViolations** variable which contains reporting directive, meaning we only report violations to sentry for preview and production deployments but NOT local development
+
+> [!NOTE]  
+> It is very important to add the **reportingDomainWildcard** to the connect-src directive or CSP will block the reporting URL and hence not send reports to Sentry, we only add the **reportingDomainWildcard** to the connect-src for preview and production, but NOT development as Sentry.io will filter out reports from localhost anyway, if you want to debug your code you might want to add the reporting also for development, in that case add the `${reportCSPViolations}` variable to the development directives too (same as for preview and production) and then check out the chapter about [disableng the "reports from locahost" filter](/web_development/posts/sentry-io/#disable-the-reports-from-locahost-filter) in my Sentry.io post as you will need to disable the filter for localhost reporting in your Sentry configuration on Sentry.io
+
+> [!MORE]  
+> [Sentry.io "CSP violations logging" documentation](https://docs.sentry.io/product/security-policy-reporting/)  
+
+### Adding security headers
+
+While at it, lets add a 3 more security headers to our Next.js configuration
+
+#### next configuration security headers
+
+We just added the CSP setup to every page header by altering the Next.js configuration file and now we are going to add 4 more security headers:
+
+```js title="next.config.mjs" showLineNumbers{30} {15-25} {90} {95-106}
+const securityHeadersConfig = (phase) => {
+
+    const cspReportOnly = true;
+	
+	const reportingUrl = 'https://foo123.ingest.sentry.io/api/bar456/security/?sentry_key=baz789'
+	const reportingDomainWildcard = 'https://*.ingest.sentry.io'
+
+    const cspHeader = () => {
+
+        const upgradeInsecure = (phase !== PHASE_DEVELOPMENT_SERVER) ? 'upgrade-insecure-requests;' : ''
+		
+		// reporting uri (CSP v1)
+		const reportCSPViolations = `report-uri ${reportingUrl};`
+
+		// security headers for preview & production
+		const extraSecurityHeaders = []
+
+		if (phase !== PHASE_DEVELOPMENT_SERVER) {
+			extraSecurityHeaders.push(
+				{
+					key: 'Strict-Transport-Security',
+					value: 'max-age=31536000', // 1 year
+				},
+			)
+		}
+
+        // worker-src is for sentry replay
+        // child-src is because safari <= 15.4 does not support worker-src
+        const defaultCSPDirectives = `
+            default-src 'none';
+            media-src 'self';
+            object-src 'none';
+            worker-src 'self' blob:;
+            child-src 'self' blob:;
+            manifest-src 'self';
+            base-uri 'none';
+            form-action 'none';
+            require-trusted-types-for 'script';
+            frame-ancestors 'none';
+            ${upgradeInsecure}
+        `
+
+        // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
+        // and whitelist vercel's domains based on:
+        // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
+        // and white-list vitals.vercel-insights
+        // based on: https://vercel.com/docs/speed-insights#content-security-policy
+        if (process.env.VERCEL_ENV === 'preview') {
+            return `
+                ${defaultCSPDirectives}
+                font-src 'self' https://vercel.live/ https://assets.vercel.com https://fonts.gstatic.com;
+                style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
+                script-src 'self' 'unsafe-inline' https://vercel.live/;
+                connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/ ${reportingDomainWildcard};
+                img-src 'self' data: https://vercel.com/ https://vercel.live/;
+                frame-src 'self' https://vercel.live/;
+				${reportCSPViolations}
+            `
+        }
+
+        // for production environment white-list vitals.vercel-insights
+        // based on: https://vercel.com/docs/speed-insights#content-security-policy
+        if (process.env.VERCEL_ENV === 'production') {
+            return `
+                ${defaultCSPDirectives}
+                font-src 'self';
+                style-src 'self' 'unsafe-inline';
+                script-src 'self';
+                connect-src 'self' https://vitals.vercel-insights.com ${reportingDomainWildcard};
+                img-src 'self';
+                frame-src 'none';
+				${reportCSPViolations}
+            `
+        }
+
+        // for dev environment enable unsafe-eval for hot-reload
+        return `
+            ${defaultCSPDirectives}
+            font-src 'self';
+            style-src 'self' 'unsafe-inline';
+            script-src 'self' 'unsafe-inline' 'unsafe-eval';
+            connect-src 'self';
+            img-src 'self' data:;
+            frame-src 'none';
+        `
+
+    }
+
+    const headers = [
+		...extraSecurityHeaders,
+		{
+			key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
+			value: cspHeader().replace(/\n/g, ''),
+		},
+		{
+			key: 'Referrer-Policy',
+			value: 'same-origin',
+		},
+		{
+			key: 'X-Content-Type-Options',
+			value: 'nosniff',
+		},
+		{
+			key: 'X-Frame-Options',
+			value: 'DENY'
+		},
+    ]
+
+    return headers
+
+}
+
+export default securityHeadersConfig
+```
+
+Line 44 to 54 we added a new variable `extraSecurityHeaders` to store the HSTS header, but as we want to exclude it in development where we don't have an SSL certificate we check if the phase is NOT development
 
 The HSTS header (`Strict-Transport-Security`) will tell the browser that this app only supports HTTPS, meaning that we want the browser to always use HTTPS for every page request even if in the page URL the scheme is HTTP
 
-Line 111 we use the `extraSecurityHeaders` to add the `Strict-Transport-Security` header to the list of headers
+Line 119 we use the `extraSecurityHeaders` to add the `Strict-Transport-Security` header to the list of headers
 
-Line 116 to 127 we add the 3 security headers to the list of headers:
+Line 124 to 135 we add the 3 security headers to the list of headers:
 
 * the first one is a `Referrer-Policy` header tells the browser when and when NOT to include information about the origin in referrer header, the [MDN "Referrer-Policy" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy) does a very good at explaining the different values, I like to only set the referrer for internal pages but not for external pages, that's why I use the value **same-origin**
 * the second **X-Content-Type-Options** header tells the browser to not attempt to guess the MIME type of resource by itself 
@@ -1372,7 +1478,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
 Now we need to update the content our `next.config.mjs` file (in the root of our project), to this:
 
-```js title="next.config.mjs" showLineNumbers
+```js title="next.config.mjs" showLineNumbers {2} {6-13} {34-35}
 import createMdx from '@next/mdx'
 
 const nextConfig = (phase) => {
@@ -1409,11 +1515,11 @@ const nextConfig = (phase) => {
 > [!NOTE]  
 > This configuration file is probably much shorter than the one you have in your project if you followed my previous chapters, to not have to display a very large file I have omitted what we added in the CSP chapter and the Sentry setup is missing too, but the structure is still the same so you should be able to only copy the relavant parts, the ones that are highlighted using a different background color
 
-Line 1 we import the `@next/mdx` we installed the previous chapter
+Line 2 we import the `@next/mdx` we installed the previous chapter
 
-Line 5 to 12: We configure **@next/mdx** by passing an object to **createMdx**, using the **extension** property we tell @next/mdx what for what pages it should use the MDX parser and the via the options we add support for **remark plugins** and **rehype plugins** (we will add a bunch of those later)
+Line 6 to 13: We configure **@next/mdx** by passing an object to **createMdx**, using the **extension** property we tell @next/mdx what for what pages it should use the MDX parser and the via the options we add support for **remark plugins** and **rehype plugins** (we will add a bunch of those later)
 
-Line 19 we tell Next.js what exntensions are valid page extensions, the pages we created so far had a `.tsx` extension and the new MDX pages we will now add will have the `.mdx` extension, as you can see we add a bunch more here to cover all use cases, if for example you are sure you won't use `.js` as extension that you can remove it
+Line 34 to 35 we tell Next.js what exntensions are valid page extensions, the pages we created so far had a `.tsx` extension but the new MDX pages we will now add will have the `.mdx` extension, as you can see we add a bunch more here to cover all use cases, if for example you are sure you won't use `.js` as extension that you can remove it
 
 > [!MORE]  
 > [Next.js "Markdown and MDX" documentation](https://nextjs.org/docs/app/building-your-application/configuring/mdx)  
@@ -1422,11 +1528,14 @@ Line 19 we tell Next.js what exntensions are valid page extensions, the pages we
 
 The configuration we just did adds support for MDX in pages that have the extension `*.mdx`, if you want to also add support for pages with the `*.md` extension, then add the extension in two places like so:
 
-```js title="next.config.mjs" {4} {24}
+```js title="next.config.mjs" {35}
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+import createMdx from '@next/mdx'
+
 const nextConfig = (phase) => {
 
     const withMDX = createMdx({
-        extension: /\.(md|mdx)$/,
+        extension: /\.mdx?$/,
         options: {
             // optional remark and rehype plugins
             remarkPlugins: [],
@@ -1445,14 +1554,24 @@ const nextConfig = (phase) => {
             // https://github.com/vercel/next.js/issues/62335
             typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
         },
-        // configure `pageExtensions` to include MDX files
+        headers: async () => {
+            return [
+                {
+                    source: '/(.*)',
+                    headers: securityHeadersConfig(phase)
+                },
+            ];
+        },
+		// configure `pageExtensions` to include MDX files
         pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx', 'md'],
     }
 
-    return withMDX(nextConfigOptions)
+    return nextConfigOptions
 
 }
 ```
+
+Line 35 we add `md` to the `pageExtensions` list
 
 If you use an other extension for your markdown pages, like *.markdown, *.mdown, *.mkd, ... then replace the **md** with the extension you prefer using
 
@@ -1471,8 +1590,11 @@ declare module '*.mdx' {
 
 Because we used **create next app** in our tsconfig.json we **already** have the following include in our `tsconfig.json` (if it isn't in your tsconfig.json then you need to add it), which means that `*.d.ts` files will get included when typescript does the compilation:
 
-```json title="tsconfig.json" {2}
+```json title="tsconfig.json" showLineNumbers {5}
     "include": [
+        "next-env.d.ts",
+        "**/*.ts",
+        "**/*.tsx",
         ".next/types/**/*.ts"
     ],
 ```
@@ -2188,27 +2310,57 @@ Btw the --fix flag works when using the **ESLint** CLI but it can also be used w
 
 Another script we need to change is the **build** script (as I explained in the ["Why are we changing the Next.js linting setup?" chapter](#why-are-we-changing-the-nextjs-linting-setup))
 
-We need to ensure the **build** script will **NOT** use the **Next lint** CLI by default, by editing the our `next.config.mjs`, we then add the **ignoreDuringBuilds** option and set it to **true**, like so:
+We need to ensure the **build** script will **NOT** use the **Next lint** CLI by default, by editing the our `next.config.mjs`, like so:
 
-```js title="next.config.mjs" {10-12}#special
+```js title="next.config.mjs" showLineNumbers {38-40}
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 import createMdx from '@next/mdx'
 
 const nextConfig = (phase) => {
 
+    const withMDX = createMdx({
+        extension: /\.mdx?$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [],
+            rehypePlugins: [],
+        },
+    })
+
     /** @type {import('next').NextConfig} */
     const nextConfigOptions = {
-        // disable linting during builds using "next lint"
+        reactStrictMode: true,
+        poweredByHeader: false,
+        experimental: {
+            // experimental typescript "statically typed links"
+            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
+            // currently false in prod until Issue #62335 is fixed
+            // https://github.com/vercel/next.js/issues/62335
+            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        },
+        headers: async () => {
+            return [
+                {
+                    source: '/(.*)',
+                    headers: securityHeadersConfig(phase)
+                },
+            ];
+        },
+		// configure `pageExtensions` to include MDX files
+        pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx', 'md'],
+		// disable linting during builds using "next lint"
         // we have manually added our lint script in package.json to the build command
         eslint: {
             ignoreDuringBuilds: true,
         },
     }
 
-    return withMDX(nextConfigOptions)
+    return nextConfigOptions
 
 }
 ```
+
+Line 38 to 40 we add the **ignoreDuringBuilds** option and set it to **true** to ensure Next.js does not automatically run the lint command during builds
 
 Now as we still want linting to happen before a build, we need to add the **lint** script we did in the previous chapter to the **build** script in our `package.json`, like so:
 
@@ -2430,7 +2582,6 @@ PATH_TO_PROJECT\tests\eslint\content.mdx
 Before you commit there is one last thing we need to do, which is excluding our tests folder from linting, by adding it to the exclude block in our `.eslintrc.js` file, like this:
 
 ```js title=".eslintrc.js"
-module.exports = {
     ignorePatterns: [
         'node_modules/',
         '.next/',
@@ -2443,7 +2594,6 @@ module.exports = {
         // the test files (in development)
         'tests/eslint/',
     ],
-}
 ```
 
 By adding 'tests/eslint/' to the **ignorePatterns** we ensure that the linting process will not lint those files when we do a deployment and hence prevent our build process
@@ -2545,7 +2695,7 @@ const UIButton: React.FC = (): JSX.Element => {
 
     return (
         <button className={styles.reset}>
-            I'm a UI button
+            I&apos;m a UI button
         </button>
     )
 }
@@ -2574,6 +2724,10 @@ export default function Home() {
 
 Tada 🎉 we now know how to use CSS Modules
 
+#### CSS Modules features
+
+What I like about CSS Modules is that they are fairly simple, which means you won't spend days reading documentation to understand how they work, yet they have some very interesting and powerful features, in this chapter we will have a look at some of them
+
 > [!TIP]  
 > For [naming](https://github.com/css-modules/css-modules#naming) classes the css modules team recommends using camelcase, a class name with a hyphen (kebab-case) is possible but you will need to put the name into square braquests, if for example you have a class named `.foo-bar{:css}`, then in your component you use it like this `className={styles['foo-bar']}{:jsx}`  
 
@@ -2594,7 +2748,7 @@ const UIButton: React.FC = (): JSX.Element => {
 
     return (
         <button className={`${styles.reset} ${styles.core}`}>
-            I'm a UI button
+            I&apos;m a UI button
         </button>
     )
 }
@@ -2644,6 +2798,82 @@ A few more things about CSS Modules worth knowing:
 > [Next.js "CSS Modules and Global Styles" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-modules)  
 > [CSS Modules "composition" documentation](https://github.com/css-modules/css-modules#composition)  
 > [CSS Modules "naming" documentation](https://github.com/css-modules/css-modules#naming)  
+
+#### Improved UI Button
+
+The UI button we just created is an oversimplified version of a button component, in a real project we would probably write something a little more useful like this:
+
+```tsx title="/components/tutorial_examples/UI/Button.tsx" {1} {3} {6-8} {10} {12} {14-19} {23}
+'use client'
+
+import type { PropsWithChildren } from 'react'
+import styles from './button.module.css'
+
+interface IProps extends PropsWithChildren {
+    clickCallback?: () => void
+}
+
+const UIButton: React.FC<IProps> = (props): JSX.Element => {
+
+    const { clickCallback, children, ...rest } = props
+
+    const clickHandler = () => {
+        console.log('click')
+        if (typeof clickCallback === 'function') {
+            clickCallback()
+        }
+    }
+
+    return (
+        <button onClick={clickHandler} className={`${styles.reset} ${styles.core}`} id={styles.myIdStyle} {...rest}>
+            {children}
+        </button>
+    )
+}
+
+export default UIButton
+```
+
+Line 1 we use the `'use client'` directive as we are going to add a click handler, if we don't explicitly mark it as client component Next.js will throw a runtime error like this one:
+
+```log
+Error: Event handlers cannot be passed to Client Component props.
+<button onClick={function clickHandler} className=... id=... children=...>
+                ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+```
+
+Line 3 we import the `PropsWithChildren` type from react and line 6 to 8 we extend the default props type by adding an entry for our custom `clickCallback` prop which will be a function that does not return anything `() => void`, we added a question mark to to the `clickCallback?` to make it optional as this feature will not always be used
+
+Line 10 because React.FC is a [generic function](https://www.typescriptlang.org/docs/handbook/2/generics.html) it makes it easy for us to use our interface to add type safety for the props
+
+Line 12 we use the [destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) to extract the variables we will use from the props object
+
+Line 14-19 we create our click handler function and inside we just use a `console.log` to print a message that tells us that the button got clicked, if we later improve this button we will replace the console.log with some logic that makes the button useful, then we check if our `clickCallback` is a function (as we set it to be optional in our interface it could be undefined) and if it is we call the callback
+
+Line 23 we use the children prop to make our button component more flexible, so that who ever uses the button can define what the button text should be instead of having a hardcoded text like before, this of course makes it more reusable
+
+> [!NOTE]  
+> Of course you should never overengineer a component early without knowing if the added flexibility will ever be useful to anyone as the added complexity would increase maintenance costs, but on the other hand there is nothing wrong in making a component a little bit more reusable like we did here as this will increase the chance that the button will get reused in the future, this helps avoiding that at some point you have a billion different components in your project where most of them do similar tasks and only have a little bit of code that differs, which would result in increased technical depth as fixing a bug or adding a feature might require you to edit multiple components instead of just one  
+>  
+> This is why it is important to attempt to find a good balance between less components but more flexible ones that can be used in different situations and more components that do that do specific tasks but are not overengineered to have a lot of flexibility that will never be used in your project  
+
+Of course not that we added a bit of reusability to our button we also need to update the page in which we use component, to this:
+
+```tsx title="/app/tutorial_examples/styling/page.tsx" {8}
+import UIButton from '@/components/tutorial_examples/UI/Button'
+
+export default function Home() {
+
+    return (
+        <>
+            <h1>Hello World!</h1>
+            <UIButton>I&apos;m a UI button</UIButton>
+        </>
+    )
+
+}
+```
 
 ### Adding a global.css
 
@@ -2749,6 +2979,7 @@ section {
     display: flex;
     flex-direction: column;
     padding: var(--spacing);
+    width: 100%;
 }
 
 a {
@@ -2833,7 +3064,7 @@ In the `components` folder (that is in the root of the project) create a new `he
 
 Then inside of the `header` folder create a new `Navigation.tsx` file and add the following content:
 
-```tsx title="/components/header/Navigation.tsx"
+```tsx title="/components/header/Navigation.tsx" /href={menuItem.pathname as Route}/#special
 import type { Route } from 'next'
 
 interface IMainMenuItem {
@@ -2870,6 +3101,12 @@ const HeaderNavigation: React.FC = () => {
 
 export default HeaderNavigation
 ```
+
+First we create a typescript interface and then use it to type our static list of pages, of course in a more complex project you might want to fetch this list from a database (at build time) but for our simple example a json will do, then we iterate through the list to create an entry for each page in our `nav` element
+
+The important part here is to use the `Route` type (that we imported on top) for the `href` value, to ensure next/link understands it is a route and not just a random string, without the `Route` type you will end up seeing errors like this one:
+
+![Next.js Typescript Type error: Type string is not assignable to type UrlObject | RouteImpl](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/nextjs_typescript_type_error_string_is_not_a_route.png 'Type error: Type string is not assignable to type UrlObject | RouteImpl')
 
 And finally we open the `layout.tsx` that is in the `app` folder to import / use the navigation component, like so:
 
@@ -3769,14 +4006,14 @@ npm i rehype-mdx-import-media --save-exact
 Now that the plugin is installed we need to update the Next.js configuration `next.config.mjs` file (which is at the root of the project) file to add it to the MDX plugins list
 
 ```js title="next.config.mjs" showLineNumbers {3} /rehypePlugins: [rehypeMDXImportMedia]/
-import { withSentryConfig } from '@sentry/nextjs'
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 import createMdx from '@next/mdx'
 import rehypeMDXImportMedia from 'rehype-mdx-import-media'
 
 const nextConfig = (phase) => {
 
     const withMDX = createMdx({
-        extension: /\.(md|mdx)$/,
+        extension: /\.mdx?$/,
         options: {
             // optional remark and rehype plugins
             remarkPlugins: [],
@@ -3788,16 +4025,31 @@ const nextConfig = (phase) => {
     const nextConfigOptions = {
         reactStrictMode: true,
         poweredByHeader: false,
-        // configure `pageExtensions` to include MDX files
+        experimental: {
+            // experimental typescript "statically typed links"
+            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
+            // currently false in prod until Issue #62335 is fixed
+            // https://github.com/vercel/next.js/issues/62335
+            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        },
+        headers: async () => {
+            return [
+                {
+                    source: '/(.*)',
+                    headers: securityHeadersConfig(phase)
+                },
+            ];
+        },
+		// configure `pageExtensions` to include MDX files
         pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx', 'md'],
-        // disable linting during builds using "next lint"
+		// disable linting during builds using "next lint"
         // we have manually added our lint script in package.json to the build command
         eslint: {
             ignoreDuringBuilds: true,
         },
     }
 
-    return withMDX(nextConfigOptions)
+    return nextConfigOptions
 
 }
 ```
@@ -3908,33 +4160,60 @@ This means that even though our source file is a [PNG](https://web.dev/learn/ima
 
 To tell next/image to also convert images to **avif** we need to edit our **nextConfigOptions** in the `next.config.mjs` like this:
 
-```js title="next.config.mjs" showLineNumbers{16} {19-22}
+```js title="next.config.mjs" showLineNumbers {42-45}
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+import createMdx from '@next/mdx'
+import rehypeMDXImportMedia from 'rehype-mdx-import-media'
+
+const nextConfig = (phase) => {
+
+    const withMDX = createMdx({
+        extension: /\.mdx?$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [],
+            rehypePlugins: [rehypeMDXImportMedia],
+        },
+    })
+
     /** @type {import('next').NextConfig} */
     const nextConfigOptions = {
         reactStrictMode: true,
         poweredByHeader: false,
-        // configure `pageExtensions` to include MDX files
+        experimental: {
+            // experimental typescript "statically typed links"
+            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
+            // currently false in prod until Issue #62335 is fixed
+            // https://github.com/vercel/next.js/issues/62335
+            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        },
+        headers: async () => {
+            return [
+                {
+                    source: '/(.*)',
+                    headers: securityHeadersConfig(phase)
+                },
+            ];
+        },
+		// configure `pageExtensions` to include MDX files
         pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx', 'md'],
-        // disable linting during builds using "next lint"
+		// disable linting during builds using "next lint"
         // we have manually added our lint script in package.json to the build command
         eslint: {
             ignoreDuringBuilds: true,
         },
-        experimental: {
-            // experimental use rust compiler for MDX
-            // as of now (07.10.2023) there is no support for rehype plugins
-            // this is why it is currently disabled
-            // https://nextjs.org/docs/app/api-reference/next-config-js/mdxRs
-            mdxRs: false,
-        },
-        images: {
+		images: {
             // file formats for next/image
             formats: ['image/avif', 'image/webp'],
         },
     }
+
+    return nextConfigOptions
+
+}
 ```
 
-Line 34 to 37 we add a new entry for images to our configuration and set the format property to `['image/avif', 'image/webp']`
+Line 42 to 45 we add a new entry for images to our configuration and set the `format` option value to `['image/avif', 'image/webp']`
 
 If you now open the playground page in your a browser (that has support for avif files) and look at the response headers of the image you will notice that the **Content-Disposition** has a filename with the .avif extension and the **Content-Type** is now **image/avif**:
 
@@ -3947,7 +4226,7 @@ This is the first optimisation that will reduce the size our images, making them
 > [web.dev "Largest Contentful Paint (LCP)" article](https://web.dev/articles/lcp)  
 > [caniuse "avif" page](https://caniuse.com/avif)  
 
-#### Image priority property to optimize LCP
+#### Image priority property and lazy loading
 
 For the second LCP optimisation go back to the **browser dev tools** and then switch to the [Console Tab](https://developer.chrome.com/docs/devtools/console), as you can see there is a warning about our image:
 
@@ -4055,7 +4334,7 @@ This is the second LCP optimisation, it will make sure that images that are abov
 > [MDN "image loading attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#loading)  
 > [MDN "image fetchPriority attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/fetchPriority)  
 
-#### Image width
+#### Image display using CSS
 
 Make sure the development server is running and then check out the image in our playground page [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground), as you can see the image is way to big, this is because right now the height and width are set to the original dimensions of the image, however we want to display an image that has the same width as the container it is in
 
@@ -4095,7 +4374,7 @@ Next hover over one of the image URLs in the srcset and you the developer tools 
 
 ![chrome dev tools elements tab showing the image modal box](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_inspect_image_modal.png)
 
-There are two important informations in here, the first one is the **Rendered size** which is 1056 pixel (if you have a high density screen this value will be higher), this corresponds to the size the image gets displayed on screen and the second important information is the **Instrinsic size** which is the original size of the image, as you can see in this example the rendered size is half the original size, this shows us that we are fetching an image that is not only two times wider but also two times higher than what we need, meaning the image is 4 times bigger than what we need and this is going to lead to a bad LCP score
+There are two important informations in here, the first one is the **Rendered size** which is 1056 pixel (if you have a high density screen this value will be higher), this corresponds to the size the image gets displayed on screen and the second important information is the **Intrinsic size** which is the original size of the image, as you can see in this example the rendered size is NOT the same as the original size, this shows us that we are fetching an image that is not only two times wider but also two times taller than what we need, this is obviously going to lead to a bad LCP score because the heaviest item on the page is our image and it is 4 times heavier than it should be
 
 In the next chapter will apply a third LCP optimisation to our images to ensure we are NOT loading images that are too big, which would harm the loading speed of our page
 
@@ -4104,9 +4383,9 @@ In the next chapter will apply a third LCP optimisation to our images to ensure 
 
 #### Image sizes attribute
 
-As we saw in the previous chapter, we told the browser to make the displayed size of our image smaller but we are still loading an image that is larger than what we need, however not every screen has the same size, which means we will have to get different versions of our image, for example bigger versions that get displayed on desktop computers and smaller versions that get used for mobile devices
+As we saw in the previous chapter, we told the browser to make the displayed size of our image smaller but we are still loading an image that is way bigger than what we need, so now the goal is to fetch an image that is as big as what we need or a bit bigger,however not every screen has the same size, which means we will have to get different versions of our image depending on how big the users screen is, for example bigger versions that get displayed on desktop computers and smaller versions that get used for mobile devices
 
-But wait there is more, today our users don't just have screens of different sizes but also screens with different pixel densities, for example some high density screens can have a resolution of 2 device pixels per CSS pixel (2x), which means that for those high density screens we will need an image that is twice the size of an image we use for a lower density screen
+But wait there is more, today our users don't just have screens of different sizes but also screens with different pixel densities, for example some high density screens can have a resolution of 2 device pixels per CSS pixel (2x) and some screens even have higher pixel densities, the ratio between the physical screen pixel density and the CSS pixel density is called **device pixel ratio**, screens with a **device pixel ratio** of **2** we will need an image that is twice the size of an image we use for a lower density screen and for **device pixel ratio** of 3 we need an images that is 3 times bigger, this means that if we want an image to be sharp on a screen with **device pixel ratio** of 3 and the image should be 800 CSS pixels wide then we need to actually load an image that has a width of 3 x 800 = 2400 pixels
 
 To ensure we don't use images that are too big (which would waste bandwidth and result in a low LCP score) or images that are too small (which would get scaled up by the browser and end up being blurry) we are going to use the [sizes attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/sizes) and set some rules to help the browser chose the image with the most appropriate dimensions:
 
@@ -4135,14 +4414,145 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 export default BaseImage
 ```
 
-In our global.css we did set a maximum width for the `main` element to 70rem, to convert REMs to pixels you need to know the root font size, in our case it is 16 pixel (the default browser font size), which means the max-width of the container in which our image gets displayed is 70 x 16 = 1120 pixels
+Line 15 we add the `sizes` attribute
 
+For the sizes we have set as value `(max-width: 70rem) 100vw, 1056px`, the meaning of this string is that we tell the browser that for a maximum width of 70rem it should chose an image to display that is equal or bigger than 100vw (100vw means 100% of the view width) and for any other screen size above 70rem the browser should always take an image that is 1056 css pixels wide
 
+You might wonder why 1056, well because in our specific use case we have defined in our global.css that the maximum width for the `main` element to 70rem, to convert REMs to pixels you need to know the root font size, in our case it is 16 pixel (the default browser font size), which means the max-width of the `main` element is 70 x 16 = 1120 pixels, in `main` element we have an `article` element which has a padding left and right of 2rem (so 2 x 16 = 32 pixels), this means we need to substract that padding from the `main` element width to get the maximum width an image can have, so 1120 - (2 x 32) = 1056 pixel
 
-TODO: explain that if we have an image with an intrinsic size that is smaller than the width of the container it will not get stretched to 100% but get displayed as large as it original width is, that is because the width attribute on the image is what matters most
+Make sure the development server is still running and then visit the playground page [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground)
+
+Now open **browser dev tools** (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**) and then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) and look at the row of the image, if you look at the URL of the image you will see that it contains a **w** parameter followed by a value, for example on a regular density screen the URL will be like this:
+
+`image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&w=1080&q=75`
+
+and on a screen with a **device pixel ratio** of **2** the URL will instead be this:
+
+`image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&w=3840&q=75`
+
+The **w** parameter represents the **width** the image should have, the browser automatically fetches an image suitable for the **device pixel ratio** of the screen, as we want an image that is 1056 pixel wide the browser loads an image with **w** set to 1080 pixel for screens with a **device pixel ratio** of **1**, but loads an image where **w** is set to 3840 pixel when the **device pixel ratio** is **2**
+
+This brings up two questions, how does the browser decide what value to use for the **w** parameter when requesting images and secondly why are the sizes the browser choses not equal to the size needed?
+
+The answer to both questions is because of the [srcset attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/srcset) attribute
+
+When we set the `sizes` attribute next/image will automatically add an `srcset` attribute to the images
+
+We now go back into the browser and right click on the image, then select **Inspect** and if we look at the image elment we see something like this (I formatted mine to make it a bit easier to read):
+
+```html
+<img
+    alt="purple octocat wearing a diadem, a teal dress, orange bunny slippers and holding a gaming console pad"
+    title="this is the image title"
+    fetchpriority="high"
+    width="2000"
+    height="2000"
+    decoding="async"
+    data-nimg="1"
+    style="color:transparent;width:100%;height:auto"
+    sizes="(max-width: 70rem) 100vw, 1056px"
+    srcset="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=640&amp;q=75 640w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=750&amp;q=75 750w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=828&amp;q=75 828w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=1080&amp;q=75 1080w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=1200&amp;q=75 1200w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=1920&amp;q=75 1920w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=2048&amp;q=75 2048w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=3840&amp;q=75 3840w"
+    src="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=3840&amp;q=75">
+```
+
+We can see the image element has our **style** attribute we added earlier, as well as the **sizes** attribute we added just now, but below there is also the **srcset** attribute that next/image added
+
+The value of the **srcset** contains a series of image **URLs** followed by a **number** that has the letter **w** appended, for example the first entry `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=640&amp;q=75 640w` in that list of image URLs and something called a **condition descriptor** tells the browser that if it needs an image with a width of 640 pixel (640w) then it should take that URL
+
+If we now put everything together here is what the browser does for a screen with a regular density:
+
+* first the browser determines what CSS **image width** we want, it knows that the **style** attribute has set the image width to 100% of the container which without the padding is 1056 pixel wide
+* the browser also knows that our **device pixel ratio** is **1**
+* so the browser does the math: image width x pixel ratio = width (1056 x 1 = 1056), so it knows it will need an image that is at least 1056 pixel wide
+* next the browser looks at what images we offer to load by looking at the **srcset** value, it attempts to find an URL for an image width that is equal or bigger (but never smaller) than the 1056 pixel image it needs and finds an entry with a **condition descriptor** that is **1080w**, so it will use the image URL `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=1080&amp;q=75`
+
+For a screen with a higher densitsy the steps are the same but the result is not:
+
+* first the browser determines what CSS **image width** we want and it is still 1056 pixels
+* however this time the browser notices that the **device pixel ratio** is **2**
+* so the browser does the math again: image width x pixel ratio = width (1056 x 2 = 2112), so it knows it will need an image that is at least 2112 pixel wide
+* next the browser looks at what images we offer to load by looking at the **srcset** value and finds an entry with a **condition descriptor** that is **3840w**, so it will use the image URL `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=3840&amp;q=75`
+
+There is one last thing we want to improve, we saw that for screens with a 2x device pixel ratio the browser will chose the URL that will fetch a 3840 pixel wide image, the problem here is that this 3840 pixel wide image will be almost twice as large as the 2112 pixel wide image that we need, the browser can NOT take a smaller image because the second biggest version we offer is 2048 pixel and this is lower than the 2112 pixel wide image it needs to display
+
+The solution is to tweak the list of sizes that next/image will use when it creates the srcset and to do so we need to edit the Next.js configuration file of our project
+
+By default Next.js will use the following values for srcsets: 640, 750, 828, 1080, 1200, 1920, 2048, 3840
+
+There are two values in the list that are very close to each other, 1920 and 2048, that 2048 one is just a bit too small for our need so lets replace that value with the one we need which is 2112
+
+We open our `next.config.mjs` and change it to this:
+
+```js title="next.config.mjs" showLineNumbers {36}
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+import createMdx from '@next/mdx'
+import rehypeMDXImportMedia from 'rehype-mdx-import-media'
+
+const nextConfig = (phase) => {
+
+    const withMDX = createMdx({
+        extension: /\.mdx?$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [],
+            rehypePlugins: [rehypeMDXImportMedia],
+        },
+    })
+
+    /** @type {import('next').NextConfig} */
+    const nextConfigOptions = {
+        reactStrictMode: true,
+        poweredByHeader: false,
+        experimental: {
+            // experimental typescript "statically typed links"
+            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
+            // currently false in prod until Issue #62335 is fixed
+            // https://github.com/vercel/next.js/issues/62335
+            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        },
+        headers: async () => {
+            return [
+                {
+                    source: '/(.*)',
+                    headers: securityHeadersConfig(phase)
+                },
+            ];
+        },
+		// configure `pageExtensions` to include MDX files
+        pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx', 'md'],
+		// disable linting during builds using "next lint"
+        // we have manually added our lint script in package.json to the build command
+        eslint: {
+            ignoreDuringBuilds: true,
+        },
+		images: {
+            // file formats for next/image
+            formats: ['image/avif', 'image/webp'],
+            deviceSizes: [384, 640, 750, 828, 1080, 1200, 1920, 2112, 3840],
+        },
+    }
+
+    return nextConfigOptions
+
+}
+```
+
+Line 36 we add the **deviceSizes** option and set the value to `[384, 640, 750, 828, 1080, 1200, 1920, 2112, 3840]`
+
+If we now open the browser and look at the `img` element we will see that srcset now has an entry for 2112 pixel wide images and if we open the developer tools and look at the image URL in the Network tab we can see that the browser has fetched the image using the URL for a 2112 pixel wide image
+
+> [!NOTE]  
+> On local the images will get automatically resized and cached by Next.js which uses a Node.js tool called [sharp](https://www.npmjs.com/package/sharp)  
+>  
+> In this tutorial we deploy to vercel and vercel will do the image resizes for us  
+>  
+> If however you use another provider you either need to find one that works like vercel or you can use a third party image optimization service like for example [Cloudinary](https://next.cloudinary.dev/) but if you search for "image hosting saas" I'm sure you will find a lot of alternatives, if you use a third party service also make sure you check out the [next/image configuration options](https://nextjs.org/docs/pages/api-reference/components/image#configuration-options) documentation  
+> 
+> Of course there are also other options like resizing the images at build time and then upload them to a CDN or a build a custom solution on a dedicated server, it all depends how much time you want to spend working on a solution and what your budget is
 
 > [!MORE]  
 > [MDN "sizes attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/sizes)  
+> [MDN "srcset attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/srcset)  
 
 #### Image placeholder
 
