@@ -192,8 +192,63 @@ const nextConfig = (phase) => {
         },
     })
 
-    // CSP headers here is set based on Next.js recommendations:
-    // https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
+    /** @type {import('next').NextConfig} */
+    const nextConfigOptions = {
+        reactStrictMode: true,
+        poweredByHeader: false,
+        experimental: {
+            // experimental use rust compiler for MDX
+            // as of now (07.10.2023) there is no support for rehype plugins
+            // this is why it is currently disabled
+            // https://nextjs.org/docs/app/api-reference/next-config-js/mdxRs
+            mdxRs: false,
+            // experimental partial prerendering
+            // (as of now) need a canary next.js for this to work
+            // https://nextjs.org/docs/messages/ppr-preview
+            ppr: false,
+            // experimental typescript "statically typed links"
+            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
+            // currently false in prod until Issue #62335 is fixed
+            // https://github.com/vercel/next.js/issues/62335
+            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        },
+        // hit or skip data cache logging (dev server)
+        // https://nextjs.org/docs/app/api-reference/next-config-js/logging
+        logging: {
+            fetches: {
+                fullUrl: true,
+            },
+        },
+        // file formats for next/image
+        images: {
+            formats: ['image/avif', 'image/webp'],
+            deviceSizes: [384, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+        },
+        // TODO: is this needed for app directory
+        // Configure pageExtensions to include md and mdx
+        pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'mdx'],
+        // disable linting during builds using "next lint"
+        // we have manually added our lint script in package.json to the build command
+        eslint: {
+            ignoreDuringBuilds: true,
+        },
+        headers: async () => {
+            return [
+                {
+                    source: '/(.*)',
+                    headers: securityHeadersConfig(phase)
+                },
+            ];
+        },
+    }
+
+    return withMDX(nextConfigOptions)
+    //return withBundleAnalyzer(withMDX(nextConfigOptions))
+
+}
+
+const securityHeadersConfig = (phase) => {
+
     const cspReportOnly = true;
 
     const reportingUrl = 'https://o4504017992482816.ingest.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
@@ -201,7 +256,7 @@ const nextConfig = (phase) => {
 
     const cspHeader = () => {
 
-        const upgradeInsecure = cspReportOnly ? '' : 'upgrade-insecure-requests;'
+        const upgradeInsecure = (phase !== PHASE_DEVELOPMENT_SERVER) ? 'upgrade-insecure-requests;' : ''
 
         // report directive to be added at the end
         // with Reporting API fallback
@@ -209,10 +264,9 @@ const nextConfig = (phase) => {
             report-uri ${reportingUrl};
             report-to default
         `*/
-        // reporting uri (CSP v1) only
-        const reportCSPViolations = `
-            report-uri ${reportingUrl};
-        `
+
+		// reporting uri (CSP v1)
+		const reportCSPViolations = `report-uri ${reportingUrl};`
 
         // worker-src is for sentry replay
         // child-src is because safari <= 15.4 does not support worker-src
@@ -292,82 +346,37 @@ const nextConfig = (phase) => {
         )
     }
 
-    /** @type {import('next').NextConfig} */
-    const nextConfigOptions = {
-        reactStrictMode: true,
-        poweredByHeader: false,
-        experimental: {
-            // experimental use rust compiler for MDX
-            // as of now (07.10.2023) there is no support for rehype plugins
-            // this is why it is currently disabled
-            // https://nextjs.org/docs/app/api-reference/next-config-js/mdxRs
-            mdxRs: false,
-            // experimental partial prerendering
-            // (as of now) need a canary next.js for this to work
-            // https://nextjs.org/docs/messages/ppr-preview
-            ppr: false,
-            // experimental typescript "statically typed links"
-            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
-            // currently false in prod until Issue #62335 is fixed
-            // https://github.com/vercel/next.js/issues/62335
-            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+    const headers = [
+        ...extraSecurityHeaders,
+        {
+            key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
+            value: cspHeader().replace(/\n/g, ''),
         },
-        // hit or skip data cache logging (dev server)
-        // https://nextjs.org/docs/app/api-reference/next-config-js/logging
-        logging: {
-            fetches: {
-                fullUrl: true,
-            },
+        // reporting API v0
+        /*{
+            key: 'Report-To',
+            value: `{"group":"default","max_age":10886400,"endpoints":[{"url":"${reportUrl}"}],"include_subdomains":true}`,
+        },*/
+        // reporting API v1
+        /*{
+            key: 'Reporting-Endpoints',
+            value: `default="${reportUrl}"`,
+        },*/
+        {
+            key: 'Referrer-Policy',
+            value: 'same-origin',
         },
-        // file formats for next/image
-        images: {
-            formats: ['image/avif', 'image/webp'],
-            deviceSizes: [384, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+        {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
         },
-        // TODO: is this needed for app directory
-        // Configure pageExtensions to include md and mdx
-        pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'mdx'],
-        // disable linting during builds using "next lint"
-        // we have manually added our lint script in package.json to the build command
-        eslint: {
-            ignoreDuringBuilds: true,
+        {
+            key: 'X-Frame-Options',
+            value: 'DENY'
         },
-        headers: async () => {
-            return [
-                {
-                    source: '/(.*)',
-                    headers: [
-                        ...extraSecurityHeaders,
-                        {
-                            key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
-                            value: cspHeader().replace(/\n/g, ''),
-                        },
-                        // reporting API v0
-                        /*{
-                            key: 'Report-To',
-                            value: `{"group":"default","max_age":10886400,"endpoints":[{"url":"${reportUrl}"}],"include_subdomains":true}`,
-                        },*/
-                        // reporting API v1
-                        /*{
-                            key: 'Reporting-Endpoints',
-                            value: `default="${reportUrl}"`,
-                        },*/
-                        {
-                            key: 'Referrer-Policy',
-                            value: 'same-origin',
-                        },
-                        {
-                            key: 'X-Content-Type-Options',
-                            value: 'nosniff',
-                        },
-                    ],
-                },
-            ];
-        },
-    }
+    ]
 
-    return withMDX(nextConfigOptions)
-    //return withBundleAnalyzer(withMDX(nextConfigOptions))
+    return headers
 
 }
 
