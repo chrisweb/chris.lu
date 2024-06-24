@@ -861,6 +861,7 @@ make the text color a bit darker */
 
 .linksList {
     list-style-type: none;
+    padding-inline-start: 2ch;
 }
 
 .linksList li {
