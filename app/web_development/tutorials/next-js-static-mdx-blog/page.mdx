@@ -3874,7 +3874,7 @@ The reason why the title of this chapter says "How to NOT add images", is becaus
 
 ![Cache-Control header having max-age set to zero and must-revalidate](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_response_headers_cache.png)
 
-As you can see next/image has set the [Cache-Control](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control) header to **public, max-age=0, must-revalidate**, Next.js uses this [caching values](https://nextjs.org/docs/app/building-your-application/optimizing/static-assets#caching) for the **Cache-Control** header because it can NOT guarantee that the image will NOT change after a build, for example if the image is a user avatar then the user could change the image at any time, there are several ways to change the Next.js [caching behavior](https://nextjs.org/docs/pages/api-reference/components/image#caching-behavior) for images, we will see one solution in the next chapter using static imports
+As you can see next/image has set the [Cache-Control](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control) header to **public, max-age=0, must-revalidate**, Next.js uses this [caching values](https://nextjs.org/docs/app/building-your-application/optimizing/static-assets#caching) for the **Cache-Control** header because it can NOT guarantee that the image will NOT change after a build, for example if the image is a user avatar then the user could change the image at any time, there are several ways to change the Next.js [caching behavior](https://nextjs.org/docs/app/api-reference/components/image#caching-behavior) for images, we will see one solution in the next chapter using static imports
 
 There is something else about this solution that is not great, by using react component (next/image component) we get a bad DX as we need to add an next/image import to all our MDX documents, we also need to write the code to use next/image ourself and finally we need to set the path to the image manually, which is bad because if we have a typo in the path then we will get a 404 instead of an image, in the next chapter we will see a better solution which uses the VSCode drag and drop feature to insert images into a document
 
@@ -3883,7 +3883,7 @@ Finally there is yet another thing that makes our DX worse, which is that we had
 > [!MORE]  
 > [MDN "Cache-Control" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)  
 > [Next.js "static assets" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/static-assets)  
-> [Next.js "image caching behavior" documentation](https://nextjs.org/docs/pages/api-reference/components/image#caching-behavior)  
+> [Next.js "image caching behavior" documentation](https://nextjs.org/docs/app/api-reference/components/image#caching-behavior)  
 
 #### VSCode image drag & drop
 
@@ -3980,7 +3980,7 @@ As we saw in the previous chapter one of things next/image helps you get right i
 
 next/image offers you 3 options to tell it what the display size will be:
 
-* one option is to use the next/image [fill](https://nextjs.org/docs/pages/api-reference/components/image#fill) property, in which case the image would fill the parent image container (which needs to a CSS position set to either relative, fixed or absolute), meaning that the space used by the image would actually be the size of the parent container (next/image will set width and height of the image to 100% and set the CSS position to absolute), this is a great solution for a header image and you want it to fit inside of a header container by setting the [CSS object-fit property](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) on the image to either cover or contain, but in our case we don't have a container for each image that will get displayed inside of our document
+* one option is to use the next/image [fill](https://nextjs.org/docs/app/api-reference/components/image#fill) property, in which case the image would fill the parent image container (which needs to a CSS position set to either relative, fixed or absolute), meaning that the space used by the image would actually be the size of the parent container (next/image will set width and height of the image to 100% and set the CSS position to absolute), this is a great solution for a header image and you want it to fit inside of a header container by setting the [CSS object-fit property](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) on the image to either cover or contain, but in our case we don't have a container for each image that will get displayed inside of our document
 * setting the width and height manually is an another option, but for use case this is also not the one we want to chose, because we want a solution that automate most of the work so that we end up having a great DX and also because setting the width and height of an image when using markdown only works if you install an extra plugin
 * finally the third option is to statically import the images so that next/image can automatically determine the width and height at build time
 
@@ -4222,7 +4222,7 @@ If you now open the playground page in your a browser (that has support for avif
 This is the first optimisation that will reduce the size our images, making them load faster, which will improve the Largest Contentful Paint (LCP) score
 
 > [!MORE]  
-> [Next.js "image component" reference](https://nextjs.org/docs/pages/api-reference/components/image)  
+> [Next.js "image component" reference](https://nextjs.org/docs/app/api-reference/components/image)  
 > [web.dev "Largest Contentful Paint (LCP)" article](https://web.dev/articles/lcp)  
 > [caniuse "avif" page](https://caniuse.com/avif)  
 > [MDN "Image file type and format guide" documentation](https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types#png_portable_network_graphics)
@@ -4233,7 +4233,7 @@ For the second LCP optimisation go back to the **browser dev tools** and then sw
 
 > Image with src "/_next/static/media/playground_test.50052472.png" was detected as the Largest Contentful Paint (LCP). Please add the "priority" property if this image is above the fold.
 
-This is a warning from **next/image** telling us that it has detected that our image is above the fold, meaning the image is inside the first part of our HTML document that is visible when the page loads and because of that it is recommended to use the [priority](https://nextjs.org/docs/pages/api-reference/components/image#priority) property
+This is a warning from **next/image** telling us that it has detected that our image is above the fold, meaning the image is inside the first part of our HTML document that is visible when the page loads and because of that it is recommended to use the [priority](https://nextjs.org/docs/app/api-reference/components/image#priority) property
 
 > [!NOTE]  
 > By default next/image will add the [loading](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#loading) attribute to every image and set the value to **lazy**, this is great for images that are down the page because they will only get [lazy loaded](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading) when the user scrolls down, however for images that are above the fold it is better to add the **priority** property, which tells next/image that this image should not get loaded but instead should have the attribute [fetchpriority](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/fetchPriority) set to **high**
@@ -4419,19 +4419,31 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 
     const newImageProps = { ...props }
 
-    updateProps(newImageProps)
+    const imageType = extractImageType(newImageProps)
 
     return (
         <>
-            {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image
-                style={{
-                    width: '100%',
-                    height: 'auto',
-                }}
-                sizes="(max-width: 70rem) 100vw, 1056px"
-                {...newImageProps}
-            />
+            {imageType === 'banner' ? (
+                <>
+                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                    <Image
+                        priority
+                        style={{
+                            width: '100%',
+                            height: 'auto',
+                        }}
+                        sizes="(max-width: 70rem) 100vw, 1056px"
+                        {...newImageProps}
+                    />
+                </>
+            ) : (
+                <>
+                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                    <Image
+                        {...newImageProps}
+                    />
+                </>
+            )}
         </>
     )
 }
@@ -4500,7 +4512,7 @@ Now that we know how sizes and srcset works, there is one last thing we want to 
 
 The solution is to tweak the list of source sizes that next/image will use when it creates the srcset and to do that we need to edit the Next.js configuration file of our project
 
-By default Next.js will use the following values for srcsets: 640, 750, 828, 1080, 1200, 1920, 2048, 3840
+By default Next.js will use the following [deviceSizes](https://nextjs.org/docs/app/api-reference/components/image#devicesizes) values for srcsets: 640, 750, 828, 1080, 1200, 1920, 2048, 3840
 
 There are two values in the list that are very close to each other, 1920 and 2048, that 2048 one is just a bit too small for our need but also very close to 1920, so it seems like a good idea to replace that value with the one we need which is 2112
 
@@ -4569,39 +4581,53 @@ If we now open the browser (assuming you are on a device with a high density scr
 >  
 > In this tutorial we deploy to vercel, in preview and production the vercel service will do the image resizes (in the cloud) for us  
 >  
-> If however you use another provider you either need to find one that works like vercel or you can use a third party image optimization service like for example [Cloudinary](https://next.cloudinary.dev/), or if you search for "image hosting saas" I'm sure you will find a lot of alternatives, if you use a third party service also make sure you check out the [next/image configuration options](https://nextjs.org/docs/pages/api-reference/components/image#configuration-options) documentation to learn how to integrate that service into your next/image configuration  
+> If however you use another provider you either need to find one that works like vercel or you can use a third party image optimization service like for example [Cloudinary](https://next.cloudinary.dev/), or if you search for "image hosting saas" I'm sure you will find a lot of alternatives, if you use a third party service also make sure you check out the [next/image configuration options](https://nextjs.org/docs/app/api-reference/components/image#configuration-options) documentation to learn how to integrate that service into your next/image configuration  
 > 
 > There are also other options, like resizing the images at build time and then upload them to a CDN or a build a custom solution on a dedicated server, what you chose depends on how much time you want to spend working on a solution and what your budget is
 
 > [!MORE]  
 > [MDN "sizes attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/sizes)  
 > [MDN "srcset attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/srcset)  
+> [Next.js "next/image sizes attribute" documentation](https://nextjs.org/docs/app/api-reference/components/image#sizes)  
+> [Next.js "next/image deviceSizes" documentation](https://nextjs.org/docs/app/api-reference/components/image#devicesizes)  
 
 #### Image placeholder
 
-Next we are going to set the **placeholder** property to **blur** which tells Next.js that we want it to create a blurry placeholder for every image and display that placeholder while the image loads, by using a placeholder to fill the space the image will take when it has finished loading we indicate to the user there something will appear soon instead of having the user wonder why there is big empty spot in the page
+Next we are going to set the [placeholder](https://nextjs.org/docs/app/api-reference/components/image#placeholder) property to **blur** which tells Next.js that we want it to create a blurry placeholder for every image and display that placeholder while the image loads, by using a placeholder to fill the space the image will take when it has finished loading we indicate to the user there something will appear soon instead of having the user wonder why there is big empty spot in the page
 
 To set the **placeholder** property we are going to edit our **BaseImage** component and update the code to this:
 
-```tsx title="/components/base/Image.tsx" showLineNumbers{35} {16}
+```tsx title="/components/base/Image.tsx" showLineNumbers{33} {19}
 const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 
     const newImageProps = { ...props }
 
-    updateProps(newImageProps)
+    const imageType = extractImageType(newImageProps)
 
     return (
         <>
-            {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image
-                style={{
-                    width: '100%',
-                    height: 'auto',
-                }}
-                sizes="(max-width: 70rem) 100vw, 1056px"
-                placeholder="blur"
-                {...newImageProps}
-            />
+            {imageType === 'banner' ? (
+                <>
+                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                    <Image
+                        priority
+                        style={{
+                            width: '100%',
+                            height: 'auto',
+                        }}
+                        sizes="(max-width: 70rem) 100vw, 1056px"
+                        placeholder="blur"
+                        {...newImageProps}
+                    />
+                </>
+            ) : (
+                <>
+                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                    <Image
+                        {...newImageProps}
+                    />
+                </>
+            )}
         </>
     )
 }
@@ -4609,11 +4635,16 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 export default BaseImage
 ```
 
+Line 51 we add the placeholder attribute and set the value to blur
 
+If you want to check out the placeholder and are on local the images will probably load instantly so you won't see it, but you can emulate a throttled Network speed by opening the chrome developer tools in your browser, then open the Network tab and then click on the down arrow icon where it says "No throttling" and change it to "Slow 3G", Firefox has a similar option and for Safari you need to first go to "Settings" (the ⚙️ gear icon on the right), then open the experimental tab and then click the checkbox for Network: allow throttling, then reload the developer tools and then you can go to the Network tab and set the throttling (on the top right) to "3G"
 
+![developer tools throttling feature](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_network_throttling.png)
 
+Then reload the page and you see the placeholder being displayed before the image starts loading
 
-
+> [!MORE]  
+> [Next.js "next/image placeholder" documentation](https://nextjs.org/docs/app/api-reference/components/image#placeholder)  
 
 
 
