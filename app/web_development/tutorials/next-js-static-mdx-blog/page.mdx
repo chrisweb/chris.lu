@@ -4066,13 +4066,13 @@ import type { ImageProps } from 'next/image'
 
 const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 
-    const imageProps = { ...props }
+    const newImageProps = { ...props }
 
     return (
         <>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
             <Image
-                {...(imageProps)}
+                {...newImageProps}
             />
         </>
     )
@@ -4225,6 +4225,7 @@ This is the first optimisation that will reduce the size our images, making them
 > [Next.js "image component" reference](https://nextjs.org/docs/pages/api-reference/components/image)  
 > [web.dev "Largest Contentful Paint (LCP)" article](https://web.dev/articles/lcp)  
 > [caniuse "avif" page](https://caniuse.com/avif)  
+> [MDN "Image file type and format guide" documentation](https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types#png_portable_network_graphics)
 
 #### Image priority property and lazy loading
 
@@ -4243,7 +4244,7 @@ which is why we need a way to distinguish between images that should be high pri
 
 What we will do first, is add a function to our **BaseImage** component that will read a special information that we add at the end of our title and based on the information we will modify the image properties, like this:
 
-```tsx title="/components/base/Image.tsx" showLineNumbers {4-33} {39}
+```tsx title="/components/base/Image.tsx" showLineNumbers {4-31} {37} {41-49}
 import Image from 'next/image'
 import type { ImageProps } from 'next/image'
 
@@ -4307,15 +4308,18 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 export default BaseImage
 ```
 
-Line 4 to 33 we add a function called **updateProps** that will extract some information that we call **imageType** that we add at the end the title inside of curly braquets and then removes the braquets and their content from the title, we then use the  **imageType** to add extra props to the image, if the imageType equals **banner** then we set the **priority** prop
+Line 4 to 31 we add a **extractImageType** function that will extract the image "type" information that we put in our image titles, a type information is a keyword inside of curly braquets that lets us apply different options to groups of images, after extracting the type the function will remove the braquets and their content from the title and put what is left back into the type attribute
 
-Line 39 we use our new **updateProps** function
+Line 37 we call our new **extractImageType** function to get the image type
 
-What we did here is add a new feature that allows us to specify an **image type** for each image, for now we only check if the type is **banner** and if it is we set the **priority** property on the image, we can later extend this feature to check for other types, like for example if an image is of type **header** we could decide to set the **fill** property as well as some CSS, how you name the types and what you do based on a type is up to you
+Line 41 to 49 we check if the type equals **banner** and if it does we set the **priority** property on the image
+
+> [!NOTE]  
+> We can later extend this feature to check for other types as well, like for example if an image is of type **header** we could decide to set the **fill** property as well as some CSS [object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) property to **cover**, what keywords you chose for the types and what you do based on a type is up to you
 
 Now all we need to do is update the title of our markdown image element and use our new feature, like so:
 
-```md title="/app/tutorial_examples/mdx-components_playground/page.mdx" showLineNumbers {16} /{ banner }/#special
+```md title="/app/tutorial_examples/mdx-components_playground/page.mdx" showLineNumbers /{ banner }/#special
 <article>
 
 * foo
@@ -4335,9 +4339,9 @@ Now all we need to do is update the title of our markdown image element and use 
 
 ```
 
-We added the `{ banner }`#special information to our image title to tell our **BaseImage** component that this image needs the **priority** property
+Line 14 we added the `{ banner }`#special keyword (inside curly braquets) to our image, so that our **BaseImage** component knows that it should add the **priority** property
 
-If you now go back into the browser and hover over the image you should see the title appear but with the `{ banner }`#special information, if you open the developer tools you should see in the console tab that the warning is gone and if you open the elements tab (or right click on the image and then select inspect) you should see that image now has an the attribute **fetchpriority** set to **high**
+If you now go back into the browser and hover over the image you should see the title appears but without the `{ banner }`#special information, if you open the developer tools you should see in the console tab that the warning is gone and if you open the elements tab (or right click on the image and then select inspect) you should see that image now has an the attribute **fetchpriority** set to **high** and the **loading** attribute that was set to **lazy** got removed
 
 This is the second LCP optimisation, it will make sure that images that are above the fold get loaded quickly, which should ensure that the main content of our web page finishes loading as early as possible 
 
@@ -4352,23 +4356,35 @@ Make sure the development server is running and then check out the image in our 
 
 For that reason we add going to use the [style attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/style) and set the width for our image(s) to 100%, like so:
 
-```tsx title="/components/base/Image.tsx" showLineNumbers{35} {11-14}
+```tsx title="/components/base/Image.tsx" showLineNumbers{33} {14-17}
 const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 
     const newImageProps = { ...props }
 
-    updateProps(newImageProps)
+    const imageType = extractImageType(newImageProps)
 
     return (
         <>
-            {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image
-                style={{
-                    width: '100%',
-                    height: 'auto',
-                }}
-                {...newImageProps}
-            />
+            {imageType === 'banner' ? (
+                <>
+                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                    <Image
+                        priority
+                        style={{
+                            width: '100%',
+                            height: 'auto',
+                        }}
+                        {...newImageProps}
+                    />
+                </>
+            ) : (
+                <>
+                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                    <Image
+                        {...newImageProps}
+                    />
+                </>
+            )}
         </>
     )
 }
@@ -4376,7 +4392,7 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 export default BaseImage
 ```
 
-Line 11 to 14 we set the width to 100% so that the image width matches the width of our container and we set the [height to auto](https://developer.mozilla.org/en-US/docs/Web/CSS/height#auto) to keep the original ratio of the image, hence the browser will decide what the height should be based on the images width
+Line 46 to 49 we set the width to 100% so that the image width matches the width of our container and we set the [height to auto](https://developer.mozilla.org/en-US/docs/Web/CSS/height#auto) to keep the original ratio of the image, hence the browser will decide what the height should be based on the images width
 
 Now go back to the playground in the browser and now the rendered image should be smaller
 
@@ -4390,10 +4406,7 @@ There are two important informations in here, the first one is the **Rendered si
 
 In the next chapter will apply a third LCP optimisation to our images to ensure we are NOT loading images that are too big, which would harm the loading speed of our page
 
-> [!MORE]  
-> [MDN "srcset attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/srcset)  
-
-#### Image sizes attribute
+#### Image sizes and srcset attributes
 
 As we saw in the previous chapter, we told the browser to make the displayed size of our image smaller but we are still loading an image that is way bigger than what we need, so now the goal is to fetch an image that is as big as what we need or a bit bigger,however not every screen has the same size, which means we will have to get different versions of our image depending on how big the users screen is, for example bigger versions that get displayed on desktop computers and smaller versions that get used for mobile devices
 
@@ -4401,7 +4414,7 @@ But wait there is more, today our users don't just have screens of different siz
 
 To ensure we don't use images that are too big (which would waste bandwidth and result in a low LCP score) or images that are too small (which would get scaled up by the browser and end up being blurry) we are going to use the [sizes attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/sizes) and set some rules to help the browser chose the image with the most appropriate dimensions:
 
-```tsx title="/components/base/Image.tsx" showLineNumbers{35} {15}
+```tsx title="/components/base/Image.tsx" showLineNumbers{33} {18}
 const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 
     const newImageProps = { ...props }
@@ -4426,9 +4439,9 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 export default BaseImage
 ```
 
-Line 15 we add the `sizes` attribute
+Line 50 we add the `sizes` attribute and added the `(max-width: 70rem) 100vw, 1056px` media query as value
 
-For the sizes we have set as value `(max-width: 70rem) 100vw, 1056px`, the meaning of this string is that we tell the browser that for a maximum width of 70rem it should chose an image to display that is equal or bigger than 100vw (100vw means 100% of the view width) and for any other screen size above 70rem the browser should always take an image that is 1056 css pixels wide
+Our sizes attribute will tell the browser that for a maximum viewport width of 70rem it should chose an image to display that is equal or bigger than 100vw (100vw means 100% of the view width) and for any other viewport size above 70rem the browser should always take an image that is 1056 CSS pixels wide
 
 You might wonder why 1056, well because in our specific use case we have defined in our global.css that the maximum width for the `main` element to 70rem, to convert REMs to pixels you need to know the root font size, in our case it is 16 pixel (the default browser font size), which means the max-width of the `main` element is 70 x 16 = 1120 pixels, in `main` element we have an `article` element which has a padding left and right of 2rem (so 2 x 16 = 32 pixels), this means we need to substract that padding from the `main` element width to get the maximum width an image can have, so 1120 - (2 x 32) = 1056 pixel
 
@@ -4442,15 +4455,13 @@ and on a screen with a **device pixel ratio** of **2** the URL will instead be t
 
 `image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&w=3840&q=75`
 
-The **w** parameter represents the **width** the image should have, the browser automatically fetches an image suitable for the **device pixel ratio** of the screen, as we want an image that is 1056 pixel wide the browser loads an image with **w** set to 1080 pixel for screens with a **device pixel ratio** of **1**, but loads an image where **w** is set to 3840 pixel when the **device pixel ratio** is **2**
+As we can see, depending on the **device pixel ratio** the browser will fetch a different source, for a **device pixel ratio** of **1** the URL has a **w** parameter with the value **1080**, but when the **device pixel ratio** is **2** the **w** parameter has a value set to **3840**
 
-This brings up two questions, how does the browser decide what value to use for the **w** parameter when requesting images and secondly why are the sizes the browser choses not equal to the size needed?
+This brings up two questions, how does the browser decide what value to use for the **w** parameter when requesting images and secondly why are the sizes the browser choses not equal to the size at which we want to display the image?
 
-The answer to both questions is because of the [srcset attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/srcset) attribute
+The answer to both questions is because of the [srcset attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/srcset) attribute, we did not add that attribute manually but we did add the sizes attribute and when use the `sizes` attribute next/image will automatically add an `srcset` attribute to the images
 
-When we set the `sizes` attribute next/image will automatically add an `srcset` attribute to the images
-
-We now go back into the browser and right click on the image, then select **Inspect** and if we look at the image elment we see something like this (I formatted mine to make it a bit easier to read):
+If we now go back into the browser and right click on the image, then select **Inspect** and if we look at the image elment we see something like this (I formatted mine to make it a bit easier to read):
 
 ```html
 <img
@@ -4467,31 +4478,31 @@ We now go back into the browser and right click on the image, then select **Insp
     src="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=3840&amp;q=75">
 ```
 
-We can see the image element has our **style** attribute we added earlier, as well as the **sizes** attribute we added just now, but below there is also the **srcset** attribute that next/image added
+We can see the image element has our **style** attribute we added earlier, as well as the **sizes** attribute we added just now, but below there is now also the **srcset** attribute that next/image added automatically
 
-The value of the **srcset** contains a series of image **URLs** followed by a **number** that has the letter **w** appended, for example the first entry `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=640&amp;q=75 640w` in that list of image URLs and something called a **condition descriptor** tells the browser that if it needs an image with a width of 640 pixel (640w) then it should take that URL
+The value of the **srcset** contains a series of image **URLs** followed by a **number** and that number has the letter **w** appended, for example the first entry `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=640&amp;q=75 640w` in the list, is a string which contains the image source URL, then a space and then something called a **condition descriptor**, in this case the condition descriptor that tells the browser that if it needs an image with a width of 640 pixel (640w) then it should take the image source URL that preceeds it
 
 If we now put everything together here is what the browser does for a screen with a regular density:
 
-* first the browser determines what CSS **image width** we want, it knows that the **style** attribute has set the image width to 100% of the container which without the padding is 1056 pixel wide
-* the browser also knows that our **device pixel ratio** is **1**
-* so the browser does the math: image width x pixel ratio = width (1056 x 1 = 1056), so it knows it will need an image that is at least 1056 pixel wide
-* next the browser looks at what images we offer to load by looking at the **srcset** value, it attempts to find an URL for an image width that is equal or bigger (but never smaller) than the 1056 pixel image it needs and finds an entry with a **condition descriptor** that is **1080w**, so it will use the image URL `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=1080&amp;q=75`
+* first the browser determines at what CSS **image width** we want to display the image, it knows that the **style** attribute has set the image width to 100% of the container, the container without the padding is 1056 pixels wide, so the first information is that it will need an image that is **1056 pixels wide**
+* the browser also knows that our **device pixel ratio** is **1**, which is the second inforation the browser needs to determine which source to chose
+* so now the browser does the math, image CSS width x device pixel ratio = image source width, so 1056 x 1 = 1056 pixels, at this point it now knows it will need an image source file that is at least 1056 pixels wide
+* next the browser looks at what image souces we offer by looking at the **srcset** sources list, it attempts to find an URL for an image width that is equal or bigger than the 1056 pixels image it needs and finds an entry with a **condition descriptor** that is **1080w**, so it will use the image URL `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=1080&amp;q=75`
 
-For a screen with a higher densitsy the steps are the same but the result is not:
+For a screen with a higher density the steps are the same but the result is not, this is because this time the **device pixel ratio** is **2**, so it does the math again and finds out it needs an image source that is 1056 x **2** = 1056 pixels wide, so it looks at the srcset again and the image source URL that is equal or bigger than 1056 pixels is `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=3840&amp;q=75`, which is the URL for the source with a width of 3840 pixels
 
-* first the browser determines what CSS **image width** we want and it is still 1056 pixels
-* however this time the browser notices that the **device pixel ratio** is **2**
-* so the browser does the math again: image width x pixel ratio = width (1056 x 2 = 2112), so it knows it will need an image that is at least 2112 pixel wide
-* next the browser looks at what images we offer to load by looking at the **srcset** value and finds an entry with a **condition descriptor** that is **3840w**, so it will use the image URL `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=3840&amp;q=75`
+> [!NOTE]  
+> The browser will always try to find a source that is equal or bigger than what is needed, there is one exception though, if there is no source big enough in the list then it takes the biggest it can find even if it is smaller than what it needs
+> 
+> If the browser finds an image that is a little bit smaller and also another source that is substantially bigger then it will take the bigger one, this is because if the browser scales the bigger image down then there is no quality loss even though it is quite a waste of bandwidth and results in longer loading times, this is because if it would take the smaller image that is almost the size it needs it would have to scale the image up and this would result in a blurry image
 
-There is one last thing we want to improve, we saw that for screens with a 2x device pixel ratio the browser will chose the URL that will fetch a 3840 pixel wide image, the problem here is that this 3840 pixel wide image will be almost twice as large as the 2112 pixel wide image that we need, the browser can NOT take a smaller image because the second biggest version we offer is 2048 pixel and this is lower than the 2112 pixel wide image it needs to display
+Now that we know how sizes and srcset works, there is one last thing we want to improve, we saw that for screens with a 2x device pixel ratio the browser will chose the source URL that will fetch a 3840 pixels wide image, the problem here is that this 3840 pixels wide image will be almost twice as large as the 2112 pixels wide image that we need, the browser can NOT take a smaller image because the second biggest version we offer is 2048 pixels and that is slightly lower than the 2112 pixels wide image we need
 
-The solution is to tweak the list of sizes that next/image will use when it creates the srcset and to do so we need to edit the Next.js configuration file of our project
+The solution is to tweak the list of source sizes that next/image will use when it creates the srcset and to do that we need to edit the Next.js configuration file of our project
 
 By default Next.js will use the following values for srcsets: 640, 750, 828, 1080, 1200, 1920, 2048, 3840
 
-There are two values in the list that are very close to each other, 1920 and 2048, that 2048 one is just a bit too small for our need so lets replace that value with the one we need which is 2112
+There are two values in the list that are very close to each other, 1920 and 2048, that 2048 one is just a bit too small for our need but also very close to 1920, so it seems like a good idea to replace that value with the one we need which is 2112
 
 We open our `next.config.mjs` and change it to this:
 
@@ -4551,16 +4562,16 @@ const nextConfig = (phase) => {
 
 Line 36 we add the **deviceSizes** option and set the value to `[384, 640, 750, 828, 1080, 1200, 1920, 2112, 3840]`
 
-If we now open the browser and look at the `img` element we will see that srcset now has an entry for 2112 pixel wide images and if we open the developer tools and look at the image URL in the Network tab we can see that the browser has fetched the image using the URL for a 2112 pixel wide image
+If we now open the browser (assuming you are on a device with a high density screen) and look at the `img` element we will see that srcset now has an entry for 2112 pixels wide images and if we open the developer tools and look at the image URL in the Network tab we can see that the browser has fetched the image using the source URL for a 2112 pixels wide image
 
 > [!NOTE]  
-> On local the images will get automatically resized and cached by Next.js which uses a Node.js tool called [sharp](https://www.npmjs.com/package/sharp)  
+> On local (in development mode) the images will get automatically resized and cached by Next.js which uses a Node.js tool called [sharp](https://www.npmjs.com/package/sharp)  
 >  
-> In this tutorial we deploy to vercel and vercel will do the image resizes for us  
+> In this tutorial we deploy to vercel, in preview and production the vercel service will do the image resizes (in the cloud) for us  
 >  
-> If however you use another provider you either need to find one that works like vercel or you can use a third party image optimization service like for example [Cloudinary](https://next.cloudinary.dev/) but if you search for "image hosting saas" I'm sure you will find a lot of alternatives, if you use a third party service also make sure you check out the [next/image configuration options](https://nextjs.org/docs/pages/api-reference/components/image#configuration-options) documentation  
+> If however you use another provider you either need to find one that works like vercel or you can use a third party image optimization service like for example [Cloudinary](https://next.cloudinary.dev/), or if you search for "image hosting saas" I'm sure you will find a lot of alternatives, if you use a third party service also make sure you check out the [next/image configuration options](https://nextjs.org/docs/pages/api-reference/components/image#configuration-options) documentation to learn how to integrate that service into your next/image configuration  
 > 
-> Of course there are also other options like resizing the images at build time and then upload them to a CDN or a build a custom solution on a dedicated server, it all depends how much time you want to spend working on a solution and what your budget is
+> There are also other options, like resizing the images at build time and then upload them to a CDN or a build a custom solution on a dedicated server, what you chose depends on how much time you want to spend working on a solution and what your budget is
 
 > [!MORE]  
 > [MDN "sizes attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/sizes)  
