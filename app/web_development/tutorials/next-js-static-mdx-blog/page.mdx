@@ -4237,7 +4237,9 @@ This is a warning from **next/image** telling us that it has detected that our i
 > [!NOTE]  
 > By default next/image will add the [loading](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#loading) attribute to every image and set the value to **lazy**, this is great for images that are down the page because they will only get [lazy loaded](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading) when the user scrolls down, however for images that are above the fold it is better to add the **priority** property, which tells next/image that this image should not get loaded but instead should have the attribute [fetchpriority](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/fetchPriority) set to **high**
 
-But wait if we now add the **priority** property to next/image then our **BaseImage** component will set the property to all images no matter if they are on top of the page or further down, which is why we need a way to distinguish between images that should be high priority and images that should be low priority
+So by default next/image will add loading ut if we now add the **priority** property to next/image then our **BaseImage** component will set the property to all images no matter if they are on top of the page or further down, 
+
+which is why we need a way to distinguish between images that should be high priority and images that should be low priority
 
 What we will do first, is add a function to our **BaseImage** component that will read a special information that we add at the end of our title and based on the information we will modify the image properties, like this:
 
@@ -4245,11 +4247,11 @@ What we will do first, is add a function to our **BaseImage** component that wil
 import Image from 'next/image'
 import type { ImageProps } from 'next/image'
 
-function updateProps(imageProps: ImageProps) {
+function extractImageType(imageProps: ImageProps) {
+
+    let imageType = ''
 
     if (imageProps !== null) {
-
-        let imageType = ''
 
         const imageTypeMatch = imageProps.title?.match(/\{(.*?)\}/)
 
@@ -4268,11 +4270,9 @@ function updateProps(imageProps: ImageProps) {
             }
         }
 
-        if (imageType === 'banner') {
-            imageProps.priority = true
-        }
-
     }
+
+    return imageType
 
 }
 
@@ -4280,14 +4280,26 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 
     const newImageProps = { ...props }
 
-    updateProps(newImageProps)
+    const imageType = extractImageType(newImageProps)
 
     return (
         <>
-            {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image
-                {...newImageProps}
-            />
+            {imageType === 'banner' ? (
+                <>
+                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                    <Image
+                        priority
+                        {...newImageProps}
+                    />
+                </>
+            ) : (
+                <>
+                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                    <Image
+                        {...newImageProps}
+                    />
+                </>
+            )}
         </>
     )
 }

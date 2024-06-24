@@ -1,6 +1,6 @@
 import BaseLink from '@/components/base/Link'
 import BaseImage from '@/components/base/image/Dispatch'
-import notFoundImage from '/public/assets/images/404.webp'
+import notFoundImage from '/public/assets/images/app/404.webp'
 
 export default function NotFound() {
     return (

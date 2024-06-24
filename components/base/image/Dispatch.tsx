@@ -89,6 +89,20 @@ const ImageDispatch: React.FC<ImageProps> = (props): JSX.Element => {
                         {...newImageProps}
                     />
                 </>
+            ) : (imageType === 'animated') ? (
+                <>
+                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                    <Image
+                        style={{
+                            width: '480px',
+                            maxWidth: '100%',
+                            height: 'auto',
+                        }}
+                        unoptimized
+                        placeholder="blur"
+                        {...(newImageProps)}
+                    />
+                </>
             ) : (
                 <>
                     {/* eslint-disable-next-line jsx-a11y/alt-text */}
