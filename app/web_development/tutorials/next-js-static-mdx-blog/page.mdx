@@ -65,7 +65,7 @@ To be able to create a Javascript backend and run our Javascript code locally we
 React and Next.js have evolved a lot lately, the most notable additions are **server components** and **(server) actions**. With those new features came a lot of changes for how we devs build Next.js apps / websites, which is why I did a seperate blog post ["The road to React 19 and Next.js 15"](/web_development/posts/road-to-react-19-next-js-15) where I list what changed during the last +-3 years in the React and Next.js ecosystem. If you did not build a project with Next.js 13/14/15 and React 18/19 yet I recommend you check it out, but if you are already an expert feel free to skip it 😉
 
 > [!MORE]  
-> [chris.lu "The road to React 19 and Next.js 14" post](/web_development/posts/road-to-react-19-next-js-15)
+> [chris.lu "The road to React 19 and Next.js 15" post](/web_development/posts/road-to-react-19-next-js-15)
 
 ## Basic project setup
 
@@ -1445,15 +1445,16 @@ To add MDX 3 support to the Next.js blog I will use [@next/mdx](https://www.npmj
 First we will add the `@next/mdx` package and the MDX types to our Next.js project, the **@next/mdx** package will add support for MDX files to our Next.js project, to install the package execute the following command in your VSCode terminal:
 
 ```shell
-npm i @next/mdx @types/mdx --save-exact
+npm i @next/mdx @types/mdx @mdx-js/loader --save-exact
 ```
 
 > [!MORE]  
-> ["@next/mdx package" README](https://github.com/vercel/next.js/tree/canary/packages/next-mdx)  
+> [Next.js "@next/mdx package" README](https://github.com/vercel/next.js/tree/canary/packages/next-mdx)  
+> [MDX.com "@mdx-js/loader package" README](https://www.npmjs.com/package/@mdx-js/loader)  
 
 ### MDX support setup
 
-First we need to create a new file called `mdx-components.tsx` in the root of our project and add the following content:
+First we need to create a new file called `mdx-components.tsx` in the root of our project (or the `./src` folder if you have configured your project to use the `./src` folder) and add the following content:
 
 ```tsx title="mdx-components.tsx" showLineNumbers
 import type { MDXComponents } from 'mdx/types'
@@ -1475,6 +1476,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
 > [!WARN]  
 > Adding the file is very important, I see a lot of posts of developers struggling with the first steps of getting MDX support to work in their Next.js project and 90% of the cases are because they have not added the `mdx-components.tsx` file, without `mdx-components.tsx` in Next.js 13 you will get an error that says **Module not found: Can't resolve 'next-mdx-import-source-file'** and in Next.js 14 you will get a bunch of **node_modules/@mdx-js/react/lib** related errors in your terminal, so it is mandatory to have that file at the root of the project, even if you don't use it (yet)
+> 
+> Also important if you chose to put all your files into an `./src` folder then you need to put the `mdx-components.tsx` into the `./src` folder and not the root of the project
 
 Now we need to update the content our `next.config.mjs` file (in the root of our project), to this:
 
@@ -1524,7 +1527,7 @@ Line 34 to 35 we tell Next.js what exntensions are valid page extensions, the pa
 > [!MORE]  
 > [Next.js "Markdown and MDX" documentation](https://nextjs.org/docs/app/building-your-application/configuring/mdx)  
 
-#### (optional) adding support for more markdown extensions
+#### (optional) adding support for more markdown file extensions
 
 The configuration we just did adds support for MDX in pages that have the extension `*.mdx`, if you want to also add support for pages with the `*.md` extension, then add the extension in two places like so:
 
@@ -1576,6 +1579,36 @@ Line 35 we add `md` to the `pageExtensions` list
 If you use an other extension for your markdown pages, like *.markdown, *.mdown, *.mkd, ... then replace the **md** with the extension you prefer using
 
 If you don't add your markdown extension to the **pageExtensions** then the Next.js app router will not be able to find your file and it will show a 404, if you don't also add the extension to the **createMDX options** then @next/mdx won't be able to parse the content of your file
+
+### No Rust compiler for MDX (yet)
+
+The [Next.js MDX documentation](https://nextjs.org/docs/app/building-your-application/configuring/mdx#using-the-rust-based-mdx-compiler-experimental) tells us to enable the experimental [Rust compiler for MDX](https://nextjs.org/docs/app/api-reference/next-config-js/mdxRs):
+
+> Next.js supports a new MDX compiler written in Rust. This compiler is still experimental and is not recommended for production use. To use the new compiler, you need to configure next.config.js when you pass it to withMDX
+
+```js
+experimental: {
+    mdxRs: true,
+},
+```
+
+Unfortunately the documentation does not clearly state that **plugins do NOT work if you turn on mdxRs** (yet), then they fixed the docs [Docs: Note that need to turn off mdxRs when using MDX plugins](https://github.com/vercel/next.js/issues/47098) but shortly after they removed the warning again 😭
+
+Because later in this tutorial we will add several plugins, what we will do for now is turn off the experimental **mdxRs** by setting the configuration option to **false**, but also add a comment as to why, so that in the future as soon as support for plugins gets shipped we just need to turn it on:
+
+```js
+experimental: {
+    // use experimental rust compiler for MDX
+    // as of now (07.10.2023) there is no support for rehype & remark plugins
+    // this is why it is currently disabled
+    mdxRs: false,
+},
+```
+
+Of course if you don't plan on using any plugins like [remark-gfm](https://github.com/remarkjs/remark-gfm) or [rehype-pretty-code](https://github.com/rehype-pretty/rehype-pretty-code), then you can turn mdxRs on by setting the option to true
+
+> [!MORE]  
+> [Next.js "mdxRs configuration option" documentation](https://nextjs.org/docs/app/api-reference/next-config-js/mdxRs))  
 
 ### MDX page type
 
@@ -4396,13 +4429,11 @@ Line 46 to 49 we set the width to 100% so that the image width matches the width
 
 Now go back to the playground in the browser and now the rendered image should be smaller
 
-Next right click on the image and chose **Inspect** to open the developer tools, you will notice that next/image has added used the [srcset attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/srcset) and set a value that does NOT contain only one source but 2, behind the URL of the image you can see the pixel density descriptor 1x or 2x where 1x is for regular screens and 2x is for high density screens
-
-Next hover over one of the image URLs in the srcset and you the developer tools will show you a modal that looks like this:
+Next right click on the image and chose **Inspect** to open the developer tools Elements tab and then hover over one of the image URLs in the srcset of the image element, a modal that looks like this will pop up:
 
 ![chrome dev tools elements tab showing the image modal box](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_inspect_image_modal.png)
 
-There are two important informations in here, the first one is the **Rendered size** which is 1056 pixel (if you have a high density screen this value will be higher), this corresponds to the size the image gets displayed on screen and the second important information is the **Intrinsic size** which is the original size of the image, as you can see in this example the rendered size is NOT the same as the original size, this shows us that we are fetching an image that is not only two times wider but also two times taller than what we need, this is obviously going to lead to a bad LCP score because the heaviest item on the page is our image and it is 4 times heavier than it should be
+There are two important informations in here, the first one is the **Rendered size** which is 1056 pixel (if you have a high density screen this value will be higher), this corresponds to the size the image gets displayed on screen and the second important information is the **Intrinsic size** which is the original size of the image, as you can see in this example the rendered size is NOT the same as the original size, this difference in sizes shows us that we are fetching an image that is not only two times wider but also two times taller than what we need, this is obviously going to lead to a bad LCP score because the heaviest item on the page is our image and it is 4 times heavier than it should be
 
 In the next chapter will apply a third LCP optimisation to our images to ensure we are NOT loading images that are too big, which would harm the loading speed of our page
 
@@ -4469,11 +4500,22 @@ and on a screen with a **device pixel ratio** of **2** the URL will instead be t
 
 As we can see, depending on the **device pixel ratio** the browser will fetch a different source, for a **device pixel ratio** of **1** the URL has a **w** parameter with the value **1080**, but when the **device pixel ratio** is **2** the **w** parameter has a value set to **3840**
 
-This brings up two questions, how does the browser decide what value to use for the **w** parameter when requesting images and secondly why are the sizes the browser choses not equal to the size at which we want to display the image?
+> [!NOTE]  
+> One of the great things about next/image is that it will handle the resizing / caching of images for us
+> 
+> On local (in development mode) the images will get automatically resized by Next.js using a Node.js tool called [sharp](https://www.npmjs.com/package/sharp)  
+>  
+> In this tutorial we deploy to vercel, in preview and production the vercel service will do the image resizes (in the cloud) for us  
+>  
+> If however you use another provider you either need to find one that works like vercel or you can use a third party image optimization service like for example [Cloudinary](https://next.cloudinary.dev/), or if you search for "image hosting saas" I'm sure you will find a lot of alternatives, if you use a third party service also make sure you check out the [next/image configuration options](https://nextjs.org/docs/app/api-reference/components/image#configuration-options) documentation to learn how to integrate that service into your next/image configuration  
+> 
+> There are also other options, like resizing the images at build time and then upload them to a CDN or a build a custom solution on a dedicated server, what you chose depends on how much time you want to spend working on a solution and what your budget is
 
-The answer to both questions is because of the [srcset attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/srcset) attribute, we did not add that attribute manually but we did add the sizes attribute and when use the `sizes` attribute next/image will automatically add an `srcset` attribute to the images
+As we just saw the browser will use different URLs to load images, but where do these URLs comes from and how does the browser decide what value to use for the **w** parameter that specifies the width of the image, next/image will use that information to resize the image, height does not get specified as next/image will keep the original ratio and hence does only need to know the width
 
-If we now go back into the browser and right click on the image, then select **Inspect** and if we look at the image elment we see something like this (I formatted mine to make it a bit easier to read):
+The answer to both questions is because of the [srcset attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/srcset) attribute of the image, which by the way we did NOT have to add manually ourself, because we did add the sizes attribute next/image has creaed that `srcset` attribute for us, both sizes and srcset work together
+
+To better understand the **srcset** attribute, we now go back into the browser and right click on the image, then select **Inspect** and if we look at the image elment we see something like this (I formatted mine to make it a bit easier to read):
 
 ```html
 <img
@@ -4576,14 +4618,10 @@ Line 36 we add the **deviceSizes** option and set the value to `[384, 640, 750, 
 
 If we now open the browser (assuming you are on a device with a high density screen) and look at the `img` element we will see that srcset now has an entry for 2112 pixels wide images and if we open the developer tools and look at the image URL in the Network tab we can see that the browser has fetched the image using the source URL for a 2112 pixels wide image
 
-> [!NOTE]  
-> On local (in development mode) the images will get automatically resized and cached by Next.js which uses a Node.js tool called [sharp](https://www.npmjs.com/package/sharp)  
->  
-> In this tutorial we deploy to vercel, in preview and production the vercel service will do the image resizes (in the cloud) for us  
->  
-> If however you use another provider you either need to find one that works like vercel or you can use a third party image optimization service like for example [Cloudinary](https://next.cloudinary.dev/), or if you search for "image hosting saas" I'm sure you will find a lot of alternatives, if you use a third party service also make sure you check out the [next/image configuration options](https://nextjs.org/docs/app/api-reference/components/image#configuration-options) documentation to learn how to integrate that service into your next/image configuration  
-> 
-> There are also other options, like resizing the images at build time and then upload them to a CDN or a build a custom solution on a dedicated server, what you chose depends on how much time you want to spend working on a solution and what your budget is
+> [!TIP]  
+> If you resize your browser the viewport size will change, if you start with a small browser and make it bigger you will see in the Network tab that the browser loads bigger images, however if you make the browser window smaller the browser will keep the current image, this is because the current image is big enough and can be downscaled, so no need to load a new image 
+
+Sizes and srcset is a powerul combination allowing us to have truly responsive images and helps prevent loading images that are excessive too large, however this feature is also not easy understand, it took me quite a while to make sure I understood everything and was able to write this chapter, if you have a question feel free to ask on the <FontAwesomeIcon icon={faComments} size="1x" color='rgb(255, 0, 170)' /> [discussion](https://github.com/chrisweb/chris.lu/discussions) page and if you find a bug or know about an improvement please report it using the <FontAwesomeIcon icon={faBug} size="1x" color='rgb(255, 0, 170)' /> [issues](https://github.com/chrisweb/chris.lu/issues)
 
 > [!MORE]  
 > [MDN "sizes attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/sizes)  
