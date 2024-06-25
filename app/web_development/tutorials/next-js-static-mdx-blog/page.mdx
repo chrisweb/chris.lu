@@ -1445,7 +1445,7 @@ To add MDX 3 support to the Next.js blog I will use [@next/mdx](https://www.npmj
 First we will add the `@next/mdx` package and the MDX types to our Next.js project, the **@next/mdx** package will add support for MDX files to our Next.js project, to install the package execute the following command in your VSCode terminal:
 
 ```shell
-npm i @next/mdx @types/mdx @mdx-js/loader --save-exact
+npm i @next/mdx @types/mdx --save-exact
 ```
 
 > [!MORE]  
@@ -1594,7 +1594,17 @@ experimental: {
 
 Unfortunately the documentation does not clearly state that **plugins do NOT work if you turn on mdxRs** (yet), then they fixed the docs [Docs: Note that need to turn off mdxRs when using MDX plugins](https://github.com/vercel/next.js/issues/47098) but shortly after they removed the warning again 😭
 
-Because later in this tutorial we will add several plugins, what we will do for now is turn off the experimental **mdxRs** by setting the configuration option to **false**, but also add a comment as to why, so that in the future as soon as support for plugins gets shipped we just need to turn it on:
+When Next.js mentions the Rust compiler then they are talking about [SWC](https://swc.rs/), mdxRs the Rust compiler for MDX is the [mdxjs-rs](https://github.com/wooorm/mdxjs-rs) package, it uses the [markdown-rs](https://github.com/wooorm/markdown-rs) package to parse markdown and **SWC** for everything that is javascript
+
+It is the **mdxjs-rs** [README](https://github.com/wooorm/mdxjs-rs#when-should-i-use-this) that has the information that plugins are not supported yet that:
+
+> This project does not yet support plugins
+
+There is a support ticket you may want to subscribe to if you are interested in getting notifications about the progress for plugin support in markdown-rs: [Enable custom plugins #32](https://github.com/wooorm/markdown-rs/issues/32)
+
+#### disabling mdxRs and installing @mdx-js/loader instead
+
+Later in this tutorial we will add several plugins, which is why we are going to turn mdxRs off for now by setting the experimental **mdxRs** configuration option to **false**, but also add a comment as to why, so that in the future as soon as support for plugins gets shipped we just need to turn it on:
 
 ```js
 experimental: {
@@ -1605,7 +1615,17 @@ experimental: {
 },
 ```
 
-Of course if you don't plan on using any plugins like [remark-gfm](https://github.com/remarkjs/remark-gfm) or [rehype-pretty-code](https://github.com/rehype-pretty/rehype-pretty-code), then you can turn mdxRs on by setting the option to true
+> [!NOTE]  
+> Of course if you don't plan on using any plugins like [remark-gfm](https://github.com/remarkjs/remark-gfm) or [rehype-pretty-code](https://github.com/rehype-pretty/rehype-pretty-code), then you can turn mdxRs on by setting the option to true
+
+Now that we have disabled mdxRs we also need to install the MDX webpack plugin manually, using the following command:
+
+```shell
+npm i @mdx-js/loader --save-exact
+```
+
+> [!NOTE]  
+> In Next.js 13 the @mdx-js/loader webpack plugin was a dependency of @next/mdx and would get installed when you install @next/mdx, however since version 14 you need to install the plugin manually as the dependency is now marked as optional
 
 > [!MORE]  
 > [Next.js "mdxRs configuration option" documentation](https://nextjs.org/docs/app/api-reference/next-config-js/mdxRs))  
