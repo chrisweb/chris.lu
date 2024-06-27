@@ -3882,6 +3882,7 @@ import Image from 'next/image'
 <Image src="/images/playground_test.png" />
 
 </article>
+
 ```
 
 Line 1 we import the **next/image** component
@@ -4734,11 +4735,11 @@ In the previous chapter we already installed a **rehype-mdx-import-media** a Reh
 
 ### Code highlighting plugin
 
-[rehype pretty code](https://www.npmjs.com/package/rehype-pretty-code) is a rehype plugin that we will use to convert our regular markdown code blocks into highlighted code blocks, for me the best of **rehype pretty code** is that it uses shiki <https://shiki.matsu.io/> under the hood, **shiki** is really amazing at highlighting code but it also comes with an amazing feature which is that you can use your favorite VSCode theme to make your code blocks look the same as your code in VSCode
+[rehype pretty code](https://www.npmjs.com/package/rehype-pretty-code) is a rehype plugin that we will use to convert our regular markdown code blocks into highlighted code blocks, for me the best of **rehype pretty code** is that it uses [shiki](https://shiki.matsu.io/) under the hood, **shiki** is really amazing at highlighting code but it also comes with an amazing feature which is that you can use your favorite VSCode theme to make your code blocks look the same as your code in VSCode
 
 First lets open our playground `pages.mdx` we created earlier in the `/app/tutorial_examples/mdx-components_playground` folder and add a codeblock to it:
 
-```md title="/app/tutorial_examples/mdx-components_playground/page.mdx" showLineNumbers /{ banner }/#special
+````md title="/app/tutorial_examples/mdx-components_playground/page.mdx" showLineNumbers /{ banner }/#special
 <article>
 
 * foo
@@ -4763,9 +4764,13 @@ First lets open our playground `pages.mdx` we created earlier in the `/app/tutor
 
 </article>
 
-```
+````
 
-Next we start the dev server and have look at how our code block gets displayed, you will see that the markdown code block syntax got converted into an html \<pre> tag with an \<code class="language-js"> html tag inside, but there is no colorful syntax highlighting yet, this is why we will now add the *rehype pretty code* plugin
+If the dev server is not already running first start the dev server (using the `npm run dev` command) and then open the [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground) playground page URL in your browser to have a look at the result:
+
+(TODO: image here)
+
+The markdown code block syntax got converted into \<pre> HTML element and inside of that container there is a \<code class="language-js"> HTML element, but there is no colorful syntax highlighting yet, this is why we will now add the *rehype pretty code* plugin
 
 To install the **rehype pretty code** as well as the **shiki** package, we use the following command command:
 
@@ -5085,7 +5090,6 @@ I will make a short list here with the most common token (for javascript / types
 
 TODO:
 
-* check out my examples page: <http://localhost:3000/web_development/test>
 * add not about rehype pretty code token maps in rehypePrettyCodeOptions:
 
 ```js
@@ -5097,7 +5101,7 @@ tokensMap: {
 ```
 
 * make a tip box explaining that if you want to use html comments in code boxes you need to encode the html entities or the comment will not show, the browser considers it a real html comment if not encoded, so `<` needs to be encoded as `&lt;` and `>` encoded as `&gt;`, like so `&lt;!-- MY HTML COMMENT --&gt;`
-* check out what shiki transformers are <https://shiki.style/guide/transformers#transformers>, can they be useful for our blog <https://www.npmjs.com/package/@shikijs/transformers>
+* check out what [shiki transformers](https://shiki.style/guide/transformers#transformers) are, can they be useful for our blog, [npmjs "shiki transformers" package](https://www.npmjs.com/package/@shikijs/transformers)
 
 > [!TIP]  
 > You can use language aliases like js and jsx, ts and tsx and also md and mdx, but for example esm is not a supported alias, you can check out the full list of languages / aliases by looking at the [shiki languages file](https://github.com/shikijs/shiki/blob/d5b04703e6237ad660e7d9ab0e6025f10b5c2e95/packages/shiki/src/assets/langs-bundle-full.ts)
@@ -5109,6 +5113,6 @@ read more:
 ["shiki" project website](https://shiki.matsu.io/)
 ["SynthWave '84" VSCode theme github repository](https://github.com/robb0wen/synthwave-vscode)
 
-TODO: if code block titles for filenames are not supported out of the box by **rehype pretty code** then add this <https://www.npmjs.com/package/rehype-code-titles>
+TODO: if code block titles for filenames are not supported out of the box by **rehype pretty code** then add this [npmjs rehype-code-titles package](https://www.npmjs.com/package/rehype-code-titles)
 
 </article>
