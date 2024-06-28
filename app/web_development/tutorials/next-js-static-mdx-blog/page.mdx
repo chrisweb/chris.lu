@@ -4755,12 +4755,13 @@ First lets open our playground `pages.mdx` we created earlier in the `/app/tutor
 
 ![purple octocat wearing a diadem, a teal dress, orange bunny slippers and holding a gaming console pad](../../../public/images/playground_test.png 'this is the image title { banner }')
 
-    ```js
-    function helloWorld() {
-        // this is a comment
-        console.log('Hello World!')
-    }
-    ```
+```js
+function helloWorld() {
+    // this is a comment
+    let greeting = 'Hello World!'
+    console.log(greeting)
+}
+```
 
 </article>
 
@@ -4768,7 +4769,7 @@ First lets open our playground `pages.mdx` we created earlier in the `/app/tutor
 
 If the dev server is not already running first start the dev server (using the `npm run dev` command) and then open the [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground) playground page URL in your browser to have a look at the result:
 
-(TODO: image here)
+![MDX code block example with no code highlighting](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/MDX_code_block_no_code_highlighting.png)
 
 The markdown code block syntax got converted into \<pre> HTML element and inside of that container there is a \<code class="language-js"> HTML element, but there is no colorful syntax highlighting yet, this is why we will now add the *rehype pretty code* plugin
 
@@ -4778,96 +4779,132 @@ To install the **rehype pretty code** as well as the **shiki** package, we use t
 npm i rehype-pretty-code shiki --save-exact
 ```
 
-Note: now we need to get the **VSCode "SynthWave '84" theme** from their github repository, we could either download it manually and put the theme json file into a folder, but what works too is to use npm to get it for us and put it into our `node_modules` directory
+Next we edit our `next.config.mjs` file (in the root of our project) to add the plugins configuration, like so:
 
-next we run the following command to add the repository **VSCode "SynthWave '84" theme** to our package.json dependencies list:
-
-```shell
-npm i https://github.com/robb0wen/synthwave-vscode.git
-```
-
-this will add the theme to our `node_modules` directory and create the following entry in our package.json:
-
-```shell
-  "dependencies": {
-    "synthwave-vscode": "github:robb0wen/synthwave-vscode",
-  },
-```
-
-unfortunatly as of now the json file of the VSCode "SynthWave '84" theme has some errors (the errors are a few extra commas at the end of lines which make the JSON invalid), this is why we add a package called [jsonrepair](https://www.npmjs.com/package/jsonrepair) to fix the errors:
-
-```shell
-npm i jsonrepair --save-exact
-```
-
-next we edit our next.config.mjs file to add the plugin to the next/mdx configuration, like so:
-
-```js
+```js title="next.config.mjs" showLineNumbers {4} {13}
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 import createMdx from '@next/mdx'
+import rehypeMDXImportMedia from 'rehype-mdx-import-media'
 import rehypePrettyCode from 'rehype-pretty-code'
-import { readFileSync } from 'fs'
-import { jsonrepair } from 'jsonrepair'
 
-const nextConfig = (/*phase*/) => {
-
-    const themeJsonPath = new URL('./node_modules/synthwave-vscode/themes/synthwave-color-theme.json', import.meta.url)
-
-    // get the json theme
-    const themeJsonContent = readFileSync(themeJsonPath, 'utf-8')
-
-    // fix errors in the json
-    const themeJsonContentFixed = jsonrepair(themeJsonContent)
-
-    // https://rehype-pretty-code.netlify.app/
-    /** @type {import('rehype-pretty-code').Options} */
-    const rehypePrettyCodeOptions = {
-        // VSCode "SynthWave '84" theme
-        theme: JSON.parse(themeJsonContentFixed),
-        // Keep the background or use a custom background color?
-        keepBackground: true,
-        tokensMap: {
-            'function': 'entity.name.function',
-            'string': '.constant.numeric.decimal.js',
-            'key': '.meta.object-literal.key',
-        },
-        defaultLang: {
-            block: "plaintext",
-            inline: "plaintext",
-        },
-    }
+const nextConfig = (phase) => {
 
     const withMDX = createMdx({
         extension: /\.mdx?$/,
         options: {
+            // optional remark and rehype plugins
             remarkPlugins: [],
-            rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions]],
+            rehypePlugins: [rehypeMDXImportMedia],
         },
     })
 
     /** @type {import('next').NextConfig} */
-    const nextConfig = {
+    const nextConfigOptions = {
+        reactStrictMode: true,
+        poweredByHeader: false,
         experimental: {
-            // experimental support for next.js > 13 app directory
-            appDir: true,
-            // experimental use rust compiler for MDX
-            mdxRs: false,
+            // experimental typescript "statically typed links"
+            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
+            // currently false in prod until Issue #62335 is fixed
+            // https://github.com/vercel/next.js/issues/62335
+            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
         },
-        // file formats for next/image
-        images: {
-            formats: ['image/avif', 'image/webp']
+        headers: async () => {
+            return [
+                {
+                    source: '/(.*)',
+                    headers: securityHeadersConfig(phase)
+                },
+            ];
         },
-        // TODO: is this needed for app directory
-        // Configure pageExtensions to include md and mdx
-        pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+		// configure `pageExtensions` to include MDX files
+        pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx', 'md'],
+		// disable linting during builds using "next lint"
+        // we have manually added our lint script in package.json to the build command
+        eslint: {
+            ignoreDuringBuilds: true,
+        },
+		images: {
+            // file formats for next/image
+            formats: ['image/avif', 'image/webp'],
+            deviceSizes: [384, 640, 750, 828, 1080, 1200, 1920, 2112, 3840],
+        },
     }
 
-    return withMDX(nextConfig)
-    //return withBundleAnalyzer(withMDX(nextConfig))
+    return nextConfigOptions
 
 }
-
-export default nextConfig
 ```
+
+Line 4 we import our new **rehypePrettyCode** plugin
+
+Line 13 we add the plugin to the rehype plugins configuration
+
+Now have a another look at the playground page in your browser and you will notice that this already looks a lot better when using the shiki default colors for highlighting:
+
+![rehype-pretty-code code highlighting example with default colors](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/rehype-pretty-code_plugin_default_colors.png)
+
+#### Using VSCode themes for code highlighting
+
+Next we are going to configure the rehype plugin to use a VSCode theme
+
+> [!TIP]  
+> You can install any VSCode theme you like, have a look at the [VSCode marketplace](https://marketplace.visualstudio.com/vscode) and when you find one you like I recommend you first check out if the theme is listed on the [themes bundled with shiki](https://shiki.style/themes) page, shiki includes all themes from the [tm-themes package](https://www.npmjs.com/package/tm-themes) which is convinient as you don't need to install the theme yourself
+
+To add a theme that is included in **shiki** all we need to do is edit the **rehype-pretty-code** plugin configuration in our `next.config.mjs` file, like so:
+
+```js title="next.config.mjs" showLineNumbers {8-10} /[rehypePrettyCode, rehypePrettyCodeOptions]/#special
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+import createMdx from '@next/mdx'
+import rehypeMDXImportMedia from 'rehype-mdx-import-media'
+import rehypePrettyCode from 'rehype-pretty-code'
+
+const nextConfig = (phase) => {
+
+    const rehypePrettyCodeOptions = {
+        theme: 'dracula',
+    }
+
+    const withMDX = createMdx({
+        extension: /\.(md|mdx)$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [],
+            rehypePlugins: [rehypeMDXImportMedia, [rehypePrettyCode, rehypePrettyCodeOptions]],
+        },
+    })
+```
+
+Line 8 to 10 we create a **rehype-pretty-code** options object and tell shiki that we want to use the bundled [Dracula Theme for Visual Studio Code](https://draculatheme.com/visual-studio-code)
+
+Line 17 we add the options to our rehype plugins configuration
+
+Now have a another look at the playground page in your browser and you will notice that this time the code is highlighted using the colors of theme (using the same colors we have in VSCode using the Dracula Theme for Visual Studio Code):
+
+![rehype-pretty-code code highlighting example with dracula theme for VSCode colors](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/rehype-pretty-code_plugin_dracula_theme.png)
+
+
+
+
+go to their Git repository and copy the git URL, then install it using the npm install command, for example to install [One Dark Pro for Visual Studio Code](https://github.com/Binaryify/OneDark-Pro/tree/052d61e1aeab15b15396f6e958c166950670a1d1/themes) you would use the following command:
+
+`npm i https://github.com/Binaryify/OneDark-Pro.git`
+
+The repository gets added to your node_modules like any other package and the package.json then contains an entry like this:
+
+```json title="package.json"
+   "dependencies": {
+       "synthwave-vscode": "github:robb0wen/synthwave-vscode",
+   },
+```
+
+However not all VSCode themes can be used out the box with shiki, some for example like [Dracula for Visual Studio Code](https://github.com/dracula/visual-studio-code/tree/e475d548db27773fa0004b252c0a4701f187fb7e/src) use yaml files to configure the VSCode colors, in this cas you need to include a yaml loader to your setup
+
+
+
+
+
+
 
 Note: all "visitor" hooks you see in the **rehypePrettyCodeOptions** have been added so that we have classNames when one of those features is present, for example if you highlight a row the hook will ensure that the line has a class named **highlightedLine** which will help us to style the features in the next step
 
