@@ -4883,24 +4883,75 @@ Now have a another look at the playground page in your browser and you will noti
 
 ![rehype-pretty-code code highlighting example with dracula theme for VSCode colors](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/rehype-pretty-code_plugin_dracula_theme.png)
 
+#### Using VSCode themes by getting the git repository
 
+If there is a theme you wish to use and it is hosted on GitHub (and not among the ones bundled in shiki) then you can do that too
 
+First go to the git repository of the theme and copy the **https** URL, then install it using the npm install command but instead of using a package name you use the repository URL, for example to install [One Dark Pro (Atom's iconic One Dark theme for Visual Studio Code)](https://github.com/Binaryify/OneDark-Pro/tree/052d61e1aeab15b15396f6e958c166950670a1d1/themes) you would use the following command:
 
-go to their Git repository and copy the git URL, then install it using the npm install command, for example to install [One Dark Pro for Visual Studio Code](https://github.com/Binaryify/OneDark-Pro/tree/052d61e1aeab15b15396f6e958c166950670a1d1/themes) you would use the following command:
-
-`npm i https://github.com/Binaryify/OneDark-Pro.git`
+```shell
+npm i https://github.com/Binaryify/OneDark-Pro.git
+```
 
 The repository gets added to your node_modules like any other package and the package.json then contains an entry like this:
 
 ```json title="package.json"
-   "dependencies": {
-       "synthwave-vscode": "github:robb0wen/synthwave-vscode",
-   },
+    "dependencies": {
+        "material-theme": "github:Binaryify/OneDark-Pro",
+    },
 ```
 
-However not all VSCode themes can be used out the box with shiki, some for example like [Dracula for Visual Studio Code](https://github.com/dracula/visual-studio-code/tree/e475d548db27773fa0004b252c0a4701f187fb7e/src) use yaml files to configure the VSCode colors, in this cas you need to include a yaml loader to your setup
+> [!NOTE]  
+> At first I was surprised to see the name **material-theme** in my package.json, but this is normal, it is the name the One Dark theme has in its package.json, so it is normal
 
+Then you go into your Next.js configuration file and change the code to this:
 
+```js title="next.config.mjs" showLineNumbers {5} {9} {10} /[rehypePrettyCode, rehypePrettyCodeOptions]/#special
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+import createMdx from '@next/mdx'
+import rehypeMDXImportMedia from 'rehype-mdx-import-media'
+import rehypePrettyCode from 'rehype-pretty-code'
+import { readFileSync } from 'fs'
+
+const nextConfig = (phase) => {
+
+    const themeJsonPath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
+    const themeJsonContent = readFileSync(themeJsonPath, 'utf-8')
+
+    const rehypePrettyCodeOptions = {
+        theme: JSON.parse(themeJsonContent),
+    }
+
+    const withMDX = createMdx({
+        extension: /\.(md|mdx)$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [],
+            rehypePlugins: [rehypeMDXImportMedia, [rehypePrettyCode, rehypePrettyCodeOptions]],
+        },
+    })
+```
+
+Line 5 import **readFileSync** function from the Node.js [file system module (fs)](https://nodejs.org/api/fs.html)
+
+Line 9 we create a URL using the path to the location of our theme in the node_modules folder
+
+Line 10 we use the **readFileSync** to read the content of the theme colors file
+
+Line 13 we parse the theme json file content using the javascript **JSON parser**
+
+#### Parsing VSCode themes that use yaml instead of json
+
+Not all VSCode themes can be used out the box with shiki, if for example you want to use one that yaml files to configure the VSCode colors, like the [Dracula for Visual Studio Code](https://github.com/dracula/visual-studio-code/tree/e475d548db27773fa0004b252c0a4701f187fb7e/src) (you can uss this one like we did in beginning as it is bundled with shiki but I use it here as an example to show you what to do when the theme uses yaml files), in this cas you need to include a yaml loader to your setup
+
+> [!NOTE]  
+> We will now install the [yaml package](https://www.npmjs.com/package/yaml), there is another package called [js-yaml](https://www.npmjs.com/package/js-yaml), which had more stard but no recent updates, it would probably do the job too but I chose to use the **yaml** package instead as it has a lot of stars and downloads too, as well as recent updates
+
+To install the **yaml** package use the following command:
+
+```shell
+npm i yaml --save-exact
+```
 
 
 
