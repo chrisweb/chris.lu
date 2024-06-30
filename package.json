@@ -61,7 +61,6 @@
         "remark-unwrap-images": "4.0.0",
         "shiki": "1.8.0",
         "simplex-noise": "4.0.1",
-        "synthwave-vscode": "github:robb0wen/synthwave-vscode#a7d6c78",
         "three": "0.165.0",
         "waveform-visualizer": "4.2.0",
         "web-audio-api-player": "5.3.1"

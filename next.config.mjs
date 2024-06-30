@@ -10,8 +10,6 @@ import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 
 import createMdx from '@next/mdx'
 import rehypePrettyCode from 'rehype-pretty-code'
-import { readFileSync } from 'fs'
-import { jsonrepair } from 'jsonrepair'
 import { remarkTableOfContents } from 'remark-table-of-contents'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
@@ -29,19 +27,11 @@ const nextConfig = (phase) => {
         openAnalyzer: false,
     })*/
 
-    const themeJsonPath = new URL('./node_modules/synthwave-vscode/themes/synthwave-color-theme.json', import.meta.url)
-
-    // get the json theme
-    const themeJsonContent = readFileSync(themeJsonPath, 'utf-8')
-
-    // fix errors in the json
-    const themeJsonContentFixed = jsonrepair(themeJsonContent)
-
     // https://rehype-pretty-code.netlify.app/
     /** @type {import('rehype-pretty-code').Options} */
     const rehypePrettyCodeOptions = {
         // VSCode "SynthWave '84" theme
-        theme: JSON.parse(themeJsonContentFixed),
+        theme: 'synthwave-84',
         // Keep the background or use a custom background color?
         keepBackground: true,
         tokensMap: {
