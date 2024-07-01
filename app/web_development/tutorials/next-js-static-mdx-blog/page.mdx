@@ -1483,7 +1483,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
 Now we need to update the content our `next.config.mjs` file (in the root of our project), to this:
 
-```js title="next.config.mjs" showLineNumbers {2} {6-13} {34-35}
+```js title="next.config.mjs" showLineNumbers {1} {5-12} {25-26}
 import createMdx from '@next/mdx'
 
 const nextConfig = (phase) => {
@@ -1518,13 +1518,13 @@ const nextConfig = (phase) => {
 ```
 
 > [!NOTE]  
-> This configuration file is probably much shorter than the one you have in your project if you followed my previous chapters, to not have to display a very large file I have omitted what we added in the CSP chapter and the Sentry setup is missing too, but the structure is still the same so you should be able to only copy the relavant parts, the ones that are highlighted using a different background color
+> This configuration file is probably much shorter than the one you have in your project (if you followed my previous chapters), I have omitted what we added in the CSP chapter and the Sentry setup to not have to display a very large file, but the structure is still the same so you should be able to only copy the relavant parts (the ones that are highlighted using a different background color)
 
-Line 2 we import the `@next/mdx` we installed the previous chapter
+Line 1 we import the `@next/mdx` package (that we installed the previous chapter)
 
-Line 6 to 13: We configure **@next/mdx** by passing an object to **createMdx**, using the **extension** property we tell @next/mdx what for what pages it should use the MDX parser and the via the options we add support for **remark plugins** and **rehype plugins** (we will add a bunch of those later)
+Line 5 to 12: We configure **@next/mdx** by passing an object to **createMdx**, using the **extension** property we tell @next/mdx what for what pages it should use the MDX parser and the via the options we add support for **remark plugins** and **rehype plugins** (we will add a bunch of those later)
 
-Line 34 to 35 we tell Next.js what exntensions are valid page extensions, the pages we created so far had a `.tsx` extension but the new MDX pages we will now add will have the `.mdx` extension, as you can see we add a bunch more here to cover all use cases, if for example you are sure you won't use `.js` as extension that you can remove it
+Line 25 to 26 we tell Next.js what exntensions are valid page extensions, the pages we created so far had a `.tsx` extension but the new MDX pages we will now add will have the `.mdx` extension, as you can see we add a bunch more here to cover all use cases, if for example you are sure you won't use `.js` as extension that you can remove it
 
 > [!MORE]  
 > [Next.js "Markdown and MDX" documentation](https://nextjs.org/docs/app/building-your-application/configuring/mdx)  
@@ -1533,7 +1533,7 @@ Line 34 to 35 we tell Next.js what exntensions are valid page extensions, the pa
 
 The configuration we just did adds support for MDX in pages that have the extension `*.mdx`, if you want to also add support for pages with the `*.md` extension, then add the extension in two places like so:
 
-```js title="next.config.mjs" {35}
+```js title="next.config.mjs" showLineNumbers {35} /'md'/#special
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 import createMdx from '@next/mdx'
 
