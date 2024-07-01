@@ -10,8 +10,7 @@
     padding: var(--main-spacing);
 }
 
-/* max-width: 70rem / 1120px (mobile breakpoint) */
-@media all and (max-width: 70rem) {
+@media all and (max-width: 1120px) {
 
     .loadingContainer {
         top: 0;
@@ -32,8 +31,7 @@
     color: var(--primary-light-color)
 }
 
-/* max-width: 70rem / 1120px (mobile breakpoint) */
-@media all and (max-width: 70rem) {
+@media all and (max-width: 1120px) {
 
     .loadingContainer .loadingText {
         font-size: var(--main-fontSize-big5);

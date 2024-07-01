@@ -30,8 +30,7 @@
     height: var(--header-navbar-height);
 }
 
-/* max-width: 70rem / 1120px (mobile breakpoint) */
-@media all and (max-width: 70rem) {
+@media all and (max-width: 1120px) {
 
     .layoutNavbarContainer {
         height: 85vh;
@@ -81,8 +80,7 @@
 }
 
 /* experimental: p3 colors */
-/* max-width: 70rem / 1120px (mobile breakpoint) */
-@media all and (max-width: 70rem) and (color-gamut: p3) {
+@media all and (max-width: 1120px) and (color-gamut: p3) {
 
     @keyframes moveDown {
         from {
@@ -185,8 +183,7 @@
     width: 48px;
 }
 
-/* max-width: 70rem / 1120px (mobile breakpoint) */
-@media all and (max-width: 70rem) {
+@media all and (max-width: 1120px) {
 
     .hamburger {
         display: flex;

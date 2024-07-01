@@ -34,10 +34,10 @@
     --main-fontWeight-links: 500;
     --main-fontWeight-activeLinks: 600;
     --main-textUnderlineOffset-links: 0.2rem;
-    --main-spacing: 2rem;
-    --main-maxWidth: 70rem;
-    --main-middle-maxWidth: 48rem;
-    --main-aside-maxWidth: 22rem;
+    --main-spacing: 32px;
+    --main-maxWidth: 1120px;
+    --main-middle-maxWidth: 768px;
+    --main-aside-maxWidth: 352px;
     /* some useful tools to pick colors
     https://www.canva.com/colors/color-wheel/
     https://www.google.com/search?q=google+color+picker
@@ -101,6 +101,7 @@ html {
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/tab-size */
     tab-size: 4;
     position: relative;
+    font-size: 100%;
 }
 
 /* not on mobile */
@@ -181,8 +182,7 @@ body {
     background-color: var(--main-background-color);
     color: var(--main-text-color);
     font-family: var(--main-frontFamily-default);
-    /* font size is 16 px so that 1rem = 16px */
-    font-size: 16px;
+    font-size: var(--main-fontSize-default);
     line-height: normal;
 }
 
@@ -235,7 +235,7 @@ main {
 }
 
 /* on phones put aside below article */
-@media all and (max-width: 48rem) {
+@media all and (max-width: 768px) {
     main {
         margin-bottom: calc(var(--main-spacing) * 2);
         flex-flow: column;
@@ -376,8 +376,7 @@ h6 {
     font-size: var(--main-fontSize-big6);
 }
 
-/* max-width: 70rem / 1120px (mobile breakpoint) */
-@media all and (max-width: 70rem) {
+@media all and (max-width: 1120px) {
     h1 {
         font-size: calc(var(--main-fontSize-big1) - 0.25rem);
     }
@@ -526,7 +525,13 @@ progress {
     vertical-align: baseline;
 }
 
-pre {
+/* https://rehype-pretty-code.netlify.app/ */
+/* code blocks styling */
+[data-rehype-pretty-code-figure] {
+    margin: var(--main-spacing) 0;
+}
+
+[data-rehype-pretty-code-figure]>pre {
     margin: 0;
     padding: calc(var(--main-spacing) / 2);
     overflow: auto;
@@ -536,13 +541,7 @@ pre {
     text-wrap: nowrap;
 }
 
-/* https://rehype-pretty-code.netlify.app/ */
-/* code blocks styling */
-[data-rehype-pretty-code-figure] {
-    margin: var(--main-spacing) 0;
-}
-
-code {
+[data-rehype-pretty-code-figure]>code {
     font-family: var(--codebloc-font-family);
     font-size: var(--main-fontSize-small);
     counter-reset: line;
@@ -662,7 +661,7 @@ article,
     padding-left: var(--main-spacing);
     padding-right: var(--main-spacing);
     margin-bottom: calc(var(--main-spacing) * 2);
-    /* width fix for mobile when word is extremly long */
+    /* for mobile when a chain of characters is extremly long */
     overflow-x: clip;
 }
 
@@ -675,8 +674,7 @@ article,
     max-width: var(--main-maxWidth);
 }
 
-/* max-width: 70rem / 1120px (mobile breakpoint) */
-@media all and (max-width: 70rem) {
+@media all and (max-width: 1120px) {
     article {
         max-width: 100%;
     }
@@ -693,7 +691,7 @@ aside {
     order: 2;
 }
 
-@media all and (max-width: 48rem) {
+@media all and (max-width: 768px) {
     aside {
         width: 100%;
         padding-left: var(--main-spacing);
@@ -717,7 +715,7 @@ aside {
     height: calc(100vh - var(--header-navbar-height) - var(--main-spacing));
 }
 
-@media all and (max-width: 48rem) {
+@media all and (max-width: 768px) {
     .asideCore {
         position: revert;
         top: unset;
@@ -977,8 +975,7 @@ make the text color a bit darker */
     padding: 0;
 }
 
-/* max-width: 70rem / 1120px (mobile breakpoint) */
-@media all and (max-width: 70rem) {
+@media all and (max-width: 1120px) {
 
     .grid {
         grid-template-columns: 1fr;

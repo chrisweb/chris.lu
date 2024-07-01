@@ -3,7 +3,7 @@
 }
 
 /* on phone don't show toc */
-@media all and (max-width: 48rem) {
+@media all and (max-width: 768px) {
     .tocContainer {
         display: none;
     }
@@ -17,7 +17,7 @@
 }
 
 .list li a {
-    margin-bottom: 0.5rem;
+    margin-bottom: calc(var(--main-spacing) / 4);
 }
 
 .active>a {

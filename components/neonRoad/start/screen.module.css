@@ -9,8 +9,7 @@
     z-index: 30;
 }
 
-/* max-width: 70rem / 1120px (mobile breakpoint) */
-@media all and (max-width: 70rem) {
+@media all and (max-width: 1120px) {
 
     .playContainer {
         top: 0;
@@ -25,8 +24,7 @@
     align-items: center;
 }
 
-/* max-width: 70rem / 1120px (mobile breakpoint) */
-@media all and (max-width: 70rem) {
+@media all and (max-width: 1120px) {
 
     .playBox {
         width: 100%;
@@ -51,8 +49,7 @@
     width: 100%;
 }
 
-/* max-width: 70rem / 1120px (mobile breakpoint) */
-@media all and (max-width: 70rem) {
+@media all and (max-width: 1120px) {
 
     .playBoxSoundOptions {
         flex-direction: row;
@@ -69,8 +66,7 @@
     border: none;
 }
 
-/* max-width: 70rem / 1120px (mobile breakpoint) */
-@media all and (max-width: 70rem) {
+@media all and (max-width: 1120px) {
 
     .withMusicButton,
     .withoutMusicButton {
@@ -92,8 +88,7 @@
     text-shadow: 0 0 2px var(--primary-light-color), 0 0 4px var(--tertiary-light-color);
 }
 
-/* max-width: 70rem / 1120px (mobile breakpoint) */
-@media all and (max-width: 70rem) {
+@media all and (max-width: 1120px) {
 
     .withMusic,
     .withoutMusic {
@@ -117,8 +112,7 @@
     display: inline-block;
 }
 
-/* max-width: 70rem / 1120px (mobile breakpoint) */
-@media all and (max-width: 70rem) {
+@media all and (max-width: 1120px) {
 
     .selected::before {
         font-size: var(--main-fontSize-big3);
@@ -133,8 +127,7 @@
     text-transform: uppercase;
 }
 
-/* max-width: 70rem / 1120px (mobile breakpoint) */
-@media all and (max-width: 70rem) {
+@media all and (max-width: 1120px) {
 
     .pressStart {
         font-size: var(--main-fontSize-big1);

@@ -4,8 +4,7 @@
     padding: 0;
 }
 
-/* max-width: 70rem / 1120px (mobile breakpoint) */
-@media all and (max-width: 70rem) {
+@media all and (max-width: 1120px) {
     .reset:focus {
         outline: none;
     }
@@ -18,8 +17,7 @@
     z-index: 20;
 }
 
-/* max-width: 70rem / 1120px (mobile breakpoint) */
-@media all and (max-width: 70rem) {
+@media all and (max-width: 1120px) {
     .bottomRight {
         bottom: calc(var(--main-spacing) / 2);
         right: calc(var(--main-spacing) / 2);
@@ -52,8 +50,7 @@
     border: 0;
 }
 
-/* max-width: 70rem / 1120px (mobile breakpoint) */
-@media all and (max-width: 70rem) {
+@media all and (max-width: 1120px) {
 
     .border {
         width: 44px;

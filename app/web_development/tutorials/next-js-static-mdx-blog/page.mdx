@@ -2975,8 +2975,9 @@ So instead if you want to style all Elements that match a certain type, or if yo
     --secondary-dark-value: 211 63% 83%;
     --secondary-dark-color: hsl(var(--secondary-dark-value));
     /* sizes */
-    --spacing: 2rem;
+    --spacing: 1rem;
     --maxWidth: 70rem;
+    --font-size: 16px;
 }
 
 *,
@@ -2996,9 +2997,11 @@ html {
     tab-size: 4;
     background-color: var(--background-dark-color);
     color: var(--text-dark-color);
+    font-size: 100%;
 }
 
 body {
+    font-size: var(--font-size);
     /* remove any margin that browsers add to body */
     margin: 0;
 }
@@ -3021,7 +3024,7 @@ main {
 }
 
 /* on small screens */
-@media all and (max-width: 48rem) {
+@media all and (max-width: 768px) {
     main {
         margin-bottom: calc(var(--spacing) * 2);
         /* place one under the other */
@@ -4955,70 +4958,74 @@ Now have a another look at the playground and you will notice that this time the
 
 ![rehype-pretty-code code highlighting example with dracula theme for VSCode colors](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/rehype-pretty-code_plugin_one-dark-pro_theme.png)
 
+#### code block styling
 
-
-
-
-
-Note: all "visitor" hooks you see in the **rehypePrettyCodeOptions** have been added so that we have classNames when one of those features is present, for example if you highlight a row the hook will ensure that the line has a class named **highlightedLine** which will help us to style the features in the next step
-
-Tip: in CSS3 pseudo elements like **before** and **after** have two colons, so `::before` and `::after` (in CSS2 they only have one colon), check out the [MDN ::before page](https://developer.mozilla.org/en-US/docs/Web/CSS/::before) for further details
-
-next we add the following css to our `global.css` file:
+Next we add the following css to our `global.css` file:
 
 ```css
-[data-rehype-pretty-code-fragment] {
-    margin: var(--main-spacing) 0;
-}
-
-pre {
+[data-rehype-pretty-code-figure],
+[data-rehype-pretty-code-figure]>pre,
+[data-rehype-pretty-code-figure]>code {
     margin: 0;
-    padding: calc(var(--main-spacing) / 2) 0;
-    /* max width = 100vw - (2 x main padding) */
-    max-width: calc(100vw - (2 * 2rem));
+    padding: 0;
+}
+
+[data-rehype-pretty-code-figure] {
+    width: 100%;
     overflow: auto;
-    /* https://developer.mozilla.org/en-US/docs/Web/CSS/white-space-collapse */
-    white-space-collapse: preserve;
-    /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap */
-    text-wrap: nowrap;
 }
 
-/* recommended by https://rehype-pretty-code.netlify.app/ */
-pre>code {
-    display: grid;
-}
-
-code {
-    font-family: var(--codebloc-font-family);
-    counter-reset: line;
-}
-
-[data-line-numbers]>[data-line]::before {
-    counter-increment: line;
-    content: counter(line);
-    display: inline-block;
-    width: 1rem;
-    margin-right: 2rem;
-    text-align: right;
-    color: #999999;
-}
-
-[data-line-numbers-max-digits='2']>[data-line]::before {
-    width: 2rem;
-}
-
-[data-line-numbers-max-digits='3']>[data-line]::before {
-    width: 3rem;
-}
-
-[data-line] {
-    padding: 0 calc(var(--main-spacing) / 2);
-    line-height: 1.4;
-    border-left-width: 2px;
-    border-left-style: solid;
-    border-left-color: transparent;
+[data-rehype-pretty-code-figure]>pre {
+    padding: var(--main-spacing);
 }
 ```
+
+What we do here is nothing fancy, we just reset the margin and padding on the figure element that is the container of a **rehype-pretty-code** code block, it has a **data** attribute that we use to target it as well as the **pre** and **code** element inside of it
+
+Then we add a margin to the figure element 
+
+```css
+/* recommended by https://rehype-pretty-code.netlify.app/ */
+code {
+  counter-reset: line;
+}
+ 
+code > [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+ 
+  /* Other styling */
+  display: inline-block;
+  width: 1rem;
+  margin-right: 2rem;
+  text-align: right;
+  color: gray;
+}
+ 
+code[data-line-numbers-max-digits="2"] > [data-line]::before {
+  width: 2rem;
+}
+ 
+code[data-line-numbers-max-digits="3"] > [data-line]::before {
+  width: 3rem;
+}
+```
+
+> [!TIP]  
+> In CSS3 pseudo elements like **before** and **after** have two colons, so `::before` and `::after` (in CSS2 they only had one colon), check out the [MDN ::before page](https://developer.mozilla.org/en-US/docs/Web/CSS/::before) for further details
+
+
+
+#### code block row highlighting
+
+#### code block characters highlighting
+
+#### code block line numbers
+
+
+
+
+
 
 this is the base css for our code blocks, some css is to style the **pre** and **code** elements, the rest is to style the data attributes that rehype pretty code will add by default
 

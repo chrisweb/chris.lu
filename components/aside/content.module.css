@@ -8,7 +8,7 @@
     padding: 0 calc(var(--main-spacing) / 2);
 }
 
-@media all and (max-width: 48rem) {
+@media all and (max-width: 768px) {
     .content p {
         padding: 0;
     }

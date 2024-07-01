@@ -68,7 +68,9 @@ const ImageDispatch: React.FC<ImageProps> = (props): JSX.Element => {
                             width: '100%',
                             height: 'auto',
                         }}
-                        sizes="(max-width: 48rem) 100vw, 704px"
+                        // 704px = 768px - (2 x 32px)
+                        // banner width = middle max width - (2 x spacing)
+                        sizes="(max-width: 768px) 100vw, 704px"
                         priority
                         placeholder="blur"
                         {...(newImageProps)}
@@ -84,7 +86,9 @@ const ImageDispatch: React.FC<ImageProps> = (props): JSX.Element => {
                             objectFit: 'cover',
                         }}
                         fill
-                        sizes="(max-width: 48rem) 100vw, 336px"
+                        // 336px = (768px - (2 x 32px) - 32px) / 2
+                        // thumbnail width = (middle max width - (2 x spacing) - grid space between two columns) / 2
+                        sizes="(max-width: 768px) 100vw, 336px"
                         placeholder="blur"
                         {...newImageProps}
                     />
@@ -111,7 +115,9 @@ const ImageDispatch: React.FC<ImageProps> = (props): JSX.Element => {
                             maxWidth: '100%',
                             height: 'auto',
                         }}
-                        sizes="(max-width: 48rem) 100vw, 704px"
+                        // 704px = 768px - (2 x 32px)
+                        // banner width = middle max width - (2 x spacing)
+                        sizes="(max-width: 768px) 100vw, 704px"
                         placeholder="blur"
                         {...(newImageProps)}
                     />
