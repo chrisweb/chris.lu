@@ -7,15 +7,15 @@
     /* https://bitsofco.de/the-new-system-font-stack/ */
     --main-frontFamily-default: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     /* 40px */
-    --main-fontSize-big1: 2.5rem;
+    --main-fontSize-big1: 4rem;
     /* 32px */
-    --main-fontSize-big2: 2rem;
+    --main-fontSize-big2: 3rem;
     /* 28px */
-    --main-fontSize-big3: 1.75rem;
+    --main-fontSize-big3: 2.5rem;
     /* 24px */
-    --main-fontSize-big4: 1.5rem;
+    --main-fontSize-big4: 2rem;
     /* 22px */
-    --main-fontSize-big5: 1.375rem;
+    --main-fontSize-big5: 1.5rem;
     /* 20 px */
     --main-fontSize-big6: 1.25rem;
     /* 18px */
@@ -24,9 +24,8 @@
     --main-fontSize-small: 1rem;
     /* 14px */
     --main-fontSize-smaller: 0.875rem;
-    --main-lineHeight-heading: 1.5;
-    --main-lineHeight-default: 1.6;
-    --main-lineHeight-small: 1.7;
+    --main-lineHeight-heading: 1.2;
+    --main-lineHeight-default: 1.8;
     --main-fontWeight-default: 400;
     --main-fontWeight-bold: 600;
     --main-fontWeight-bolder: 700;
@@ -183,7 +182,8 @@ body {
     color: var(--main-text-color);
     font-family: var(--main-frontFamily-default);
     font-size: var(--main-fontSize-default);
-    line-height: normal;
+    line-height: var(--main-lineHeight-default);
+    text-rendering: optimizeLegibility;
 }
 
 /* prevent any scrolling when dialog is open */
@@ -205,16 +205,6 @@ body:has(dialog.disablePageScroll[open]) {
     body {
         background-color: white;
     }
-}
-
-main,
-header,
-footer {
-    /* ensure the parent of next/image is relative */
-    /* header is the parent of the animation fallback img */
-    position: relative;
-    font-size: var(--main-fontSize-default);
-    line-height: var(--main-lineHeight-default);
 }
 
 header {
@@ -321,21 +311,6 @@ h6 {
     font-family: var(--font-anta), sans-serif;
 }
 
-/* helper middle line */
-/*h1::before,
-h2::before,
-h3::before,
-h4::before,
-h5::before,
-h6::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: -25px;
-    border-top: 1px solid white;
-    width: 100%;
-}*/
-
 h1 {
     margin: 0 0 var(--main-spacing) 0;
 }
@@ -345,7 +320,7 @@ h3,
 h4,
 h5,
 h6 {
-    margin: var(--main-spacing) 0;
+    margin: calc(var(--main-spacing) * 2) 0 var(--main-spacing) 0;
 }
 
 p {
@@ -778,34 +753,49 @@ aside {
 
 /* github like heading anchor */
 .headingAnchor {
-    float: left;
-    padding-right: 4px;
-    margin-left: -28px;
+    position: absolute;
+    top: 0;
+    left: -30px;
 }
 
 h1 .headingAnchor {
-    line-height: 1.35;
+    line-height: 0.92;
 }
 
 h2 .headingAnchor {
-    line-height: 1.5;
+    line-height: 1.06;
 }
 
 h3 .headingAnchor {
-    line-height: 1.65;
+    line-height: 1.1;
 }
 
 h4 .headingAnchor {
-    line-height: 1.8;
+    line-height: 1.25;
 }
 
 h5 .headingAnchor {
-    line-height: 1.95;
+    line-height: 1.5;
 }
 
 h6 .headingAnchor {
-    line-height: 2;
+    line-height: 1;
 }
+
+/* helper middle line */
+/*h1::before,
+h2::before,
+h3::before,
+h4::before,
+h5::before,
+h6::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -25px;
+    border-top: 1px solid white;
+    width: 100%;
+}*/
 
 .fontSmall {
     font-size: var(--main-fontSize-small);
