@@ -115,7 +115,7 @@ Next you will get asked some more questions so that Next.js knows what it needs 
 * **Would you like to customize the default import alias (@/*)?** press `→` (the right arrow key) to select **Yes** and then press `ENTER`, this will tell CNA to add an alias for a given path in the `tsconfig.json` (the Typescript configuration file) if you selected **TypeScript** in the first question and if you chose **Javascript** it will create the alias in the `jsconfig.json` file (This alias can be used for imports as a replacement for a path to a dependency, to learn more about this feature I recommend you have a quick look at the [Next.js "Absolute Imports and Module Path Aliases" documentation](https://nextjs.org/docs/app/building-your-application/configuring/absolute-imports-and-module-aliases)), if however you don't want it feel free to leave it on "No"
 * **What import alias would you like configured?** I personally keep the default `@/*`, but feel free to chose another one if you prefer, then press `ENTER`
 
-That's it the **Create Next App** will now install Next.js and React (and React DOM) for us, it will then add some development dependencies based on what we chose, like Typescript and ESLint and then it will add some default configuration files for each of these tools
+That's it the **Create Next App** will now install Next.js and React (and React DOM) for us, it will then also install some development dependencies based on what we chose, like Typescript and ESLint and then it will create some default configuration files for those tools
 
 > [!TIP]  
 > when you use CNA, some of the options you chose will get stored, so that next time you use it again it will take your stored preferences instead of default values, if you want to reset those stored preferences you can use the `--reset-preferences` option like so `npx create-next-app --reset-preferences`, if successful CNA will print the following message "**Preferences reset successfully**"  
@@ -131,12 +131,16 @@ Now that create next app is done, it is a good time to do your first commit
 
 If you need help to commit changes (and then synchronize them) using VSCode, check out my chapter [commit your changes to GitHub using the VSCode version control tool](/web_development/posts/vscode#commit-your-changes-to-github-using-the-vscode-version-control-tool) from the VSCode post
 
-After you have commited the files and synchronised the changes with remote repository, you can go to [github.com](https://github.com/) and check out your repository or go directly to your repository if you remember the name, the URL should be in the format `https://github.com/MY_GITHUB_USER_NAME/MY_REPOSITORY_NAME`, by default the content of the **main** branch gets displayed and because we commited our changes into the **preview** branch you need switch to the **preview** branch on GitHub to see your files (if you don't know how to switch branches on GitHub check out the [switch branches](/web_development/posts/github#switch-branches) chapter in my GitHub post)
+After you have commited the files and synchronised the changes with the remote repository, you can then go to [github.com](https://github.com/) and check out your repository or go directly to your repository if you remember the name, the URL should be in the format `https://github.com/MY_GITHUB_USER_NAME/MY_REPOSITORY_NAME`, by default the content of the **main** branch gets displayed on the repository homepage and because we commited our changes into the **preview** branch you need switch to the **preview** branch on GitHub to see your files (if you don't know how to switch branches on GitHub check out the [switch branches](/web_development/posts/github#switch-branches) chapter in my GitHub post)
 
 If the commit and syncing was successful you will see that all the new files and directories are now listed in your GitHub repository
 
 > [!TIP]  
-> I recommend you commit often as it will make it a lot easier if you decide to revert your last commit, because it will only include the code from one step you want to undo and NOT also the code of several other steps that you actually want to keep, it will also create a nicer commit history where the commit messages are short and related to a few files instead if having a huge commit messages attached to dozens of files, also commiting and synchronising often reduces the risk that you lose code and hence hours or days of work if something happens to your local machine and finally it reduces the risk that you end of having conflits if you are not the only one working on the repository
+> I recommend you commit often as it will make it a lot easier to revert your last commit if a situation arises where you need to, by having only the code from the step in one commit will make it easy to undo just that step, if you also included the code of several other steps in your commit but you actually want to keep those then reverting will be difficult
+> 
+> It will also create a nicer commit history where the commit messages are short and related to a few changes and probably impact a few files instead of having a huge commit messages attached to dozens of changes in lots of different files
+> 
+> Also commiting and synchronising often reduces the risk that you lose code and hence hours or days of work if something happens to your local machine and finally it reduces the risk that you end of having conflits, which you will likely get if you are not the only one working on the repository and only rarely commit your code
 
 ### update the README.md file
 
@@ -2932,7 +2936,7 @@ export default function Home() {
 
 ### Adding a global.css
 
-CSS Modules are perfect to style components and even the content in your pages but at some point you might want to add a class that can be used everywhere in your app, like for example have a global style for links, this is when you use the global.css
+CSS Modules are perfect to style components and even the content in your pages but at some point you might want to add a class that can be used everywhere in your app, like for example have a global style for links, this is when you use the **global.css**
 
 As we saw in the previous chapter you can add classes and use the id in CSS Modules, but there is one thing you can't use in CSS Modules and that's the [Element type selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/Type_selectors)
 
@@ -2963,7 +2967,7 @@ Then make sure your dev server is running (using the `npm run dev` command) and 
 
 So instead if you want to style all Elements that match a certain type, or if you want to add universal selectors (`*`), or set global css variables using the [:root](https://developer.mozilla.org/en-US/docs/Web/CSS/:root) pseudo class, then you do it in the `global.css`, which we will create in the `/app` folder, with the following content:
 
-```css title="/app/global.css"
+```css title="/app/global.css" showLineNumbers
 :root {
     /* colors */
     --background-dark-value: 288 23% 20%;
@@ -2975,8 +2979,8 @@ So instead if you want to style all Elements that match a certain type, or if yo
     --secondary-dark-value: 211 63% 83%;
     --secondary-dark-color: hsl(var(--secondary-dark-value));
     /* sizes */
-    --spacing: 1rem;
-    --maxWidth: 70rem;
+    --spacing: 16px;
+    --maxWidth: 1120px;
     --font-size: 16px;
 }
 
@@ -2987,13 +2991,10 @@ So instead if you want to style all Elements that match a certain type, or if yo
 }
 
 html {
-    /* https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-size-adjust */
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
-    /* https://developer.mozilla.org/en-US/docs/Web/CSS/tab-size */
     tab-size: 4;
     background-color: var(--background-dark-color);
     color: var(--text-dark-color);
@@ -3051,11 +3052,28 @@ a:hover {
 
 This is our base `global.css` which now contains a basic [CSS (Cascading Style Sheet)](https://developer.mozilla.org/en-US/docs/Web/CSS) used to style and layout our app:
 
-* first we set some variables (inside of the [:root](https://developer.mozilla.org/en-US/docs/Web/CSS/:root) pseudo class) that can be used everywhere (even in any of our CSS Modules), it is recommended to use CSS variables when ever possible as in the future it will be faster to change the value of a variable in the globall css instead of having to go into every file where that variable gets used and change the value there
-* next we reset some browser styling using the **body** (element) [type selector](https://developer.mozilla.org/en-US/docs/Web/CSS/Type_selectors)
-* then we add some margin to the **footer** and **header** using the respective type selectors
-* then we add a basic page layout using [Flexbox](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Flexbox)
-* finally add some color to all our links using the css [var()](https://developer.mozilla.org/en-US/docs/Web/CSS/var) function to use the variables we set earlier and we also use the [:hover](https://developer.mozilla.org/en-US/docs/Web/CSS/:hover) pseudo class to change the color of links on hover
+Line 1 to 15 we set some variables (inside of the [:root](https://developer.mozilla.org/en-US/docs/Web/CSS/:root) pseudo class) that can be used everywhere (even in any of our CSS Modules), it is recommended to use CSS variables when ever possible as in the future it will be faster to change the value of a variable in the globall css instead of having to go into every file where that variable gets used and change the value there
+
+Line 17 to 21 we use a technique seen in a lot of **reset stylesheets**, we using the asterisk to target all elements of our HTML document and then also include their [::before](https://developer.mozilla.org/en-US/docs/Web/CSS/::before) and [::after](https://developer.mozilla.org/en-US/docs/Web/CSS/::after) pseudo elements, we set their [box-sizing CSS property](https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing) to **border-box**, this has an impact on how the browser calculates the width and height of elements, by default **box-sizing** is set to **content-box**, in which case the width and height only include the content but NOT the border padding or margin, however as we change it **border-box** the width and height will now also include the border and padding but still not the margin, this way of calculating the width and height seems more intuitive then the default behavior to a lot of developers, which is why this is something you will often see in stylesheets (if however you prefer the default behavior, then feel free to not include this part in your own global.css stylesheet)
+
+> [!TIP]  
+> In CSS3 pseudo elements like **before** and **after** have two colons, so `::before` and `::after` (in CSS2 they only had one colon), check out the [MDN ::before page](https://developer.mozilla.org/en-US/docs/Web/CSS/::before) for further details
+
+Line 23 to 32 we use the **html** [type selector](https://developer.mozilla.org/en-US/docs/Web/CSS/Type_selectors) and do several things:
+
+* first set the [font-smoothing](https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth) CSS property to tell the browser to apply **anti-aliasing** to our fonts, if you have a dark background and light text (which we do in this example) then **anti-aliasing** can prevent the text from looking overly bold and instead makes it look lighter, but be aware that on the [caniuse CSS font-smooth](https://caniuse.com/font-smooth) page they say that this property is not part of the CSS standard, however both webkit and firefox implement their own non standard property, as explained the article ["stop-fixing-font-smoothing"](https://usabilitypost.com/2012/11/05/stop-fixing-font-smoothing/) this feature should only get used for light fonts on dark backgrounds but not for dark text on a light background, I recommend reading that article if you want to learn more about font smoothing
+* then we also set the [text-size-adjust](https://developer.mozilla.org/en-US/docs/Web/CSS/text-size-adjust)
+* we also use the [tab-size](https://developer.mozilla.org/en-US/docs/Web/CSS/tab-size)
+* then we set the color for our background and the default color for our text
+* finally we set the font-size to 100%, which is good for accessibility as it lets the user change the font-size via the browser settings, as are using the [CSS rem unit](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units) for all font related sizes, this means that setting the font-size of the HTML element will have an impact on all other font-sizes in our CSS, for example we use rem for the 
+
+next we use the **body** and first set the default font-size using the css variable we just set in the root pseudo class, then we also reset the mardin values that browser might set by default
+
+then we add some margin to the **footer** and **header** using the respective type selectors
+ 
+then we add a basic page layout using [Flexbox](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Flexbox)
+
+finally add some color to all our links using the css [var()](https://developer.mozilla.org/en-US/docs/Web/CSS/var) function to use the variables we set earlier and we also use the [:hover](https://developer.mozilla.org/en-US/docs/Web/CSS/:hover) pseudo class to change the color of links on hover
 
 Now to apply the global styles to our content we our going to import the `global.css` inside of our **root layout** (located in the `/app` folder), like so:
 
@@ -5011,8 +5029,6 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
 }
 ```
 
-> [!TIP]  
-> In CSS3 pseudo elements like **before** and **after** have two colons, so `::before` and `::after` (in CSS2 they only had one colon), check out the [MDN ::before page](https://developer.mozilla.org/en-US/docs/Web/CSS/::before) for further details
 
 
 
