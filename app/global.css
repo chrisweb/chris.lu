@@ -542,12 +542,9 @@ pre {
     margin: var(--main-spacing) 0;
 }
 
-pre>code {
-    display: grid;
-}
-
 code {
     font-family: var(--codebloc-font-family);
+    font-size: var(--main-fontSize-small);
     counter-reset: line;
 }
 
