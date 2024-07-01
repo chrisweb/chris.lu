@@ -575,22 +575,22 @@ code[data-line-numbers-max-digits="3"]>[data-line]::before {
 }
 
 [data-highlighted-line] {
-    background-color: #494365;
+    background-color: #3f2046;
     border-left-color: var(--primary-light-color);
 }
 
 [data-highlighted-line][data-highlighted-line-id="special"] {
-    background-color: #623c86;
+    background-color: #61286c;
 }
 
 [data-highlighted-chars] {
-    background-color: #6f5886;
+    background-color: #502858;
     border-radius: 4px;
     padding: 0px 4px;
 }
 
 [data-highlighted-chars][data-chars-id="special"] {
-    background-color: #623c86;
+    background-color: #61286c;
 }
 
 [data-rehype-pretty-code-title] {
