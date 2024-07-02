@@ -9,8 +9,8 @@ export default function Homepage() {
             <section className="core">
                 <h1 className="h1">Hello, World!&nbsp;
                     <picture>
-                        <source srcSet="/assets/images/noto_emoji_animated/wave_46.webp" />
-                        <img src="/assets/images/noto_emoji_animated/wave_46.gif" alt="waving hand icon" height="46" width="46" />
+                        <source srcSet="/assets/images/noto_emoji_animated/wave_32.webp" />
+                        <img src="/assets/images/noto_emoji_animated/wave_32.gif" alt="waving hand icon" className="animatedEmoji" />
                     </picture>
                 </h1>
                 <p>Welcome to my blog, my name is Chris Weber (aka chrisweb)</p>
