@@ -262,7 +262,7 @@ main {
 
 }
 
-@media (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
 
     .h1,
     .h2,
@@ -353,7 +353,46 @@ h6 {
 
 @media all and (max-width: 1120px) {
     h1 {
-        font-size: calc(var(--main-fontSize-big1) - 0.25rem);
+        font-size: 1.9rem;
+    }
+
+    h2 {
+        font-size: 1.7rem;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    h4 {
+        font-size: 1.4rem;
+    }
+
+    h5 {
+        font-size: 1.3rem;
+    }
+
+    h6 {
+        font-size: 1.2rem;
+    }
+
+    .h1,
+    .h2,
+    .h3,
+    .h4,
+    .h5,
+    .h6 {
+        background-size: initial;
+        background-image: linear-gradient(90deg, var(--primary-light-color) 5%, var(--tertiary-light-color) 50%, var(--primary-light-color) 95%);
+        line-height: 1;
+    }
+
+    .h2,
+    .h3,
+    .h4,
+    .h5,
+    .h6 {
+        margin: calc(var(--main-spacing)* 1.5) 0 var(--main-spacing) 0;
     }
 }
 
@@ -365,6 +404,18 @@ h6 {
 .h6>.emoji {
     -webkit-text-fill-color: var(--main-background-color);
     background-color: var(--main-background-color);
+}
+
+.animatedEmoji {
+    width: 46px;
+    height: auto;
+}
+
+@media all and (max-width: 768px) {
+    .animatedEmoji {
+        width: 20px;
+        height: auto;
+    }
 }
 
 a {
