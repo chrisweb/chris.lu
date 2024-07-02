@@ -406,7 +406,7 @@ Let's assume the path is now `www.example.com/foo/bar`, when using the **pages r
 
 The other difference is the page files, with the **pages router** the name of the file gets used for the last segment, in the **app router** every page is always named **page**(.jsx/.tsx)
 
-The advantage of using a folder as last segment and having a convention that says that every page needs to be named page, is that with the introduction of the **app router** Next.js added a bunch of other [file conventions](https://nextjs.org/docs/app/building-your-application/routing#file-conventions), for example you can have a layout in every segment folder, you can have a not-found file in every folder and so on, meaning you can create different layouts for different parts of the website easily, or even create different error, loading, not-found, ... files for different parts of your project (without having to add logic inside those files to check what the current path is and then show a different layout, UI or content based on it)
+The advantage of using a folder as last segment and having a convention that says that every page needs to be named page, is that with the introduction of the **app router** Next.js added a bunch of other [file conventions](https://nextjs.org/docs/app/building-your-application/routing#file-conventions), for example you can have a layout in every segment folder, you can have a not-found file in every folder and so on, meaning you can create different layouts for different parts of the website easily, or even create different error, loading, not-found, ... pages for different parts of your project (without having to add logic inside those files to check what the current path is and then show a different layout, UI or content based on it)
 
 A feature you will already know if you used the **pages router** are [dynamic routes](https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes), to create a dynamic route segment you wrap the folder's name in square brackets, for example with a folder structure like this `/app/articles/[slug]`, the **slug** could be anything, so the URL `www.example.com/articlers/foo` the slug would be foo and for another URL `www.example.com/articlers/bar` the slug would be bar, to retrieve the slug value you would use a page with the following code:
 
@@ -786,7 +786,7 @@ export default function Error({
 
     return (
         <div>
-            <h2>Something went wrong!</h2>
+            <h1>Sorry, something went wrong 😞</h1>
             <button
                 // Attempt to recover by trying to re-render the segment
                 onClick={() => reset()} 
@@ -847,7 +847,7 @@ export default function Error({
 
     return (
         <>
-            <h2>Sorry, something went wrong 😞</h2>
+            <h1>Sorry, something went wrong 😞</h1>
             <button
                 onClick={() => reset()} // attempt to recover by trying to re-render the segment
             >
@@ -897,7 +897,7 @@ export default function GlobalError({
     return (
         <html>
             <body>
-                <h2>Sorry, something went wrong 😞</h2>
+                <h1>Sorry, something went wrong 😞</h1>
                 <button
                     onClick={() => reset()} // attempt to recover by trying to re-render the segment
                 >
