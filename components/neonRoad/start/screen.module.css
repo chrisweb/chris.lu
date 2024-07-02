@@ -82,7 +82,7 @@
 
 .withMusic,
 .withoutMusic {
-    font-size: var(--main-fontSize-big2);
+    font-size: var(--main-fontSize-big4);
     color: var(--secondary-light-color);
     /* offset-x | offset-y | blur-radius | color */
     text-shadow: 0 0 2px var(--primary-light-color), 0 0 4px var(--tertiary-light-color);
@@ -92,7 +92,7 @@
 
     .withMusic,
     .withoutMusic {
-        font-size: var(--main-fontSize-big3);
+        font-size: var(--main-fontSize-big5);
     }
 
 }
@@ -106,7 +106,7 @@
 
 .selected::before {
     content: ">";
-    font-size: var(--main-fontSize-big2);
+    font-size: var(--main-fontSize-big4);
     color: #fcff00;
     width: 20px;
     display: inline-block;
@@ -115,14 +115,14 @@
 @media all and (max-width: 1120px) {
 
     .selected::before {
-        font-size: var(--main-fontSize-big3);
+        font-size: var(--main-fontSize-big5);
     }
 
 }
 
 .pressStart {
     text-transform: capitalize;
-    font-size: calc(var(--main-fontSize-big1) * 1.5);
+    font-size: var(--main-fontSize-big1);
     color: var(--secondary-light-color);
     text-transform: uppercase;
 }
@@ -130,7 +130,7 @@
 @media all and (max-width: 1120px) {
 
     .pressStart {
-        font-size: var(--main-fontSize-big1);
+        font-size: var(--main-fontSize-big2);
     }
 
 }

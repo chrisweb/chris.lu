@@ -1,7 +1,6 @@
 import Typing from '@/components/animated/Typing'
 import styles from './page.module.css'
 import Link from 'next/link'
-import Image from 'next/image'
 
 export default function Homepage() {
 
@@ -9,7 +8,10 @@ export default function Homepage() {
         <>
             <section className="core">
                 <h1 className="h1">Hello, World!&nbsp;
-                    <Image src="/assets/images/noto_emoji_animated/wave_64.gif" unoptimized alt="🚀" width="32" height="32" />
+                    <picture>
+                        <source srcSet="/assets/images/noto_emoji_animated/wave_46.webp" />
+                        <img src="/assets/images/noto_emoji_animated/wave_46.gif" alt="waving hand icon" height="46" width="46" />
+                    </picture>
                 </h1>
                 <p>Welcome to my blog, my name is Chris Weber (aka chrisweb)</p>
                 <p className="fontBigger fontLighter">I like <Typing>Web development, Lego bricks, Music, Games, Cooking, Movies & TV shows, Memes</Typing></p>
