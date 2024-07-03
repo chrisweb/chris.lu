@@ -228,6 +228,15 @@ const nextConfig = (phase) => {
                     source: '/(.*)',
                     headers: securityHeadersConfig(phase)
                 },
+                {
+                    source: '/(.*).cur',
+                    headers: [
+                        {
+                            key: 'Cache-Control',
+                            value: 'public, max-age=315360000, immutable',
+                        },
+                    ],
+                },
             ];
         },
     }
@@ -255,8 +264,8 @@ const securityHeadersConfig = (phase) => {
             report-to default
         `*/
 
-		// reporting uri (CSP v1)
-		const reportCSPViolations = `report-uri ${reportingUrl};`
+        // reporting uri (CSP v1)
+        const reportCSPViolations = `report-uri ${reportingUrl};`
 
         // worker-src is for sentry replay
         // child-src is because safari <= 15.4 does not support worker-src
