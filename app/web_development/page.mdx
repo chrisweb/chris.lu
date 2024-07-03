@@ -4,6 +4,9 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import styles from './page.module.css'
 import Link from 'next/link'
 import AsideContent from '@/components/aside/Content'
+import ImageAnimatedEmoji from '@/components/base/image/AnimatedEmoji'
+import gifRocketStaticImport from '/public/assets/images/noto_emoji_animated/46/rocket.gif'
+import webpRocketStaticImport from '/public/assets/images/noto_emoji_animated/46/rocket.webp'
 
 <aside>
     <div className='asideCore'>
@@ -16,7 +19,7 @@ import AsideContent from '@/components/aside/Content'
     </div>
 </aside>
 <section id="web_development" className="middle">
-    <h1 className="h1">Web development&nbsp;<picture><source srcSet="/assets/images/noto_emoji_animated/rocket_32.webp" /><img src="/assets/images/noto_emoji_animated/rocket_32.gif" alt="waving hand icon" className="animatedEmoji" /></picture></h1>
+    <h1 className="h1">Web development&nbsp;<ImageAnimatedEmoji gifStaticImport={gifRocketStaticImport} webpStaticImport={webpRocketStaticImport} alt="animated emoji flying rocket" /></h1>
     ## Tutorials
     <div className="grid">
         <Link href="/web_development/tutorials/next-js-static-mdx-blog" className={styles.preview}>
