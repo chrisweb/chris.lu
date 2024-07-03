@@ -1438,12 +1438,12 @@ If you prefer you can also create your own package in which case I recommend you
 > [!NOTE]  
 > If you want to get more background information about MDX I recommended checking out my [MDX post](/web_development/posts/mdx)
 
-**@next/mdx** is stable and I had no major problems using it for this project, there are however a series of open Issues on GitHub, I recommend having a brief look at the [@next/mdx issues search on GitHub](https://github.com/vercel/next.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22area%3A+MDX%22) to have an idea of what might not work or just have a look at the list when you have the feeling something is not working as it should
+**@next/mdx** is stable and I had no major problems using it for this project, there are however a series of open Issues on GitHub, I recommend having a brief look at the [@next/mdx issues search on GitHub](https://github.com/vercel/next.js/labels/Markdown%20%28MDX%29) to have an idea of what might not work or just have a look at the list when you have the feeling something is not working as it should
 
 > [!MORE]  
 > [mdxjs.com "getting started" documentation](https://mdxjs.com/docs/getting-started/)  
 > [mdxjs.com "MDX 3" announcement](https://mdxjs.com/blog/v3/)  
-> [@next/mdx repository](https://github.com/vercel/next.js/tree/canary/packages/next-mdx)  
+> [npm.js "@next/mdx" page](https://www.npmjs.com/package/@next/mdx)  
 > [chris.lu "MDX" post](/web_development/posts/mdx)  
 
 ### @next/mdx installation
@@ -1943,11 +1943,11 @@ Package 1: **eslint-config-next** (ESLint Config) intends to make it easier to g
 * [eslint-plugin-react](https://www.npmjs.com/package/eslint-plugin-react)
 * [eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks)
 * [eslint-plugin-next](https://www.npmjs.com/package/@next/eslint-plugin-next)
-* and some more, if you want the full list of plugins that eslint-config-next installs check out the [eslint-config-next package.json dependencies](https://github.com/vercel/next.js/blob/canary/packages/eslint-config-next/package.json)
+* and some more, if you want the full list of plugins that eslint-config-next installs check out the [eslint-config-next package.json dependencies](https://github.com/vercel/next.js/blob/b2625477c002343e7fe083204c45af1fdd7cd407/packages/eslint-config-next/package.json)
 
 Package 2: Is called **eslint-plugin-next** and it is the actual ESLint plugin for Nextjs (called **@next/eslint-plugin-next** on npmjs), it aims to catch common problems in a Next.js application
 
-for a full list of rules that the Next.js ESLint plugin adds check out the [Nextjs "ESLint rules" documentation](https://nextjs.org/docs/app/building-your-application/configuring/eslint#eslint-plugin) or have a look at the [eslint-plugin-next rules directory on GitHub](https://github.com/vercel/next.js/tree/canary/packages/eslint-plugin-next/src/rules)
+for a full list of rules that the Next.js ESLint plugin adds check out the [Nextjs "ESLint rules" documentation](https://nextjs.org/docs/app/building-your-application/configuring/eslint#eslint-plugin) or have a look at the [eslint-plugin-next rules directory on GitHub](https://github.com/vercel/next.js/tree/b2625477c002343e7fe083204c45af1fdd7cd407/packages/eslint-plugin-next/src/rules)
 
 > [!MORE]  
 > [Next.js "ESLint" documentation](https://nextjs.org/docs/app/building-your-application/configuring/eslint)  
@@ -3858,11 +3858,11 @@ Congratulations you just created a link component that will now get used for all
 
 ### optimizing images in MDX using next/image
 
-For the third and last part we are going to use [next/image](https://nextjs.org/docs/app/api-reference/components/image) an image component that got created by the [Aurora team at Google](https://developer.chrome.com/docs/aurora/image-component) in cooperation with the Next.js team, by using next/image we will make sure that all images we put into our MDX pages get optimized, which means that:
+For the third and last part we are going to use [next/image](https://nextjs.org/docs/app/api-reference/components/image) an image component that got created by the [Aurora team at Google](https://developer.chrome.com/docs/aurora/image-component) in cooperation with the Next.js team, by using **next/image** we will make sure that all images we put into our MDX pages get optimized, which means that:
 
 * we will update the configuration to make sure our [PNG](https://web.dev/learn/images/png) or [JPG](https://web.dev/learn/images/jpeg) images get converted automatically into formats like [WEBP](https://web.dev/learn/images/webp) and [AVIF](https://web.dev/learn/images/avif), this will reduce the file sizes of images without them losing in quality, which means our images will consume less bandwidth and load faster
-* we will use next/image which will make our images [responsive](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images) by creating an srcset to define multiple versions of an image with different dimensions so that on small screens we don't load images that are bigger and hence heavier than necessary
-* we will also use a remark plugin to make sure the path of each image gets turned into an import, which will allow next/image to automatically determine the width and height of our images
+* we will use **next/image** which will make our images [responsive](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images) by creating an srcset to define multiple versions of an image with different dimensions so that on small screens we don't load images that are bigger and hence heavier than necessary
+* we will also use a remark plugin to make sure the path of each image gets turned into an import, which will allow **next/image** to automatically determine the width and height of our images
 
 We will also keep **developer experience (DX)** feature of VSCode intact, by making sure that adding images to a document is easy and quick when using VSCode, meaning it should be possible to simply **drag and drop** images into a document and have VSCode create the markdown element with the path to the image for us
 
@@ -4549,7 +4549,7 @@ As we can see, depending on the **device pixel ratio** the browser will fetch a 
 > 
 > On local (in development mode) the images will get automatically resized by Next.js using a Node.js tool called [sharp](https://www.npmjs.com/package/sharp)  
 >  
-> In this tutorial we deploy to vercel, in preview and production the vercel service will do the image resizes (in the cloud) for us  
+> In this tutorial we deploy to vercel which means we will benefit from the [Vercel Image optimization](https://vercel.com/docs/image-optimization) features, in preview and production the vercel service will do the image resizes (in the cloud) for us, our images will then be cached using the [Vercel Edge Network](https://vercel.com/docs/edge-network/overview) (CDN)     
 >  
 > If however you use another provider you either need to find one that works like vercel or you can use a third party image optimization service like for example [Cloudinary](https://next.cloudinary.dev/), or if you search for "image hosting saas" I'm sure you will find a lot of alternatives, if you use a third party service also make sure you check out the [next/image configuration options](https://nextjs.org/docs/app/api-reference/components/image#configuration-options) documentation to learn how to integrate that service into your next/image configuration  
 > 
