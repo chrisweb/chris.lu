@@ -2,9 +2,8 @@ import Typing from '@/components/animated/Typing'
 import styles from './page.module.css'
 import Link from 'next/link'
 import ImageAnimatedEmoji from '@/components/base/image/AnimatedEmoji'
-import gifWaveStaticImport from '/public/assets/images/noto_emoji_animated/46/wave.gif'
-import webpWaveStaticImport from '/public/assets/images/noto_emoji_animated/46/wave.webp'
-//import avifWaveStaticImport from '/public/assets/images/noto_emoji_animated/46/wave.avif'
+import gifWaveStaticImport from '/public/assets/images/noto_emoji_animated/48/waving.gif'
+import webpWaveStaticImport from '/public/assets/images/noto_emoji_animated/48/waving.webp'
 
 export default function Homepage() {
 
@@ -12,7 +11,7 @@ export default function Homepage() {
         <>
             <section className="core">
                 <h1 className="h1">Hello, World!&nbsp;
-                    <ImageAnimatedEmoji gifStaticImport={gifWaveStaticImport} webpStaticImport={webpWaveStaticImport} /*avifStaticImport={avifWaveStaticImport}*/ alt="animated emoji waving hand" />
+                    <ImageAnimatedEmoji gifStaticImport={gifWaveStaticImport} webpStaticImport={webpWaveStaticImport} alt="animated emoji waving hand" />
                 </h1>
                 <p>Welcome to my blog, my name is Chris Weber (aka chrisweb)</p>
                 <p className="fontBigger fontLighter">I like <Typing>Web development, Lego bricks, Music, Games, Cooking, Movies & TV shows, Memes</Typing></p>

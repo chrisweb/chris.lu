@@ -4,7 +4,6 @@ import type { StaticImageData, ImageProps } from 'next/image'
 interface IAnimatedEmojiProps extends Omit<ImageProps, 'src'> {
     gifStaticImport: StaticImageData
     webpStaticImport: StaticImageData
-    //avifStaticImport: StaticImageData
 }
 
 const ImageAnimatedEmoji: React.FC<IAnimatedEmojiProps> = (props): JSX.Element => {
@@ -16,8 +15,8 @@ const ImageAnimatedEmoji: React.FC<IAnimatedEmojiProps> = (props): JSX.Element =
     const common = {
         alt: '',
         //unoptimized: true,
-        width: 46,
-        height: 46,
+        width: 48,
+        height: 48,
         quality: 100,
     }
 
@@ -35,17 +34,9 @@ const ImageAnimatedEmoji: React.FC<IAnimatedEmojiProps> = (props): JSX.Element =
         src: props.webpStaticImport
     })
 
-    /*const {
-        props: { src: avifSourceSrc },
-    } = getImageProps({
-        ...common,
-        src: props.avifStaticImport
-    })*/
-
     return (
         <>
             <picture>
-                {/*<source srcSet={avifSourceSrc} type="image/avif" />*/}
                 <source srcSet={webpSourceSrc} type="image/webp" />
                 {/* eslint-disable-next-line jsx-a11y/alt-text */}
                 <img src={gifSourceSrc} {...rest} className="animatedEmoji" />
