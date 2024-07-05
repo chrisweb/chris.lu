@@ -1,4 +1,6 @@
 import BaseLink from '@/components/base/Link'
+import webpNotFoundStaticImport from '/public/assets/images/animated/404.webp'
+import ImageAnimatedPicture from '@/components/base/image/AnimatedPicture'
 
 export default function NotFound() {
     return (
@@ -6,11 +8,7 @@ export default function NotFound() {
             <h1 className="h1">404 Page not found</h1>
             <p>Sorry, I looked everywhere but somehow I can&apos;t find this page.</p>
             <p>
-                <picture>
-                    <source srcSet="/assets/images/app/404.avif" type="image/avif" />
-                    <source srcSet="/assets/images/app/404.webp" type="image/webp" />
-                    <img src="/assets/images/app/404.webp" alt="Pulp Fiction movie scene of Vincent Vega (played by John Travolta) looking around a room" width="586" height="330" fetchPriority="high" decoding="async" />
-                </picture>
+                <ImageAnimatedPicture avifPath='/assets/images/animated/404.avif' webpStaticImport={webpNotFoundStaticImport} priority alt="Pulp Fiction movie scene of Vincent Vega (played by John Travolta) looking around a room" className="animatedPicture" />
             </p>
             <p>
                 <BaseLink href="/">Return Home</BaseLink>
