@@ -1,5 +1,7 @@
 import { getImageProps } from 'next/image'
 import type { StaticImageData, ImageProps } from 'next/image'
+import { rgbDataURL } from '@/lib/image'
+import Image from 'next/image'
 
 interface IAnimatedEmojiProps extends Omit<ImageProps, 'src'> {
     gifStaticImport: StaticImageData
@@ -24,6 +26,8 @@ const ImageAnimatedEmoji: React.FC<IAnimatedEmojiProps> = (props): JSX.Element =
         props: { src: gifSourceSrc, ...rest },
     } = getImageProps({
         ...common,
+        placeholder: 'blur',
+        blurDataURL: rgbDataURL(255, 188, 24),
         src: props.gifStaticImport
     })
 
@@ -44,7 +48,7 @@ const ImageAnimatedEmoji: React.FC<IAnimatedEmojiProps> = (props): JSX.Element =
             <picture>
                 <source srcSet={webpSource} type="image/webp" />
                 {/* eslint-disable-next-line jsx-a11y/alt-text */}
-                <img src={gifSource} {...rest} className="animatedEmoji" />
+                <Image src={gifSource} alt={props.alt} {...rest} className="animatedEmoji" />
             </picture>
         </>
     )
