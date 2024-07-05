@@ -229,7 +229,16 @@ const nextConfig = (phase) => {
                     headers: securityHeadersConfig(phase)
                 },
                 {
-                    source: '/(.*).cur',
+                    source: '/(.*).(cur|webm|mp4)',
+                    headers: [
+                        {
+                            key: 'Cache-Control',
+                            value: 'public, max-age=315360000, immutable',
+                        },
+                    ],
+                },
+                {
+                    source: '/assets/images/animated/(.*).(webp|avif)',
                     headers: [
                         {
                             key: 'Cache-Control',
