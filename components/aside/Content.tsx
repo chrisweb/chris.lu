@@ -12,7 +12,7 @@ const AsideContent: React.FC = (): JSX.Element => {
         <div className={styles.content}>
             <ShareButton />
             <a href="https://www.buymeacoffee.com/chriswwweb" className='shake'>
-                <ImageBuyMeACoffee staticImport={buyMeACoffeeImport} alt="button buy me a coffee" />
+                <ImageBuyMeACoffee staticImport={buyMeACoffeeImport} alt="buy me a coffee, please" />
             </a>
             <br />
             <span className="fontDarker">* Please 😉</span>
