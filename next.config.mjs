@@ -229,7 +229,7 @@ const nextConfig = (phase) => {
                     headers: securityHeadersConfig(phase)
                 },
                 {
-                    source: '/(.*).(cur|webm|mp4)',
+                    source: '/(.*).(cur|webm|mp4|ogg|mp3)',
                     headers: [
                         {
                             key: 'Cache-Control',
