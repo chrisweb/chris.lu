@@ -3876,11 +3876,11 @@ We will also keep **developer experience (DX)** feature of VSCode intact, by mak
 
 This first example is to demonstrate how you should **NOT** add images to document
 
-To experiment with images we first need an image, I created a test image using the funny [GitHub **octocat** image generator](https://myoctocat.com/), to create your own octocat image visit [myoctocat.com](https://myoctocat.com/), then create your own octocat and finally click on the **share** button to download the image, another option is to use a royalty free photo from a website like [pexels.com](https://www.pexels.com/creative-commons-images/) and download one you like
+To experiment with images we first need an image, I recommend visiting a royalty free images website like [pexels.com](https://www.pexels.com/creative-commons-images/) and download a picture you like, for this tutorial I downloadeded the ["Stranger Things 2 Sign in City at Night"](https://www.pexels.com/photo/green-bushes-on-desert-998653/) photograph by [Yuting Gao](https://www.pexels.com/@leofallflat/)
 
 Now in the `public` folder (which is at the root of your project) create a new `images` folder
 
-Then move the image or photo you just downloaded into `/public/images` folder and rename the image to `playground_test.png` (you can rename the file using the files explorer that is in the sidebar, open the `/public/images` folder, then right click on the name and chose **rename**, then type in the new name and then press `ENTER`)
+Then move the image or photo you just downloaded into `/public/images` folder and rename the image to `playground_test.jpg` (you can rename the file using the files explorer that is in the sidebar, open the `/public/images` folder, then right click on the name and chose **rename**, then type in the new name and then press `ENTER`), I renamed it to `playground_test.jpg` as I kept the original extension but if your photo is a png then you might want to rename it to `playground_test.png`
 
 Then open the `page.mdx` file (that is in the `/app/tutorial_examples/mdx-components_playground` folder) we created earlier and add the following content:
 
@@ -3900,7 +3900,7 @@ import Image from 'next/image'
 
 [external link](https://google.com)
 
-<Image src="/images/playground_test.png" />
+<Image src="/images/playground_test.jpg" />
 
 </article>
 
@@ -3914,12 +3914,12 @@ If you now look at the code you will notice that the markdown image element is u
 
 ![eslint message "Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images."](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_eslint_modal_missing_image_alt.png 'Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.')
 
-This is the eslint plugin jsx-a11y telling us that it is recommended to always add an alt text to images, not only is this a best practice for accessibility reasons but it can also improve your SEO
+This is the eslint **jsx-a11y** plugin telling us that it is recommended to always add an alt text to images, not only is this a best practice for accessibility reasons but it can also improve your SEO
 
 So let's first that by adding an alt text, like this:
 
-```mdx title="/app/tutorial_examples/mdx-components_playground/page.tsx" showLineNumbers{16} /alt="purple octocat wearing a diadem, a teal dress, orange bunny slippers and holding a gaming console pad"/#special
-<Image src="/images/playground_test.png" alt="purple octocat wearing a diadem, a teal dress, orange bunny slippers and holding a gaming console pad" />
+```mdx title="/app/tutorial_examples/mdx-components_playground/page.tsx" showLineNumbers{16} /alt=/#special
+<Image src="/images/playground_test.jpg" alt="Street at night, wet floor has reflections of the bright lights from multiple billboards and neon signs, one prominent billboard features an advertisement for the TV series Stranger Things 2" />
 ```
 
 Now let's save our `page.mdx` file (using the VSCode keyboard shortcut `Ctrl+S` (macOS: `⌘S`, Linux: `Ctrl+S`)) and then start the development server
@@ -3928,7 +3928,7 @@ Then open the [http://localhost:3000/tutorial_examples/mdx-components_playground
 
 Bummer we get an error:
 
-> Error: Image with src "/images/playground_test.png" is missing required "width" property.
+> Error: Image with src "/images/playground_test.jpg" is missing required "width" property.
 
 As the documentation for next/image tells us:
 
@@ -3937,48 +3937,58 @@ As the documentation for next/image tells us:
 Actually if we would fix this error we would get another one that tells us that the height is required too, so let's set the width and height values manually like so:
 
 ```mdx title="/app/tutorial_examples/mdx-components_playground/page.tsx" showLineNumbers{16} /width="200" height="200"/#special
-<Image src="/images/playground_test.png" alt="purple octocat wearing a diadem, a teal dress, orange bunny slippers and holding a gaming console pad" width="200" height="200" />
+<Image src="/images/playground_test.jpg" width="5398" height="3374" alt="Street at night, wet floor has reflections of the bright lights from multiple billboards and neon signs, one prominent billboard features an advertisement for the TV series Stranger Things 2" />
 ```
 
 > [!NOTE]  
-> I set the width and height to 200 pixels as I used the octocat image I mentioned at the beginning of this chapter, if you are using another image you that is not square then you might want to look at the details of image by hovering over the image in your operating system or by using an image editor like [Gimp](https://www.gimp.org/) and then depending on the ratio you might want to set other values for the width and height
+> I set the width to 5398 and height to 3374 in this case, but if you are using another image and don't know its exact dimensions then you might want to look at the details of image by hovering over the image in your operating system or by using an image editor like [Gimp](https://www.gimp.org/) and then depending on the ratio you might want to set other values for the width and height
 
 Now let's save our `page.mdx` file again (assuming our development server is still running) and then we have another look at the [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground) page in our browser
 
+> [!NOTE]  
+> On local the first time you visit the page it might take a bit of time before the image appears, this is because under the hood next/image will resize the image, depending on how fast your computer is some time might pass before the image actually finishes loading
+
 This time the page got compiled and we can see the result, the image is huge because it obviously gets displayed full size as we did not add any CSS whatsoever to style it, but this is just a test so this is fine
 
-The reason why the title of this chapter says "How to NOT add images", is because even though it works, there are actually several problems with this solution, to understand the first one, first open the **browser dev tools** (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**), then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) and then click on the row for the image, then click on **Headers** and look at the entries for the **response headers** where you should have an entry for **Cache-Control**, like in this screenshot:
+This solution seems to work well, so why does the title say this is not a good solution?
+
+To what the problem is we need to open the **browser dev tools** (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**), then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) and then click on the row for the image, then click on **Headers** and look at the entries for the **response headers** where you should have an entry for **Cache-Control**, like in this screenshot:
 
 ![Cache-Control header having max-age set to zero and must-revalidate](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_response_headers_cache.png)
 
 As you can see next/image has set the [Cache-Control](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control) header to **public, max-age=0, must-revalidate**, Next.js uses this [caching values](https://nextjs.org/docs/app/building-your-application/optimizing/static-assets#caching) for the **Cache-Control** header because it can NOT guarantee that the image will NOT change after a build, for example if the image is a user avatar then the user could change the image at any time, there are several ways to change the Next.js [caching behavior](https://nextjs.org/docs/app/api-reference/components/image#caching-behavior) for images, we will see one solution in the next chapter using static imports
 
-There is something else about this solution that is not great, by using react component (next/image component) we get a bad DX as we need to add an next/image import to all our MDX documents, we also need to write the code to use next/image ourself and finally we need to set the path to the image manually, which is bad because if we have a typo in the path then we will get a 404 instead of an image, in the next chapter we will see a better solution which uses the VSCode drag and drop feature to insert images into a document
+Finally something else that is not great for our DX is that we had to set the width and height of our image manually
 
-Finally there is yet another thing that makes our DX worse, which is that we had to set the width and height of our image manually, in the next chapter we will see a solution so that those values get determined automatically
+The solution we will see in the next chapter will fix both those problems, it will automatically determine the width and height of images and add a cache control header that tells the browser to actually cache our image(s)
 
-> [!MORE]  
-> [MDN "Cache-Control" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)  
-> [Next.js "static assets" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/static-assets)  
-> [Next.js "image caching behavior" documentation](https://nextjs.org/docs/app/api-reference/components/image#caching-behavior)  
+#### Automated image sizing and improved cache control
 
-#### VSCode image drag & drop
+As we saw in the previous chapter one of things next/image helps you get right is [image sizing](https://nextjs.org/docs/app/building-your-application/optimizing/images#image-sizing), if next/image knows the width and height of an image it is able to reserve the space the image will use when it has finished loading
 
-VSCode makes it easy to add images as markdown elements into MDX documents because it has a feature that lets you **drag & drop** images into a MDX document, it then creates the markdown element for you, sets the path to the image and if you hover over the path it shows you a preview of the image
+> [!TIP]  
+> By correctly sizing the images next/image will help prevent [cumulative layout shifts (CLS)](https://web.dev/articles/cls) which is a **Core Web Vital metric**, without a width and heigt value the image would get displayed as an empty element until it has has finished loading, then when the image appears it would some space in the document, meaning other content would then get pushed around
+>  
+> layout shifts are bad because if they happen at a moment where the user attempts to for example click on something then there is a chance that the user will misclick, this is why it is important to make sure that all images reserve the space they will need as soon as the HTML document gets rendered in the browser  
 
-We go back to our `page.mdx` file (that is in the `/app/tutorial_examples/mdx-components_playground` folder) in VSCode and first remove the next/image import as well as the image component itself, we will not need them anymore
+But having to set the width and height manually for all our images would NOT be a great developer experience (DX), as our project will grow we will have to manage lots of images and this means we will have to do a lot of manual work if we want to set the width and height manually for each of them, so what we want is to have next/image detect the width and height automatically
 
-Then to drag & drop our image we do the following steps:
+next/image offers 3 ways to avoid setting the width and height manually:
 
-* Keep the `page.mdx` file open and then in the VSCode file explorer (on the right) expand the `public` folder and then the `images` folder, you should now see the file you added to `/public/images` being listed
-* Now do a left click on the image name and keep the button pressed
-* Then drag the image into the `page.mdx` to the location where you want to insert it (for this example I will drop the image at line 16)
-* While dragging the image over the page VSCode will show you a message that says **Hold `shift` to drop into editor", so let's do just that (while still keeping the left mouse key pressed) also press the `shift` key and finally release the left mouse key to drop the image
-* You will notice that VSCode will automatically generate the markdown image element for you
+* one option is to use the next/image [fill](https://nextjs.org/docs/app/api-reference/components/image#fill) property, in which case the image would fill the parent image container (which needs to a CSS position set to either relative, fixed or absolute), meaning that the space used by the image would actually be the size of the parent container (next/image will set width and height of the image to 100% and set the CSS position to absolute), this is a great solution for a header image and you want it to fit inside of a header container by setting the [CSS object-fit property](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) on the image to either cover or contain, but in our case we don't have a container for each image that will get displayed inside of our document
+* setting the width and height manually is an another option, but for use case this is also not the one we want to chose, because we want a solution that automate most of the work so that we end up having a great DX and also because setting the width and height of an image when using markdown only works if you install an extra plugin
+* finally the third option is to statically import the images so that next/image can automatically determine the width and height at build time
 
-After dropping the image into the page your content should be like this:
+In this tutorial we are going to use the third option, which consists of using **static imports** 
 
-```md title="/app/tutorial_examples/mdx-components_playground/page.mdx" showLineNumbers {16}#special
+What is great about the **static imports** option is that we will also get rid of the other problem we found in the previous chapter, which was the cache control which had the max-age of the image set to zero, meaning the browser would not cache the image
+
+Lets edit our playground page once more and add the image import like this:
+
+```md title="/app/tutorial_examples/mdx-components_playground/page.mdx" showLineNumbers {2} /{PlaygroundTestImage}/#special
+import Image from 'next/image'
+import PlaygroundTestImage from '/public/images/playground_test.jpg'
+
 <article>
 
 * foo
@@ -3992,84 +4002,51 @@ After dropping the image into the page your content should be like this:
 
 [external link](https://google.com)
 
-![alt text](../../../public/images/playground_test.png)
+<Image src={PlaygroundTestImage} alt="Street at night, wet floor has reflections of the bright lights from multiple billboards and neon signs, one prominent billboard features an advertisement for the TV series Stranger Things 2" />
 
 </article>
 
 ```
 
-Line 16 is the image markdown element that VSCode created after we drag & dropped the image into the page
+Line 2 we imort the image (using same syntax we use to import code, only that this time we use the path our image to import from)
 
-If you now look at the image markdown element that VSCode has created, you will notice that there is a **drop options** icon at the end, like this:
+> [!NOTE]  
+> in previous example when we did add the path for image to the src attribute value it was possible to omit the public folder and just write `/images/playground_test.jpg`, however when using imports you need to use the full path including public like so `/public/images/playground_test.jpg`
 
-![image of the the vscode drop options icon](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_image_drop_options_icon.png)
+Line 17 we replace we image path with the variable we used in the import, we remove the width and height we did set manually in the previous example but we keep the alt attribute
 
-(the icon tends to disappear after a while, if you don't see the icon, delete the image element and do a new drag & drop)
+Save the changes to the MDX playground, then make sure the dev server is running and finally open the playground page in the browser, then open the **browser dev tools** by right clicking on the image and then chose **Inspect** (or by pressing the `F12` key and then selecting the **Elements** tab) and then have a look at the HTML of our image, it should look like this:
 
-Now click on that icon or as VSCode suggests you can use the keyboard shortcut by pressing `Ctrl+.` (macOS: `⌘.`, Linux: `Ctrl+.`), it should open a modal with 3 options where the first option should be **Insert Markdown Image**:
+![browser dev tools inspect element showing an image element with a width and height attribute](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_inspect_elements_image_width_and_height.png)
 
-![image of the the vscode drop options menu](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_image_drop_menu_option_markdown_image.png)
+Even though this time we didn't set the width and height manually, but because we used the **static import** for the image, **next/image** was able to automatically set the width and height on the element 
 
-If the first option is NOT **Insert Markdown Image** then I recommend you open the `.vscode/settings.json` VSCode workspace settings file (that we already used in one of the first steps of this tutorial to the tell VSCode to use the typescript version that is in our workspace) and add the following entry to it:
+Now to check if our second problem is solved we stay in the developer tools but switch to the [Network Tab](https://developer.chrome.com/docs/devtools/network), then click on the row for the image, then click on **Headers** and if we look at the entries for the **response headers** we can see that the **Cache-Control** value changed:
 
-```json title=".vscode/settings.json"
-    "files.associations": {
-        "*.mdx": "markdown"
-    },
-```
+![Cache-Control header having max-age set to high value and immutable](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_response_headers_cache_control_fixed.png)
 
-Now save the `.vscode/settings.json` file and then to make sure that VSCode takes the changes into account I recommend closing the `page.mdx` file and reopening it, then delete the image path and repeat the drag and drop of the image into the `page.mdx` file, then click again on the **drop options** icon and finally select **Insert Markdown Image**
+Previously the **Cache-Control header** had the value **public, max-age=0, must-revalidate** (meaning the browser would NOT cache the image), but this time the value is **public, max-age=315360000, immutable**, the **max-age** now has a very high value and is not zero anymore meaning the browser will cache our image for a long duration and we can also see that the [immutable directive](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control) got added, telling the browser that this resource will not change
 
-You should now have a markdown image element that looks like this:
+> [!NOTE]  
+> when seeing the high max-age value as well as the immutable directive you might wonder what happens if you change an image, how will the browser know about the change and fetch the new version of the image instead of the one that is now in its cache, well for that problem next/image uses a cache buster technique, if you have a closer look at the image name you will see that next/image added a hash between the original name and the file extension, as long as your image does not change the hash also won't, but if you change the image then next/image will update the hash to a new one and this will make the browser think it is a new file and hence it will fetch it
 
-```md
-![alt text](../../../public/images/playground_test.png)
-```
-
-> [!TIP]  
-> VSCode recently added a new feature that let's you preview your images, to see the preview hover over the image path with your mouse and a modal box should open with a preview of the image
->
-> ![vscode image preview](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_image_preview.png)
-
-We then replace the **alt text** placeholder with the alt text we already used in the previous chapter:
-
-```md
-![purple octocat wearing a diadem, a teal dress, orange bunny slippers and holding a gaming console pad](../../../public/images/playground_test.png)
-```
-
-And if you want to have a title you can add it like so:
-
-```md
-![purple octocat wearing a diadem, a teal dress, orange bunny slippers and holding a gaming console pad](../../../public/images/playground_test.png 'this is the image title')
-```
+By solving two major problems in this chapter we are already closer to a great solution, by using static imports we got rid of two problems, however one problem we got rid off was to not have to manually set the width and height just to come up with a solution where we have to manually write static imports, which means we need an even better solution that would allow us to automatise the creation of imports and that is why there is yet another chapter after this one
 
 > [!MORE]  
-> [VSCode "Markdown editing" documentation](https://code.visualstudio.com/docs/languages/markdown#_inserting-images-and-links-to-files)  
-
-#### Automatic image sizing using image imports to optimize CLS
-
-As we saw in the previous chapter one of things next/image helps you get right is [image sizing](https://nextjs.org/docs/app/building-your-application/optimizing/images#image-sizing), meaning it needs to know the width and height of an image to be able to reserve the space the image will use when it has finished loading
-
-> [!TIP]  
-> By correctly sizing the images next/image will help prevent [cumulative layout shifts (CLS)](https://web.dev/articles/cls) which is a **Core Web Vital metric**, without a width and heigt value the image would get displayed as an empty element until it has has finished loading, then when the image appears it would some space in the document, meaning other content would then get pushed around
->  
-> layout shifts are bad because if they happen at a moment where the user attempts to for example click on something then there is a chance that the user will misclick, this is why it is important to make sure that all images reserve the space they will need as soon as the HTML document gets rendered in the browser  
-
-next/image offers you 3 options to tell it what the display size will be:
-
-* one option is to use the next/image [fill](https://nextjs.org/docs/app/api-reference/components/image#fill) property, in which case the image would fill the parent image container (which needs to a CSS position set to either relative, fixed or absolute), meaning that the space used by the image would actually be the size of the parent container (next/image will set width and height of the image to 100% and set the CSS position to absolute), this is a great solution for a header image and you want it to fit inside of a header container by setting the [CSS object-fit property](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) on the image to either cover or contain, but in our case we don't have a container for each image that will get displayed inside of our document
-* setting the width and height manually is an another option, but for use case this is also not the one we want to chose, because we want a solution that automate most of the work so that we end up having a great DX and also because setting the width and height of an image when using markdown only works if you install an extra plugin
-* finally the third option is to statically import the images so that next/image can automatically determine the width and height at build time
-
-In the first example we did set the width and height manually, of course if you have to manage lots of images this is just bad for the DX, so what we want is to have next/image detect the width and height automatically, next/image can do this if we use static imports, but if we would add the static imports manually this would again be bad for our DX, so this is why (in the next chapter) we will install and configure a rehype plugin that will scan our MDX documents and automatically convert all image paths it finds to static imports and then next/image will be able to detect the width and height of our images
-
-> [!MORE]  
+> [MDN "Cache-Control" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)  
+> [Next.js "static assets" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/static-assets)  
+> [Next.js "image caching behavior" documentation](https://nextjs.org/docs/app/api-reference/components/image#caching-behavior)  
 > [Next.js "Image Sizing" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/images#image-sizing)  
 > [web.dev "cumulative layout shifts (CLS)" article](https://web.dev/articles/cls)  
 
-#### Rehype plugin to convert all image paths to static imports
+#### Rehype plugin to automate static imports of images
 
-This chapter consists of 4 steps, first we will add the rehype plugin package to our project, which will convert the path of our markdown images into an import, next we will update our Next.js configuration file to use the rehype plugin to our MDX setup, then we will create a simple image component that will use next/image so that our images get optimized and finally we will add our image component to the mdx-components file to make sure every markdown element uses our image plugin
+This chapter consists of 4 steps:
+
+* first we will add the rehype plugin package to our project
+* then we will update our Next.js configuration file to use the rehype plugin in our MDX setup
+* then we will create a simple image component that will use next/image
+* finally we will add our image component to the mdx-components file to make sure every markdown element uses our image plugin
 
 First we install the rehype plugin called [rehype-mdx-import-media](https://www.npmjs.com/package/rehype-mdx-import-media) using the following command in your VSCode terminal:
 
@@ -4131,11 +4108,13 @@ const nextConfig = (phase) => {
 }
 ```
 
-Line 3 we import the **remark-mdx-images** plugin
+Line 3 we import the **rehype-mdx-import-media** plugin
 
 Line 12 we add the **rehypeMDXImportMedia** plugin to the **rehypePlugins** list of our MDX configuration
 
-Next we are going to create a simple **BaseImage** component, similar to what we did earlier for the links, go into the `/components/base` folder we created earlier, then create a new `Image.tsx` file and add the following code:
+Next we are going to create a simple **BaseImage** component, similar to what we did earlier for the links
+
+Go into the `/components/base` folder we created earlier, then create a new `Image.tsx` file and add the following code:
 
 ```tsx title="/components/base/Image.tsx" showLineNumbers {1} {2} {4} {11} {11-13}
 import Image from 'next/image'
@@ -4206,20 +4185,153 @@ Line 4 to 5 we import our custom **BaseImage** component that we just created an
 
 Line 26 we specify that for each markdown image that got transformed into an HTML `<img>` element we want to use our custom BaseImage component
 
+Phew that was a lot of code but trust me it will be worth it, we just have one more thing to do and that is to update our playground, like so:
+
+```md title="/app/tutorial_examples/mdx-components_playground/page.mdx" showLineNumbers {2} /{PlaygroundTestImage}/#special
+<article>
+
+* foo
+* bar
+
+[internal link that has our production domain](https://example.com)
+
+[internal link starting with a slash](/internal)
+
+[internal link starting with a hash](#internal)
+
+[external link](https://google.com)
+
+![Street at night, wet floor has reflections of the bright lights from multiple billboards and neon signs, one prominent billboard features an advertisement for the TV series Stranger Things 2](../../../public/images/playground_test.jpg)
+
+</article>
+
+```
+
+On top we have removed the import of **next/image** from the playground MDX document as it is now gets used inside of our `mdx-components.tsx` file, this is great because it means we will NOT have to import next/image into every MDX document in which we have images
+
+We have also removed the image static import we had created manually earlier as we have now installed and configured the new **rehype-mdx-import-media** plugin, which will parse our MDX documents, find image (media) paths and convert them to static imports for us
+
+Line 14 we don't use the next/image component anymore but instead now use the regular markdown syntax for image elements, there is however one very important change and that is the path to the image, for the rehype plugin to work we need to use the relative path of the image
+
 Now start the dev server (using the `npm run dev` command) and then open the [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground) playground page URL in your browser
 
-In the first chapter when we launched the dev server we got an error from Next.js telling us to set the image height and width manually, this time we don't have such an error because we now use the rehype plugin to convert the image path to an import and this allows next/image to automatically detect the width and height
+In the first chapter when we launched the dev server we got an error from Next.js telling us to set the image height and width manually, this time we don't have such an error because we now use static imports, the best part is that we don't need to add them manually to every document as the rehype plugin will do it for us, the static imports will also make sure that next/image sets a cache control header telling the browser to cache the image for a long time
 
-Another problem we saw in first chapter was that our image response had a **Cache-Control header** with the value set to **public, max-age=0, must-revalidate**, now if we open the **browser dev tools** again (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**), then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) then click on the row for the image, then click on **Headers** and look at the entries for the **response headers** we can see that the **Cache-Control** value changed:
-
-![Cache-Control header having max-age set to high value and immutable](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_response_headers_cache_control_fixed.png)
-
-As we can see the max-age now has a very high value and is not zero anymore and the [immutable directive](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control) got added too, telling the browser that this resource will not change, which is another benefit we get from using static import
-
-Congratulations you just created a complete workflow where every image you drag & drop into your MDX documents will have its path automazically converted to an import so that next/image can determine the width and height (without you having to set it manually) and you created a custom react image component that will automatically optimize every markdown image 🎉
+Congratulations you just created a complete workflow that allows you to use the regular markdown syntax to add images to your MDX documents but still benefit from all the image optimizations that next/image will perform 🎉
 
 > [!MORE]  
 > ["rehype-mdx-import-media" repository](https://github.com/remcohaszing/rehype-mdx-import-media)  
+
+#### VSCode image drag & drop
+
+In the previous chapter we written the markdown image element manually and had to set the relative path manually too, if you are using VSCode there is however a much more convienient and faster way of adding images to your MDX documents, you just have to drag and drop an image into an MDX document and then VSCode creates the markdown image element including the correct path for you, a bonus feature is that you get an image preview if you hover over the image path with your mouse, in this chapter we will learn howto use that feature (however if you already know it or if you are not using VSCode then feel free to skip this chapter)
+
+We go back to our `page.mdx` file (that is in the `/app/tutorial_examples/mdx-components_playground` folder) in VSCode and first remove the next/image import (on the first line) as well as the image component itself (that we added line 16), we will not need them anymore
+
+Then to drag & drop our image we do the following steps:
+
+* Keep the `page.mdx` file open and then in the VSCode file explorer (on the right) expand the `public` folder and then the `images` folder, you should now see the file you added to `/public/images` being listed
+* Now do a left click on the image name and keep the button pressed
+* Then drag the image into the `page.mdx` to the location where you want to insert it (for this example I will drop the image at line 16)
+* While dragging the image over the page VSCode will show you a message that says **Hold `shift` to drop into editor", so let's do just that (while still keeping the left mouse key pressed) also press the `shift` key and finally release the left mouse key to drop the image
+* You will notice that VSCode will automatically generate the markdown image element for you
+
+After dropping the image into the page your content should be like this:
+
+```md title="/app/tutorial_examples/mdx-components_playground/page.mdx" showLineNumbers {14}#special
+<article>
+
+* foo
+* bar
+
+[internal link that has our production domain](https://example.com)
+
+[internal link starting with a slash](/internal)
+
+[internal link starting with a hash](#internal)
+
+[external link](https://google.com)
+
+![alt text](../../../public/images/playground_test.jpg)
+
+</article>
+
+```
+
+Line 14 is the image markdown element that VSCode created after we drag & dropped the image into the page (in this case you can skip the next chapter)
+
+If however VSCode added onyl the path to the file after you dropped the image, like this:
+
+```md
+public/images/playground_test.jpg
+```
+
+Or if VSCode inserted the absolute path and not the relative path, like so:
+
+```md
+![](file:///c%3A/Users/MY_USER/MY_PROJECT/public/images/playground_test.jpg)
+```
+
+Then I recommend you check out the next chapter
+
+##### Telling VSCode that our MDX files contain markdown 
+
+If you only see a path to a file then this is because VSCode recognized your page as MDX content instead of markdown, MDX is markdown + JSX but VSCode (as of now, sees things a bit differently, I however hope this will change in the future) and does not enable some of the markdown features when the file content is set to MDX
+
+I recommend you open the `.vscode/settings.json` VSCode workspace settings file (that we already used in one of the first steps of this tutorial to the tell VSCode to use the typescript version that is in our workspace) and add the following entry to it:
+
+```json title=".vscode/settings.json"
+    "files.associations": {
+        "*.mdx": "markdown"
+    },
+```
+
+Now save the `.vscode/settings.json` file and then to make sure that VSCode takes the changes into account I recommend closing the `page.mdx` file and reopening it
+
+Then delete the image path and repeat the drag and drop of the image into the `page.mdx` file
+
+This time you should see the markdown image element instead of just a path
+
+If it however the absolute path (and not the relative path), then notice the **drop options** icon at the end, that looks like this:
+
+![image of the the vscode drop options icon](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_image_drop_options_icon.png)
+
+(the icon tends to disappear after a while, if you don't see the icon, delete the image element and do a new drag & drop)
+
+Now click on that icon or as VSCode suggests you can use the keyboard shortcut by pressing `Ctrl+.` (macOS: `⌘.`, Linux: `Ctrl+.`), it should open a modal with 3 options where the first option should be **Insert Markdown Image**:
+
+![image of the the vscode drop options menu](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_image_drop_menu_option_markdown_image.png)
+
+Click on the first option to select **Insert Markdown Image**
+
+You should now have a markdown image element that looks like this:
+
+```md
+![alt text](../../../public/images/playground_test.png)
+```
+
+##### Markdown image preview in VSCode
+
+VSCode recently added a new feature that let's you preview your images, to see the preview hover over the image path with your mouse and a modal box should open with a preview of the image
+
+![vscode image preview](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_image_preview.png)
+
+##### Markdown image alt text and title
+
+We then replace the **alt text** placeholder with the alt text we already used in the previous chapter but this time for the markdown element, when using markdown the alt text goes into the brequets after the excalamation mark, like so:
+
+```md
+![Street at night, wet floor has reflections of the bright lights from multiple billboards and neon signs, one prominent billboard features an advertisement for the TV series Stranger Things 2](../../../public/images/playground_test.png)
+```
+
+And if you want to have a title you can add it like so:
+
+```md
+![Street at night, wet floor has reflections of the bright lights from multiple billboards and neon signs, one prominent billboard features an advertisement for the TV series Stranger Things 2](../../../public/images/playground_test.png 'this is the image title')
+```
+
+> [!MORE]  
+> [VSCode "Markdown editing" documentation](https://code.visualstudio.com/docs/languages/markdown#_inserting-images-and-links-to-files)  
 
 #### Image formats to optimize LCP
 
@@ -4410,7 +4522,7 @@ Now all we need to do is update the title of our markdown image element and use 
 
 [external link](https://google.com)
 
-![purple octocat wearing a diadem, a teal dress, orange bunny slippers and holding a gaming console pad](../../../public/images/playground_test.png 'this is the image title { banner }')
+![Street at night, wet floor has reflections of the bright lights from multiple billboards and neon signs, one prominent billboard features an advertisement for the TV series Stranger Things 2](../../../public/images/playground_test.jpg 'this is the image title { banner }')
 
 </article>
 
@@ -4477,7 +4589,7 @@ Next right click on the image and chose **Inspect** to open the developer tools 
 
 ![chrome dev tools elements tab showing the image modal box](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_inspect_image_modal.png)
 
-There are two important informations in here, the first one is the **Rendered size** which is 1056 pixel (if you have a high density screen this value will be higher), this corresponds to the size the image gets displayed on screen and the second important information is the **Intrinsic size** which is the original size of the image, as you can see in this example the rendered size is NOT the same as the original size, this difference in sizes shows us that we are fetching an image that is not only two times wider but also two times taller than what we need, this is obviously going to lead to a bad LCP score because the heaviest item on the page is our image and it is 4 times heavier than it should be
+There are two important informations in here, the first one is the **Rendered size** which is 1088 pixel (if you have a high density screen this value will be higher), this corresponds to the size the image gets displayed on screen and the second important information is the **Intrinsic size** which is the original size of the image, as you can see in this example the rendered size is NOT the same as the intrinsic size, this difference in sizes shows us that we are fetching an image that is far bigger then what we need it to be, this is obviously going to lead to a bad LCP score because the heaviest item on the page is our image and it is heavier than it should be
 
 In the next chapter will apply a third LCP optimisation to our images to ensure we are NOT loading images that are too big, which would harm the loading speed of our page
 
@@ -4507,7 +4619,7 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
                             width: '100%',
                             height: 'auto',
                         }}
-                        sizes="(max-width: 70rem) 100vw, 1056px"
+                        sizes="(max-width: 1120px) 100vw, 1088px"
                         {...newImageProps}
                     />
                 </>
@@ -4526,23 +4638,23 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
 export default BaseImage
 ```
 
-Line 50 we add the `sizes` attribute and added the `(max-width: 70rem) 100vw, 1056px` media query as value
+Line 50 we add the `sizes` attribute and added the `(max-width: 1120px) 100vw, 1088px` media query as value
 
-Our sizes attribute will tell the browser that for a maximum viewport width of 70rem it should chose an image to display that is equal or bigger than 100vw (100vw means 100% of the view width) and for any other viewport size above 70rem the browser should always take an image that is 1056 CSS pixels wide
+Our sizes attribute will tell the browser that for a maximum viewport width of 1120px it should chose an image to display that is equal or bigger than 100vw (100vw means 100% of the view width) and for any other viewport size above 1120px the browser should always take an image that is 1088px (CSS pixels) wide
 
-You might wonder why 1056, well because in our specific use case we have defined in our global.css that the maximum width for the `main` element to 70rem, to convert REMs to pixels you need to know the root font size, in our case it is 16 pixel (the default browser font size), which means the max-width of the `main` element is 70 x 16 = 1120 pixels, in `main` element we have an `article` element which has a padding left and right of 2rem (so 2 x 16 = 32 pixels), this means we need to substract that padding from the `main` element width to get the maximum width an image can have, so 1120 - (2 x 32) = 1056 pixel
+You might wonder why 1088px, well because in our specific use case we have defined in our global.css that the maximum width for the `main` element to 1120px, in that `main` element we have an `article` element which has a padding left and right of 16px (so 2 x 16 = 32 pixels), this means we need to substract that padding from the `main` element width to get the maximum width an image can have, so 1120 - (2 x 16) = 1088 pixel
 
 Make sure the development server is still running and then visit the playground page [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground)
 
 Now open **browser dev tools** (by pressing the `F12` key or right click somewhere in the page and chose **Inspect**) and then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) and look at the row of the image, if you look at the URL of the image you will see that it contains a **w** parameter followed by a value, for example on a regular density screen the URL will be like this:
 
-`image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&w=1080&q=75`
+`image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.XXXXXXXX.jpg&w=1200&q=75`
 
 and on a screen with a **device pixel ratio** of **2** the URL will instead be this:
 
-`image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&w=3840&q=75`
+`image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.XXXXXXXX.jpg&w=3840&q=75`
 
-As we can see, depending on the **device pixel ratio** the browser will fetch a different source, for a **device pixel ratio** of **1** the URL has a **w** parameter with the value **1080**, but when the **device pixel ratio** is **2** the **w** parameter has a value set to **3840**
+As we can see, depending on the **device pixel ratio** the browser will fetch a different source, for a **device pixel ratio** of **1** the URL has a **w** parameter with the value **1200**, but when the **device pixel ratio** is **2** the **w** parameter has a value set to **3840**
 
 > [!NOTE]  
 > One of the great things about next/image is that it will handle the resizing / caching of images for us
@@ -4563,44 +4675,45 @@ To better understand the **srcset** attribute, we now go back into the browser a
 
 ```html
 <img
-    alt="purple octocat wearing a diadem, a teal dress, orange bunny slippers and holding a gaming console pad"
+    alt="Street at night, wet floor has reflections of the bright lights from multiple billboards and neon signs, one prominent billboard features an advertisement for the TV series Stranger Things 2"
     title="this is the image title"
     fetchpriority="high"
-    width="2000"
-    height="2000"
+    width="5398"
+    height="3374"
     decoding="async"
     data-nimg="1"
-    style="color:transparent;width:100%;height:auto"
-    sizes="(max-width: 70rem) 100vw, 1056px"
-    srcset="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=640&amp;q=75 640w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=750&amp;q=75 750w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=828&amp;q=75 828w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=1080&amp;q=75 1080w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=1200&amp;q=75 1200w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=1920&amp;q=75 1920w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=2048&amp;q=75 2048w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=3840&amp;q=75 3840w"
-    src="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=3840&amp;q=75">
+    style="color: transparent; width: 100%; height: auto;"
+    sizes="(max-width: 1120px) 100vw, 1088px"
+    srcset="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.5085913e.jpg&amp;w=640&amp;q=75 640w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.5085913e.jpg&amp;w=750&amp;q=75 750w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.5085913e.jpg&amp;w=828&amp;q=75 828w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.5085913e.jpg&amp;w=1080&amp;q=75 1080w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.5085913e.jpg&amp;w=1200&amp;q=75 1200w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.5085913e.jpg&amp;w=1920&amp;q=75 1920w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.5085913e.jpg&amp;w=2048&amp;q=75 2048w, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.5085913e.jpg&amp;w=3840&amp;q=75 3840w"
+    src="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.5085913e.jpg&amp;w=3840&amp;q=75"
+>
 ```
 
 We can see the image element has our **style** attribute we added earlier, as well as the **sizes** attribute we added just now, but below there is now also the **srcset** attribute that next/image added automatically
 
-The value of the **srcset** contains a series of image **URLs** followed by a **number** and that number has the letter **w** appended, for example the first entry `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=640&amp;q=75 640w` in the list, is a string which contains the image source URL, then a space and then something called a **condition descriptor**, in this case the condition descriptor that tells the browser that if it needs an image with a width of 640 pixel (640w) then it should take the image source URL that preceeds it
+The value of the **srcset** contains a series of image **URLs** followed by a **number** and that number has the letter **w** appended, for example the first entry `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.5085913e.jpg&amp;w=640&amp;q=75 640w` in the list, is a string which contains the image source URL, then a space and then something called a **condition descriptor**, in this case the condition descriptor that tells the browser that if it needs an image with a width of 640 pixel (640w) then it should take the image source URL that preceeds it
 
 If we now put everything together here is what the browser does for a screen with a regular density:
 
-* first the browser determines at what CSS **image width** we want to display the image, it knows that the **style** attribute has set the image width to 100% of the container, the container without the padding is 1056 pixels wide, so the first information is that it will need an image that is **1056 pixels wide**
+* first the browser determines at what CSS **image width** we want to display the image, it knows that the **style** attribute has set the image width to 100% of the container, the container without the padding is 1088 pixels wide, so the first information is that it will need an image that is **1088 pixels wide**
 * the browser also knows that our **device pixel ratio** is **1**, which is the second inforation the browser needs to determine which source to chose
-* so now the browser does the math, image CSS width x device pixel ratio = image source width, so 1056 x 1 = 1056 pixels, at this point it now knows it will need an image source file that is at least 1056 pixels wide
-* next the browser looks at what image souces we offer by looking at the **srcset** sources list, it attempts to find an URL for an image width that is equal or bigger than the 1056 pixels image it needs and finds an entry with a **condition descriptor** that is **1080w**, so it will use the image URL `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=1080&amp;q=75`
+* so now the browser does the math, image CSS width x device pixel ratio = image source width, so 1088 x 1 = 1088 pixels, at this point it now knows it will need an image source file that is at least 1088 pixels wide
+* next the browser looks at what image souces we offer by looking at the **srcset** sources list, it attempts to find an URL for an image width that is equal or bigger than the 1088 pixels image it needs and finds an entry with a **condition descriptor** that is **1080w**, so it will use the image URL `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=1080&amp;q=75`
 
-For a screen with a higher density the steps are the same but the result is not, this is because this time the **device pixel ratio** is **2**, so it does the math again and finds out it needs an image source that is 1056 x **2** = 1056 pixels wide, so it looks at the srcset again and the image source URL that is equal or bigger than 1056 pixels is `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=3840&amp;q=75`, which is the URL for the source with a width of 3840 pixels
+For a screen with a higher density the steps are the same but the result is not, this is because this time the **device pixel ratio** is **2**, so it does the math again and finds out it needs an image source that is 1088 x **2** = 2176 pixels wide, so it looks at the srcset again and the image source URL that is equal or bigger than 2176 pixels is `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=3840&amp;q=75`, which is the URL for the source with a width of 3840 pixels
 
 > [!NOTE]  
 > The browser will always try to find a source that is equal or bigger than what is needed, there is one exception though, if there is no source big enough in the list then it takes the biggest it can find even if it is smaller than what it needs
 > 
 > If the browser finds an image that is a little bit smaller and also another source that is substantially bigger then it will take the bigger one, this is because if the browser scales the bigger image down then there is no quality loss even though it is quite a waste of bandwidth and results in longer loading times, this is because if it would take the smaller image that is almost the size it needs it would have to scale the image up and this would result in a blurry image
 
-Now that we know how sizes and srcset works, there is one last thing we want to improve, we saw that for screens with a 2x device pixel ratio the browser will chose the source URL that will fetch a 3840 pixels wide image, the problem here is that this 3840 pixels wide image will be almost twice as large as the 2112 pixels wide image that we need, the browser can NOT take a smaller image because the second biggest version we offer is 2048 pixels and that is slightly lower than the 2112 pixels wide image we need
+Now that we know how sizes and srcset works, there is one last thing we want to improve, we saw that for screens with a 2x device pixel ratio the browser will chose the source URL that will fetch a 3840 pixels wide image, the problem here is that this 3840 pixels wide image will be almost twice as large as the 2176 pixels wide image that we need, the browser can NOT take a smaller image because the second biggest version we offer is 2048 pixels and that is slightly lower than the 2176 pixels wide image we need
 
 The solution is to tweak the list of source sizes that next/image will use when it creates the srcset and to do that we need to edit the Next.js configuration file of our project
 
 By default Next.js will use the following [deviceSizes](https://nextjs.org/docs/app/api-reference/components/image#devicesizes) values for srcsets: 640, 750, 828, 1080, 1200, 1920, 2048, 3840
 
-There are two values in the list that are very close to each other, 1920 and 2048, that 2048 one is just a bit too small for our need but also very close to 1920, so it seems like a good idea to replace that value with the one we need which is 2112
+There are two values in the list that are very close to each other, 1920 and 2048, that 2048 one is just a bit too small for our need but also very close to 1920, so it seems like a good idea to replace that value with the one we need which is 2176
 
 We open our `next.config.mjs` and change it to this:
 
@@ -4649,7 +4762,7 @@ const nextConfig = (phase) => {
 		images: {
             // file formats for next/image
             formats: ['image/avif', 'image/webp'],
-            deviceSizes: [384, 640, 750, 828, 1080, 1200, 1920, 2112, 3840],
+            deviceSizes: [384, 640, 750, 828, 1080, 1200, 1920, 2176, 3840],
         },
     }
 
@@ -4658,9 +4771,9 @@ const nextConfig = (phase) => {
 }
 ```
 
-Line 36 we add the **deviceSizes** option and set the value to `[384, 640, 750, 828, 1080, 1200, 1920, 2112, 3840]`
+Line 36 we add the **deviceSizes** option and set the value to `[384, 640, 750, 828, 1080, 1200, 1920, 2176, 3840]`
 
-If we now open the browser (assuming you are on a device with a high density screen) and look at the `img` element we will see that srcset now has an entry for 2112 pixels wide images and if we open the developer tools and look at the image URL in the Network tab we can see that the browser has fetched the image using the source URL for a 2112 pixels wide image
+If we now open the browser (assuming you are on a device with a high density screen) and look at the `img` element we will see that srcset now has an entry for 2176 pixels wide images and if we open the developer tools and look at the image URL in the Network tab we can see that the browser has fetched the image using the source URL for a 2176 pixels wide image
 
 > [!TIP]  
 > If you resize your browser the viewport size will change, if you start with a small browser and make it bigger you will see in the Network tab that the browser loads bigger images, however if you make the browser window smaller the browser will keep the current image, this is because the current image is big enough and can be downscaled, so no need to load a new image 
@@ -4697,7 +4810,7 @@ const BaseImage: React.FC<ImageProps> = (props): JSX.Element => {
                             width: '100%',
                             height: 'auto',
                         }}
-                        sizes="(max-width: 70rem) 100vw, 1056px"
+                        sizes="(max-width: 1120px) 100vw, 1088px"
                         placeholder="blur"
                         {...newImageProps}
                     />
@@ -4774,7 +4887,7 @@ First lets open our playground `pages.mdx` we created earlier in the `/app/tutor
 
 [external link](https://google.com)
 
-![purple octocat wearing a diadem, a teal dress, orange bunny slippers and holding a gaming console pad](../../../public/images/playground_test.png 'this is the image title { banner }')
+![Street at night, wet floor has reflections of the bright lights from multiple billboards and neon signs, one prominent billboard features an advertisement for the TV series Stranger Things 2](../../../public/images/playground_test.jpg 'this is the image title { banner }')
 
 ```js
 function helloWorld() {
@@ -4850,7 +4963,7 @@ const nextConfig = (phase) => {
 		images: {
             // file formats for next/image
             formats: ['image/avif', 'image/webp'],
-            deviceSizes: [384, 640, 750, 828, 1080, 1200, 1920, 2112, 3840],
+            deviceSizes: [384, 640, 750, 828, 1080, 1200, 1920, 2176, 3840],
         },
     }
 
