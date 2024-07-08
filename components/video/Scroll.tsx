@@ -65,7 +65,8 @@ const VideoScroll: React.FC = () => {
 
         if (chunkSizeRef.current > 0) {
             const frameFloat = window.scrollY * chunkSizeRef.current
-            const frame = Math.round((frameFloat + Number.EPSILON) * 100) / 100
+            const frame = Math.round((frameFloat + Number.EPSILON) * 1000) / 1000
+            console.log(frame)
             video.currentTime = frame
         }
 
