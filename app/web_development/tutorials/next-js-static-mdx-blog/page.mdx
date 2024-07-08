@@ -4832,11 +4832,22 @@ export default BaseImage
 
 Line 51 we add the placeholder attribute and set the value to blur
 
-If you want to check out the placeholder and are on local the images will probably load instantly so you won't see it, but you can emulate a throttled Network speed by opening the chrome developer tools in your browser, then open the Network tab and then click on the down arrow icon where it says "No throttling" and change it to "Slow 3G", Firefox has a similar option and for Safari you need to first go to "Settings" (the ⚙️ gear icon on the right), then open the experimental tab and then click the checkbox for Network: allow throttling, then reload the developer tools and then you can go to the Network tab and set the throttling (on the top right) to "3G"
+> [!TIP]  
+> If you want to check out the placeholder and are on local the images will probably load instantly so you won't see it, but you can emulate a throttled Network speed by opening the chrome developer tools in your browser, then open the Network tab and then click on the down arrow icon where it says "No throttling" and change it to "Slow 3G", Firefox has a similar option and for Safari you need to first go to "Settings" (the ⚙️ gear icon on the right), then open the experimental tab and then click the checkbox for Network: allow throttling, then reload the developer tools and then you can go to the Network tab and set the throttling (on the top right) to "3G"  
+>  
+> ![developer tools throttling feature](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_network_throttling.png)  
+>  
+> Then reload the page and you see the placeholder being displayed before the image starts loading  
 
-![developer tools throttling feature](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_network_throttling.png)
+To see the placeholder image that next/image has generated you can also open the **Network Tab** (in your browsers developer tools) and click on the row of the image, then click on on the preview tab, the URL of the placeholder is similar to the URL of the image itself, the only difference is that for the placeholder the size is set to 8px (`&w=8`)
 
-Then reload the page and you see the placeholder being displayed before the image starts loading
+Something worth knowing about the placeholder is that next/image will only create a [blurDataURL](https://nextjs.org/docs/pages/api-reference/components/image#blurdataurl) (blurDataURL is the image attribute next/image uses when placeholder is set to blur) for  images that you import statically but NOT for remote images where your source is a URL, for example the URL of a remote image hosting service or a CDN, next/image does also NOT (as of now) create placeholder images for animated images, like an animated gif, webp or avif won't have a placeholder
+
+In situations next/image does not create the placeholder you have several options to create your own placeholder:
+
+* by adding code to your project that will create placeholder images, Next.js has an example of such a script in the [placeholder color placeholder example on GitHub](https://github.com/vercel/next.js/blob/canary/examples/image-component/app/color/page.tsx)
+* the second option is an online tool (that they recommend in the Next.js documentation) from [png-pixel.com](https://png-pixel.com/) that you can use to create your own static placeholder image
+* the third option is to use a package like [pla**i**ceholder](https://www.npmjs.com/package/plaiceholder), but be careful when using this one, I see it being mentioned in a lot of tutorials, however if you go to [pla**i**ceholders GitHub repository](https://github.com/joe-bell/plaiceholder) you will notice that the project has been archived so its unlickely it will get updates in the future (also issues are disabled on archived repositories so there is no way to open one if you find a bug)
 
 > [!MORE]  
 > [Next.js "next/image placeholder" documentation](https://nextjs.org/docs/app/api-reference/components/image#placeholder)  
