@@ -510,6 +510,7 @@ video {
 
 audio {
     margin: calc(var(--main-spacing) / 2) 0;
+    width: 100%;
 }
 
 audio::-webkit-media-controls-enclosure {
