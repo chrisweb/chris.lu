@@ -105,8 +105,8 @@ const VideoScroll: React.FC = () => {
     return (
         <div className="videoContainer" style={{ width: '100%', position: 'relative', display: 'flex', flexDirection: 'column' }}>
             <video id="banner_video" style={{ position: 'absolute', zIndex: 10, flexShrink: 1 }} ref={videoElementRef} muted playsInline preload="auto" title={altText} poster="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
-                <source src="/assets/video/app/web_development/tutorials/next-js-static-mdx-blog/banner.webm" type="video/webm" />
                 <source src="/assets/video/app/web_development/tutorials/next-js-static-mdx-blog/banner.mp4" type="video/mp4" />
+                <source src="/assets/video/app/web_development/tutorials/next-js-static-mdx-blog/banner.webm" type="video/webm" />
                 <p>Your browser doesn&apos;t support HTML5 video.</p>
             </video>
             <ImageDispatch
