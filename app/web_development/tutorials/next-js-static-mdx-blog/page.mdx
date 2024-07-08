@@ -2981,7 +2981,6 @@ So instead if you want to style all Elements that match a certain type, or if yo
     /* sizes */
     --spacing: 16px;
     --maxWidth: 1120px;
-    --font-size: 16px;
 }
 
 *,
@@ -3002,7 +3001,7 @@ html {
 }
 
 body {
-    font-size: var(--font-size);
+    font-size: 1rem;
     /* remove any margin that browsers add to body */
     margin: 0;
 }
@@ -3018,10 +3017,10 @@ footer {
 
 main {
     display: flex;
+    max-width: var(--maxWidth);
     margin-left: auto;
     margin-right: auto;
     margin-bottom: calc(var(--spacing) * 4);
-    max-width: var(--maxWidth);
 }
 
 /* on small screens */
@@ -3048,36 +3047,78 @@ a {
 a:hover {
     color: var(--secondary-dark-color);
 }
+
+h1 {
+    font-size: 6rem;
+    line-height: 1.167;
+}
+
+h2 {
+    font-size: 3.75rem;
+    line-height: 1.2;
+}
+
+h3 {
+    font-size: 3rem;
+    line-height: 1.167;
+}
+
+h4 {
+    font-size: 2.125rem;
+    line-height: 1.235; 
+}
+
+h5 {
+    font-size: 1.5rem;
+    line-height: 1.334;
+}
+
+h6 {
+    font-size: 1.25rem;
+    line-height: 1.6;
+}
 ```
 
 This is our base `global.css` which now contains a basic [CSS (Cascading Style Sheet)](https://developer.mozilla.org/en-US/docs/Web/CSS) used to style and layout our app:
 
-Line 1 to 15 we set some variables (inside of the [:root](https://developer.mozilla.org/en-US/docs/Web/CSS/:root) pseudo class) that can be used everywhere (even in any of our CSS Modules), it is recommended to use CSS variables when ever possible as in the future it will be faster to change the value of a variable in the globall css instead of having to go into every file where that variable gets used and change the value there
+Line 1 to 14 we set some variables (inside of the [:root](https://developer.mozilla.org/en-US/docs/Web/CSS/:root) pseudo class) that can be used everywhere (even in any of our CSS Modules), it is recommended to use CSS variables when ever possible as in the future it will be faster to change the value of a variable in the globall css instead of having to go into every file where that variable gets used and change the value there
 
-Line 17 to 21 we use a technique seen in a lot of **reset stylesheets**, we using the asterisk to target all elements of our HTML document and then also include their [::before](https://developer.mozilla.org/en-US/docs/Web/CSS/::before) and [::after](https://developer.mozilla.org/en-US/docs/Web/CSS/::after) pseudo elements, we set their [box-sizing CSS property](https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing) to **border-box**, this has an impact on how the browser calculates the width and height of elements, by default **box-sizing** is set to **content-box**, in which case the width and height only include the content but NOT the border padding or margin, however as we change it **border-box** the width and height will now also include the border and padding but still not the margin, this way of calculating the width and height seems more intuitive then the default behavior to a lot of developers, which is why this is something you will often see in stylesheets (if however you prefer the default behavior, then feel free to not include this part in your own global.css stylesheet)
+Line 16 to 20 we use a technique seen in a lot of **reset stylesheets**, we using the asterisk to target all elements of our HTML document and then also include their [::before](https://developer.mozilla.org/en-US/docs/Web/CSS/::before) and [::after](https://developer.mozilla.org/en-US/docs/Web/CSS/::after) pseudo elements, we set their [box-sizing CSS property](https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing) to **border-box**, this has an impact on how the browser calculates the width and height of elements, by default **box-sizing** is set to **content-box**, in which case the width and height only include the content but NOT the border padding or margin, however as we change it **border-box** the width and height will now also include the border and padding but still not the margin, this way of calculating the width and height seems more intuitive then the default behavior to a lot of developers, which is why this is something you will often see in stylesheets (if however you prefer the default behavior, then feel free to not include this part in your own global.css stylesheet)
 
 > [!TIP]  
 > In CSS3 pseudo elements like **before** and **after** have two colons, so `::before` and `::after` (in CSS2 they only had one colon), check out the [MDN ::before page](https://developer.mozilla.org/en-US/docs/Web/CSS/::before) for further details
 
-Line 23 to 32 we use the **html** [type selector](https://developer.mozilla.org/en-US/docs/Web/CSS/Type_selectors) and do several things:
+Line 22 to 31 we use the **html** [type selector](https://developer.mozilla.org/en-US/docs/Web/CSS/Type_selectors) and do several things:
 
 * first set the [font-smoothing](https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth) CSS property to tell the browser to apply **anti-aliasing** to our fonts, if you have a dark background and light text (which we do in this example) then **anti-aliasing** can prevent the text from looking overly bold and instead makes it look lighter, but be aware that on the [caniuse CSS font-smooth](https://caniuse.com/font-smooth) page they say that this property is not part of the CSS standard, however both webkit and firefox implement their own non standard property, as explained the article ["stop-fixing-font-smoothing"](https://usabilitypost.com/2012/11/05/stop-fixing-font-smoothing/) this feature should only get used for light fonts on dark backgrounds but not for dark text on a light background, I recommend reading that article if you want to learn more about font smoothing
-* then we also set the [text-size-adjust](https://developer.mozilla.org/en-US/docs/Web/CSS/text-size-adjust)
-* we also use the [tab-size](https://developer.mozilla.org/en-US/docs/Web/CSS/tab-size)
-* then we set the color for our background and the default color for our text
-* finally we set the font-size to 100%, which is good for accessibility as it lets the user change the font-size via the browser settings, as are using the [CSS rem unit](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units) for all font related sizes, this means that setting the font-size of the HTML element will have an impact on all other font-sizes in our CSS, for example we use rem for the 
+* then we also set the [text-size-adjust](https://developer.mozilla.org/en-US/docs/Web/CSS/text-size-adjust) CSS property, this feature makes sure that on mobile browsers the text size is the exactly the one we set and not inflated by the browser, this helps to avoid weird placement bugs where modified text size moves other elements around, however if you use this feature make sure that your text is easy to read on mobile devies and tablets, if the text is too small I recommend using a bigger font-size and always keep the **text-size-adjust** set to 100%, text-size-adjust is however only support on chrome (as of now), you can check out what browser support it on [caniuse "text-size-adjust"](https://caniuse.com/text-size-adjust)
+* we also use the [tab-size](https://developer.mozilla.org/en-US/docs/Web/CSS/tab-size) CSS property, which is useful if for example you have codeblocks in your content, as codeblocks often contain tabs for code indentation, which means this feature is similar to setting the indent size in your [.editorconfig](https://editorconfig.org/) file, if you use just a number without a unit (like in this example) then tab size will be that number multiplied by the **width of one space** (this is not the font-size, which is the height of your characters), so setting it to **4** and assuming a space character is 9px wide then this gives us a tab size of 4 x 9 = 36px
+* then we set the color for our background and the default color for our text using the CSS [var()](https://developer.mozilla.org/en-US/docs/Web/CSS/var) function and as value we use the colors we previously defined in the `:root` pseudo element
+* finally we set the font-size to 100%, which is good for accessibility as it lets the user change the font-size via the browser settings, as we will also use the [CSS rem unit](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units) for all font related sizes, this means that setting the font-size of the HTML element will have an impact on all other font-sizes in our CSS, for example we use the CSS rem unit for the font-size of all our headings, if the user now changes the default font-size via the browser settings then all our text will adapt to that change, if however you set a value like 16px as font-size to your `<html>` element (or the `<body>` element) then the user will not be able to change the font-size via the browser settings
 
-next we use the **body** and first set the default font-size using the css variable we just set in the root pseudo class, then we also reset the mardin values that browser might set by default
+To make a test you can set the font-size to 100% in the global.css, then save the file and launch the development server, then open the [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground) playground page in your browser, then open the settings, in chrome you have to click on **appearance** in the menu on the left and then you on the right you have options where you can change the browsers default font-size setting to **large** (in Firefox it is also in the settings but in the general section, in Safari it is also in settings, then Advanced and then change the font-site where it says "Never use font sizes smaller than")
 
-then we add some margin to the **footer** and **header** using the respective type selectors
+![chrome settings appearance menu to change the default font-size](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_settings_appearance_change_font_size.png)
+
+Line 33 to 36 we use the **body type selector** and use a reset the margin value(s) that a browser might set by default to zero
+
+Line 38 to 45 we add some margin to the **footer** and **header** using the respective type selectors, we also add a minimum height to the footer which will create a bit of space at the end of our pages, this is useful as on mobile and tablet you sometimes have device or browser UIs putting something on the bottom that would cover your last bit of content, by adding a bit of space you ensure that the user will always see everything when the page is fully scrolled down
  
-then we add a basic page layout using [Flexbox](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Flexbox)
+Line 47 to 53 we use the **main type selector** to tell the browser that we want to use the [CSS Flexbox layout](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Flexbox) by setting the display property to [flex](https://developer.mozilla.org/en-US/docs/Web/CSS/display#flex), for this element we set a maximum width using the CSS variable we created in the `:root`, the maximum width is 1120px to ensure that even on very large viewports (screens) the main element will not stretch to the full width that is available, this is important for the text we will place inside of our main section, because if chapters of text are very wide if makes them hard to read, we set both the margin-left and margin-left to auto to make sure that our `<main>` element will get centered if the viewport is wider than the **max-width** we just set, finally we also add a little bit of margin to the bottom to make sure our content has a bit of space before the footer starts
 
-finally add some color to all our links using the css [var()](https://developer.mozilla.org/en-US/docs/Web/CSS/var) function to use the variables we set earlier and we also use the [:hover](https://developer.mozilla.org/en-US/docs/Web/CSS/:hover) pseudo class to change the color of links on hover
+When chosing to use the **CSS Flexbox layout** as we did for the main element, the browser automatically assumes that the [flex-flow](https://developer.mozilla.org/en-US/docs/Web/CSS/flex-flow) is set to row, which means that if we put an `<article>` into our `<main>` as well as an `<aside>` then both will get displayed as two columns next to each other (yes flex-flow row creates "columns", that's because using flex-flow row all elements get put in a row and then expand twowards the bottom, with flexbox flex-flow column they all elements are in a column and expand towards the right)
+
+Line 55 to 62 here we change the flex-flow of the `<main>` element to column, which means that this time if we put an `<article>` into our `<main>` as well as an `<aside>` then both will get displayed as two rows, we do this because on devices with a viewport smaller than the maximum width of 768px we are targetting with our `@media all and (max-width: 768px){:css}` [media query](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries)  we want the `<aside>` element will get placed below the `<article>`
+
+Line 64 to 40 same as for the `<main>` element we again set the **display** property to **flex** and the **flex-direction** to column to make sure all elements inside of our `<article>` element get displayed one under the other, then we add a padding using our `--spacing` CSS variable to 16 pixels on each side, because we also added maximum width to the main element this means that article content (if we don't have an aside) will be a maximum 1120 - 32 = 1088 pixels wide, this will matter in a later chapter when we start adding images to our cotnent, finally we set the width to 100% to make sure that the article always uses the full width of the parent main element
+
+Line 72 to 78 we add some color to all our links using the CSS `var()` function to use the variables we set earlier in the  and we also use the [:hover](https://developer.mozilla.org/en-US/docs/Web/CSS/:hover) pseudo class to change the color of links on hover
+
+Line 80 to 108 we add use  the font-size and line-height properties to define the height of all our headings (like any other values in this CSS stylesheet, those are just my examples, feel free to tweak those values to your liking)
 
 Now to apply the global styles to our content we our going to import the `global.css` inside of our **root layout** (located in the `/app` folder), like so:
 
-```tsx title="/app/layout.tsx"
+```tsx title="/app/layout.tsx" showLineNumbers {1}
 import './global.css'
 import { Metadata } from 'next'
 
@@ -3106,6 +3147,8 @@ export default function RootLayout({
     )
 }
 ```
+
+Line 1 we import our `global.css` stylesheet and that's already it
 
 > [!MORE]  
 > [Next.js "global styles" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-modules#global-styles)  
@@ -3566,9 +3609,9 @@ Line 6 we import the new CSS Module containing the Navigation component styleshe
 
 Line 28 / 34 / 43 / 49 we use the 3 CSS rules, the `.active` rule will be used to make the Navigation entry that matches the current pathname bold, the `.navigation` rule uses **position fixed** so that the navigation bar always stays on top and finally the `.link` rule will use the custom font to change the font of our navigation items  
 
-Just one last little change needed, because we made the navigation fixed, it means that it will NOT take up any space anymore in the document as it will be floating above the content, this will cause the page content to move up and eventually be under the navigation, this is why we will edit the file in the folder, like so:
+Just one last little change needed, because we made the navigation fixed, it means that it will NOT take up any space anymore in the document as it will be floating above the content, this will cause the page content to move up and eventually be under the navigation, this is why we will edit our `global.css` file in `/app` the folder and add these few lines of CSS to it:
 
-```css title="/app/global.css" showLineNumbers{38} {4-5}
+```css title="/app/global.css" showLineNumbers{33} {4-5}
 body {
     /* remove any margin that browsers add to body */
     margin: 0;
@@ -3577,7 +3620,7 @@ body {
 }
 ```
 
-Line 69 to 70 we add a padding-top property and set its value to the same size to be equivalent to the height of the navigation, this will ensure that when the page has loaded there is no content displayed under the navigation (later when scrolling the content will move under the navigation)
+Line 36 to 37 we add a padding-top property and set its value to the same size to be equivalent to the height of the navigation, this will ensure that when the page has loaded there is no content displayed under the navigation (later when scrolling the content will move under the navigation)
 
 Congratulations, you now know what next/navigation, next/link and next/font are usefull for and finished the navigation component 🎉
 
@@ -3816,7 +3859,7 @@ Line 19 to 23 we specify that for each markdown link that got transformed into a
 
 Next we edit the `global.css` file in the `app` folder to add the styles for the svg icon(s), like so:
 
-```css title="/app/global.css" showLineNumbers{83} {1-8}
+```css title="/app/global.css" showLineNumbers{112} {1-8}
 .iconSmall {
     margin-left: calc(var(--spacing) / 4);
     display: inline-block;
@@ -3826,6 +3869,14 @@ Next we edit the `global.css` file in the `app` folder to add the styles for the
     vertical-align: -.125em;
 }
 ```
+
+Line 112 to 119 we add some CSS to style our icon:
+
+* we add some **margin** on the **left** of the icon to add some space between the icon and the preceeding link
+* we set the **display** property to **inline-block** to make sure the icon and the link are one after the other
+* we set the **fill** property to tell the browser to use the **currentcolor** (which is the current color of our text) to as filler color for our SVG icon
+* we set the **font-size** and element **height** to the same value that is being used for our text (default font-size is 1rem) so that the icon matches the height of the link text
+* finally I manually adjusted the **vertical-align** value a little bit so that visually the icon is centered vertically
 
 #### Links examples using the MDX playground page
 
@@ -5104,7 +5155,7 @@ Now have a another look at the playground and you will notice that this time the
 
 Next we add the following css to our `global.css` file:
 
-```css
+```css title="/app/global.css" showLineNumbers{121} {1-6} {7-10} {11-13}
 [data-rehype-pretty-code-figure],
 [data-rehype-pretty-code-figure]>pre,
 [data-rehype-pretty-code-figure]>code {
@@ -5118,15 +5169,21 @@ Next we add the following css to our `global.css` file:
 }
 
 [data-rehype-pretty-code-figure]>pre {
-    padding: var(--main-spacing);
+    padding: var(--spacing);
 }
 ```
 
-What we do here is nothing fancy, we just reset the margin and padding on the figure element that is the container of a **rehype-pretty-code** code block, it has a **data** attribute that we use to target it as well as the **pre** and **code** element inside of it
+Line 121 to 126 we just reset the margin and padding on the figure element that is the container of a **rehype-pretty-code** code block, it has a **data** attribute that we use to target it as well as the **pre** and **code** element inside of it
 
-Then we add a margin to the figure element 
+Line 128 to 130 we set its **width** to **100%** to make sure our code block is as wide as our articles (**rehype-pretty-code** adds a container around code blocks, which consists of a `<figure>` element width a **data** attribute that has the value **rehype-pretty-code-figure**, this is what we target using the `data-rehype-pretty-code-figure` selector) and then we set the **overflow** property to **auto**, meaning that if the code inside of the code block is too large the code block is allowed to add (and display) scrollbars, if the code is fits the code block then the scrollbars should be hidden
 
-```css
+Line 133 to 135 we add a padding to the `<pre>` element that is inside of the `<figure>` container
+
+#### line numbers
+
+On its website the **rehype-pretty-code** plugin author recommends to add some more CSS if you want to display line numbers on the left in your code blocks:
+
+```css title="/app/global.css" showLineNumbers{137}
 /* recommended by https://rehype-pretty-code.netlify.app/ */
 code {
   counter-reset: line;
@@ -5160,7 +5217,7 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
 
 #### code block characters highlighting
 
-#### code block line numbers
+
 
 
 
