@@ -562,7 +562,7 @@ progress {
     margin: var(--main-spacing) 0;
 }
 
-[data-rehype-pretty-code-figure]>pre {
+[data-rehype-pretty-code-figure] pre {
     margin: 0;
     padding: calc(var(--main-spacing) / 2);
     overflow: auto;
@@ -572,15 +572,15 @@ progress {
     text-wrap: nowrap;
 }
 
-[data-rehype-pretty-code-figure]>code {
+code {
     font-family: var(--codebloc-font-family);
     font-size: var(--main-fontSize-small);
     counter-reset: line;
 }
 
 code[data-line-numbers]>[data-line]::before {
-    content: counter(line);
     counter-increment: line;
+    content: counter(line);
     display: inline-block;
     width: 1rem;
     margin-right: 2rem;
