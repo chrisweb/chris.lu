@@ -12,7 +12,10 @@ export const metadata: Metadata = {
     metadataBase: process.env.VERCEL_URL
         ? new URL(`https://${process.env.VERCEL_URL}`)
         : new URL(`http://localhost:${3000 ?? process.env.PORT}`),
-    title: 'Home | chris.lu',
+    title: {
+        template: '%s | chris.lu',
+        default: 'Home | chris.lu',
+    },
     description: 'chrisweb\'s blog about web development, games, Lego, music, memes, ... | chris.lu',
     manifest: '/manifest.json',
     twitter: {},
