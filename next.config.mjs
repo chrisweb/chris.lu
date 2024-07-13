@@ -212,7 +212,7 @@ const nextConfig = (phase) => {
         // file formats for next/image
         images: {
             formats: ['image/avif', 'image/webp'],
-            deviceSizes: [336, 384, 704, 750, 828, 1080, 1408, 1920, 2048, 3840],
+            deviceSizes: [240, 336, 480, 704, 1080, 1408, 1920, 2112, 3840],
         },
         // TODO: is this needed for app directory
         // Configure pageExtensions to include md and mdx
