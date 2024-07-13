@@ -3,7 +3,7 @@ import BaseLink from '@/components/base/Link'
 import ShareButton from '@/components/base/button/Share'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBug, faComments } from '@fortawesome/free-solid-svg-icons'
-import ImageBuyMeACoffee from '@/components/base/image/BuyMeACoffee'
+import Image from 'next/image'
 import buyMeACoffeeImport from '/public/assets/images/buy_me_a_coffee_button.png'
 
 const AsideContent: React.FC = (): JSX.Element => {
@@ -11,8 +11,8 @@ const AsideContent: React.FC = (): JSX.Element => {
     return (
         <div className={styles.content}>
             <ShareButton />
-            <a href="https://www.buymeacoffee.com/chriswwweb" className='shake'>
-                <ImageBuyMeACoffee staticImport={buyMeACoffeeImport} alt="buy me a coffee, please" />
+            <a href="https://www.buymeacoffee.com/chriswwweb" className={`${styles.coffeeButton} shake`}>
+                <Image src={buyMeACoffeeImport} priority fill alt="buy me a coffee, please" />
             </a>
             <br />
             <span className="fontDarker">* Please 😉</span>

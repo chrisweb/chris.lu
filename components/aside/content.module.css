@@ -13,3 +13,15 @@
         padding: 0;
     }
 }
+
+.coffeeButton {
+    position: relative;
+    display: block;
+    width: 240px;
+    height: 48px;
+    margin: 0 auto;
+}
+
+.coffeeButton>img {
+    object-fit: "contain";
+}
