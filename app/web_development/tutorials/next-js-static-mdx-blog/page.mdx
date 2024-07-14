@@ -5431,6 +5431,8 @@ Some text `variable` some more text `function()` even more text
 
 ````
 
+As you might notice if you run the dev sever and then inspect the HTML in the browser is that rehype pretty code did not convert the inline code block to a highlighted code block, for rehype pretty code to do something you need to add a language hint, a token or set a default language in the configuration
+
 Next we add a bit of CSS to our global.css to improve the styling of inline code blocks:
 
 ```css title="/app/global.css" showLineNumbers{182}
@@ -5441,7 +5443,7 @@ Next we add a bit of CSS to our global.css to improve the styling of inline code
 
 #### changing the programming language
 
-If we tell rehype pretty code what programming language we used for the code inside of the code blocks then the code block highlighting colors will get adjusted, so far we always used javascript by adding the language hint `js`, if you want to use **typescript** instead then you can switch the language hint that is behind the first backticks to `tsx`, like so:
+If we tell rehype pretty code what programming language the code inside of the code block is, then the code block highlighting colors will get adjusted, so far we always used javascript by adding the language hint `js`, if you want to use **typescript** instead then you can switch the language hint that is behind the first backticks to for example `tsx`, like so:
 
 ````md title="/app/tutorial_examples/mdx-components_playground/page.mdx" showLineNumbers{16} /2/#special
 ```tsx showLineNumbers /greeting/2#mySpecialHighlight
@@ -5451,15 +5453,15 @@ function helloWorld() {
     console.log(greeting)
 }
 ```
-
-</article>
-
 ````
 
-the second option is to add a hint for what language styling we want to use inside of curly brackets at the end of our inline code, like so:
+> [!TIP]  
+> You can use language aliases like js and jsx, ts and tsx and also md and mdx, but for example mjs or esm are not a supported aliases, you can check out the full list of languages / aliases by looking at the [shiki languages file](https://github.com/shikijs/shiki/blob/main/packages/shiki/src/assets/langs-bundle-full.ts#L1248)
+
+For inline code the language hint needs to be inside curly brackets at the end of our inline code, like so:
 
 ```mdx
-Lorem ipsum dolor sit amet, `helloWorld(){:tsx}`. Praesent vehicula sem ac erat sagittis, eget dapibus eros cursus.
+Some text `variable{:js}` some more text `function(){:ts}` even more text
 ```
 
 as you can see this works, our inline code has been highlighted and the colors are correct, but what if instead of **helloworld()** we use **helleworld** so just the function name without the brackets at the end:
@@ -5468,7 +5470,7 @@ as you can see this works, our inline code has been highlighted and the colors a
 Lorem ipsum dolor sit amet, `helloWorld{:tsx}`. Praesent vehicula sem ac erat sagittis, eget dapibus eros cursus.
 ```
 
-now even though we specified the language, the color is wrong, this is because based on the little bit of code the highlighter can not now that it is actually a function and instead assumes it is a variable
+now even though we specified the language, the color is wrong, this is because based on the little bit of code the highlighter can NOT know that it is actually a function and instead assumes it is a variable
 
 to fix this and tell the highlighter explicitly that this is a function, we need to use a **.token** instead of the language, like so:
 
@@ -5476,9 +5478,11 @@ to fix this and tell the highlighter explicitly that this is a function, we need
 Lorem ipsum dolor sit amet, `helloWorld{:.function}`. Praesent vehicula sem ac erat sagittis, eget dapibus eros cursus.
 ```
 
-and the color is fixed.
+Now the color is the one we expected
 
-Now you might wonder how do you know what each and every token is, well at the top of this chapter we included a vscode json theme, in that json file there is a section called **tokenColors** and in that list are all the tokens and their color settings
+You might wonder how do you know what each and every token is, well at the top of this chapter we imported a vscode json theme, in the json files of the VSCode there is a section called **tokenColors** and in that list are all the tokens and their color settings
+
+For example to g
 
 I will make a short list here with the most common token (for javascript / typescript), if you need one that is not listed here you need to look it up in your theme json file:
 
@@ -5486,7 +5490,7 @@ I will make a short list here with the most common token (for javascript / types
 * comment: .comment
 * string: .string.quoted
 * variable: .variable
-* number: .constant.numeric.decimal.js
+* number: .constant.numeric
 * Object property: .meta.object-literal.key
 
 TODO:
@@ -5502,10 +5506,10 @@ tokensMap: {
 ```
 
 * make a tip box explaining that if you want to use html comments in code boxes you need to encode the html entities or the comment will not show, the browser considers it a real html comment if not encoded, so `<` needs to be encoded as `&lt;` and `>` encoded as `&gt;`, like so `&lt;!-- MY HTML COMMENT --&gt;`
-* check out what [shiki transformers](https://shiki.style/guide/transformers#transformers) are, can they be useful for our blog, [npmjs "shiki transformers" package](https://www.npmjs.com/package/@shikijs/transformers)
 
-> [!TIP]  
-> You can use language aliases like js and jsx, ts and tsx and also md and mdx, but for example esm is not a supported alias, you can check out the full list of languages / aliases by looking at the [shiki languages file](https://github.com/shikijs/shiki/blob/d5b04703e6237ad660e7d9ab0e6025f10b5c2e95/packages/shiki/src/assets/langs-bundle-full.ts)
+
+
+
 
 > [!MORE]  
 > ["rehype pretty code" website & documentation](https://rehype-pretty-code.netlify.app/)  
