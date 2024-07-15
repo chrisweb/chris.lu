@@ -2365,6 +2365,12 @@ Btw the --fix flag works when using the **ESLint** CLI but it can also be used w
 > [!MORE]  
 > [ESLint "command line interface (CLI)" reference](https://eslint.org/docs/v8.x/use/command-line-interface)  
 
+### Clear the ESLint cache
+
+Because by default we use a cache to speed up the linting process when using the `npm run lint` command, we need to delete the cache manually after making changes to the `.eslintrc.js` ESLint configuration file or the `.remarkrc.mjs` remark-lint configuration file
+
+To delete the cache manually open the `.next` folder in the root of your project and then go into the `cache` folder, finally delete the `eslint` file
+
 ### package.json build script update
 
 Another script we need to change is the **build** script (as I explained in the ["Why are we changing the Next.js linting setup?" chapter](#why-are-we-changing-the-nextjs-linting-setup))
@@ -2439,7 +2445,7 @@ We now have linting using the lint command 🎉 but we have no linting in VSCode
 
 We are going to install 2 **VSCode extensions**, the first one will add linting messages directly into our code and the second one will add MDX language support to the VSCode intellisense
 
-Having the ESLint extension is great because it allows us to see linting hints, warnings and errors as we code, instead of having to wait for the linting command to run, meaning we can fix the problems one by one as the occur instead of waiting until the last moment and potentially having to fix a lot of problems all at once
+Having the ESLint extension is great because it allows us to see linting warnings and errors as we code, instead of having to wait for the linting command to run, meaning we can fix the problems one by one as they occur instead of waiting until the last moment and potentially having to fix a lot of problems all at once
 
 #### ESLint extension
 
@@ -2636,7 +2642,7 @@ PATH_TO_PROJECT\tests\eslint\content.mdx
   10:99  warning  Unexpected missing final newline character, expected line feed (`\n`) at end of file
 ```
 
-#### Ecluding tests from linting
+#### Excluding tests from linting
 
 Before you commit there is one last thing we need to do, which is excluding our tests folder from linting, by adding it to the exclude block in our `.eslintrc.js` file, like this:
 
@@ -5410,9 +5416,77 @@ function helloWorld() {
 
 ````
 
+#### fenced code block language flag
+
+In the previous example(s) we did set the programming languge to **javascript** using the `js` language flag (after the 3 backticks of our fenced code block), because rehype pretty code needs that information to know what colors to use when highlighting our code
+
+There is a second option to set the language, which is interesting if all your code blocks contain code written in the same language and you don't want to always have to set the language flag for every code block
+
+In this case you can use the rehype pretty code configuration to set a default language:
+
+```js title="next.config.mjs" showLineNumbers {15}
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+import createMdx from '@next/mdx'
+import rehypeMDXImportMedia from 'rehype-mdx-import-media'
+import rehypePrettyCode from 'rehype-pretty-code'
+import { readFileSync } from 'fs'
+
+const nextConfig = (phase) => {
+
+    const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
+    const themeFileContent = readFileSync(themePath, 'utf-8')
+
+    /** @type {import('rehype-pretty-code').Options} */
+    const rehypePrettyCodeOptions = {
+        theme: JSON.parse(themeFileContent),
+        defaultLang: {
+            block: 'js',
+        },
+    }
+
+    const withMDX = createMdx({
+        extension: /\.(md|mdx)$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [],
+            rehypePlugins: [rehypeMDXImportMedia, [rehypePrettyCode, rehypePrettyCodeOptions]],
+        },
+    })
+```
+
+Line 15 we set the rehype pretty code `defaultLang` configuration option for a code `block` to `js`
+
+Now that we have a default language set we can remove the language flag we had after the 3 backticks of our fenced code block, like so:
+
+````md title="/app/tutorial_examples/mdx-components_playground/page.mdx" showLineNumbers{16}
+```
+function helloWorld() {
+    // this is a comment
+    let greeting = 'Hello World!'
+    console.log(greeting)
+}
+```
+
+</article>
+
+````
+
+Line 16 we removed the `js` language flag
+
+However if you did follow the ESLint with remark lint setup we did earlier in this tutorial then you should see that now our code block is underlined and if you hover over it you will see it is an ESLint warning:
+
+![ESLint warning in VSCode: Unexpected missing fenced code language flag in info string](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_eslint_fenced_block_language_flag.png)
+
+We see this Remark lint [remark-lint-fenced-code-flag](https://github.com/remarkjs/remark-lint/blob/main/packages/remark-lint-fenced-code-flag/readme.md) warning because remark-lint is not aware of the default language we just added
+
+If you want to remove the linting warning, use a [comment to disable the remark-link rule](#remark-lint-disable-comments-in-mdx) for that code block or if you want to completly disable that remark-link rule then you need to edit your `.remarkrc.mjs` file and set the rule to false, as we previously did in the [configuring remark-lint](#adding-and-configuring-remark-lint) chapter, after editing the remark-lint configuration you might want to [restart the eslint server in VSCode](#restart-the-eslint-server-in-vscode) and [delete the eslint command cache](#clear-the-eslint-cache)
+
+> [!NOTE]  
+> If you don't set a default language and also don't set a language flag on a code block then rehype pretty code will not get activated for that code block as it needs to know the programming language to be able to chose the correct colors when highlighting 
+
 #### highlighting inline code
 
-Rehype pretty code will also highlight inline code
+Rehype pretty code can also highlight inline code
 
 To showcase this lets edit our playground to add an inline code example, like so:
 
@@ -5431,15 +5505,13 @@ Some text `variable` some more text `function()` even more text
 
 ````
 
-As you might notice if you run the dev sever and then inspect the HTML in the browser is that rehype pretty code did not convert the inline code block to a highlighted code block
+As you might notice if you run the dev sever and then inspect the HTML in the browser is that rehype pretty code did not convert the inline code block to a highlighted code block, as we just saw in the previous chapter rehype pretty code needs some information to know what colors to chose
 
-If you want rehype pretty code to convert the code block to a highlighted one you have 3 options:
+If you want rehype pretty code to convert an inline code block to a highlighted one you have 3 options:
 
-* add a language hint
-* add a token
+* add a language flag
+* add a token (this is an extra option only inline code blocks can use)
 * set a default language in the configuration
-
-
 
 Next we add a bit of CSS to our global.css to improve the styling of inline code blocks:
 
@@ -5451,7 +5523,7 @@ Next we add a bit of CSS to our global.css to improve the styling of inline code
 
 #### changing the programming language
 
-If we tell rehype pretty code what programming language the code inside of the code block is, then the code block highlighting colors will get adjusted, so far we always used javascript by adding the language hint `js`, if you want to use **typescript** instead then you can switch the language hint that is behind the first backticks to for example `tsx`, like so:
+If we tell rehype pretty code what programming language the code inside of the code block is, then the code block highlighting colors will get adjusted, so far we always used javascript by adding the language flag `js`, if you want to use **typescript** instead then you can switch the language flag that is behind the first backticks to for example `tsx`, like so:
 
 ````md title="/app/tutorial_examples/mdx-components_playground/page.mdx" showLineNumbers{16} /2/#special
 ```tsx showLineNumbers /greeting/2#mySpecialHighlight
