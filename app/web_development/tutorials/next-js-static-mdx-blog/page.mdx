@@ -5431,7 +5431,15 @@ Some text `variable` some more text `function()` even more text
 
 ````
 
-As you might notice if you run the dev sever and then inspect the HTML in the browser is that rehype pretty code did not convert the inline code block to a highlighted code block, for rehype pretty code to do something you need to add a language hint, a token or set a default language in the configuration
+As you might notice if you run the dev sever and then inspect the HTML in the browser is that rehype pretty code did not convert the inline code block to a highlighted code block
+
+If you want rehype pretty code to convert the code block to a highlighted one you have 3 options:
+
+* add a language hint
+* add a token
+* set a default language in the configuration
+
+
 
 Next we add a bit of CSS to our global.css to improve the styling of inline code blocks:
 
