@@ -40,8 +40,8 @@ const nextConfig = (phase) => {
             'key': '.meta.object-literal.key',
         },
         defaultLang: {
-            block: "tsx",
-            inline: "shell",
+            block: 'tsx',
+            inline: 'shell',
         },
     }
 
