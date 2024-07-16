@@ -663,13 +663,13 @@ code[data-line-numbers-max-digits="3"]>[data-line]::before {
             0 calc(100% - var(--cornerSideLength)));
 }
 
-/* this is the styling for inline code */
+/* styling for inline code blocks */
 [data-rehype-pretty-code-figure]>code {
     border-radius: 5px;
     padding: 2px 6px;
 }
 
-[data-rehype-pretty-code-figure] [data-line] {
+[data-rehype-pretty-code-figure]>code [data-line] {
     padding: 0px;
 }
 
