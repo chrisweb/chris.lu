@@ -5760,7 +5760,163 @@ function helloWorld() {
 
 If we used the correct tokens to create our aliases map, then the examples list where we use the aliases should have matching colors with what can be seen in the code block that is above
 
+![the result when using rehype pretty code for a code block and some inline code examples](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/rehype-pretty-code_code_block_and_inline_code_examples.png)
+
 > [!MORE]  
 > [VSCode "Semantic Highlight" guide](https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers)  
+
+### Table of contents (TOC) plugin
+
+You have probably already seen such **table of contents (TOC)** widgets in blog posts and documentations that display a list of the main sections and serve as a way to quickly navigate to the headline of the section you are most interested in
+
+This is why our third plugin we are about to add to our MDX setup is going to be a plugin that does just that, it will automatically turn our headings (`# level 1`, `## level 2`, ...) into a **table of contents (TOC)** for each of our mdx pages, which is great as this means we won't have to do those lists manually and also if we change, add or remove headings the list will get updated automatically for us
+
+#### Why I created a my own TOC plugin
+
+I tried out several remark and rehype table of contents (toc) plugins, none of which were suitable for my use case, I will still list them here maybe they are good for your use case and you want to use them, I will also explain a bit why I chose not to use them:
+
+* [remark-toc](https://www.npmjs.com/package/remark-toc): this is a great plugin but I chose not to use this plugin because the only way to insert the toc into a page is by placing a heading into the page, this works well for some use cases but for my own blog (the one you are reading right now) I wanted a toc inside of an `<aside>` element that would show up on the right side of my article(s), also this is a markdown plugin and when I placed the toc placeholder (after some jsx) in an MDX document, then it had trouble to find the headline that tells the plugin where to place the toc
+* [mdast-util-toc](https://www.npmjs.com/package/mdast-util-toc): the remark-toc plugin we just saw uses this plugin under the hood, this plugin converts your mdast list of headings into a toc object, again this plugin is great at doing what it is supposed to do, but for my use case I needed a plugin that creates a toc as markdown or as HTML
+* [remark-mdx-toc](https://www.npmjs.com/package/remark-mdx-toc): this plugin as the name suggests got fine tuned for MDX documents, but for my use case it has the same problem as the previous plugin, it will generate a toc and then it will generate an array that you can then use to create the toc markup
+* [@jsdevtools/rehype-toc](https://www.npmjs.com/package/@jsdevtools/rehype-toc): this plugin is not a remark but a rehype plugin, which is not a problem, as long as it does what I need it to do, unfortunatly this plugin does not use a placeholder to let you specify where to place the toc, it only allows you to use configuration options to place the toc relative to the position of your `<body>` element or a `<main>` element in your HTML document, both options did not work for me as I wanted my toc to be inside of an `<aside>` element that itself is inside of an `<article>` element
+
+I also checked out what solutions other frameworks like [docusaurus toc](https://docusaurus.io/docs/next/markdown-features/toc) and [gatsby table of contents](https://www.gatsbyjs.com/plugins/gatsby-remark-table-of-contents/) use, to create a table of contents (toc), those seemed to do a fine job but only if you actually use the framework they were specifically build for
+
+As I wasn't able to find a plugin that was suitable for my use case, I decided it was time for me to learn how to create remark plugins and build one myself, my attempt at creating (yet another toc plugin) is called **remark-table-of-contents**, you can check out the README and source code in the [remark-table-of-contents repository](https://github.com/chrisweb/remark-table-of-contents) (on GitHub) or get it from [npmjs.com (remark-table-of-contents plugin page)](https://www.npmjs.com/package/remark-table-of-contents), it is a remark plugin that similar to other plugins parses your markdown (or MDX) document, creates a list of all the headings it can find and then turns them into a "table of contents" (TOC), the toc can be freely placed where ever you want as it uses a placeholder that you insert into your document and which then gets replaced by the toc at build time
+
+> [!MORE]  
+> [remark-table-of-contents](https://www.npmjs.com/package/remark-table-of-contents)  
+> [unifiedjs.com "creating a plugin with unified (remark / rehype plugins)" documentation](https://unifiedjs.com/learn/guide/create-a-plugin/)  
+
+#### Using the TOC plugin
+
+To install the **remark-table-of-contents** plugin package use the following command:
+
+```shell
+npm i remark-table-of-contents --save-exact
+```
+
+Now that it is installed we need to edit our Next.js configuration file and add it to our MDX setup:
+
+```js title="next.config.mjs" showLineNumbers {6} {32-41} /[remarkTableOfContents, remarkTableOfContentsOptions]/#special
+import { withSentryConfig } from '@sentry/nextjs'
+import createMdx from '@next/mdx'
+import rehypeMDXImportMedia from 'rehype-mdx-import-media'
+import rehypePrettyCode from 'rehype-pretty-code'
+import { readFileSync } from 'fs'
+import { remarkTableOfContents } from 'remark-table-of-contents'
+
+const nextConfig = (phase) => {
+
+    const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
+    const themeFileContent = readFileSync(themePath, 'utf-8')
+
+    /** @type {import('rehype-pretty-code').Options} */
+    const rehypePrettyCodeOptions = {
+        theme: JSON.parse(themeFileContent),
+        keepBackground: false,
+        defaultLang: {
+            block: 'tsx',
+            inline: 'js',
+        },
+        tokensMap: {
+            fn: 'entity.name.function',
+            cmt: 'comment',
+            str: 'string',
+            var: 'entity.name.variable',
+            obj: 'variable.other.object',
+            prop: 'meta.property.object',
+            int: 'constant.numeric',
+        },
+    }
+
+    /** @type {import('remark-table-of-contents').IRemarkTableOfContentsOptions} */
+    const remarkTableOfContentsOptions = {
+        containerAttributes: {
+            id: 'articleToc',
+        },
+        navAttributes: {
+            'aria-label': 'table of contents'
+        },
+        maxDepth: 3,
+    }
+
+    const withMDX = createMdx({
+        extension: /\.(md|mdx)$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions]],
+            rehypePlugins: [rehypeMDXImportMedia, [rehypePrettyCode, rehypePrettyCodeOptions]],
+        },
+    })
+```
+
+Line 6 we import the **remark-table-of-contents** plugin
+
+Line 32 to 41 first we add the import for the **IRemarkTableOfContentsOptions** type, which will make sure our options object is strictly typed, meaning that we will get an autocomplete that will help us discover the options that are available without having to look them up in the documentation (the plugins README.md), the plugin has no mandatory configuration options but we have used 3 to demonstate a bit how a toc can be customized:
+
+* by default a toc will be wrapped in `<aside>` element which acts as container for the headings links list (you can disable the creation of this aside container if you prefer), here we use the **containerAttributes** option to specify that we want to have an `id` attribute with a value set to `articleToc`, meaning we will have a toc container element like this `<aside id="articleToc">`
+* inside of the `<aside>` container the toc will add a `<nav>` element, we use the **navAttributes** option to specify that we want to set the `aria-label` attribute of the `<nav>` element to `table of contents`, which is not mandatory but my hope is that it is benefical for accessibility purposes, to help the user understand that this element is not the main navigation but a more specific navigation for the article chapters
+* the 3rd option we set will let the plugin know that we only want to include headings into the toc up to level 3, which means it will ignore all headings that are level 4, 5 and 6 
+
+Line 47 we add an array with our plugin and its options to the **remarkPlugins** configuration
+
+> [!NOTE]  
+> in this example we have only used a few configuration options, there are more options available, as I mentioned already you can disable the creation of a container if you want to, you can also customize the placeholder itself  
+>
+> for a full list of configuration options, as well as more examples of how to use the plugin, I recommend having a look at the [**remark-table-of-contents** README](https://github.com/chrisweb/remark-table-of-contents) on GitHub
+
+Now that the plugin is ready lets make a test, for this we will create a new MDX page
+
+First go into the `/app/tutorial_examples` folder and then create a new `toc_playground` folder
+
+Inside of the `toc_playground` folder create a new `page.mdx` MDX page and add the following content:
+
+```md title="/app/tutorial_examples/toc_playground/page.mdx" showLineNumbers
+<article>
+
+# headline level 1
+
+## headline level 2
+
+### headline level 3
+
+#### headline level 4
+
+</article>
+<aside>
+    %toc%
+</aside>
+
+```
+
+We have added some markdown headings of different levels to our MDX page, they are wrapped inside of an `<article>` element (which is optional but I like to use semantic elements when ever it makes sense)
+
+After the `<article>` element we have inserted the placeholder for our **table of contents (TOC)**
+
+Finally make sure the dev server is running and then visit the toc playground page in your browser and you will see that the plugin has created a **table of contents** for us, it has included the first the 3 levels of headings but excluded the level 4 heading as this is what we specified in the configuration by setting the maximum depth option to 3, if you inspect the HTML code you will notice that it also added the **id** attribute to `<aside>` container as well as the **aria label** to the inner `<nav>` element
+
+> [!MORE]  
+> ["remark table of contents" README](https://github.com/chrisweb/remark-table-of-contents)  
+
+#### styling the table of contents
+
+To make the table of contents a little bit better looking we are going to add the following CSS to our `global.css` file:
+
+```css title="/app/global.css" showLineNumbers{188}
+#articleToc {
+    position: relative;
+}
+
+#articleToc>nav {
+    position: sticky;
+    top: 20px;
+    right: 20px;
+}
+
+#articleToc ul {
+    list-style: none;
+}
+```
 
 </article>
