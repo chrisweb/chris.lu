@@ -9,11 +9,11 @@
     /* 40px */
     --main-fontSize-big1: 4rem;
     /* 32px */
-    --main-fontSize-big2: 3rem;
+    --main-fontSize-big2: 2.25rem;
     /* 28px */
-    --main-fontSize-big3: 2.5rem;
+    --main-fontSize-big3: 2rem;
     /* 24px */
-    --main-fontSize-big4: 2rem;
+    --main-fontSize-big4: 1.75rem;
     /* 22px */
     --main-fontSize-big5: 1.5rem;
     /* 20 px */
@@ -312,7 +312,7 @@ h6 {
 }
 
 h1 {
-    margin: 0 0 var(--main-spacing) 0;
+    margin-block: 0 1em;
 }
 
 h2,
@@ -320,11 +320,11 @@ h3,
 h4,
 h5,
 h6 {
-    margin: calc(var(--main-spacing) * 2) 0 var(--main-spacing) 0;
+    margin-block: 2em 1em;
 }
 
 p {
-    margin: var(--main-spacing) 0;
+    margin-block: 1.8em;
 }
 
 h1 {
@@ -597,7 +597,7 @@ code[data-line-numbers-max-digits="3"]>[data-line]::before {
 }
 
 [data-line] {
-    padding: 0 calc(var(--main-spacing) / 2);
+    padding-right: calc(var(--main-spacing) / 2);
     line-height: 1.4;
     border-left-width: 2px;
     border-left-style: solid;
