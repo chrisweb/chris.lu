@@ -5911,12 +5911,17 @@ To make the table of contents a little bit better looking we are going to add th
 #articleToc>nav {
     position: sticky;
     top: 20px;
-    right: 20px;
 }
 
 #articleToc ul {
     list-style: none;
 }
 ```
+
+> [!TIP]  
+> if you have trouble making the [position](https://developer.mozilla.org/en-US/docs/Web/CSS/position) **sticky** work, know that when using **position sticky** there are 2 things that are very important to make sure it works, the 1st one is that the parent element should NOT have an **overflow** set (like for example `overflow: auto`) and the 2nd one is that you need to make sure you also specify at least one of the 4 properties **top**, **left**, **right** or **bottom**, for example in the example above if we remove the **top** property then the `<nav>` element wouldn't be sticky anymore
+
+> [!MORE]
+> [MDN "CSS position" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/position)
 
 </article>
