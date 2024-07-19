@@ -3064,14 +3064,12 @@ main {
 
 article,
 section {
-    display: flex;
-    flex-direction: column;
     padding: var(--spacing);
     width: 100%;
 }
 
 p {
-    margin:var(--spacing) 0;
+    margin-block: 1em;
 }
 
 a {
@@ -3111,6 +3109,18 @@ h6 {
     font-size: 1.25rem;
     line-height: 1.6;
 }
+
+h1 {
+    margin-block: 0 1em;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-block: 1.5em 1em;
+}
 ```
 
 This is our base `global.css` which now contains a basic [CSS (Cascading Style Sheet)](https://developer.mozilla.org/en-US/docs/Web/CSS) used to style and layout our app:
@@ -3144,14 +3154,16 @@ When chosing to use the **CSS Flexbox layout** as we did for the main element, t
 
 Line 55 to 62 here we change the flex-flow of the `<main>` element to column, which means that this time if we put an `<article>` into our `<main>` as well as an `<aside>` then both will get displayed as two rows, we do this because on devices with a viewport smaller than the maximum width of 768px we are targetting with our `@media all and (max-width: 768px){:css}` [media query](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries)  we want the `<aside>` element will get placed below the `<article>`
 
-Line 64 to 70 same as for the `<main>` element we again set the **display** property to **flex** and the **flex-direction** to column to make sure all elements inside of our `<article>` element get displayed one under the other, then we add a padding using our `--spacing` CSS variable to 16 pixels on each side, because we also added maximum width to the main element this means that article content (if we don't have an aside) will be a maximum 1120 - 32 = 1088 pixels wide, this will matter in a later chapter when we start adding images to our cotnent, finally we set the width to 100% to make sure that the article always uses the full width of the parent main element
+Line 64 to 68 we add a padding to sections and articles on each side using our `--spacing` CSS variable (16 pixels), because we also added maximum width to the main element this means that article content (if we don't have an aside) will be a maximum 1120 - 32 = 1088 pixels wide, this will matter in a later chapter when we start adding images to our cotnent, finally we set the width to 100% to make sure that the article always uses the full width of the parent main element
 
-Line 72 to 74 we use our default spacing variable to add some margin to our paragraphs
+Line 70 to 72 we use the [margin-block](https://developer.mozilla.org/en-US/docs/Web/CSS/margin-block) CSS property (which is a shorthand for [margin-block-start](https://developer.mozilla.org/en-US/docs/Web/CSS/margin-block-start) and [margin-block-end](https://developer.mozilla.org/en-US/docs/Web/CSS/margin-block-end)) and define the size using **em** units, which will result in a margin on the top and bottom, the size of the margin will be relative to the font-size used by the paragraph as the unit we use is **em** (1em is 1 time the elements font-size), be aware that [caniuse states that margin-block](https://caniuse.com/mdn-css_properties_margin-block) is supported by all modern browsers but NOT supported by IE11
 
-Line 76 to 82 we add some color to all our links using the CSS `var()` function to use the variables we set earlier in the  and we also use the [:hover](https://developer.mozilla.org/en-US/docs/Web/CSS/:hover) pseudo class to change the color of links on hover
+Line 74 to 80 we add some color to all our links using the CSS `var()` function to use the variables we set earlier in the  and we also use the [:hover](https://developer.mozilla.org/en-US/docs/Web/CSS/:hover) pseudo class to change the color of links on hover
 
-Line 84 to 112 we use the font-size and line-height properties to set a custom height for our headings (like any other values in this CSS stylesheet, those are just my examples, feel free to tweak those values to your liking)
+Line 82 to 110 we use the font-size and line-height properties to set a custom height for our headings (like any other values in this CSS stylesheet, those are just my examples, feel free to tweak those values to your liking)
 
+Line 112 to 122 we set the margin for the headings, same as for the paragraph(s) we use the [margin-block](https://developer.mozilla.org/en-US/docs/Web/CSS/margin-block) CSS property and **em** units, meaning the margins will be relative to the headings font-size (the bigger the font-size of the heading the bigger the margin will be)
+ 
 Now to apply the global styles to our content we our going to import the `global.css` inside of our **root layout** (located in the `/app` folder), like so:
 
 ```tsx title="/app/layout.tsx" showLineNumbers {1}
@@ -3895,7 +3907,7 @@ Line 19 to 23 we specify that for each markdown link that got transformed into a
 
 Next we edit the `global.css` file in the `app` folder to add the styles for the svg icon(s), like so:
 
-```css title="/app/global.css" showLineNumbers{116} {1-8}
+```css title="/app/global.css" showLineNumbers{126} {1-8}
 .iconSmall {
     margin-left: calc(var(--spacing) / 4);
     display: inline-block;
@@ -3906,7 +3918,7 @@ Next we edit the `global.css` file in the `app` folder to add the styles for the
 }
 ```
 
-Line 116 to 123 we add some CSS to style our icon:
+Line 126 to 133 we add some CSS to style our icon:
 
 * we add some **margin** on the **left** of the icon to add some space between the icon and the preceeding link
 * we set the **display** property to **inline-block** to make sure the icon and the link are one after the other
@@ -5210,7 +5222,7 @@ Now have a another look at the playground and you will notice that this time the
 
 Next we add the following css to our `global.css` file:
 
-```css title="/app/global.css" showLineNumbers{125} {1-5} {7-11}
+```css title="/app/global.css" showLineNumbers{135} {1-5} {7-11}
 [data-rehype-pretty-code-figure],
 [data-rehype-pretty-code-figure]>pre {
     margin: 0;
@@ -5224,9 +5236,9 @@ Next we add the following css to our `global.css` file:
 }
 ```
 
-Line 125 to 129 we just reset the **margin** and **padding** on the `<figure>` element that is the container of a rehype-pretty-code code block, it has a **data attribute** (**rehype-pretty-code** adds a container around code blocks, which consists of a `<figure>` element width a **data** attribute that has the value **rehype-pretty-code-figure**) that we use to target it as well as the `<pre>` element inside of it
+Line 135 to 139 we just reset the **margin** and **padding** on the `<figure>` element that is the container of a rehype-pretty-code code block, it has a **data attribute** (**rehype-pretty-code** adds a container around code blocks, which consists of a `<figure>` element width a **data** attribute that has the value **rehype-pretty-code-figure**) that we use to target it as well as the `<pre>` element inside of it
 
-Line 131 to 136 we set the **width** of the `<pre>` element to **100%** to make sure our code block is as wide as our articles and then we set the **overflow** property to **auto**, meaning that if the code inside of the code block is too large the code block is allowed to add (and display) scrollbars, if the code is fits the code block then the scrollbars will be hidden, finally use our spacing variable to add some padding all around our code 
+Line 141 to 145 we set the **width** of the `<pre>` element to **100%** to make sure our code block is as wide as our articles and then we set the **overflow** property to **auto**, meaning that if the code inside of the code block is too large the code block is allowed to add (and display) scrollbars, if the code is fits the code block then the scrollbars will be hidden, finally use our spacing variable to add some padding all around our code 
 
 When it comes to styling and using themes, you have the option to either keep the original background color that is included in the theme or disable it, this is especially interesting if the theme background color does not match your websites color palette at all and you want to use a different background color for your code blocks, as we will see it is not difficult to use a custom color however finding one that looks good and still works well with colors used to highlight the code can be tricky
 
@@ -5244,7 +5256,7 @@ Line 15 we set the `keepBackground` option to false which disables the default t
 
 Then we add our own background color to our rehype-pretty-code CSS in the `global.css` file:
 
-```css title="/app/global.css" showLineNumbers{125} {11}
+```css title="/app/global.css" showLineNumbers{135} {11}
 [data-rehype-pretty-code-figure],
 [data-rehype-pretty-code-figure]>pre {
     margin: 0;
@@ -5259,13 +5271,13 @@ Then we add our own background color to our rehype-pretty-code CSS in the `globa
 }
 ```
 
-Line 135 we add our `background-color`, I chose a very dark color to make we have a high contrast between the code colors and the background
+Line 145 we add our `background-color`, I chose a very dark color to make we have a high contrast between the code colors and the background
 
 #### line numbers
 
 On its website the **rehype-pretty-code** plugin author recommends to add some more CSS if you want to display line numbers (in your code blocks on the left):
 
-```css title="/app/global.css" showLineNumbers{138}
+```css title="/app/global.css" showLineNumbers{148}
 /* recommended by https://rehype-pretty-code.netlify.app/ */
 code[data-line-numbers] {
     counter-reset: line;
@@ -5337,7 +5349,7 @@ Another great feature of rehype pretty code is that you can highlight code lines
 
 First we update our global.css and add some styling for highlighted lines, like so:
 
-```css title="/app/global.css" showLineNumbers{163} {2-6} {8-11}
+```css title="/app/global.css" showLineNumbers{173} {2-6} {8-11}
 /* code blocks custom styling */
 [data-line] {
     border-left-width: 2px;
@@ -5351,9 +5363,9 @@ First we update our global.css and add some styling for highlighted lines, like 
 }
 ```
 
-Line 164 to 168 we use a selector to target all lines, lines have a `data-line` attribute, the CSS we add will border on the left which will create a vertical line that we will then be able to colorize when the line is highlighted but by default we set it to `transparent`, to create this vertical line is of course not mandatory, if you don't like it just leave it away
+Line 174 to 178 we use a selector to target all lines, lines have a `data-line` attribute, the CSS we add will border on the left which will create a vertical line that we will then be able to colorize when the line is highlighted but by default we set it to `transparent`, to create this vertical line is of course not mandatory, if you don't like it just leave it away
 
-Line 170 to 173 we use a selector to target all line that have a `data-highlighted-line` attribute, we change the background color of the line as well as the color of the new border (vertical line) we added on the left
+Line 180 to 183 we use a selector to target all line that have a `data-highlighted-line` attribute, we change the background color of the line as well as the color of the new border (vertical line) we added on the left
 
 Then we just need to add the numbers of the lines we want to highlight inside of curly brackets (`{}`), like so:
 
@@ -5399,14 +5411,14 @@ If you launch the dev server, then open the playground URL [http://localhost:300
 
 Next we update our global.css again and add a another highlight style, but this one is only for highlighted lines that have the ID `errorLine`:
 
-```css title="/app/global.css" showLineNumbers{175}
+```css title="/app/global.css" showLineNumbers{185}
 [data-highlighted-line][data-highlighted-line-id="errorLine"] {
     background-color: #6b2424;
     border-left-color: #ff003d;
 }
 ```
 
-Line 175 we added a selector to target the `data-highlighted-line-id` attribute if it has the value `errorLine` and on the next we added a more reddish color for the background and vertical line to make this line appear like a line with an error
+Line 185 to 188 we added a selector to target the `data-highlighted-line-id` attribute if it has the value `errorLine`, we set a more reddish color for the background and vertical line to make this code block line look like a code line with an error
 
 If you launch the dev server, then open the playground URL in your browser and you will see that the first line is highlighted but uses the `errorLine` ID style, line 3 to 4 are highlighted too but as they have no ID they use the default highlight line style
 
@@ -5433,13 +5445,13 @@ Line 16 we removed the highlight line curly brackets from the previous example a
 
 Next we update our stylesheet and add some CSS to style highlighted characters:
 
-```css title="/app/global.css" showLineNumbers{180}
+```css title="/app/global.css" showLineNumbers{192}
 [data-highlighted-chars] {
     background-color: #432936;
 }
 ```
 
-Line 180 we add a custom background color for highlighted characters
+Line 190 to 192 we add a custom background color for highlighted characters
 
 Same as for the highlighted lines, you can add an unlimited amount of highlited characters variations by using IDs, like so:
 
@@ -5458,11 +5470,13 @@ function helloWorld() {
 
 And then you just need to add the style for that new ID:
 
-```css title="/app/global.css" showLineNumbers{184}
+```css title="/app/global.css" showLineNumbers{194}
 [data-highlighted-chars][data-chars-id="mySpecialHighlight"] {
     background-color: #874691;
 }
 ```
+
+Line 194 to 196 we set the background-color for a highlighted characters when using the **mySpecialHighlight** ID
 
 If you look at the result in your browser you will notice that both occurences of the greeting variable got highlighted, to only highlight the second one just add the number 2 behind the second slash, like so:
 
@@ -5594,7 +5608,7 @@ As we just saw in the previous chapter rehype pretty code needs some information
 
 First lets add a bit of CSS to our global.css to improve the styling of inline code:
 
-```css title="/app/global.css" showLineNumbers{188}
+```css title="/app/global.css" showLineNumbers{198}
 /* inline code custom styling */
 [data-rehype-pretty-code-figure]>code {
     border-radius: 5px;
@@ -5883,14 +5897,16 @@ Inside of the `toc_playground` folder create a new `page.mdx` MDX page and add t
 
 #### headline level 4
 
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
 </article>
-<aside>
-    %toc%
-</aside>
+%toc%
 
 ```
 
-We have added some markdown headings of different levels to our MDX page, they are wrapped inside of an `<article>` element (which is optional but I like to use semantic elements when ever it makes sense)
+We have added some markdown headings of different levels to our MDX page, they are wrapped inside of an `<article>` element (which is optional but I like to use semantic elements when ever it makes sense), the extra line break elements are so that we can better see how the sticky position of the aside element works when we add the CSS in the next chapter
 
 After the `<article>` element we have inserted the placeholder for our **table of contents (TOC)**
 
@@ -5903,20 +5919,33 @@ Finally make sure the dev server is running and then visit the toc playground pa
 
 To make the table of contents a little bit better looking we are going to add the following CSS to our `global.css` file:
 
-```css title="/app/global.css" showLineNumbers{188}
+```css title="/app/global.css" showLineNumbers{209}
 #articleToc {
-    position: relative;
+    width: 100%;
+    max-width: 200px;
 }
 
 #articleToc>nav {
     position: sticky;
-    top: 20px;
+    top: calc(var(--spacing) + 60px);
 }
 
 #articleToc ul {
     list-style: none;
 }
+
+#articleToc ul:first-child {
+    padding-inline: 0;
+}
 ```
+
+Line 209 to 212 for the `<aside>` container that has the id **articleToc**, we set a width of 100% but also set the maximum width to 200px
+
+Line 214 to 217 for the `<nav>` element that is a child of the `<aside>` element, we set the position to sticky to make sure it always visible (even when you scroll down it stays on top)
+
+Line 219 to 212 as the toc consists of `<ul>` and `<li>` list elements but we don't want to see the default list markers so we set the list style to none
+
+Line 223 to 225 because by default browsers add padding to an `<ul>` element which we remove, but we use the [:first-child](https://developer.mozilla.org/en-US/docs/Web/CSS/:first-child) pseudo class to only target the first `<ul>` element (the other child `<ul>` elements need to keep their padding as this is used to create the stairs effect for the heading links)
 
 > [!TIP]  
 > if you have trouble making the [position](https://developer.mozilla.org/en-US/docs/Web/CSS/position) **sticky** work, know that when using **position sticky** there are 2 things that are very important to make sure it works, the 1st one is that the parent element should NOT have an **overflow** set (like for example `overflow: auto`) and the 2nd one is that you need to make sure you also specify at least one of the 4 properties **top**, **left**, **right** or **bottom**, for example in the example above if we remove the **top** property then the `<nav>` element wouldn't be sticky anymore
