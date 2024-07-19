@@ -75,8 +75,7 @@ const nextConfig = (phase) => {
     }
 
     // https://github.com/remarkjs/remark-gfm
-    // If you use remark-gfm, you'll need to use next.config.mjs
-    // as the package is ESM only
+    /** @type {import('remark-gfm').Options} */
     const remarkGfmOptions = {
         singleTilde: false,
     }
