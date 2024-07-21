@@ -6069,27 +6069,50 @@ Table:
 | `code` | [external link](https://google.com) |
 
 Autolink: https://www.example.com
+
+Tasklist:
+* [x] foo  
+* [ ] bar  
 ```
 
 We added some examples of new features that are now available:
 
 * like ~~strikethrough~~ text
 * a table, where the 1st row has text in both cells, the 2nd row has a strikethrough text and an emoji and the 3rd row has inline code and a link
-* A link that automatically gets converted to anchor element (automatic here means you don't need to use the regular markdown **link** syntax, it is enough to add a URL and it gets automatically transformed into a link) 
+* A link that automatically gets converted to anchor element (automatic here means you don't need to use the regular markdown **link** syntax, it is enough to add a URL and it gets automatically transformed into a link)  
+* A tasklist consisting of 2 tasks, the 1st one is checked the 2nd is unchecked
 
 > [!WARN]  
-> There is one thing that however does not work, using remark-gfm and the following syntax `[ ]` and `[x]` is supposed to get rendered as HTML input fields of type checkboxe:
+> I add a warning here as this is something I misunderstood when first using the remark-gfm tasklist, you see the feature is called tasklist and NOT for example tasks or checkboxes
+>
+> What this means is that the following syntax `[ ]` and `[x]` with the list syntax is NOT going to generate a checkbox, for example:
 >  
 > ```md
-> [ ] checkbox
+> [ ] a checkbox
 > ```
 >  
-> I have NOT been able to get this to work (as of now), so be aware that checkboxes and footnotes might not work for you too, if you have any idea what causes them to not render as checkboxes please let me know in a [chris.lu repository discussion](https://github.com/chrisweb/chris.lu/discussions) and I will update this tutorial with a note or fix
+> This is NOT going to render a checkbox
+>  
+> So when using tasklists you need to use the exact syntax that remark-gfm expects, which is:
+>
+> ```md
+> * [ ] a task
+> ```
+
+If you open the playground in the browser and inspect the HTML source, you will notice that all checkboxes are marked as disabled (this is remark-gfm feature NOT a bug)
+
+It is however possible to customize the **checkboxes** of a **tasklist**
 
 > [!MORE]  
 > [GitHub "remark-gfm" repository](https://github.com/remarkjs/remark-gfm)  
 > [npmjs.com "remark-gfm" page](https://www.npmjs.com/package/remark-gfm)  
 > [GitHub "GFM markdown formatting" documentation](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)  
+
+### remark-gfm Footnotes
+
+The footnotes are a bit more complex to use than the other remark-gfm features which is why I decided to create a seperate chapter just for them
+
+
 
 ## GitHub like alerts using the rehype-github-alerts plugin
 
@@ -6097,9 +6120,7 @@ The [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts) plu
 
 The **rehype github alerts** plugin does not use the exact GitHub code as the code used for their implementation is NOT opensource but attempts to mimick the GitHub alerts features and look, meaning that when you add alerts into your markdown and publish it on GitHub then the rendered alert output should be very similar to what you get when using this plugin and having alerts in the markdown of your own project
 
-It is however possible to customize the alerts in different ways and you can use whatever styling you like (check out the [**rehype github alerts** README](https://github.com/chrisweb/rehype-github-alerts?tab=readme-ov-file#rehype-github-alerts) for some documentation and more examples), I use the plugin a lot on this website and my alerts look quite different from what they look like on GitHub, here is an example:
-
-![alt text](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/custom-alert-with-blockquote-and-code-block.png)
+It is however possible to customize the alerts in different ways and you can use whatever styling you like (check out the [**rehype github alerts** README](https://github.com/chrisweb/rehype-github-alerts?tab=readme-ov-file#rehype-github-alerts) for some documentation and more examples), I use the plugin a lot on this website and my alerts look quite different from what they look like on GitHub
 
 To add the **rehype github alerts** plugin we first need to install the package:
 
@@ -6125,5 +6146,11 @@ Then we can add some examples to our playground:
 > [!MORE]  
 > [GitHub "rehype-github-alerts" repository](https://github.com/chrisweb/rehype-github-alerts)  
 > [npmjs.com "rehype-github-alerts" page](https://www.npmjs.com/package/rehype-github-alerts)  
+
+## frontmatter
+
+## metadata
+
+## vercel production publishing
 
 </article>
