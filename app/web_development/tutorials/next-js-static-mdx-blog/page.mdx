@@ -6083,17 +6083,15 @@ We added some examples of new features that are now available:
 * A tasklist consisting of 2 tasks, the 1st one is checked the 2nd is unchecked
 
 > [!WARN]  
-> I add a warning here as this is something I misunderstood when first using the remark-gfm tasklist, you see the feature is called tasklist and NOT for example tasks or checkboxes
+> The remark-gfm tasklist feature is called tasklist for a reason
 >
-> What this means is that the following syntax `[ ]` and `[x]` with the list syntax is NOT going to generate a checkbox, for example:
+> What I mean by that is that the following syntax `[ ]` and `[x]` with the list syntax is NOT going to generate a checkbox:
 >  
 > ```md
 > [ ] a checkbox
 > ```
 >  
-> This is NOT going to render a checkbox
->  
-> So when using tasklists you need to use the exact syntax that remark-gfm expects, which is:
+> So when using tasklists you need to use the exact syntax that remark-gfm expects, which is a **list** of tasks / checkboxes:
 >
 > ```md
 > * [ ] a task
@@ -6101,7 +6099,184 @@ We added some examples of new features that are now available:
 
 If you open the playground in the browser and inspect the HTML source, you will notice that all checkboxes are marked as disabled (this is remark-gfm feature NOT a bug)
 
-It is however possible to customize the **checkboxes** of a **tasklist**
+It is however possible to customize the **checkboxes** of a **tasklist** using the `mdx-components.tsx` file that in the root of our project:
+
+```tsx title="mdx-components.tsx" showLineNumbers {29}
+import type { MDXComponents } from 'mdx/types'
+import BaseLink from '@/components/base/Link'
+import type { Route } from 'next'
+import BaseImage from '@/components/base/Image'
+import type { ImageProps } from 'next/image'
+
+// This file allows you to provide custom React components
+// to be used in MDX files. You can import and use any
+// React component you want, including components from
+// other libraries.
+
+// This file is required to use MDX in `app` directory.
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+    return {
+        // Allows customizing built-in components, e.g. to add styling.
+        ul: ({ children, ...props }) => (
+            <ul className="listContainer" {...props}>
+                {children}
+            </ul>
+        ),
+        a: ({ children, href, ...props }) => (
+            <BaseLink href={href as Route} {...props}>
+                {children}
+            </BaseLink>
+        ),
+        img: (props) => (<BaseImage {...props as ImageProps} />),
+        input: (props) => {
+            console.log(props)
+        },
+        ...components,
+    }
+}
+```
+
+Line 29 we add a `console.log` to get an idea of what the props of an input element are, our `console.log` will print the following in our terminal:
+
+```shell
+{ type: 'checkbox', checked: true, disabled: true }
+{ type: 'checkbox', disabled: true }
+```
+
+As you can see all checkboxes are **disabled**, this is the default behavior for remark-gfm tasklists
+
+You might want to remove the `disabled` attribute, we can do that easily by using a destructuring assignment to remove the `disabled` attribute and put the remaining props into new object that we then pass to a custom input element, like so:
+
+```tsx title="mdx-components.tsx" showLineNumbers {30-32}
+import type { MDXComponents } from 'mdx/types'
+import BaseLink from '@/components/base/Link'
+import type { Route } from 'next'
+import BaseImage from '@/components/base/Image'
+import type { ImageProps } from 'next/image'
+
+// This file allows you to provide custom React components
+// to be used in MDX files. You can import and use any
+// React component you want, including components from
+// other libraries.
+
+// This file is required to use MDX in `app` directory.
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+    return {
+        // Allows customizing built-in components, e.g. to add styling.
+        ul: ({ children, ...props }) => (
+            <ul className="listContainer" {...props}>
+                {children}
+            </ul>
+        ),
+        a: ({ children, href, ...props }) => (
+            <BaseLink href={href as Route} {...props}>
+                {children}
+            </BaseLink>
+        ),
+        img: (props) => (<BaseImage {...props as ImageProps} />),
+        input: (props) => {
+            console.log(props)
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { disabled, ...newProps } = props
+            return (<input {...newProps} />)
+        },
+        ...components,
+    }
+}
+```
+
+Line 30 to 32 we use a destructuring assignment to split the original props into the disabled attribute and the remaining props, we need to disable the eslint `@typescript-eslint/no-unused-vars` for that line as we won't use the disabled variable, then we create a new input element and pass the remaining props
+
+> [!TIP]  
+> when you make changes to the `mdx-components.tsx` file, Next.js will not always instantly detect those changes and reload the project, the easiest trick I have found to make sure Next.js notices the changes is to also open the `next.config.mjs` configuration file and make a small change like adding a line break at the end, then save the Next.js configuration file, this will cause a reload of the project, which ensures your mdx-components changes get taken into account
+
+However if we remove the `disabled` attribute and start our dev server, we see that we get an error in our terminal:
+
+> Warning: You provided a `checked` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultChecked`. Otherwise, set either `onChange` or `readOnly`.
+
+This error tells us that checkboxes that have the `checked` prop also need to have `onChange` handler and for that reason we will create a custom checkbox React component, go into the `/components/base` folder and then create a new `Checkbox.tsx` file with the following content:
+
+```tsx title="/components/base/Checkbox.tsx" showLineNumbers
+'use client'
+
+import { useState } from 'react'
+
+const BaseCheckbox: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = (props): JSX.Element => {
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { disabled, checked, ...newProps } = props
+
+    const [isChecked, setIsChecked] = useState(checked ? true : false)
+
+    const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(event.target.value)
+        setIsChecked((previous) => {
+            return !previous
+        })
+    }
+
+    return (<input onChange={changeHandler} defaultChecked={isChecked} {...newProps} value="test" />)
+
+}
+
+export default BaseCheckbox
+```
+
+Line 1 we first add the `'use client'` as our component will have an **onChange** handler and also because we will use React **state**
+
+Line 5 we create a component and use the types for an Input Element to make it strictly typed
+
+Line 8 we do the same thing we did in the mdx-components file but we also extract the **checked** prop as we will need for the initial value of our state
+
+Line 10 we create our **is checked** state, which will turn the component into a controlled checkbox component
+
+Line 12 to 17 we create a basic **onChange** handler, that will log the current value in the console and will update the state, every time the user interacts with the checkbox we read the current checked value and if true we set it to false and if false we set it true
+
+Line 19 we create an input element of type checkbox and add all our attributes
+
+Now that we have our custom checkbox component we can start using it in the `mdx-components.tsx` file, like so:
+
+```tsx title="mdx-components.tsx" showLineNumbers {6} {29}
+import type { MDXComponents } from 'mdx/types'
+import BaseLink from '@/components/base/Link'
+import type { Route } from 'next'
+import BaseImage from '@/components/base/Image'
+import type { ImageProps } from 'next/image'
+import BaseCheckbox from '@/components/base/Checkbox'
+
+// This file allows you to provide custom React components
+// to be used in MDX files. You can import and use any
+// React component you want, including components from
+// other libraries.
+
+// This file is required to use MDX in `app` directory.
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+    return {
+        // Allows customizing built-in components, e.g. to add styling.
+        ul: ({ children, ...props }) => (
+            <ul className="listContainer" {...props}>
+                {children}
+            </ul>
+        ),
+        a: ({ children, href, ...props }) => (
+            <BaseLink href={href as Route} {...props}>
+                {children}
+            </BaseLink>
+        ),
+        img: (props) => (<BaseImage {...props as ImageProps} />),
+        input: (props) => {
+            return(<BaseCheckbox {...props} />)
+        },
+        ...components,
+    }
+}
+```
+
+Line 6 we import our checkbox component
+
+Line 29 we remove the previous code and use our checbox component instead
+
+Of course depending on your needs what you would do now is update the **BaseCheckbox** onChange handler with some code to do something useful based on your needs, like for example add code to send a POST request to the server or add code that updates a value in the localstorage of the users browser
 
 > [!MORE]  
 > [GitHub "remark-gfm" repository](https://github.com/remarkjs/remark-gfm)  
