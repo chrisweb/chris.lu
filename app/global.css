@@ -863,10 +863,12 @@ h6::before {
 
 .fontBig {
     font-size: var(--main-fontSize-big6);
+    line-height: var(--main-lineHeight-heading);
 }
 
 .fontBigger {
     font-size: var(--main-fontSize-big5);
+    line-height: var(--main-lineHeight-heading);
 }
 
 /* if the color-mix css feature is supported
