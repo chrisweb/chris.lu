@@ -69,3 +69,7 @@
     color: #fff;
     padding: 0 var(--main-spacing);
 }
+
+.extraMargin {
+    margin-block: 0 calc(var(--main-spacing) * 1.5);
+}

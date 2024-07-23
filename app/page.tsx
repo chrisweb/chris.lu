@@ -10,11 +10,11 @@ export default function Homepage() {
     return (
         <>
             <section className="core">
-                <h1 className="h1">Hello, World!&nbsp;
+                <h1 className={`h1 ${styles.extraMargin}`}>Hello, World!&nbsp;
                     <ImageAnimatedEmoji gifStaticImport={gifWaveStaticImport} webpStaticImport={webpWaveStaticImport} alt="animated emoji waving hand" />
                 </h1>
                 <p>Welcome to my blog, my name is Chris Weber (aka chrisweb)</p>
-                <p className="fontBigger fontLighter">I like <Typing>Web development, Lego bricks, Music, Games, Cooking, Movies & TV shows, Memes</Typing></p>
+                <p className={`fontBigger ${styles.extraMargin}`}>I like <Typing>Web development, Lego bricks, Music, Games, Cooking, Movies & TV shows, Memes</Typing></p>
                 <div className={styles.portalsGrid}>
                     <div className={styles.cyberPortalOuterGlow} id="web_development">
                         <div className={styles.cyberPortalBorder}>
