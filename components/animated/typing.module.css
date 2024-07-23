@@ -8,8 +8,8 @@
 .blinkingCarret::after {
     content: "";
     width: 2px;
-    height: var(--main-fontSize-default);
-    background: white;
+    height: var(--main-fontSize-big5);
+    background: var(--primary-light-color);
     display: inline-block;
 }
 
