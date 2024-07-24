@@ -5946,6 +5946,38 @@ Line 223 to 225 because by default browsers add padding to an `<ul>` element whi
 > [MDN "CSS :first-child" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/:first-child)  
 > [MDN "CSS position" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/position)  
 
+#### highlight the link to the current headding
+
+You have probably seen this feature on websites like the [Next.js documentation](https://nextjs.org/docs) or [React.dev](https://react.dev/learn) where one link in the toc is being hihglighted, but how can we add this to our own TOC
+
+Our goal in this chapter is to detect which heading is visible inside of the viewport and then highlight the corresponding link in the toc
+
+To help us achieve that goal we are going to use the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), as you can see on [caniuse the Intersection Observer API](https://caniuse.com/mdn-api_intersectionobserver) is well supported (expect for IE 11)
+
+An easy way to use the **Intersection Observer API** is to create a React **hook**, so first we create a new `/hooks` folder in the root of our project (or inside the /src folder if this is how you configured Next.js)
+
+Then inside of our `/hooks` folder we create a new `useIntersectionObserver.ts` hook file and add the following content:
+
+```ts title="/hooks/useIntersectionObserver.ts" showLineNumbers
+
+```
+
+Next we need to create a component that will use our **useIntersectionObserver** hook
+
+In the `/components` folder create a new `toc` folder and then in that folder create a new `Hihglight.tsx` component file:
+
+```tsx title="/components/toc/Hihglight.tsx" showLineNumbers
+
+```
+
+When we configured the TOC plugin in the Next.js configuration file, we used it's options object to tell the plugin that we wanted to have an `id` attribute with the value `` on our TOC container, meaning that the `aside` element that acts as container will have ``, we are going to use that id to traget the aside container in our mdx-components.tsx file and then :
+
+```ts title="mdx-components.tsx" showLineNumbers
+
+```
+
+> [!MORE]
+
 ## GitHub flawored markdown plugins
 
 there is more than just one plugin related to GitHub markdown:
