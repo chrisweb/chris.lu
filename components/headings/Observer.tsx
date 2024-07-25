@@ -140,7 +140,7 @@ const HeadingsObserver: React.FC<IProps> = (props): JSX.Element => {
     // remarkTableOfContents maxDepth option is set to 3, so only observe h1, h2 & h3
     // the second part is the rootMargin string of the IntersectionObserver
     // https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver
-    const { activeIdState } = useObserver('h1, h2, h3', '-25% 0px -35% 0px')
+    const { activeIdState } = useObserver('h1, h2, h3', '-10% 0px -50% 0px')
     const navChild = findFirstNodeThatMatchesType(props.children, 'nav')
 
     let toc: React.ReactNode
