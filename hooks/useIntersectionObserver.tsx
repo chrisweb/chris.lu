@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 
-const useObserver = (elementsToObserve: string, rootMargin: string) => {
+const useIntersectionObserver = (querySelector: string, rootMargin: string, threshold: number) => {
 
     const [activeIdState, setActiveIdState] = useState('')
     const observerRef = useRef<IntersectionObserver | null>(null)
@@ -20,10 +20,11 @@ const useObserver = (elementsToObserve: string, rootMargin: string) => {
         if (observerRef !== undefined) {
 
             observerRef.current = new IntersectionObserver(handleObsever, {
-                rootMargin: rootMargin
+                rootMargin: rootMargin,
+                threshold: threshold,
             })
 
-            const elements = document.querySelectorAll(elementsToObserve)
+            const elements = document.querySelectorAll(querySelector)
 
             elements.forEach((elem) => observerRef.current !== null ? observerRef.current.observe(elem) : null)
         }
@@ -32,10 +33,10 @@ const useObserver = (elementsToObserve: string, rootMargin: string) => {
             observerRef.current?.disconnect()
         }
 
-    }, [elementsToObserve, rootMargin])
+    }, [querySelector, rootMargin, threshold])
 
     return { activeIdState }
 
 }
 
-export default useObserver
+export default useIntersectionObserver

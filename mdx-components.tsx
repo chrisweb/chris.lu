@@ -1,5 +1,5 @@
 import type { MDXComponents } from 'mdx/types'
-import HeadingsObserver from '@/components/headings/Observer'
+import TocHighlight from '@/components/toc/Highlight'
 import BaseLink from '@/components/base/Link'
 import ImageDispatch from '@/components/base/image/Dispatch'
 import { ImageProps } from 'next/image'
@@ -55,16 +55,16 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
             <>
                 {props.id === 'articleToc' ? (
                     <>
-                    <aside>
-                        <BaseLink href="#skipToc" className="skipToc">Skip table of contents</BaseLink>
-                        <div className='asideCore'>
-                            <HeadingsObserver>
-                                {children}
-                            </HeadingsObserver>
-                            <AsideContent />
-                        </div>
-                    </aside>
-                    <div id="skipToc" tabIndex={-1} />
+                        <aside>
+                            <BaseLink href="#skipToc" className="skipToc">Skip table of contents</BaseLink>
+                            <div className='asideCore'>
+                                <TocHighlight>
+                                    {children}
+                                </TocHighlight>
+                                <AsideContent />
+                            </div>
+                        </aside>
+                        <div id="skipToc" tabIndex={-1} />
                     </>
                 ) : (
                     <aside>

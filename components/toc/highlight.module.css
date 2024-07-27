@@ -9,24 +9,24 @@
     }
 }
 
-.list {
+.tocContainer ul {
     list-style-type: none;
     padding-inline-start: 2ch;
     font-size: var(--main-fontSize-smaller);
     line-height: 1.5;
 }
 
-.list li a {
+.tocContainer li a {
     margin-bottom: calc(var(--main-spacing) / 4);
 }
 
-.active>a {
+.tocContainer li a.active {
     color: var(--secondary-light-color);
     font-weight: var(--main-fontWeight-activeLinks);
     text-shadow: 0px 0px 10px var(--secondary-light-color), 0px 0px 20px var(--secondary-light-color);
 }
 
-.notActive>a {
+.tocContainer li a:not(.active) {
     color: var(--quaternary-light-color);
     font-weight: var(--main-fontWeight-links);
 }
@@ -35,7 +35,7 @@
 make the text color a bit darker */
 @supports (color: color-mix(in srgb, var(--quaternary-light-color), black 20%)) {
 
-    .notActive>a {
+    .tocContainer li a:not(.active) {
         color: color-mix(in srgb, var(--quaternary-light-color), black 20%);
     }
 
@@ -44,11 +44,11 @@ make the text color a bit darker */
 /* not on mobile */
 @media (hover: hover) {
 
-    .active>a:hover {
+    .tocContainer li a.active:hover {
         background-image: linear-gradient(var(--secondary-light-color) 0%, var(--secondary-light-color) 100%);
     }
 
-    .notActive>a:hover {
+    .tocContainer li a:not(.active):hover {
         color: var(--secondary-light-color);
         background-image: linear-gradient(var(--secondary-light-color) 0%, var(--secondary-light-color) 100%);
     }
@@ -58,11 +58,11 @@ make the text color a bit darker */
 /* experimental: p3 colors */
 @media (hover: hover) and (color-gamut: p3) {
 
-    .active>a:hover {
+    .tocContainer li a.active:hover {
         background-image: linear-gradient(in srgb, var(--secondary-light-color) 0%, var(--secondary-light-color) 100%);
     }
 
-    .notActive>a:hover {
+    .tocContainer li a:not(.active):hover {
         color: var(--secondary-light-color);
         background-image: linear-gradient(in srgb, var(--secondary-light-color) 0%, var(--secondary-light-color) 100%);
     }
