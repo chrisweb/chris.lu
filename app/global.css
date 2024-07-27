@@ -25,7 +25,7 @@
     /* 14px */
     --main-fontSize-smaller: 0.875rem;
     --main-lineHeight-heading: 1.2;
-    --main-lineHeight-default: 1.8;
+    --main-lineHeight-default: 1.6;
     --main-fontWeight-default: 400;
     --main-fontWeight-bold: 600;
     --main-fontWeight-bolder: 700;
@@ -743,7 +743,7 @@ aside {
     position: sticky;
     top: calc(var(--header-navbar-height) + var(--main-spacing));
     overflow-y: auto;
-    height: calc(100vh - var(--header-navbar-height) - var(--main-spacing));
+    height: auto;
 }
 
 @media all and (max-width: 768px) {
