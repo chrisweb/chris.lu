@@ -1412,6 +1412,8 @@ Line 124 to 135 we add the 3 security headers to the list of headers:
 * the second **X-Content-Type-Options** header tells the browser to not attempt to guess the MIME type of resource by itself 
 * The third one is the `X-Frame-Options` header when set to **deny** does the same thing as the **frame-ancestors** directive (we added earlier) when set to **none**, but it is for older browsers that did not have support for the directive
 
+Congratulations you just made your project a lot more secure by setting up CSP headers and reporting of potential violations 🎉
+
 > [!MORE]  
 > [MDN "Strict-Transport-Security" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)  
 > [MDN "Referrer-Policy" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy)  
@@ -2538,7 +2540,9 @@ To restart the eslint server in VSCode press `ctrl` + `shift` + `p` to open the 
 
 ### linting tests to ensure everything works
 
-We are finally done with out ESLint setup 🎉 we now have a linting command for our code as well as MDX content, we did install 2 extensions so that we now have full ESLint and MDX support inside of our VSCode IDE, but does it work?
+Congratulations you just completed your projects ESLint setup 🎉 you now have a linting command for your code as well as your MDX content, you installed 2 extensions in VSCode so that we you now also have full ESLint and MDX (markdown) linting inside of our VSCode IDE
+
+Now the final question it, "but does it work?"
 
 To test if everything works as intended, we will create some errors in both tsx and mdx files and if we did the setup correctly we should get linting errors both in VSCode as well as in the command line output
 
@@ -3198,6 +3202,8 @@ export default function RootLayout({
 
 Line 1 we import our `global.css` stylesheet and that's already it
 
+Congratulations 🎉 you now know how to use CSS modules and global.css to add styling to your project
+
 > [!MORE]  
 > [Next.js "global styles" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-modules#global-styles)  
 > [MDN "CSS" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS)  
@@ -3670,7 +3676,7 @@ body {
 
 Line 36 to 37 we add a padding-top property and set its value to the same size to be equivalent to the height of the navigation, this will ensure that when the page has loaded there is no content displayed under the navigation (later when scrolling the content will move under the navigation)
 
-Congratulations, you now know what next/navigation, next/link and next/font are usefull for and finished the navigation component 🎉
+Congratulations, you now know what next/navigation, next/link and next/font are usefull for and you now have navigation component for your website 🎉
 
 > [!MORE]  
 > [Next.js "Font Optimization" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/fonts)  
@@ -4948,6 +4954,8 @@ In situations next/image does not create the placeholder you have several option
 * the second option is an online tool (that they recommend in the Next.js documentation) from [png-pixel.com](https://png-pixel.com/) that you can use to create your own static placeholder image
 * the third option is to use a package like [pla**i**ceholder](https://www.npmjs.com/package/plaiceholder), but be careful when using this one, I see it being mentioned in a lot of tutorials, however if you go to [pla**i**ceholders GitHub repository](https://github.com/joe-bell/plaiceholder) you will notice that the project has been archived so its unlickely it will get updates in the future (also issues are disabled on archived repositories so there is no way to open one if you find a bug)
 
+Congratulations 🎉 you now know almost everything there is to know about next/image and its many features and will now be able to create a project that has optimized images, giving you a good web metrics score and make it will contribute to making your users happy because your pages load super fast
+
 > [!MORE]  
 > [Next.js "next/image placeholder" documentation](https://nextjs.org/docs/app/api-reference/components/image#placeholder)  
 
@@ -5767,6 +5775,8 @@ If we used the correct tokens to create our aliases map, then the examples list 
 
 ![the result when using rehype pretty code for a code block and some inline code examples](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/rehype-pretty-code_code_block_and_inline_code_examples.png)
 
+Congratulations 🎉 you finished learning about how to highlight code using a remark plugin and learned how to use most of its features (including using VSCode themes)
+
 > [!MORE]  
 > [VSCode "Semantic Highlight" guide](https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers)  
 
@@ -5995,7 +6005,7 @@ Sed sodales mi id odio finibus, eu scelerisque dui convallis. Aliquam ornare urn
 
 Line 20 we inserted the TOC placeholder
 
-Now if you want to make a test, first make sure the dev server is running and then visit the toc playground page in your browser and you will see that the plugin has created a **table of contents** for us, it has included the first the 3 levels of headings but excluded the level 4 heading as this is what we specified in the configuration by setting the maximum depth option to 3, if you inspect the HTML code you will notice that it also added the **id** attribute to `<aside>` container as well as the **aria label** to the inner `<nav>` element
+Now if you want to make a test, first make sure the dev server is running and then visit the toc playground page [http://localhost:3000/tutorial_examples/toc_playground](http://localhost:3000/tutorial_examples/toc_playground) in your browser and you will see that the plugin has created a **table of contents** for us, it has included the first the 3 levels of headings but excluded the level 4 heading as this is what we specified in the configuration by setting the maximum depth option to 3, if you inspect the HTML code you will notice that it also added the **id** attribute to `<aside>` container as well as the **aria label** to the inner `<nav>` element
 
 > [!MORE]  
 > ["remark table of contents" README](https://github.com/chrisweb/remark-table-of-contents)  
@@ -6046,31 +6056,260 @@ You have probably seen this feature on websites like the [Next.js documentation]
 
 Our goal in this chapter is to detect which heading is visible inside of the viewport and then highlight the corresponding link in the toc
 
-To help us achieve that goal we are going to use the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), as you can see on [caniuse the Intersection Observer API](https://caniuse.com/mdn-api_intersectionobserver) is well supported (expect for IE 11)
+To achieve that goal we are going to use the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), as you can see on [caniuse the Intersection Observer API](https://caniuse.com/mdn-api_intersectionobserver) is well supported (expect for IE 11)
 
-An easy way to use the **Intersection Observer API** is to create a React **hook**, so first we create a new `/hooks` folder in the root of our project (or inside the /src folder if this is how you configured Next.js)
+An easy way to use the **Intersection Observer API** is by create a React **hook**, so first we create a new `/hooks` folder in the root of the project (or inside the /src folder if this is how you configured Next.js)
 
-Then inside of our `/hooks` folder we create a new `useIntersectionObserver.ts` hook file and add the following content:
+Then inside of our `/hooks` folder create a new `useIntersectionObserver.ts` hook file and add the following content:
 
 ```ts title="/hooks/useIntersectionObserver.ts" showLineNumbers
+import { useEffect, useState, useRef } from 'react'
 
+const useIntersectionObserver = (querySelector: string, rootMargin: string, threshold: number) => {
+
+    const [activeIdState, setActiveIdState] = useState('')
+    const observerRef = useRef<IntersectionObserver | null>(null)
+
+    useEffect(() => {
+
+        const handleObsever = (entries: IntersectionObserverEntry[]) => {
+
+            entries.forEach((entry) => {
+                if (entry?.isIntersecting) {
+                    setActiveIdState(entry.target.id)
+                }
+            })
+
+        }
+
+        if (observerRef !== undefined) {
+
+            observerRef.current = new IntersectionObserver(handleObsever, {
+                rootMargin: rootMargin,
+                threshold: threshold,
+            })
+
+            const elements = document.querySelectorAll(querySelector)
+
+            elements.forEach((elem) => observerRef.current !== null ? observerRef.current.observe(elem) : null)
+        }
+
+        return () => {
+            observerRef.current?.disconnect()
+        }
+
+    }, [querySelector, rootMargin, threshold])
+
+    return { activeIdState }
+
+}
+
+export default useIntersectionObserver
 ```
 
-Next we need to create a component that will use our **useIntersectionObserver** hook
+Line 5 we initialize a state, that state will hold the ID of the current heading that is visibile in the viewport, when the state changes the component using our hook will re-render
 
-In the `/components` folder create a new `toc` folder and then in that folder create a new `Hihglight.tsx` component file:
+Line 6 we create a [Ref](https://react.dev/learn/referencing-values-with-refs) to store an instance of the **IntersectionObserver**, later line 33 in the cleanup function (that will get called when our component gets removed from DOM) we call the **Intersection Observer** [disconnect](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/disconnect) method to tell it to stop observing the DOM for visibility changes
+
+Line 10 to 18 we create a handler for the **Intersection Observer**, when the **Intersection Observer** detects a visibility change it will call our handler, which will then put the ID of the headline that becomes visible in the **activeIdState** we created line 5
+
+Line 20 to 30 we create a new instance of the Intersection Observer (if none exists yet), we pass it two variables to specify what [rootMargin](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin) and [threshold](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/thresholds) we want it to use, we query the DOM to find all headings and each time we find one we tell the Intersection Observer to **observe** it
+
+> [!NOTE]  
+> the [rootMargin](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin) and [threshold](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/thresholds) are two values used to modify the area that the **Intersection Observer** is watching, by default it watches an area that is equal to the viewport but using the **rootMargin** you can for example tell it to extend the area it is watching to the top, meaning it will detect elements even before they enter the viewport, the **treshold** can be used to tell the Intersection Observer how much of the element needs to be visible before it triggers, for example a treshold of 0.5 means that it will trigger as soon as there are more than 50% of the element that are visible, there is a good [article on smashingmag titled "Building A Dynamic Header With Intersection Observer"](https://www.smashingmagazine.com/2021/07/dynamic-header-intersection-observer/) which has a bunch of examples with a lot of images to better explain the rootMargin and threshold of the Intersection Observer
+
+Next we will create a tiny CSS Module and add an `.active` CSS class to be applied to the highlighted link in our TOC
+
+In the `/components` folder create a new `toc` folder and then in that folder we create a new `hihglight.module.css` file:
+
+```css title="/components/toc/hihglight.module.css"
+.active {
+    color: white;
+}
+```
+
+All our active class does is change the link color to white (of course feel free to adjust the CSS to your needs)
+
+Now that we have CSS Module we can create the component that will use the **useIntersectionObserver** hook we just created
+
+In the same folder we just added our CSS module we now create a new `Hihglight.tsx` component file:
 
 ```tsx title="/components/toc/Hihglight.tsx" showLineNumbers
+'use client'
 
+import useIntersectionObserver from '@/hooks/useIntersectionObserver'
+import type { PropsWithChildren, ReactElement, ReactNode } from 'react'
+import { Children, cloneElement, isValidElement } from 'react'
+import styles from './highlight.module.css'
+
+interface IProps extends PropsWithChildren {
+    headingsToObserve?: string
+    rootMargin?: string
+    threshold?: number
+}
+
+interface IChildProps {
+    className: string
+    href: string
+    children: ReactElement<IChildProps>
+}
+
+
+const TocHighlight: React.FC<IProps> = (props): JSX.Element => {
+
+    const { headingsToObserve, rootMargin, threshold, ...rest } = props
+
+    const tocHeadingsToObserve = headingsToObserve ?? 'h1, h2, h3'
+    const tocRootMargin = rootMargin ?? '-5% 0px -50% 0px'
+    const tocThreshold = threshold ?? 1
+
+    const children = Children.toArray(props.children)
+
+    function recursiveChildren(children: ReactNode[], activeIdState: string): ReactNode {
+
+        const newChildren = Children.map(children, child => {
+
+            if (isValidElement<IChildProps>(child)) {
+
+                if (child.props.children) {
+
+                    const children = Children.toArray(child.props.children)
+
+                    child = cloneElement(
+                        child,
+                        recursiveChildren(children, activeIdState) as ReactElement<IChildProps>
+                    )
+
+                }
+
+                if ('href' in child.props) {
+
+                    const childProps = child.props as IChildProps
+
+                    if (childProps.href.substring(1) === activeIdState) {
+
+                        child = cloneElement(
+                            child,
+                            { className: styles.active }
+                        )
+
+                    }
+                }
+
+            }
+
+            return child
+        })
+
+        return newChildren
+
+    }
+
+    const { activeIdState } = useIntersectionObserver(tocHeadingsToObserve, tocRootMargin, tocThreshold)
+
+    return (
+        <>
+            <aside {...rest}>
+                {recursiveChildren(children, activeIdState)}
+            </aside>
+        </>
+    )
+}
+
+export default TocHighlight
 ```
 
-When we configured the TOC plugin in the Next.js configuration file, we used it's options object to tell the plugin that we wanted to have an `id` attribute with the value `` on our TOC container, meaning that the `aside` element that acts as container will have ``, we are going to use that id to traget the aside container in our mdx-components.tsx file and then :
+Line 8 to 12 we create an interface to strongly type our incoming props, which are the list of headings we want to observe, the [rootMargin](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin) and the [treshold](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/thresholds), all three values will get passed to the hook as they are needed by the **IntersectionObserver**
 
-```ts title="mdx-components.tsx" showLineNumbers
+Line 14 to 18 we create an interface to strongly type the children of our toc
 
+Line 23 to 27 we take extract the variables we will pass to our hook from the props object and set default values to make it "no configuration" component (meaning you can set any the three values but it is optional)
+
+Line 29 we use React [Children](https://react.dev/reference/react/Children) to transform the children prop into a flat array of elements, by using [toArray](https://react.dev/reference/react/Children#children-toarray) we also make sure the children will always be an array of ReactNodes
+
+Line 31 to 65 we create a function that will handle the main logic of this component:
+
+* we use the **map()** method to iterate the **array of children**, it will then return a new array containing the modified children
+* inside of map for each child we check if the it is a **valid element** (and if not we return the child as is)
+* then we check if the current child has children, if it does we pass those again to our function, this ensures we will do a **recursive traversing** of our elements tree, also because the child **children** are immutable we use the React [cloneElement](https://react.dev/reference/react/cloneElement) to create a new child
+* finally we check if the current child is an anchor element by checking if it has an `href` prop, if the child is one of the links of our toc we use the href that points to the heading and remove the hash (first character) to turn the href into a heading ID, we then compare if the ID from the href is equal to the ID of the heading that is currently visible in the viewport, it they match we add the `.active` CSS class (from the CSS Module we just created and imported into this component) to the anchor element that we want to highlight
+
+Line 71 we call the **Intersection Observer hook** we created earlier, the hook will return an `activeIdState` state, meaning that if the hooks detects a new heading becoming visibile then it will set a new state value, the state gets returned to our component and because the state has changed it triggers a re-rendering of our component
+
+Line 75 to 77 we create a new aside and pass the props from the original aside, inside of the aside we call our recursive function that will create a new children array (in which the active class got moved from one line element to another) 
+
+Finally we can now use our component inside of our `mdx-components.tsx` file, to replace the aside element that the toc has created by a new aside that will get generated by our compoenent:
+
+```ts title="mdx-components.tsx" showLineNumbers {32-53}
+import type { MDXComponents } from 'mdx/types'
+import BaseLink from '@/components/base/Link'
+import type { Route } from 'next'
+import BaseImage from '@/components/base/Image'
+import type { ImageProps } from 'next/image'
+import BaseCheckbox from '@/components/base/Checkbox'
+import TocHighlight from './components/toc/Hihglight'
+
+// This file allows you to provide custom React components
+// to be used in MDX files. You can import and use any
+// React component you want, including components from
+// other libraries.
+
+// This file is required to use MDX in `app` directory.
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+    return {
+        // Allows customizing built-in components, e.g. to add styling.
+        ul: ({ children, ...props }) => (
+            <ul className="listContainer" {...props}>
+                {children}
+            </ul>
+        ),
+        a: ({ children, href, ...props }) => (
+            <BaseLink href={href as Route} {...props}>
+                {children}
+            </BaseLink>
+        ),
+        img: (props) => (<BaseImage {...props as ImageProps} />),
+        input: (props) => {
+            return (<BaseCheckbox {...props} />)
+        },
+        aside: ({ children, ...props }) => {
+            const tocHighlightProps = {
+                headingsToObserve: 'h1, h2, h3',
+                rootMargin: '-5% 0px -50% 0px',
+                threshold: 1,
+                ...props
+            }
+            return (
+                <>
+                    {props.id === 'articleToc' ? (
+                        <TocHighlight {...tocHighlightProps}>
+                            {children}
+                        </TocHighlight>
+                    ) : (
+                        <aside>
+                            {children}
+                        </aside>
+                    )
+                    }
+                </>
+            )
+        },
+        ...components,
+    }
+}
 ```
 
-> [!MORE]
+Line 32 to 53 we add new code to our `mdx-components.tsx` file, our code will check if the current `<aside>` element is the one that has the `articleToc` ID attribute (this is the ID attribute we set when configuring the TOC in the Next.js configuration) and if the `<aside>` element is the one that contains the TOC we replace it by a new one that we create using the **TOC Highlight component** we just created
+
+> [!TIP]  
+> If the switch between currently highlighted links and the previous one does not behave as you expect, then you need to adjust the values of the **rootMargin** and adapt them based on the dimensions of your pages, you header and eventually the article itself
+
+Now is a good time to check the result of all the code we just added and if it works as expected it probably is also a good time to make another commit, first make sure the dev server is running and then visit the toc playground page [http://localhost:3000/tutorial_examples/toc_playground](http://localhost:3000/tutorial_examples/toc_playground) in your browser
+
+Congratulations 🎉 you should now see a TOC on the right side of the article that always stays on top even when you scroll down and in the list of links one of them should always be highlighted based on the headline that is currently in the viewport
+
+> [!MORE]  
+> [MDN "Intersection Observer API" documentation](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)  
 
 ## GitHub flawored markdown plugins
 
@@ -6593,7 +6832,7 @@ Then we can add some examples to our playground:
 > [!TIP]
 > when adding **github alerts** you use square braquets (`[!ALERT_TYPE]`), however in VSCode (if you have link validation enabled) then the markdown language service will assume this is an invalid link (QUOTE_VSCODE_ERROR), and show an error (SCRENNSHOT_HERE), to exclude the alerts from validation put a backslash (`\`) in front of the square braquets, like so `\[!NOTE]` and the error will be gone (SCRENNSHOT_2_HERE)
 
-
+Congratulations 🎉 you Alerts similar to what GitHub has and because of GFM you now also have support for most of the other features GitHub flawored markdown has to offer
 
 > [!MORE]  
 > [GitHub "rehype-github-alerts" repository](https://github.com/chrisweb/rehype-github-alerts)  
