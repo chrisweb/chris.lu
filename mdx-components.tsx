@@ -67,7 +67,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                         <div id="skipToc" tabIndex={-1} />
                     </>
                 ) : (
-                    <aside>
+                    <aside {...props}>
                         {children}
                     </aside>
                 )
