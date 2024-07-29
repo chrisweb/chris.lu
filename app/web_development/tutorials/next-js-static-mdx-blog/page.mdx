@@ -6018,7 +6018,7 @@ To make the table of contents a little bit better looking we are going to add th
 ```css title="/app/global.css" showLineNumbers{209}
 #articleToc {
     width: 100%;
-    max-width: 200px;
+    max-width: 400px;
 }
 
 #articleToc>nav {
@@ -6419,7 +6419,9 @@ First go into the `/app/tutorial_examples` folder and then create a new `gfm_pla
 
 Inside of the `gfm_playground` folder create a new `page.mdx` MDX page and add the following content:
 
-```md title="/app/tutorial_examples/gfm_playground/page.mdx" showLineNumbers{42}
+```md title="/app/tutorial_examples/gfm_playground/page.mdx" showLineNumbers
+<article>
+
 ~~strikethrough~~
 
 Table:
@@ -6434,6 +6436,9 @@ Autolink: https://www.example.com
 Tasklist:
 * [x] foo  
 * [ ] bar  
+
+</article>
+
 ```
 
 We added some examples of new features that are now available:
@@ -6718,7 +6723,7 @@ The footnotes are a bit more complex to use than the other remark-gfm features w
 
 First lets go back into our playground file and add a simple notes example:
 
-```md title="/app/tutorial_examples/gfm_playground/page.mdx" showLineNumbers {57-58}
+```md title="/app/tutorial_examples/gfm_playground/page.mdx" showLineNumbers {20-21}
 <article>
 
 ~~strikethrough~~
@@ -6743,13 +6748,15 @@ Example text with a note.[^1]
 
 ```
 
-As you can see there are a few things that are not great, first our footnotes appear on the right, which is because our **main** element (in our layout) uses `display: flex` and the default **flex direction** is **row**, which was great for our table of contents but NOT for the footnotes, which we want to have on the bottom and not the right side
+Line 20 to 21 we add an example for footnotes
+
+If you launch the dev server, then open the playground URL [http://localhost:3000/tutorial_examples/gfm_playground](http://localhost:3000/tutorial_examples/gfm_playground) in your browser, you will notice that there are a few things that are not great, first our footnotes appear on the right, which is because our **main** element (in our layout) uses `display: flex` and the default **flex direction** is **row**, which was great for our table of contents but NOT for the footnotes, which we want to have on the bottom and not the right side
 
 The footnotes don't use a placeholder as does the toc to place them anywhere in the document, this is because they are supposed to always be placed at the end of the page, there is even a linting rule [remark-lint-final-definition](https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-final-definition) to make sure definitions are at the end
 
 So to change the footnotes from being on the right side to being on the bottom we need to add a bit of HTML and CSS to our project, let's start by adding a new HTML container element to our playground:
 
-```md title="/app/tutorial_examples/gfm_playground/page.mdx" showLineNumbers {57-58}
+```md title="/app/tutorial_examples/gfm_playground/page.mdx" showLineNumbers {1} {25}
 <div id="core">
 
 <article>
@@ -6891,16 +6898,197 @@ npm i rehype-github-alerts --save-exact
 
 Next we need to edit our Next.js configuration file to add the plugin to our MDX setup:
 
-```js title="next.config.mjs" showLineNumbers
+```js title="next.config.mjs" showLineNumbers {9} /rehypeGithubAlerts/2#special
+import { withSentryConfig } from '@sentry/nextjs'
+import createMdx from '@next/mdx'
+import rehypeMDXImportMedia from 'rehype-mdx-import-media'
+import rehypePrettyCode from 'rehype-pretty-code'
+import { readFileSync } from 'fs'
+import rehypeSlug from 'rehype-slug'
+import { remarkTableOfContents } from 'remark-table-of-contents'
+import remarkGfm from 'remark-gfm'
+import { rehypeGithubAlerts } from 'rehype-github-alerts'
+
+const nextConfig = (phase) => {
+
+    const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
+    const themeFileContent = readFileSync(themePath, 'utf-8')
+
+    /** @type {import('rehype-pretty-code').Options} */
+    const rehypePrettyCodeOptions = {
+        theme: JSON.parse(themeFileContent),
+        keepBackground: false,
+        defaultLang: {
+            block: 'tsx',
+            inline: 'js',
+        },
+        tokensMap: {
+            fn: 'entity.name.function',
+            cmt: 'comment',
+            str: 'string',
+            var: 'entity.name.variable',
+            obj: 'variable.other.object',
+            prop: 'meta.property.object',
+            int: 'constant.numeric',
+        },
+    }
+
+    /** @type {import('remark-table-of-contents').IRemarkTableOfContentsOptions} */
+    const remarkTableOfContentsOptions = {
+        containerAttributes: {
+            id: 'articleToc',
+        },
+        navAttributes: {
+            'aria-label': 'table of contents'
+        },
+        maxDepth: 3,
+    }
+
+    /** @type {import('remark-gfm').Options} */
+    const remarkGfmOptions = {
+        singleTilde: false,
+    }
+
+    const withMDX = createMdx({
+        extension: /\.(md|mdx)$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions], [remarkGfm, remarkGfmOptions]],
+            rehypePlugins: [rehypeGithubAlerts, rehypeSlug, rehypeMDXImportMedia, [rehypePrettyCode, rehypePrettyCodeOptions]],
+            remarkRehypeOptions: {
+                footnoteLabel: 'Notes',
+                footnoteLabelTagName: 'span',
+            },
+        },
+    })
+```
+
+Line 9 we import the `rehype-github-alerts` plugin
+
+Line 56 we add the **rehypeGithubAlerts** plugin to our rehype plugins configuration array
+
+The plugin is now ready to used, so we can now add some examples to our playground:
+
+```md title="/app/tutorial_examples/gfm_playground/page.mdx" showLineNumbers {24-36}
+<div id="core">
+
+<article>
+
+~~strikethrough~~
+
+Table:
+| Left    | Right   |
+| -------- | ------- |
+| Foo       | Bar |
+| ~~strikethrough~~ | 😃 |
+| `code` | [external link](https://google.com) |
+
+Autolink: https://www.example.com
+
+Tasklist:
+* [x] foo  
+* [ ] bar  
+
+Example text with a note.[^1]  
+[^1]: This is the text of the note, [it can be a link too](https://www.example.com)  
+
+> [!NOTE]  
+> Highlights information that users should take into account, even when skimming.
+
+> [!TIP]  
+> Optional information to help a user be more successful.
+
+> [!IMPORTANT]  
+> Crucial information necessary for users to succeed.
+
+> [!WARNING]  
+> Critical content demanding immediate user attention due to potential risks.
+
+> [!CAUTION]  
+> Negative potential consequences of an action.
+
+</article>
+
+</div>
 
 ```
 
-Then we can add some examples to our playground:
+If you now launch the dev server and then open the playground URL [http://localhost:3000/tutorial_examples/gfm_playground](http://localhost:3000/tutorial_examples/gfm_playground) in your browser, you will see that alerts get rendered
 
+Now to mimick the style alerts have on GitHub we will add some custom CSS to our `global.css` CSS file:
 
+```css title="/app/global.css" showLineNumbers{228}
+.markdown-alert {
+    --github-alert-default-color: rgb(48, 54, 61);
+    --github-alert-note-color: rgb(31, 111, 235);
+    --github-alert-tip-color: rgb(35, 134, 54);
+    --github-alert-important-color: rgb(137, 87, 229);
+    --github-alert-warning-color: rgb(158, 106, 3);
+    --github-alert-caution-color: rgb(248, 81, 73);
 
-> [!TIP]
-> when adding **github alerts** you use square braquets (`[!ALERT_TYPE]`), however in VSCode (if you have link validation enabled) then the markdown language service will assume this is an invalid link (QUOTE_VSCODE_ERROR), and show an error (SCRENNSHOT_HERE), to exclude the alerts from validation put a backslash (`\`) in front of the square braquets, like so `\[!NOTE]` and the error will be gone (SCRENNSHOT_2_HERE)
+    padding: 0.5rem 1rem;
+    margin-bottom: 16px;
+    border-left: 0.25em solid var(--github-alert-default-color);
+}
+
+.markdown-alert>:first-child {
+    margin-top: 0;
+}
+
+.markdown-alert>:last-child {
+    margin-bottom: 0;
+}
+
+.markdown-alert-note {
+    border-left-color: var(--github-alert-note-color);
+}
+
+.markdown-alert-tip {
+    border-left-color: var(--github-alert-tip-color);
+}
+
+.markdown-alert-important {
+    border-left-color: var(--github-alert-important-color);
+}
+
+.markdown-alert-warning {
+    border-left-color: var(--github-alert-warning-color);
+}
+
+.markdown-alert-caution {
+    border-left-color: var(--github-alert-caution-color);
+}
+
+.markdown-alert-title {
+    display: flex;
+    margin-bottom: 4px;
+    align-items: center;
+}
+
+.markdown-alert-title>svg {
+    margin-right: 8px;
+}
+
+.markdown-alert-note .markdown-alert-title {
+    color: var(--github-alert-note-color);
+}
+
+.markdown-alert-tip .markdown-alert-title {
+    color: var(--github-alert-tip-color);
+}
+
+.markdown-alert-important .markdown-alert-title {
+    color: var(--github-alert-important-color);
+}
+
+.markdown-alert-warning .markdown-alert-title {
+    color: var(--github-alert-warning-color);
+}
+
+.markdown-alert-caution .markdown-alert-title {
+    color: var(--github-alert-caution-color);
+}
+```
 
 Congratulations 🎉 you Alerts similar to what GitHub has and because of GFM you now also have support for most of the other features GitHub flawored markdown has to offer
 
@@ -6908,14 +7096,16 @@ Congratulations 🎉 you Alerts similar to what GitHub has and because of GFM yo
 > [GitHub "rehype-github-alerts" repository](https://github.com/chrisweb/rehype-github-alerts)  
 > [npmjs.com "rehype-github-alerts" page](https://www.npmjs.com/package/rehype-github-alerts)  
 
-## frontmatter
+## pages (and layout) metadata
 
-## metadata
+### Next.js metadata extraction from frontmatter
 
-## going into production
+## GitHub production branch merge
 
-### GitHub production branch
+### automatically close GitHub issues (tickets)
 
-### Vercel production publishing
+## going into production (using Vercel)
+
+### custom domain
 
 </article>
