@@ -5909,12 +5909,13 @@ npm i remark-table-of-contents --save-exact
 
 Now that it is installed we need to edit our Next.js configuration file and add it to our MDX setup:
 
-```js title="next.config.mjs" showLineNumbers {6} {32-41} /[remarkTableOfContents, remarkTableOfContentsOptions]/#special
+```js title="next.config.mjs" showLineNumbers {7} {33-42} /[remarkTableOfContents, remarkTableOfContentsOptions]/#special
 import { withSentryConfig } from '@sentry/nextjs'
 import createMdx from '@next/mdx'
 import rehypeMDXImportMedia from 'rehype-mdx-import-media'
 import rehypePrettyCode from 'rehype-pretty-code'
 import { readFileSync } from 'fs'
+import rehypeSlug from 'rehype-slug'
 import { remarkTableOfContents } from 'remark-table-of-contents'
 
 const nextConfig = (phase) => {
@@ -5957,14 +5958,14 @@ const nextConfig = (phase) => {
         options: {
             // optional remark and rehype plugins
             remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions]],
-            rehypePlugins: [rehypeMDXImportMedia, [rehypePrettyCode, rehypePrettyCodeOptions]],
+            rehypePlugins: [rehypeSlug, rehypeMDXImportMedia, [rehypePrettyCode, rehypePrettyCodeOptions]],
         },
     })
 ```
 
-Line 6 we import the **remark-table-of-contents** plugin
+Line 7 we import the **remark-table-of-contents** plugin
 
-Line 32 to 41 first we add the import for the **IRemarkTableOfContentsOptions** type, which will make sure our options object is strictly typed, meaning that we will get an autocomplete that will help us discover the options that are available without having to look them up in the documentation (the plugins README.md), the plugin has no mandatory configuration options but we have used 3 to demonstate a bit how a toc can be customized:
+Line 33 to 42 first we add the import for the **IRemarkTableOfContentsOptions** type, which will make sure our options object is strictly typed, meaning that we will get an autocomplete that will help us discover the options that are available without having to look them up in the documentation (the plugins README.md), the plugin has no mandatory configuration options but we have used 3 to demonstate a bit how a toc can be customized:
 
 * by default a toc will be wrapped in `<aside>` element which acts as container for the headings links list (you can disable the creation of this aside container if you prefer), here we use the **containerAttributes** option to specify that we want to have an `id` attribute with a value set to `articleToc`, meaning we will have a toc container element like this `<aside id="articleToc">`
 * inside of the `<aside>` container the toc will add a `<nav>` element, we use the **navAttributes** option to specify that we want to set the `aria-label` attribute of the `<nav>` element to `table of contents`, which is not mandatory but my hope is that it is benefical for accessibility purposes, to help the user understand that this element is not the main navigation but a more specific navigation for the article chapters
@@ -6269,9 +6270,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
             </BaseLink>
         ),
         img: (props) => (<BaseImage {...props as ImageProps} />),
-        input: (props) => {
-            return (<BaseCheckbox {...props} />)
-        },
         aside: ({ children, ...props }) => {
             const tocHighlightProps = {
                 headingsToObserve: 'h1, h2, h3',
@@ -6286,7 +6284,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                             {children}
                         </TocHighlight>
                     ) : (
-                        <aside>
+                        <aside {...props}>
                             {children}
                         </aside>
                     )
@@ -6299,7 +6297,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 }
 ```
 
-Line 32 to 53 we add new code to our `mdx-components.tsx` file, our code will check if the current `<aside>` element is the one that has the `articleToc` ID attribute (this is the ID attribute we set when configuring the TOC in the Next.js configuration) and if the `<aside>` element is the one that contains the TOC we replace it by a new one that we create using the **TOC Highlight component** we just created
+Line 32 to 53 we add new code to our `mdx-components.tsx` file, we [conditionally render JSX](https://react.dev/learn/conditional-rendering) using our custom **TocHighlight** component if the current `<aside>` element is the one that has the `articleToc` ID attribute (this is the ID attribute we set when configuring the TOC in the Next.js configuration), if it is a regular `<aside>` element that does not have the `articleToc` ID attribute we just create an `<aside>` element with the initial props
 
 > [!TIP]  
 > If the switch between currently highlighted links and the previous one does not behave as you expect, then you need to adjust the values of the **rootMargin** and adapt them based on the dimensions of your pages, you header and eventually the article itself
@@ -6310,6 +6308,8 @@ Congratulations 🎉 you should now see a TOC on the right side of the article t
 
 > [!MORE]  
 > [MDN "Intersection Observer API" documentation](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)  
+> [react.dev "JSX conditanal rendering" documentation](https://react.dev/learn/conditional-rendering)  
+> [react.dev "custom hooks" documentation](https://react.dev/learn/reusing-logic-with-custom-hooks)  
 
 ## GitHub flawored markdown plugins
 
@@ -6345,12 +6345,13 @@ npm i remark-gfm --save-exact
 
 Next we edit our `next.config.mjs` configuration file to add the plugin to the `next/mdx` setup, like so:
 
-```js title="next.config.mjs" showLineNumbers {7} {44-47} /[remarkGfm, remarkGfmOptions]/#special
+```js title="next.config.mjs" showLineNumbers {8} {44-47} /[remarkGfm, remarkGfmOptions]/#special
 import { withSentryConfig } from '@sentry/nextjs'
 import createMdx from '@next/mdx'
 import rehypeMDXImportMedia from 'rehype-mdx-import-media'
 import rehypePrettyCode from 'rehype-pretty-code'
 import { readFileSync } from 'fs'
+import rehypeSlug from 'rehype-slug'
 import { remarkTableOfContents } from 'remark-table-of-contents'
 import remarkGfm from 'remark-gfm'
 
@@ -6399,14 +6400,14 @@ const nextConfig = (phase) => {
         options: {
             // optional remark and rehype plugins
             remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions], [remarkGfm, remarkGfmOptions]],
-            rehypePlugins: [rehypeMDXImportMedia, [rehypePrettyCode, rehypePrettyCodeOptions]],
+            rehypePlugins: [rehypeSlug, rehypeMDXImportMedia, [rehypePrettyCode, rehypePrettyCodeOptions]],
         },
     })
 ```
 
-Line 7 we import the **remark-gfm** plugin
+Line 8 we import the **remark-gfm** plugin
 
-Line 44 to 47 I added a configuration object for the plugin, I first add the options type from the package to have strictly typed options, but there are actually few things you can or NEED to configure, there is just one option I personally like to disable and that is the **singleTilde** which I set to false, why it true by default is well explained in their [README](https://github.com/remarkjs/remark-gfm?tab=readme-ov-file#options) so I will just quote the official explanation here:
+Line 45 to 48 I added a configuration object for the plugin, I first add the options type from the package to have strictly typed options, but there are actually few things you can or NEED to configure, there is just one option I personally like to disable and that is the **singleTilde** which I set to false, why it true by default is well explained in their [README](https://github.com/remarkjs/remark-gfm?tab=readme-ov-file#options) so I will just quote the official explanation here:
 
 > whether to support strikethrough with a single tilde; single tildes work on github.com, but are technically prohibited by GFM; you can always use 2 or more tildes for strikethrough
 
@@ -6461,7 +6462,7 @@ If you open the playground in the browser and inspect the HTML source, you will 
 
 It is however possible to customize the **checkboxes** of a **tasklist** using the `mdx-components.tsx` file that in the root of our project:
 
-```tsx title="mdx-components.tsx" showLineNumbers {29}
+```tsx title="mdx-components.tsx" showLineNumbers {51-53}
 import type { MDXComponents } from 'mdx/types'
 import BaseLink from '@/components/base/Link'
 import type { Route } from 'next'
@@ -6488,6 +6489,28 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
             </BaseLink>
         ),
         img: (props) => (<BaseImage {...props as ImageProps} />),
+        aside: ({ children, ...props }) => {
+            const tocHighlightProps = {
+                headingsToObserve: 'h1, h2, h3',
+                rootMargin: '-5% 0px -50% 0px',
+                threshold: 1,
+                ...props
+            }
+            return (
+                <>
+                    {props.id === 'articleToc' ? (
+                        <TocHighlight {...tocHighlightProps}>
+                            {children}
+                        </TocHighlight>
+                    ) : (
+                        <aside {...props}>
+                            {children}
+                        </aside>
+                    )
+                    }
+                </>
+            )
+        },
         input: (props) => {
             console.log(props)
         },
@@ -6496,7 +6519,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 }
 ```
 
-Line 29 we add a `console.log` to get an idea of what the props of an input element are, our `console.log` will print the following in our terminal:
+Line 51 to 53 for any input element, we do a `console.log` to get an idea of what the props of an input element are
+
+In this case our `console.log` will print the following in our terminal:
 
 ```shell
 { type: 'checkbox', checked: true, disabled: true }
@@ -6507,7 +6532,7 @@ As you can see all checkboxes are **disabled**, this is the default behavior for
 
 You might want to remove the `disabled` attribute, we can do that easily by using a destructuring assignment to remove the `disabled` attribute and put the remaining props into new object that we then pass to a custom input element, like so:
 
-```tsx title="mdx-components.tsx" showLineNumbers {30-32}
+```tsx title="mdx-components.tsx" showLineNumbers {52-55}
 import type { MDXComponents } from 'mdx/types'
 import BaseLink from '@/components/base/Link'
 import type { Route } from 'next'
@@ -6534,6 +6559,28 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
             </BaseLink>
         ),
         img: (props) => (<BaseImage {...props as ImageProps} />),
+        aside: ({ children, ...props }) => {
+            const tocHighlightProps = {
+                headingsToObserve: 'h1, h2, h3',
+                rootMargin: '-5% 0px -50% 0px',
+                threshold: 1,
+                ...props
+            }
+            return (
+                <>
+                    {props.id === 'articleToc' ? (
+                        <TocHighlight {...tocHighlightProps}>
+                            {children}
+                        </TocHighlight>
+                    ) : (
+                        <aside {...props}>
+                            {children}
+                        </aside>
+                    )
+                    }
+                </>
+            )
+        },
         input: (props) => {
             console.log(props)
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -6545,7 +6592,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 }
 ```
 
-Line 30 to 32 we use a destructuring assignment to split the original props into the disabled attribute and the remaining props, we need to disable the eslint `@typescript-eslint/no-unused-vars` for that line as we won't use the disabled variable, then we create a new input element and pass the remaining props
+Line 52 to 55 we use a destructuring assignment to split the original props into the disabled attribute and the remaining props, we need to disable the eslint `@typescript-eslint/no-unused-vars` for that line as we won't use the disabled variable, then we create a new input element and pass the remaining props
 
 > [!TIP]  
 > when you make changes to the `mdx-components.tsx` file, Next.js will not always instantly detect those changes and reload the project, the easiest trick I have found to make sure Next.js notices the changes is to also open the `next.config.mjs` configuration file and make a small change like adding a line break at the end, then save the Next.js configuration file, this will cause a reload of the project, which ensures your mdx-components changes get taken into account
@@ -6596,7 +6643,7 @@ Line 19 we create an input element of type checkbox and add all our attributes
 
 Now that we have our custom checkbox component we can start using it in the `mdx-components.tsx` file, like so:
 
-```tsx title="mdx-components.tsx" showLineNumbers {6} {29}
+```tsx title="mdx-components.tsx" showLineNumbers {6} {52}
 import type { MDXComponents } from 'mdx/types'
 import BaseLink from '@/components/base/Link'
 import type { Route } from 'next'
@@ -6624,6 +6671,28 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
             </BaseLink>
         ),
         img: (props) => (<BaseImage {...props as ImageProps} />),
+        aside: ({ children, ...props }) => {
+            const tocHighlightProps = {
+                headingsToObserve: 'h1, h2, h3',
+                rootMargin: '-5% 0px -50% 0px',
+                threshold: 1,
+                ...props
+            }
+            return (
+                <>
+                    {props.id === 'articleToc' ? (
+                        <TocHighlight {...tocHighlightProps}>
+                            {children}
+                        </TocHighlight>
+                    ) : (
+                        <aside {...props}>
+                            {children}
+                        </aside>
+                    )
+                    }
+                </>
+            )
+        },
         input: (props) => {
             return(<BaseCheckbox {...props} />)
         },
@@ -6634,7 +6703,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
 Line 6 we import our checkbox component
 
-Line 29 we remove the previous code and use our checbox component instead
+Line 52 we remove the previous code and use our checbox component instead
 
 Of course depending on your needs what you would do now is update the **BaseCheckbox** onChange handler with some code to do something useful based on your needs, like for example add code to send a POST request to the server or add code that updates a value in the localstorage of the users browser
 
@@ -6733,12 +6802,13 @@ If you launch the dev server, then open the playground URL [http://localhost:300
 
 In the following example are going to change the label that is being used in the footnotes at the bottom and we will change the element used for the footnores label
 
-```js title="next.config.mjs" showLineNumbers 
+```js title="next.config.mjs" showLineNumbers {56-59}
 import { withSentryConfig } from '@sentry/nextjs'
 import createMdx from '@next/mdx'
 import rehypeMDXImportMedia from 'rehype-mdx-import-media'
 import rehypePrettyCode from 'rehype-pretty-code'
 import { readFileSync } from 'fs'
+import rehypeSlug from 'rehype-slug'
 import { remarkTableOfContents } from 'remark-table-of-contents'
 import remarkGfm from 'remark-gfm'
 
@@ -6787,7 +6857,7 @@ const nextConfig = (phase) => {
         options: {
             // optional remark and rehype plugins
             remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions], [remarkGfm, remarkGfmOptions]],
-            rehypePlugins: [rehypeMDXImportMedia, [rehypePrettyCode, rehypePrettyCodeOptions]],
+            rehypePlugins: [rehypeSlug, rehypeMDXImportMedia, [rehypePrettyCode, rehypePrettyCodeOptions]],
             remarkRehypeOptions: {
                 footnoteLabel: 'Notes',
                 footnoteLabelTagName: 'span',
@@ -6796,7 +6866,7 @@ const nextConfig = (phase) => {
     })
 ```
 
-Line 55 to 58 we added the options for the footnotes to the **remarkRehypeOptions** object and NOT (as one might assume) to the **remarkGfmOptions** object line 45 to 47
+Line 56 to 59 we added the options for the footnotes to the **remarkRehypeOptions** object and NOT (as one might assume) to the **remarkGfmOptions** object (at line 46 to 48)
 
 If you launch the dev server, then open the playground URL [http://localhost:3000/tutorial_examples/gfm_playground](http://localhost:3000/tutorial_examples/gfm_playground) in your browser, you will notice that the footnotes label changed from default "Footnotes" to "Notes" (this can be useful if you have a website that has content in multiple languages and want to translate the label), then we also changed the element of the label (which by default is a `<h2>`) to a `<span>`
 
@@ -6807,11 +6877,11 @@ If you launch the dev server, then open the playground URL [http://localhost:300
 
 ## GitHub like alerts using the rehype-github-alerts plugin
 
-The [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts) plugin is a plugin I did a while back when I first saw the [GitHub alerts RFC](https://github.com/orgs/community/discussions/16925), in the meantime they have also added a short [chapter about alerts in their markdown documentation](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts)
+The [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts) plugin to render alerts (admonitions / callouts) in a similar way to how GitHub does it, **rehype-github-alerts** is a plugin I did a while back after I first saw the [GitHub alerts RFC](https://github.com/orgs/community/discussions/16925) in which GitHub suggests adding a new alerts syntax to their GitHub markdown
 
-The **rehype github alerts** plugin does not use the exact GitHub code as the code used for their implementation is NOT opensource but attempts to mimick the GitHub alerts features and look, meaning that when you add alerts into your markdown and publish it on GitHub then the rendered alert output should be very similar to what you get when using this plugin and having alerts in the markdown of your own project
+The **rehype github alerts** plugin is not a copy of the exact GitHub source code as the code used for their implementation is NOT opensource, but the **rehype github alerts** attempts to mimick the [GitHub alerts](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts) appearance and features, meaning that when you add alerts into your markdown and publish it on GitHub then the rendered alert output should be very similar to what you get when using this plugin, of course the alerts style might be different for your own project depending on what CSS you apply to them
 
-It is however possible to customize the alerts in different ways and you can use whatever styling you like (check out the [**rehype github alerts** README](https://github.com/chrisweb/rehype-github-alerts?tab=readme-ov-file#rehype-github-alerts) for some documentation and more examples), I use the plugin a lot on this website and my alerts look quite different from what they look like on GitHub
+This plugin attempts to mimick the GitHub alerts by implementing the same features it is however possible to use the configuration to for example add new custom types of alerts (the default GitHub alert types are Note, Tip, Important, Warning and Caution), also using custom CSS it is possible to change how they get displayed (check out the [**rehype github alerts** README](https://github.com/chrisweb/rehype-github-alerts?tab=readme-ov-file#rehype-github-alerts) for some documentation and more examples), as you probably noticed I use the plugin a lot on this website and my alerts look quite different from what they look like on GitHub
 
 To add the **rehype github alerts** plugin we first need to install the package:
 
@@ -6842,6 +6912,10 @@ Congratulations 🎉 you Alerts similar to what GitHub has and because of GFM yo
 
 ## metadata
 
-## vercel production publishing
+## going into production
+
+### GitHub production branch
+
+### Vercel production publishing
 
 </article>
