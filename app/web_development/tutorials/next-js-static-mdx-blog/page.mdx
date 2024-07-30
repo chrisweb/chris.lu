@@ -439,7 +439,6 @@ export default function Home() {
     )
 
 }
-
 ```
 
 Congratulations you just coded your first Next.js page 🎉
@@ -2277,7 +2276,7 @@ const config = {
         // https://www.npmjs.com/package/remark-lint-unordered-list-marker-style
         [remarkLintUnorderedListMarkerStyle, 'consistent'],
         // https://www.npmjs.com/package/remark-lint-no-undefined-references
-        [remarkLintNoUndefinedReferences, { allow: ['!NOTE', '!TIP', '!MORE', '!WARN', ' ', 'x'] }],
+        [remarkLintNoUndefinedReferences, { allow: ['!NOTE', '!TIP', '!IMPORTANT', '!WARNING', '!CAUTION', ' ', 'x'] }],
         // https://www.npmjs.com/package/remark-lint-link-title-style
         [remarkLintLinkTitleStyle, '\''],
         // https://www.npmjs.com/package/remark-lint-maximum-line-length
@@ -2780,8 +2779,8 @@ Next in the `UI` folder we create a new `button.module.css` file and add the fol
 
 And then a second `Button.tsx` file (also in the `UI` folder), with the following content:
 
-```tsx title="/components/tutorial_examples/UI/Button.tsx"
-import styles from './styles.module.css'
+```tsx title="/components/tutorial_examples/UI/Button.tsx" showLineNumbers
+import styles from './button.module.css'
 
 const UIButton: React.FC = (): JSX.Element => {
 
@@ -2795,24 +2794,31 @@ const UIButton: React.FC = (): JSX.Element => {
 export default UIButton
 ```
 
+Line 1 we import the CSS module
+
+Line 6 we apply the `.reset` class we did add in our `button.module.css` CSS module to the button
+
 Then we go into the `/app/tutorial_examples` folder and create a new `styling` folder
 
 Then in the `styling` folder we create a new `page.tsx` file and paste the following content into it:
 
-```tsx title="/app/tutorial_examples/styling/page.tsx"
+```tsx title="/app/tutorial_examples/styling/page.tsx" showLineNumbers
 import UIButton from '@/components/tutorial_examples/UI/Button'
 
-export default function Home() {
+export default function StylingExamplePage() {
 
     return (
         <>
-            <h1>Hello World!</h1>
             <UIButton />
         </>
     )
 
 }
 ```
+
+Line 1 we import our custom button component that is styled using a CSS module
+
+Line 7 we use the button
 
 Tada 🎉 we now know how to use CSS Modules
 
@@ -2833,8 +2839,8 @@ Then right click, chose **Inspect** or press `F12` to open the dev tools, then o
 
 If you want to add more than one class, either use a package like [classnames](https://www.npmjs.com/package/classnames) or just use [native javascript template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) like so:
 
-```tsx title="/components/tutorial_examples/UI/Button.tsx" "&#x60;${styles.reset} ${styles.core}&#x60;"
-import styles from './styles.module.css'
+```tsx title="/components/tutorial_examples/UI/Button.tsx" showLineNumbers "&#x60;${styles.reset} ${styles.core}&#x60;"
+import styles from './button.module.css'
 
 const UIButton: React.FC = (): JSX.Element => {
 
@@ -2847,6 +2853,8 @@ const UIButton: React.FC = (): JSX.Element => {
 
 export default UIButton
 ```
+
+Line 6 we use a javascript template literal to add two classes to the button (instead of just one)
 
 Then we add the second class to our CSS Module:
 
@@ -2861,22 +2869,29 @@ Then we add the second class to our CSS Module:
     --button-padding: 6px;
 
     padding: var(--button-padding);
-    border: 1px dashed orange;
+    border: 2px dashed magenta;
 }
 ```
 
 If you want to use the element **id** instead of a **class** to style an element, you can do it like this:
 
-```tsx
-<button id={styles.myIdStyle}>
+```tsx title="/components/tutorial_examples/UI/Button.tsx"  showLineNumbers{6} /styles.myIdStyle/#special
+<button id={styles.myIdStyle} className={`${styles.reset} ${styles.core}`}>
 ```
 
 and in the css module file you add the corresponding css like this:
 
-```css
+```css title="/components/tutorial_examples/UI/button.module.css"
+#myIdStyle {
+    color: white;
+    background-color: black;
+    cursor:pointer;
+}
+
+
 #myIdStyle:hover {
-    color: red;
-    background-color: yellow;
+    color: black;
+    background-color: white;
 }
 ```
 
@@ -2895,29 +2910,30 @@ A few more things about CSS Modules worth knowing:
 
 The UI button we just created is an oversimplified version of a button component, in a real project we would probably write something a little more useful like this:
 
-```tsx title="/components/tutorial_examples/UI/Button.tsx" {1} {3} {6-8} {10} {12} {14-19} {23}
+```tsx title="/components/tutorial_examples/UI/Button.tsx" showLineNumbers
 'use client'
 
 import type { PropsWithChildren } from 'react'
 import styles from './button.module.css'
+import { useRouter } from 'next/navigation'
 
 interface IProps extends PropsWithChildren {
-    clickCallback?: () => void
+    url?: string
 }
 
 const UIButton: React.FC<IProps> = (props): JSX.Element => {
 
-    const { clickCallback, children, ...rest } = props
+    const { url, children, ...rest } = props
+    const router = useRouter()
 
     const clickHandler = () => {
-        console.log('click')
-        if (typeof clickCallback === 'function') {
-            clickCallback()
+        if (url) {
+            router.push(url)
         }
     }
 
     return (
-        <button onClick={clickHandler} className={`${styles.reset} ${styles.core}`} id={styles.myIdStyle} {...rest}>
+        <button onClick={clickHandler} id={styles.myIdStyle} className={`${styles.reset} ${styles.core}`} {...rest}>
             {children}
         </button>
     )
@@ -2935,37 +2951,48 @@ Error: Event handlers cannot be passed to Client Component props.
 If you need interactivity, consider converting part of this to a Client Component.
 ```
 
-Line 3 we import the `PropsWithChildren` type from react and line 6 to 8 we extend the default props type by adding an entry for our custom `clickCallback` prop which will be a function that does not return anything `() => void`, we added a question mark to to the `clickCallback?` to make it optional as this feature will not always be used
+Line 3 we import the `PropsWithChildren` type from react and line 7 to 9 we extend the default props type by adding an entry for our `url` prop, the **url** is followed by a question which indicates we want this to be an optional prop
 
-Line 10 because React.FC is a [generic function](https://www.typescriptlang.org/docs/handbook/2/generics.html) it makes it easy for us to use our interface to add type safety for the props
+Line 5 we import the Next.js [useRouter](https://nextjs.org/docs/app/api-reference/functions/use-router) hook, which will allow us to programmatically trigger a client side navigation
 
-Line 12 we use the [destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) to extract the variables we will use from the props object
+Line 11 because React.FC is a [generic function](https://www.typescriptlang.org/docs/handbook/2/generics.html) it makes it easy for us to use our `IProps` interface which will add type safety for the props
 
-Line 14-19 we create our click handler function and inside we just use a `console.log` to print a message that tells us that the button got clicked, if we later improve this button we will replace the console.log with some logic that makes the button useful, then we check if our `clickCallback` is a function (as we set it to be optional in our interface it could be undefined) and if it is we call the callback
+Line 13 we use the [destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) to extract the variables we will use from the props object
 
-Line 23 we use the children prop to make our button component more flexible, so that who ever uses the button can define what the button text should be instead of having a hardcoded text like before, this of course makes it more reusable
+Line 14 we create an app router instance
+
+Line 16-20 we create a click handler using an arrow function, it will check if the url prop is defined, if it is defined we use the app router **push** method to perform a client-side navigation to the provided url
+
+Line 23 we pass our our event handler function to onClick
+
+Line 24 we use the children prop to make our button component more flexible, so that who ever uses the button can define what the button text should be instead of having a hardcoded text like before, this of course makes it more reusable
 
 > [!NOTE]  
-> Of course you should never overengineer a component early without knowing if the added flexibility will ever be useful to anyone as the added complexity would increase maintenance costs, but on the other hand there is nothing wrong in making a component a little bit more reusable like we did here as this will increase the chance that the button will get reused in the future, this helps avoiding that at some point you have a billion different components in your project where most of them do similar tasks and only have a little bit of code that differs, which would result in increased technical depth as fixing a bug or adding a feature might require you to edit multiple components instead of just one  
->  
-> This is why it is important to attempt to find a good balance between less components but more flexible ones that can be used in different situations and more components that do that do specific tasks but are not overengineered to have a lot of flexibility that will never be used in your project  
+> Of course you should never overengineer a component early without knowing if the added flexibility will ever be useful to anyone, for example in this case you could have made the button a bit simpler by not checking if the url exists and just assume the button will always get used to navigate to a page
+> 
+> But on the other hand it is also important to not end up having dozens of button components in a project that are all very similar, this is why in this case, we need it to navigate to a page another developer that will use the button somewhere else might not need that feature, which is why we made the feature optional
+>
+> Reusing components will avoid having dozens of button components in your project that for example look the same but do different things, this matters as more components will probably lead to higher maintenance costs and maybe even increase technical dept
 
-Of course not that we added a bit of reusability to our button we also need to update the page in which we use component, to this:
+Of course now that we added a bit of reusability to our button we also need to update the page in which we use component, to this:
 
-```tsx title="/app/tutorial_examples/styling/page.tsx" {8}
+```tsx title="/app/tutorial_examples/styling/page.tsx" showLineNumbers {9}
 import UIButton from '@/components/tutorial_examples/UI/Button'
 
-export default function Home() {
+export default function StylingExamplePage() {
+
+    const goTo = '/'
 
     return (
         <>
-            <h1>Hello World!</h1>
-            <UIButton>I&apos;m a UI button</UIButton>
+            <UIButton url={goTo}>I&apos;m a UI button, that will open the homepage</UIButton>
         </>
     )
 
 }
 ```
+
+Line 9 the UIButton **text** is now defined between the opening and closing tag (and not hardcoded in the button itself anymore, making it more reusable) and we also pass it a url prop that we have set above in the page to activate the navigation feature
 
 ### Adding a global.css
 
@@ -3507,7 +3534,7 @@ When using **next/font** you can use any font available on [google fonts](https:
 
 Because we are using the font for our navigation, let's start by editing our `layout.tsx` file (that is in the `app` folder) and import the font from there:
 
-```tsx title="/app/layout.tsx" showLineNumbers {4} {11-16} /className={pixelifySans.variable}/#special
+```tsx title="/app/layout.tsx" showLineNumbers {4} {11-16} /className={kablammo.variable}/#special
 import './global.css'
 import { Metadata } from 'next'
 import HeaderNavigation from '@/components/header/Navigation'
@@ -3518,9 +3545,9 @@ export const metadata: Metadata = {
     description: 'Generated by Next.js',
 }
 
-const pixelifySans = Kablammo({
+const kablammo = Kablammo({
     subsets: ['latin'],
-    variable: '--font-pixelifySans',
+    variable: '--font-kablammo',
     weight: ['400'],
     display: 'swap',
 })
@@ -3531,7 +3558,7 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <html lang="en" className={pixelifySans.variable}>
+        <html lang="en" className={kablammo.variable}>
             <body>
                 <header>
                     <HeaderNavigation />
@@ -3551,7 +3578,7 @@ Line 4 we import the font called **Kablammo** from **next/font**, you can find [
 Line 11-16 we set some options for the font:
 
 * like what [subset](https://fonts.google.com/knowledge/glossary/subsetting) do we want to use
-* the CSS variable (**--font-pixelifySans**) we want to use for the font
+* the CSS variable (**--font-kablammo**) we want to use for the font
 * the (font-)[weight](https://fonts.google.com/knowledge/glossary/weight) will we use
 * the [display](https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display) strategy defines what happens during the period where the font is still getting fetched and not ready to be used, Next.js sets it to swap by default, so if you chose **swap** as in this example you could also just not set it or if you prefer to let the browser chose the display strategy then use **auto** as value, as described on the [chrome developer "font-display" page](https://developer.chrome.com/blog/font-display) when you chose auto most browsers will use a technique similar to **block**, meaning that for a short period of time the browser will use an invisible fallback font face (to avoid layout shifts) and then when the font is ready it will swap in the font
 
@@ -3566,7 +3593,7 @@ Next we are going to add a stylesheet for our Naviation component and use the ne
 
 Create a new `navigation.module.css` file the `/components/header` folder and insert the following content:
 
-```css title="/components/header/navigation.module.css" showLineNumbers /--font-pixelifySans/
+```css title="/components/header/navigation.module.css" showLineNumbers /--font-kablammo/
 .navigation {
     display: flex;
     align-items: center;
@@ -3583,7 +3610,7 @@ Create a new `navigation.module.css` file the `/components/header` folder and in
     padding: 0 var(--spacing);
     font-size: xx-large;
     text-decoration: none;
-    font-family: var(--font-pixelifySans);
+    font-family: var(--font-kablammo);
 }
 
 .active {
@@ -3591,7 +3618,7 @@ Create a new `navigation.module.css` file the `/components/header` folder and in
 }
 ```
 
-As you can see at line 17 this is where we use the **--font-pixelifySans** variable we defined when setting the options for the font in the `layout.tsx` file
+As you can see at line 17 this is where we use the **--font-kablammo** variable we defined when setting the options for the font in the `layout.tsx` file
 
 The final step is to edit our `Navigation.tsx` file in the `/components/header` folder and start using the styles we just created, like so:
 
@@ -7013,7 +7040,16 @@ Example text with a note.[^1]
 
 ```
 
+> [!NOTE]  
+> If you get the following linting error for what is between the square brackets (`[]`):  
+>  
+> > Unexpected reference to undefined definition, expected corresponding definition (`!warning`) for a link or escaped opening bracket (`\[`) for regular texteslint(remark-lint-no-undefined-references)  
+>  
+> then have a look at the previous chapter ["adding and configuring remark-lint"](#adding-and-configuring-remark-lint), to learn how to get rid of those
+
 If you now launch the dev server and then open the playground URL [http://localhost:3000/tutorial_examples/gfm_playground](http://localhost:3000/tutorial_examples/gfm_playground) in your browser, you will see that alerts get rendered
+
+### styling GitHub alerts
 
 Now to mimick the style alerts have on GitHub we will add some custom CSS to our `global.css` CSS file:
 
@@ -7096,9 +7132,407 @@ Congratulations 🎉 you now have Alerts similar to what GitHub has and thx to r
 > [GitHub "rehype-github-alerts" repository](https://github.com/chrisweb/rehype-github-alerts)  
 > [npmjs.com "rehype-github-alerts" page](https://www.npmjs.com/package/rehype-github-alerts)  
 
-## pages (and layout) metadata
+## metadata in pages (and layout)
 
-### Next.js metadata extraction from frontmatter
+In this chapter we will add **metadata** to our pages (and layout) by using the [Next.js Metadata API](https://nextjs.org/docs/app/building-your-application/optimizing/metadata), this will add meta tags inside of the `<head>` element of our HTML documents, which are important to help crawlers from search engines and social networks better understand the content of our pages and should result in good SEO scores
+
+As we saw early on in this tutorial, Next.js has created a `layout.tsx` file in the `/app` folder and already added a basic **metadata** object
+
+The good thing is that Next.js imported the `Metadata` type (line 2) and used it to strictly type the metadata object (line 6), meaning we will benefit from **autocomplete** in VSCode while editing our metadata object
+
+We start by editing the `layout.tsx` file to add some entries to the metadata object:
+
+```tsx title="/app/layout.tsx" showLineNumbers
+import './global.css'
+import { Metadata } from 'next'
+import HeaderNavigation from '@/components/header/Navigation'
+import { Kablammo } from 'next/font/google'
+
+export const metadata: Metadata = {
+    title: {
+        template: '%s | example.com',
+        default: 'Home | example.com',
+    },
+    description: 'My description',
+}
+
+const kablammo = Kablammo({
+    subsets: ['latin'],
+    variable: '--font-kablammo',
+    weight: ['400'],
+    display: 'swap',
+})
+
+export default function RootLayout({
+    children,
+}: {
+    children: React.ReactNode
+}) {
+    return (
+        <html lang="en" className={kablammo.variable}>
+            <body>
+                <header>
+                    <HeaderNavigation />
+                </header>
+                <main>{children}</main>
+                <footer>
+                    <p>My Footer</p>
+                </footer>
+            </body>
+        </html>
+    )
+}
+```
+
+Line 7 we edited the title meta tag, the default title value was previously a string but we turned it into an object with two properties, [title.template](https://nextjs.org/docs/app/api-reference/functions/generate-metadata#template) is a great way to ensure titles have the same structure on every page and it helps reducing repetition (DRY), the second property is the default title for the homepage (which is required)
+
+The template will work for any pages that are in the same route segment as the layout, as this is the root layout of our project it means the template will work on all our pages, how the title template works is that on every page it will take the page title and then replace the `%s` placeholder of the template with the page title
+
+Line 8 I just changed the description default value to something else
+
+If you now launch the dev server, then open the "home" page [http://localhost:3000/](http://localhost:3000/) in your browser, then right click and select **inspect**
+
+Look at what is inside the `<head>` element of your page, there are for example some Next.js `<script>` tags, but also the following 4 tags are now present:
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<title>Home | example.com</title>
+<meta name="description" content="My description">
+```
+
+The `viewport` tag gets always added to every page by default, you can customize it if you need to, but for our example the default one is good enough, the second `charset` tag gets also added by Next.js to every page
+
+And then there are also the two meta data tags we added in the `layout.tsx` file, both **title** and **description** are displaying the default values we have set in our layout
+
+Now lets have a look at the source code of our **home** page:
+
+```tsx title="/app/page.tsx" showLineNumbers
+export default function Home() {
+
+    return (
+        <>
+            <h1>Hello World?</h1>
+        </>
+    )
+
+}
+```
+
+As we saw when inspecting the `<head>` element of our page had meta tags but our `page.tsx` file does not have any code related to the **metadata** object, this is because every page will inherit from the metadata we have set in the layout, you only add a metadata object in the pages for which you want to override a default value or when you want to add a metadata property that you didn't set in the layout
+
+Let's keep the **home** page as is and instead edit the second page we created earlier, which is the `/app/blog/page.tsx` file and add some metadata to it:
+
+```tsx title="/app/blog/page.tsx" showLineNumbers
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+    title: 'Blog page',
+}
+
+export default function Blog() {
+
+    return (
+        <>
+            I&apos;m the blog page
+        </>
+    )
+}
+```
+
+Line 1 we import the `Metadata` type to strictly type the metadata object
+
+Line 3 to 5 we create a `metadata` object and add a custom title for the blog page
+
+Now launch the dev server, then open the **blog** page [http://localhost:3000/blog](http://localhost:3000/blog) in your browser, then right click and select **inspect**
+
+As you can see the title tag has used the template from our layout file as well as the custom title from the blog page, the description is unchanged as we did NOT overwrite the default value from our layout 
+
+> [!MORE]  
+> [Next.js "Optimizing Metadata" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/metadata)  
+> [Next.js "Metadata Files API Reference" documentation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata)  
+> [Next.js "Metadata Object and generateMetadata Options" documentation](https://nextjs.org/docs/app/api-reference/functions/generate-metadata)  
+> [Next.js "Generate Viewport" documentation](https://nextjs.org/docs/app/api-reference/functions/generate-viewport)  
+
+### metadata in MDX pages
+
+When I first experimented with the new metadata object I was wondering if it would also work in MDX pages and YES it does
+
+Lets edit the last MDX playground page we created earlier and add a some metadata:
+
+```md title="/app/tutorial_examples/gfm_playground/page.mdx" showLineNumbers
+export const metadata = {
+    title: 'GFM playground page',
+}
+
+<div id="core">
+
+<article>
+
+~~strikethrough~~
+
+Table:
+| Left    | Right   |
+| -------- | ------- |
+| Foo       | Bar |
+| ~~strikethrough~~ | 😃 |
+| `code` | [external link](https://google.com) |
+
+Autolink: https://www.example.com
+
+Tasklist:
+* [x] foo  
+* [ ] bar  
+
+Example text with a note.[^1]  
+[^1]: This is the text of the note, [it can be a link too](https://www.example.com)  
+
+> [!NOTE]  
+> Highlights information that users should take into account, even when skimming.
+
+> [!TIP]  
+> Optional information to help a user be more successful.
+
+> [!IMPORTANT]  
+> Crucial information necessary for users to succeed.
+
+> [!WARNING]  
+> Critical content demanding immediate user attention due to potential risks.
+
+> [!CAUTION]  
+> Negative potential consequences of an action.
+
+</article>
+
+</div>
+
+```
+
+Line 1 this time we do NOT import `Metadata` type as MDX files are not typescript
+
+Line 1 to 3 we create a new **metadata** object and add a custom title for the GFM playground page
+
+If you inspect the source of the playground page [http://localhost:3000/tutorial_examples/gfm_playground](http://localhost:3000/tutorial_examples/gfm_playground), you will see the MDX page has the correct title (and also makes use of the template from the layout)
+
+### open graph metadata
+
+The [Open Graph protocol](https://ogp.me/) is important if you want to control what gets displayed when your content gets shared, but it also matters if you want to get a good SEO score, in the past it was mostly regarded as a facebook thing, but today a lot of social networks, messengers, search engines and a bunch of services will use the open graph data that your website provides
+
+First lets add a default **Open Graph** object to our layout file:
+
+```tsx title="/app/layout.tsx" showLineNumbers
+import './global.css'
+import { Metadata } from 'next'
+import HeaderNavigation from '@/components/header/Navigation'
+import { Kablammo } from 'next/font/google'
+
+export const metadata: Metadata = {
+    title: {
+        template: '%s | example.com',
+        default: 'Home | example.com',
+    },
+    description: 'My description',
+    openGraph: {
+        url: 'https://example.com/',
+        siteName: 'My website name',
+        locale: 'en_US',
+        type: 'website',
+    },
+}
+```
+
+> [!TIP]  
+> As we already a title and description in the regular metadata, we do NOT need to repeat those in the open graph data, Next.js will handle this automatically for us
+
+Next lets also add an example to our GFM playground to overwrite the URL property of the **Open Graph** metadata we added in the layout:
+
+```md title="/app/tutorial_examples/gfm_playground/page.mdx" showLineNumbers
+export const metadata = {
+    title: 'GFM playground page',
+    openGraph: {
+        url: 'https://example.com/tutorial_examples/gfm_playground',
+    },
+}
+```
+
+Now inspect the source of the playground page [http://localhost:3000/tutorial_examples/gfm_playground](http://localhost:3000/tutorial_examples/gfm_playground) you will see that in the `<head>` element of our page there are the following tags:
+
+```html
+<meta property="og:title" content="GFM playground page | example.com">
+<meta property="og:description" content="My description">
+<meta property="og:url" content="https://example.com/tutorial_examples/gfm_playground">
+```
+
+I expected to see 6 meta tags but there are only 3, which means the **openGraph** object from the page did not get merged with the **openGraph** object of the layout, at first I thought this was a bug, so I did a search in the Next.js issues in their GitHub repository and found an Issue [Next.js issue "openGraph metadata not merging across layouts" #47540](https://github.com/vercel/next.js/issues/47540) and then 2 more [Next.js issue "All properties of nested metadata objects like openGraph get overriten even if only one was a duplicate" #46899](https://github.com/vercel/next.js/issues/46899), [Next.js issue "Nested Open Graph metadata overwrites root metadata" #46434](https://github.com/vercel/next.js/issues/46434)
+
+> [!TIP]  
+> To learn more about "metadata merging" I recommend checking out the official documentation, they actually have a very informative chapter about this topic [Next.js "metadata merging" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/metadata#merging)
+
+There are 3 different solutions to our problem, I will start with the most obvious one and end with one that is a bit more complex:
+
+Solution 1: we can repeat the opengraph values in every page in which we use the **static** metadata export, this means manually copy the open graph we already set in the layout and add it again to the page itself:
+
+```md title="/app/tutorial_examples/gfm_playground/page.mdx" showLineNumbers
+export const metadata = {
+    title: 'GFM playground page',
+    openGraph: {
+        url: 'https://example.com/tutorial_examples/gfm_playground',
+        siteName: 'My website name',
+        locale: 'en_US',
+        type: 'website',
+    },
+}
+```
+
+Solution 2: is to use [generateMetadata](https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function) function to get the parent open graph metadata object and extend it manually:
+
+```md title="/app/tutorial_examples/gfm_playground/page.mdx" showLineNumbers
+export async function generateMetadata(props, parent) {
+    const parentOpenGraph = (await parent).openGraph
+    return {
+        title: 'GFM playground page',
+        openGraph: {
+            ...parentOpenGraph,
+            url: 'https://example.com/tutorial_examples/gfm_playground'
+        }
+    }
+}
+```
+
+When I saw the `await` in the above code, I was afraid that using this might actually opt the page out of static rendering, so I used the `npm run build` command to make a local test build and saw that it is not the case:
+
+```shell
+Route (app)                                          Size     First Load JS
+└ ○ /tutorial_examples/gfm_playground                1.04 kB         191 kB
+○  (Static)  prerendered as static content
+```
+
+The same code we added to MDX page, can be strictly typed if you we add it to a typescript page, like so:
+
+```tsx title="/app/blog/page.tsx" showLineNumbers
+import type { Metadata, ResolvingMetadata } from 'next'
+
+export async function generateMetadata(props: unknown, parent?: ResolvingMetadata):Promise<Metadata> {
+    const parentOpenGraph = (await parent)?.openGraph
+    return {
+        title: 'Blog page',
+        openGraph: {
+            ...parentOpenGraph,
+            url: 'https://example.com/blog'
+        }
+    }
+}
+```
+
+Solution 3: as suggested in the [metadata merging documentation](https://nextjs.org/docs/app/building-your-application/optimizing/metadata#merging) is to create a file with default open graph values and then always import that file:
+
+First we create a new `shared` folder in the root of project and then inside of it a `opengraph.ts` file, into which we add the open graph metadata we want to use in every page:
+
+```ts
+export const sharedOpenGraph = {
+    url: 'https://example.com/',
+    siteName: 'My website name',
+    locale: 'en_US',
+    type: 'website',
+}
+```
+
+Then we import the shared open graph file inside of our page(s):
+
+```tsx title="/app/blog/page.tsx" showLineNumbers
+import type { Metadata } from 'next'
+import { sharedOpenGraph } from '@/shared/opengraph'
+
+export const metadata: Metadata = {
+    title: 'Blog page',
+    openGraph: {
+        ...sharedOpenGraph,
+        url: 'https://example.com/blog'
+    }
+}
+```
+
+> [!MORE]  
+> [Next.js "Open Graph metadata" documentation](https://nextjs.org/docs/app/api-reference/functions/generate-metadata#opengraph)  
+> ["The Open Graph protocol" website](https://ogp.me/)  
+> [Next.js "metadata merging" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/metadata#merging)  
+
+### Meta data extraction from frontmatter
+
+frontmatter for Next.js metadata
+
+because we are using MDX pages in this tutorial, maybe you are using MDX or markdown content you had created for another tool and maybe your pages / documents have frontmatter to define a pages metadata, in that case it is possible to keep the frontmatter and use it for the Next.js metadata
+
+first we need to install 2 plugins:
+
+[remark-frontmatter](https://github.com/remarkjs/remark-frontmatter)
+
+this plugin will parse the frontmatter, without this plugin a MDX page with frontmatter would just display the frontmatter as text, after enabling this plugin the frontmatter part will not show up in your MDX pages anymore
+
+[remark-mdx-frontmatter](https://github.com/remcohaszing/remark-mdx-frontmatter)
+
+the second plugin is important as it will put the parsed frontmatter values into a variable which by default is called frontmatter but you can change the name using the options of the plugin 
+
+```js
+import remarkFrontmatter from 'remark-frontmatter'
+import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
+
+const nextConfig = (phase) => {
+
+    const withMDX = createMdx({
+        extension: /\.(md|mdx)$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
+            rehypePlugins: [],
+        },
+    })
+```
+
+now if you want to go a step further and also add linting for the frontmatter part, then add this plugin
+
+[remark-lint-frontmatter-schema](https://github.com/JulianCataldo/remark-lint-frontmatter-schema)
+
+> [!MORE]  
+> [](https://mdxjs.com/guides/frontmatter/)
+> [](https://nextjs.org/docs/app/building-your-application/configuring/mdx#frontmatter)
+> [](https://ogp.me/#type_article)
+
+```md
+---
+title: npm & package.json
+keywords: ['npm', 'package.json']
+published: 2024-05-24T19:14:23.792Z
+modified: 2024-05-24T19:14:23.792Z
+permalink: https://chris.lu/web_development/posts/npm
+siteName: chris.lu
+---
+
+export const metadata = {
+    title: frontmatter.title,
+    keywords: frontmatter.keywords,
+    openGraph: {
+        url: frontmatter.permalink,
+        siteName: frontmatter.siteName,
+        type: 'article',
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+    }
+}
+
+<article>
+
+<h1>{frontmatter.title}</h1>
+
+* foo
+* bar
+
+[internal link](/internal)
+
+[external link](https://example.com)
+
+</article>
+```
 
 ## GitHub production branch merge
 
