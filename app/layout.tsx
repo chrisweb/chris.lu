@@ -4,7 +4,7 @@ import styles from './layout.module.css'
 import { Permanent_Marker, VT323, Architects_Daughter, Source_Code_Pro, Anta } from 'next/font/google'
 import HeaderNavigation from '@/components/header/Navigation'
 import BaseLink from '@/components/base/Link'
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
     // default next.js value
