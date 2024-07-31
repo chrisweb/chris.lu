@@ -3998,6 +3998,9 @@ For the third and last part we are going to use [next/image](https://nextjs.org/
 
 We will also keep **developer experience (DX)** feature of VSCode intact, by making sure that adding images to a document is easy and quick when using VSCode, meaning it should be possible to simply **drag and drop** images into a document and have VSCode create the markdown element with the path to the image for us
 
+> [!NOTE]  
+> Since Next.js 13 there is a new next/image package and the previous package got renamed to [next/legacy/image](https://nextjs.org/docs/pages/api-reference/components/image-legacy), the Next.js documentation has an informative chapter about ["next/image changed in version 13"](https://nextjs.org/docs/messages/next-image-upgrade-to-13), which explains what has changed and also provides links to codemods to automatically update your codebase  
+
 > [!MORE]  
 > [Next.js "next/image" api reference](https://nextjs.org/docs/app/api-reference/components/image)  
 > [Next.js "Image Optimization" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/images)  
@@ -4448,7 +4451,7 @@ VSCode recently added a new feature that let's you preview your images, to see t
 
 ![vscode image preview](../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_image_preview.png)
 
-##### Markdown image alt text and title
+##### Markdown image alt and title
 
 We then replace the **alt text** placeholder with the alt text we already used in the previous chapter but this time for the markdown element, when using markdown the alt text goes into the brequets after the excalamation mark, like so:
 
@@ -4457,6 +4460,8 @@ We then replace the **alt text** placeholder with the alt text we already used i
 ```
 
 > [!NOTE]  
+> It is recommended to always add an alt **attribute** to images, however the alt **text** itself is optional, meaning that for most images it is considered a best practice for **accessibility** reasons as well as for **SEO** optimization to add a descriptive alt text, however if the image is purely decorative then you should still add an alt **attribute** but the alt **text** should be an empty string, also if the image is purely decorative you can also add the **aria-hidden** attribute and set it to true to tell the assertive technology (screen reader) to ignore it, MDN has a very in-depth article about [aria-hidden](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-hidden) you may want to check out
+> 
 > If you are unsure about how to write good alt texts I recommend having a look at this [blog post about how to write good alt texts](https://design102.blog.gov.uk/2022/01/14/whats-the-alternative-how-to-write-good-alt-text/), a quick read is the HTML specification chapter about [alt text for images](https://html.spec.whatwg.org/multipage/images.html#alt), the w3c also has an interesting document helping you to decide [when and what kind of alt text to use](https://www.w3.org/WAI/tutorials/images/decision-tree/), finally the w3c has a page that list useful [resources about alt texts](https://www.w3.org/WAI/alt/)
 
 And if you want to have a title you can add it like so:
@@ -4469,6 +4474,7 @@ And if you want to have a title you can add it like so:
 > [VSCode "Markdown editing" documentation](https://code.visualstudio.com/docs/languages/markdown#_inserting-images-and-links-to-files)  
 > [w3c "Resources on Alternative Text for Images"](https://www.w3.org/WAI/alt/)  
 > [HTML specification "Requirements for providing text to act as an alternative for images"](https://html.spec.whatwg.org/multipage/images.html#alt)  
+> [MDN "aria-hidden" documentation](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-hidden)  
 
 #### Image formats to optimize LCP
 
@@ -4553,7 +4559,7 @@ This is the first optimisation that will reduce the size our images, making them
 > [caniuse "avif" page](https://caniuse.com/avif)  
 > [MDN "Image file type and format guide" documentation](https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types#png_portable_network_graphics)
 
-#### Image priority property and lazy loading
+#### Image priority and lazy loading
 
 For the second LCP optimisation go back to the **browser dev tools** and then switch to the [Console Tab](https://developer.chrome.com/docs/devtools/console), as you can see there is a warning about our image:
 
@@ -7462,55 +7468,127 @@ export const metadata: Metadata = {
 > ["The Open Graph protocol" website](https://ogp.me/)  
 > [Next.js "metadata merging" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/metadata#merging)  
 
-### Meta data extraction from frontmatter
+### frontmatter introduction
 
-frontmatter for Next.js metadata
+As stated in the ["GitHub docs" frontmatter documentation](https://docs.github.com/en/contributing/writing-for-github-docs/using-yaml-frontmatter), the [Jekyll](https://jekyllrb.com/docs/front-matter/) static site generator was the first to popularize frontmatter, but today a lot of frameworks and libraries add support for frontmatter, so maybe your markdown files already have frontmatter and you want to be able to use that data, or as I did when I started with this toturial, you just learned about frontmatter now and think it is a good way to store metdata in your MDX files
 
-because we are using MDX pages in this tutorial, maybe you are using MDX or markdown content you had created for another tool and maybe your pages / documents have frontmatter to define a pages metadata, in that case it is possible to keep the frontmatter and use it for the Next.js metadata
+You might have noticed that frontmatter is sometimes called "yaml frontmatter" or "frontmatter yaml", this is because frontmatter uses the [YAML data language](https://yaml.org/spec/1.2.2/)
 
-first we need to install 2 plugins:
+To add frontmatter to a document you start by adding 3 dashes (`---`), then add your frontmatter yaml and finally close the frontmatter block with another 3 dashes (`---`)
 
-[remark-frontmatter](https://github.com/remarkjs/remark-frontmatter)
+I already mentioned the GitHub and Jekyll documentation about frontmatter, they both specify predefined frontmatter variables, but because we will add our own frontmatter support we are actually free to use what ever variables we think are useful for our project, there is however one convention that you should follow and that is to always put the frontmatter part on top of your MDX page or markdown document
 
-this plugin will parse the frontmatter, without this plugin a MDX page with frontmatter would just display the frontmatter as text, after enabling this plugin the frontmatter part will not show up in your MDX pages anymore
+> [!MORE]  
+> ["YAML data language" specification](https://yaml.org/spec/1.2.2/)  
 
-[remark-mdx-frontmatter](https://github.com/remcohaszing/remark-mdx-frontmatter)
+#### Meta data extraction from frontmatter
 
-the second plugin is important as it will put the parsed frontmatter values into a variable which by default is called frontmatter but you can change the name using the options of the plugin 
+What we will do in this chapter is add two plugins to our next/mdx setup, that will read the frontmatter part of our MDX pages and then automatically populate the Next.js metadata object (using the frontmatter metadata) for us
 
-```js
+First we install install the 2 remark plugins using the following command:
+
+```shell
+npm i remark-frontmatter remark-mdx-frontmatter --save-exact
+```
+
+[remark-frontmatter](https://github.com/remarkjs/remark-frontmatter) is a plugin will parse the frontmatter, without this plugin a MDX page with frontmatter would just display the frontmatter as text (when getting rendered), after enabling this plugin the frontmatter part will not show up in your MDX pages anymore but will get parsed as frontmatter yaml
+
+[remark-mdx-frontmatter](https://github.com/remcohaszing/remark-mdx-frontmatter) is a plugin that is important as it will put the parsed frontmatter values into a variable inside of our MDX documents, the variable is called frontmatter by default but you can change the name using the options of the plugin
+
+Next we add the frontmatter plugins to our next/mdx configuration:
+
+```js title="next.config.mjs" showLineNumbers {10-11} /remarkFrontmatter, remarkMdxFrontmatter/#special
+import { withSentryConfig } from '@sentry/nextjs'
+import createMdx from '@next/mdx'
+import rehypeMDXImportMedia from 'rehype-mdx-import-media'
+import rehypePrettyCode from 'rehype-pretty-code'
+import { readFileSync } from 'fs'
+import rehypeSlug from 'rehype-slug'
+import { remarkTableOfContents } from 'remark-table-of-contents'
+import remarkGfm from 'remark-gfm'
+import { rehypeGithubAlerts } from 'rehype-github-alerts'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
 
 const nextConfig = (phase) => {
 
+    const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
+    const themeFileContent = readFileSync(themePath, 'utf-8')
+
+    /** @type {import('rehype-pretty-code').Options} */
+    const rehypePrettyCodeOptions = {
+        theme: JSON.parse(themeFileContent),
+        keepBackground: false,
+        defaultLang: {
+            block: 'tsx',
+            inline: 'js',
+        },
+        tokensMap: {
+            fn: 'entity.name.function',
+            cmt: 'comment',
+            str: 'string',
+            var: 'entity.name.variable',
+            obj: 'variable.other.object',
+            prop: 'meta.property.object',
+            int: 'constant.numeric',
+        },
+    }
+
+    /** @type {import('remark-table-of-contents').IRemarkTableOfContentsOptions} */
+    const remarkTableOfContentsOptions = {
+        containerAttributes: {
+            id: 'articleToc',
+        },
+        navAttributes: {
+            'aria-label': 'table of contents'
+        },
+        maxDepth: 3,
+    }
+
+    /** @type {import('remark-gfm').Options} */
+    const remarkGfmOptions = {
+        singleTilde: false,
+    }
+
     const withMDX = createMdx({
         extension: /\.(md|mdx)$/,
         options: {
             // optional remark and rehype plugins
-            remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
-            rehypePlugins: [],
+            remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter, [remarkTableOfContents, remarkTableOfContentsOptions], [remarkGfm, remarkGfmOptions]],
+            rehypePlugins: [rehypeGithubAlerts, rehypeSlug, rehypeMDXImportMedia, [rehypePrettyCode, rehypePrettyCodeOptions]],
+            remarkRehypeOptions: {
+                footnoteLabel: 'Notes',
+                footnoteLabelTagName: 'span',
+            },
         },
     })
 ```
 
-now if you want to go a step further and also add linting for the frontmatter part, then add this plugin
+Line 10 to 11 we import the 2 frontmatter plugins
 
-[remark-lint-frontmatter-schema](https://github.com/JulianCataldo/remark-lint-frontmatter-schema)
+Line 57 we add both to our remark plugins list
+
+> [!NOTE]  
+> Something I will not cover here, but if you want to go a step further and are interested in adding linting for the frontmatter part, then have a look at [remark-lint-frontmatter-schema](https://github.com/JulianCataldo/remark-lint-frontmatter-schema)  
 
 > [!MORE]  
-> [](https://mdxjs.com/guides/frontmatter/)
-> [](https://nextjs.org/docs/app/building-your-application/configuring/mdx#frontmatter)
-> [](https://ogp.me/#type_article)
+> [mdx.js "Frontmatter" documentation](https://mdxjs.com/guides/frontmatter/)  
+> [Next.js "Frontmatter" documentation](https://nextjs.org/docs/app/building-your-application/configuring/mdx#frontmatter)  
+> [npmjs.com "remark-frontmatter" page](https://www.npmjs.com/package/remark-frontmatter)  
+> [npmjs.com "remark-mdx-frontmatter" page](https://www.npmjs.com/package/remark-mdx-frontmatter)  
 
-```md
+Now it time to create an example where we define some frontmatter, let both plugins do their magic and then use the frontmatter variable to populate the Next.js metadata object
+
+Lets reuse our gfm_plaground page one more time, first remove the current metadata and then add this instead:
+
+```md title="/app/tutorial_examples/gfm_playground/page.mdx" showLineNumbers
 ---
-title: npm & package.json
-keywords: ['npm', 'package.json']
+title: GFM playground page
+keywords: ['gfm', 'playground', 'frontmatter', 'mdx']
 published: 2024-05-24T19:14:23.792Z
 modified: 2024-05-24T19:14:23.792Z
-permalink: https://chris.lu/web_development/posts/npm
-siteName: chris.lu
+permalink: http://localhost:3000/tutorial_examples/gfm_playground
+siteName: My website name
 ---
 
 export const metadata = {
@@ -7525,19 +7603,93 @@ export const metadata = {
     }
 }
 
+<div id="core">
+
 <article>
 
-<h1>{frontmatter.title}</h1>
+# {frontmatter.title.toUpperCase()}
 
-* foo
-* bar
+~~strikethrough~~
 
-[internal link](/internal)
+Table:
+| Left    | Right   |
+| -------- | ------- |
+| Foo       | Bar |
+| ~~strikethrough~~ | 😃 |
+| `code` | [external link](https://google.com) |
 
-[external link](https://example.com)
+Autolink: https://www.example.com
+
+Tasklist:
+* [x] foo  
+* [ ] bar  
+
+Example text with a note.[^1]  
+[^1]: This is the text of the note, [it can be a link too](https://www.example.com)  
+
+> [!NOTE]  
+> Highlights information that users should take into account, even when skimming.
+
+> [!TIP]  
+> Optional information to help a user be more successful.
+
+> [!IMPORTANT]  
+> Crucial information necessary for users to succeed.
+
+> [!WARNING]  
+> Critical content demanding immediate user attention due to potential risks.
+
+> [!CAUTION]  
+> Negative potential consequences of an action.
 
 </article>
+
+</div>
+
 ```
+
+Line 1 to 8 we first added our frontmatter on top of the page with some variables we will use in the MDX page itself
+
+Line 10 to 20 we created a Next.js metadata object and used the frontmatter variable (that holds all they key / values from our frontmatter above) to populate it
+
+Line 26 we added a heading and used the frontmatter title value to demonstrate that the frontmatter variable can be used for more than just metadata
+
+Finally make sure the dev server is running, then open the playground page [http://localhost:3000/tutorial_examples/gfm_playground](http://localhost:3000/tutorial_examples/gfm_playground) in your browser and then right click in the page to have a look at the meta tags of the `<head>` element
+
+You should be getting the following result:
+
+```html showLineNumbers
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<title>GFM playground page | example.com</title>
+<meta name="description" content="My description">
+<meta name="keywords" content="gfm,playground,frontmatter,mdx">
+<meta property="og:title" content="GFM playground page | example.com">
+<meta property="og:description" content="My description">
+<meta property="og:url" content="http://localhost:3000/tutorial_examples/gfm_playground">
+<meta property="og:site_name" content="My website name">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2024-05-24T19:14:23.792Z">
+<meta property="article:modified_time" content="2024-05-24T19:14:23.792Z">
+```
+
+Line 1 to 2 are the viewport and charset Next.js adds by default
+
+Line 3 is the default [HTML title element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/title) that has the frontmatter.title as value and uses the template we have set in the layout file
+
+Line 4 is similar but holds the **description**
+
+Line 5 we have a **keywords** meta tag, which contains some keywords we added to our frontmatter, it is an example of how an array gets transformed into a string, but search engines like [google apparently don't use it](https://developers.google.com/search/docs/crawling-indexing/special-tags)
+
+Line 6 and 7 we have **open graph title and description** which Next.js sets based on the default title and description
+
+Line 8 and 9 we have the **open graph url and sitename** which are two values we have set in our frontmatter (and they overwrite the opengraph values set in the layout)
+
+Line 10 I added a static value as **open graph type** just to demoinstrate the following two meta tags
+
+Line 11 and 12 we have two new meta tags, which have a property that is not prefixed with `og:` but as can be seen on [https://ogp.me/#type_article](https://ogp.me/#type_article) they are part of the open graph protocol, the open graph **article namespace** needs to have the **open graph type** set to **article** and then you get tags that are **prefixed** with `article:`, if however the type is for example set to website those two metatags will not show up
+
+Congratulations you just learned how to set metadata for MDX pages and how to add frontmatter to MDX documents 🎉
 
 ## GitHub production branch merge
 
