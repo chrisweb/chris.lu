@@ -1,0 +1,234 @@
+%toc%
+
+<article>
+
+# Linting MDX using remark-lint
+
+In the previous part of the tutorial we added linting for our code, we did heavy changes to the linting setup which we needed to be able to start the second major linting setup, which is setting up linting for the markdown content in our MDX pages
+
+## Adding and configuring remark-lint
+
+We have now created an `.eslintrc.js` ESLint configuration file, we have added the MDX plugin which has installed [remark-lint](https://www.npmjs.com/package/remark-lint) for us as it is a dependency of the **eslint-plugin-mdx** package
+
+The next step is to configure **remark-lint**, but first we need to install remark-lint as well as 3 packages that contain presets for remark-lint, those presets will install a bunch of rules for us and will add a default configuration for those rules, use the following command to install all 4:
+
+```shell
+npm i remark-lint@latest remark-preset-lint-consistent@latest remark-preset-lint-recommended@latest remark-preset-lint-markdown-style-guide@latest --save-exact --save-dev
+```
+
+Remark-lint rules don't get added to `.eslintrc.js`, but instead we create a new file called `.remarkrc.mjs` (in the root of our project) and add the following content:
+
+```js title=".remarkrc.mjs"
+// presets imports
+import remarkPresetLintRecommended from 'remark-preset-lint-consistent'
+import remarkPresetLintConsistent from 'remark-preset-lint-recommended'
+import remarkPresetLintMarkdownStyleGuide from 'remark-preset-lint-markdown-style-guide'
+
+// rules imports
+import remarkLintMaximumHeadingLength from 'remark-lint-maximum-heading-length'
+import remarkLintUnorderedListMarkerStyle from 'remark-lint-unordered-list-marker-style'
+import remarkLintNoUndefinedReferences from 'remark-lint-no-undefined-references'
+import remarkLintLinkTitleStyle from 'remark-lint-link-title-style'
+import remarkLintMaximumLineLength from 'remark-lint-maximum-line-length'
+import remarkLintListItemSpacing from 'remark-lint-list-item-spacing'
+
+const config = {
+    plugins: [
+        // presets
+        remarkPresetLintRecommended,
+        remarkPresetLintConsistent,
+        remarkPresetLintMarkdownStyleGuide,
+        // rules
+        // https://www.npmjs.com/package/remark-lint-maximum-heading-length
+        [remarkLintMaximumHeadingLength, [1, 100]],
+        // https://www.npmjs.com/package/remark-lint-unordered-list-marker-style
+        [remarkLintUnorderedListMarkerStyle, 'consistent'],
+        // https://www.npmjs.com/package/remark-lint-no-undefined-references
+        [remarkLintNoUndefinedReferences, { allow: ['!NOTE', '!TIP', '!IMPORTANT', '!WARNING', '!CAUTION', ' ', 'x'] }],
+        // https://www.npmjs.com/package/remark-lint-link-title-style
+        [remarkLintLinkTitleStyle, '\''],
+        // https://www.npmjs.com/package/remark-lint-maximum-line-length
+        [remarkLintMaximumLineLength, false],
+        // https://www.npmjs.com/package/remark-lint-list-item-spacing
+        [remarkLintListItemSpacing, false],
+    ]
+}
+
+export default config
+```
+
+The first 3 imports are presets with recommended rules, below in the plugins config object we use the 3 presets
+
+The other imports are single rules we want to configure, below in the config object we use arrays where the first value is the rule and the second value is the configuration we want to apply:
+
+* for the **maximum headings length** rule, we use **1,100** which tells remark-lint that headings should not have a length lower than 1 character and not greater than 100
+* for the **unordered lists marker style** we set it to **consistent**, when set to **consistent** the rule will check which marker is the most used and then enforce it everywhere, this is nice because it means it is flexible and will adapt to what you use, do you often define lists by using an asterisk (*), then this is what the rule will enforce or do you prefer using an hyphen-minus (-) then that is what will get enforced, consistent is nice setting to ensure that your styling is consitent based on what you use the most
+* the **no undefined references** rule adds a list of references that should get excluded (hence not be considered undefined), we add !NOTE and some others as those will be used at some point when we start to use GitHub like alerts for markdown
+* images and links can have a title, the title needs to be enclosed by two symbols, here we define that we want to use a single quote (') for titles, so an image with a title would look like this `![IMAGE_ALT_TEXT](IMAGE_PATH 'IMAGE_TITLE')`, if you prefer you can enforce double quotes or even set it to consistent to let it chose the one you use most
+* the **maximum line length** rule I disabled it, some people like to stick to 80 characters, I try to keep my lines short but if a line is bigger that's ok (for me) too
+* finally the **list item spacing** I disabled it because I had a lot of false positives when using that rule (I might re-enable it in the future and check if the problems I encountered got fixed)
+
+> [!TIP]  
+> To get more information about what each rule does as well as more information about the 3 presets I use here I recommend visiting the [rules and presets GitHub repository](https://github.com/remarkjs/remark-lint/tree/main/packages) and then check out the README of each package
+
+There are a lot more rules than the ones listed here that get used, but for all other rules we keep the default configuration, so we don't need to install and import them individually
+
+> [!MORE]  
+> [remark lint "rules and presets" repository](https://github.com/remarkjs/remark-lint/tree/main/packages)  
+
+## package.json lint script update
+
+The next thing we need to do (as I explained in the ["Why are we changing the Next.js linting setup?" chapter](#why-are-we-changing-the-nextjs-linting-setup)) is to change the lint script in our `package.json`
+
+Instead of using the **next lint** command line interface (CLI) command for linting we will create our own command using the **ESLint** CLI, 
+
+When using the **next lint** CLI command, several things were done for us in the background, however as we want to use the **ESLint** CLI we need to set those flags ourself
+
+For example to enable ESLint cache we need to use the option `--cache` and then we tell ESLint to use the same cache directory that Next.js would use, using the `--cache-location` flag, like so:
+
+```shell
+npx eslint ./ --cache --cache-location .next/cache/eslint
+```
+
+To specify what files (extensions) get linted we need will use the ext flag like so:
+
+```shell
+npx eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md
+```
+
+Now we need to put those commands into our `package.json`, because we are in the `package.json` we don't need to use `npx`, change the **lint script** in the to this:
+
+```js title="package.json" {3}
+{
+    "scripts": {
+        "lint": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint"
+    },
+}
+```
+
+Now when we use the `npm run lint` command in our terminal, it will use our new script, which will use the **ESLint CLI** which will read the ESLint configuration from our `.eslintrc.js` configuration file
+
+I have two more scripts that can be useful, that you might to add too:
+
+```js title="package.json" {4-5}#special
+{
+    "scripts": {
+        "lint": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint",
+        "lint-nocache": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md",
+        "lint-debug": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --debug",
+        "lint-fix": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --fix"
+    },
+}
+```
+
+The **lint-nocache** script is the same linting command but it does **NOT** use the ESLint **cache**, this is useful when tweaking the ESLint configuration and not wanting ESLint to use the cache but instead always do a fresh start
+
+The **lint-debug** script is again the same linting command but this time we add the `--debug` flag (which you can't use when using the **next lint** CLI but as we now use the **ESLint** CLI we can), this will print a lot of useful information about what ESLint does in the **OUTPUT** tab in VSCode, which is again useful if you tweak your configuration and want to verify the things ESLint is doing or to debug a problem with your setup, like checking if your plugins get loaded correctly and much more
+
+If you don't know (yet) how to open the output channel, check out the ["VSCode (ESLint) output channel" chapter](/web_development/posts/vscode#vscode-eslint-output-channel) in the VSCode post
+
+The **lint-fix** script will attempt to automatically fix linting problems for you, however this can be tricky on big repositories with a lot of code, so if you run this later and have potentially a lot of fixes that get applied, then I recommend to first create a new branch, run the command and then use the commit list to check the changes manually for each file, then do some testing to ensure nothing is broken and then finally merge the changes into your main branch
+
+Btw the --fix flag works when using the **ESLint** CLI but it can also be used when using the **next lint** CLI
+
+One more thing that will help us NOT forget about those 3 new commands is to document them in our `README.md` file:
+
+```md showLineNumbers {9-11}
+# MY_PROJECT
+
+## npm commands (package.json scripts)
+
+`npm run dev`: to start the development server  
+`npm run build`: to make a production build  
+`npm run start`: to start the server on a production server using the build we made with the previous command  
+`npm run lint`: to run a linting script that will scan our code and help us find problems in our code  
+`npm run lint-nocache`:  same as the **lint** command but it does **NOT** use the ESLint **cache**, useful to testing changes to the linting configuration  
+`npm run lint-debug`: a more verbose version of the lint command that adds more information to the **output** tab, useful to verify the things ESLint is doing and to debug potential problems  
+`npm run lint-fix`: ESLint will attempt to automatically fix linting problems (use with caution as ESLint might make a lot of changes, so you might want to create a new branch before running this command)  
+
+## CI/CD pipeline for automatic deployments
+
+Everytime code gets pushed into the main branch it will trigger a production deployment, when code gets pushed into the preview branch it will trigger a preview deployment
+
+```
+
+Finally save the `README.md` file and commit / sync to changes
+
+> [!MORE]  
+> [ESLint "command line interface (CLI)" reference](https://eslint.org/docs/v8.x/use/command-line-interface)  
+
+## Clearing the ESLint cache
+
+Because by default we use a cache to speed up the linting process when using the `npm run lint` command, we need to delete the cache manually after making changes to the `.eslintrc.js` ESLint configuration file or the `.remarkrc.mjs` remark-lint configuration file
+
+To delete the cache manually open the `.next` folder in the root of your project and then go into the `cache` folder, finally delete the `eslint` file
+
+## package.json build script update
+
+Another script we need to change is the **build** script (as I explained in the ["Why are we changing the Next.js linting setup?" chapter](#why-are-we-changing-the-nextjs-linting-setup))
+
+We need to ensure the **build** script will **NOT** use the **Next lint** CLI by default, by editing the our `next.config.mjs`, like so:
+
+```js title="next.config.mjs" showLineNumbers {38-40}
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+import createMdx from '@next/mdx'
+
+const nextConfig = (phase) => {
+
+    const withMDX = createMdx({
+        extension: /\.mdx?$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [],
+            rehypePlugins: [],
+        },
+    })
+
+    /** @type {import('next').NextConfig} */
+    const nextConfigOptions = {
+        reactStrictMode: true,
+        poweredByHeader: false,
+        experimental: {
+            // experimental typescript "statically typed links"
+            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
+            // currently false in prod until Issue #62335 is fixed
+            // https://github.com/vercel/next.js/issues/62335
+            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        },
+        headers: async () => {
+            return [
+                {
+                    source: '/(.*)',
+                    headers: securityHeadersConfig(phase)
+                },
+            ];
+        },
+        // configure `pageExtensions` to include MDX files
+        pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx', 'md'],
+        // disable linting during builds using "next lint"
+        // we have manually added our lint script in package.json to the build command
+        eslint: {
+            ignoreDuringBuilds: true,
+        },
+    }
+
+    return nextConfigOptions
+
+}
+```
+
+Line 38 to 40 we add the **ignoreDuringBuilds** option and set it to **true** to ensure Next.js does not automatically run the lint command during builds
+
+Now as we still want linting to happen before a build, we need to add the **lint** script we did in the previous chapter to the **build** script in our `package.json`, like so:
+
+```json title="package.json" {10-12}#special
+{
+    "scripts": {
+        "build": "npm run lint && next build"
+    },
+}
+```
+
+When we now use our `npm run build` command (or when our deployment script uses it), it will first execute `npm run lint` and if there are NO linting errors it will then execute `next build`, this means that if you a deployment tool like Vercel and linting fails then the build process will abort, so the same behavior as we had when using the default next lint and next build commands
+
+</article>

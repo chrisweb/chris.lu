@@ -1,0 +1,228 @@
+%toc%
+
+<article>
+
+## GitHub like alerts using the rehype-github-alerts plugin
+
+The [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts) plugin to render alerts (admonitions / callouts) in a similar way to how GitHub does it, **rehype-github-alerts** is a plugin I did a while back after I first saw the [GitHub alerts RFC](https://github.com/orgs/community/discussions/16925) in which GitHub suggests adding a new alerts syntax to their GitHub markdown
+
+The **rehype github alerts** plugin is not a copy of the exact GitHub source code as the code used for their implementation is NOT opensource, but the **rehype github alerts** attempts to mimick the [GitHub alerts](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts) appearance and features, meaning that when you add alerts into your markdown and publish it on GitHub then the rendered alert output should be very similar to what you get when using this plugin, of course the alerts style might be different for your own project depending on what CSS you apply to them
+
+This plugin attempts to mimick the GitHub alerts by implementing the same features it is however possible to use the configuration to for example add new custom types of alerts (the default GitHub alert types are Note, Tip, Important, Warning and Caution), also using custom CSS it is possible to change how they get displayed (check out the [**rehype github alerts** README](https://github.com/chrisweb/rehype-github-alerts?tab=readme-ov-file#rehype-github-alerts) for some documentation and more examples), as you probably noticed I use the plugin a lot on this website and my alerts look quite different from what they look like on GitHub
+
+To add the **rehype github alerts** plugin we first need to install the package:
+
+```shell
+npm i rehype-github-alerts --save-exact
+```
+
+Next we need to edit our Next.js configuration file to add the plugin to our MDX setup:
+
+```js title="next.config.mjs" showLineNumbers {9} /rehypeGithubAlerts/2#special
+import { withSentryConfig } from '@sentry/nextjs'
+import createMdx from '@next/mdx'
+import rehypeMDXImportMedia from 'rehype-mdx-import-media'
+import rehypePrettyCode from 'rehype-pretty-code'
+import { readFileSync } from 'fs'
+import rehypeSlug from 'rehype-slug'
+import { remarkTableOfContents } from 'remark-table-of-contents'
+import remarkGfm from 'remark-gfm'
+import { rehypeGithubAlerts } from 'rehype-github-alerts'
+
+const nextConfig = (phase) => {
+
+    const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
+    const themeFileContent = readFileSync(themePath, 'utf-8')
+
+    /** @type {import('rehype-pretty-code').Options} */
+    const rehypePrettyCodeOptions = {
+        theme: JSON.parse(themeFileContent),
+        keepBackground: false,
+        defaultLang: {
+            block: 'tsx',
+            inline: 'js',
+        },
+        tokensMap: {
+            fn: 'entity.name.function',
+            cmt: 'comment',
+            str: 'string',
+            var: 'entity.name.variable',
+            obj: 'variable.other.object',
+            prop: 'meta.property.object',
+            int: 'constant.numeric',
+        },
+    }
+
+    /** @type {import('remark-table-of-contents').IRemarkTableOfContentsOptions} */
+    const remarkTableOfContentsOptions = {
+        containerAttributes: {
+            id: 'articleToc',
+        },
+        navAttributes: {
+            'aria-label': 'table of contents'
+        },
+        maxDepth: 3,
+    }
+
+    /** @type {import('remark-gfm').Options} */
+    const remarkGfmOptions = {
+        singleTilde: false,
+    }
+
+    const withMDX = createMdx({
+        extension: /\.(md|mdx)$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions], [remarkGfm, remarkGfmOptions]],
+            rehypePlugins: [rehypeGithubAlerts, rehypeSlug, rehypeMDXImportMedia, [rehypePrettyCode, rehypePrettyCodeOptions]],
+            remarkRehypeOptions: {
+                footnoteLabel: 'Notes',
+                footnoteLabelTagName: 'span',
+            },
+        },
+    })
+```
+
+Line 9 we import the `rehype-github-alerts` plugin
+
+Line 56 we add the **rehypeGithubAlerts** plugin to our rehype plugins configuration array
+
+The plugin is now ready to used, so we can now add some examples to our playground:
+
+```md title="/app/tutorial_examples/gfm_playground/page.mdx" showLineNumbers {24-36}
+<div id="core">
+
+<article>
+
+~~strikethrough~~
+
+Table:
+| Left    | Right   |
+| -------- | ------- |
+| Foo       | Bar |
+| ~~strikethrough~~ | 😃 |
+| `code` | [external link](https://google.com) |
+
+Autolink: https://www.example.com
+
+Tasklist:
+* [x] foo  
+* [ ] bar  
+
+Example text with a note.[^1]  
+[^1]: This is the text of the note, [it can be a link too](https://www.example.com)  
+
+> [!NOTE]  
+> Highlights information that users should take into account, even when skimming.
+
+> [!TIP]  
+> Optional information to help a user be more successful.
+
+> [!IMPORTANT]  
+> Crucial information necessary for users to succeed.
+
+> [!WARNING]  
+> Critical content demanding immediate user attention due to potential risks.
+
+> [!CAUTION]  
+> Negative potential consequences of an action.
+
+</article>
+
+</div>
+
+```
+
+> [!NOTE]  
+> If you get the following linting error for what is between the square brackets (`[]`):  
+>  
+> > Unexpected reference to undefined definition, expected corresponding definition (`!warning`) for a link or escaped opening bracket (`\[`) for regular texteslint(remark-lint-no-undefined-references)  
+>  
+> then have a look at the previous chapter ["adding and configuring remark-lint"](#adding-and-configuring-remark-lint), to learn how to get rid of those
+
+If you now launch the dev server and then open the playground URL [http://localhost:3000/tutorial_examples/gfm_playground](http://localhost:3000/tutorial_examples/gfm_playground) in your browser, you will see that alerts get rendered
+
+### styling GitHub alerts
+
+Now to mimick the style alerts have on GitHub we will add some custom CSS to our `global.css` CSS file:
+
+```css title="/app/global.css" showLineNumbers{228}
+.markdown-alert {
+    --github-alert-default-color: rgb(48, 54, 61);
+    --github-alert-note-color: rgb(31, 111, 235);
+    --github-alert-tip-color: rgb(35, 134, 54);
+    --github-alert-important-color: rgb(137, 87, 229);
+    --github-alert-warning-color: rgb(158, 106, 3);
+    --github-alert-caution-color: rgb(248, 81, 73);
+
+    padding: 0.5rem 1rem;
+    margin-bottom: 16px;
+    border-left: 0.25em solid var(--github-alert-default-color);
+}
+
+.markdown-alert>:first-child {
+    margin-top: 0;
+}
+
+.markdown-alert>:last-child {
+    margin-bottom: 0;
+}
+
+.markdown-alert-note {
+    border-left-color: var(--github-alert-note-color);
+}
+
+.markdown-alert-tip {
+    border-left-color: var(--github-alert-tip-color);
+}
+
+.markdown-alert-important {
+    border-left-color: var(--github-alert-important-color);
+}
+
+.markdown-alert-warning {
+    border-left-color: var(--github-alert-warning-color);
+}
+
+.markdown-alert-caution {
+    border-left-color: var(--github-alert-caution-color);
+}
+
+.markdown-alert-title {
+    display: flex;
+    margin-bottom: 4px;
+    align-items: center;
+}
+
+.markdown-alert-title>svg {
+    margin-right: 8px;
+}
+
+.markdown-alert-note .markdown-alert-title {
+    color: var(--github-alert-note-color);
+}
+
+.markdown-alert-tip .markdown-alert-title {
+    color: var(--github-alert-tip-color);
+}
+
+.markdown-alert-important .markdown-alert-title {
+    color: var(--github-alert-important-color);
+}
+
+.markdown-alert-warning .markdown-alert-title {
+    color: var(--github-alert-warning-color);
+}
+
+.markdown-alert-caution .markdown-alert-title {
+    color: var(--github-alert-caution-color);
+}
+```
+
+Congratulations 🎉 you now have Alerts similar to what GitHub has and thx to remark-gfm you now also have support for most of the other features GitHub flawored markdown (GFM) has to offer
+
+> [!MORE]  
+> [GitHub "rehype-github-alerts" repository](https://github.com/chrisweb/rehype-github-alerts)  
+> [npmjs.com "rehype-github-alerts" page](https://www.npmjs.com/package/rehype-github-alerts)  
+
+</article>

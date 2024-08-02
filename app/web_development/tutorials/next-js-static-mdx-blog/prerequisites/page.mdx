@@ -1,0 +1,44 @@
+%toc%
+
+<article>
+
+# Prerequisites
+
+> [!NOTE]  
+> The Next.js static MDX website **Prerequisites** chapter is for beginners, if for example you already have a GitHub account then you can skip that step or if you prefer to install another IDE then the one I suggest then feel free to do so
+
+First we need a **GitHub account** to store our code in a GitHub repository (if you prefer to use another serive like [GitLab](https://about.gitlab.com/) or [Bitbucket](https://bitbucket.org/), feel free to do so), which will make it easy to access your code on multiple devices and will also allow us to share your code with others. Later on we will use the GitHub to sign in to services like Vercel.com to set up an automatic CI/CD pipeline that will automatically deploy our code and sign up for a Sentry.io to add error monitoring, so that when a user encounters a bug it gets listed with a stacktrace in Sentry.io
+
+* [create a GitHub account](/web_development/posts/github)
+
+After creating a GitHub account need to **create a repository** on GitHub for our Code:
+
+* [create a new GitHub repository](/web_development/posts/github#create-a-repository)
+
+Next we need to **install git**, which is a version control tool which will get used by VSCode:
+
+* [install git](/web_development/posts/git)
+
+Next to be able to write code we need an Integrated Development Environment (IDE), my preferred IDE to write Javascript (Typescript) code is VSCode (Visual Studio Code):
+
+* [install VSCode](/web_development/posts/vscode)
+
+Now we need to sign in to our GitHub account in VSCode and use the VSCode source control tool to make a local clone of our GitHub repository:
+
+* [clone GitHub repository in VSCode](/web_development/posts/vscode#cloning-your-github-repository-in-vscode)
+
+To be able to create a Javascript backend and run our Javascript code locally we need to install the Node.js runtime:
+
+* [install Node.js (and npm)](/web_development/posts/node-js)
+
+> [!NOTE]  
+> the **Next.js 14** "app directory features" require nodejs v18.17 or later, so if you skipped the Node.js installation document because you already have Node.js installed, then just make sure you have a version installed that is high enough, to do that you can for example use the following command: `node -v`
+
+## The road to React 19 and Next.js 15
+
+React and Next.js have evolved a lot lately, the most notable additions are **server components** and **(server) actions**. With those new features came a lot of changes for how we devs build Next.js apps / websites, which is why I did a seperate blog post ["The road to React 19 and Next.js 15"](/web_development/posts/road-to-react-19-next-js-15) where I list what changed during the last +-3 years in the React and Next.js ecosystem. If you did not build a project with Next.js 13/14/15 and React 18/19 yet I recommend you check it out, but if you are already an expert feel free to skip it 😉
+
+> [!MORE]  
+> [chris.lu "The road to React 19 and Next.js 15" post](/web_development/posts/road-to-react-19-next-js-15)
+
+</article>

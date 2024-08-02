@@ -1,0 +1,75 @@
+%toc%
+
+<article>
+
+# Typescript plugin and typed routes
+
+The next step is to ensure **Typescript** is correctly set up and we will enable **statically typed routes**
+
+## Next.js typescript plugin
+
+Since [Next.js 13.1](https://nextjs.org/blog/next-13-1) the Next.js team added a new Typescript plugin:
+
+> We've built a new TypeScript plugin that provides suggestions for page and layout configuration options and provides helpful usage hints around Server and Client Components
+
+[Delba de Oliveira](https://github.com/delbaoliveira) which is part of the Next.js developer experience team posted a [a short "Next.js Typescript plugin" introduction video](https://www.youtube.com/watch?v=pqMqn9fKEf8) on Youtube that you may want to watch
+
+### Enabling the Next.js Typescript plugin
+
+To make the Next.js typescript plugin work you need to change the Typescript version that VSCode is using to the **workspace version** (the version that Next.js create app just installed), because by default VSCode will use a built in Typescript version
+
+If you don't know how yet how to change the typescript version to **workspace version** (in VSCode), check out the [VSCode typescript version](/web_development/posts/vscode#vscode-typescript-version) chapter in the VSCode post
+
+As soon as you switch to the **workspace version**, VSCode will create new `.vscode/settings.json` file (or if you already have a VSCode settings.json it will extend it), there is nothing wrong in sharing that file as it will ensure that everyone that works on your project (or if you use multiple devices yourself) that they use the same workspace settings, like the typescript workspace version but also in one of the next chapters we will add useful VSCode extension and they will be listed in settings file too, so if someone does not have the extension installed VSCode will show a modal that suggests installing it
+
+> [!TIP]  
+> Next.js typescript plugin comes with some useful features, for example you will have typed routes, meaning that if you use next/link and set a href to a page that doesn't exist you will get a warning, it will also warn you if something is wrong in how you use the **use client** directive in your components and some more, I recommend to keep an eye on the [Next.js "typescript" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript) as the Next.js team adds more features over time
+
+finally I recommend you commit / sync the new `.vscode/settings.json`
+
+> [!MORE]  
+> [Next.js "TypeScript" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript)  
+
+## Statically Typed Links (Routes)
+
+> [!WARN]  
+> There seems to be a bug in the route types for `*.mdx` pages, when doing a prod build, when doing a dev build all routes are typed and listed in the `.next/types/link.d.ts` but they are missing in prod resulting in a **Type error** "XY is not an existing route.", so even though this feature seems very promissing, as of now I recommend to keep it turned off (set to false) if you have are using `*.mdx` pages (which is what we will do in this tutorial)
+
+To ensure we benefit from **statically typed links** there is one more step needed, open the `next.config.mjs` and then add the **experimental** typedRoutes to your Next.js configuration file like so:
+
+```js title="next.config.mjs" showLineNumbers {3-9}
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    experimental: {
+        // experimental typescript "statically typed links"
+        // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
+        // currently false in prod until Issue #62335 is fixed
+        // https://github.com/vercel/next.js/issues/62335
+        typedRoutes: true,
+    },
+};
+
+export default nextConfig
+```
+
+Line 1 you can see that the Next.js configuration file uses [jsdoc](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html) with the `@type` Typescript script, which allows us to have types even though the configuration file is not Typescript (but Javascript), which means if you start typing inside of the nextConfig object you will benefit from autocompletation for the Next.js configuration options
+
+Line 3-9 we use the typedRoutes (experimental) option and enabled it, which means that when using `npm run dev` or when building for production, Next.js will generate a `.next/types/link.d.ts` file that contains information about all existing routes in our application, the advantage of this is that if we now use [next/link](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#link-component) but set the href to a route that doesn't exist we will see an error in VSCode getting displayed and builds will fail until we fix the typo in our URL
+
+> [!NOTE]  
+> You might have noticed that in the latest Next.js the configuration file is now an [ECMAScript module](https://nodejs.org/api/esm.html) (ES modules / ESM) and not a [CommonJS module](https://nodejs.org/api/modules.html#modules-commonjs-modules) like in previous versions, which is why the extension is now `.mjs` and not `.js` anymore, this means that instead of using a require function to import other modules we now use the same import statement we use in client code, this change also matters because more and packages on npm are migrating to an ESM only format, which reduces the amount of code needed as they can drop CommonJS backward compatibility, but for us it means we must use import statements and can't NOT use the require function anymore  
+
+then save your `next.config.mjs` and commit / sync your latest changes
+
+> [!MORE]  
+> [Next.js "configuration options" reference](https://nextjs.org/docs/app/api-reference/next-config-js)  
+> [Typescript "JSDoc" reference](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html)  
+> [Next.js "Statically Typed Links" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript)  
+> [Next.js "typedRoutes (experimental)" reference](https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes)  
+
+### typedRoutes bug
+
+> [!WARN]  
+> right now there is a bug in Next.js that prevents MDX pages (page.mdx) to be recognized as routes when doing a production build (in development the typed routes work well), I opened a [ticket #62335 on GitHub](https://github.com/vercel/next.js/issues/62335), until the bug is fixed I suggested only enabling the **typedRoutes in development**, you can do so by using the next config **phase** parameter, to check if current phase is **PHASE_DEVELOPMENT_SERVER**
+
+</article>
