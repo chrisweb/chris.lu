@@ -2,9 +2,11 @@
 
 <article>
 
-### Code highlighting plugin
+# Code highlighting plugin
 
 [rehype pretty code](https://rehype-pretty.pages.dev/) is a rehype plugin that we will use to convert our regular markdown code blocks into highlighted code blocks, for me the best of **rehype pretty code** is that it uses [shiki](https://shiki.matsu.io/) under the hood, **shiki** is really amazing at highlighting code but it also comes with an amazing feature which is that you can use your favorite VSCode theme to make your code blocks look the same as your code in VSCode
+
+## Adding a new playground page
 
 First go into the `/app/tutorial_examples` folder and then create a new `code-highlighting_playground` folder
 
@@ -37,7 +39,7 @@ The markdown code block syntax got converted into \<pre> HTML element and inside
 > ["rehype pretty code" website](https://rehype-pretty.pages.dev/)  
 > ["shiki" website](https://shiki.matsu.io/)  
 
-#### Rehype pretty code installation
+## Rehype pretty code installation
 
 To install the **rehype pretty code** as well as the **shiki** package, we use the following command command:
 
@@ -114,7 +116,7 @@ Now have a another look at the playground page in your browser and you will noti
 > [NPM "rehype-pretty-code" package](https://www.npmjs.com/package/rehype-pretty-code)  
 > [NPM "shiki" package](https://www.npmjs.com/package/shiki)  
 
-#### Using VSCode themes for code highlighting
+## Using VSCode themes for code highlighting
 
 Next we are going to configure the rehype plugin to use a VSCode theme
 
@@ -158,7 +160,7 @@ Now have a another look at the playground page in your browser and you will noti
 
 ![rehype-pretty-code code highlighting example with dracula theme for VSCode colors](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/rehype-pretty-code_plugin_dracula_theme.png)
 
-#### Using a VSCode theme from a git(hub) repository
+### Using a VSCode theme from a git(hub) repository
 
 If there is a theme you wish to use a theme that is NOT among the ones bundled in shiki, then you can do that too, in this example we will install a theme called [One Dark Pro (Atom's iconic One Dark theme for Visual Studio Code)](https://github.com/Binaryify/OneDark-Pro/)
 
@@ -232,7 +234,7 @@ Now have a another look at the playground and you will notice that this time the
 > [One Dark Pro theme for VSCode)](https://github.com/Binaryify/OneDark-Pro/)  
 > [Dracula theme for VSCode](https://draculatheme.com/visual-studio-code)  
 
-#### code block styling
+## Code block styling
 
 Next we add the following css to our `global.css` file:
 
@@ -287,7 +289,7 @@ Then we add our own background color to our rehype-pretty-code CSS in the `globa
 
 Line 145 we add our `background-color`, I chose a very dark color to make we have a high contrast between the code colors and the background
 
-#### line numbers
+## Line numbers
 
 On its website the **rehype-pretty-code** plugin author recommends to add some more CSS if you want to display line numbers (in your code blocks on the left):
 
@@ -357,7 +359,7 @@ Line 1 we updated the `showLineNumbers` adding `{10}` to tell the code block tha
 > [!MORE]  
 > [MDN "css counters" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_counter_styles/Using_CSS_counters)  
 
-#### code block row highlighting
+## Line highlighting
 
 Another great feature of rehype pretty code is that you can highlight code lines and it is very easy to do
 
@@ -436,7 +438,7 @@ Line 185 to 188 we added a selector to target the `data-highlighted-line-id` att
 
 If you launch the dev server, then open the playground URL in your browser and you will see that the first line is highlighted but uses the `errorLine` ID style, line 3 to 4 are highlighted too but as they have no ID they use the default highlight line style
 
-#### code block characters highlighting
+## Characters highlighting
 
 Not only can you highlight lines but you can also highlight series of characters
 
@@ -507,7 +509,7 @@ function helloWorld() {
 
 ````
 
-#### fenced code block language flag
+## Code block language flag
 
 In the previous example(s) we already saw the first option, which consists of setting the programming languge for example to **javascript** by using the `js` language flag (placed after the 3 backticks of our fenced code block), it is important to set the language flag as rehype pretty code (shiki) needs that information to know what colors to use when highlighting your code
 
@@ -593,7 +595,7 @@ If you want to remove the linting warning, use a [comment to disable the remark-
 > [!NOTE]  
 > If you don't set a default language and also don't set a language flag on a code block then rehype pretty code will not get activated for that code block as it needs to know the programming language to be able to chose the correct colors when highlighting 
 
-#### highlighting inline code
+## Highlighting inline code
 
 Rehype pretty code can also highlight inline code
 
@@ -638,6 +640,8 @@ First lets add a bit of CSS to our global.css to improve the styling of inline c
 ```
 
 Both code blocks and inline code use similar HTML elements, but there is one major difference which is that for code blocks there is a `<pre>` element between the `<figure>` and the `<code>` element but inline code has no `<pre>` element, we are using this to our advantage here to be able to apply styling only to inline code, by using a [CSS selector](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors) that will only apply our styling if the `<code>` element is a direct child of the `<figure>` element by using a child combinator (`>`), the CSS we add is nothing special, we just add a small border radius, some padding and the same background-color we previously used for the code blocks `<pre>` element
+
+### Inline code language
 
 As we saw in the list above our **first option** is to add a **language flag** to let rehype pretty code (shiki) know what colors to use, for inline code the language glag needs to be inside curly brackets and the brackets need to be at the end of our inline code before the "closing" backtick, like so:
 
@@ -701,6 +705,8 @@ This time even though we have specified the language (in the configuration), the
 
 This is because based on the little bit of code, the highlighter can NOT know that it is actually a function and instead assumes it is a variable
 
+### Inline code tokens
+
 This brings us to the **3rd option**, to fix the color we are going to tell the highlighter explicitly that this is a function, to do that we are going to use a **token** instead of the language flag, like so:
 
 ```md
@@ -746,7 +752,7 @@ To add those aliases to our setup, we need to edit our `rehypePrettyCodeOptions`
 Line 20 to 28 we add 7 custom token aliases to our rehype pretty code configuration, I tried to use abbreviations that are easy to remember without having to constantly check out the configuration file, however as I mentioned early in this tutorial for things like this it doesn't hurt to document them in the `README.md` file of the project:
 
 ````md showLineNumbers{17} 
-## code highlighting token aliases
+### Inline code token aliases
 
 This is a list of token aliases you can use for inline code in markdown (MDX) files, tokens get added at the end of inline code markup, they start with a curly bracket, then a colon followed by a dot, the token alias and then a closing curly bracket:
 

@@ -2,7 +2,7 @@
 
 <article>
 
-## The mdx-components file
+# The **mdx-components** file
 
 Before we experiment with plugins in the next chapter I wanted to first come back to the `mdx-components.tsx` file which we briefly saw when setting up MDX support (at the very beginning) as the file is required to make MDX work
 
@@ -23,7 +23,7 @@ Or you could write custom react component, but then you would need to import and
 > [mdxjs.com "components" documentation](https://mdxjs.com/table-of-components/)  
 > [Next.js "MDX custom elements" documentation](https://nextjs.org/docs/app/building-your-application/configuring/mdx#custom-elements)  
 
-### Adding a CSS class to lists using mdx-components
+## Adding a CSS class to lists using mdx-components
 
 First open the `mdx-components.tsx` (which is in the root of your project) and add an entry for each headline, like so:
 
@@ -51,7 +51,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
 Line 12 to 16 we have created a simple custom component for **ul lists**, now the markdown parser will turn the list into HTML and then mdx-components will add a class called `listContainer` to each ul element
 
-### CSS class example using a MDX playground page
+## CSS class example using a MDX playground page
 
 Next lets create a new playground to experiment with the **mdx-components** file
 
@@ -74,6 +74,6 @@ Then in the `mdx-components_playground` folder create a `page.mdx` file and past
 
 Now ensure the dev server is running (or launch it using the `npm run dev` command) and then in the browser navigate to [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground), then use your browser developper tools inspect tool and you will see that the `<ul>` element now has a **class** attribute containing the value `listContainer`
 
-Congratulations you just learned how to use the **mdx-components** file 🎉
+Congratulations you just learned how to use the **mdx-components** file 🎉 we other parts of this tutorial we will edit this file again and add several more features to it
 
 </article>

@@ -2,13 +2,15 @@
 
 <article>
 
-## GitHub like alerts using the rehype-github-alerts plugin
+# GitHub like alerts using the rehype-github-alerts plugin
 
 The [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts) plugin to render alerts (admonitions / callouts) in a similar way to how GitHub does it, **rehype-github-alerts** is a plugin I did a while back after I first saw the [GitHub alerts RFC](https://github.com/orgs/community/discussions/16925) in which GitHub suggests adding a new alerts syntax to their GitHub markdown
 
 The **rehype github alerts** plugin is not a copy of the exact GitHub source code as the code used for their implementation is NOT opensource, but the **rehype github alerts** attempts to mimick the [GitHub alerts](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts) appearance and features, meaning that when you add alerts into your markdown and publish it on GitHub then the rendered alert output should be very similar to what you get when using this plugin, of course the alerts style might be different for your own project depending on what CSS you apply to them
 
 This plugin attempts to mimick the GitHub alerts by implementing the same features it is however possible to use the configuration to for example add new custom types of alerts (the default GitHub alert types are Note, Tip, Important, Warning and Caution), also using custom CSS it is possible to change how they get displayed (check out the [**rehype github alerts** README](https://github.com/chrisweb/rehype-github-alerts?tab=readme-ov-file#rehype-github-alerts) for some documentation and more examples), as you probably noticed I use the plugin a lot on this website and my alerts look quite different from what they look like on GitHub
+
+## rehype-github-alerts installation
 
 To add the **rehype github alerts** plugin we first need to install the package:
 
@@ -87,6 +89,8 @@ Line 9 we import the `rehype-github-alerts` plugin
 
 Line 56 we add the **rehypeGithubAlerts** plugin to our rehype plugins configuration array
 
+## Rehype github alerts in action
+
 The plugin is now ready to used, so we can now add some examples to our playground:
 
 ```md title="/app/tutorial_examples/gfm_playground/page.mdx" showLineNumbers {24-36}
@@ -142,7 +146,7 @@ Example text with a note.[^1]
 
 If you now launch the dev server and then open the playground URL [http://localhost:3000/tutorial_examples/gfm_playground](http://localhost:3000/tutorial_examples/gfm_playground) in your browser, you will see that alerts get rendered
 
-### styling GitHub alerts
+### Styling rehype github alerts
 
 Now to mimick the style alerts have on GitHub we will add some custom CSS to our `global.css` CSS file:
 
@@ -219,7 +223,7 @@ Now to mimick the style alerts have on GitHub we will add some custom CSS to our
 }
 ```
 
-Congratulations 🎉 you now have Alerts similar to what GitHub has and thx to remark-gfm you now also have support for most of the other features GitHub flawored markdown (GFM) has to offer
+Congratulations 🎉 you have now added support for makrdown alerts that are compatible with GitHub (flawored markdown)
 
 > [!MORE]  
 > [GitHub "rehype-github-alerts" repository](https://github.com/chrisweb/rehype-github-alerts)  

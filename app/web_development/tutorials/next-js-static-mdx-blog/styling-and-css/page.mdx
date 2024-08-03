@@ -2,7 +2,7 @@
 
 <article>
 
-## Styling and CSS libraries
+# Styling and CSS libraries
 
 Spoiler alert! I will use [CSS Modules](https://github.com/css-modules/css-modules) in this tutorial, for the simple reason that a lot of CSS libraries had problems with **Server** components but even with **Client** components and I did NOT want to add an experimental library to my project. When I started writing this tutorial CSS Modules where one of the few choices that worked well with Next.js 13 and Server Components, which is the main reason I decided to give it a try. Some CSS libraries that were very popular did not work with Next.js 13 which is why the Next.js team has put up a [Next.js "CSS-in-JS" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-in-js) page that lists those who work with client components, but it doesn't mean they work with server components (actually a lot of them still don't), for more details keep an eye on the [Emotion support for App Router Issue #2928](https://github.com/emotion-js/emotion/issues/2928)) or the [styled components for Next.js 13 Issue #3856](https://github.com/styled-components/styled-components/issues/3856) if those are libraries you are interested in
 
@@ -16,7 +16,7 @@ If you like Tailwind and want to use it with Next.js 13 / 14 the good news is th
 > [Next.js "CSS-in-JS" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-in-js)  
 > [Tailwind CSS "with Next.js" documentation](https://tailwindcss.com/docs/guides/nextjs)  
 
-### Getting started with CSS Modules
+## Getting started with CSS Modules
 
 Next.js supports [CSS Modules](https://github.com/css-modules/css-modules) out of the box, which means there is NO need to install any extra packages and CSS Modules are **React Server Components (RSC)** compatible which these days should be a requirement for CSS libraries that you intend to use with Next.js 13 / 14
 
@@ -79,7 +79,7 @@ Line 7 we use the button
 
 Tada 🎉 we now know how to use CSS Modules
 
-#### CSS Modules features
+## CSS Modules features
 
 What I like about CSS Modules is that they are fairly simple, which means you won't spend days reading documentation to understand how they work, yet they have some very interesting and powerful features, in this chapter we will have a look at some of them
 
@@ -163,7 +163,7 @@ A few more things about CSS Modules worth knowing:
 > [CSS Modules "composition" documentation](https://github.com/css-modules/css-modules#composition)  
 > [CSS Modules "naming" documentation](https://github.com/css-modules/css-modules#naming)  
 
-#### Improved UI Button
+### Improved UI Button
 
 The UI button we just created is an oversimplified version of a button component, in a real project we would probably write something a little more useful like this:
 
@@ -216,13 +216,13 @@ Line 11 because React.FC is a [generic function](https://www.typescriptlang.org/
 
 Line 13 we use the [destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) to extract the variables we will use from the props object
 
-Line 14 we create an app router instance
+Line 14 we create an **app router instance**
 
-Line 16-20 we create a click handler using an arrow function, it will check if the url prop is defined, if it is defined we use the app router **push** method to perform a client-side navigation to the provided url
+Line 16-20 we create a **click handler** using an arrow function, it will check if the url prop is defined, if it is defined we use the app router **push** method to perform a **client-side navigation** to the provided url
 
-Line 23 we pass our our event handler function to onClick
+Line 23 we pass our our event handler function to **onClick**
 
-Line 24 we use the children prop to make our button component more flexible, so that who ever uses the button can define what the button text should be instead of having a hardcoded text like before, this of course makes it more reusable
+Line 24 we use the **children** prop to make our button component more flexible, so that who ever uses the button can define what the button text should be instead of having a hardcoded text like before, this of course makes it more reusable
 
 > [!NOTE]  
 > Of course you should never overengineer a component early without knowing if the added flexibility will ever be useful to anyone, for example in this case you could have made the button a bit simpler by not checking if the url exists and just assume the button will always get used to navigate to a page
@@ -251,7 +251,7 @@ export default function StylingExamplePage() {
 
 Line 9 the UIButton **text** is now defined between the opening and closing tag (and not hardcoded in the button itself anymore, making it more reusable) and we also pass it a url prop that we have set above in the page to activate the navigation feature
 
-### Adding a global.css
+## Adding a global.css
 
 CSS Modules are perfect to style components and even the content in your pages but at some point you might want to add a class that can be used everywhere in your app, like for example have a global style for links, this is when you use the **global.css**
 
@@ -451,6 +451,8 @@ Line 74 to 80 we add some color to all our links using the CSS `var()` function 
 Line 82 to 110 we use the font-size and line-height properties to set a custom height for our headings (like any other values in this CSS stylesheet, those are just my examples, feel free to tweak those values to your liking)
 
 Line 112 to 122 we set the margin for the headings, same as for the paragraph(s) we use the [margin-block](https://developer.mozilla.org/en-US/docs/Web/CSS/margin-block) CSS property and **em** units, meaning the margins will be relative to the headings font-size (the bigger the font-size of the heading the bigger the margin will be)
+
+## Adding the global.css to the layout
  
 Now to apply the global styles to our content we our going to import the `global.css` inside of our **root layout** (located in the `/app` folder), like so:
 

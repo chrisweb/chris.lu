@@ -2,7 +2,7 @@
 
 <article>
 
-### frontmatter introduction
+# Frontmatter introduction
 
 As stated in the ["GitHub docs" frontmatter documentation](https://docs.github.com/en/contributing/writing-for-github-docs/using-yaml-frontmatter), the [Jekyll](https://jekyllrb.com/docs/front-matter/) static site generator was the first to popularize frontmatter, but today a lot of frameworks and libraries add support for frontmatter, so maybe your markdown files already have frontmatter and you want to be able to use that data, or as I did when I started with this toturial, you just learned about frontmatter now and think it is a good way to store metdata in your MDX files
 
@@ -15,7 +15,7 @@ I already mentioned the GitHub and Jekyll documentation about frontmatter, they 
 > [!MORE]  
 > ["YAML data language" specification](https://yaml.org/spec/1.2.2/)  
 
-#### Meta data extraction from frontmatter
+## Frontmatter plugins installation
 
 What we will do in this chapter is add two plugins to our next/mdx setup, that will read the frontmatter part of our MDX pages and then automatically populate the Next.js metadata object (using the frontmatter metadata) for us
 
@@ -112,6 +112,8 @@ Line 57 we add both to our remark plugins list
 > [npmjs.com "remark-mdx-frontmatter" page](https://www.npmjs.com/package/remark-mdx-frontmatter)  
 
 Now it time to create an example where we define some frontmatter, let both plugins do their magic and then use the frontmatter variable to populate the Next.js metadata object
+
+## Frontmatter for metadata (and more)
 
 Lets reuse our gfm_plaground page one more time, first remove the current metadata and then add this instead:
 

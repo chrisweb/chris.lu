@@ -2,9 +2,11 @@
 
 <article>
 
-### styling the navigation and using next/font
+# Styling the navigation and using next/font
 
 Now that our Navigation is working we will add a few touches of color and use [next/font](https://nextjs.org/docs/app/api-reference/components/font) to add an custom web font to our project
+
+## next/font to use an open source font
 
 When using **next/font** you can use any font available on [google fonts](https://fonts.google.com/) or use your own local font(s), the best part about using next/font is that it will optimize the loading of the font to make sure that there are zero layout shifts, also when using next/font we are self hosting the font(s), which means we will NOT need to do an external network request to fetch the font, which will decrease loading times but also increase privacy as NO request is done to google servers
 
@@ -64,6 +66,8 @@ Line 11-16 we set some options for the font:
 > Also because the fonts are fully typed you can just type an option name and will get a list of values that you can chose from  
 
 Finally line 24 we add the font style to our HTML element via the className attribute
+
+## Navigation CSS module
 
 Next we are going to add a stylesheet for our Naviation component and use the new font for the navigation items
 
@@ -179,7 +183,7 @@ body {
 
 Line 36 to 37 we add a padding-top property and set its value to the same size to be equivalent to the height of the navigation, this will ensure that when the page has loaded there is no content displayed under the navigation (later when scrolling the content will move under the navigation)
 
-Congratulations, you now know what next/navigation, next/link and next/font are usefull for and you now have navigation component for your website 🎉
+Congratulations you now have a much better looking navigation component and learned how to use next/font 🎉
 
 > [!MORE]  
 > [Next.js "Font Optimization" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/fonts)  

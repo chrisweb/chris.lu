@@ -2,13 +2,13 @@
 
 <article>
 
-### Table of contents (TOC) plugin
+# Table of contents (TOC) plugin
 
 You have probably already seen such **table of contents (TOC)** widgets in blog posts and documentations that display a list of the main sections and serve as a way to quickly navigate to the headline of the section you are most interested in
 
 This is why our third plugin we are about to add to our MDX setup is going to be a plugin that does just that, it will automatically turn our headings (`# level 1`, `## level 2`, ...) into a **table of contents (TOC)** for each of our mdx pages, which is great as this means we won't have to do those lists manually and also if we change, add or remove headings the list will get updated automatically for us
 
-#### Why I created a my own TOC plugin
+## Why I created a my own TOC plugin
 
 I tried out several remark and rehype table of contents (toc) plugins, none of which were suitable for my use case, I will still list them here maybe they are good for your use case and you want to use them, I will also explain a bit why I chose not to use them:
 
@@ -25,7 +25,7 @@ As I wasn't able to find a plugin that was suitable for my use case, I decided i
 > [remark-table-of-contents](https://www.npmjs.com/package/remark-table-of-contents)  
 > [unifiedjs.com "creating a plugin with unified (remark / rehype plugins)" documentation](https://unifiedjs.com/learn/guide/create-a-plugin/)  
 
-#### Using the TOC plugin
+## Using the TOC plugin
 
 To install the **remark-table-of-contents** plugin package use the following command:
 
@@ -137,7 +137,7 @@ Now if you want to make a test, first make sure the dev server is running and th
 > [!MORE]  
 > ["remark table of contents" README](https://github.com/chrisweb/remark-table-of-contents)  
 
-#### styling the table of contents
+## Styling the table of contents
 
 To make the table of contents a little bit better looking we are going to add the following CSS to our `global.css` file:
 
@@ -177,11 +177,13 @@ Line 223 to 225 because by default browsers add padding to an `<ul>` element whi
 > [MDN "CSS :first-child" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/:first-child)  
 > [MDN "CSS position" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/position)  
 
-#### highlight toc link to the current headding
+## Highlight the toc link to the current headding
 
 You have probably seen this feature on websites like the [Next.js documentation](https://nextjs.org/docs) or [React.dev](https://react.dev/learn) where one link in the toc is being hihglighted, but how can we add this to our own TOC
 
 Our goal in this chapter is to detect which heading is visible inside of the viewport and then highlight the corresponding link in the toc
+
+### Heading intersection observer hook
 
 To achieve that goal we are going to use the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), as you can see on [caniuse the Intersection Observer API](https://caniuse.com/mdn-api_intersectionobserver) is well supported (expect for IE 11)
 
@@ -258,6 +260,8 @@ In the `/components` folder create a new `toc` folder and then in that folder we
 All our active class does is change the link color to white (of course feel free to adjust the CSS to your needs)
 
 Now that we have CSS Module we can create the component that will use the **useIntersectionObserver** hook we just created
+
+### Toc headings highlighting component
 
 In the same folder we just added our CSS module we now create a new `Hihglight.tsx` component file:
 

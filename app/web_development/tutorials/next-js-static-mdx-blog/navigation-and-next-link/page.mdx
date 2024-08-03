@@ -2,7 +2,7 @@
 
 <article>
 
-## Navigation and next/link
+# Navigation and next/link
 
 In this chapter we will build a basic navigation to navigate between two pages the home(page) and a second page
 
@@ -111,7 +111,9 @@ Line 3 we import our new **HeaderNavigation** component
 
 Line 19 we replace the placeholder paragraph we had earlier with our new **HeaderNavigation** component  
 
-Line 20 we display the current date & time  
+Line 20 we display the current date & time
+
+## Understanding why using regular anchors is not recommended
 
 Then save the file and launch the dev server if it isn't already running (using the `npm run dev` command)
 
@@ -137,7 +139,7 @@ Now have a look at the time we print on top of the navigation, click on the navi
 > [developer.chrome.com "Inspect network activity" documentation](https://developer.chrome.com/docs/devtools/network)  
 > [developer.chrome.com "Network Tab" documentation](https://developer.chrome.com/docs/devtools/network)
 
-### using next/link instead of anchor elements
+## Using next/link instead of anchor elements
 
 Now let's replace the [anchor element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a) (`<a>`) we used in our navigation component with [next/link](https://nextjs.org/docs/app/api-reference/components/link)
 
@@ -208,7 +210,7 @@ You can now remove the `<p>{new Date().toString()}</p>` test (in `/app/layout.ts
 > [!MORE]  
 > [Next.js "next/link" api reference](https://nextjs.org/docs/app/api-reference/components/link)  
 
-### highlight active path using next/navigation
+## Highlight the current route using next/navigation
 
 Next we are going to use the [pathname](https://developer.mozilla.org/en-US/docs/Web/API/URL/pathname) of the current page that we can get using **next/navigation**, then we will check if the first segment of the current path matches one of the entries in our navigation items list
 
@@ -286,6 +288,8 @@ Line 14 we get the **pathname** for the current page
 Line 21 to 38 we have added a function that will check if the pathname starts with the path of one of the items in our navigation, if it does then we add an active class to the className of that item  
 
 Line 48 we use our **isActiveCheck** function to check if that item if active, if it the function will add a class else className will stay empty  
+
+Congratulations you created your own navigation component 🎉 using next/link and next/navigation
 
 > [!MORE]  
 > [Next.js "Linking and Navigating" documentation](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating)  

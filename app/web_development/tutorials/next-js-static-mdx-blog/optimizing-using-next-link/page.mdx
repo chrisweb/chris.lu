@@ -2,7 +2,7 @@
 
 <article>
 
-### Optimizing links in MDX using next/link
+# Optimizing links in MDX using next/link
 
 When building our navigation earlier we saw why it is beneficial to use [next/link](https://nextjs.org/docs/app/api-reference/components/link) (for internal links) instead of regular HTML anchors, so now we want to do the same for all the markdown links that we will insert into our MDX pages, because without using the **mdx-components** the parser would just transform the markdown links into regular HTML anchors
 
@@ -10,7 +10,7 @@ When building our navigation earlier we saw why it is beneficial to use [next/li
 > [Next.js "next/link" api reference](https://nextjs.org/docs/app/api-reference/components/link)  
 > [Next.js "linking and navigation" documentation](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating)  
 
-#### React component for external and internal links
+## React component for external and internal links
 
 First we are going to create a custom Link component that will use **next/link**, **next/link** extends the HTML `<a>` element to provide prefetching and client-side navigation between routes and we are going to create a component that will use **next/link** for internal URLs and use a regular `<a>` element for external URLs, we will also add an icon to external URLs to give users a visible hint that if they click on that link they will leave the our app
 
@@ -115,7 +115,7 @@ The SVG icon that I used is from [icons.getbootstrap.com](https://icons.getboots
 > [MDN "rel attribute" documenation](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel)  
 > [MDN "target attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#target)  
 
-#### Using the BaseLink component for all markdown links
+## Using the BaseLink component for all markdown links
 
 Next open the `mdx-components.tsx` (which is in the root of your project) again and and lets add a second mdx component to customize the anchor elements, like so:
 
@@ -152,7 +152,7 @@ Line 2 to 3 we import our custom **BaseLink** component and the **Route** type f
 
 Line 19 to 23 we specify that for each markdown link that got transformed into an HTML anchor element we want to use our BaseLink component to customize the link
 
-#### external icon styling in the global.css
+## External icon styling in the global.css
 
 Next we edit the `global.css` file in the `app` folder to add the styles for the svg icon(s), like so:
 
@@ -175,7 +175,7 @@ Line 126 to 133 we add some CSS to style our icon:
 * we set the **font-size** and element **height** to the same value that is being used for our text (default font-size is 1rem) so that the icon matches the height of the link text
 * finally I manually adjusted the **vertical-align** value a little bit so that visually the icon is centered vertically
 
-#### Links examples using the MDX playground page
+## Links examples using the MDX playground page
 
 And finally we update our playground `page.mdx` file (that is in the `/app/tutorial_examples/mdx-components_playground` folder) with two links to showcase internal and external links, like so:
 

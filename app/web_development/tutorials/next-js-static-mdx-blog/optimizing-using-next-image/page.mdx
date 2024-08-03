@@ -5,7 +5,7 @@ import { faBug, faComments } from '@fortawesome/free-solid-svg-icons'
 
 <article>
 
-### optimizing images in MDX using next/image
+# Optimizing images in MDX using next/image
 
 For the third and last part we are going to use [next/image](https://nextjs.org/docs/app/api-reference/components/image) an image component that got created by the [Aurora team at Google](https://developer.chrome.com/docs/aurora/image-component) in cooperation with the Next.js team, by using **next/image** we will make sure that all images we put into our MDX pages get optimized, which means that:
 
@@ -24,9 +24,10 @@ We will also keep **developer experience (DX)** feature of VSCode intact, by mak
 > [MDN "Responsive images" documentation](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images)  
 > [Aurora team "Building an effective Image Component" article](https://developer.chrome.com/docs/aurora/image-component)  
 
-#### How to **NOT** add images to an MDX document
+## How to **NOT** add images to an MDX document
 
-This first example is to demonstrate how you should **NOT** add images to document
+> [!WARN]  
+> This first example is to demonstrate how you should **NOT** add images to document (I added this example as I thought some people might like to know about this before seeing what the recommended way of adding images is)
 
 To experiment with images we first need an image, I recommend visiting a royalty free images website like [pexels.com](https://www.pexels.com/creative-commons-images/) and download a picture you like, for this tutorial I downloadeded the ["Stranger Things 2 Sign in City at Night"](https://www.pexels.com/photo/green-bushes-on-desert-998653/) photograph by [Yuting Gao](https://www.pexels.com/@leofallflat/)
 
@@ -114,7 +115,7 @@ Finally something else that is not great for our DX is that we had to set the wi
 
 The solution we will see in the next chapter will fix both those problems, it will automatically determine the width and height of images and add a cache control header that tells the browser to actually cache our image(s)
 
-#### Automated image sizing and improved cache control
+## Automated image sizing and improved cache control
 
 As we saw in the previous chapter one of things next/image helps you get right is [image sizing](https://nextjs.org/docs/app/building-your-application/optimizing/images#image-sizing), if next/image knows the width and height of an image it is able to reserve the space the image will use when it has finished loading
 
@@ -191,7 +192,7 @@ By solving two major problems in this chapter we are already closer to a great s
 > [Next.js "Image Sizing" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/images#image-sizing)  
 > [web.dev "cumulative layout shifts (CLS)" article](https://web.dev/articles/cls)  
 
-#### Rehype plugin to automate static imports of images
+## Rehype plugin to automate static imports of images
 
 This chapter consists of 4 steps:
 
@@ -374,7 +375,7 @@ Congratulations you just created a complete workflow that allows you to use the 
 > [!MORE]  
 > ["rehype-mdx-import-media" repository](https://github.com/remcohaszing/rehype-mdx-import-media)  
 
-#### VSCode image drag & drop
+## VSCode image drag & drop
 
 In the previous chapter we written the markdown image element manually and had to set the relative path manually too, if you are using VSCode there is however a much more convienient and faster way of adding images to your MDX documents, you just have to drag and drop an image into an MDX document and then VSCode creates the markdown image element including the correct path for you, a bonus feature is that you get an image preview if you hover over the image path with your mouse, in this chapter we will learn howto use that feature (however if you already know it or if you are not using VSCode then feel free to skip this chapter)
 
@@ -426,7 +427,7 @@ Or if VSCode inserted the absolute path and not the relative path, like so:
 
 Then I recommend you check out the next chapter
 
-##### Telling VSCode that our MDX files contain markdown 
+### Telling VSCode that our MDX files contain markdown 
 
 If you only see a path to a file then this is because VSCode recognized your page as MDX content instead of markdown, MDX is markdown + JSX but VSCode (as of now, sees things a bit differently, I however hope this will change in the future) and does not enable some of the markdown features when the file content is set to MDX
 
@@ -462,13 +463,13 @@ You should now have a markdown image element that looks like this:
 ![alt text](../../../public/images/playground_test.png)
 ```
 
-##### Markdown image preview in VSCode
+### Markdown image preview in VSCode
 
 VSCode recently added a new feature that let's you preview your images, to see the preview hover over the image path with your mouse and a modal box should open with a preview of the image
 
 ![vscode image preview](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_image_preview.png)
 
-##### Markdown image alt and title
+## Markdown image alt and title
 
 We then replace the **alt text** placeholder with the alt text we already used in the previous chapter but this time for the markdown element, when using markdown the alt text goes into the brequets after the excalamation mark, like so:
 
@@ -493,7 +494,7 @@ And if you want to have a title you can add it like so:
 > [HTML specification "Requirements for providing text to act as an alternative for images"](https://html.spec.whatwg.org/multipage/images.html#alt)  
 > [MDN "aria-hidden" documentation](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-hidden)  
 
-#### Image formats to optimize LCP
+## Image formats to optimize LCP
 
 In this chapter we will do two things that will improve the [Largest Contentful Paint (LCP)](https://web.dev/articles/lcp) which is a **Core Web Vital metric**
 
@@ -576,7 +577,7 @@ This is the first optimisation that will reduce the size our images, making them
 > [caniuse "avif" page](https://caniuse.com/avif)  
 > [MDN "Image file type and format guide" documentation](https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types#png_portable_network_graphics)
 
-#### Image priority and lazy loading
+## Image priority and lazy loading
 
 For the second LCP optimisation go back to the **browser dev tools** and then switch to the [Console Tab](https://developer.chrome.com/docs/devtools/console), as you can see there is a warning about our image:
 
@@ -699,7 +700,7 @@ This is the second LCP optimisation, it will make sure that images that are abov
 > [MDN "image loading attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#loading)  
 > [MDN "image fetchPriority attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/fetchPriority)  
 
-#### Image display using CSS
+## Image size adjustement using CSS
 
 Make sure the development server is running and then check out the image in our playground page [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground), as you can see the image is way to big, this is because right now the height and width are set to the original dimensions of the image, however we want to display an image that has the same width as the container it is in
 
@@ -753,7 +754,7 @@ There are two important informations in here, the first one is the **Rendered si
 
 In the next chapter will apply a third LCP optimisation to our images to ensure we are NOT loading images that are too big, which would harm the loading speed of our page
 
-#### Image sizes and srcset attributes
+## Image sizes and srcset attributes
 
 As we saw in the previous chapter, we told the browser to make the displayed size of our image smaller but we are still loading an image that is way bigger than what we need, so now the goal is to fetch an image that is as big as what we need or a bit bigger,however not every screen has the same size, which means we will have to get different versions of our image depending on how big the users screen is, for example bigger versions that get displayed on desktop computers and smaller versions that get used for mobile devices
 
@@ -946,7 +947,7 @@ Sizes and srcset is a powerul combination allowing us to have truly responsive i
 > [Next.js "next/image sizes attribute" documentation](https://nextjs.org/docs/app/api-reference/components/image#sizes)  
 > [Next.js "next/image deviceSizes" documentation](https://nextjs.org/docs/app/api-reference/components/image#devicesizes)  
 
-#### Image placeholder
+## Image placeholder
 
 Next we are going to set the [placeholder](https://nextjs.org/docs/app/api-reference/components/image#placeholder) property to **blur** which tells Next.js that we want it to create a blurry placeholder for every image and display that placeholder while the image loads, by using a placeholder to fill the space the image will take when it has finished loading we indicate to the user there something will appear soon instead of having the user wonder why there is big empty spot in the page
 

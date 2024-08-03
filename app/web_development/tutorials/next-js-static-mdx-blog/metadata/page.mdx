@@ -2,13 +2,15 @@
 
 <article>
 
-## metadata in pages (and layout)
+# Metadata (for tsx and mdx pages)
 
 In this chapter we will add **metadata** to our pages (and layout) by using the [Next.js Metadata API](https://nextjs.org/docs/app/building-your-application/optimizing/metadata), this will add meta tags inside of the `<head>` element of our HTML documents, which are important to help crawlers from search engines and social networks better understand the content of our pages and should result in good SEO scores
 
 As we saw early on in this tutorial, Next.js has created a `layout.tsx` file in the `/app` folder and already added a basic **metadata** object
 
 The good thing is that Next.js imported the `Metadata` type (line 2) and used it to strictly type the metadata object (line 6), meaning we will benefit from **autocomplete** in VSCode while editing our metadata object
+
+## Metadata in layouts
 
 We start by editing the `layout.tsx` file to add some entries to the metadata object:
 
@@ -91,6 +93,8 @@ export default function Home() {
 
 As we saw when inspecting the `<head>` element of our page had meta tags but our `page.tsx` file does not have any code related to the **metadata** object, this is because every page will inherit from the metadata we have set in the layout, you only add a metadata object in the pages for which you want to override a default value or when you want to add a metadata property that you didn't set in the layout
 
+## Metadata in typescript pages
+
 Let's keep the **home** page as is and instead edit the second page we created earlier, which is the `/app/blog/page.tsx` file and add some metadata to it:
 
 ```tsx title="/app/blog/page.tsx" showLineNumbers
@@ -124,7 +128,7 @@ As you can see the title tag has used the template from our layout file as well 
 > [Next.js "Metadata Object and generateMetadata Options" documentation](https://nextjs.org/docs/app/api-reference/functions/generate-metadata)  
 > [Next.js "Generate Viewport" documentation](https://nextjs.org/docs/app/api-reference/functions/generate-viewport)  
 
-### metadata in MDX pages
+## Metadata in MDX pages
 
 When I first experimented with the new metadata object I was wondering if it would also work in MDX pages and YES it does
 
@@ -184,7 +188,9 @@ Line 1 to 3 we create a new **metadata** object and add a custom title for the G
 
 If you inspect the source of the playground page [http://localhost:3000/tutorial_examples/gfm_playground](http://localhost:3000/tutorial_examples/gfm_playground), you will see the MDX page has the correct title (and also makes use of the template from the layout)
 
-### open graph metadata
+Congratulations you just leanred how to add metadata using layouts and pages 🎉 
+
+## Open Graph metadata
 
 The [Open Graph protocol](https://ogp.me/) is important if you want to control what gets displayed when your content gets shared, but it also matters if you want to get a good SEO score, in the past it was mostly regarded as a facebook thing, but today a lot of social networks, messengers, search engines and a bunch of services will use the open graph data that your website provides
 
@@ -238,9 +244,11 @@ I expected to see 6 meta tags but there are only 3, which means the **openGraph*
 > [!TIP]  
 > To learn more about "metadata merging" I recommend checking out the official documentation, they actually have a very informative chapter about this topic [Next.js "metadata merging" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/metadata#merging)
 
-There are 3 different solutions to our problem, I will start with the most obvious one and end with one that is a bit more complex:
+### 3 ways to merge Open Graph metadata
 
-Solution 1: we can repeat the opengraph values in every page in which we use the **static** metadata export, this means manually copy the open graph we already set in the layout and add it again to the page itself:
+There are **3** different solutions to our problem, I will start with the most obvious one and end with one that is a bit more complex:
+
+**Solution 1**: we can repeat the opengraph values in every page in which we use the **static** metadata export, this means manually copy the open graph we already set in the layout and add it again to the page itself:
 
 ```md title="/app/tutorial_examples/gfm_playground/page.mdx" showLineNumbers
 export const metadata = {
@@ -254,7 +262,7 @@ export const metadata = {
 }
 ```
 
-Solution 2: is to use [generateMetadata](https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function) function to get the parent open graph metadata object and extend it manually:
+**Solution 2**: is to use [generateMetadata](https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function) function to get the parent open graph metadata object and extend it manually:
 
 ```md title="/app/tutorial_examples/gfm_playground/page.mdx" showLineNumbers
 export async function generateMetadata(props, parent) {
@@ -294,7 +302,7 @@ export async function generateMetadata(props: unknown, parent?: ResolvingMetadat
 }
 ```
 
-Solution 3: as suggested in the [metadata merging documentation](https://nextjs.org/docs/app/building-your-application/optimizing/metadata#merging) is to create a file with default open graph values and then always import that file:
+**Solution 3**: as suggested in the [metadata merging documentation](https://nextjs.org/docs/app/building-your-application/optimizing/metadata#merging) is to create a file with default open graph values and then always import that file:
 
 First we create a new `shared` folder in the root of project and then inside of it a `opengraph.ts` file, into which we add the open graph metadata we want to use in every page:
 
@@ -321,6 +329,8 @@ export const metadata: Metadata = {
     }
 }
 ```
+
+Congratulations 🎉 you now also have support for open graph metadata in your project
 
 > [!MORE]  
 > [Next.js "Open Graph metadata" documentation](https://nextjs.org/docs/app/api-reference/functions/generate-metadata#opengraph)  
