@@ -2,23 +2,23 @@
 
 <article>
 
-# GitHub like alerts using the rehype-github-alerts plugin
+# GitHub-like alerts using the rehype-github-alerts plugin
 
-The [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts) plugin to render alerts (admonitions / callouts) in a similar way to how GitHub does it, **rehype-github-alerts** is a plugin I did a while back after I first saw the [GitHub alerts RFC](https://github.com/orgs/community/discussions/16925) in which GitHub suggests adding a new alerts syntax to their GitHub markdown
+The [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts) plugin to render alerts (admonitions/callouts) in a similar way to how GitHub does it, **rehype-github-alerts** is a plugin I did a while back after I first saw the [GitHub alerts RFC](https://github.com/orgs/community/discussions/16925) in which GitHub suggests adding a new alerts syntax to their GitHub markdown
 
-The **rehype github alerts** plugin is not a copy of the exact GitHub source code as the code used for their implementation is NOT opensource, but the **rehype github alerts** attempts to mimick the [GitHub alerts](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts) appearance and features, meaning that when you add alerts into your markdown and publish it on GitHub then the rendered alert output should be very similar to what you get when using this plugin, of course the alerts style might be different for your own project depending on what CSS you apply to them
+The **rehype github alerts** plugin is not a copy of the exact GitHub source code as the code used for their implementation is NOT open source, but the **rehype github alerts** attempts to mimic the [GitHub alerts](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts) appearance and features, meaning that when you add alerts into your markdown and publish it on GitHub then the rendered alert output should be very similar to what you get when using this plugin, of course, the alerts style might be different for your project depending on what CSS you apply to them
 
-This plugin attempts to mimick the GitHub alerts by implementing the same features it is however possible to use the configuration to for example add new custom types of alerts (the default GitHub alert types are Note, Tip, Important, Warning and Caution), also using custom CSS it is possible to change how they get displayed (check out the [**rehype github alerts** README](https://github.com/chrisweb/rehype-github-alerts?tab=readme-ov-file#rehype-github-alerts) for some documentation and more examples), as you probably noticed I use the plugin a lot on this website and my alerts look quite different from what they look like on GitHub
+This plugin attempts to mimic the GitHub alerts by implementing the same features it is, however, possible to use the configuration to, for example, add new custom types of alerts (the default GitHub alert types are Note, Tip, Important, Warning, and Caution), also using custom CSS it is possible to change how they get displayed (check out the [**rehype github alerts** README](https://github.com/chrisweb/rehype-github-alerts?tab=readme-ov-file#rehype-github-alerts) for some documentation and more examples), as you probably noticed I use the plugin a lot on this website and my alerts look pretty different from what they look like on GitHub
 
 ## rehype-github-alerts installation
 
-To add the **rehype github alerts** plugin we first need to install the package:
+To add the **rehype github alerts** plugin, we first need to install the package:
 
 ```shell
 npm i rehype-github-alerts --save-exact
 ```
 
-Next we need to edit our Next.js configuration file to add the plugin to our MDX setup:
+Next, we need to edit our Next.js configuration file to add the plugin to our MDX setup:
 
 ```js title="next.config.mjs" showLineNumbers {9} /rehypeGithubAlerts/2#special
 import { withSentryConfig } from '@sentry/nextjs'
@@ -85,13 +85,13 @@ const nextConfig = (phase) => {
     })
 ```
 
-Line 9 we import the `rehype-github-alerts` plugin
+Line 9: we import the `rehype-github-alerts` plugin
 
-Line 56 we add the **rehypeGithubAlerts** plugin to our rehype plugins configuration array
+Line 56: we add the **rehypeGithubAlerts** plugin to our rehype plugins configuration array
 
 ## Rehype github alerts in action
 
-The plugin is now ready to used, so we can now add some examples to our playground:
+The plugin is now ready to be used, so we can now add some examples to our playground:
 
 ```md title="/app/tutorial_examples/gfm_playground/page.mdx" showLineNumbers {24-36}
 <div id="core">
@@ -140,15 +140,15 @@ Example text with a note.[^1]
 > [!NOTE]  
 > If you get the following linting error for what is between the square brackets (`[]`):  
 >  
-> > Unexpected reference to undefined definition, expected corresponding definition (`!warning`) for a link or escaped opening bracket (`\[`) for regular texteslint(remark-lint-no-undefined-references)  
+> > Unexpected reference to undefined definition, expected corresponding definition (`!warning`) for a link or escaped opening bracket (`\[`) for regular text eslint(remark-lint-no-undefined-references)  
 >  
-> then have a look at the previous chapter ["adding and configuring remark-lint"](#adding-and-configuring-remark-lint), to learn how to get rid of those
+> Then have a look at the previous chapter ["adding and configuring remark-lint"](#adding-and-configuring-remark-lint) to learn how to get rid of those
 
 If you now launch the dev server and then open the playground URL [http://localhost:3000/tutorial_examples/gfm_playground](http://localhost:3000/tutorial_examples/gfm_playground) in your browser, you will see that alerts get rendered
 
 ### Styling rehype github alerts
 
-Now to mimick the style alerts have on GitHub we will add some custom CSS to our `global.css` CSS file:
+Now, to mimic the style alerts we have on GitHub, we will add some custom CSS to our `global.css` CSS file:
 
 ```css title="/app/global.css" showLineNumbers{228}
 .markdown-alert {
@@ -223,7 +223,9 @@ Now to mimick the style alerts have on GitHub we will add some custom CSS to our
 }
 ```
 
-Congratulations 🎉 you have now added support for makrdown alerts that are compatible with GitHub (flawored markdown), if you liked this post please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+Congratulations 🎉 you have now added support for markdown alerts that are compatible with GitHub (flavored markdown)
+
+If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
 
 > [!MORE]  
 > [GitHub "rehype-github-alerts" repository](https://github.com/chrisweb/rehype-github-alerts)  

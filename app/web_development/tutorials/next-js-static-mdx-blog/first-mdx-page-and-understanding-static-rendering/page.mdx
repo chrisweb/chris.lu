@@ -2,15 +2,15 @@
 
 <article>
 
-# First MDX page and understanding static rendering
+# First MDX page and understanding of static rendering
 
-We have reached yet another milestone as it is now time to create our very first MDX page and after that we will see how to know if pages got statically generated (or not)
+We have reached yet another milestone as it is now time to create our very first MDX page, and after that, we will see how to know if pages got statically generated (or not)
 
 ## Our first MDX page
 
 In the `app` folder, create a new `tutorial_examples` folder and then in it another `first_mdx_page` folder
 
-Then inside of the `first_mdx_page` folder add a `page.mdx` (note that we set **extension** to **mdx** and NOT tsx) and in it paste the following content:
+Then, inside of the `first_mdx_page` folder, add a `page.mdx` (note that we set **extension** to **mdx** and NOT tsx), and in it, paste the following content:
 
 ```md title="/app/tutorial_examples/first_mdx_page/page.mdx"
 # Hello 👋 with MDX!
@@ -34,23 +34,23 @@ Then inside of the `first_mdx_page` folder add a `page.mdx` (note that we set **
 ![This is an octocat image](https://myoctocat.com/assets/images/base-octocat.svg 'I\'m the title of the octocat image')
 ```
 
-Make sure your dev server is running, if it is not start it using `npm run dev`
+Make sure your dev server is running, if it is not, start it using `npm run dev`
 
-And then visit your newly created MDX page in the browser at `http://localhost:3000/tutorial_examples/first_mdx_page`
+Then visit your newly created MDX page in the browser at `http://localhost:3000/tutorial_examples/first_mdx_page`
 
-Congratulations 🎉 you just added MDX support to your Next.js project and learned how to create MDX pages, if you liked this post please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+Congratulations 🎉 you just added MDX support to your Next.js project and learned how to create MDX pages
 
-## static rendering
+## Static rendering
 
-By putting our content into the first MDX page instead of fetching it from a database means we have just created our own static site generator with MDX support
+Putting our content into the first MDX page instead of fetching it from a database means we have just created our static site generator with MDX support
 
-To check if a page is fully **static** you can do a build using the `npm run build` command:
+To check if a page is fully **static**, you can do a build using the `npm run build` command:
 
 ```shell
 npm run build
 ```
 
-After the build is done look at the output in your terminal:
+After the build is done, look at the output in your terminal:
 
 ![build terminal output showing that pages are static](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/nextjs_build_static_page.png)
 
@@ -58,9 +58,11 @@ The empty circle (`○`) in front of our `/tutorial_examples/first_mdx_page` ind
 
 Because Next.js will automatically choose the [server rendering strategy](https://nextjs.org/docs/app/building-your-application/rendering/server-components#server-rendering-strategies) for each route based on the features you use, your page at some point might not be **static** anymore, for example when you use a **dynamic function** like [searchParams](https://nextjs.org/docs/app/api-reference/file-conventions/page#searchparams-optional) or when you fetch data and do NOT use [generateStaticParams](https://nextjs.org/docs/app/api-reference/functions/generate-static-params) then your page becomes **dynamic**, which is why it is recommended to launch the build locally from time to time and check if the pages you want to be static still are, if they are not static anymore you might want to find the cause and for example use **generateStaticParams** to make it fully static again
 
-If all of your pages are static, you have the possibility to do a [static export](https://nextjs.org/docs/app/building-your-application/deploying/static-exports), meaning Next.js build will create an `out` folder and put all the HTML/CSS/JS static assets into it, then you can take that folder and for example deploy your app on [GitHub pages](https://pages.github.com/)
+If all of your pages are static, you can do a [static export](https://nextjs.org/docs/app/building-your-application/deploying/static-exports), meaning Next.js build will create an `out` folder and put all the HTML/CSS/JS static assets into it, then you can take that folder and for example deploy your app on [GitHub pages](https://pages.github.com/)
 
-Congratulations 🎉 you now know how to check if pages are static or dynamic, which is important because the more static content you have the less work the server will need to do during runtime and this will result in pages that load blazingly fast, if you liked this post please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+Congratulations 🎉 you now know how to check if pages are static or dynamic, which is essential because the more static content you have, the less work the server will need to do during runtime, and this will result in pages that load blazingly fast
+
+If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
 
 > [!MORE]  
 > [Next.js "Server Rendering Strategies" documentation](https://nextjs.org/docs/app/building-your-application/rendering/server-components#server-rendering-strategies)  

@@ -4,19 +4,19 @@
 
 # Rehype slug plugin to add IDs to headings
 
-The [rehype-slug](https://github.com/rehypejs/rehype-slug) does not much on its own, but it does something that is useful for other plugins, which is adding an ID to headings, this ID can then be used by plugins like [rehype-autolink-headings](https://github.com/rehypejs/rehype-autolink-headings) or a table of contents (TOC) plugin like [remark-table-of-contents](https://github.com/chrisweb/remark-table-of-contents)
+The [rehype-slug](https://github.com/rehypejs/rehype-slug) does not do much on its own, but it does something useful for other plugins, which is adding an ID to headings, this ID can then be used by plugins like [rehype-autolink-headings](https://github.com/rehypejs/rehype-autolink-headings) or a table of contents (TOC) plugin like [remark-table-of-contents](https://github.com/chrisweb/remark-table-of-contents)
 
-The **rehype-slug** plugin will transform the text of a heading into and ID, if there are two headings with the same text then the plugin will add a number to the ID to make sure every heading has a unique ID
+The **rehype-slug** plugin will transform the text of a heading into an ID, if there are two headings with the same text, then the plugin will add a number to the ID to make sure every heading has a unique ID
 
 ## rehype-slug installation
 
-To install the **rehype-slug** plugin package use the following command:
+To install the **rehype-slug** plugin package, use the following command:
 
 ```shell
 npm i rehype-slug --save-exact
 ```
 
-Now that the plugin is installed we need to edit our Next.js configuration file and add it to our MDX setup:
+Now that the plugin is installed, we need to edit our Next.js configuration file and add it to our MDX setup:
 
 ```js title="next.config.mjs" showLineNumbers {6} /rehypeSlug/2#special
 import { withSentryConfig } from '@sentry/nextjs'
@@ -60,19 +60,19 @@ const nextConfig = (phase) => {
     })
 ```
 
-Line 6 we import the **rehypeSlug** plugin
+Line 6: we import the **rehypeSlug** plugin
 
-Line 37 we add the plugin to our array of rehype plugins (in our MDX configuration)
+Line 37: we add the plugin to our array of rehype plugins (in our MDX configuration)
 
-And thats already it, the plugin is now operational
+And that's already it, the plugin is now operational
 
 ## Playground page to experiment with markdown headings
 
 To see this plugin in action and also in preparation for the table of contents (TOC) plugin experiments we will do in the next chapter, we are going to create a new playground
 
-First go into the `/app/tutorial_examples` folder and then create a new `toc_playground` folder
+First, go into the `/app/tutorial_examples` folder and then create a new `toc_playground` folder
 
-Inside of the `toc_playground` folder create a new `page.mdx` MDX page and add the following content:
+Inside the `toc_playground` folder, create a new `page.mdx` MDX page and add the following content:
 
 ```md title="/app/tutorial_examples/toc_playground/page.mdx"
 <article>
@@ -97,11 +97,13 @@ Sed sodales mi id odio finibus, eu scelerisque dui convallis. Aliquam ornare urn
 
 ```
 
-We have added some markdown headings of different levels to our MDX page as well as some fake text using an online [lorem ipsum generator](https://www.lipsum.com/), the content is wrapped inside of an `<article>` element (which is optional but I like to use semantic elements when ever it makes sense)
+We have added some markdown headings of different levels to our MDX page as well as some fake text using an online [lorem ipsum generator](https://www.lipsum.com/), the content is wrapped inside of an `<article>` element (which is optional but I like to use semantic elements whenever it makes sense)
 
-Now launch the dev server, then open the [http://localhost:3000/tutorial_examples/toc_playground](http://localhost:3000/tutorial_examples/toc_playground) TOC playground URL and then right click on a heading and select **Inspect**, if you now look at the HTML code of the heading you will notice that **rehype slug** has added an ID
+Now launch the dev server, then open the [http://localhost:3000/tutorial_examples/toc_playground](http://localhost:3000/tutorial_examples/toc_playground) TOC playground URL and then right-click on a heading and select **Inspect**, if you now look at the HTML code of the heading you will notice that **rehype slug** has added an ID
 
-Congratulations 🎉 all of your headings now automatically get a unique ID, if you liked this post please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+Congratulations 🎉 all of your headings now automatically get a unique ID
+
+If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
 
 > [!MORE]  
 > [npmjs.com "rehype-slug" page](https://www.npmjs.com/package/rehype-slug)  

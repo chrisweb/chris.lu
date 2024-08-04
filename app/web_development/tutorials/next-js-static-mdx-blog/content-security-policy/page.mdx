@@ -13,7 +13,7 @@ Using [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/W
 
 In this chapter, we are to add CSP rules to our `next.config.mjs` configuration file (which is in the root of the project) like so:
 
-```js title="next.config.mjs" showLineNumbers {16-23} /cspReportOnly/#special /upgradeInsecure/#special {34-96} {98-103}
+```js title="next.config.mjs" showLineNumbers {16-23} {32} /cspReportOnly/#special /upgradeInsecure/#special {34-96} {98-103}
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 
 const nextConfig = (phase) => {
@@ -125,7 +125,7 @@ const securityHeadersConfig = (phase) => {
 export default securityHeadersConfig
 ```
 
-Lines 17 to 24: we add a `headers` configuration where we use the `source` property to tell Next.js that it should add those headers to every page, then we set a second `headers` property, and as the value, we make a call to our `securityHeadersConfig` function
+Lines 16 to 23: we add a `headers` configuration where we use the `source` property to tell Next.js that it should add those headers to every page, then we set a second `headers` property, and as the value, we make a call to our `securityHeadersConfig` function
 
 Line 32: we have added a `cspReportOnly` variable and have set it to **true**, we will use this variable to decide if we want to **only report** CSP violations or **enforce** CSP rules and report them, we start with true so that violations get reported but not enforced and later when we are sure that we have set out rules correctly and fixed potential violations then we will set this to false to start not only reporting but also enforcing CSP rules
 
@@ -166,7 +166,7 @@ If you now start your development server (using `npm run dev`), open `http://loc
 > [!NOTE]  
 > To check for best practices, I used a tool by Google called [CSP Evaluator](https://csp-evaluator.withgoogle.com/), it showed a green checkmark for every directive except the **script-src** directive, where it mentioned that it would be better to remove **'unsafe-inline'**, however unsafe-inline is there because Next.js uses inline scripts a lot
 
-Let's edit the CSP rules we just added in our `next.config.mjs` file and make the **script-src** directive stricter by not using **'unsafe-eval'** as recommended by the CSP Evaluator service, like so:
+Let's edit the CSP rules we just added in our `next.config.mjs` file and make the **script-src** directive stricter by not using **unsafe-eval** as recommended by the CSP Evaluator service, like so:
 
 ```js title="security.config.mjs" showLineNumbers{85} {6}#special
     // for dev environment enable unsafe-eval for hot-reload
@@ -180,6 +180,8 @@ Let's edit the CSP rules we just added in our `next.config.mjs` file and make th
         frame-src 'none';
     `
 ```
+
+Line 90 we remove `'unsafe-eval'` for the **script-src** directive
 
 Go back into the browser and check the [Console Tab](https://developer.chrome.com/docs/devtools/console) again, you should now be able to see a bunch of errors like these:
 
@@ -235,7 +237,7 @@ Next, we need to ensure violations get sent to Sentry.io (logged like any other 
 
 For that reason, we are going to edit our CSP setup in the next.config.mjs file, like so:
 
-```js title="next.config.mjs" showLineNumbers {34-35} {41-42} /${reportingDomainWildcard}/#special /${reportCSPViolations}/#special
+```js title="next.config.mjs" showLineNumbers {34-35} {41-42} {71} {74} {86} {89} /${reportingDomainWildcard}/#special /${reportCSPViolations}/#special
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 
 const nextConfig = (phase) => {

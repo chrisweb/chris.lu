@@ -4,11 +4,11 @@
 
 # Error handling and logging
 
-As we saw earlier each route segment is directory and each directory contains a page file, but unlike the page router, when using the app router we can add more than just pages, one of those files is an error file
+As we saw earlier, each route segment is a directory, and each directory contains a page file, but unlike the page router, when using the app router, we can add more than just pages, for example, one of those files we are about to add is an error page
 
-How this works is that Next.js will automatically wrap the children of your page with a **React Error Boundary**, meaning that when an error gets thrown in a page then the error boundary will contain it and then use the error file that is the closest (either an error file that is in the same directory as the page itself or a parent directory) as a fallback
+How this works is that Next.js will automatically wrap the children of your page with a **React Error Boundary**, meaning that when an error gets thrown in a page, then the error boundary will contain it and then use the error file that is the closest (either an error file that is in the same directory as the page itself or a parent directory) as a fallback
 
-Let's create our first error file inside of our app directory and let's use the example from the Next.js documentation, like so:
+Let's create our first error file inside of our app directory, and let's use the example from the Next.js documentation like so:
 
 ```ts title="app/error.tsx" showLineNumbers {13-16}
 'use client' // Error components must be Client Components
@@ -42,33 +42,35 @@ export default function Error({
 }
 ```
 
-Every time the component recieves an error it will use `console.log` to print the error in the console, the second feature of this component is that there is a `button` which will trigger the `reset` function we got from the component props, this function provided by Next.js will attempt to rerender the segment that triggered an error, this is helpful if the error was caused by something that occurs sporadically and might allow the user to continue
+Every time the component receives an error, it will use `console.log` to print the error in the console
 
-As you can see the Next.js documentation example uses a `useEffect(){:.function}` function to log the error in our console, but what happens if the error is getting triggered on a users computer, then we won't know about, so as Next.js suggests, in the second part of this chapter, we will use a third party service called [Sentry.io](https://sentry.io) to do the logging for us (of course if you prefer you can also develop and run your own logging service instead)
+The second feature of this component is that there is a `button` which will trigger the `reset` function we got from the component props, this function provided by Next.js will attempt to rerender the segment that triggered an error, this is helpful if the error was caused by something that occurs sporadically and might allow the user to continue
+
+As you can see, the Next.js documentation example uses a `useEffect(){:.function}` function to log the error in our console, but what happens if the error is getting triggered on a user's computer, then we won't know about, so as Next.js suggests, in the second part of this chapter, we will use a third-party service called [Sentry.io](https://sentry.io) to do the logging for us (of course if you prefer you can also develop and run your logging service instead)
 
 > [!MORE]  
 > [Next.js "Handling Errors" documentation](https://nextjs.org/docs/app/building-your-application/routing/error-handling)  
 
 ## Sentry.io SDK for Next.js setup
 
-In this chapter we will use [Sentry.io](https://sentry.io) (which has a free plan for side projects) to add error logging to the Next.js error file we just created
+In this chapter, we will use [Sentry.io](https://sentry.io) (which has a free plan for side projects) to add error logging to the Next.js error file we just created
 
-First you need to have or create an account on [Sentry.io](https://sentry.io) (if you need help with that step, check out my chapter [Create a Sentry account (sign up)](/web_development/posts/sentry-io#create-an-account-sign-up) in the Sentry.io post)
+First, you need to have or create an account on [Sentry.io](https://sentry.io) (if you need help with that step, check out my chapter [Create a Sentry account (sign up)](/web_development/posts/sentry-io#create-an-account-sign-up) in the Sentry.io post)
 
-Now we need create a new project on Sentry.io (if you need help with that step, check out my chapter [Create a Sentry.io project](/web_development/posts/sentry-io#create-a-sentryio-project) in the Sentry.io post)
+Now we need to create a new project on Sentry.io (if you need help with that step, check out my chapter [Create a Sentry.io project](/web_development/posts/sentry-io#create-a-sentryio-project) in the Sentry.io post)
 
-Now that the project is created we will use the Sentry.io Wizard tool to install the Sentry.io SDK for Next.js (if you need help with that step, check out my chapter [Sentry.io SDK for Next.js installation](/web_development/posts/sentry-io#sentryio-sdk-for-nextjs-installation) in the Sentry.io post)
+Now that the project is created, we will use the Sentry.io Wizard tool to install the Sentry.io SDK for Next.js (if you need help with that step, check out my chapter [Sentry.io SDK for Next.js installation](/web_development/posts/sentry-io#sentryio-sdk-for-nextjs-installation) in the Sentry.io post)
 
-After creating a Sentry.io project and setting up the SDK I recommend also using the [Sentry.io integration on Vercel](https://vercel.com/integrations/sentry) as this will automate the part **"Adding the Sentry authentication token as an environment variable to your CI setup"** that we just saw when using the Sentry.io wizard (if you need help with that step, check out my chapter [Sentry integration for Vercel](/web_development/posts/vercel#sentry-integration-for-vercel) in the Vercel post)
+After creating a Sentry.io project and setting up the SDK, I recommend also using the [Sentry.io integration on Vercel](https://vercel.com/integrations/sentry) as this will automate the part **"Adding the Sentry authentication token as an environment variable to your CI setup"** that we just saw when using the Sentry.io wizard (if you need help with that step, check out my chapter [Sentry integration for Vercel](/web_development/posts/vercel#sentry-integration-for-vercel) in the Vercel post)
 
-Finally now that you have installed the SDK you might want to some fine tuning of the Sentry.io configuration (if you need help with that step, check out my chapter [Sentry.io for Next.js configuration](/web_development/posts/sentry-io#sentryio-for-nextjs-configuration) in the Sentry.io post)
+Finally, now that you have installed the SDK, you might want to do some fine-tuning of the Sentry.io configuration (if you need help with that step, check out my chapter [Sentry.io for Next.js configuration](/web_development/posts/sentry-io#sentryio-for-nextjs-configuration) in the Sentry.io post)
 
 > [!MORE]  
 > [chris.lu "Sentry" post](/web_development/posts/sentry-io)
 
 ## Error logging using Sentry.io
 
-Now that Sentry.io is set up we can modify the error file we created earlier and add import the Sentry SDK and add the Sentry.io logging function inside of the `useEffect(){:.function}` to replace the example console.log, like so:
+Now that Sentry.io is set up, we can modify the error file we created earlier and add import the Sentry SDK, and add the Sentry.io logging function inside of the `useEffect(){:.function}` to replace the example console.log, like so:
 
 ```tsx title="app/error.tsx" showLineNumbers {3} {14-17}
 'use client' // Error components must be Client Components
@@ -107,7 +109,9 @@ export default function Error({
 
 ## Handling global errors
 
-The Sentry.io wizard we just used has created a Next.js `app/global-error.jsx` file for us, the Next.js documentation explains well why this file is important:
+The Sentry.io wizard we just used has created a Next.js `app/global-error.jsx` file for us
+
+The Next.js documentation explains well why this file is essential:
 
 > The root app/error.js boundary does not catch errors thrown in the root app/layout.js or app/template.js component.
 >
@@ -115,9 +119,9 @@ The Sentry.io wizard we just used has created a Next.js `app/global-error.jsx` f
 >
 > global-error.js is the least granular error UI and can be considered "catch-all" error handling for the whole application.
 
-But because Sentry created a **javascript** file but our project uses **typescript**, we will start by converting the file into a typescript file, by renaming `app/global-error.jsx` to `app/global-error.tsx`
+But because Sentry created a **javascript** file, but our project uses **typescript**, we will start by converting the file into a typescript file by renaming `app/global-error.jsx` to `app/global-error.tsx`
 
-After renaming the file we edit it and replace its content with the code for a global error page from the Next.js documentation, which is a good start as it is strictly typed, the only difference is that we also modify the code to add the Sentry.io `captureException(){:.function}` function, that will capture exceptions and send them to Sentry.io, the final version looks like this:
+After renaming the file, we edit it and replace its content with the code for a global error page from the Next.js documentation, which is a good start as it is strictly typed, the only difference is that we also modify the code to add the Sentry.io `captureException(){:.function}` function, that will capture exceptions and send them to Sentry.io, the final version looks like this:
 
 ```ts title="app/global-error.tsx" showLineNumbers
 'use client' // Error components must be Client Components
@@ -153,11 +157,13 @@ export default function GlobalError({
 }
 ```
 
-The global error handling file will handle root layout errors and act as a catch all for app errors
+The global error handling file will handle root layout errors and act as a catch-all for app errors
 
-Congratulations 🎉 you now have error handling and logging for pages as well as a global error handling in your project, if you liked this post please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+Time to save, commit, and sync
 
-Time to save, commit and sync
+Congratulations 🎉 you now have error handling and logging for pages as well as a global error handling in your project
+
+If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
 
 > [!MORE]  
 > [Next.js "handling errors in root layouts" documentation](https://nextjs.org/docs/app/building-your-application/routing/error-handling#handling-errors-in-root-layouts)  
