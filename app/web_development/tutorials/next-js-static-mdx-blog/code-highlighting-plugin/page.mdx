@@ -19,9 +19,9 @@ Inside the `code-highlighting_playground` folder, create a new `page.mdx` MDX pa
 
 ```js
 function helloWorld() {
-    // this is a comment
-    let greeting = 'Hello World!'
-    console.log(greeting)
+    // this is a comment
+    let greeting = 'Hello World!'
+    console.log(greeting)
 }
 ```
 
@@ -39,9 +39,9 @@ The markdown code block syntax got converted into \<pre> HTML element, and insid
 
 This is why we will now add the *rehype pretty code* plugin
 
-> [!MORE]  
-> ["rehype pretty code" website](https://rehype-pretty.pages.dev/)  
-> ["shiki" website](https://shiki.matsu.io/)  
+> [!MORE]  
+> ["rehype pretty code" website](https://rehype-pretty.pages.dev/)  
+> ["shiki" website](https://shiki.matsu.io/)  
 
 ## Rehype pretty code installation
 
@@ -61,49 +61,49 @@ import rehypePrettyCode from 'rehype-pretty-code'
 
 const nextConfig = (phase) => {
 
-    const withMDX = createMdx({
-        extension: /\.mdx?$/,
-        options: {
-            // optional remark and rehype plugins
-            remarkPlugins: [],
-            rehypePlugins: [rehypeMDXImportMedia, rehypePrettyCode],
- },
- })
+    const withMDX = createMdx({
+        extension: /\.mdx?$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [],
+            rehypePlugins: [rehypeMDXImportMedia, rehypePrettyCode],
+        },
+    })
 
-    /** @type {import('next').NextConfig} */
-    const nextConfigOptions = {
-        reactStrictMode: true,
-        poweredByHeader: false,
-        experimental: {
-            // experimental typescript "statically typed links"
-            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
-            // currently false in prod until Issue #62335 is fixed
-            // https://github.com/vercel/next.js/issues/62335
-            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
- },
-        headers: async () => {
-            return [
- {
-                    source: '/(.*)',
-                    headers: securityHeadersConfig(phase)
- },
- ];
- },
-        // configure `pageExtensions` to include MDX files
-        pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx', 'md'],
-        // disable linting during builds using "next lint"
-        // we have manually added our lint script in package.json to the build command
-        eslint: {
-            ignoreDuringBuilds: true,
- },
-        images: {
-            // file formats for next/image
-            formats: ['image/avif', 'image/webp'],
-            deviceSizes: [384, 640, 750, 828, 1080, 1200, 1920, 2176, 3840],
- },
- }
+    /** @type {import('next').NextConfig} */
+    const nextConfigOptions = {
+        reactStrictMode: true,
+        poweredByHeader: false,
+        experimental: {
+            // experimental typescript "statically typed links"
+            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
+            // currently false in prod until Issue #62335 is fixed
+            // https://github.com/vercel/next.js/issues/62335
+            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        },
+        headers: async () => {
+            return [
+                {
+                    source: '/(.*)',
+                    headers: securityHeadersConfig(phase)
+                },
+            ];
+        },
+        // configure `pageExtensions` to include MDX files
+        pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx', 'md'],
+        // disable linting during builds using "next lint"
+        // we have manually added our lint script in package.json to the build command
+        eslint: {
+            ignoreDuringBuilds: true,
+        },
+        images: {
+            // file formats for next/image
+            formats: ['image/avif', 'image/webp'],
+            deviceSizes: [384, 640, 750, 828, 1080, 1200, 1920, 2176, 3840],
+        },
+    }
 
-    return nextConfigOptions
+    return nextConfigOptions
 
 }
 ```
@@ -116,15 +116,15 @@ Now have another look at the playground page in your browser, and you will notic
 
 ![rehype-pretty-code code highlighting example with default colors](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/rehype-pretty-code_plugin_default_colors.png)
 
-> [!MORE]  
-> [NPM "rehype-pretty-code" package](https://www.npmjs.com/package/rehype-pretty-code)  
-> [NPM "shiki" package](https://www.npmjs.com/package/shiki)  
+> [!MORE]  
+> [NPM "rehype-pretty-code" package](https://www.npmjs.com/package/rehype-pretty-code)  
+> [NPM "shiki" package](https://www.npmjs.com/package/shiki)  
 
 ## Using VSCode themes for code highlighting
 
 Next, we are going to configure the rehype plugin to use a VSCode theme
 
-> [!TIP]  
+> [!TIP]  
 > You can install any VSCode theme you like
 >  
 > Have a look at the [VSCode marketplace](https://marketplace.visualstudio.com/vscode), and when you find one you like, I recommend you first check out if the [themes bundled with shiki](https://shiki.style/themes) page lists it, all themes included in shiki come from the [tm-themes package](https://www.npmjs.com/package/tm-themes), which is convenient as you don't need to install the theme yourself (but you could as we will see in the following example)
@@ -139,19 +139,19 @@ import rehypePrettyCode from 'rehype-pretty-code'
 
 const nextConfig = (phase) => {
 
-    /** @type {import('rehype-pretty-code').Options} */
-    const rehypePrettyCodeOptions = {
-        theme: 'dracula',
- }
+    /** @type {import('rehype-pretty-code').Options} */
+    const rehypePrettyCodeOptions = {
+        theme: 'dracula',
+    }
 
-    const withMDX = createMdx({
-        extension: /\.(md|mdx)$/,
-        options: {
-            // optional remark and rehype plugins
-            remarkPlugins: [],
-            rehypePlugins: [rehypeMDXImportMedia, [rehypePrettyCode, rehypePrettyCodeOptions]],
- },
- })
+    const withMDX = createMdx({
+        extension: /\.(md|mdx)$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [],
+            rehypePlugins: [rehypeMDXImportMedia, [rehypePrettyCode, rehypePrettyCodeOptions]],
+        },
+    })
 ```
 
 Line 8, we import the types for the **rehype-pretty-code** configuration, which improves the DX as it shows us for every configuration option which values we can choose from
@@ -172,8 +172,8 @@ If there is a theme you wish to use a theme that is NOT among the ones bundled i
 
 In this example, we will install a theme called [One Dark Pro (Atom's iconic One Dark theme for Visual Studio Code)](https://github.com/Binaryify/OneDark-Pro/)
 
-> [!NOTE]  
-> We are using the **One Dark Pro for VSCode** theme in this example even though you can use this theme without actually downloading it (as we did in the previous example) because it is one of the many themes bundled with shiki, but I use it here as an example to show you what to do when using any theme from a git repository
+> [!NOTE]  
+> We are using the **One Dark Pro for VSCode** theme in this example even though you can use this theme without actually downloading it (as we did in the previous example) because it is one of the many themes bundled with shiki, but I use it here as an example to show you what to do when using any theme from a git repository  
 
 First, go to the git repository of the theme you want to use and copy the **https** URL, then install it using the npm install command, but instead of using a package name, you use the repository URL, for example, to install the **One Dark Pro Theme** you would use the following command:
 
@@ -184,12 +184,12 @@ npm i https://github.com/Binaryify/OneDark-Pro.git
 The repository gets added to your node_modules like any other package, and the package.json then contains an entry like this:
 
 ```json title="package.json"
-    "dependencies": {
-        "material-theme": "github:Binaryify/OneDark-Pro",
- },
+"dependencies": {
+    "material-theme": "github:Binaryify/OneDark-Pro",
+},
 ```
 
-> [!NOTE]  
+> [!NOTE]  
 > At first, I was surprised to see the name **material-theme** in my package.json, but this is normal
 >  
 > It is the name the One Dark theme has in its package.json, so it is normal
@@ -205,22 +205,22 @@ import { readFileSync } from 'fs'
 
 const nextConfig = (phase) => {
 
-    const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
-    const themeFileContent = readFileSync(themePath, 'utf-8')
+    const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
+    const themeFileContent = readFileSync(themePath, 'utf-8')
 
-    /** @type {import('rehype-pretty-code').Options} */
-    const rehypePrettyCodeOptions = {
-        theme: JSON.parse(themeFileContent),
- }
+    /** @type {import('rehype-pretty-code').Options} */
+    const rehypePrettyCodeOptions = {
+        theme: JSON.parse(themeFileContent),
+    }
 
-    const withMDX = createMdx({
-        extension: /\.(md|mdx)$/,
-        options: {
-            // optional remark and rehype plugins
-            remarkPlugins: [],
-            rehypePlugins: [rehypeMDXImportMedia, [rehypePrettyCode, rehypePrettyCodeOptions]],
- },
- })
+    const withMDX = createMdx({
+        extension: /\.(md|mdx)$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [],
+            rehypePlugins: [rehypeMDXImportMedia, [rehypePrettyCode, rehypePrettyCodeOptions]],
+        },
+    })
 ```
 
 Line 5 import **readFileSync** function from the Node.js [file system module (fs)](https://nodejs.org/api/fs.html)
@@ -235,18 +235,18 @@ Now have another look at the playground, and you will notice that this time, the
 
 ![rehype-pretty-code code highlighting example with dracula theme for VSCode colors](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/rehype-pretty-code_plugin_one-dark-pro_theme.png)
 
-> [!NOTE]  
-> As themes are JSON files that you import in your configuration, and if you are into creating personalized color palettes, then you have the option to create or at least edit an existing theme
+> [!NOTE]  
+> As themes are JSON files that you import in your configuration, and if you are into creating personalized color palettes, then you have the option to create or at least edit an existing theme  
 >  
-> All you need to do is create a json file (or clone one of the themes you like), bring in your own colors, and then import it the same way we imported a theme that we downloaded from GitHub
+> All you need to do is create a json file (or clone one of the themes you like), bring in your own colors, and then import it the same way we imported a theme that we downloaded from GitHub  
 >  
-> If you do so, you then also have the option to use your customized theme in VSCode by [creating your own VSCode theme extension](https://code.visualstudio.com/api/get-started/your-first-extension)
+> If you do so, you then also have the option to use your customized theme in VSCode by [creating your own VSCode theme extension](https://code.visualstudio.com/api/get-started/your-first-extension)  
 
-> [!MORE]  
-> [VSCode marketplace](https://marketplace.visualstudio.com/vscode)  
-> [NPM "tm-themes" package](https://www.npmjs.com/package/tm-themes)  
-> [One Dark Pro theme for VSCode)](https://github.com/Binaryify/OneDark-Pro/)  
-> [Dracula theme for VSCode](https://draculatheme.com/visual-studio-code)  
+> [!MORE]  
+> [VSCode marketplace](https://marketplace.visualstudio.com/vscode)  
+> [NPM "tm-themes" package](https://www.npmjs.com/package/tm-themes)  
+> [One Dark Pro theme for VSCode)](https://github.com/Binaryify/OneDark-Pro/)  
+> [Dracula theme for VSCode](https://draculatheme.com/visual-studio-code)  
 
 ## Code block styling
 
@@ -255,14 +255,14 @@ Next, we add the following CSS to our `global.css` file:
 ```css title="/app/global.css" showLineNumbers{135} {1-5} {7-11}
 [data-rehype-pretty-code-figure],
 [data-rehype-pretty-code-figure]>pre {
-    margin: 0;
-    padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 [data-rehype-pretty-code-figure]>pre {
-    width: 100%;
-    overflow: auto;
-    padding: var(--spacing);
+    width: 100%;
+    overflow: auto;
+    padding: var(--spacing);
 }
 ```
 
@@ -281,11 +281,11 @@ However, finding one that looks good and still works well with colors used to hi
 To disable the default theme background color, we edit the rehype pretty code configuration in our `next.config.mjs` file:
 
 ```js title="next.config.mjs" showLineNumbers{15}
-    /** @type {import('rehype-pretty-code').Options} */
-    const rehypePrettyCodeOptions = {
-        theme: JSON.parse(themeFileContent),
-        keepBackground: false,
- }
+/** @type {import('rehype-pretty-code').Options} */
+const rehypePrettyCodeOptions = {
+    theme: JSON.parse(themeFileContent),
+    keepBackground: false,
+}
 ```
 
 Line 15, we set the `keepBackground` option to false, which disables the default theme background color
@@ -295,15 +295,15 @@ Then we add our background color to our rehype-pretty-code CSS in the `global.cs
 ```css title="/app/global.css" showLineNumbers{135} {11}
 [data-rehype-pretty-code-figure],
 [data-rehype-pretty-code-figure]>pre {
-    margin: 0;
-    padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 [data-rehype-pretty-code-figure]>pre {
-    width: 100%;
-    overflow: auto;
-    padding: var(--spacing);
-    background-color: #27162b;
+    width: 100%;
+    overflow: auto;
+    padding: var(--spacing);
+    background-color: #27162b;
 }
 ```
 
@@ -316,27 +316,27 @@ On its website, the **rehype-pretty-code** plugin author recommends adding some 
 ```css title="/app/global.css" showLineNumbers{148}
 /* recommended by https://rehype-pretty-code.netlify.app/ */
 code[data-line-numbers] {
-    counter-reset: line;
+    counter-reset: line;
 }
 
 code[data-line-numbers]>[data-line]::before {
-    counter-increment: line;
-    content: counter(line);
+    counter-increment: line;
+    content: counter(line);
 
-    /* Other styling */
-    display: inline-block;
-    width: 1rem;
-    margin-right: 2rem;
-    text-align: right;
-    color: gray;
+    /* Other styling */
+    display: inline-block;
+    width: 1rem;
+    margin-right: 2rem;
+    text-align: right;
+    color: gray;
 }
 
 code[data-line-numbers-max-digits="2"]>[data-line]::before {
-    width: 2rem;
+    width: 2rem;
 }
 
 code[data-line-numbers-max-digits="3"]>[data-line]::before {
-    width: 3rem;
+    width: 3rem;
 }
 ```
 
@@ -347,9 +347,9 @@ Next, we need to go back to our playground and add a keyword on top of our code 
 ````md title="/app/tutorial_examples/code-highlighting_playground/page.mdx" showLineNumbers /showLineNumbers/#special
 ```js showLineNumbers
 function helloWorld() {
-    // this is a comment
-    let greeting = 'Hello World!'
-    console.log(greeting)
+    // this is a comment
+    let greeting = 'Hello World!'
+    console.log(greeting)
 }
 ```
 
@@ -364,9 +364,9 @@ If your code block only contains a code fragment and you want to indicate that t
 ````md title="/app/tutorial_examples/code-highlighting_playground/page.mdx" showLineNumbers /showLineNumbers{10}/#special
 ```js showLineNumbers{10}
 function helloWorld() {
-    // this is a comment
-    let greeting = 'Hello World!'
-    console.log(greeting)
+    // this is a comment
+    let greeting = 'Hello World!'
+    console.log(greeting)
 }
 ```
 
@@ -376,8 +376,8 @@ function helloWorld() {
 
 Line 1, we updated the `showLineNumbers` adding `{10}` to tell the code block that the first line is number 10
 
-> [!MORE]  
-> [MDN "CSS counters" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_counter_styles/Using_CSS_counters)  
+> [!MORE]  
+> [MDN "CSS counters" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_counter_styles/Using_CSS_counters)  
 
 ## Line highlighting
 
@@ -388,14 +388,14 @@ First, we update our global.css and add some styling for highlighted lines, like
 ```css title="/app/global.css" showLineNumbers{173} {2-6} {8-11}
 /* code blocks custom styling */
 [data-line] {
-    border-left-width: 2px;
-    border-left-style: solid;
-    border-left-color: transparent;
+    border-left-width: 2px;
+    border-left-style: solid;
+    border-left-color: transparent;
 }
 
 [data-highlighted-line] {
-    background-color: #58404c;
-    border-left-color: #d6277f;
+    background-color: #58404c;
+    border-left-color: #d6277f;
 }
 ```
 
@@ -408,9 +408,9 @@ Then we need to add the numbers of the lines we want to highlight inside of curl
 ````md title="/app/tutorial_examples/code-highlighting_playground/page.mdx" showLineNumbers {1}#special
 ```js showLineNumbers {1} {3-4}
 function helloWorld() {
-    // this is a comment
-    let greeting = 'Hello World!'
-    console.log(greeting)
+    // this is a comment
+    let greeting = 'Hello World!'
+    console.log(greeting)
 }
 ```
 
@@ -429,9 +429,9 @@ Let's start the other way around this time by first adding an ID to our curly br
 ````md title="/app/tutorial_examples/code-highlighting_playground/page.mdx" showLineNumbers /#errorLine/#special
 ```js showLineNumbers {1}#errorLine {3-4}
 function helloWorld() {
-    // this is a comment
-    let greeting = 'Hello World!'
-    console.log(greeting)
+    // this is a comment
+    let greeting = 'Hello World!'
+    console.log(greeting)
 }
 ```
 
@@ -449,8 +449,8 @@ Next, we update our global.css again and add another highlight style, but this o
 
 ```css title="/app/global.css" showLineNumbers{185}
 [data-highlighted-line][data-highlighted-line-id="errorLine"] {
-    background-color: #6b2424;
-    border-left-color: #ff003d;
+    background-color: #6b2424;
+    border-left-color: #ff003d;
 }
 ```
 
@@ -467,9 +467,9 @@ Go back to editing the playground markdown and change the code block to this:
 ````md title="/app/tutorial_examples/code-highlighting_playground/page.mdx" showLineNumbers /helloWorld()/1#special
 ```js showLineNumbers /helloWorld()/
 function helloWorld() {
-    // this is a comment
-    let greeting = 'Hello World!'
-    console.log(greeting)
+    // this is a comment
+    let greeting = 'Hello World!'
+    console.log(greeting)
 }
 ```
 
@@ -483,7 +483,7 @@ Next, we update our stylesheet and add some CSS to style highlighted characters:
 
 ```css title="/app/global.css" showLineNumbers{192}
 [data-highlighted-chars] {
-    background-color: #432936;
+    background-color: #432936;
 }
 ```
 
@@ -494,9 +494,9 @@ Same as for the highlighted lines, you can add an unlimited amount of highlighte
 ````md title="/app/tutorial_examples/code-highlighting_playground/page.mdx" showLineNumbers /#mySpecialHighlight/#special
 ```js showLineNumbers /greeting/#mySpecialHighlight
 function helloWorld() {
-    // this is a comment
-    let greeting = 'Hello World!'
-    console.log(greeting)
+    // this is a comment
+    let greeting = 'Hello World!'
+    console.log(greeting)
 }
 ```
 
@@ -508,7 +508,7 @@ And then you need to add the style for that new ID:
 
 ```css title="/app/global.css" showLineNumbers{194}
 [data-highlighted-chars][data-chars-id="mySpecialHighlight"] {
-    background-color: #874691;
+    background-color: #874691;
 }
 ```
 
@@ -521,9 +521,9 @@ To only highlight the second one, add the number 2 behind the second slash, like
 ````md title="/app/tutorial_examples/code-highlighting_playground/page.mdx" showLineNumbers /2/#special
 ```js showLineNumbers /greeting/2#mySpecialHighlight
 function helloWorld() {
-    // this is a comment
-    let greeting = 'Hello World!'
-    console.log(greeting)
+    // this is a comment
+    let greeting = 'Hello World!'
+    console.log(greeting)
 }
 ```
 
@@ -540,19 +540,19 @@ So far, we have always used javascript by adding the language flag `js`, but if 
 ````md title="/app/tutorial_examplescode-highlighting_playground/page.mdx" showLineNumbers /tsx/#special
 ```tsx showLineNumbers /greeting/2#mySpecialHighlight
 function helloWorld() {
-    // this is a comment
-    let greeting = 'Hello World!'
-    console.log(greeting)
+    // this is a comment
+    let greeting = 'Hello World!'
+    console.log(greeting)
 }
 ```
 ````
 
 Line 1, we changed the language flag from js to **tsx**
 
-> [!TIP]  
-> You can use language flags like js and jsx, ts, and tsx, and also md and mdx, but for example, mjs or esm are not supported as language flags
+> [!TIP]  
+> You can use language flags like js and jsx, ts, and tsx, and also md and mdx, but for example, mjs or esm are not supported as language flags  
 >  
-> You can check out the complete list of language flags that are available by looking at the [shiki languages file](https://github.com/shikijs/shiki/blob/main/packages/shiki/src/assets/langs-bundle-full.ts#L1248)
+> You can check out the complete list of language flags that are available by looking at the [shiki languages file](https://github.com/shikijs/shiki/blob/main/packages/shiki/src/assets/langs-bundle-full.ts#L1248)  
 
 There is a second option to specify the programming language, and this option is helpful if all your code blocks contain code written in the same language, and you don't want always to have to set the language flag for every code block
 
@@ -567,26 +567,26 @@ import { readFileSync } from 'fs'
 
 const nextConfig = (phase) => {
 
-    const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
-    const themeFileContent = readFileSync(themePath, 'utf-8')
+    const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
+    const themeFileContent = readFileSync(themePath, 'utf-8')
 
-    /** @type {import('rehype-pretty-code').Options} */
-    const rehypePrettyCodeOptions = {
-        theme: JSON.parse(themeFileContent),
-        keepBackground: false,
-        defaultLang: {
-            block: 'js',
- },
- }
+    /** @type {import('rehype-pretty-code').Options} */
+    const rehypePrettyCodeOptions = {
+        theme: JSON.parse(themeFileContent),
+        keepBackground: false,
+        defaultLang: {
+            block: 'js',
+        },
+    }
 
-    const withMDX = createMdx({
-        extension: /\.(md|mdx)$/,
-        options: {
-            // optional remark and rehype plugins
-            remarkPlugins: [],
-            rehypePlugins: [rehypeMDXImportMedia, [rehypePrettyCode, rehypePrettyCodeOptions]],
- },
- })
+    const withMDX = createMdx({
+        extension: /\.(md|mdx)$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [],
+            rehypePlugins: [rehypeMDXImportMedia, [rehypePrettyCode, rehypePrettyCodeOptions]],
+        },
+    })
 ```
 
 Line 16 to 18, we set the rehype pretty code `defaultLang` configuration option for a code `block` to `js`
@@ -616,8 +616,8 @@ We see this Remark lint [remark-lint-fenced-code-flag](https://github.com/remark
 
 If you want to remove the linting warning, use a [comment to disable the remark-link rule](#remark-lint-disable-comments-in-mdx) for that code block or if you want to disable that remark-link rule altogether, then you need to edit your `.remarkrc.mjs` file and set the rule to false, as we previously did in the [configuring remark-lint](#adding-and-configuring-remark-lint) chapter, after editing the remark-lint configuration you might want to [restart the eslint server in VSCode](#restart-the-eslint-server-in-vscode) and [delete the eslint command cache](#clear-the-eslint-cache)
 
-> [!NOTE]  
-> If you don't set a default language and also don't set a language flag on a code block, then rehype pretty code will not get activated for that code block, as it needs to know the programming language to be able to choose the correct colors when highlighting 
+> [!NOTE]  
+> If you don't set a default language and also don't set a language flag on a code block, then rehype pretty code will not get activated for that code block, as it needs to know the programming language to be able to choose the correct colors when highlighting  
 
 ## Highlighting inline code
 
@@ -628,9 +628,9 @@ To showcase this, let's edit our playground to add an inline code example like s
 ````md title="/app/tutorial_examples/code-highlighting_playground/page.mdx" showLineNumbers {9}
 ```js
 function helloWorld() {
-    // this is a comment
-    let greeting = 'Hello World!'
-    console.log(greeting)
+    // this is a comment
+    let greeting = 'Hello World!'
+    console.log(greeting)
 }
 ```
 
@@ -657,13 +657,13 @@ First, let's add a bit of CSS to our global.css to improve the styling of inline
 ```css title="/app/global.css" showLineNumbers{198}
 /* inline code custom styling */
 [data-rehype-pretty-code-figure]>code {
-    border-radius: 5px;
-    padding: 0 4px;
-    background-color: #27162b;
+    border-radius: 5px;
+    padding: 0 4px;
+    background-color: #27162b;
 }
 
 [data-rehype-pretty-code-figure]>code [data-line] {
-    padding: 0px;
+    padding: 0px;
 }
 ```
 
@@ -702,27 +702,27 @@ import { readFileSync } from 'fs'
 
 const nextConfig = (phase) => {
 
-    const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
-    const themeFileContent = readFileSync(themePath, 'utf-8')
+    const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
+    const themeFileContent = readFileSync(themePath, 'utf-8')
 
-    /** @type {import('rehype-pretty-code').Options} */
-    const rehypePrettyCodeOptions = {
-        theme: JSON.parse(themeFileContent),
-        keepBackground: false,
-        defaultLang: {
-            block: 'js',
-            inline: 'js',
- },
- }
+    /** @type {import('rehype-pretty-code').Options} */
+    const rehypePrettyCodeOptions = {
+        theme: JSON.parse(themeFileContent),
+        keepBackground: false,
+        defaultLang: {
+            block: 'js',
+            inline: 'js',
+        },
+    }
 
-    const withMDX = createMdx({
-        extension: /\.(md|mdx)$/,
-        options: {
-            // optional remark and rehype plugins
-            remarkPlugins: [],
-            rehypePlugins: [rehypeMDXImportMedia, [rehypePrettyCode, rehypePrettyCodeOptions]],
- },
- })
+    const withMDX = createMdx({
+        extension: /\.(md|mdx)$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [],
+            rehypePlugins: [rehypeMDXImportMedia, [rehypePrettyCode, rehypePrettyCodeOptions]],
+        },
+    })
 ```
 
 Line 18, we add the `inline` option inside of the `defaultLang` configuration for rehype pretty code and set its value to `js`
@@ -768,32 +768,32 @@ There is one last feature I want to bring up, which is **token aliases**, if you
 To add those aliases to our setup, we need to edit our `rehypePrettyCodeOptions` configuration like so:
 
 ```js title="next.config.mjs" showLineNumbers{12} {20-28}
-    /** @type {import('rehype-pretty-code').Options} */
-    const rehypePrettyCodeOptions = {
-        theme: JSON.parse(themeFileContent),
-        keepBackground: false,
-        defaultLang: {
-            block: 'tsx',
-            inline: 'js',
- },
-        tokensMap: {
-            fn: 'entity.name.function',
-            cmt: 'comment',
-            str: 'string',
-            var: 'entity.name.variable',
-            obj: 'variable.other.object',
-            prop: 'meta.property.object',
-            int: 'constant.numeric',
- },
- }
+/** @type {import('rehype-pretty-code').Options} */
+const rehypePrettyCodeOptions = {
+    theme: JSON.parse(themeFileContent),
+    keepBackground: false,
+    defaultLang: {
+        block: 'tsx',
+        inline: 'js',
+    },
+    tokensMap: {
+        fn: 'entity.name.function',
+        cmt: 'comment',
+        str: 'string',
+        var: 'entity.name.variable',
+        obj: 'variable.other.object',
+        prop: 'meta.property.object',
+        int: 'constant.numeric',
+    },
+}
 ```
 
-> [!NOTE]  
-> What tokens are available will vary from theme to theme
+> [!NOTE]  
+> What tokens are available will vary from theme to theme  
 >  
-> For example, in OneDark Pro, there is a token **constant.numeric** that I used to create the **int** alias, but in the Dracula theme, it does not exist
+> For example, in OneDark Pro, there is a token **constant.numeric** that I used to create the **int** alias, but in the Dracula theme, it does not exist  
 >  
-> There is only a global **constant** but no specific definition for a numeric constant, which means you might need to make some adjustments to your tokens map depending on what theme you use
+> There is only a global **constant** but no specific definition for a numeric constant, which means you might need to make some adjustments to your tokens map depending on what theme you use  
 
 Line 20 to 28, we add several custom token aliases to our rehype pretty code configuration, I tried to use abbreviations that are easy to remember without having to check out the configuration file constantly
 
@@ -828,9 +828,9 @@ Next, we add a code block and a list of inline code examples to our MDX playgrou
 ````md title="/app/tutorial_examples/code-highlighting_playground/page.mdx" showLineNumbers{13}
 ```tsx
 function helloWorld() {
-    // read me
-    let foo = { bar: 'text', bar: 123 }
-    console.log(foo.bar, foo.baz)
+    // read me
+    let foo = { bar: 'text', bar: 123 }
+    console.log(foo.bar, foo.baz)
 }
 ```
 
@@ -850,9 +850,11 @@ If we used the correct tokens to create our aliases map, then the examples list 
 
 ![the result when using rehype pretty code for a code block and some inline code examples](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/rehype-pretty-code_code_block_and_inline_code_examples.png)
 
-Congratulations 🎉 you finished learning about how to highlight code using a remark plugin and learned how to use most of its features (including using VSCode themes), if you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb)  ❤️ as it will help me create more content and keep it free for everyone
+Congratulations 🎉 you finished learning about how to highlight code using a remark plugin and learned how to use most of its features (including using VSCode themes)
 
-> [!MORE]  
-> [VSCode "Semantic Highlight" guide](https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers)  
+If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+
+> [!MORE]  
+> [VSCode "Semantic Highlight" guide](https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers)  
 
 </article>

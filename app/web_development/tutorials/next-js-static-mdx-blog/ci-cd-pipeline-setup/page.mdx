@@ -6,10 +6,10 @@
 
 In this part of the tutorial, we will set up a CI/CD pipeline that will automatically deploy our code using [Vercel](https://vercel.com)
 
-> [!NOTE]  
-> You might still remember how, in the past, we would use FTP software and manually transfer code to a server, or you might have struggled setting up GitHub actions... When using Vercel, they will set up the workflow for us and start monitoring our repository. If they detect a new commit (or pull request), they will fetch our code and automatically deploy it (on their infrastructure) for us
->
-> This means we don't have to do anything else besides committing our code as we have already done before, but there will be no new additional step, meaning there is no further click on a button needed 😉
+> [!NOTE]  
+> You might still remember how, in the past, we would use FTP software and manually transfer code to a server, or you might have struggled setting up GitHub actions... When using Vercel, they will set up the workflow for us and start monitoring our repository. If they detect a new commit (or pull request), they will fetch our code and automatically deploy it (on their infrastructure) for us  
+>  
+> This means we don't have to do anything else besides committing our code as we have already done before, but there will be no new additional step, meaning there is no further click on a button needed 😉  
 
 Of course, if you prefer to use GitHub actions to create your own CI/CD pipeline, feel free to do so
 
@@ -25,8 +25,8 @@ Now we need to create a new project on Vercel and allow them to access our repos
 
 Now that we have added our GitHub repository to Vercel, every commit (or pull request) we do into the **main** branch will trigger a **production** deployment, and every commit we do into the **preview** branch will trigger a **preview** (staging) deployment
 
-> [!MORE]  
-> [chris.lu "Vercel" post](/web_development/posts/vercel)
+> [!MORE]  
+> [chris.lu "Vercel" post](/web_development/posts/vercel)  
 
 ## Testing preview deployments
 
@@ -36,10 +36,10 @@ In the **Projects** list, click on the name of your project to access the projec
 
 On top, you will have a section called **Production Deployment**, and below that, there is a section called **Active Branches**, which is still empty (No Preview Deployments)
 
-> [!NOTE]  
-> On the project page, you can also find your **production deployment domains**
+> [!NOTE]  
+> On the project page, you can also find your **production deployment domains**  
 >  
-> Those are useful if you don't have a custom domain yet, as they are short URLs to your production deployment that you can bookmark as they won't change over time
+> Those are useful if you don't have a custom domain yet, as they are short URLs to your production deployment that you can bookmark as they won't change over time  
 
 Now open VSCode and make sure you are on the **preview** branch
 
@@ -50,10 +50,10 @@ Open the `README.md` file and, for example, add a small explanation that our pro
 
 ## npm commands (package.json scripts)
 
-`npm run dev`: to start the development server  
-`npm run build`: to make a production build  
-`npm run start`: to start the server on a production server using the build we made with the previous command  
-`npm run lint`: to run a linting script that will scan our code and help us find problems in our code  
+`npm run dev`: to start the development server  
+`npm run build`: to make a production build  
+`npm run start`: to start the server on a production server using the build we made with the previous command  
+`npm run lint`: to run a linting script that will scan our code and help us find problems in our code  
 
 ## CI/CD pipeline for automatic deployments
 
@@ -77,10 +77,8 @@ Your branch URL will be something like `https://PROJECT_NAME-git-preview-TEAM_NA
 
 Paste the branch URL you just copied into your browser address bar and press `Enter`
 
-> [!NOTE]  
-> When you visit your preview URL, Vercel will ask you to log in (if you are not logged in yet); this is because only you are supposed to have access to the previews; if someone else wants access, they will first have to request access and wait for you to grant them access
-
-Congratulations 🎉 you are now viewing a preview version of your project hosted on Vercel, if you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+> [!NOTE]  
+> When you visit your preview URL, Vercel will ask you to log in (if you are not logged in yet); this is because only you are supposed to have access to the previews; if someone else wants access, they will first have to request access and wait for you to grant them access  
 
 Because GitHub and Vercel are now connected, you will also have all the information about your deployments on your GitHub page
 
@@ -93,5 +91,9 @@ You will now see a new section called **Deployments**:
 If, for example, you click on **preview**, it will open the deployments page
 
 On top of that page, you will have a link to the live preview on the vercel.app domain, and below, you will have a list of the recent deployments
+
+Congratulations 🎉 you are now viewing a preview version of your project hosted on Vercel
+
+If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
 
 </article>
