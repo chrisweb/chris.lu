@@ -29,7 +29,7 @@ function helloWorld() {
 
 ````
 
-Line 3 to 9, we add a code block example to our playground
+Lines 3 to 9: we add a code block example to our playground
 
 If the dev server is not already running, first start the dev server (using the `npm run dev` command) and then open the [http://localhost:3000/tutorial_examples/code-highlighting_playground](http://localhost:3000/tutorial_examples/code-highlighting_playground) playground page URL in your browser to have a look at the result:
 
@@ -108,9 +108,9 @@ const nextConfig = (phase) => {
 }
 ```
 
-Line 4, we import our new **rehypePrettyCode** plugin
+Line 4: we import our new **rehypePrettyCode** plugin
 
-Line 13, we add the plugin to the rehype plugins configuration
+Line 13: we add the plugin to the rehype plugins configuration
 
 Now have another look at the playground page in your browser, and you will notice that this already looks a lot better when using the shiki default colors for highlighting:
 
@@ -154,13 +154,13 @@ const nextConfig = (phase) => {
     })
 ```
 
-Line 8, we import the types for the **rehype-pretty-code** configuration, which improves the DX as it shows us for every configuration option which values we can choose from
+Line 8: we import the types for the **rehype-pretty-code** configuration, which improves the DX as it shows us for every configuration option which values we can choose from
 
-Lines 9 to 11, we create a **rehype-pretty-code** options object and tell shiki that we want to use the bundled [Dracula Theme for Visual Studio Code](https://draculatheme.com/visual-studio-code), also because we added the types, we will get a nice autocomplete showing us what other values we could choose from:
+Lines 9 to 11: we create a **rehype-pretty-code** options object and tell shiki that we want to use the bundled [Dracula Theme for Visual Studio Code](https://draculatheme.com/visual-studio-code), also because we added the types, we will get a nice autocomplete showing us what other values we could choose from:
 
 ![rehype-pretty-code configuration options autocomplete because we added the types](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_rehype_pretty_code_configuration_options_autocomplete.png)
 
-Line 18, we add the options to our rehype plugins configuration
+Line 18: we add the options to our rehype plugins configuration
 
 Now have another look at the playground page in your browser, and you will notice that this time, the code is highlighted using the colors of the theme (using the same colors we have in VSCode using the Dracula Theme for Visual Studio Code):
 
@@ -223,13 +223,13 @@ const nextConfig = (phase) => {
     })
 ```
 
-Line 5 import **readFileSync** function from the Node.js [file system module (fs)](https://nodejs.org/api/fs.html)
+Line 5: we import the **readFileSync** function from the Node.js [file system module (fs)](https://nodejs.org/api/fs.html)
 
-Line 9, we create a URL using the path to the location of our theme in the node_modules folder
+Line 9: we create a URL using the path to the location of our theme in the node_modules folder
 
-Line 10, we use the **readFileSync** to read the content of the theme file
+Line 10: we use the **readFileSync** to read the content of the theme file
 
-Line 14, we parse the themes json file content using the javascript **JSON parser**
+Line 14: we parse the themes json file content using the javascript **JSON parser**
 
 Now have another look at the playground, and you will notice that this time, the code is highlighted using the colors of the One Dark Pro theme:
 
@@ -266,9 +266,9 @@ Next, we add the following CSS to our `global.css` file:
 }
 ```
 
-Lines 135 to 139, we just reset the **margin** and **padding** on the `<figure>` element that is the container of a rehype-pretty-code code block, it has a **data attribute** (**rehype-pretty-code** adds a container around code blocks, which consists of a `<figure>` element width a **data** attribute that has the value **rehype-pretty-code-figure**) that we use to target it as well as the `<pre>` element inside of it
+Lines 135 to 139: we only reset the **margin** and **padding** on the `<figure>` element that is the container of a rehype-pretty-code code block, it has a **data attribute** (**rehype-pretty-code** adds a container around code blocks, which consists of a `<figure>` element width a **data** attribute that has the value **rehype-pretty-code-figure**) that we use to target it as well as the `<pre>` element inside of it
 
-Line 141 to 145 we set the **width** of the `<pre>` element to **100%** to make sure our code block is as wide as our articles and then we set the **overflow** property to **auto**, meaning that if the code inside of the code block is too large the code block is allowed to add (and display) scrollbars if the code fits the code block then the scrollbars will be hidden, finally use our spacing variable to add some padding all around our code 
+Lines 141 to 145: we set the **width** of the `<pre>` element to **100%** to make sure our code block is as wide as our articles and then we set the **overflow** property to **auto**, meaning that if the code inside of the code block is too large the code block is allowed to add (and display) scrollbars if the code fits the code block then the scrollbars will be hidden, finally use our spacing variable to add some padding all around our code 
 
 When it comes to styling and using themes, you have the option to either keep the original background color that is included in the theme or deactivate it
 
@@ -288,7 +288,7 @@ const rehypePrettyCodeOptions = {
 }
 ```
 
-Line 15, we set the `keepBackground` option to false, which disables the default theme background color
+Line 15: we set the `keepBackground` option to false, which disables the default theme background color
 
 Then we add our background color to our rehype-pretty-code CSS in the `global.css` file:
 
@@ -307,7 +307,7 @@ Then we add our background color to our rehype-pretty-code CSS in the `global.cs
 }
 ```
 
-Line 145, we add our `background-color`, I chose a very dark color to make we have a high contrast between the code colors and the background
+Line 145: we add our `background-color`, I chose a very dark color to make we have a high contrast between the code colors and the background
 
 ## Line numbers
 
@@ -357,7 +357,7 @@ function helloWorld() {
 
 ````
 
-Line 1, we add the `showLineNumbers` keyword to code block markdown
+Line 1: we add the `showLineNumbers` keyword to code block markdown
 
 If your code block only contains a code fragment and you want to indicate that the first line is NOT 1 but another number, then you add the number you wish to use for the first line inside curly brackets to the showLineNumbers keyword, like so:
 
@@ -374,7 +374,7 @@ function helloWorld() {
 
 ````
 
-Line 1, we updated the `showLineNumbers` adding `{10}` to tell the code block that the first line is number 10
+Line 1: we updated the `showLineNumbers` adding `{10}` to tell the code block that the first line is number 10
 
 > [!MORE]  
 > [MDN "CSS counters" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_counter_styles/Using_CSS_counters)  
@@ -399,9 +399,9 @@ First, we update our global.css and add some styling for highlighted lines, like
 }
 ```
 
-Lines 174 to 178, we use a selector to target all lines, lines have a `data-line` attribute, and the CSS we add will border on the left, which will create a vertical line that we will then be able to colorize when the line is highlighted but by default we set it to `transparent`, to create this vertical line is of course not mandatory, if you don't like it leave it away
+Lines 174 to 178: we use a selector to target all lines, lines have a `data-line` attribute, and the CSS we add will border on the left, which will create a vertical line that we will then be able to colorize when the line is highlighted but by default we set it to `transparent`, to create this vertical line is of course not mandatory, if you don't like it leave it away
 
-Line 180 to 183, we use a selector to target all lines that have a `data-highlighted-line` attribute, we change the background color of the line as well as the color of the new border (vertical line) we added on the left
+Lines 180 to 183: we use a selector to target all lines that have a `data-highlighted-line` attribute, we change the background color of the line as well as the color of the new border (vertical line) we added on the left
 
 Then we need to add the numbers of the lines we want to highlight inside of curly brackets (`{}`), like so:
 
@@ -418,7 +418,7 @@ function helloWorld() {
 
 ````
 
-Line 1, we removed the `{10}` curly brackets to make our line numbers start with 1 again, then we added a space and then a number inside of curly brackets `{1}` to highlight the first line and also added `{3-4}` to highlight line 3 to 4
+Line 1: we removed the `{10}` curly brackets to make our line numbers start with 1 again, then we added a space and then a number inside of curly brackets `{1}` to highlight the first line and also added `{3-4}` to highlight line 3 to 4
 
 As you can see, you can highlight a single line by using the line number, or you can set a range using two values to highlight from line X to line Y
 
@@ -439,7 +439,7 @@ function helloWorld() {
 
 ````
 
-Line 1, we added a new highlight style ID after the curly brackets defining which line(s) should get highlighted, and we set the highlight line ID to `errorLine`
+Line 1: we add a new highlight style ID after the curly brackets defining which line(s) should get highlighted, and we set the highlight line ID to `errorLine`
 
 If you launch the dev server, then open the playground URL [http://localhost:3000/tutorial_examples/code-highlighting_playground](http://localhost:3000/tutorial_examples/code-highlighting_playground) in your browser, right-click on the code block and then select **Inspect**, you will notice that because we added the `#errorLine` ID we now have a `data-highlighted-line-id="errorLine"` attribute, meaning we can now target `data-highlighted-line-id` attributes that have the value `errorLine` in our CSS to change their background (and left line) color(s)
 
@@ -454,7 +454,7 @@ Next, we update our global.css again and add another highlight style, but this o
 }
 ```
 
-Lines 185 to 188, we added a selector to target the `data-highlighted-line-id` attribute if it has the value `errorLine`, we set a reddish color for the background and vertical line to make this code block line look like a code line with an error
+Lines 185 to 188: we add a selector to target the `data-highlighted-line-id` attribute if it has the value `errorLine`, we also set a reddish color for the background and vertical line to make this code block line look like a code line with an error
 
 If you launch the dev server then open the playground URL in your browser, and you will see that the first line is highlighted but uses the `errorLine` ID style, line 3 to 4 are highlighted too, but as they have no ID, they use the default highlight line style
 
@@ -477,7 +477,7 @@ function helloWorld() {
 
 ````
 
-Line 1, we removed the highlight line curly brackets from the previous example and instead used two slashes (`/`) to tell rehype pretty code that we want to highlight `helloWorld()`
+Line 1: we remove the curly brackets (used to highlight a line) from the previous example and instead used two slashes (`/`) to tell rehype pretty code that we want to highlight `helloWorld()`
 
 Next, we update our stylesheet and add some CSS to style highlighted characters:
 
@@ -487,7 +487,7 @@ Next, we update our stylesheet and add some CSS to style highlighted characters:
 }
 ```
 
-Line 190 to 192, we add a custom background color for highlighted characters
+Lines 190 to 192: we add a custom background color for highlighted characters
 
 Same as for the highlighted lines, you can add an unlimited amount of highlighted character variations by using IDs like so:
 
@@ -512,7 +512,7 @@ And then you need to add the style for that new ID:
 }
 ```
 
-Line 194 to 196, we set the background color for highlighted characters when using the **mySpecialHighlight** ID
+Lines 194 to 196: we set the background color for highlighted characters when using the **mySpecialHighlight** ID
 
 If you look at the result in your browser, you will notice that both occurrences of the greeting variable were highlighted
 
@@ -547,7 +547,7 @@ function helloWorld() {
 ```
 ````
 
-Line 1, we changed the language flag from js to **tsx**
+Line 1: we changed the language flag from js to **tsx**
 
 > [!TIP]  
 > You can use language flags like js and jsx, ts, and tsx, and also md and mdx, but for example, mjs or esm are not supported as language flags  
@@ -589,7 +589,7 @@ const nextConfig = (phase) => {
     })
 ```
 
-Line 16 to 18, we set the rehype pretty code `defaultLang` configuration option for a code `block` to `js`
+Lines 16 to 18: we set the rehype pretty code `defaultLang` configuration option for a code `block` to `js`
 
 Now that we have a default language set, we can remove the language flag we had after the 3 backticks of our fenced code block, like so:
 
@@ -606,9 +606,9 @@ function helloWorld() {
 
 ````
 
-Line 1 we removed the language flag (and any other options)
+Line 1: we remove the language flag (and any other options)
 
-If you did follow the ESLint with remark lint setup we did earlier in this tutorial, then you should now see that our code block is underlined, and if you hover over it, you will see it is an ESLint warning:
+If you did follow the "ESLint with remark lint setup" we did earlier in this tutorial, then you should now see that our code block is underlined, and if you hover over it, you will see it is an ESLint warning:
 
 ![ESLint warning in VSCode: Unexpected missing fenced code language flag in info string](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_eslint_fenced_block_language_flag.png)
 
@@ -725,7 +725,7 @@ const nextConfig = (phase) => {
     })
 ```
 
-Line 18, we add the `inline` option inside of the `defaultLang` configuration for rehype pretty code and set its value to `js`
+Line 18: we add the `inline` option inside of the `defaultLang` configuration for rehype pretty code and set its value to `js`
 
 If we look at our playground in the browser, we can see that the 2nd option works well, too
 
@@ -795,7 +795,7 @@ const rehypePrettyCodeOptions = {
 >  
 > There is only a global **constant** but no specific definition for a numeric constant, which means you might need to make some adjustments to your tokens map depending on what theme you use  
 
-Line 20 to 28, we add several custom token aliases to our rehype pretty code configuration, I tried to use abbreviations that are easy to remember without having to check out the configuration file constantly
+Lines 20 to 28: we add several custom token aliases to our rehype pretty code configuration, I tried to use abbreviations that are easy to remember without having to check out the configuration file constantly
 
 However, as I mentioned early in this tutorial, it doesn't hurt to also document them in the `README.md` file of the project:
 
