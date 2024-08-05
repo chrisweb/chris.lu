@@ -4,11 +4,11 @@
 
 # Styling the navigation and using next/font
 
-Now that our Navigation is working we will add a few touches of color and use [next/font](https://nextjs.org/docs/app/api-reference/components/font) to add an custom web font to our project
+Now that our Navigation is working, we will add a few touches of color and use [next/font](https://nextjs.org/docs/app/api-reference/components/font) to add a custom web font to our project
 
 ## next/font to use an open source font
 
-When using **next/font** you can use any font available on [google fonts](https://fonts.google.com/) or use your own local font(s), the best part about using next/font is that it will optimize the loading of the font to make sure that there are zero layout shifts, also when using next/font we are self hosting the font(s), which means we will NOT need to do an external network request to fetch the font, which will decrease loading times but also increase privacy as NO request is done to google servers
+When using **next/font**, you can use any font available on [google fonts](https://fonts.google.com/) or use your local font(s), the best part about using next/font is that it will optimize the loading of the font to make sure that there are zero layout shifts, also when using next/font we are self-hosting the font(s), which means we will NOT need to make an external network request to fetch the font, which will decrease loading times but also increase privacy as NO request is made to google servers
 
 Because we are using the font for our navigation, let's start by editing our `layout.tsx` file (that is in the `app` folder) and import the font from there:
 
@@ -51,27 +51,27 @@ export default function RootLayout({
 }
 ```
 
-Line 4 we import the font called **Kablammo** from **next/font**, you can find [Kablammo on google fonts](https://fonts.google.com/specimen/Kablammo)  
+Line 4: we import the font called **Kablammo** from **next/font**, you can find [Kablammo on google fonts](https://fonts.google.com/specimen/Kablammo)  
 
-Line 11-16 we set some options for the font:
+Lines 11-16: we set some options for the font:
 
 * like what [subset](https://fonts.google.com/knowledge/glossary/subsetting) do we want to use
 * the CSS variable (**--font-kablammo**) we want to use for the font
 * the (font-)[weight](https://fonts.google.com/knowledge/glossary/weight) will we use
-* the [display](https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display) strategy defines what happens during the period where the font is still getting fetched and not ready to be used, Next.js sets it to swap by default, so if you chose **swap** as in this example you could also just not set it or if you prefer to let the browser chose the display strategy then use **auto** as value, as described on the [chrome developer "font-display" page](https://developer.chrome.com/blog/font-display) when you chose auto most browsers will use a technique similar to **block**, meaning that for a short period of time the browser will use an invisible fallback font face (to avoid layout shifts) and then when the font is ready it will swap in the font
+* the [display](https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display) strategy defines what happens during the period when the font is still getting fetched and not ready to be used, Next.js sets it to swap by default, so if you chose **swap** as in this example you could also just not set it or if you prefer to let the browser chose the display strategy then use **auto** as value, as described on the [chrome developer "font-display" page](https://developer.chrome.com/blog/font-display) when you chose auto most browsers will use a technique similar to **block**, meaning that for a short period of time, the browser will use an invisible fallback font face (to avoid layout shifts) and then when the font is ready it will swap in the font
 
 > [!TIP]  
-> Chosing a subset is important to make the font load quickly because Next.js will inject a link preload tag into the head (when the preload option is true, which is the default)  
+> Choosing a subset is important to make the font load quickly because Next.js will inject a link preload tag into the head (when the preload option is true, which is the default)  
 >  
-> Also because the fonts are fully typed you can just type an option name and will get a list of values that you can chose from  
+> Also, because the fonts are fully typed, you can just type an option name and will get a list of values that you can choose from  
 
-Finally line 24 we add the font style to our HTML element via the className attribute
+Line 24: we add the font style to our HTML element via the className attribute
 
 ## Navigation CSS module
 
-Next we are going to add a stylesheet for our Naviation component and use the new font for the navigation items
+Next, we are going to add a stylesheet for our Navigation component and use the new font for the navigation items
 
-Create a new `navigation.module.css` file the `/components/header` folder and insert the following content:
+Create a new `navigation.module.css` file in the `/components/header` folder and insert the following content:
 
 ```css title="/components/header/navigation.module.css" showLineNumbers /--font-kablammo/
 .navigation {
@@ -98,7 +98,7 @@ Create a new `navigation.module.css` file the `/components/header` folder and in
 }
 ```
 
-As you can see at line 17 this is where we use the **--font-kablammo** variable we defined when setting the options for the font in the `layout.tsx` file
+Line 17: we use the **--font-kablammo** variable we defined when setting the options for the font in the `layout.tsx` file
 
 The final step is to edit our `Navigation.tsx` file in the `/components/header` folder and start using the styles we just created, like so:
 
@@ -166,11 +166,13 @@ const HeaderNavigation: React.FC = () => {
 export default HeaderNavigation
 ```
 
-Line 6 we import the new CSS Module containing the Navigation component stylesheet  
+Line 6: we import the new CSS Module containing the Navigation component stylesheet  
 
-Line 28 / 34 / 43 / 49 we use the 3 CSS rules, the `.active` rule will be used to make the Navigation entry that matches the current pathname bold, the `.navigation` rule uses **position fixed** so that the navigation bar always stays on top and finally the `.link` rule will use the custom font to change the font of our navigation items  
+Lines 28 / 34 / 43 and 49: we use the 3 CSS rules, the `.active` rule will be used to make the Navigation entry that matches the current pathname bold, and the `.navigation` rule uses **position fixed** so that the navigation bar always stays on top and finally the `.link` rule will use the custom font to change the font of our navigation items  
 
-Just one last little change needed, because we made the navigation fixed, it means that it will NOT take up any space anymore in the document as it will be floating above the content, this will cause the page content to move up and eventually be under the navigation, this is why we will edit our `global.css` file in `/app` the folder and add these few lines of CSS to it:
+Just one last little change is needed because we made the navigation fixed, it means that it will NOT take up any space anymore in the document as it will be floating above the content, which will cause the page content to move up and eventually be under the navigation
+
+This is why we will edit our `global.css` file in the `/app` folder and add these few lines of CSS to it:
 
 ```css title="/app/global.css" showLineNumbers{33} {4-5}
 body {
@@ -181,13 +183,15 @@ body {
 }
 ```
 
-Line 36 to 37 we add a padding-top property and set its value to the same size to be equivalent to the height of the navigation, this will ensure that when the page has loaded there is no content displayed under the navigation (later when scrolling the content will move under the navigation)
+Lines 36 to 37: we add a padding-top property and set its value to the same size to be equivalent to the height of the navigation, this will ensure that when the page has loaded, there is no content displayed under the navigation (later when scrolling the content will move under the navigation)
 
-Congratulations 🎉 you now have a much better looking navigation component and learned how to use next/font, if you liked this post please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+Congratulations 🎉 you now have a much better-looking navigation component and learned how to use next/font
+
+If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
 
 > [!MORE]  
 > [Next.js "Font Optimization" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/fonts)  
-> [Next.js "next/font" api reference](https://nextjs.org/docs/app/api-reference/components/font)  
+> [Next.js "next/font" API reference](https://nextjs.org/docs/app/api-reference/components/font)  
 > [Google Fonts](https://fonts.google.com)  
 > [MDN "font-display" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display)  
 > [developer.chrome.com "font-display" blog post](https://developer.chrome.com/blog/font-display)  

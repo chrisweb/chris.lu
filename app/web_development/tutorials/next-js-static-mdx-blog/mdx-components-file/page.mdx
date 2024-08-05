@@ -4,20 +4,22 @@
 
 # The **mdx-components** file
 
-Before we experiment with plugins in the next chapter I wanted to first come back to the `mdx-components.tsx` file which we briefly saw when setting up MDX support (at the very beginning) as the file is required to make MDX work
+Before we experiment with plugins in the next chapter, I wanted to first come back to the `mdx-components.tsx` file, which we briefly saw when setting up MDX support (at the very beginning), as the file is required to make MDX work
 
-`mdx-components.tsx` is great to quickly and easily replace an HTML Element with a React component
+`mdx-components.tsx` is great for quickly and easily replacing an HTML Element with a React component
 
-For example how can we quickly add a CSS class to all our `<ul>` [unordered list elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ul), because the markdown syntax does NOT let us add a class in a similar way to how we add a class to an HTML element, in fact the ul is not even part of the markdown syntax:
+For example, how can we quickly add a CSS class to all our `<ul>` [unordered list elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ul) because the markdown syntax does NOT let us add a class in a similar way to how we add a class to an HTML element the ul is not even part of the markdown syntax:
 
 ```md
 * foo
 * bar
 ```
 
-To solve this you add a remark plugin which would extend the base markdown syntax, but if you that and want to move your content to another platform someday, then that platform might not understand your custom markdown sysntax as the plugin you used to add classes to lists is not installed, as we will see in the next chapter using **mdx-components** file we can add a class to all of our lists without using an extra plugin and without having to introduce any new markdown syntax
+To solve this, you could add a remark plugin, which would extend the base markdown syntax, but if you want to move your content to another platform someday, then that platform might not understand your custom markdown syntax as the plugin you used to add classes to lists is not installed
 
-Or you could write custom react component, but then you would need to import and use that react component in every single MDX page, when using the **mdx-components** file however you only import the component once, for example in the second chapter we will create a custom link component, we import it once into **mdx-components** file and then use it for all the links in all our pages
+Or you could write a custom react component, but then you would need to import and use that react component in every single MDX page, however, when using the **mdx-components** file, you only import the component once, for example, in the second chapter we will create a custom link component, we import it once into **mdx-components** file and then use it for all the links in all our pages
+
+This is why the solution we will use is the next/mdx `mdx-components.tsx` file, and as we will see in the next chapter, it will allow us to add a class to all of our lists without using an extra plugin, and without having to introduce any new markdown syntax
 
 > [!MORE]  
 > [mdxjs.com "components" documentation](https://mdxjs.com/table-of-components/)  
@@ -25,7 +27,7 @@ Or you could write custom react component, but then you would need to import and
 
 ## Adding a CSS class to lists using mdx-components
 
-First open the `mdx-components.tsx` (which is in the root of your project) and add an entry for each headline, like so:
+First, open the `mdx-components.tsx` (which is in the root of your project) and add an entry for each headline, like so:
 
 ```tsx title="mdx-components.tsx" showLineNumbers {12-16}
 import type { MDXComponents } from 'mdx/types'
@@ -49,15 +51,15 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 }
 ```
 
-Line 12 to 16 we have created a simple custom component for **ul lists**, now the markdown parser will turn the list into HTML and then mdx-components will add a class called `listContainer` to each ul element
+Lines 12 to 16: we have created a simple custom component for **ul lists**, what happens is that first, the markdown parser turns the markdown list into HTML, and then mdx-components will be used to add a CSS class called `listContainer` to each `<ul>` element
 
 ## CSS class example using a MDX playground page
 
-Next lets create a new playground to experiment with the **mdx-components** file
+Next, let's create a new playground to experiment with the **mdx-components** file
 
-Inside of the `/app/tutorial_examples` folder create a `mdx-components_playground` folder
+Inside the `/app/tutorial_examples` folder, create a `mdx-components_playground` folder
 
-Then in the `mdx-components_playground` folder create a `page.mdx` file and paste the following content into it:
+Then, in the `mdx-components_playground` folder, create a `page.mdx` file and paste the following content into it:
 
 ```mdx title="/app/tutorial_examples/mdx-components_playground/page.mdx"
 <article>
@@ -70,10 +72,12 @@ Then in the `mdx-components_playground` folder create a `page.mdx` file and past
 ```
 
 > [!NOTE]  
-> We wrap our content with the `article` HTML element so that the content is not placed directly into the `main` HTML element (of our layout) which has a **flex-direction** set to **row**, the `article` element has a flex-direction of **column** (we defined all this in our `global.css` file which is in the `app` folder when we created it)  
+> We wrap our content with the `article` HTML element so that the content is not placed directly into the `main` HTML element (of our layout), which has a **flex-direction** set to **row**, the `article` element has a flex-direction of **column** (we defined all this in our `global.css` file which is in the `app` folder when we created it)  
 
-Now ensure the dev server is running (or launch it using the `npm run dev` command) and then in the browser navigate to [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground), then use your browser developper tools inspect tool and you will see that the `<ul>` element now has a **class** attribute containing the value `listContainer`
+Now ensure the dev server is running (or launch it using the `npm run dev` command), and then in the browser, navigate to [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground), then use your browser developer tools inspect tool and you will see that the `<ul>` element now has a **class** attribute containing the value `listContainer`
 
-Congratulations 🎉 you just learned how to use the **mdx-components** file, in other parts of this tutorial we will edit this file again and add several more features to it, if you liked this post please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+Congratulations 🎉 you just learned how to use the **mdx-components** file, in other parts of this tutorial, we will edit this file again and add several more features to it
+
+If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
 
 </article>
