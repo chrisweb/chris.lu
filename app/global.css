@@ -740,10 +740,14 @@ aside {
 }
 
 .asideCore {
+    --aside-height-offset: (var(--header-navbar-height) + var(--main-spacing));
+
     position: sticky;
     top: calc(var(--header-navbar-height) + var(--main-spacing));
     overflow-y: auto;
-    height: auto;
+    height: calc(100vh - var(--aside-height-offset));
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior */
+    overscroll-behavior: contain;
 }
 
 @media all and (max-width: 768px) {
