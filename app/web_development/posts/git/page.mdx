@@ -6,7 +6,7 @@
 
 ![two super heros pointing at each other, it represents two versions of a file getting compared in a git diff](../../../../public/assets/images/app/web_development/posts/git/banner.png 'when two files meet in git diff { banner }')
 
-**git** is an open source version control system, used for tracking changes in source code during software development. Git gives every developer a local copy of a project, after a developer has made his changes, he will create a new commit and then push it to a central repository, other developers can then pull that commit from the central repository into their local copy. Git makes branching (creating a separate line of development) and merging (combining changes from different branches) easy.
+**git** is an open-source version control system used for tracking changes in source code during software development. Git gives every developer a local copy of a project. After a developer has made his changes, they create a new commit and then push it to a central repository. Other developers can then pull that commit from the central repository into their local copy. Git makes branching (creating a separate line of development) and merging (combining changes from different branches) easy.
 
 ## Installation
 
@@ -14,13 +14,13 @@
 
 Go to [git-scm.com/download/win](https://git-scm.com/download/win) and click on **Click here to download** which will automatically download the latest (64bit) windows version
 
-When the download has finished, double click on the **exe** file to start the installation
+Double-click on the **exe** file when the download has finished to start the installation.
 
-You will get asked a bunch of stuff, I usually keep the default settings but feel free to change the default values to fit your needs
+You will get asked a bunch of stuff. I usually keep the default settings but feel free to change the default values to fit your needs.
 
 ### on Linux
 
-If you are on a ditribution (like Fedora or CentOS) that come with **dnf**, then use this command:
+If you are on a distribution (like Fedora or CentOS) that comes with **dnf**, then use this command:
 
 ```shell
 sudo dnf install git-all
@@ -34,7 +34,7 @@ sudo apt install git-all
 
 ### on macOS
 
-If you have the Xcode command line tools already installed on your machien then you already have git
+If you have the Xcode command line tools installed on your machine, then you already have git.
 
 You can check if it is already installed using this command:
 
@@ -42,7 +42,7 @@ You can check if it is already installed using this command:
 git --version
 ```
 
-If it is not yet installed, you can visit [git-scm.com/download/mac](https://git-scm.com/download/mac) to see all the options, my favorite way of installing git is via brew using the following command:
+If it is not yet installed, you can visit [git-scm.com/download/mac](https://git-scm.com/download/mac) to see all the options. My favorite way of installing git is via brew using the following command:
 
 ```shell
 brew install git
@@ -64,9 +64,9 @@ To initialize a git project locally, you first need to use the following command
 git init
 ```
 
-As origin I will use github but you could use any other git cloud service like gitlab for example
+I will use GitHub as the origin, but you could use any other Git cloud service, like GitLab.
 
-Next go to github and create a new repository by clicking on the "+" icon on the left of your user avatar (in the top right section of the page), then select "new repository"
+Next, go to GitHub and create a new repository by clicking on the "+" icon on the left of your user avatar (in the top right section of the page), then select "new repository".
 
 Then use the following command to add the origin to your local git setup:
 
@@ -74,7 +74,7 @@ Then use the following command to add the origin to your local git setup:
 git remote add origin https://github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
 ```
 
-Or you are using the git credential manager and you have multiple users, then you may want to set the default, to do so add your DEFAULT_GIT_USER_NAME into the URL like this:
+If you are using the git credential manager and have multiple users, then you may want to set the default. To do so, add your DEFAULT_GIT_USER_NAME to the URL like this:
 
 ```shell
 git remote add origin https://DEFAULT_GIT_USER_NAME@github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
@@ -84,15 +84,15 @@ git remote add origin https://DEFAULT_GIT_USER_NAME@github.com/GITHUB_USER_NAME/
 > [git documentation](https://git-scm.com/doc)  
 > [GitHub "Adding locally hosted code to GitHub" documentation](https://docs.github.com/github/importing-your-projects-to-github/adding-an-existing-project-to-github-using-the-command-line)  
 
-## cloning a repository
+## Cloning a repository
 
-VSCode has a source control tool that makes it easy to clone repositories, but if you prefer to do it manually via the command line then use this command:
+VSCode has a source control tool that makes it easy to clone repositories, but if you prefer to do it manually via the command line, then use this command:
 
 ```shell
 git clone https://github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
 ```
 
-Or you are using the git credential manager and you have multiple users, then you may want to set the default, to do so add your DEFAULT_GIT_USER_NAME into the URL like this when cloning:
+If you are using the git credential manager and have multiple users, then you may want to set the default. To do so, add your DEFAULT_GIT_USER_NAME into the URL like this when cloning:
 
 ```shell
 git clone https://DEFAULT_GIT_USER_NAME@github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
@@ -138,7 +138,7 @@ git switch BRANCH_NAME
 > [git "checkout" documentation](https://git-scm.com/docs/git-checkout)  
 > [git "switch" documentation](https://git-scm.com/docs/git-switch)  
 
-### shortcut to return to previous branch
+### shortcut to return to the previous branch
 
 There is a shortcut to switch back to the previous branch:
 
@@ -146,33 +146,33 @@ There is a shortcut to switch back to the previous branch:
 git checkout -
 ```
 
-or using the new switch:
+Or using the new switch:
 
 ```shell
 git switch -
 ```
 
-### stash your changes before switching
+### Stash your changes before switching
 
-If you want to switch to another branch but have uncommited changes then either commit them or stash them away using this command:
+If you want to switch to another branch but have uncommitted changes, then either commit them or stash them away using this command:
 
 ```shell
 git stash
 ```
 
-Now if you want to see the changes that are currently stashed, use this command:
+Now, if you want to see the changes that are currently stashed, use this command:
 
 ```shell
 git stash show
 ```
 
-And finally to restore the files use:
+Finally, to restore the files, use the following:
 
 ```shell
 git stash apply
 ```
 
-## create a new branch
+## Create a new branch
 
 To create a new branch (and stay on the current branch), use the following command:
 
@@ -197,11 +197,11 @@ git switch -c BRANCH_NAME
 > [git "checkout" documentation](https://git-scm.com/docs/git-checkout)  
 > [git "switch" documentation](https://git-scm.com/docs/git-switch)  
 
-## renaming a branche
+## renaming a branch
 
 ### rename a local branch
 
-If you didn't push the branch yet, then renaming a local branch is easy, just use the following command in your terminal (command line tool):
+Renaming a local branch is easy if you haven't pushed the branch yet. Just use the following command in your terminal (command line tool):
 
 ```shell
 git branch --move OLD_BRANCH_NAME NEW_BRANCH_NAME
@@ -210,9 +210,9 @@ git branch --move OLD_BRANCH_NAME NEW_BRANCH_NAME
 > [!MORE]  
 > [Git "Git Branching" documentation](https://git-scm.com/book/en/v2/Git-Branching-Branch-Management)  
 
-### renaming a remote branch
+### Renaming a remote branch
 
-To rename a remote branch (a remote branch that has already been pushed), first use the command from the previous chapter to rename it locally
+To rename a remote branch (a remote branch that has already been pushed), first use the command from the previous chapter to rename it locally.
 
 Then use the following command in your terminal (command line tool) to push it:
 
@@ -220,11 +220,11 @@ Then use the following command in your terminal (command line tool) to push it:
 git push -u origin NEW_BRANCH_NAME
 ```
 
-The `-u` (alias for `--set-upstream-to`) option is there to tell the local branch to track changes from the remote branch
+The `-u` (alias for `--set-upstream-to`) option tells the local branch to track changes from the remote branch.
 
-Now the branch with the new name is also available remotly, but git has copied the branch to rename the old one, meaning the old branch is also still present remotly
+Now, the branch with the new name is also available remotely, but git has copied the branch to rename the old one, meaning the old branch is still present remotely.
 
-A this point it is recommended to let everyone know in the team that you renamed the branch as they might still have open commits, tell them to execute the following commands, so that they too switch to the new branch (those are the commands GitHub recommends after you rename a remote branch on GitHub):
+At this point, letting everyone on the team know that you renamed the branch is recommended, as they might still have open commits. Tell them to execute the following commands so that they, too, switch to the new branch (those are the commands GitHub recommends after you rename a remote branch on GitHub):
 
 ```shell
 git checkout OLD_BRANCH_NAME
@@ -233,37 +233,37 @@ git fetch origin
 git branch -u origin/NEW_BRANCH_NAME
 ```
 
-First they use **checkout** to switch to the old branch, then they rename it locally too using **branch -m**, then they **fetch the origin** to fetch the ref of all branches in origin, then they need to use the **branch -u** (which is an alias for set-upstream we used earlier) to tell the local branch to track the origin/NEW_BRANCH_NAME
+First, they use **checkout** to switch to the old branch, then they rename it locally too using **branch -m**, then they **fetch the origin** to fetch the ref of all branches in origin, then they need to use the **branch -u** (which is an alias for set-upstream we used earlier) to tell the local branch to track the origin/NEW_BRANCH_NAME.
 
-If it is the default branch that got renamed also update origin/HEAD:
+If it is the default branch that got renamed, also update origin/HEAD:
 
 ```shell
 git remote set-head origin -a
 ```
 
-After the other members in your team have updated their local environment too, then you can go ahead an delete the old branch, using this command:
+After the other members of your team have updated their local environment, too, then you can go ahead and delete the old branch using this command:
 
 ```shell
 git push origin --delete OLD_BRANCH_NAME
 ```
 
-## update the list of remote branches (locally)
+## Update the list of remote branches (locally)
 
-To update / refresh the list of remote branches locally, use this command:
+To update/refresh the list of remote branches locally, use this command:
 
 ```shell
 git remote update origin --prune
 ```
 
-## get an overview of all local and remote branches
+## Get an overview of all local and remote branches
 
-To get an overview of all branches that exist remotly and locally, what remote branches are tracked by local branches, ... use this command:
+To get an overview of all branches that exist remotely and locally, what local branches track remote branches, ... use this command:
 
 ```shell
 git remote show origin
 ```
 
-## delete a local branch
+## Delete a local branch
 
 ```shell
 git branch --delete BRANCH_NAME

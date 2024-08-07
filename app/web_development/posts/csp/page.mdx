@@ -6,9 +6,9 @@
 
 ![a female robocop, in front of a police car with the text CSP on the side door, in a futuristic city](../../../../public/assets/images/app/web_development/posts/csp/banner.png '{ banner }')
 
-**Content Security Policy (CSP)** is important as it can help you prevent cross-site scripting (XSS), clickjacking, and other code injection attacks resulting from the execution of malicious content. That malicious content can be hiding in remote code from a banner ads system you included into your app or is for example hidden in a client package from a compromised NPM account.
+**Content Security Policy (CSP)** is important as it can help you prevent cross-site scripting (XSS), clickjacking, and other code injection attacks resulting from executing malicious content. That malicious content can be hidden in remote code from a banner ads system you included in your app or, for example, hidden in a client package from a compromised NPM account.
 
-Using the Content-Security-Policy HTTP header to limit fetching resources only from sources you explicitly declared can mitigate the risks related to content injection attacks. OWASP has an interesting [OWASP "Content Security Policy (CSP)" cheat sheet](https://chromium.googlesource.com/chromium/src/+/HEAD/net/reporting/README.md) page with examples that show you what kind of malicious atttacks the different CSP directives can help prevent
+Using the Content-Security-Policy HTTP header to limit fetching resources only from sources you explicitly declared can mitigate the risks related to content injection attacks. OWASP has an interesting [OWASP "Content Security Policy (CSP)" cheat sheet](https://chromium.googlesource.com/chromium/src/+/HEAD/net/reporting/README.md) page with examples that show you what kind of malicious attacks the different CSP directives can help prevent
 
 > [!MORE]  
 > [MDN "Content Security Policy (CSP)" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)  
@@ -17,7 +17,7 @@ Using the Content-Security-Policy HTTP header to limit fetching resources only f
 
 ## CSP policy using a meta element or header
 
-There are two ways to define **CSP directives**, either you use a **header** sent by your server or you use the **meta element** in your html
+There are two ways to define **CSP directives**: either you use a **header** sent by your server, or you use the **meta element** in your HTML
 
 A basic meta element to configure a CSP policy would look like this:
 
@@ -27,7 +27,7 @@ A basic meta element to configure a CSP policy would look like this:
     content="default-src 'self';" />
 ```
 
-The header is often the preferred way of as it supports sending reports which is something that can't be done using the meta element
+The header is often preferred because it supports sending reports, which cannot be done using the meta element.
 
 A very basic [Content-Security-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy) header looks like this:
 
@@ -35,7 +35,7 @@ A very basic [Content-Security-Policy](https://developer.mozilla.org/en-US/docs/
 Content-Security-Policy: default-src 'self'
 ```
 
-So far we used the Content-Security-Policy header but there is a second header [Content-Security-Policy-Report-Only](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy-Report-Only) that can be used, the difference is that when using Content-Security-Policy the browser will enforce the policy, if using Content-Security-Policy-**Report-Only** the browser will only report violations but NOT enforce them
+So far, we have used the Content-Security-Policy header, but there is a second header [Content-Security-Policy-Report-Only](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy-Report-Only) that can be used, the difference is that when using Content-Security-Policy the browser will enforce the policy, if using Content-Security-Policy-**Report-Only** the browser will only report violations but NOT enforce them
 
 ```shell
 Content-Security-Policy-Report-Only: default-src 'self'
@@ -43,9 +43,9 @@ Content-Security-Policy-Report-Only: default-src 'self'
 
 ## CSP directives
 
-The **default-src directive** is a fallback that gets used everytime a [fetch directive](https://developer.mozilla.org/en-US/docs/Glossary/Fetch_directive) for a resource type is missing, for a complete list check out the [MDN "CSP: default-src" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/default-src)
+The **default-src directive** is a fallback that gets used every time a [fetch directive](https://developer.mozilla.org/en-US/docs/Glossary/Fetch_directive) for a resource type is missing. For a complete list, check out the [MDN "CSP: default-src" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/default-src)
 
-I saw countless CSP examples (for beginners) that would set the **default-src** to **'self'**, my personal recommendation is set the default-src to **none**, meaning that it will disallow any source for any content type that is not explicitly whitelisted using a fetch directive
+I saw countless CSP examples (for beginners) that would set the **default-src** to **'self'**. I recommend setting the default-src to **none**, which will disallow any source for any content type that is not explicitly whitelisted using a fetch directive.
 
 Use a **secure by default** approach instead of an open everything by default approach, like this:
 
@@ -54,39 +54,39 @@ Content-Security-Policy: default-src 'none'
 ```
 
 > [!WARN]  
-> Always set a default-src, if you don't set a default-src then every resource type that has no directive will be allowed, which means that if there is no default-src and you don't set the script-src directive then all scripts from whatever source will be allowed, if you don't set a default-src there is no fallback 
+> Always set a default-src. If you don't set a default-src, then every resource type that has no directive will be allowed, which means that if there is no default-src and you don't set the script-src directive, then all scripts from whatever source will be allowed, if you don't set a default-src there is no fallback. 
 
-Now that we have a basic CSP, I would check what violations get listed in your browser console and then use specific directives to fix the violations one at a time, for example a directive to allow images from the same origin as the html document would look like this:
+Now that we have a basic CSP, I would check what violations get listed in your browser console and then use specific directives to fix the violations one at a time. For example, a directive to allow images from the same origin as the HTML document would look like this:
 
 ```shell
 Content-Security-Policy: default-src 'none'; img-src 'self'
 ```
 
-For a website that has images, javascript and css and where the javascript code needs to make requests to a remote API (api.example.com) I would use this basic CSP policy:
+For a website that has images, javascript, and CSS and where the javascript code needs to make requests to a remote API (api.example.com), I would use this basic CSP policy:
 
 ```shell
 Content-Security-Policy: default-src 'none'; img-src 'self'; script-src 'self'; style-src 'self'; connect-src https://api.example.com
 ```
 
-Not all policy directives are fetch directives, check out this [MDN "Content-Security-Policy Directives" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy#directives) for a full list of directives
+Not all policy directives are fetch directives. Check out this [MDN "Content-Security-Policy Directives" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy#directives) for a complete list of directives
 
-For example adding the [require-trusted-types-for](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/require-trusted-types-for) directive is recommended to reduce the DOM XSS attack surface, this ensures that if you have a script that attempts to put a string into for example Element.innerHTML but the string has not been sanitized then CSP will consider this a violation:
+For example, adding the [require-trusted-types-for](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/require-trusted-types-for) directive is recommended to reduce the DOM XSS attack surface. This ensures that if you have a script that attempts to put a string into, for example, Element.innerHTML, but the string has not been sanitized, then CSP will consider this a violation:
 
 ```shell
 Content-Security-Policy: default-src 'none'; img-src 'self'; script-src 'self'; style-src 'self'; connect-src https://api.example.com; require-trusted-types-for 'script'
 ```
 
-### nonce, hash and strict-dynamic
+### nonce, hash, and strict-dynamic
 
-An alternative to whitelisting an entire domain for external scripts is to use **hashes** or **nonces** to only whitelist certain scripts sources
+An alternative to whitelisting an entire domain for external scripts is to use **hashes** or **nonces** to whitelist only certain scripts sources.
 
-Those nonces and hashes can also be used for inline scripts, when used for inline scripts the big advantage is that you can avoid using unsafe-inline which whitelists all inline scripts
+Those nonces and hashes can also be used for inline scripts. When used for inline scripts, the big advantage is that you can avoid using unsafe-inline, which whitelists all inline scripts.
 
-**Hashes** are a powerful way of only allowing certain scripts instead of whitelisted an entire external source, this is preferred because if the domain gets taken over or hacked and the script(s) gets altered to include malicous code, then the hash won't match anymore and your code will refuse to use the script, this is much safer then to whitelist a domain and accept whatever version of a script that domain is hosting
+**Hashes** are a powerful way of only allowing certain scripts instead of whitelisting an entire external source. This is preferred because if the domain gets taken over or hacked and the script(s) gets altered to include malicious code, the hash won't match anymore, and your code will refuse to use the script. This is much safer than whitelisting a domain and accepting whatever version of a script the domain is hosting.
 
-**Nonces** are very useful for your inline scripts, instead of using **unsafe-inline** you create a nonce for your inline script(s), hence only allowing scripts that have a nonce you created instead of allowing all inline scripts, many frameworks support nonces, for example if you use Next.js check out their ["nonce" documentation](https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy#nonces) or Remix ["Streaming with a Content Security Policy" documentation](https://remix.run/docs/en/main/guides/streaming#streaming-with-a-content-security-policy) (you might also want to dig into this Remix [CSP nonce Issue #5162](https://github.com/remix-run/remix/issues/5162)) and for Astro check out [discussion #377](https://github.com/withastro/roadmap/discussions/377)
+**Nonces** are very useful for your inline scripts. Instead of using **unsafe-inline**, you create a nonce for your inline script(s), hence only allowing scripts that have a nonce you made instead of allowing all inline scripts. Many frameworks support nonces, for example if you use Next.js check out their ["nonce" documentation](https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy#nonces) or Remix ["Streaming with a Content Security Policy" documentation](https://remix.run/docs/en/main/guides/streaming#streaming-with-a-content-security-policy) (you might also want to dig into this Remix [CSP nonce Issue #5162](https://github.com/remix-run/remix/issues/5162)) and for Astro check out [discussion #377](https://github.com/withastro/roadmap/discussions/377)
 
-Finally I recommend checking out the strict-dynamic source expression which can be used when you want the trust that you have in a script to be propagated to all the scripts getting loaded by the root script, but use with caution as allowing a script to load other scripts should only happen if you have unconditional trust into the scripts code and the sources it gets other scripts from
+Finally, I recommend checking out the strict-dynamic source expression, which can be used when you want your trust in a script to be propagated to all the scripts getting loaded by the root script. But use with caution as allowing a script to load other scripts should only happen if you have unconditional trust in the scripts’ code and the sources it gets other scripts from
 
 > [!MORE]  
 > [MDN "CSP hashes" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src#whitelisting_external_scripts_using_hashes)  
@@ -95,13 +95,15 @@ Finally I recommend checking out the strict-dynamic source expression which can 
 
 ### upgrade-insecure-requests and frame-ancestors
 
-The **upgrade-insecure-requests** directive can be used to upgrade any first-party as well as third-party requests to https, this is useful for cases where for example you have an image URL that has not been migrated from HTTP to HTTPS yet or where a mistake was made by using HTTP instead of HTTPS, this directive will tell the browser to rewrite the URL with HTTPS before the insecure requests gets made, but be careful this is NOT a replacement for the HSTS header, here is a quote from MDN that explains it well:
+The **upgrade-insecure-requests** directive can be used to upgrade any first-party as well as third-party requests to https. This is useful for cases where, for example, you have an image URL that has yet to be migrated from HTTP to HTTPS or where a mistake was made by using HTTP instead of HTTPS. This directive will tell the browser to rewrite the URL with HTTPS before the insecure requests get made, but be careful. This is NOT a replacement for the HSTS header.
+
+Here is a quote from MDN that explains it well:
 
 > The upgrade-insecure-requests directive will not ensure that users visiting your site via links on third-party sites will be upgraded to HTTPS for the top-level navigation and thus does not replace the Strict-Transport-Security (HSTS) header, which should still be set with an appropriate max-age to ensure that users are not subject to SSL stripping attacks.
 
-So even if you use the **upgrade-insecure-requests** directive it is still recommended to also set the **Strict-Transport-Security** header
+So even if you use the **upgrade-insecure-requests** directive, it is still recommended to also set the **Strict-Transport-Security** header
 
-You might still find examples on the web using the **block-all-mixed-content**, this one is however deprecated and not needed when using **upgrade-insecure-requests**
+You might still find examples on the web using the **block-all-mixed-content**. This one is, however, deprecated and not needed when using **upgrade-insecure-requests**
 
 The **frame-ancestors** directive is useful to specify what parent source may embed a page and can help prevent clickjacking attacks, so if you want to disallow anyone to put your pages into an iFrame then set this directive to none, when frame-ancestors is set to none it does the same thing as the **X-Frame-Options** header when set to deny, meaning that the frame-ancestors directive is a replacement for X-Frame-Options in modern browsers, so when you see a high enough support percentage on the [caniuse "frame-ancestors" page](https://caniuse.com/?search=frame-ancestors) then you can ditch the **X-Frame-Options** header
 
@@ -115,26 +117,26 @@ The **frame-ancestors** directive is useful to specify what parent source may em
 
 A tool that can help you improve your Content-Security-Policy HTTP header is [Google's CSP Evaluator](https://csp-evaluator.withgoogle.com/)
 
-## the state of violations reporting (as of february 2024)
+## The state of violations reporting (as of February 2024)
 
-CSP violations can not only be seen in the console, as this would limit us to only see violations that occur when we (the developers) visit the app ourself, but what about violations that happen when a user visits our project, for such cases you can use CSP violations reporting
+CSP violations can not only be seen in the console, as this would limit us only to see violations that occur when we (the developers) visit the app ourselves, but what about violations that happen when a user visits our project, for such cases you can use CSP violations reporting
 
-However how CSP violation reports work has changed over the years, the w3c has released several iterations of their Content Security Policy recommendations / working drafts and then even created a drafts for something called the Reporting API which is a new header dedicated to sending reports to an endpoint
+However, how CSP violation reports work has changed over the years. The W3C has released several iterations of its Content Security Policy recommendations / working drafts and even created a draft for the Reporting API, a new header dedicated to sending reports to an endpoint.
 
-* in the [CSP level 1](https://www.w3.org/TR/2012/CR-CSP-20121115/) & [CSP level 2](https://www.w3.org/TR/CSP2/) recommandations, CSP violations get reported using a [report-uri](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-uri) reporting directive, if we look at [caniuse report-uri](https://caniuse.com/?search=report-uri) page we can see that it is supported by all major browsers
-* [CSP level 3](https://www.w3.org/TR/CSP3/) introduces a new [report-to](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-to) **reporting directive** and the w3c has marked the report-uri directive as deprecated, if we look at [caniuse report-to](https://caniuse.com/mdn-http_headers_content-security-policy_report-to)
+* in the [CSP level 1](https://www.w3.org/TR/2012/CR-CSP-20121115/) & [CSP level 2](https://www.w3.org/TR/CSP2/) recommendations, CSP violations get reported using a [report-uri](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-uri) reporting directive, if we look at [caniuse report-uri](https://caniuse.com/?search=report-uri) page we can see that it is supported by all major browsers
+* [CSP level 3](https://www.w3.org/TR/CSP3/) introduces a new [report-to](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-to) **reporting directive** and the w3c has marked the report-uri directive as deprecated. Have a look at the [caniuse report-to](https://caniuse.com/mdn-http_headers_content-security-policy_report-to) page to check how browser support evolves
 
 All browsers support the report-uri directive, but NOT all browsers support the report-to directive or the Report-To and Reporting-Endpoints headers:
 
-* Firefox supports the report-to directive but it is behind a feature flag, the Firefox ["CSP: Implement report-to" Issue](https://bugzilla.mozilla.org/show_bug.cgi?id=1391243) is quite old but one of the latest comments states that support has landed but is behind a feature flag), support for the reporting API gets tracked using the ["Considering implementing the Reporting API" Issue](https://bugzilla.mozilla.org/show_bug.cgi?id=1492036) and first shipped in Firefox 65 but has also been behind a feature flag since
+* Firefox supports the report-to directive but is behind a feature flag. The Firefox ["CSP: Implement report-to" Issue](https://bugzilla.mozilla.org/show_bug.cgi?id=1391243) is quite old, but one of the latest comments states that support has landed but is behind a feature flag). Support for the reporting API gets tracked using the ["Considering implementing the Reporting API" Issue](https://bugzilla.mozilla.org/show_bug.cgi?id=1492036) and first shipped in Firefox 65 but has also been behind a feature flag since
 * Safari added support for the report-to directive and the Reporting-Endpoints header in their [technology preview 154](https://developer.apple.com/documentation/safari-technology-preview-release-notes/stp-release-154#Reporting-API) and support landed in [Safari version 16.4](https://developer.apple.com/documentation/safari-release-notes/safari-16_4-release-notes) (released March 27, 2023)
 * Chrome on the other hand has had support for **report-to** directive since [version 69](https://chromestatus.com/feature/5826576096690176) and also the corresponding **Report-To** header since [version 69](https://chromestatus.com/feature/4672626140119040) (based on the reporting API v0 specs), since [version 96 chrome](https://chromestatus.com/feature/5712172409683968) now supports the more modern **Reporting-Endpoints** header (introduced in the reporting API v1)
 
 ### report-uri
 
-**report-uri** is a directive used to tell the browser where to send CSP violation reports, the w3c has marked it as deprecated but as of today this is still the only reporting mechanism that most SAAS logging services support and also the only directive supported by all major browsers
+**report-uri** is a directive that tells the browser where to send CSP violation reports. The w3c has marked it as deprecated, but as of today, this is still the only reporting mechanism most SAAS logging services support and the only directive supported by all major browsers.
 
-A Content Security header that uses the report-uri directive looks like:
+A Content Security header that uses the report-uri directive looks like this:
 
 ```shell
 Content-Security-Policy: ...;
@@ -149,19 +151,19 @@ Content-Security-Policy: ...;
 
 ### report-to != Report-to
 
-If like me you read some documents about CSP you might find that there are two report-to, **report-to** (with a small first letter **r**) refers to the directive, this report-to directive can point to a Reporting API header, in the first version (v0) of the reporting API that header was called **Report-to** (with a capital **R**)
+If, like me, you read some documents about CSP, you might find that there are two report-to, **report-to** (with a small first letter **r**) refers to the directive, this report-to directive can point to a Reporting API header, in the first version (v0) of the reporting API that header was called **Report-to** (with a capital **R**)
 
 The **report-to** directive is part of the w3c [CSP level 3](https://www.w3.org/TR/CSP3/) reference and is still valid today
 
-The **Report-to** header however, is part of an initial draft by the w3c for the [reporting API v0](https://www.w3.org/TR/2016/WD-reporting-1-20160407/#header), however this draft is now obsolete, if you see this header in a documentation it means that it is outdated
+The **Report-to** header was part of the W3C's initial draft for the [reporting API v0](https://www.w3.org/TR/2016/WD-reporting-1-20160407/#header). However, this draft is now obsolete. If you see this header in the documentation, it means that it is outdated.
 
-In the new [w3c "Reporting API v1" working draft](https://www.w3.org/TR/reporting-1/) the Report-to header got replaced by a header that is now called **Reporting-Endpoints**
+In the new [w3c "Reporting API v1" working draft](https://www.w3.org/TR/reporting-1/), the Report-to header got replaced by a header that is now called **Reporting-Endpoints**
 
 ### Reporting API
 
-The **Reporting API** describes a new header that tells the browser which endpoint(s) should get used to send the reports
+The **Reporting API** describes a new header that tells the browser which endpoint(s) should get used to send the reports.
 
-This header is NOT just to send CSP violations reports but covers a wide range of use cases, for example it can be used to send [Permissions-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy) reports, reports regarding deprecated browser features your code might be using, but also reports about browser crashes and more...
+This header is NOT just for sending CSP violation reports but covers a wide range of use cases. For example, it can be used to send [Permissions-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy) reports, reports regarding deprecated browser features your code might be using, reports about browser crashes, and more.
 
 #### Reporting API v0
 
@@ -177,7 +179,7 @@ Content-Security-Policy: ...;
     report-to {"group":"default","max_age":10886400,"endpoints":[{"url":"https://csp-logging.example.com"}],"include_subdomains":true}
 ```
 
-and using the Report-to header, like this:
+And using the Report-to header like this:
 
 ```shell
 Content-Security-Policy: ...;
@@ -185,7 +187,7 @@ Content-Security-Policy: ...;
 Report-to: {"group":"default","max_age":10886400,"endpoints":[{"url":"https://csp-logging.example.com"}],"include_subdomains":true}
 ```
 
-Did you notice the **max_age** key in the Report-to json, this tells the browser for how long you want to cache the endpoint information, meaning that if the next page (as long as the origin is the same) wants to make a report you don't need to specify the endpoint again and can just use it in the directive, this feature however got dropped in the v1 specs of the reporting API
+Did you notice the **max_age** key in the Report-to json? This tells the browser for how long you want to cache the endpoint information, meaning that if the next page (as long as the origin is the same) wants to make a report, you don't need to specify the endpoint again and can just use it in the directive, this feature, however, got dropped in the v1 specs of the reporting API
 
 > [!MORE]  
 > [MDN "CSP: report-to" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-to)  
@@ -194,7 +196,7 @@ Did you notice the **max_age** key in the Report-to json, this tells the browser
 
 #### Reporting API v1
 
-After a while the w3c team decided to rename the header and so in the [w3c "Reporting API v1" working draft](https://www.w3.org/TR/reporting-1/) they renamed the Report-to header to **Reporting-Endpoints**
+After a while, the w3c team decided to rename the header, and so in the [w3c "Reporting API v1" working draft](https://www.w3.org/TR/reporting-1/), they renamed the Report-to header to **Reporting-Endpoints**
 
 [chrome 96](https://chromestatus.com/feature/5712172409683968) is the first browser to ship support for the **Reporting-Endpoints** header
 
@@ -208,7 +210,7 @@ Content-Security-Policy: ...; report-to default
 Reporting-Endpoints: default="https://csp-logging.example.com"
 ```
 
-You can specify more then one endpoint if you need to:
+You can specify more than one endpoint if you need to:
 
 ```shell
 Reporting-Endpoints: default="https://csp-logging.example.com", second-endpoint="https://csp-logging2.example.com"
@@ -222,54 +224,54 @@ Reporting-Endpoints: default="https://csp-logging.example.com", second-endpoint=
 > [w3c "Reporting API v1" working draft](https://www.w3.org/TR/reporting-1/)  
 > [chromium "Reporting API" readme](https://chromium.googlesource.com/chromium/src/+/HEAD/net/reporting/README.md)  
 
-## logging CSP violations
+## Logging CSP violations
 
 A lot of the paid SAAS Error Monitoring services can also be used to log CSP violations, [Sentry.io CSP logging documentation](https://docs.sentry.io/product/security-policy-reporting/), [raygun.com](https://raygun.com/documentation/language-guides/browser-reporting/crash-reporting/csp/) or [datadoghq.com](https://www.datadoghq.com/blog/content-security-policy-reporting-with-datadog/)
 
-An alternative is to host a logging tool on your own infrastructure, for example Mozilla published an opensource [CSP logging service called "CSP Logger"](https://github.com/mozilla/csp-logger) on GitHub that is written in Javascript but it only supports the report-uri directive and has not been updated in years
+An alternative is to host a logging tool on your own infrastructure. For example, Mozilla published an opensource [CSP logging service called "CSP Logger"](https://github.com/mozilla/csp-logger) on GitHub that is written in Javascript, but it only supports the report-uri directive and has not been updated in years
 
-Or you could write your own CSP logging endpoint and store the reports in a database but then you probably will also need an admin interface to filter and analyze the reports
+You could also write your own CSP logging endpoint and store the reports in a database, but then you would probably also need an admin interface to filter and analyze the reports.
 
 > [!MORE]  
 > [Mozilla "CSP Logger" repository](https://github.com/mozilla/csp-logger)  
 
-### logging CSP violations using Sentry.io
+### Logging CSP violations using Sentry.io
 
-Sentry.io can be used to log CSP violations and will add those to your project issues
+Sentry.io can be used to log CSP violations and will add those to your project issues.
 
-Sentry.io also supports [Certificate Transparency](https://developer.mozilla.org/en-US/docs/Web/Security/Certificate_Transparency) reports logging and [HTTP Public Key Pinning (HPKP)](https://developer.mozilla.org/en-US/docs/Glossary/HPKP), however both those features are now obsolete
+Sentry.io also supports [Certificate Transparency](https://developer.mozilla.org/en-US/docs/Web/Security/Certificate_Transparency) reports logging and [HTTP Public Key Pinning (HPKP)](https://developer.mozilla.org/en-US/docs/Glossary/HPKP). However, both those features are now obsolete.
 
 > [!MORE]  
 > [Sentry.io "Security Policy Reporting" documentation](https://docs.sentry.io/product/security-policy-reporting/)  
 
-#### Sentry.io does not the Reporting-Endpoints header (yet)
+#### Sentry.io does not have the Reporting-Endpoints header (yet)
 
-The repoting API v1 **Reporting-Endpoints** header is not yet supported by sentry.io, there are several open tickets related to this, one of them is [issue #38940](https://github.com/getsentry/sentry/issues/38940)
+The reporting API v1 **Reporting-Endpoints** header is not yet supported by sentry.io. There are several open tickets related to this; one of them is [issue #38940](https://github.com/getsentry/sentry/issues/38940)
 
 #### Sentry.io (by default) has a filter for reports coming from localhost
 
-Your localhost requests might get filtered by Sentry.io if you or a team member have enabled that feature, if you use **report-uri** you will see the successful requests in the Network tab but they won't show up in Sentry.io
+Your localhost requests might get filtered by Sentry.io if you or a team member have enabled that feature; if you use **report-uri**, you will see the successful requests in the Network tab, but they won't show up in Sentry.io.
 
-For a guide about how to disable the filter, check out the chapter about [disabling the "reports from locahost" filter](/web_development/posts/sentry-io/#disable-the-reports-from-locahost-filter) in my Sentry.io post
+For a guide about how to disable the filter, check out the chapter about [disabling the "reports from localhost" filter](/web_development/posts/sentry-io/#disable-the-reports-from-locahost-filter) in my Sentry.io post
 
 > [!TIP]  
 > You probably don't want to keep the localhost reports filter disabled for too long as developing locally will generate all sorts of error logs that are not very useful, so just remember to turn the filter back on when you don't need the localhost reports anymore
 
-### Sentry.io documentation example is not ideal
+### The Sentry.io documentation example is not ideal
 
-The Sentry.io documentation suggests you add the Reporting API v0 as fallback for the report-uri directive, like so:
+The Sentry.io documentation suggests you add the Reporting API v0 as a fallback for the report-uri directive, like so:
 
 ```shell
 Content-Security-Policy: ...;
     report-uri https://xxx.ingest.sentry.io/api/007/security/?sentry_key=aaa;
-    report-to csp-endpoint
+    report-to CSP-endpoint
 
 Report-To: {"group":"csp-endpoint","max_age":10886400,"endpoints":[{"url":"https://xxx.ingest.sentry.io/api/007/security/?sentry_key=aaa"}],"include_subdomains":true}
 ```
 
-The problem is that chrome (>96) will attempt to use the new **report-to directive**, but chrome (>96) supports the **Reporting-Endpoints** header from the Reporting API v1 and not the **Report-To** header defined in Reporting API v0 specs, so it will fail sending the reports and then it will never fallback to using the report-uri directive, meaning that if you use this suggested setup you will not get any reports from chrome (>96) at all
+The problem is that Chrome (>96) will attempt to use the new **report-to directive**, but Chrome (>96) supports the **Reporting-Endpoints** header from the Reporting API v1 and not the **Report-To** header defined in Reporting API v0 specs. Chrome will fail to send the reports and never fall back to using the report-uri directive, meaning that if you use this suggested setup, you will not get any reports from Chrome (>96).
 
-I instead suggest online using the report-uri directive for the time being and only add the report-to directive in the future when browser support for that feature has significantly improved
+I suggest using the report-uri directive for the time being and adding the report-to directive only when browser support for that feature has significantly improved.
 
 > [!MORE]  
 > [Sentry.io "Content-Security-Policy reporting" documentation](https://docs.sentry.io/product/security-policy-reporting/)  
@@ -278,18 +280,18 @@ I instead suggest online using the report-uri directive for the time being and o
 
 ### Reduce chrome CSP reporting delay
 
-Chrome will wait some time to ensure it collected all the potential CSP reports before attempting to send them to the reporting server, there is however a command-line switch that you can use to shorten that delay when debugging CSP reporting
+Chrome will wait some time to ensure it has collected all the potential CSP reports before attempting to send them to the reporting server. However, there is a command-line switch that you can use to shorten that delay when debugging CSP reporting.
 
 > [!WARN]  
-> This option is NOT a Flag it is a command line option
+> This option is NOT a Flag. It is a command-line option.
 
-On Mac or Linux, to shorten this delay to a minimum you can use the following command in your terminal to manually start chrome:
+On Mac or Linux, to shorten this delay to a minimum, you can use the following command in your terminal to start Chrome manually:
 
 ```shell
 PATH/TO/Chrome --short-reporting-delay
 ```
 
-On Windows if you use PowerShell then the command syntax is a bit more complex:
+On Windows, if you use PowerShell, then the command syntax is a bit more complex:
 
 ```shell
 Start-Process -FilePath 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe' -ArgumentList '--short-reporting-delay'
@@ -298,43 +300,43 @@ Start-Process -FilePath 'C:\Program Files (x86)\Google\Chrome\Application\chrome
 > [!MORE]  
 > [Chromium "Run Chromium with command-line switches" documentation](https://www.chromium.org/developers/how-tos/run-chromium-with-flags/)  
 
-### report-uri works in localhost but report-to does NOT
+### report-uri works in localhost, but report-to does NOT
 
-When using **report-uri**, reporting violations works locally (localhost) as well as in preview / production (secure context / https URL)
+When using **report-uri**, reporting violations work locally (localhost) as well as in preview/production (secure context / https URL)
 
-When using **report-to**, reporting violations will NOT work on localhost (in chrome) without a valid SSL certificate, which is surprising as localhost usually is considered a secure context (if you know why please let me know using the [chris.lu github discussions](https://github.com/chrisweb/chris.lu/discussions))
+When using **report-to**, reporting violations will NOT work on localhost (in Chrome) without a valid SSL certificate, which is surprising as localhost usually is considered a secure context (if you know why, please let me know using the [chris.lu github discussions](https://github.com/chrisweb/chris.lu/discussions))
 
-In staging (preview) / production environements however the **report-to** will work as long as those environments have an SSL certificate
+In staging (preview) / production environments, however, the **report-to** will work if those environments have an SSL certificate.
 
 #### report-uri requests show up in the Network tab
 
-When using **report-uri** directive, you can inspect requests using the developer tools **Network tab** like any other POST request made by your app
+When using the **report-uri** directive, you can inspect requests utilizing the developer tools **Network tab** like any other POST request made by your app.
 
-#### report-to requests are Not in the Network but the Application tab
+#### report-to requests are Not in the Network but in the Application tab
 
-When using **report-to** directive, you won't see any entries in your developer tools **Network** tab, this is because a background service does the request(s) and not the website (your code)
+When using the **report-to** directive, you won't see any entries in your developer tools **Network** tab. This is because a background service makes the request(s) and not the website (your code)
 
-To see the requests open your developer tools, then click on the **Application** tab and then on the left list under **Background services** click on **Reporting API**:
+To see the requests, open your developer tools, then click on the **Application** tab, and then on the left list under **Background services**, click on **Reporting API**:
 
 ![](../../../../public/assets/images/app/web_development/posts/csp/developer_tools_application_reporting_api.png)
 
-### adblockers may block CSP violation logging services
+### Adblockers may block CSP violation logging services
 
-If you are using report-uri and your logging tool does not recieve the reports then they might be **blocked**, to verify if the requests are blocked, open your browsers developer tools and then go into the Network and check if their **status is blocked**, in which case you probably have an adblocker extension installed that is blocking the requests, I for example use [Privacy Badger](https://privacybadger.org/) and have to allow the domain in the extension settings
+If you are using report-uri and your logging tool does not receive the reports, then they might be **blocked**. To verify if the requests are blocked, open the developer tools in your browser and then go into the network tab. Look at the request rows and check if their **status is blocked**. In this case, you probably have an adblocker extension installed that blocks the requests. I, for example, use [Privacy Badger](https://privacybadger.org/) and have to allow the domain in the extension settings
 
 ![](../../../../public/assets/images/app/web_development/posts/csp/privacy_badger_sentry_ingest_blocked.png)
 
-so make sure to either whitelist the Sentry.io CSP reporting URL or disable the adblocker for your domain or even diable it completly until you are done testing
+So make sure to either whitelist the Sentry.io CSP reporting URL or disable the ad blocker for your domain, or even disable it completely until you are done testing.
 
 ### Chrome (Chromium) CSP preflight request headers BUG
 
-This bug is important if you want to create your own CSP logging server
+This bug is important if you want to create your own CSP logging server.
 
-There is a bug in Chrome (Chromium) which will cause Preflight requests to fail if some of the reponse headers use a wildcard
+A bug in Chrome (Chromium) will cause Preflight requests to fail if some of the response headers use a wildcard.
 
-Chrome will send make a call to your server using the OPTIONS method to test your endpoint before sending the actual reports, but if your server response has headers with an Asterisk then the preflight request will fail
+Chrome will send a request to your server using the OPTIONS method to test your endpoint before sending the actual reports, but if your server response has headers with an Asterisk, then the preflight request will fail.
 
-So for example these headers will NOT work:
+So, for example, these headers will NOT work:
 
 ```js
 headers["Access-Control-Allow-Origin"] = "*";
@@ -350,13 +352,13 @@ responseHeaders["Access-Control-Allow-Methods"] = "POST";
 responseHeaders["Access-Control-Allow-Headers"] = "Content-Type";
 ```
 
-Have a look at the [chromium issue #40733909](https://issues.chromium.org/issues/40733909) if you want more details and maybe you are lucky and it got fixed
+Have a look at the [chromium issue #40733909](https://issues.chromium.org/issues/40733909) if you want more details, and maybe you are lucky, and it got fixed
 
 ### Create a quick and dirty CSP reporting server
 
-To help me better understand what kind of information browsers send when using the different version of CSP reports I wrote a small Node.js server tool to display some information about CSP logging calls
+To help me better understand what kind of information browsers send when using the different versions of CSP reports, I wrote a small Node.js server tool to display some information about CSP logging calls.
 
-If you want to set up a CSP logging server for yourself you can use the following code to get you started:
+If you want to set up a CSP logging server for yourself, you can use the following code to get started:
 
 ```js title="csp-logging.mjs"
 import { createServer } from 'node:http';
@@ -419,32 +421,32 @@ server.listen(3000, '127.0.0.1', () => {
 });
 ```
 
-To start the server use the following command:
+To start the server, use the following command:
 
 ```shell
 node csp-logging.mjs
 ```
 
-If you need to setup a server to host the Node.js server you might want to have a look at my [Tutorial: Node.js server on an AWS EC2 instance with an NGINX reverse proxy](/web_development/tutorials/node-js-app-aws-ec2/)
+If you need to set up a server to host the Node.js server, you might want to have a look at my [Tutorial: Node.js server on an AWS EC2 instance with an NGINX reverse proxy](/web_development/tutorials/node-js-app-aws-ec2/)
 
 ### Debugging Sentry.io dropping reports
 
-While testing the CSP reporting feature on Sentry.io I had trouble to understand why some reports would not go through
+While testing the CSP reporting feature on Sentry.io, I had trouble understanding why some reports would not go through.
 
-In the **Stats** page on Sentry.io I would only see that a certain amount of requests had been dropped but not for what reason
+In the **Stats** page on Sentry.io, I would only see that a certain number of requests had been dropped, but I would not know why.
 
-If you want to get a little bit more information as to why requests get dropped you can use the Sentry.io API, I recommend having a look at the [Sentry.io API chapter in my Sentry.io Post](/web_development/posts/sentry-io/#investigating-sentryio-dropped-requests)
+If you want to get a little bit more information as to why requests get dropped, you can use the Sentry.io API. I recommend having a look at the [Sentry.io API chapter in my Sentry.io Post](/web_development/posts/sentry-io/#investigating-sentryio-dropped-requests)
 
-### Debugging chrome requests using Netlog
+### Debugging Chrome requests using Netlog
 
 > [!WARN]  
-> Before you start experimenting with Chrome Netlog, know that as of now the information you get from the logs is not very helpful, you still can't see the exact reason as to why a CSP report call has failed, but hopefully future version will bring improvements, this is why I added this option to this post
+> Before you start experimenting with Chrome Netlog, know that, as of now, the information you get from the logs is not very helpful. You still can't see the exact reason as to why a CSP report call has failed, but hopefully, future versions will bring improvements. This is why I added this option to this post.
 
-Debugging the reporting API in chrome is painful as you don't get any information about why requests have failed, the requests will just go back to a **Queued** state if the fail and chrome will retry to send the report, if sending the reports fails for a while chrome will show a "MarkedForRemoval" state
+Debugging the reporting API in Chrome is painful as you don't get any information about why requests have failed. If they fail, The requests will return to a **Queued** state, and Chrome will retry to send the report. If sending the reports fails for a while, chrome will show a "MarkedForRemoval" state
 
 Chrome (Chromium) has a tool called [Netlog](https://www.chromium.org/developers/design-documents/network-stack/netlog/):
 
-> NetLog is an event logging mechanism for Chrome’s network stack to help debug problems
+> NetLog is an event-logging mechanism for Chrome’s network stack to help debug problems
 
 You can access Netlog by entering the following URL into your address bar:
 
@@ -452,13 +454,13 @@ You can access Netlog by entering the following URL into your address bar:
 chrome://net-export/
 ```
 
-Now click on the **Start Logging To Disk** button and then in another tab open the website making the CSP reporting calls
+Now click on the **Start Logging To Disk** button, and then in another tab, open the website, making the CSP reporting calls.
 
-Then after a while click on **Stop Logging**
+Then, after a while, click on **Stop Logging**.
 
-To analyze the content of the log file head over to the [Netlog viewer website](https://netlog-viewer.appspot.com/) that google has created to help you analyze logs
+To analyze the content of the log file, head over to the [Netlog viewer website](https://netlog-viewer.appspot.com/) that Google has created to help you analyze logs
 
-Then in the left navigation click on **Reporting**
+Then, in the left navigation, click on **Reporting**.
 
 > [!MORE]  
 > [Chromium "NetLog" documentation](https://www.chromium.org/for-testers/providing-network-details/)  
