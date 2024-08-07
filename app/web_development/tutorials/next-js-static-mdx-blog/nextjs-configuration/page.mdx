@@ -72,7 +72,7 @@ What surprises developers the most when they use React Strict Mode for the first
 
 What happens is that every component gets rendered (and effects triggered), then the components get unmounted and then get mounted a second time, which triggers the rendering process and all of the effects a second time
 
-This is done to detect problems, here is the explanation from the React.dev documentation as to why this is done:
+This is done to detect problems. Here is the explanation from the React.dev documentation as to why this is done:
 
 > React components you write must always return the same JSX given the same inputs (props, state, and context). Components breaking this rule behave unpredictably and cause bugs.
 
@@ -126,7 +126,7 @@ I prefer to turn it off because, unfortunately, some people on the web have mali
 
 I agree that it does NOT make a huge difference if you turn it on or off because hackers usually just launch batteries of tests against your website, which will probe it for a wide range of known vulnerabilities
 
-Few will use a bot that checks for **x-powered-by** headers to target the exact version you are using specifically, and it is also true that hackers can use profiling tools to get approximative information about what tech stack you are using
+Few will use a bot that checks for **x-powered-by** headers to target the exact version you are using specifically, and it is also true that hackers can use profiling tools to get approximative information about what tech stack you are using.
 
 Setting the poweredByHeader option in the Next.js configuration to off is not a miracle solution that will prevent all potential attacks, but if there is a chance (no matter how small) that turning it off will make my app just a little bit safer, then that's good enough for me and as I said earlier the second reason is that I see no reason why I would want to turn it on
 

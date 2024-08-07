@@ -35,9 +35,9 @@ If the dev server is not already running, first start the dev server (using the 
 
 ![MDX code block example with no code highlighting](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/MDX_code_block_no_code_highlighting.png)
 
-The markdown code block syntax got converted into \<pre> HTML element, and inside of that container, there is a \<code class="language-js"> HTML element, but there is no colorful syntax highlighting yet
+The markdown code block syntax got converted into \<pre> HTML element, and inside of that container, there is a \<code class="language-js"> HTML element, but there is no colorful syntax highlighting yet.
 
-This is why we will now add the *rehype pretty code* plugin
+This is why we will now add the *rehype pretty code* plugin.
 
 > [!MORE]  
 > ["rehype pretty code" website](https://rehype-pretty.pages.dev/)  
@@ -122,7 +122,7 @@ Now have another look at the playground page in your browser, and you will notic
 
 ## Using VSCode themes for code highlighting
 
-Next, we are going to configure the rehype plugin to use a VSCode theme
+Next, we will configure the rehype plugin to use a VSCode theme.
 
 > [!TIP]  
 > You can install any VSCode theme you like
@@ -164,11 +164,11 @@ Line 18: we add the options to our rehype plugins configuration
 
 Now have another look at the playground page in your browser, and you will notice that this time, the code is highlighted using the colors of the theme (using the same colors we have in VSCode using the Dracula Theme for Visual Studio Code):
 
-![rehype-pretty-code code highlighting example with dracula theme for VSCode colors](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/rehype-pretty-code_plugin_dracula_theme.png)
+![rehype-pretty-code code highlighting example with Dracula theme for VSCode colors](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/rehype-pretty-code_plugin_dracula_theme.png)
 
 ### Using a VSCode theme from a git(hub) repository
 
-If there is a theme you wish to use a theme that is NOT among the ones bundled in shiki, then you can do that, too
+If there is a theme you wish to use a theme that is NOT among the ones bundled in shiki, then you can do that, too.
 
 In this example, we will install a theme called [One Dark Pro (Atom's iconic One Dark theme for Visual Studio Code)](https://github.com/Binaryify/OneDark-Pro/)
 
@@ -233,7 +233,7 @@ Line 14: we parse the themes json file content using the javascript **JSON parse
 
 Now have another look at the playground, and you will notice that this time, the code is highlighted using the colors of the One Dark Pro theme:
 
-![rehype-pretty-code code highlighting example with dracula theme for VSCode colors](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/rehype-pretty-code_plugin_one-dark-pro_theme.png)
+![rehype-pretty-code code highlighting example with Dracula theme for VSCode colors](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/rehype-pretty-code_plugin_one-dark-pro_theme.png)
 
 > [!NOTE]  
 > As themes are JSON files that you import in your configuration, and if you are into creating personalized color palettes, then you have the option to create or at least edit an existing theme  
@@ -266,17 +266,17 @@ Next, we add the following CSS to our `global.css` file:
 }
 ```
 
-Lines 135 to 139: we only reset the **margin** and **padding** on the `<figure>` element that is the container of a rehype-pretty-code code block, it has a **data attribute** (**rehype-pretty-code** adds a container around code blocks, which consists of a `<figure>` element width a **data** attribute that has the value **rehype-pretty-code-figure**) that we use to target it as well as the `<pre>` element inside of it
+Lines 135 to 139: we only reset the **margin** and **padding** on the `<figure>` element that is the container of a rehype-pretty-code code block; it has a **data attribute** (**rehype-pretty-code** adds a container around code blocks, which consists of a `<figure>` element width a **data** attribute that has the value **rehype-pretty-code-figure**) that we use to target it as well as the `<pre>` element inside of it
 
-Lines 141 to 145: we set the **width** of the `<pre>` element to **100%** to make sure our code block is as wide as our articles and then we set the **overflow** property to **auto**, meaning that if the code inside of the code block is too large the code block is allowed to add (and display) scrollbars if the code fits the code block then the scrollbars will be hidden, finally use our spacing variable to add some padding all around our code 
+Lines 141 to 145: we set the **width** of the `<pre>` element to **100%** to make sure our code block is as wide as our articles, and then we set the **overflow** property to **auto**, meaning that if the code inside of the code block is too large the code block is allowed to add (and display) scrollbars if the code fits the code block then the scrollbars will be hidden, finally use our spacing variable to add some padding all around our code 
 
-When it comes to styling and using themes, you have the option to either keep the original background color that is included in the theme or deactivate it
+When styling and using themes, you can either keep the original background color or deactivate it.
 
-This is especially interesting if the theme background color does not match your website's color palette at all and you want to use a different background color for your code blocks
+This is especially interesting if the theme background color does not match your website's color palette at all and you want to use a different background color for your code blocks.
 
-As we will see, it is not difficult to use a custom color
+As we will see, it is easy to use a custom color.
 
-However, finding one that looks good and still works well with colors used to highlight the code can be tricky
+However, it can be tricky to find a background color that both looks good based on your project theme colors and also looks good and has good contrast for the colors used by the code highlight theme.
 
 To disable the default theme background color, we edit the rehype pretty code configuration in our `next.config.mjs` file:
 
@@ -307,8 +307,8 @@ Then we add our background color to our rehype-pretty-code CSS in the `global.cs
 }
 ```
 
-Line 145: we add our `background-color`, I chose a very dark color to make we have a high contrast between the code colors and the background
-
+Line 145: we add our `background-color`. I chose a very dark color to make we have a high contrast between the code colors and the background
+.
 ## Line numbers
 
 On its website, the **rehype-pretty-code** plugin author recommends adding some more CSS if you want to display line numbers (in your code blocks on the left):
@@ -342,7 +342,7 @@ code[data-line-numbers-max-digits="3"]>[data-line]::before {
 
 We are using an interesting CSS feature here: the [CSS counters](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_counter_styles/Using_CSS_counters) feature is perfect for numbering code block lines but can be used for other things too, for example, if you want to add numbering to headings or lists
 
-Next, we need to go back to our playground and add a keyword on top of our code block to tell rehype pretty code to enable the **line numbers** for that code block, meaning only code blocks for which you use the **showLineNumbers** keywords will have line numbers
+Next, we need to go back to our playground and add a keyword on top of our code block to tell rehype pretty code to enable the **line numbers** for that code block, meaning only code blocks for which you use the **showLineNumbers** keywords will have line numbers.
 
 ````md title="/app/tutorial_examples/code-highlighting_playground/page.mdx" showLineNumbers /showLineNumbers/#special
 ```js showLineNumbers
@@ -357,7 +357,7 @@ function helloWorld() {
 
 ````
 
-Line 1: we add the `showLineNumbers` keyword to code block markdown
+Line 1: we add the `showLineNumbers` keyword to the code block markdown
 
 If your code block only contains a code fragment and you want to indicate that the first line is NOT 1 but another number, then you add the number you wish to use for the first line inside curly brackets to the showLineNumbers keyword, like so:
 
@@ -374,7 +374,7 @@ function helloWorld() {
 
 ````
 
-Line 1: we updated the `showLineNumbers` adding `{10}` to tell the code block that the first line is number 10
+Line 1: we updated the `showLineNumbers` and attached `{10}` to it to tell the code block that the first line is number 10
 
 > [!MORE]  
 > [MDN "CSS counters" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_counter_styles/Using_CSS_counters)  
@@ -399,9 +399,9 @@ First, we update our global.css and add some styling for highlighted lines, like
 }
 ```
 
-Lines 174 to 178: we use a selector to target all lines, lines have a `data-line` attribute, and the CSS we add will border on the left, which will create a vertical line that we will then be able to colorize when the line is highlighted but by default we set it to `transparent`, to create this vertical line is of course not mandatory, if you don't like it leave it away
+Lines 174 to 178: we use a selector to target all lines. Lines have a `data-line` attribute, and the CSS we add will border on the left, which will create a vertical line that we will then be able to colorize when the line is highlighted, but by default, we set it to `transparent`, to create this vertical line is of course not mandatory if you don't like it leave it away.
 
-Lines 180 to 183: we use a selector to target all lines that have a `data-highlighted-line` attribute, we change the background color of the line as well as the color of the new border (vertical line) we added on the left
+Lines 180 to 183: we use a selector to target all lines that have a `data-highlighted-line` attribute; we change the background color of the line as well as the color of the new border (vertical line) we added on the left
 
 Then we need to add the numbers of the lines we want to highlight inside of curly brackets (`{}`), like so:
 
@@ -422,7 +422,7 @@ Line 1: we removed the `{10}` curly brackets to make our line numbers start with
 
 As you can see, you can highlight a single line by using the line number, or you can set a range using two values to highlight from line X to line Y
 
-If you want more than one highlighted line style, then you can use IDs to create an unlimited number of variations
+If you want more than one highlighted line style, you can use IDs to create unlimited variations.
 
 Let's start the other way around this time by first adding an ID to our curly brackets in the playground code block example:
 
@@ -454,13 +454,13 @@ Next, we update our global.css again and add another highlight style, but this o
 }
 ```
 
-Lines 185 to 188: we add a selector to target the `data-highlighted-line-id` attribute if it has the value `errorLine`, we also set a reddish color for the background and vertical line to make this code block line look like a code line with an error
+Lines 185 to 188: we add a selector to target the `data-highlighted-line-id` attribute if it has the value `errorLine`; we also set a reddish color for the background and vertical line to make this code block line look like a code line with an error
 
-If you launch the dev server then open the playground URL in your browser, and you will see that the first line is highlighted but uses the `errorLine` ID style, line 3 to 4 are highlighted too, but as they have no ID, they use the default highlight line style
+If you launch the dev server and then open the playground URL in your browser, you will see that the first line is highlighted but uses the `errorLine` ID style. Lines 3 to 4 are highlighted, too, but as they have no ID, they use the default highlight line style.
 
 ## Characters highlighting
 
-Not only can you highlight lines, but you can also highlight a series of characters
+Not only can you highlight lines, but you can also highlight a series of characters.
 
 Go back to editing the playground markdown and change the code block to this:
 
@@ -514,7 +514,7 @@ And then you need to add the style for that new ID:
 
 Lines 194 to 196: we set the background color for highlighted characters when using the **mySpecialHighlight** ID
 
-If you look at the result in your browser, you will notice that both occurrences of the greeting variable were highlighted
+If you look at the result in your browser, you will notice that both occurrences of the greeting variable were highlighted.
 
 To only highlight the second one, add the number 2 behind the second slash, like so:
 
@@ -533,7 +533,7 @@ function helloWorld() {
 
 ## Code block language flag
 
-In the previous example(s), we already saw the first option, which consists of setting the programming language, for instance, to **javascript** by using the `js` language flag (placed after the 3 backticks of our fenced code block), it is essential to set the language flag as rehype pretty code (shiki) needs that information to know what colors to use when highlighting your code
+In the previous example(s), we already saw the first option, which consists of setting the programming language, for instance, to **javascript** by using the `js` language flag (placed after the 3 backticks of our fenced code block), it is essential to set the language flag as rehype pretty code (shiki) needs that information to know what colors to use when highlighting your code.
 
 So far, we have always used javascript by adding the language flag `js`, but if you want, for example, to change the programming language from **javascript** to **typescript**, then all you need to do is change the language flag (after the backticks) to `tsx`, like so:
 
@@ -554,7 +554,7 @@ Line 1: we changed the language flag from js to **tsx**
 >  
 > You can check out the complete list of language flags that are available by looking at the [shiki languages file](https://github.com/shikijs/shiki/blob/main/packages/shiki/src/assets/langs-bundle-full.ts#L1248)  
 
-There is a second option to specify the programming language, and this option is helpful if all your code blocks contain code written in the same language, and you don't want always to have to set the language flag for every code block
+There is a second option to specify the programming language. This option is helpful if all your code blocks contain code written in the same language and you want to avoid having to set the language flag for every code block.
 
 In this case, you can use the rehype pretty code configuration to set a default language:
 
@@ -621,7 +621,7 @@ If you want to remove the linting warning, use a [comment to disable the remark-
 
 ## Highlighting inline code
 
-Rehype pretty code can also highlight inline code
+Rehype pretty code can also highlight inline code.
 
 To showcase this, let's edit our playground to add an inline code example like so:
 
@@ -642,9 +642,9 @@ Some text `variable{:js}` some more text `helloWorld(){:js}` even more text
 
 As you might notice, if you run the dev server and then inspect the HTML in the browser, that rehype pretty code did not get applied, and instead, we still have a regular `<code>` element
 
-As we just saw in the previous chapter, rehype pretty code needs some information to know what colors to apply
+As we saw in the previous chapter, rehype pretty code needs information on what colors to apply.
 
-We also saw in the previous example that we have 2 options to specify the programming language for a code block
+In the previous example, we also saw that we have 2 options for specifying the programming language for a code block.
 
 For inline code, we have one more option:
 
@@ -671,7 +671,7 @@ Both code blocks and inline code use similar HTML elements, but there is one sig
 
 ### Inline code language
 
-As we saw in the list above, our **first option** is to add a **language flag** to let rehype pretty code (shiki) know what colors to use
+As we saw in the list above, our **first option** is to add a **language flag** to let rehype pretty code (shiki) know what colors to use.
 
 For inline code, the language flag needs to be inside curly brackets, and the brackets need to be at the end of our inline code before the "closing" backtick, like so:
 
@@ -679,11 +679,7 @@ For inline code, the language flag needs to be inside curly brackets, and the br
 Some text `variable{:js}` some more text `function helloWorld(){:js}` even more text
 ```
 
-If you launch the dev server and have a look at the playground page in your browser, you will see this works
-
-Our inline code has been highlighted, and the colors are correct
-
-The `variable` now has the same color as our variables in the code block above, and so does the `hello-world()` function
+Launch the dev server and look at your browser's playground page. You will see that the code is highlighted as intended. However, we will soon see a case where setting the language flag is not enough to get the correct colors. Our inline code has been highlighted, and the colors are correct. The `variable` now has the same color as our variables in the code block above, and so does the `hello-world()` function.
 
 Next, let's remove the language flags we added in the markdown for our inline code like so:
 
@@ -727,7 +723,7 @@ const nextConfig = (phase) => {
 
 Line 18: we add the `inline` option inside of the `defaultLang` configuration for rehype pretty code and set its value to `js`
 
-If we look at our playground in the browser, we can see that the 2nd option works well, too
+If we look at our playground in the browser, we see that the 2nd option works well, too.
 
 But look at what happens if we now remove the brackets of our `helloWorld` function:
 
@@ -735,13 +731,13 @@ But look at what happens if we now remove the brackets of our `helloWorld` funct
 Some text `variable` some more text `helloWorld` even more text
 ```
 
-This time, even though we have specified the language (in the configuration), the color is wrong
+This time, even though we have specified the language (in the configuration), the color is wrong.
 
-This is because, based on the little bit of code, the highlighter can NOT know that it is actually a function and instead assumes it is a variable
+This is because, based on the little bit of code, the highlighter can NOT know that it is actually a function and instead assumes it is a variable.
 
 ### Inline code tokens
 
-For the **3rd option** to fix the color, we will tell the highlighter explicitly that this is a function
+For the **3rd option** to fix the color, we will tell the highlighter explicitly that this is a function.
 
 To do that, we are going to use a **token** instead of the language flag, like so:
 
@@ -749,15 +745,15 @@ To do that, we are going to use a **token** instead of the language flag, like s
 Some text `variable` some more text `helloWorld{:.entity.name.function}` even more text
 ```
 
-Now, the color is the one we would expect it to be for a function
+Now, the color is what we would expect it to be for a function.
 
 Tokens are similar to language flags, but the difference is that they are inside of curly brackets at the end of inline code, and **tokens start with a colon and a dot** (`:.`) while **language flags only begin with a colon** (`:`)
 
-Finally, you might wonder how you know what tokens are available
+Finally, you might wonder how you know what tokens are available.
 
 In a previous chapter, we used a VSCode theme and VSCode has a guide on their website about [what tokens to use when building themes](https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers), on top of the page there is a list of **Standard token types** and on the bottom you will find a list of **Predefined TextMate scope mappings** 
 
-Another way to find out what tokens your theme uses is to look at the json file of the VSCode theme you are using
+Another way to find out what tokens your theme uses is to look at the json file of the VSCode theme you use.
 
 In that json file, there is a section called **tokenColors**, which is the list of all the tokens and colors the theme uses
 
@@ -795,16 +791,16 @@ const rehypePrettyCodeOptions = {
 >  
 > There is only a global **constant** but no specific definition for a numeric constant, which means you might need to make some adjustments to your tokens map depending on what theme you use  
 
-Lines 20 to 28: we add several custom token aliases to our rehype pretty code configuration, I tried to use abbreviations that are easy to remember without having to check out the configuration file constantly
+Lines 20 to 28: we add several custom token aliases to our rehype pretty code configuration; I tried to use abbreviations that are easy to remember without having to check out the configuration file constantly
 
 However, as I mentioned early in this tutorial, it doesn't hurt to also document them in the `README.md` file of the project:
 
 ````md showLineNumbers{17} 
 ### Inline code token aliases
 
-This section contains a list of token aliases you can use for inline code in markdown (MDX) files
+This section contains a list of token aliases for inline code in Markdown (MDX) files.
 
-Tokens get added at the end of inline code markup
+Tokens get added at the end of inline code markup.
 
 They start with a curly bracket, then a colon followed by a dot, the token alias, and then a closing curly bracket:
 
@@ -846,7 +842,7 @@ function helloWorld() {
 
 ````
 
-If we used the correct tokens to create our aliases map, then the examples list where we use the aliases should have matching colors with what can be seen in the code block that is above
+If we used the correct tokens to create our aliases map, the colors in the list of inline code examples (where we use the aliases) should match the colors in the code block above.
 
 ![the result when using rehype pretty code for a code block and some inline code examples](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/rehype-pretty-code_code_block_and_inline_code_examples.png)
 

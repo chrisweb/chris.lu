@@ -66,7 +66,7 @@ Line 8: we only changed the description default value to something else
 
 If you now launch the dev server, then open the "home" page [http://localhost:3000/](http://localhost:3000/) in your browser, then right-click and select **inspect**
 
-Look at what is inside the `<head>` element of your page, there are for example some Next.js `<script>` tags, but also the following 4 tags are now present:
+Look at what is inside your page's `<head>` element. There are, for example, some Next.js `<script>` tags, but also the following 4 tags are now present:
 
 ```html
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -97,7 +97,7 @@ As we saw when inspecting the `<head>` element of our page had meta tags, but ou
 
 ## Metadata in typescript pages
 
-Let's keep the **home** page as is and instead edit the second page we created earlier, which is the `/app/blog/page.tsx` file and add some metadata to it:
+Let's keep the **home** page as is and instead edit the second page we created earlier, which is the `/app/blog/page.tsx` file, and add some metadata to it:
 
 ```tsx title="/app/blog/page.tsx" showLineNumbers
 import type { Metadata } from 'next'
@@ -122,7 +122,7 @@ Lines 3 to 5: we create a `metadata` object and add a custom title for the blog 
 
 Now launch the dev server, then open the **blog** page [http://localhost:3000/blog](http://localhost:3000/blog) in your browser, then right click and select **inspect**
 
-As you can see the title tag has used the template from our layout file as well as the custom title from the blog page, the description is unchanged as we did NOT overwrite the default value from our layout 
+As you can see, the title tag has used the template from our layout file and the custom title from the blog page. The description is unchanged, as we did NOT overwrite the default value from our layout 
 
 > [!MORE]  
 > [Next.js "Optimizing Metadata" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/metadata)  

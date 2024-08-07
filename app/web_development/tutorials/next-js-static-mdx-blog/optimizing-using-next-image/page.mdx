@@ -128,7 +128,7 @@ If next/image knows the width and height of an image, it can reserve the space t
 > [!TIP]  
 > By correctly sizing the images next/image will help prevent [cumulative layout shifts (CLS)](https://web.dev/articles/cls), which is a **Core Web Vital metric**
 >  
-> Without a width and height value, the image would get displayed as an empty element until it has finished loading and not be using any space in the document, then when the image appears, it would need some space in the document to get displayed, meaning other content would then get pushed around
+> Without a width and height value, the image would be displayed as an empty element and would not use any space in the document until it has finished loading. Then, when the image appears, it would need some space in the document to be displayed, meaning other content would get pushed around.
 >  
 > Layout shifts are bad because if they happen at a moment when the user attempts to, for example, click on something, then there is a chance that the user will misclick, which is why it is important to make sure that all images reserve the space they will need as soon as the HTML document gets rendered in the browser  
 
@@ -399,20 +399,20 @@ Congratulations 🎉 you just created a complete workflow that allows you to use
 
 ## VSCode image drag & drop
 
-In the previous chapter, we wrote the markdown image element manually and had to set the relative path manually, too
+In the previous chapter, we manually wrote the markdown image element and had to set the relative path manually, too.
 
-If you are using VSCode, there is a much more convenient and faster way of adding images to your MDX documents
+Using VSCode, you can add images to your MDX documents much more conveniently and quickly.
 
-All you need to do is drag and drop an image into an MDX document, and then VSCode creates the markdown image element, including the correct path for you, a bonus feature is that you get an image preview if you hover over the image path with your mouse, in this chapter we will learn how to use that feature (however if you already know it or if you are not using VSCode then feel free to skip this chapter)
+All you need to do is drag and drop an image into an MDX document, and then VSCode creates the markdown image element, including the correct path for you. A bonus feature is that you get an image preview if you hover over the image path with your mouse. In this chapter, we will learn how to use that feature (however,r if you already know it or if you are not using VSCod,e then feel free to skip this chapter)
 
-We go back to our `page.mdx` file (that is in the `/app/tutorial_examples/mdx-components_playground` folder) in VSCode and first remove the next/image import (on the first line) as well as the image component itself (that we added at line 16), we will not need them anymore
+We go back to our `page.mdx` file (that is in the `/app/tutorial_examples/mdx-components_playground` folder) in VSCode and first remove the next/image import (on the first line) as well as the image component itself (that we added at line 16), we will not need them anymore.
 
 Then, to drag & drop our image, we do the following steps:
 
-* keep the `page.mdx` file open, and then in the VSCode file explorer (on the right), expand the `public` folder and then the `images` folder, you should now see the file you added to `/public/images` being listed
+* keep the `page.mdx` file open, and then in the VSCode file explorer (on the right), expand the `public` folder and then the `images` folder; you should now see the file you added to `/public/images` being listed
 * now do a left-click on the image name and keep the button pressed
 * then drag the image into the `page.mdx` to the location where you want to insert it (for this example, I will drop the image at line 16)
-* while dragging the image over the page, VSCode will show you a message that says **Hold `shift` to drop into the editor", so let's do just that, while still keeping the left mouse key pressed,  also press the `shift` key and finally release the left mouse key to drop the image
+* while dragging the image over the page, VSCode will show you a message that says **Hold `shift` to drop into the editor", so let's do just that while still keeping the left mouse key pressed also press the `shift` key and finally release the left mouse key to drop the image
 * you will notice that VSCode will automatically generate the markdown image element for you
 
 After dropping the image into the page, your content should be like this:
@@ -451,13 +451,13 @@ Or if VSCode inserted the absolute path and not the relative path, like so:
 ![](file:///c%3A/Users/MY_USER/MY_PROJECT/public/images/playground_test.jpg)
 ```
 
-Then I recommend you check out the next chapter
+Then, I recommend you check out the next chapter.
 
 ### Telling VSCode that our MDX files contain markdown 
 
-If you only see a path to a file, then this is because VSCode recognized your page as MDX content instead of markdown
+If you only see a path to a file, then this is because VSCode recognized your page as MDX content instead of markdown.
 
-We know by now that MDX is markdown + JSX, but VSCode (as of now, sees things a bit differently, but I hope this will change in the future) and does not enable some of the markdown features when the file content is set to MDX
+We know by now that MDX is markdown + JSX, but VSCode (as of now, sees things a bit differently, but I hope this will change in the future) and does not enable some of the markdown features when the file content is set to MDX.
 
 I recommend you open the `.vscode/settings.json` VSCode workspace settings file (that we already used in one of the first steps of this tutorial to tell VSCode to use the typescript version that is in our workspace) and add the following entry to it:
 
@@ -467,13 +467,13 @@ I recommend you open the `.vscode/settings.json` VSCode workspace settings file 
     },
 ```
 
-Now save the `.vscode/settings.json` file, and then to make sure that VSCode takes the changes into account, I recommend closing the `page.mdx` file and reopening it
+Now save the `.vscode/settings.json` file, and then to make sure that VSCode takes the changes into account, I recommend closing the `page.mdx` file and reopening it.
 
-Then delete the image path and repeat the drag and drop of the image into the `page.mdx` file
+Then, delete the image path and repeat the drag and drop of the image into the `page.mdx` file.
 
-This time, you should see the markdown image element instead of just a path
+This time, you should see the markdown image element instead of just a path.
 
-If the path it inserts is the absolute path (and not the relative path), then this needs to get changed, you will notice that there is a **drop options** icon at the end of the line that looks like this:
+If the path it inserts is the absolute path (and not the relative path), then this needs to be changed. You will notice that there is a **drop options** icon at the end of the line that looks like this:
 
 ![image of the the VSCode drop options icon](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_image_drop_options_icon.png)
 
@@ -493,31 +493,31 @@ You should now have a markdown image element that looks like this:
 
 ### Markdown image preview in VSCode
 
-VSCode recently added a new feature that lets you preview your images
+VSCode recently added a new feature that lets you preview your images.
 
-To see the preview, hover over the image path with your mouse, and a modal box should open with a preview of the image
+To see the preview, hover over the image path with your mouse, and a modal box should open with a preview of the image.
 
 ![vscode image preview](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/vscode_image_preview.png)
 
 ## Markdown image alt and title
 
-We then replace the **alt text** placeholder with the alt text we already used in the previous chapter, but this time for the markdown element
+We then replace the **alt text** placeholder with the alt text we used in the previous chapter, but this time for the markdown element.
 
 When using markdown, the alt text goes into the brackets after the exclamation mark, like so:
 
 ```md
-![Street at night, wet floor has reflections of the bright lights from multiple billboards and neon signs, one prominent billboard features an advertisement for the TV series Stranger Things 2](../../../public/images/playground_test.png)
+![Street at night, the wet floor has reflections of the bright lights from multiple billboards and neon signs; one prominent billboard features an advertisement for the TV series Stranger Things 2](../../../public/images/playground_test.png)
 ```
 
 > [!NOTE]  
-> It is recommended, to always add an alt **attribute** to images, but the alt **text** itself is optional, meaning that for most images, it is considered a best practice for **accessibility** reasons as well as for **SEO** optimization to add a descriptive alt text, however if the image is purely decorative then you should still add an alt **attribute** but the alt **text** should be an empty string, also if the image is purely decorative you can add the **aria-hidden** attribute and set it to true to tell the assertive technology (screen reader) to ignore it, MDN has a very in-depth article about [aria-hidden](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-hidden) you may want to check out
+> It is always recommended to add an alt **attribute** to images, but the alt **text** itself is optional, meaning that for most images, it is considered a best practice for **accessibility** reasons as well as for **SEO** optimization to add a descriptive alt text, however, if the image is purely decorative then you should still add an alt **attribute** but the alt **text** should be an empty string, also if the image is purely decorative you can add the **aria-hidden** attribute and set it to true to tell the assertive technology (screen reader) to ignore it, MDN has a very in-depth article about [aria-hidden](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-hidden) you may want to check out
 > 
 > If you are unsure about how to write good alt texts I recommend having a look at this [blog post about how to write good alt texts](https://design102.blog.gov.uk/2022/01/14/whats-the-alternative-how-to-write-good-alt-text/), a quick read is the HTML specification chapter about [alt text for images](https://html.spec.whatwg.org/multipage/images.html#alt), the w3c also has an interesting document helping you to decide [when and what kind of alt text to use](https://www.w3.org/WAI/tutorials/images/decision-tree/), finally the w3c has a page that list useful [resources about alt texts](https://www.w3.org/WAI/alt/)
 
 And if you want to have a title, you can add it like so:
 
 ```md
-![Street at night, wet floor has reflections of the bright lights from multiple billboards and neon signs, one prominent billboard features an advertisement for the TV series Stranger Things 2](../../../public/images/playground_test.png 'this is the image title')
+![Street at night, the wet floor reflects the bright lights from multiple billboards and neon signs. One prominent billboard features an advertisement for the TV series Stranger Things 2](../../../public/images/playground_test.png 'this is the image title')
 ```
 
 > [!MORE]  
@@ -599,11 +599,11 @@ const nextConfig = (phase) => {
 
 Lines 42 to 45: we add a new entry for images to our configuration and set the `format` option value to `['image/avif', 'image/webp']`
 
-If you now open the playground page in your browser (that has support for avif files) and look at the response headers of the image, you will notice that the **Content-Disposition** has a filename with the .avif extension and the **Content-Type** is now **image/avif**:
+Now open the playground page in your browser (a browser that has support for avif files), and look at the response headers of the image. You will notice that the **Content-Disposition** has a filename with the .avif extension, and the **Content-Type** is now **image/avif**:
 
 ![Content-Disposition and Content-Type headers for an avif image](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_response_headers_content_type_image_avif.png)
 
-This is the first optimization that will reduce the size of our images, making them load faster, which will improve the Largest Contentful Paint (LCP) score
+This is the first optimization that will reduce the size of our images, making them load faster, which will improve the Largest Contentful Paint (LCP) score.
 
 > [!MORE]  
 > [Next.js "image component" reference](https://nextjs.org/docs/app/api-reference/components/image)  
@@ -613,7 +613,7 @@ This is the first optimization that will reduce the size of our images, making t
 
 ## Image priority and lazy loading
 
-For the second LCP optimization, go back to the **browser dev tools** and then switch to the [Console Tab](https://developer.chrome.com/docs/devtools/console), as you can see, there is a warning about our image:
+For the second LCP optimization, go back to the **browser dev tools** and then switch to the [Console Tab](https://developer.chrome.com/docs/devtools/console). As you can see, there is a warning about our image:
 
 > Image with src "/_next/static/media/playground_test.50052472.png" was detected as the Largest Contentful Paint (LCP). Please add the "priority" property if this image is above the fold.
 
@@ -729,11 +729,11 @@ Now, all we need to do is update the title of our markdown image element and use
 
 Line 14: we added the `{ banner }`#special keyword (inside curly brackets) to our image so that our **BaseImage** component knows that it should add the **priority** property
 
-If you now go back into the browser and hover over the image, you should see the title appear but without the `{ banner }`#special information
+If you go back into the browser and hover over the image, you should see the title appear, but it won’t have the `{ banner }`#special information as it got stripped from the title.
 
-If you open the developer tools, you should see in the console tab that the warning is gone, and if you open the elements tab (or right-click on the image and then select inspect,) you should see that the image now has the attribute **fetchpriority** set to **high** and the **loading** attribute that was set to **lazy** got removed
+If you open the developer tools, you should see in the console tab that the warning is gone. If you open the elements tab (or right-click on the image and then select inspect,) you should see that the image now has the attribute **fetchpriority** set to **high** and the **loading** attribute that was set to **lazy** got removed.
 
-This is the second LCP optimization, it will make sure that images that are above the fold get loaded quickly, which should ensure that the main content of our web page finishes loading as early as possible 
+This is the second LCP optimization. It will ensure that images above the fold load quickly, ensuring that our web page's main content finishes loading as early as possible. 
 
 > [!MORE]  
 > [MDN "lazy loading" documentation](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading)  
@@ -742,7 +742,7 @@ This is the second LCP optimization, it will make sure that images that are abov
 
 ## Image size adjustment using CSS
 
-Make sure the development server is running, and then check out the image in our playground page [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground), as you can see the image is way too big, this is because right now the height and width are set to the original dimensions of the image, but what we want is to display an image that has the same width as the container it is in
+Make sure the development server is running, and then check out the image on our playground page [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground), as you can see the image is way too big, this is because right now the height and width are set to the original dimensions of the image, but what we want is to display an image that has the same width as the container it is in
 
 For that reason, we are going to use the [style attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/style) and set the width for our image(s) to 100%, like so:
 
@@ -784,7 +784,7 @@ export default BaseImage
 
 Lines 46 to 49: we set the width to 100% so that the image width matches the width of our container, and we set the [height to auto](https://developer.mozilla.org/en-US/docs/Web/CSS/height#auto) to keep the original ratio of the image, meaning that is not us but the browser that will decide what the exact height should be, based on the image’s width
 
-Now go back to the playground in the browser, and the rendered image should be smaller
+Now, go back to the playground in the browser, and the rendered image should be smaller.
 
 Next right, click on the image and choose **Inspect** to open the developer tools Elements tab and then hover over one of the image URLs in the srcset of the image element, and a modal that looks like this will pop up:
 
@@ -793,23 +793,23 @@ Next right, click on the image and choose **Inspect** to open the developer tool
 There are two important pieces of information here:
 
 * the first one is the **Rendered size**, which is 1088 pixels (if you have a high-density screen, this value will be higher), which corresponds to the size the image gets displayed on the screen
-* the second important information is the **Intrinsic size**, which is the original size of the image, as you can see in the example above, the rendered size is NOT the same as the intrinsic size, this difference in sizes shows us that we are fetching an image that is far bigger then what we need it to be, this is going to lead to a bad LCP score because the heaviest item on the page is our image and it is heavier than it should be
+* the second important information is the **Intrinsic size**, which is the original size of the image; as you can see in the example above, the rendered size is NOT the same as the intrinsic size; this difference in sizes shows us that we are fetching an image that is far bigger then what we need it to be, this is going to lead to a bad LCP score because the heaviest item on the page is our image and it is heavier than it should be
 
-In the next chapter, we will apply a third LCP optimization to our images to ensure we are NOT loading images that are too big, which would harm the loading speed of our page
+In the next chapter, we will apply a third LCP optimization to our images to ensure we are not loading images that are too big, which would harm our page's loading speed.
 
 ## Image sizes and srcset attributes
 
-As we saw in the previous chapter, we told the browser to make the displayed size of our image smaller, but we are still loading an image that is way bigger than what we need, so now the goal is to fetch an image that is as big as what we need or a bit bigger
+As we saw in the previous chapter, we told the browser to make the displayed size of our image smaller, but we are still loading an image that is way bigger than what we need, so now the goal is to fetch an image that is as big as what we need or a bit bigger.
 
-However, not every screen has the same size, which means we will have to get different versions of our image depending on how big the user’s screen is, for example, bigger versions that get displayed on desktop computers and smaller versions that get used for mobile devices
+However, not every screen is the same size, which means we will have to get different versions of our image depending on the size of the user’s screen. For example, bigger versions are needed for desktop computers, and smaller versions are needed for mobile devices.
 
-But wait, there is more, today our users don't just have screens of different sizes but also screens with varying pixel densities
+But wait, there is more. Today, our users don't just have screens of different sizes but also screens with varying pixel densities.
 
-For example, some high-density screens can have a resolution of 2 device pixels per CSS pixel (2x), and some screens even have higher pixel densities
+For example, some high-density screens can have a resolution of 2 device pixels per CSS pixel (2x), and some screens even have higher pixel densities.
 
 The ratio between the physical screen pixel density and the CSS pixel density is called **device pixel ratio**
 
-For screens with a **device pixel ratio** of **2**, we will need an image that is twice the size of an image we use for a lower-density screen, and for a **device pixel ratio** of 3 we need an image that is 3 times bigger, this means that if we want an image to be sharp on a screen with **device pixel ratio** of 3 and the image should be 800 CSS pixels wide, then we need to load an image that has a width of 3 x 800 = 2400 pixels
+For screens with a **device pixel ratio** of **2**, we will need an image twice the size of an image we use for a lower-density screen. For a **device pixel ratio** of 3, we need an image that is 3 times bigger. This means that if we want an image to be sharp on a screen with a **device pixel ratio** of 3, and the image should be 800 CSS pixels wide, then we need to load an image with a width of 3 x 800 = 2400 pixels.
 
 To ensure we don't use images that are too big (which would waste bandwidth and result in a low LCP score) or images that are too small (which would get scaled up by the browser and end up being blurry), we are going to use the [sizes attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/sizes) and set some rules to help the browser chose the image with the most appropriate dimensions:
 
@@ -852,11 +852,11 @@ export default BaseImage
 
 Line 50: we add the `sizes` attribute and add the `(max-width: 1120px) 100vw, 1088px` media query as its value
 
-Our sizes attribute will tell the browser that for a maximum viewport width of 1120px, it should choose an image to display that is equal to or bigger than 100vw (100vw means 100% of the view width) and for any other viewport size above 1120px the browser should always take an image that is 1088px (CSS pixels) wide
+Our sizes attribute will tell the browser that for a maximum viewport width of 1120px, it should choose an image to display that is equal to or bigger than 100vw (100vw means 100% of the view width). For any other viewport size above 1120px, the browser should always take an image that is 1088px (CSS pixels) wide.
 
-You might wonder why 1088px?
+Why 1088px?
 
-Well, because in our specific use case, we have defined in our global.css that the maximum width for the `main` element is 1120px, in that `main` element, we have an `article` element which has a padding left and right of 16px (so 2 x 16 = 32 pixels), this means we need to subtract that padding from the `main` element width to get the maximum width an image can have, so 1120 - (2 x 16) = 1088 pixel
+Because in our specific use case, we have defined in our global.css that the maximum width for the `main` element is 1120px. In that `main` element, we have an `article` element with a padding left and right of 16px (so 2 x 16 = 32 pixels). This means we must subtract that padding from the `main` element width to get the image's maximum width, so 1120 - (2 x 16) = 1088 pixels.
 
 Make sure the development server is still running and then visit the playground page [http://localhost:3000/tutorial_examples/mdx-components_playground](http://localhost:3000/tutorial_examples/mdx-components_playground)
 
@@ -875,13 +875,13 @@ As we can see, depending on the **device pixel ratio** the browser will fetch a 
 > 
 > On local (in development mode), the images will get automatically resized by Next.js using a Node.js tool called [sharp](https://www.npmjs.com/package/sharp)  
 >  
-> In this tutorial, we deploy to Vercel, which means we will benefit from the [Vercel Image optimization](https://vercel.com/docs/image-optimization) features, in preview and production, the Vercel service will do the image resizes (in the cloud) for us, our images will then be cached using the [Vercel Edge Network](https://vercel.com/docs/edge-network/overview) (CDN)     
+> In this tutorial, we deploy to Vercel, which means we will benefit from the [Vercel Image optimization](https://vercel.com/docs/image-optimization) features. In preview and production, the Vercel service will resize the image (in the cloud) for us. Our images will then be cached using the [Vercel Edge Network](https://vercel.com/docs/edge-network/overview) (CDN)     
 >  
-> If, however, you use another provider, you either need to find one that works like Vercel or you can use a third-party image optimization service like, for example [Cloudinary](https://next.cloudinary.dev/), or if you search for "image hosting says" I'm sure you will find a lot of alternatives, if you use a third-party service also make sure you check out the [next/image configuration options](https://nextjs.org/docs/app/api-reference/components/image#configuration-options) documentation to learn how to integrate that service into your next/image configuration  
+> If, however, you use another provider, you either need to find one that works like Vercel, or you can use a third-party image optimization service like, for example, [Cloudinary](https://next.cloudinary.dev/), or if you search for "image hosting says" I'm sure you will find a lot of alternatives. If you use a third-party service, also make sure you check out the [next/image configuration options](https://nextjs.org/docs/app/api-reference/components/image#configuration-options) documentation to learn how to integrate that service into your next/image configuration  
 > 
-> There are also other options, like resizing the images at build time and then uploading them to a CDN or building a custom solution on a dedicated server, what you choose depends on how much time you want to spend working on a solution and what your budget is
+> Other options include resizing the images at build time and then uploading them to a CDN or building a custom solution on a dedicated server. What you choose depends on how much time you want to spend working on a solution and what your budget is
 
-As we just saw, the browser will use different URLs to load images, but where do these URLs come from, and how does the browser decide what value to use for the **w** parameter that specifies the width of the image, next/image will use that information to resize the image, height does not get specified as next/image will keep the original ratio and hence does only need to know the width
+As we just saw, the browser will use different URLs to load images. But where do these URLs come from, and how does the browser decide what value to use for the **w** parameter that specifies the image's width? next/image will use that information to resize the image. The height is not specified, as next/image will keep the original ratio and hence only needs to know the width.
 
 The answer to both questions is because of the [srcset attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/srcset) attribute of the image, which we did NOT have to add ourselves manually because we did add the sizes attribute next/image has created that `srcset` attribute for us, both sizes and srcset work together
 
@@ -889,7 +889,7 @@ To better understand the **srcset** attribute, we now go back into the browser a
 
 ```html
 <img
-    alt="Street at night, the wet floor has reflections of the bright lights from multiple billboards and neon signs, one prominent billboard features an advertisement for the TV series Stranger Things 2"
+    alt="Street at night, the wet floor has reflections of the bright lights from multiple billboards and neon signs; one prominent billboard features an advertisement for the TV series Stranger Things 2"
     title="this is the image title"
     fetchpriority="high"
     width="5398"
@@ -905,37 +905,37 @@ To better understand the **srcset** attribute, we now go back into the browser a
 
 We can see the image element has our **style** attribute we added earlier, as well as the **sizes** attribute we added just now, but below, there is now also the **srcset** attribute that next/image added automatically
 
-The value of the **srcset** contains a series of image **URLs** followed by a **number**, and that number has the letter **w** appended, for example, the first entry `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.5085913e.jpg&amp;w=640&amp;q=75 640w` in the list, is a string which contains the image source URL, then a space and then something called a **condition descriptor**, in this case, the condition descriptor that tells the browser that if it needs an image with a width of 640 pixels (640w) then it should take the image source URL that precedes it
+The value of the **srcset** contains a series of image **URLs** followed by a **number**, and that number has the letter **w** appended, for example, the first entry `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.5085913e.jpg&amp;w=640&amp;q=75 640w` in the list, is a string which contains the image source URL, then a space and then something called a **condition descriptor**, in this case, the condition descriptor that tells the browser that if it needs an image with a width of 640 pixels (640w) then it should take the image source URL that precedes it.
 
 If we now put everything together, here is what the browser does for a screen with a regular density:
 
-* first, the browser determines at what CSS **image width** we want to display the image, it knows that the **style** attribute has set the image width to 100% of the container, the container without the padding is 1088 pixels wide, so the first information is that it will need an image that is **1088 pixels wide**
+* first, the browser determines at what CSS **image width** we want to display the image; it knows that the **style** attribute has set the image width to 100% of the container; the container without the padding is 1088 pixels wide, so the first information is that it will need an image that is **1088 pixels wide**
 * the browser also knows that our **device pixel ratio** is **1**, which is the second information the browser needs to determine which source to choose
-* so now the browser does the math, image CSS width x device pixel ratio = image source width, so 1088 x 1 = 1088 pixels, at this point, it now knows it will need an image source file that is at least 1088 pixels wide
+* so now the browser does the math: image CSS width x device pixel ratio = image source width, so 1088 x 1 = 1088 pixels; at this point, it now knows it will need an image source file that is at least 1088 pixels wide
 * next, the browser looks at what image sources we offer by looking at the **srcset** sources list, it attempts to find a URL for an image width that is equal to or bigger than the 1088 pixels image it needs and finds an entry with a **condition descriptor** that is **1080w**, so it will use the image URL `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=1080&amp;q=75`
 
-For a screen with a higher density, the steps are the same, but the result is not, this is because this time, the **device pixel ratio** is **2**, so it does the math again and finds out it needs an image source that is 1088 x **2** = 2176 pixels wide, so it looks at the srcset again and the image source URL that is equal or bigger than 2176 pixels is `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=3840&amp;q=75`, which is the URL for the source with a width of 3840 pixels
+The steps are the same for a screen with a higher density, but the result is not. This is because this time, the **device pixel ratio** is **2**, so it does the math again and finds out it needs an image source that is 1088 x **2** = 2176 pixels wide. Hence, it looks at the srcset again and the image source URL that is equal or bigger than 2176 pixels is `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=3840&amp;q=75`, which is the URL for the source with a width of 3840 pixels.
 
 > [!NOTE]  
 > The browser will always try to find a source that is equal to or bigger than what is needed
 >  
 > There is one exception, though: if there is no source big enough in the list, then it takes the biggest it can find, even if it is smaller than what it needs
 > 
-> If the browser finds an image that is a little bit smaller and also another source that is substantially bigger, then it will take the bigger one
+> If the browser finds an image that is a little bit smaller and also another substantially bigger source, then it will take the bigger one
 >  
 > This is because if the browser scales the bigger image down, then there is no quality loss, even though it is quite a waste of bandwidth and results in longer loading times
 >  
-> If instead, it would choose a smaller image (that is almost the size it needs), then it would have to scale the image up, and this would result in a blurry image
+> If it would choose a smaller image (that is almost the size it needs), then it would have to scale the image up, and this would result in a blurry image
 
 Now that we know how sizes and srcset work, there is one last thing we want to improve
 
-We saw that for screens with a 2x device pixel ratio, the browser will choose the source URL that will fetch a 3840 pixels wide image
+We saw that for screens with a 2x device pixel ratio, the browser will choose the source URL that fetches a 3840-pixel-wide image.
 
-The problem here is that this 3840 pixel wide image will be almost twice as large as the 2176 pixels wide image that we need
+The problem is that this 3840 pixel wide image will be almost twice as large as the 2176 pixels wide image we need.
 
 The browser can NOT take a smaller image because the second biggest version we offer is 2048 pixels, and that is slightly lower than the 2176 pixels wide image we need
 
-The solution is to tweak the list of source sizes that next/image will use when it creates the srcset, and to do that, we need to edit the Next.js configuration file of our project
+The solution is to tweak the list of source sizes that next/Image will use when creating the srcset. To do that, we need to edit our project's Next.js configuration file.
 
 By default, Next.js will use the following [deviceSizes](https://nextjs.org/docs/app/api-reference/components/image#devicesizes) values for srcsets: 640, 750, 828, 1080, 1200, 1920, 2048, 3840
 
@@ -1001,20 +1001,20 @@ const nextConfig = (phase) => {
 
 Line 36: we add the **deviceSizes** option and set the value to `[384, 640, 750, 828, 1080, 1200, 1920, 2176, 3840]`
 
-If we now open the browser (assuming you are on a device with a high-density screen) and look at the `img` element, we will see that srcset now has an entry for 2176 pixels wide images, and if we open the developer tools and look at the image URL in the Network tab we can see that the browser has fetched the image using the source URL for a 2176 pixels wide image
+If we open the browser (assuming we are on a device with a high-density screen) and look at the `img` element, we will see that srcset now has an entry for 2176 pixels wide images. If we open the developer tools and look at the image URL in the Network tab, we can see that the browser has fetched the image using the source URL for a 2176 pixels wide image.
 
 > [!TIP]  
 > If you resize your browser, the viewport size will change
 >  
 > If you start with a small browser and make it bigger, you will see in the Network tab that the browser loads bigger images
 >  
-> However, if you make the browser window smaller, the browser will keep the current image, this is because the current image is big enough and can be downscaled, so there is no need to load a new image
+> However, if you make the browser window smaller, the browser will keep the current image. This is because the current image is big enough and can be downscaled, so there is no need to load a new image.
 >  
 > So, if you want to see a change you made, make sure to reload the page first
 
-Sizes and srcset is a powerful combination that allows us to have truly responsive images and helps prevent loading images that are excessively too large
+Sizes and srcset are a powerful combination that allows us to have truly responsive images and help prevent the loading of excessively large images.
 
-However, this feature is also not easy to understand, it took me quite a while to make sure I understood everything and was able to write this chapter, if you have a question feel free to ask on the <FontAwesomeIcon icon={faComments} size="1x" color='rgb(255, 0, 170)' /> [discussion](https://github.com/chrisweb/chris.lu/discussions) page and if you find a bug or know about an improvement, please report it using the <FontAwesomeIcon icon={faBug} size="1x" color='rgb(255, 0, 170)' /> [issues](https://github.com/chrisweb/chris.lu/issues)
+However, this feature is also not easy to understand. It took me quite a while to make sure I understood everything and was able to write this chapter, if you have a question feel free to ask on the <FontAwesomeIcon icon={faComments} size="1x" color='rgb(255, 0, 170)' /> [discussion](https://github.com/chrisweb/chris.lu/discussions) page and if you find a bug or know about an improvement, please report it using the <FontAwesomeIcon icon={faBug} size="1x" color='rgb(255, 0, 170)' /> [issues](https://github.com/chrisweb/chris.lu/issues)
 
 > [!MORE]  
 > [MDN "sizes attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/sizes)  
@@ -1083,7 +1083,7 @@ In situations where next/image does not create the placeholder, you have several
 
 * by adding code to your project that will create placeholder images, Next.js has an example of such a script in the [placeholder color placeholder example on GitHub](https://github.com/vercel/next.js/blob/canary/examples/image-component/app/color/page.tsx)
 * the second option is an online tool (that they recommend in the Next.js documentation) from [png-pixel.com](https://png-pixel.com/) that you can use to create your own static placeholder image
-* the third option is to use a package like [pla**i**ceholder](https://www.npmjs.com/package/plaiceholder), but be careful when using this one, I see it being mentioned in a lot of tutorials, however, if you go to [pla**i**ceholders GitHub repository](https://github.com/joe-bell/plaiceholder) you will notice that the project has been archived so its unlikely it will get updates in the future (also issues are disabled on archived repositories so there is no way to open one if you find a bug)
+* the third option is to use a package like [pla**i**ceholder](https://www.npmjs.com/package/plaiceholder), but be careful when using this one, I see it being mentioned in a lot of tutorials, however, if you go to [pla**i**ceholders GitHub repository](https://github.com/joe-bell/plaiceholder) you will notice that the project has been archived so it's unlikely it will get updates in the future (also issues are disabled on archived repositories so there is no way to open one if you find a bug)
 
 Congratulations 🎉 you now know almost everything there is to know about next/image and its many features and will now be able to create a project that has optimized images, giving you a good web metrics score and make it will contribute to making your users happy because your pages load super fast
 

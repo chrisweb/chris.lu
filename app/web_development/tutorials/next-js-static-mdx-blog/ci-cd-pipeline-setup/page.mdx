@@ -7,7 +7,7 @@
 In this part of the tutorial, we will set up a CI/CD pipeline that will automatically deploy our code using [Vercel](https://vercel.com)
 
 > [!NOTE]  
-> You might still remember how, in the past, we would use FTP software and manually transfer code to a server, or you might have struggled setting up GitHub actions... When using Vercel, they will set up the workflow for us and start monitoring our repository. If they detect a new commit (or pull request), they will fetch our code and automatically deploy it (on their infrastructure) for us  
+> You might still remember how, in the past, we would use FTP software and manually transfer code to a server, or you might have struggled setting up GitHub actions... When using Vercel, they will set up the workflow for us and start monitoring our repository. If they detect a new commit (or pull request), they will fetch our code and automatically deploy it (on their infrastructure) for us.  
 >  
 > This means we don't have to do anything else besides committing our code as we have already done before, but there will be no new additional step, meaning there is no further click on a button needed 😉  
 
@@ -15,7 +15,7 @@ Of course, if you prefer to use GitHub actions to create your own CI/CD pipeline
 
 Also, feel free to use another provider, but in this example, I show you how easy and quick it is to use [Vercel](https://vercel.com)
 
-The Hobby plan is free, so if you don't know Vercel yet, you might want to give it a try to get an idea of how it performs compared to your current deployment process
+The Hobby plan is free, so if you haven't tried Vercel yet, you can get an idea of how it performs compared to your current deployment process.
 
 ## Vercel setup
 
@@ -23,7 +23,7 @@ First, you need to have or create a hobby (free) account on [Vercel](https://ver
 
 Now we need to create a new project on Vercel and allow them to access our repository (if you need help with that step, check out my chapter [Add a new project (repository)](/web_development/posts/vercel#add-a-new-project-repository) in the Vercel post)
 
-Now that we have added our GitHub repository to Vercel, every commit (or pull request) we do into the **main** branch will trigger a **production** deployment, and every commit we do into the **preview** branch will trigger a **preview** (staging) deployment
+Now that we have added our GitHub repository to Vercel, every commit (or pull request) we make to the main branch will trigger a production deployment, and every commit we make to the preview branch will trigger a preview (staging) deployment.
 
 > [!MORE]  
 > [chris.lu "Vercel" post](/web_development/posts/vercel)  
@@ -41,7 +41,7 @@ On top, you will have a section called **Production Deployment**, and below that
 >  
 > Those are useful if you don't have a custom domain yet, as they are short URLs to your production deployment that you can bookmark as they won't change over time  
 
-Now open VSCode and make sure you are on the **preview** branch
+Now open VSCode and make sure you are on the **preview** branch.
 
 Open the `README.md` file and, for example, add a small explanation that our project is now auto-deploying on Vercel, like so:
 
@@ -63,13 +63,13 @@ When code gets pushed into the preview branch, it will trigger a preview deploym
 
 ```
 
-Then save the file, commit, and sync the changes
+Then, save the file, commit, and sync the changes.
 
-Now open the browser tab in which you opened your Vercel project page
+Now open the browser tab in which you opened your Vercel project page.
 
 In the section **Active Branches**, you should now see an entry for the **preview** branch (if it does not show up, manually reload the page)
 
-If you click on **View Deployment Status**, it will open a page with details about the current deployment
+Clicking on **View Deployment Status** will open a page with details about the current deployment.
 
 Back on the project page, click on the **3 dots** (...) at the end of your preview branch row and then click on **Copy Branch URL**
 
@@ -80,15 +80,15 @@ Paste the branch URL you just copied into your browser address bar and press `En
 > [!NOTE]  
 > When you visit your preview URL, Vercel will ask you to log in (if you are not logged in yet); this is because only you are supposed to have access to the previews; if someone else wants access, they will first have to request access and wait for you to grant them access  
 
-Because GitHub and Vercel are now connected, you will also have all the information about your deployments on your GitHub page
+Because GitHub and Vercel are now connected, you will also have all the information about your deployments on your GitHub page.
 
-Open the repository page on GitHub and have a look at the right sidebar
+Open the repository page on GitHub and look at the right sidebar.
 
 You will now see a new section called **Deployments**:
 
 ![GitHub sidebar deployments list](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/github_project_sidebar_deployments_list.png)
 
-If, for example, you click on **preview**, it will open the deployments page
+If, for example, you click on **preview**, it will open the deployments page.
 
 On top of that page, you will have a link to the live preview on the vercel.app domain, and below, you will have a list of the recent deployments
 

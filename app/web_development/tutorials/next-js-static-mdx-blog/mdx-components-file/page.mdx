@@ -17,7 +17,7 @@ For example, how can we quickly add a CSS class to all our `<ul>` [unordered lis
 
 To solve this, you could add a remark plugin, which would extend the base markdown syntax, but if you want to move your content to another platform someday, then that platform might not understand your custom markdown syntax as the plugin you used to add classes to lists is not installed
 
-Or you could write a custom react component, but then you would need to import and use that react component in every single MDX page, however, when using the **mdx-components** file, you only import the component once, for example, in the second chapter we will create a custom link component, we import it once into **mdx-components** file and then use it for all the links in all our pages
+You could also write a custom react component, but then you would need to manually import and use that react component in every single MDX page. The advantage of using the **mdx-components** file is that you only need to import a component once. For example, in an upcoming chapter, we will create a custom link component. We will only need to import it once into the **mdx-components** file, but it will still transform every link in every page of our project .
 
 This is why the solution we will use is the next/mdx `mdx-components.tsx` file, and as we will see in the next chapter, it will allow us to add a class to all of our lists without using an extra plugin, and without having to introduce any new markdown syntax
 

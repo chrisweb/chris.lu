@@ -4,17 +4,17 @@
 
 # package.json (npm run) scripts
 
-We just used the **dev** script earlier, but where does this script come from?
+We used the **dev** script earlier, but where does this script come from?
 
-The scripts are located in our `package.json` file (which is located in the root of our project), a `package.json` can have a **scripts** object where we can add commands that we will use often
+The scripts are in our `package.json` file (which is located in the root of our project). A package.json can have a scripts object where we can add commands that we will use often.
 
-The scripts object contains one or more key/value pairs, the key is an alias that we will use instead of the full command, and the value is the command itself
+The scripts object contains one or more key/value pairs. The key is an alias we will use instead of the full command, and the value is the command itself.
 
-Using **npm run scripts** has the advantage that we don't need to type (or even remember) the full command but only the alias and it is also great because as the package.json is part of our project, it means that we share those commands, get shared with everyone else that might work on the project with us
+Using **npm run scripts** has the advantage of not needing to type (or even remember) the full command but only the alias. It is also great because as the package.json is part of our project, it means that we share those commands, get shared with everyone else who might work on the project with us.
 
 ## How to use (npm run) scripts
 
-All `npm run SCRIPT_NAME` commands work because they have been added to the package.json scripts block, in our case, the `npm run dev` we used earlier works because **create next app** has added it to the package.json for us:
+All `npm run SCRIPT_NAME` commands work because they have been added to the package.json scripts block. In our case, the `npm run dev` we used earlier works because **create next app** has added it to the package.json for us:
 
 ```json title="package.json"
 {
@@ -33,7 +33,7 @@ To get a list of all scripts without opening the package.json, you can use the f
 npm run
 ```
 
-This will show you the 4 run-scripts commands that were added by create next app
+This will show you the 4 run-scripts commands added by create next app.
 
 > [!MORE]  
 > [NPM "run scripts" documentation](https://docs.npmjs.com/cli/v10/commands/npm-run-script)  
@@ -44,9 +44,9 @@ To edit (or even add) run scripts, we first need to open our `package.json` file
 
 ### Changing the Next.js dev server port
 
-As you may have noticed, when we used `npm run dev`, it started the dev server using port 3000, this is because port 3000 is the default, the port will NOT be 3000 it was already in use, then Next.js will use the next best free port, for example, 3001, 3002, ...
+As you may have noticed, when we used `npm run dev`, it started the dev server using port 3000. This is because port 3000 is the default port used by Next.js. If port 3000 is already in use, Next.js will use the next best free port, for example, 3001, 3002, ...
 
-You can, however, also change the port manually if needed, to do so, you need to use the **-p** option for Next.js **dev** (also works for the **start** cli commands used to start the production server)
+You can, however, also change the port manually if needed. To do so, you need to use the **-p** option for Next.js **dev** (also works for the **start** cli commands used to start the production server)
 
 For example, to use port 4000, edit your `package.json` and change `next dev` to this:
 
@@ -69,13 +69,13 @@ You will see that now Next.js uses the port you have told it to use because the 
 ```
 
 > [!NOTE]  
-> Now I recommend you discard the changes we just did, it is preferred to let Next.js choose the port for you and use 3000 by default, only set the port to a specific value if you have a use case for it
+> Now, I recommend you discard the changes we just made. It is preferred to let Next.js choose the port for you and use 3000 by default. Only set the port to a specific value if you have a use case for it.
 
 ## Next.js CLI commands and NPM npx
 
-When using a command like `npm run dev` npm will check for a script and then execute the command of that script, in the case of `npm run dev` it will execute `next dev`
+When using a command like `npm run dev`, npm will check for a script and then execute the command of that script. In the case of `npm run dev`, it will execute `next dev`
 
-`next dev` is a Next.js CLI command, as we already saw in the package.json scripts, there are other Next.js CLI commands you can use, like `next build`, `next start`, `next lint` and a bunch more
+`next dev` is a Next.js CLI command, as we already saw in the package.json scripts. There are other Next.js CLI commands you can use, like `next build`, `next start`, `next lint`, and a bunch more
 
 If you try to run one of those commands in the terminal (or your favorite command line tool), for example:
 
@@ -83,7 +83,7 @@ If you try to run one of those commands in the terminal (or your favorite comman
 next dev
 ```
 
-On linux you will get an error like:
+On Linux, you will get an error like this:
 
 ```shell
 bash: next: command not found
@@ -102,7 +102,7 @@ npx next dev
 ```
 
 > [!TIP]  
-> If you want to see what options a given Next.js CLI command has, add the -h flag to the command, for example, `next dev -h` will show you a list of options for the dev command, for a list of all commands use `next -h`
+> If you want to see what options a given Next.js CLI command has, add the -h flag to the command. For example, `next dev -h` will show you a list of options for the dev command. For a list of all commands, use `next -h`
 
 For example, this command will show the options for the Next.js dev CLI:
 
@@ -116,13 +116,13 @@ Or to see the options of the linting command, use:
 npx next lint -h
 ```
 
-Besides starting the dev server, there are other interesting CLI commands you may want to try out at some point, for example, if you have a build that fails during deployment and you want to debug that build of your project locally, then you can use this command:
+Besides starting the dev server, there are other interesting CLI commands you may want to try out at some point. For example, if you have a build that fails during deployment and you want to debug that build of your project locally, then you can use this command:
 
 ```shell
 npx next build --debug
 ```
 
-After the build is done, Next.js will print a lot of interesting information in your terminal, like what headers, rewrites, redirects, routes, … are in your app, it will also add information like: did this page get prerendered as static content or is it dynamic and will get rendered at runtime
+After the build is done, Next.js will print a lot of interesting information in your terminal, like what headers, rewrites, redirects, routes, … are in your app. It will also add information like: did this page get prerendered as static content, or is it dynamic and will get rendered at runtime.
 
 Another command to get some information about your system is:
 
@@ -130,9 +130,9 @@ Another command to get some information about your system is:
 npx next info
 ```
 
-After experimenting with Next.js CLI in your terminal, you can of course, add those to your package.json, too
+After experimenting with Next.js CLI in your terminal, you can of course, add those to your package.json, too.
 
-Adding them to your package.json scripts has the advantage that you don't need to remember them, and it has the advantage that when other devs join your project, they can use them, too
+Adding them to your package.json scripts has the advantage that you don't need to remember them, and it has the advantage that when other devs join your project, they can use them, too.
 
 To add the info CLI command to your `package.json`, open the `package.json` and edit it like this:
 
@@ -143,7 +143,7 @@ To add the info CLI command to your `package.json`, open the `package.json` and 
     },
 ```
 
-As you can see, because the command is inside of the scripts of the `package.json`, we do NOT need to use **npx** anymore, as NPM does it (under the hood) for us
+As you can see, because the command is inside of the scripts of the `package.json`, we do NOT need to use **npx** anymore, as NPM does it (under the hood) for us.
 
 > [!MORE]  
 > [Next.js "cli" documentation](https://nextjs.org/docs/app/api-reference/next-cli)  
@@ -153,9 +153,9 @@ As you can see, because the command is inside of the scripts of the `package.jso
 
 There is one last dev CLI option I want to highlight before we go back to our project, which is `--experimental-https`
 
-When using the next dev command, it will always start a dev server using HTTP, but there are situations where you want to use HTTPS instead
+The next dev command always starts a dev server using HTTP, but there are situations where you want to use HTTPS instead.
 
-The great thing about `--experimental-https` is that Next.js will download an extra package that it will then use to create and set up a self-signed certificate for our localhost
+The great thing about `--experimental-https` is that Next.js will download an extra package that it will then use to create and set up a self-signed certificate for our localhost.
 
 All we need to do is that option to our next dev command like so:
 
@@ -171,7 +171,7 @@ This will start your dev server using HTTPS, and you can see a recap of what Nex
 > Certificates created in PATH_TO_PROJECT\certificates
 > Adding certificates to .gitignore
 
-You can now visit your localhost with SSL at: [https://localhost:3000/](https://localhost:3000/)
+You can now visit your localhost with SSL at [https://localhost:3000/](https://localhost:3000/)
 
 > [!MORE]  
 > [Next.js "HTTPS for local development" documentation](https://nextjs.org/docs/app/api-reference/next-cli#https-for-local-development)  

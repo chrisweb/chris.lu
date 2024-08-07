@@ -51,7 +51,7 @@ Earlier in this tutorial, we used **create-next-app**, which has installed [ESLi
 
 When you [install ESLint for Next.js manually](https://nextjs.org/docs/app/building-your-application/configuring/eslint) by adding the lint command `"lint": "next lint"` to your package.json scripts and then executing it for the first time it will detect that there is no `.eslintrc.json` it will ask you if you want to use the **Base** mode or the **Strict** mode, we, however, used **create-next-app** and it did not let us chose if we prefer the **Base** mode or the **Strict** mode, that's because when using **create-next-app** it chooses the strict mode by default, which is why currently in your `.eslintrc.json` it extends **next/core-web-vitals** (which is the strict mode) and not just **next** (which is the base mode)
 
-**next/core-web-vitals** is a set of extra rules that will check your code and inform you about potential optimizations you can do that are related to core web vitals metrics like rules to improve page loading speed, but **next/core-web-vitals** will also extend the base **next** rules
+**next/core-web-vitals** is a set of extra rules that will check your code and inform you about potential optimizations you can do that are related to core web vitals metrics, like rules to improve page loading speed, but **next/core-web-vitals** will also extend the base **next** rules
 
 Finally, **create-next-app** will also add the line `"lint": "next lint"{:json}` to your package.json `scripts`, which means that you now can use the command `npm run lint`, which will execute `next lint`, next lint is the Next.js CLI command for linting
 
@@ -112,9 +112,9 @@ The ESLint MDX plugin has the [ESLint MDX parser (called eslint-mdx)](https://ww
 
 ## ESLint configuration step 1: Basic ESLint configuration file
 
-**create next app** has added a `.eslintrc.json` in the root of our project, as we will add our own custom eslint configuration file, the first we need to do is delete the current `.eslintrc.json`
+**create next app** has added a `.eslintrc.json` in the root of our project, as we will add our own custom eslint configuration file, the first thing we need to do is delete the current `.eslintrc.json`
 
-**create next app** should have installed all dependencies needed, so we don't need to install any packages this time, if however you didn't use **create-next-app** like we did in this tutorial, then I recommend using this command to ensure all packages are installed: 
+**create next app** should have installed all dependencies needed, so we do NOT need to install any packages; if you didn't use **create-next-app** as we did in this tutorial, then I recommend using this command to ensure all packages are installed: 
 
 ```shell
 npm i eslint@latest eslint-config-next@latest --save-exact --save-dev
