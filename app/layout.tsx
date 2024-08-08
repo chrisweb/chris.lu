@@ -18,12 +18,13 @@ export const metadata: Metadata = {
         default: 'Home | chris.lu',
     },
     description: 'chrisweb\'s blog about web development, games, Lego, music, memes, ... | chris.lu',
-    twitter: {},
+    keywords: ['web development', 'lego', 'games', 'music', 'about me'],
+    twitter: null,
     alternates: {
         canonical: 'https://chris.lu/',
     },
     openGraph: {
-        ...sharedOpenGraph
+        ...sharedOpenGraph,
     },
 }
 
