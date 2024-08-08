@@ -1,9 +1,12 @@
+import { sharedOpenGraph } from '@/shared/opengraph'
+
 export const metadata = {
     title: 'Memes',
     alternates: {
         canonical: 'https://chris.lu/memes',
     },
     openGraph: {
+        ...sharedOpenGraph,
         url: 'https://chris.lu/memes',
     },
 }

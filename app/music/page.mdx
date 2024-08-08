@@ -5,6 +5,7 @@ import styles from './page.module.css'
 import Link from 'next/link'
 import ImageDispatch from '@/components/base/image/Dispatch'
 import AsideContent from '@/components/aside/Content'
+import { sharedOpenGraph } from '@/shared/opengraph'
 
 export const metadata = {
     title: 'Music',
@@ -12,6 +13,7 @@ export const metadata = {
         canonical: 'https://chris.lu/music',
     },
     openGraph: {
+        ...sharedOpenGraph,
         url: 'https://chris.lu/music',
     },
 }

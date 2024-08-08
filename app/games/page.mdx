@@ -1,9 +1,12 @@
+import { sharedOpenGraph } from '@/shared/opengraph'
+
 export const metadata = {
     title: 'Games',
     alternates: {
         canonical: 'https://chris.lu/games',
     },
     openGraph: {
+        ...sharedOpenGraph,
         url: 'https://chris.lu/games',
     },
 }
