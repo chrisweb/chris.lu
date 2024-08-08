@@ -24,7 +24,7 @@ const TocHighlight: React.FC<IProps> = (props): JSX.Element => {
     const { headingsToObserve, rootMargin, threshold } = props
 
     const tocHeadingsToObserve = headingsToObserve ?? 'h1, h2, h3'
-    const tocRootMargin = rootMargin ?? '-10% 0px -50% 0px'
+    const tocRootMargin = rootMargin ?? '-10% 0px -40% 0px'
     const tocThreshold = threshold ?? 1
 
     const children = Children.toArray(props.children)
