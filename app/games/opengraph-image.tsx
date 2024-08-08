@@ -11,7 +11,9 @@ export const size = {
 
 export const contentType = 'image/png'
 
-export const alt = 'Chris.lu banner'
+const title = 'Games'
+
+export const alt = `Chris.lu ${title} banner`
 
 /*interface IImageProps {
     params: {
@@ -47,7 +49,7 @@ export default async function OGImage(/*props: IImageProps*/) {
                 }}
             >
                 {
-                    // eslint-disable-next-line @next/next/no-img-element
+                    // eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element 
                     <img
                         // @ts-ignore: this is fine 🔥
                         src={imageData}
@@ -55,7 +57,6 @@ export default async function OGImage(/*props: IImageProps*/) {
                             objectFit: 'cover',
                             objectPosition: 'center',
                         }}
-                        alt=""
                     />
                 }
                 <span
@@ -94,7 +95,7 @@ export default async function OGImage(/*props: IImageProps*/) {
                         bottom: '-10%',
                     }}
                 >
-                    Games
+                    {title}
                 </span>
             </div >
         ),

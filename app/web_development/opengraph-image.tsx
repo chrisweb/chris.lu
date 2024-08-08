@@ -11,7 +11,9 @@ export const size = {
 
 export const contentType = 'image/png'
 
-export const alt = 'Chris.lu banner'
+const title = 'Web development'
+
+export const alt = `Chris.lu ${title} banner`
 
 /*interface IImageProps {
     params: {
@@ -93,7 +95,7 @@ export default async function OGImage(/*props: IImageProps*/) {
                         bottom: '-10%',
                     }}
                 >
-                    Web development
+                    {title}
                 </span>
             </div >
         ),
