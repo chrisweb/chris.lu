@@ -17,7 +17,6 @@ export const metadata: Metadata = {
         default: 'Home | chris.lu',
     },
     description: 'chrisweb\'s blog about web development, games, Lego, music, memes, ... | chris.lu',
-    manifest: '/manifest.json',
     twitter: {},
     alternates: {
         canonical: 'https://chris.lu/',
