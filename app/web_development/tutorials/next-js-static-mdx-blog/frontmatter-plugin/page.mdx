@@ -138,59 +138,14 @@ export const metadata = {
         type: 'article',
         publishedTime: frontmatter.published,
         modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
     }
 }
-
-<div id="core">
-
-<article>
-
-# {frontmatter.title.toUpperCase()}
-
-~~strikethrough~~
-
-Table:
-| Left    | Right   |
-| -------- | ------- |
-| Foo       | Bar |
-| ~~strikethrough~~ | 😃 |
-| `code` | [external link](https://google.com) |
-
-Autolink: https://www.example.com
-
-Tasklist:
-* [x] foo  
-* [ ] bar  
-
-Example text with a note.[^1]  
-[^1]: This is the text of the note, [it can be a link too](https://www.example.com)  
-
-> [!NOTE]  
-> Highlights information that users should take into account, even when skimming.
-
-> [!TIP]  
-> Optional information to help a user be more successful.
-
-> [!IMPORTANT]  
-> Crucial information necessary for users to succeed.
-
-> [!WARNING]  
-> Critical content demands immediate user attention due to potential risks.
-
-> [!CAUTION]  
-> Negative potential consequences of an action.
-
-</article>
-
-</div>
-
 ```
 
 Lines 1 to 8: we first added our frontmatter on top of the page with some variables we will use on the MDX page itself
 
-Lines 10 to 20: we created a Next.js metadata object and used the frontmatter variable (that holds all the key/value pairs from our frontmatter above) to populate it
-
-Line 26: we added a heading and used the frontmatter title value to demonstrate that the frontmatter variable can be used for more than just metadata
+Lines 10 to 21: we created a Next.js metadata object and used the frontmatter variable (that holds all the key/value pairs from our frontmatter above) to populate it
 
 Finally, make sure the dev server is running, then open the playground page [http://localhost:3000/tutorial_examples/gfm_playground](http://localhost:3000/tutorial_examples/gfm_playground) in your browser and then right-click in the page to have a look at the meta tags of the `<head>` element
 
@@ -209,6 +164,10 @@ You should be getting the following result:
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2024-05-24T19:14:23.792Z">
 <meta property="article:modified_time" content="2024-05-24T19:14:23.792Z">
+<meta property="article:tag" content="gfm">
+<meta property="article:tag" content="playground">
+<meta property="article:tag" content="frontmatter">
+<meta property="article:tag" content="mdx">
 ```
 
 Lines 1 to 2: are the viewport and charset Next.js adds by default
@@ -225,7 +184,9 @@ Lines 8 and 9: we have the **open graph URL and sitename**, which are two values
 
 Line 10: we add a static **article** value as **open graph type** just to demonstrate the following two meta tags at lines 11 and 12
 
-Line 11 and 12: we have two new meta tags, which have a property that is not prefixed with `og:` but as can be seen on [https://ogp.me/#type_article](https://ogp.me/#type_article) they are part of the open graph protocol, the open graph **article namespace** needs to have the **open graph type** set to **article** and then you get tags that are **prefixed** with `article:` if however the type is for example set to website those two metatags will not show up
+Line 11 and 12: we have two new meta tags, which have a property that is NOT prefixed with `og:` but as can be seen on [https://ogp.me/#type_article](https://ogp.me/#type_article) they are part of the open graph protocol, the open graph **article namespace** needs to have the **open graph type** set to **article** and then you get tags that are **prefixed** with `article:` if however the type is for example set to website those two metatags will not show up
+
+Lines 13 to 16: we have the keywords that get used as tags for our open graph article, unlike the **keywords** meta tag the **tags** get split into multiple tags
 
 Congratulations 🎉 you just learned how to set metadata for MDX pages and how to add frontmatter to MDX documents
 
