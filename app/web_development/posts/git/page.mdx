@@ -1,3 +1,36 @@
+---
+title: git
+keywords: ['git', 'commit', 'repository', 'branch']
+published: 2024-07-01T11:22:33.444Z
+modified: 2024-07-01T11:22:33.444Z
+permalink: https://chris.lu/web_development/posts/git
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+
+export const metadata = {
+    title: frontmatter.title,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/posts_git/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
 %toc%
 
 <article>

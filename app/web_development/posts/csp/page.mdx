@@ -17,6 +17,12 @@ export const metadata = {
     },
     openGraph: {
         ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/posts_csp/opengraph-image'
+        }],
         url: frontmatter.permalink,
         section: frontmatter.section,
         publishedTime: frontmatter.published,
@@ -24,7 +30,6 @@ export const metadata = {
         tags: frontmatter.keywords,
     },
 }
-
 
 %toc%
 

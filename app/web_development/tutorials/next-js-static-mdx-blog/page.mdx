@@ -20,7 +20,12 @@ export const metadata = {
     },
     openGraph: {
         ...sharedMetaDataArticle.openGraph,
-        images: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image',
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
         url: frontmatter.permalink,
         section: frontmatter.section,
         publishedTime: frontmatter.published,
