@@ -1,6 +1,33 @@
+---
+title: Next.js static MDX blog - Tutorial
+keywords: ['Next.js', 'Nextjs', 'static', 'mdx', 'blog', 'tutorial', 'react', 'ssg']
+published: 2024-07-01T11:22:33.444Z
+modified: 2024-07-01T11:22:33.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog
+section: Web development
+---
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBug, faComments } from '@fortawesome/free-solid-svg-icons'
 import VideoScroll from '@/components/video/Scroll'
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+
+export const metadata = {
+    title: frontmatter.title,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image',
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
 
 %toc%
 
@@ -14,7 +41,7 @@ I tried to make this tutorial as beginner-friendly as possible. If, however you 
 
 In this tutorial, we will:
 
-* create static pages using the Next.js v15.x (compatible with v13.x/14.x) app directory
+* create a static site generator (SSG) using the Next.js v14.x (compatible with v13.x) app directory
 * create several components using React v19.x (compatible with v18.x)
 * add support for MDX content formatting via the @next/mdx package
 * add a plugin to generate a table of contents for each post automatically
