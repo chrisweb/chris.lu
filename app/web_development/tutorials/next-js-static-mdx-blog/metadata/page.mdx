@@ -306,14 +306,18 @@ export async function generateMetadata(props: unknown, parent?: ResolvingMetadat
 
 **Solution 3**: as suggested in the [metadata merging documentation](https://nextjs.org/docs/app/building-your-application/optimizing/metadata#merging), create a file with default open graph values and then always import that file:
 
-First, we create a new `shared` folder in the root of the project and then inside of it a `opengraph.ts` file, into which we add the open graph metadata we want to use in every page:
+First, we create a new `shared` folder in the root of the project and then inside of it a `metadata.ts` file, into which we add the metadata including our open graph we want to use in every page:
 
 ```ts
-export const sharedOpenGraph = {
-    url: 'https://example.com/',
-    siteName: 'My website name',
-    locale: 'en_US',
-    type: 'website',
+import type { Metadata } from 'next'
+
+export const sharedMetadata: Metadata = {
+    openGraph: {
+        url: 'https://example.com/',
+        siteName: 'My website name',
+        locale: 'en_US',
+        type: 'website',
+    }
 }
 ```
 
@@ -321,19 +325,19 @@ Then we import the shared open graph file inside of our page(s):
 
 ```tsx title="/app/blog/page.tsx" showLineNumbers
 import type { Metadata } from 'next'
-import { sharedOpenGraph } from '@/shared/opengraph'
+import { sharedMetadata } from '@/shared/metadata'
 
 export const metadata: Metadata = {
     title: 'Blog page',
     openGraph: {
-        ...sharedOpenGraph,
+        ...sharedMetadata.openGraph,
         url: 'https://example.com/blog'
     }
 }
 ```
 
 > [!TIP]  
-> Make sure the `sharedOpenGraph` variable is first in the `openGraph` so that what comes after overwrites the default values  
+> Make sure the `sharedMetadata` variable is first in the `openGraph` so that what comes after overwrites the default values  
 
 Congratulations 🎉 you now also have support for open graph metadata in your project
 
