@@ -5,7 +5,7 @@ import { Permanent_Marker, VT323, Architects_Daughter, Source_Code_Pro, Anta } f
 import HeaderNavigation from '@/components/header/Navigation'
 import BaseLink from '@/components/base/Link'
 import type { Metadata } from 'next'
-import { sharedOpenGraph } from '@/shared/opengraph'
+import { sharedMetaData } from '@/shared/metadata'
 
 export const metadata: Metadata = {
     // default next.js value
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
         canonical: 'https://chris.lu/',
     },
     openGraph: {
-        ...sharedOpenGraph,
+        ...sharedMetaData.openGraph,
     },
 }
 

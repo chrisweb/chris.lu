@@ -1,6 +1,6 @@
 import webpMindBlowingStaticImport from '/public/assets/images/animated/mind_blowing.webp'
 import ImageAnimatedPicture from '@/components/base/image/AnimatedPicture'
-import { sharedOpenGraph } from '@/shared/opengraph'
+import { sharedMetaData } from '@/shared/metadata'
 
 export const metadata = {
     title: 'About me',
@@ -8,7 +8,7 @@ export const metadata = {
         canonical: 'https://chris.lu/about_me',
     },
     openGraph: {
-        ...sharedOpenGraph,
+        ...sharedMetaData,
         url: 'https://chris.lu/about_me',
     },
 }
