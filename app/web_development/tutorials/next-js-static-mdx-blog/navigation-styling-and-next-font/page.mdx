@@ -1,6 +1,48 @@
+---
+title: Styling the navigation and using next/font - Tutorial
+description: Styling the navigation and using next/font - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['navigation', 'Styling', 'next/font', 'nextjs', 'react']
+published: 2024-07-01T11:22:33.444Z
+modified: 2024-07-01T11:22:33.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/navigation-styling-and-next-font
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
 %toc%
 
 <article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
 
 # Styling the navigation and using next/font
 
@@ -195,5 +237,10 @@ If you liked this post, please consider making a [donation](https://buymeacoffee
 > [Google Fonts](https://fonts.google.com)  
 > [MDN "font-display" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display)  
 > [developer.chrome.com "font-display" blog post](https://developer.chrome.com/blog/font-display)  
+
+<Pagination
+    previous={{ label: 'Navigation and next/link', href: '/web_development/tutorials/next-js-static-mdx-blog/navigation-and-next-link' }}
+    next={{ label: 'The mdx-components file', href: '/web_development/tutorials/next-js-static-mdx-blog/mdx-components-file' }}
+/>
 
 </article>

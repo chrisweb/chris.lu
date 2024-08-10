@@ -1,6 +1,48 @@
+---
+title: CI/CD pipeline for automatic deployments - Tutorial
+description: CI/CD pipeline for automatic deployments - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['CI/CD', 'Vercel', 'build', 'Production', 'preview']
+published: 2024-07-01T11:22:33.444Z
+modified: 2024-07-01T11:22:33.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/ci-cd-pipeline-setup
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
 %toc%
 
 <article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
 
 # CI/CD pipeline for automatic deployments
 
@@ -95,5 +137,10 @@ On top of that page, you will have a link to the live preview on the vercel.app 
 Congratulations 🎉 you are now viewing a preview version of your project hosted on Vercel
 
 If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+
+<Pagination
+    previous={{ label: 'package.json (npm run) scripts', href: '/web_development/tutorials/next-js-static-mdx-blog/package-json-scripts' }}
+    next={{ label: 'Error handling and logging', href: '/web_development/tutorials/next-js-static-mdx-blog/error-handling-and-logging' }}
+/>
 
 </article>

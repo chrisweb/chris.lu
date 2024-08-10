@@ -1,6 +1,48 @@
+---
+title: Linting MDX using remark-lint - Tutorial
+description: Linting MDX using remark-lint - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['Linting', 'MDX', 'markdown', 'remark', 'remark-lint', 'plugin', 'rules', 'eslint', 'nextjs']
+published: 2024-07-01T11:22:33.444Z
+modified: 2024-07-01T11:22:33.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/linting-mdx-using-remark-lint
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
 %toc%
 
 <article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
 
 # Linting MDX using remark-lint
 
@@ -238,5 +280,10 @@ When we now use our `npm run build` command (or when our deployment script uses 
 Congratulations 🎉 you just added linting for all your markdown content in your project's MDX pages
 
 If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+
+<Pagination
+    previous={{ label: 'Linting setup using ESLint', href: '/web_development/tutorials/next-js-static-mdx-blog/linting-setup-using-eslint' }}
+    next={{ label: 'Linting in VSCode using ESLint and MDX extensions', href: '/web_development/tutorials/next-js-static-mdx-blog/linting-using-vscode-and-extensions' }}
+/>
 
 </article>

@@ -1,10 +1,52 @@
+---
+title: First MDX page and understanding of static rendering - Tutorial
+description: First MDX page and understanding of static rendering - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['static', 'rendering', 'SSG', 'first', 'MDX', 'page', 'next/mdx']
+published: 2024-07-01T11:22:33.444Z
+modified: 2024-07-01T11:22:33.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/first-mdx-page-and-understanding-static-rendering
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
 %toc%
 
 <article>
 
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
+
 # First MDX page and understanding of static rendering
 
-We have reached yet another milestone as it is now time to create our very first MDX page, and after that, we will see how to know if pages got statically generated (or not)
+We have reached yet another milestone, now that we did [set up MDX support for Next.js](/web_development/tutorials/next-js-static-mdx-blog/nextjs-mdx-setup), it is now time to create our very first MDX page, and after that, we will see how to know if pages got statically generated (or not)
 
 ## Our first MDX page
 
@@ -69,5 +111,10 @@ If you liked this post, please consider making a [donation](https://buymeacoffee
 > [Vercel.com "How to choose the best rendering strategy for your app" blog post](https://vercel.com/blog/how-to-choose-the-best-rendering-strategy-for-your-app)
 > [Next.js "generateStaticParams" documentation](https://nextjs.org/docs/app/api-reference/functions/generate-static-params)  
 > [Next.js "Static Exports" documentation](https://nextjs.org/docs/app/building-your-application/deploying/static-exports)  
+
+<Pagination
+    previous={{ label: 'Next.js MDX support', href: '/web_development/tutorials/next-js-static-mdx-blog/nextjs-mdx-setup' }}
+    next={{ label: 'React in MDX and MDX in react', href: '/web_development/tutorials/next-js-static-mdx-blog/react-in-mdx-and-mdx-in-react' }}
+/>
 
 </article>

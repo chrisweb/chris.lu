@@ -1,6 +1,48 @@
+---
+title: Project setup and first commit - Tutorial
+description: Project setup and first commit - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['project', 'setup', 'first', 'commit', 'preview', 'git flow', 'VSCode']
+published: 2024-07-01T11:22:33.444Z
+modified: 2024-07-01T11:22:33.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/project-setup-and-first-commit
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
 %toc%
 
 <article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
 
 # Project setup and first commit
 
@@ -147,5 +189,10 @@ Finally, commit the changes and then synchronize them
 Congratulations 🎉 you just created a solid foundation for your project using create next app and did your first commit
 
 If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+
+<Pagination
+    previous={{ label: 'Prerequisites', href: '/web_development/tutorials/next-js-static-mdx-blog/prerequisites' }}
+    next={{ label: 'Typescript plugin and typed routes', href: '/web_development/tutorials/next-js-static-mdx-blog/typescript-plugin-and-typed-routes' }}
+/>
 
 </article>

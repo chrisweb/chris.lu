@@ -1,9 +1,50 @@
+---
+title: Optimizing images in MDX using next/image - Tutorial
+description: Optimizing images in MDX using next/image (LCP Core Web Vital optimization / VSCode MDX image drag and drop) - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['Optimizing', 'images', 'MDX', 'next/image', 'Tutorial', 'LCP', 'nextjs', 'developer experience', 'drag and drop', 'accessibility', 'Core Web Vital']
+published: 2024-07-01T11:22:33.444Z
+modified: 2024-07-01T11:22:33.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/optimizing-using-next-image
+section: Web development
+---
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBug, faComments } from '@fortawesome/free-solid-svg-icons'
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
 
 %toc%
 
 <article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
 
 # Optimizing images in MDX using next/image
 
@@ -1091,5 +1132,10 @@ If you liked this post, please consider making a [donation](https://buymeacoffee
 
 > [!MORE]  
 > [Next.js "next/image placeholder" documentation](https://nextjs.org/docs/app/api-reference/components/image#placeholder)  
+
+<Pagination
+    previous={{ label: 'Optimizing links in MDX using next/link', href: '/web_development/tutorials/next-js-static-mdx-blog/optimizing-using-next-link' }}
+    next={{ label: 'MDX plugins', href: '/web_development/tutorials/next-js-static-mdx-blog/mdx-plugins' }}
+/>
 
 </article>

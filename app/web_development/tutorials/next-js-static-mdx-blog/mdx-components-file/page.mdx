@@ -1,8 +1,50 @@
+---
+title: The mdx-components file - Tutorial
+description: The mdx-components file - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['CI/CD', 'Vercel', 'build', 'Production', 'preview']
+published: 2024-07-01T11:22:33.444Z
+modified: 2024-07-01T11:22:33.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/mdx-components-file
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
 %toc%
 
 <article>
 
-# The **mdx-components** file
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
+
+# The mdx-components file
 
 Before we experiment with plugins in the next chapter, I wanted to first come back to the `mdx-components.tsx` file, which we briefly saw when setting up MDX support (at the very beginning), as the file is required to make MDX work
 
@@ -79,5 +121,10 @@ Now ensure the dev server is running (or launch it using the `npm run dev` comma
 Congratulations 🎉 you just learned how to use the **mdx-components** file, in other parts of this tutorial, we will edit this file again and add several more features to it
 
 If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+
+<Pagination
+    previous={{ label: 'Styling the navigation and using next/font', href: '/web_development/tutorials/next-js-static-mdx-blog/navigation-styling-and-next-font' }}
+    next={{ label: 'Optimizing links in MDX using next/link', href: '/web_development/tutorials/next-js-static-mdx-blog/optimizing-using-next-link' }}
+/>
 
 </article>

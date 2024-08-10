@@ -1,6 +1,48 @@
+---
+title: Rehype slug plugin to add IDs to headings - Tutorial
+description: Rehype slug plugin to add IDs to headings - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['CI/CD', 'Vercel', 'build', 'Production', 'preview']
+published: 2024-07-01T11:22:33.444Z
+modified: 2024-07-01T11:22:33.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/headings-id-plugin
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
 %toc%
 
 <article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
 
 # Rehype slug plugin to add IDs to headings
 
@@ -107,5 +149,10 @@ If you liked this post, please consider making a [donation](https://buymeacoffee
 
 > [!MORE]  
 > [npmjs.com "rehype-slug" page](https://www.npmjs.com/package/rehype-slug)  
+
+<Pagination
+    previous={{ label: 'Code highlighting plugin', href: '/web_development/tutorials/next-js-static-mdx-blog/code-highlighting-plugin' }}
+    next={{ label: 'Table of contents (TOC) plugin', href: '/web_development/tutorials/next-js-static-mdx-blog/table-of-contents-plugin' }}
+/>
 
 </article>

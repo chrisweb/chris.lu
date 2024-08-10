@@ -1,6 +1,48 @@
+---
+title: Typescript plugin and typed routes - Tutorial
+description: Typescript plugin and typed routes - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['Typescript', 'plugin', 'typed', 'routes', 'Tutorial']
+published: 2024-07-01T11:22:33.444Z
+modified: 2024-07-01T11:22:33.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/typescript-plugin-and-typed-routes
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
 %toc%
 
 <article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
 
 # Typescript plugin and typed routes
 
@@ -75,5 +117,10 @@ If you liked this post, please consider making a [donation](https://buymeacoffee
 
 > [!WARN]  
 > Right now, there is a bug in Next.js that prevents MDX pages (page.mdx) from being recognized as routes when doing a production build (in development, the typed routes work well). I opened ticket #62335 on GitHub. Until the bug is fixed, I suggested only enabling the **typedRoutes in development**. You can do so by using the next config **phase** parameter to check if the current phase is **PHASE_DEVELOPMENT_SERVER**
+
+<Pagination
+    previous={{ label: 'Project setup and first commit', href: '/web_development/tutorials/next-js-static-mdx-blog/project-setup-and-first-commit' }}
+    next={{ label: 'Next.js configuration', href: '/web_development/tutorials/next-js-static-mdx-blog/nextjs-configuration' }}
+/>
 
 </article>

@@ -1,6 +1,48 @@
+---
+title: Optimizing links in MDX using next/link - Tutorial
+description: Optimizing links in MDX using next/link - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['Optimizing', 'links', 'MDX', 'next/link', 'mdx-components', 'External Url']
+published: 2024-07-01T11:22:33.444Z
+modified: 2024-07-01T11:22:33.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/optimizing-using-next-link
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
 %toc%
 
 <article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
 
 # Optimizing links in MDX using next/link
 
@@ -205,5 +247,10 @@ If you liked this post, please consider making a [donation](https://buymeacoffee
 
 > [!MORE]  
 > [VSCode "Markdown editing" documentation](https://code.visualstudio.com/docs/languages/markdown#_inserting-images-and-links-to-files)  
+
+<Pagination
+    previous={{ label: 'The mdx-components file', href: '/web_development/tutorials/next-js-static-mdx-blog/mdx-components-file' }}
+    next={{ label: 'Optimizing images in MDX using next/image', href: '/web_development/tutorials/next-js-static-mdx-blog/optimizing-using-next-image' }}
+/>
 
 </article>

@@ -1,6 +1,48 @@
+---
+title: Code highlighting plugin - Tutorial
+description: Code highlighting plugin - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['highlighting', 'rehype', 'plugin', 'pretty', 'code', 'shiki']
+published: 2024-07-01T11:22:33.444Z
+modified: 2024-07-01T11:22:33.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/code-highlighting-plugin
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
 %toc%
 
 <article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
 
 # Code highlighting plugin
 
@@ -852,5 +894,10 @@ If you liked this post, please consider making a [donation](https://buymeacoffee
 
 > [!MORE]  
 > [VSCode "Semantic Highlight" guide](https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers)  
+
+<Pagination
+    previous={{ label: 'MDX plugins', href: '/web_development/tutorials/next-js-static-mdx-blog/mdx-plugins' }}
+    next={{ label: 'Rehype slug plugin to add IDs to headings', href: '/web_development/tutorials/next-js-static-mdx-blog/headings-id-plugin' }}
+/>
 
 </article>

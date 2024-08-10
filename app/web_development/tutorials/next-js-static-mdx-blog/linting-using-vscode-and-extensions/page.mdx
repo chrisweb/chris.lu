@@ -1,12 +1,54 @@
+---
+title: Linting in VSCode using ESLint and MDX extensions - Tutorial
+description: Linting in VSCode using ESLint and MDX extensions - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['CI/CD', 'Vercel', 'build', 'Production', 'preview']
+published: 2024-07-01T11:22:33.444Z
+modified: 2024-07-01T11:22:33.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/linting-using-vscode-and-extensions
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
 %toc%
 
 <article>
 
-# Linting using VSCode and extensions
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
 
-We now have linting using the lint command 🎉, but we have no linting in VSCode itself (yet)
+# Linting in VSCode using ESLint and MDX extensions
 
-We are going to install 2 **VSCode extensions**
+We now have [linting set up and a custom lint command](/web_development/tutorials/next-js-static-mdx-blog/linting-setup-using-eslint) 🎉, but we have no linting in VSCode itself (yet)
+
+For that reason we are now going to install 2 **VSCode extensions**
 
 The first one will add linting messages directly into our code, and the second one will add MDX language support to the VSCode IntelliSense
 
@@ -295,5 +337,10 @@ So if we do both things, we get something like this:
 {/* eslint-disable-next-line mdx/remark */}
 > [Info - 8:41:03 PM] ESLint server is running.
 ```
+
+<Pagination
+    previous={{ label: 'Linting MDX using remark-lint', href: '/web_development/tutorials/next-js-static-mdx-blog/linting-mdx-using-remark-lint' }}
+    next={{ label: 'Styling and CSS libraries', href: '/web_development/tutorials/next-js-static-mdx-blog/styling-and-css' }}
+/>
 
 </article>

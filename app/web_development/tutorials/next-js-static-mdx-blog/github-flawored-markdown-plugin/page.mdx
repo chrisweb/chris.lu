@@ -1,6 +1,48 @@
+---
+title: GitHub flawored markdown plugin - Tutorial
+description: GitHub flawored markdown plugin - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['GitHub', 'flawored', 'plugin', 'gfm', 'markdown', 'mdx', 'remark-gfm', 'next/mdx', 'remark']
+published: 2024-07-01T11:22:33.444Z
+modified: 2024-07-01T11:22:33.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/github-flawored-markdown-plugin
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
 %toc%
 
 <article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
 
 # GitHub flawored markdown plugin(s)
 
@@ -596,5 +638,10 @@ If you liked this post, please consider making a [donation](https://buymeacoffee
 > ["footnotes bug list" in the micromark-extension-gfm-footnote readme](https://github.com/micromark/micromark-extension-gfm-footnote?tab=readme-ov-file#bugs)  
 > ["remark-gfm options" in the remark-gfm readme](https://github.com/remarkjs/remark-gfm?tab=readme-ov-file#options)
 > ["remark-rehype options" in the remark-rehype readme](https://github.com/remarkjs/remark-rehype?tab=readme-ov-file#options)  
+
+<Pagination
+    previous={{ label: 'Table of contents (TOC) plugin', href: '/web_development/tutorials/next-js-static-mdx-blog/table-of-contents-plugin' }}
+    next={{ label: 'GitHub-like alerts using the rehype-github-alerts plugin', href: '/web_development/tutorials/next-js-static-mdx-blog/github-like-alerts-plugin' }}
+/>
 
 </article>

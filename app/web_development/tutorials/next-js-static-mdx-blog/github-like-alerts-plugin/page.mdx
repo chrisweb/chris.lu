@@ -1,10 +1,52 @@
+---
+title: GitHub-like alerts (admonitions/callouts) using the rehype-github-alerts plugin - Tutorial
+description: GitHub-like alerts (admonitions/callouts) using the rehype-github-alerts plugin - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['GitHub', 'alerts', 'rehype', 'plugin', 'mdx', 'markdown', 'admonitions', 'callouts']
+published: 2024-07-01T11:22:33.444Z
+modified: 2024-07-01T11:22:33.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/github-like-alerts-plugin
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
 %toc%
 
 <article>
 
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
+
 # GitHub-like alerts using the rehype-github-alerts plugin
 
-The [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts) plugin to render alerts (admonitions/callouts) in a similar way to how GitHub does it, **rehype-github-alerts** is a plugin I did a while back after I first saw the [GitHub alerts RFC](https://github.com/orgs/community/discussions/16925) in which GitHub suggests adding a new alerts syntax to their GitHub markdown
+The [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts) plugin to render alerts (**admonitions**/**callouts**) in a similar way to how GitHub does it, **rehype-github-alerts** is a plugin I did a while back after I first saw the [GitHub alerts RFC](https://github.com/orgs/community/discussions/16925) in which GitHub suggests adding a new alerts syntax to their GitHub markdown
 
 The **rehype github alerts** plugin is not a copy of the exact GitHub source code as the code used for their implementation is NOT open source, but the **rehype github alerts** attempts to mimic the [GitHub alerts](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts) appearance and features, meaning that when you add alerts into your markdown and publish it on GitHub then the rendered alert output should be very similar to what you get when using this plugin, of course, the alerts style might be different for your project depending on what CSS you apply to them
 
@@ -230,5 +272,10 @@ If you liked this post, please consider making a [donation](https://buymeacoffee
 > [!MORE]  
 > [GitHub "rehype-github-alerts" repository](https://github.com/chrisweb/rehype-github-alerts)  
 > [npmjs.com "rehype-github-alerts" page](https://www.npmjs.com/package/rehype-github-alerts)  
+
+<Pagination
+    previous={{ label: 'GitHub flawored markdown plugin(s)', href: '/web_development/tutorials/next-js-static-mdx-blog/github-flawored-markdown-plugin' }}
+    next={{ label: 'Metadata (for tsx and mdx pages)', href: '/web_development/tutorials/next-js-static-mdx-blog/metadata' }}
+/>
 
 </article>

@@ -1,12 +1,56 @@
+---
+title: Table of contents (TOC) plugin - Tutorial
+description: Table of contents (TOC) remark plugin (remark-table-of-contents) - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['Table', 'contents', 'Table of contents', 'TOC', 'plugin', 'Next.js', 'MDX', 'remark', 'placeholder', 'support', 'markdown', 'typescript', 'react', 'observer', 'hook']
+published: 2024-07-01T11:22:33.444Z
+modified: 2024-07-01T11:22:33.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/table-of-contents-plugin
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
 %toc%
 
 <article>
 
-# Table of contents (TOC) plugin
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
+
+# Table of contents (TOC) plugin and React Observer Hook
 
 You have probably already seen such **table of contents (TOC)** widgets in blog posts and documentation that display a list of the main sections and serve as a way to quickly navigate to the headline of the section you are most interested in
 
 This is why the third plugin we are about to add to our MDX setup will do just that. It will automatically turn our headings (`# level 1`, `## level 2`, ...) into a **table of contents (TOC)** for each of our mdx pages, which is great as this means we won't have to make those lists manually and also if we change, add or remove headings the list will get updated automatically for us.
+
+In the second part of this tutorial we will build an React Observer Hook to detect which heading is currently inside the visible viewport and then we also build a React Highlight TOC component that will change the style of the currently active heading link in the table of contents
 
 ## Why I created my own TOC plugin
 
@@ -442,5 +486,10 @@ If you liked this post, please consider making a [donation](https://buymeacoffee
 > [MDN "Intersection Observer API" documentation](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)  
 > [react.dev "JSX conditanal rendering" documentation](https://react.dev/learn/conditional-rendering)  
 > [react.dev "custom hooks" documentation](https://react.dev/learn/reusing-logic-with-custom-hooks)  
+
+<Pagination
+    previous={{ label: 'Rehype slug plugin to add IDs to headings', href: '/web_development/tutorials/next-js-static-mdx-blog/headings-id-plugin' }}
+    next={{ label: 'GitHub flawored markdown plugin(s)', href: '/web_development/tutorials/next-js-static-mdx-blog/github-flawored-markdown-plugin' }}
+/>
 
 </article>
