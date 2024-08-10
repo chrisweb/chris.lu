@@ -57,7 +57,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                     <>
                         <aside>
                             <BaseLink href="#skipToc" className="skipToc">Skip table of contents</BaseLink>
-                            <div className='asideCore'>
+                            <div className="asideCore">
                                 <TocHighlight>
                                     {children}
                                 </TocHighlight>
