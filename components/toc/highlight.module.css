@@ -16,6 +16,10 @@
     line-height: 1.5;
 }
 
+.tocContainer ul:first-child {
+    margin-top: 0;
+}
+
 .tocContainer li a {
     margin-bottom: calc(var(--main-spacing) / 4);
 }
