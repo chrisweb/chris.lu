@@ -1,0 +1,126 @@
+---
+title: Vercel
+keywords: ['Vercel', 'ci/cd', 'deployment', 'hosting', 'SaaS']
+published: 2024-07-01T11:22:33.444Z
+modified: 2024-07-01T11:22:33.444Z
+permalink: https://chris.lu/web_development/posts/vercel
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+
+export const metadata = {
+    title: frontmatter.title,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/posts_vercel/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+# Vercel.com
+
+![a book with the title vercel.com surrounded by magical items](../../../../public/assets/images/app/web_development/posts/vercel/banner.png '{ banner }')
+
+**Vercel.com** is a cloud platform that automates your Javascript project's building, deploying, and scaling. Vercel can be set up to watch your GitHub repository, and every time you merge a pull request, it can trigger a new build process. When the build process is done, it will automatically deploy the code (depending on the branch, it will either deploy it as a staging or production version).
+
+Vercel has a (free) [Hobby](https://vercel.com/pricing) plan for developers who want to start a side project or just experiment with the service. It includes 6000 minutes of build execution for Automatic CI/CD deployments, 100 GB of bandwidth usage, and more.
+
+> [!MORE]  
+> [Vercel documentation](https://vercel.com/docs)  
+> [Vercel pricing](https://vercel.com/pricing)  
+
+## Create an account (sign up)
+
+* visit [vercel.com](https://vercel.com/)
+* click on **Sign Up** in the top right
+* Select the [Hobby](https://vercel.com/pricing) plan
+* then a field pops up asking you for your name. Enter a name (you can use your full name, or as I did, use your GitHub username or any display name you like). If you already or later plan to work in a team, then I recommend you choose a name they will recognize)
+* next, they ask you to connect your Git provider (or use your email address by clicking on "Continue with Email") to create a new account; I intended to connect to a GitHub account, so I clicked on the GitHub button (or click on [GitLab](https://about.gitlab.com/) or [Bitbucket](https://bitbucket.org/) if that is the git provider hosting your code), I usually try not to connect too many accounts which each other as a breach into one of them could potentially give the attacker access to the services that are linked to it too, but in this case, I chose to because in the next step, we need to connect our GitHub account anyway and allow Vercel to access repositories
+  * for a guide about creating a GitHub account, check out my chapter [Create a GitHub account (sign up)](/web_development/posts/github#create-an-account-sign-up) in the GitHub post
+* next, a pop-up window will open, asking you to authorize Vercel; there is one request they do, which is called [Act on your behalf](https://docs.github.com/en/apps/using-github-apps/authorizing-github-apps#about-github-apps-acting-on-your-behalf), this means that Vercel will be able to do tasks on your repositories, this is needed so that Vercel can fetch your code after you made a new commit or pull request and deploy the code on their servers (you will later get asked to give access to one or more repositories, meaning you can define which repositories Vercel can access and which not)
+
+![](../../../../public/assets/images/app/web_development/posts/vercel/vercel_github_permissions_modal.png)
+
+* click on **Authorize Vercel**, and you will get redirected to your new Vercel account dashboard
+
+> [!MORE]  
+> [vercel.com "Create an Account" documentation](https://vercel.com/docs/accounts/create-an-account)  
+> [GitHub "About GitHub Apps acting on your behalf" documentation](https://docs.github.com/en/apps/using-github-apps/authorizing-github-apps#about-github-apps-acting-on-your-behalf)  
+
+## Add a new project (repository)
+
+If you are not yet on the **new project** page, in the top left navigation, click on **Overview** and then below on the right, click on **Add New...** and select **Project**
+
+### Install GitHub on Vercel
+
+On this page, you will have a Box with the title **Import Git Repository**. If you have already installed GitHub in the past, then you will see a list of repositories, and in that case, you can jump to the next chapter [Import a Repository](#import-a-repository) (if you already installed GitHub but the repository is missing in the list then click on the **Adjust GitHub App Permissions** link to add access to that repository)
+
+Because we have already linked our GitHub account when signing up, we also have a **GitHub** button. Click on the button to start the process.
+
+Next, Vercel will open a modal asking you to give access to one or more repositories. I recommend only providing access to the repository where you store the code you want to deploy. To do so, click on the radio button next to **Only select repositories**
+
+Now click on the **Select repositories** select box and select your git repository.
+
+![](../../../../public/assets/images/app/web_development/posts/vercel/vercel_only_select_repositories.png)
+
+Finally, click on **Install** at the bottom of the modal.
+
+### Import a Repository
+
+On the new project page, you will see that your repository has been added to the Import Git Repository list. Click on the Import button to the right of your repository name.
+
+![](../../../../public/assets/images/app/web_development/posts/vercel/vercel_import_repository.png)
+
+Now you will be on a new page, **Configure Project**, you can change the **Project Name** of the project (I left it as is, as I like it to match the name of my repository)
+
+Next you can choose a **Framework Preset**, select **Next.js** (or the framework you chose for your project)
+
+The next option, **Root Directory**, you can leave it as is (if you use a monorepo that hosts multiple projects, you may want to set the root to the directory in which you placed your project)
+
+We also don't need to touch the **Build and Output Settings**, as we chose a **Framework Preset** earlier. These values are already set (if you know what you are doing and depending on what Framework you chose, you may want to adapt those values)
+
+The **Environment Variables** is something we have no use for just yet; it is, however, an interesting feature that lets you add environment variables to your project (instead of having a .env file in your project, you set the key-value pair here and can later download a copy of those variables into your development environment)
+
+Finally, click on **Deploy** (unfortunately, the only way to **save** the imported project is to click Deploy, which will start a deployment. You may need more time to be ready to make your first deployment, and your main branch may still be empty. This doesn't matter; still, proceed and click Deploy. If the main branch is empty, the deployment will just fail, but your project will be saved. You can also click on **Cancel Deployment** if you want)
+
+## Sentry integration for Vercel
+
+First, open the [Sentry integration page on Vercel](https://vercel.com/integrations/sentry)
+
+On the bottom right, click on **Add Integration**
+
+In the form, first, select your **Vercel account**
+
+Chose the radio button **Specific Projects** and then **select the project(s)** for which you want to enable the sentry integration
+
+Now, review the permissions you are giving to Sentry and click on **Install ** if you are okay with them.
+
+This will open a Sentry.io modal to **connect your projects**. In the first select box, choose your project on Vercel, and in the second, select box your project on Sentry.io. Finally, click the **+** (plus sign) button to add a new connection.
+
+Then click the **Complete on Vercel** button to return to Vercel. Now you are done, you can come back to the [Sentry integration page on Vercel](https://vercel.com/integrations/sentry) later and make some configuration adjustments or eventually remove the integration
+
+> [!TIP]  
+> If you want to verify that the environment variables have been set correctly by the Sentry Integration, go to your [Vercel Overview page](https://vercel.com), click on the name of **your project**, then in the top project navigation click on **Settings** and then on the settings page in the left navigation click on **Environment Variables**, if you now scroll down a bit you should see that the integration has added an entry for **SENTRY_AUTH_TOKEN** and a few other **SENTRY_XXX** environment variables
+
+> [!MORE]  
+> [Sentry integration page on Vercel](https://vercel.com/integrations/sentry)  
+
+</article>

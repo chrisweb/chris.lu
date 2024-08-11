@@ -1,0 +1,51 @@
+.preview>p {
+    --innerCornerSize: 39px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% calc(100% - var(--innerCornerSize)),
+            calc(100% - var(--innerCornerSize)) 100%,
+            0 100%);
+
+    background-color: var(--main-background-color);
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    height: 219px;
+    width: 100%;
+    color: #fff;
+}
+
+.title {
+    position: absolute;
+    top: 0;
+    display: flex;
+    align-items: center;
+    z-index: 1;
+    background-color: rgba(var(--main-background-value) / 0.6);
+    width: 100%;
+    padding: calc(var(--main-spacing) / 2);
+}
+
+/* experimental: p3 colors */
+@media (color-gamut: p3) {
+    .title {
+        background-color: color(display-p3 var(--main-background-value) / 0.6);
+    }
+}
+
+.link {
+    color: rgb(255, 255, 255);
+}
+
+/* not on mobile */
+@media (hover: hover) {
+
+    .link:hover {
+        color: var(--secondary-light-color);
+    }
+
+}

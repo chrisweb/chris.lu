@@ -1,0 +1,78 @@
+import BaseLink from '@/components/base/Link'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGithub } from '@fortawesome/free-brands-svg-icons'
+import styles from './page.module.css'
+import Link from 'next/link'
+import AsideContent from '@/components/aside/Content'
+import ImageAnimatedEmoji from '@/components/base/image/AnimatedEmoji'
+import gifRocketStaticImport from '/public/assets/images/noto_emoji_animated/48/rocket.gif'
+import webpRocketStaticImport from '/public/assets/images/noto_emoji_animated/48/rocket.webp'
+import { sharedMetaData } from '@/shared/metadata'
+
+export const metadata = {
+    title: 'Web development',
+    alternates: {
+        canonical: 'https://chris.lu/web_development',
+    },
+    openGraph: {
+        ...sharedMetaData,
+        url: 'https://chris.lu/web_development',
+    },
+}
+
+<aside>
+    <div className="asideCore">
+        <ul className="linksList">
+            <li>
+                <FontAwesomeIcon icon={faGithub} color='white' size="2x" className="social" /> <BaseLink href="https://github.com/chrisweb">My GitHub Projects</BaseLink>
+            </li>
+        </ul>
+        <AsideContent />
+    </div>
+</aside>
+<section id="web_development" className="middle">
+    <h1 className="h1">Web development&nbsp;<ImageAnimatedEmoji gifStaticImport={gifRocketStaticImport} webpStaticImport={webpRocketStaticImport} alt="animated emoji flying rocket" /></h1>
+    ## Posts
+    <div className="grid">
+        <Link href="/web_development/posts/road-to-react-19-next-js-15" className={styles.preview}>
+            ![a futuristic city with two signs "react" and "next.js"](../../public/assets/images/app/web_development/posts/road-to-react-19-next-js-15/banner.png '{ card }')
+            <span className={styles.title}>The road to React 19 and Next.js 14</span>
+        </Link>
+        <Link href="/web_development/posts/csp" className={styles.preview}>
+            ![a female robocop, in front of a police car with the text CSP on the side door, in a futuristic city](../../public/assets/images/app/web_development/posts/csp/banner.png '{ card }')
+            <span className={styles.title}>Content Security Policy (CSP)</span>
+        </Link>
+        <Link href="/web_development/posts/vscode" className={styles.preview}>
+            ![a woman wearing a VSCode t-shirt and writing code](../../public/assets/images/app/web_development/posts/vscode/banner.png '{ card }')
+            <span className={styles.title}>VSCode</span>
+        </Link>
+        <Link href="/web_development/posts/node-js" className={styles.preview}>
+            ![a waterfall of code with the text node.js](../../public/assets/images/app/web_development/posts/node-js/banner.png '{ card }')
+            <span className={styles.title}>Node.js</span>
+        </Link>
+        <Link href="/web_development/posts/git" className={styles.preview}>
+            ![two superheroes pointing at each other, it represents two versions of a file getting compared in a git diff](../../public/assets/images/app/web_development/posts/git/banner.png '{ card }')
+            <span className={styles.title}>git</span>
+        </Link>
+        <Link href="/web_development/posts/github" className={styles.preview}>
+            ![a stylized depiction of the GitHub mascot "octocat" in a futuristic city with a neon sign that reads GitHub and Git](../../public/assets/images/app/web_development/posts/github/banner.png '{ card }')
+            <span className={styles.title}>GitHub</span>
+        </Link>
+        <Link href="/web_development/posts/vercel" className={styles.preview}>
+            ![a book with the title vercel.com surrounded by magical items](../../public/assets/images/app/web_development/posts/vercel/banner.png '{ card }')
+            <span className={styles.title}>Vercel</span>
+        </Link>
+        <Link href="/web_development/posts/sentry-io" className={styles.preview}>
+            ![a robot with sentry.io written on his chest that is catching bugs with a huge net](../../public/assets/images/app/web_development/posts/sentry-io/banner.png '{ card }')
+            <span className={styles.title}>Sentry.io</span>
+        </Link>
+        <Link href="/web_development/posts/npm" className={styles.preview}>
+            ![conveyor belts moving lots of packages](../../public/assets/images/app/web_development/posts/npm/banner.png '{ card }')
+            <span className={styles.title}>NPM and package.json</span>
+        </Link>
+        <Link href="/web_development/posts/mdx" className={styles.preview}>
+            ![a mad scientist mixing the content of a bottle labeled markdown with the content of another bottle labeled JSX into a big bowl labeled MDX](../../public/assets/images/app/web_development/posts/mdx/banner.png '{ card }')
+            <span className={styles.title}>MDX introduction</span>
+        </Link>
+    </div>
+</section>

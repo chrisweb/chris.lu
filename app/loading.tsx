@@ -3,7 +3,9 @@ export default function Loading() {
 
     return (
         <>
-            Loading...(next.js loading.tsx)
+            <section className="core">
+                <h1 className="h1">Loading...</h1>
+            </section>
         </>
     )
 }

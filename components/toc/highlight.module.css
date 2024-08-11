@@ -1,0 +1,55 @@
+.tocContainer {
+    margin-bottom: var(--main-spacing);
+}
+
+/* on phone don't show toc */
+@media all and (max-width: 768px) {
+    .tocContainer {
+        display: none;
+    }
+}
+
+.tocContainer ul {
+    list-style-type: none;
+    padding-inline-start: 2ch;
+    font-size: var(--main-fontSize-smaller);
+    line-height: 1.5;
+}
+
+.tocContainer ul:first-child {
+    margin-top: 0;
+}
+
+.tocContainer li a {
+    margin-bottom: calc(var(--main-spacing) / 4);
+}
+
+.tocContainer li a.active {
+    color: var(--secondary-light-color);
+    font-weight: var(--main-fontWeight-activeLinks);
+    text-shadow: 0px 0px 10px var(--secondary-light-color), 0px 0px 20px var(--secondary-light-color);
+}
+
+.tocContainer li a:not(.active) {
+    color: var(--quaternary-light-color);
+    font-weight: var(--main-fontWeight-links);
+}
+
+/* if the color-mix css feature is supported
+make the text color a bit darker */
+@supports (color: color-mix(in srgb, var(--quaternary-light-color), black 20%)) {
+
+    .tocContainer li a:not(.active) {
+        color: color-mix(in srgb, var(--quaternary-light-color), black 20%);
+    }
+
+}
+
+/* not on mobile */
+@media (hover: hover) {
+
+    .tocContainer li a:not(.active):hover {
+        color: var(--secondary-light-color);
+    }
+
+}

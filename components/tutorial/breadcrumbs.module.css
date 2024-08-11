@@ -1,0 +1,40 @@
+.nav {
+    margin-bottom: var(--main-spacing);
+}
+
+.inline {
+    display: inline-block;
+}
+
+/* on phone don't show toc */
+@media all and (max-width: 768px) {
+    .nav {
+        flex-direction: column;
+    }
+}
+
+.icon {
+    margin: 0 calc(var(--main-spacing) / 4);
+}
+
+.nav a {
+    color: var(--quaternary-light-color);
+    font-weight: var(--main-fontWeight-links);
+}
+
+/* if the color-mix css feature is supported
+make the text color a bit darker */
+@supports (color: color-mix(in srgb, var(--quaternary-light-color), black 20%)) {
+
+    .nav a {
+        color: color-mix(in srgb, var(--quaternary-light-color), black 20%);
+    }
+
+}
+
+/* not on mobile */
+@media (hover: hover) {
+    .nav a:hover {
+        color: var(--secondary-light-color);
+    }
+}

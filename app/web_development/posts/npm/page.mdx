@@ -1,0 +1,287 @@
+---
+title: npm & package.json
+keywords: ['npm', 'package.json', 'publishing', 'package']
+published: 2024-07-01T11:22:33.444Z
+modified: 2024-07-01T11:22:33.444Z
+permalink: https://chris.lu/web_development/posts/npm
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+
+export const metadata = {
+    title: frontmatter.title,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/posts_npm/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+# npm & package.json
+
+![conveyor belts moving lots of packages](../../../../public/assets/images/app/web_development/posts/npm/banner.png '{ banner }')
+
+## npm
+
+**npm** (Node Package Manager) is a package manager that comes with every installation of Node.js but can be installed/updated separately if needed. **npm** also has a Command Line Interface (CLI) tool to install the dependencies listed in a package.json file. By default, it will install packages that are hosted on npmjs.com. Still, it can also be used to install the content of a GitHub repository (or any other git online platform like [GitLab](https://about.gitlab.com/)). There are several popular alternatives to npm, like [yarn](https://yarnpkg.com/) or [PNPm](https://pnpm.io/)
+
+> [!MORE]  
+> [npm documentation](https://docs.npmjs.com/)  
+
+### Installation
+
+You usually don't need to install NPM manually as it is bundled with Node.js. If you install Node.js, you already have NPM installed.
+
+### checking the current NPM version
+
+You can use the following command in the VSCode terminal (or your favorite command line tool) to check which version of NPM is currently installed:
+
+```shell
+npm -v
+```
+
+### Updating
+
+To update npm manually to the latest version, open the VSCode terminal (or use your favorite command line tool) and enter the following command:
+
+```shell
+npm install -g npm@latest
+```
+
+## package.json
+
+**package.json** is a file you will find in most Javascript (Typescript) projects. Package.json is a JSON file that contains metadata about the project, like the project name, a description and the current version, a list of dependencies as well as devDependencies, scripts (custom scripts that can be run from the command line using `npm run SCRIPT_NAME`), ...
+
+**package-lock.json** is a file that gets created when you install packages using a package manager. It lists the exact version of each installed package and its dependencies (unlike the package.json itself, which often allows a range of versions to be installed). This file is important as it can be used to create reproducible builds. When you test your project on the staging server and then deploy it to production, you don't want the package versions to be different, as this could introduce bugs after you are done testing if a package uses a newer version in production than previously on the staging server.
+
+> [!MORE]  
+> [npmjs.com "package.json" documentation](https://docs.npmjs.com/cli/configuring-npm/package-json)  
+> [nodejs.org "Modules: Packages" documentation](https://nodejs.org/api/packages.html)  
+
+### creating a package.json
+
+You can create one manually using your IDE or copy a package.json from another project and then edit it to fit your needs, but the easiest way is to use the npm cli and let it create a package.json for you.
+
+Use your VSCode terminal (or favorite command line tool) to execute the following command and have npm guide you step by step through the creation of your `package.json` file:
+
+```shell
+npm init
+```
+
+Answer the questions displayed. When you have done this, npm will create a `package.json` in the root of your project.
+
+### dependencies
+
+The part of your package.json that will change the most is the dependencies section.
+
+The dependencies list is an object that maps a dependency name to a version (for all dependencies that come from a registry like npmjs.com)
+
+### add a dependency
+
+You can manually add a dependency by editing the package.json and then running the command `npm i' to install it.
+
+But usually, you will use a command. For example, to install react, you would use:
+
+```shell
+npm i react react-dom
+```
+
+This will install react and react-dom and update your package.json and the package-lock.json file.
+
+```json title="package.json"
+    "dependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+    },
+```
+
+#### What are dependencies semver versions?
+
+Packages use semantic versioning (semver) for their version numbers, with semver a version having 3 parts **MAJOR.MINOR.PATCH**:
+
+* if the patch number changes, it means there has been a fix that does NOT introduce any breaking changes, and also NO new features, but one or more existing features received a fix, meaning if you install that version, nothing is supposed to break in your code
+* the second number indicates a minor change has happened, meaning a new feature got added to the package, but this new feature does not introduce breaking changes
+* the major version indicates that existing features got modified in a way that potentially will introduce breaking changes, so when updating a package and there is a change in the major version, it is highly recommended that you check out the package's changelog. If you find breaking changes, you need to verify if those will impact your code that uses the package. If there is an impact, then you need to update your code accordingly after installing the update and before committing the update
+
+> [!NOTE]  
+> when you install a dependency, the verion will be prefixed with a **^** (carret), when using **caret ranges** npm will install the version you specified as long as there is no newer version available, if however a newer PATCH or even MINOR version is available then npm will install the newer version instead, if we take the example above where we have "^18.2.0", this means npm will install react 18.2.0 as long as there is no update, however if react releases a fix for an existing feature and increment their PATCH number then the newest version would be 18.2.1 and if you now use the npm install command then npm will install 18.2.1 (and not 18.2.0 anymore), this is also true if the react team adds a new feature and bumps their MINOR number to 18.3.0 then npm will install that version, however if the react team adds breaking changes and the new version is 19.0.0 then npm will not update your package because this version might introduce breaking changes, instead npm will use the latest 18.x.x available version
+
+> [!MORE]  
+> [Semantic Versioning Specification](https://semver.org/)  
+> [npmjs-com "About semantic versioning" documentation](https://docs.npmjs.com/about-semantic-versioning)  
+
+#### dependency version pinning (optional)
+
+if (like me) you prefer to **pinning** versions of package, then add the option **--save-exact** to your command:
+
+```shell
+npm i react react-dom --save-exact
+```
+
+This will add the dependencies to your package.json as before, but the difference is that the version will NOT be prefixed with a **^** (carret):
+
+```json title="package.json"
+    "dependencies": {
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+    },
+```
+
+> [!NOTE]  
+> I like to pin versions to know exactly which version of each dependency is installed. Occasionally, I manually update all my dependencies, depending on how big the difference between the two versions is. I also visited the dependencies GitHub repository and checked the change.log to find out what has changed between the version I installed and the new version I'm about to install. This helps me find out about new features I might want to use, and if I see that there is a section mentioning potential breaking changes, then I know that I need to verify if it impacts my code and eventually update my code.  
+
+#### VSCode extension for manual version updates
+
+To make manual updates of my dependencies easier, I use a VSCode extension called [versionlens](https://marketplace.visualstudio.com/items?itemName=pflannery.vscode-versionlens). I like this extension because when I open my package.json, it will fetch all the versions of the packages I have installed and tell me if a new version is available. If there is a new version and I want to use it, all I need to do is click on **↑ latest x.x.x** (where x.x.x stands for the new version number), and the version lens will insert the new version for me. When I'm done with updating the versions, I save the package.json and then install the new versions with the command `npm i`
+
+> [!MORE]  
+> [VSCode "versionlens" extension](https://marketplace.visualstudio.com/items?itemName=pflannery.vscode-versionlens)  
+
+### Git(Hub) URLs as Dependencies
+
+If a package/repository has not been published on npm, for example, one of your own projects on GitHub, and you want to add it as a dependency to your project, then you can do this, too.
+
+```json title="package.json"
+"dependencies": {
+    "GITHUB_REPOSITORY_NAME": "github:USER_NAME/REPOSITORY_NAME",
+},
+```
+
+This will add the package located at https://github.com/USER_NAME/REPOSITORY_NAME as a dependency.
+
+If you want to pin a more specific version of the repository, you can do so by adding a hash symbol at the end, followed by the commit ID or the tag (if the repository author has published a tag) or a release version.
+
+For example, if adding a repository with the latest commit ID being **d29f7d9**, then you would do like this:
+
+```json title="package.json"
+"dependencies": {
+    "GITHUB_REPOSITORY_NAME": "github:USER_NAME/REPOSITORY_NAME#d29f7d9",
+},
+```
+
+> [!MORE]  
+> [npmjs.com "package.json git(hub) urls" documentation](https://docs.npmjs.com/cli/v10/configuring-npm/package-json#github-urls)  
+
+#### private repositories as a dependency
+
+> [!NOTE]  
+> It is also possible to use a Git(Hub) URL of a private repository, but you need to add a method that will grant access to that private repository so that the tools in your pipeline can access it, for example, when fetching those dependencies to start development but also later when doing deployments, so be careful what you use to access the private repository as some methods might for example not be compatible with the deployment tools or the hosting platform you use  
+
+I will list a few methods here and add some links to the relevant documentation, but I will not add a complete walkthrough as those differ quite a lot depending on what platform your code is hosted on and based on what tools are in your deployment pipeline (if, however, I see that there is interest in such a tutorial in the [GitHub discussions for chris.lu](https://github.com/chrisweb/chris.lu/discussions) then I might write one in the future)
+
+An alternative to using private GitHub repositories is to use npm to host [private packages](https://docs.npmjs.com/creating-and-publishing-private-packages) but be aware that this is a paid service
+
+##### using a GitHub personal access token
+
+For example, this method is recommended if you intend to deploy it on Vercel. In their [Private dependencies on Vercel](https://vercel.com/guides/using-private-dependencies-with-vercel) documentation, this is the method they recommend using. If this is the method you chose, then you might first check out the [GitHub personal access tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) documentation, which explains how to create and manage personal access tokens
+
+First, you need to create a personal access token, and then by adding the private repository to the `package.json` like this, it will be possible to access the private repository using the personal access token:
+
+```json title="package.json"
+"dependencies": {
+    "GITHUB_REPOSITORY_NAME": "git+https://USER_NAME:PERSONAL_TOKEN@github.com:USER_NAME/REPOSITORY_NAME"
+}
+```
+
+> [!MORE]  
+> [Vercel "How do I use private dependencies with Vercel?" documentation](https://vercel.com/guides/using-private-dependencies-with-vercel)  
+> [GitHub "Managing your personal access tokens" documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)  
+
+##### using a GitHub App access tokens
+
+If you are part of an organization on GitHub, there is an alternative you might want to check out called [GitHub App installation access tokens](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#github-app-installation-access-tokens)
+
+> [!MORE]  
+> [GitHub "App installation access tokens" documentation](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#github-app-installation-access-tokens)  
+
+##### Using a GitHub repository, deploy key
+
+For example, one such method to access private repositories is to use a GitHub repository deploy key. The public part of that key is then given to your developers, who store it locally in their SSH agent. Then, by adding the private repository to the `package.json` like this, it will be possible to access the private repository:
+
+```json title="package.json"
+"dependencies": {
+    "GITHUB_REPOSITORY_NAME": "git+ssh://git@github.com:USER_NAME/REPOSITORY_NAME"
+}
+```
+
+The important part is replacing **github** (from the previous examples) with **git+ssh://git@github.com:**. This tells npm to use SSH to get your package (instead of https)
+
+> [!MORE]  
+> [GitHub "Managing deploy keys" documentation](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys)  
+> [GitHub "Generating a new SSH key" documentation](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key)  
+> [GitHub "Working with SSH key passphrases" documentation](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/working-with-ssh-key-passphrases)  
+
+## Publishing a package on npmjs.com
+
+To publish a package on npm, you can use the version command to bump the version in your package.json and also create a git commit:
+
+```shell
+npm version MY_PACKAGE_VERSION
+```
+
+So, for example:
+
+```shell
+npm version 2.0.0
+```
+
+Then, to publish the package, you use this command:
+
+```shell
+npm publish
+```
+
+### Publishing a beta version
+
+To publish a beta version of your version, you need to add **-beta.MY_BETA_VERSION** at the end of your version number, MY_BETA_VERSION is a number that **starts at 0 (zero)** when you publish your **first beta**, the next beta will be -beta.1 and so on
+
+The package version (MY_PACKAGE_VERSION) is the version you will want to use when the package comes out of beta, so for example, 2.1.0
+
+So, to publish the first beta of the 2.1.0 version of your package, you use this command:
+
+```shell
+npm version 2.1.0-beta.0
+```
+
+Then, to publish the beta, you use the option **--tag beta**, like so:
+
+```shell
+npm publish --tag beta
+```
+
+The beta will not impact your **latest** package, meaning that if users use the regular `npm i PACKAGE_NAME` command, they will still get the latest version. However, if a user wants to **explicitly install the beta**, they can do so using this command:
+
+```shell
+npm i PACKAGE_NAME@beta
+```
+
+## NPM alternatives
+
+The two major developer/code platforms **GitHub** and **GitLab** each have their own **package registries**. If you are interested I recommend you check out the [documentation on how to use packages hosted on GitHub](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#installing-a-package) or the [documentation on how to use packages hosted on GitLab](https://docs.gitlab.com/ee/user/packages/npm_registry/#install-a-package)
+
+In [march 2024 Deno announced jsr.io](https://deno.com/blog/jsr_open_beta), [JSR](https://jsr.io/) is an ESM only (and typescript first) package registry, also good to know is that [JSR has a npm compatibility layer](https://jsr.io/docs/npm-compatibility), check out the **JSR** [docs](https://jsr.io/docs/introduction) if you want to learn more about **publishing** or **installing** packages or check out the [Ryan Dahl introduces JSR at DevWorld 2024](https://youtu.be/MFCn4ce5dVc?si=T857PpDaOL0jROqk) YouTube video
+
+> [!MORE]  
+> [jsr.io](https://jsr.io/)  
+> [GitHub package registry](https://docs.github.com/en/packages/learn-github-packages/introduction-to-github-packages)  
+> [GitLab package registry](https://docs.gitlab.com/ee/user/packages/npm_registry/)  
+
+</article>

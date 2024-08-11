@@ -1,0 +1,53 @@
+.reset {
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+    background-color: transparent;
+}
+
+.dialog {
+    box-shadow: 0 0 10px 5px var(--primary-light-color);
+    background-color: rgba(var(--primary-light-value) / 0.3);
+    width: 40px;
+    height: 170px;
+    position: fixed;
+    right: 85px;
+    left: auto;
+    top: -300px;
+    z-index: 41;
+}
+
+/* experimental: p3 colors */
+@media (color-gamut: p3) {
+    .dialog {
+        background-color: color(display-p3 var(--primary-light-value) / 0.3);
+    }
+}
+
+.dialog[open] {
+    animation: openAnimation .5s ease forwards;
+}
+
+.dialog.close {
+    animation: closeAnimation .5s ease forwards;
+}
+
+@keyframes openAnimation {
+    from {
+        top: -300px;
+    }
+
+    to {
+        top: calc(var(--main-spacing) + var(--header-navbar-height));
+    }
+}
+
+@keyframes closeAnimation {
+    from {
+        top: calc(var(--main-spacing) + var(--header-navbar-height));
+    }
+
+    to {
+        top: -300px;
+    }
+}

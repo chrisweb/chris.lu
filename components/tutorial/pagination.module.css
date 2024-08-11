@@ -1,0 +1,111 @@
+.nav {
+    display: flex;
+    flex-direction: row;
+    gap: calc(var(--main-spacing) / 2);
+}
+
+/* on phone don't show toc */
+@media all and (max-width: 768px) {
+    .nav {
+        flex-direction: column;
+    }
+}
+
+.iconLeft {
+    margin-right: calc(var(--main-spacing) / 6);
+}
+
+.iconRight {
+    margin-left: calc(var(--main-spacing) / 6);
+}
+
+.borderRight {
+    width: 100%;
+    height: 100%;
+    padding: 1px;
+    --cornerSideLength: 12px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
+            0 100%);
+    background: linear-gradient(90deg, var(--quaternary-light-color) 0%, var(--primary-light-color) 95%);
+    border: 0;
+    color: var(--primary-light-color);
+    font-weight: 600;
+}
+
+.borderLeft {
+    width: 100%;
+    height: 100%;
+    padding: 1px;
+    --cornerSideLength: 12px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% 100%,
+            calc(var(--cornerSideLength)) 100%,
+            0 calc(100% - var(--cornerSideLength)));
+    background: linear-gradient(90deg, var(--primary-light-color) 0%, var(--quaternary-light-color) 95%);
+    border: 0;
+    color: var(--primary-light-color);
+    font-weight: 600;
+}
+
+/* experimental: p3 colors */
+@media (color-gamut: p3) {
+
+    .borderRight {
+        background: linear-gradient(90deg in srgb, var(--quaternary-light-color) 0%, var(--primary-light-color) 95%);
+    }
+
+    .borderLeft {
+        background: linear-gradient(90deg in srgb, var(--primary-light-color) 0%, var(--quaternary-light-color) 95%);
+    }
+}
+
+.coreRight {
+    width: 100%;
+    height: 100%;
+    padding: calc(var(--main-spacing) / 2);
+    position: relative;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    background-color: var(--main-background-color);
+    --cornerSideLength: 12px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
+            0 100%);
+    text-align: right;
+}
+
+.coreLeft {
+    width: 100%;
+    height: 100%;
+    padding: calc(var(--main-spacing) / 2);
+    position: relative;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    background-color: var(--main-background-color);
+    --cornerSideLength: 12px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% 100%,
+            calc(var(--cornerSideLength)) 100%,
+            0 calc(100% - var(--cornerSideLength)));
+}

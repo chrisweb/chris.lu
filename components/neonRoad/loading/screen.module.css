@@ -1,0 +1,39 @@
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    z-index: 10;
+    position: absolute;
+    top: var(--header-navbar-height);
+    padding: var(--main-spacing);
+}
+
+@media all and (max-width: 1120px) {
+
+    .loadingContainer {
+        top: 0;
+        padding: calc(var(--main-spacing) / 2);
+    }
+
+}
+
+.loadingContainer .loadingText {
+    /* https://fonts.google.com/specimen/VT323 */
+    font-family: var(--font-vt323);
+    font-size: var(--main-fontSize-big1);
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: subpixel-antialiased;
+    color: var(--primary-light-color)
+}
+
+@media all and (max-width: 1120px) {
+
+    .loadingContainer .loadingText {
+        font-size: var(--main-fontSize-big5);
+    }
+}
