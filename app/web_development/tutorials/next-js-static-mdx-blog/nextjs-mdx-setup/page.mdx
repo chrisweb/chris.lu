@@ -234,7 +234,7 @@ Unfortunately, the documentation does not clearly state that **plugins do NOT wo
 
 When Next.js mentions the Rust compiler then they are talking about [SWC](https://swc.rs/), mdxRs the Rust compiler for MDX is the [mdxjs-rs](https://github.com/wooorm/mdxjs-rs) package, it uses the [markdown-rs](https://github.com/wooorm/markdown-rs) package to parse markdown and **SWC** for everything that is javascript
 
-It is the **mdxjs-rs** [README](https://github.com/wooorm/mdxjs-rs#when-should-i-use-this) that has the information that plugins are not supported yet that:
+It is the **mdxjs-rs** [README](https://github.com/wooorm/mdxjs-rs#when-should-i-use-this) that has the information that plugins are not supported yet, their readme states that:
 
 > This project does not yet support plugins
 
@@ -261,6 +261,8 @@ Now that we have disabled mdxRs, we also need to install the MDX webpack plugin 
 ```shell
 npm i @mdx-js/loader --save-exact
 ```
+
+This webpack plugin will handle parsing MDX and is a replacement for the MDX rust compiler we just disabled
 
 > [!NOTE]  
 > In Next.js 13, the @mdx-js/loader webpack plugin was a dependency of @next/mdx and would get installed when you install @next/mdx
