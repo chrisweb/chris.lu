@@ -151,6 +151,28 @@ Now you can clone that repository and start editing your profile readme.
 > [!MORE]  
 > [GitHub "Managing your profile README" documentation](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme)  
 
+## Add a "Sponsor this project" link to your repository
+
+You can add one or more **Sponsor this project** links any of your repositories, GitHub has their own [GitHub Sponsors](https://github.com/sponsors) service but you can also add other services like [Buy Me a Coffee](https://buymeacoffee.com/) or [Patreon ](https://www.patreon.com/). here is the full [list of supported services](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository)
+
+In the root of your repository create a `.github` folder
+
+Inside of the `.github` folder create a `FUNDING.yml` file
+
+In the `FUNDING.yml` file add the services you want to use
+
+For example if you have a [Buy Me a Coffee](https://buymeacoffee.com/) then you would add this to your `FUNDING.yml` file
+
+```yml
+buy_me_a_coffee: YOUR_BUY_ME_A_COFFEE_USERNAME
+```
+
+Now commit your changes and then go to your repository page on GitHub and look at the sidebar, there should be a **Sponsor this project** section with one or more sponsor button(s)
+
+> [!MORE]  
+> [github "sponsor button" documentation](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository)
+> [github "sponsors" documentation](https://docs.github.com/en/sponsors/receiving-sponsorships-through-github-sponsors/about-github-sponsors-for-open-source-contributors)  
+
 ## Create your own custom Octocat
 
 Want to have some fun and create your own custom Octocat, then visit [https://myoctocat.com/](https://myoctocat.com/)
