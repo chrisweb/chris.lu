@@ -322,9 +322,9 @@ const securityHeadersConfig = (phase) => {
                 ${defaultCSPDirectives}
                 font-src 'self';
                 style-src 'self' 'unsafe-inline';
-                script-src 'self';
+                script-src 'self' 'unsafe-inline';
                 connect-src 'self' https://vitals.vercel-insights.com ${reportingDomainWildcard};
-                img-src 'self';
+                img-src 'self' data:;
                 frame-src 'none';
                 ${reportCSPViolations}
             `
