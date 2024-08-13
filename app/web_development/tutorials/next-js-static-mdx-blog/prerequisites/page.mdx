@@ -51,17 +51,17 @@ export const metadata = {
 >  
 > For example, if you already have a GitHub account, then you can skip that step, or if you prefer to install another IDE than the one I suggest, then feel free to do so
 
-First, we need a **GitHub account** to store our code in a GitHub repository (if you prefer to use another service like [GitLab](https://about.gitlab.com/) or [Bitbucket](https://bitbucket.org/), feel free to do so), which will make it easy to access your code on multiple devices and will also allow us to share your code with others
+First, we need a **GitHub account** to store our code in a GitHub repository (if you prefer to use another service like [GitLab](https://about.gitlab.com/) or [Bitbucket](https://bitbucket.org/), feel free to do so), having our code on GitHub will make it easy to access our code on multiple devices, it will serve as a backup in case something happens to our local copy and it will also allow us to share our code with others (in the future)
 
-Later on, we will use GitHub to sign in to services like Vercel.com to set up an automatic CI/CD pipeline that will automatically deploy our code and sign up for a Sentry.io to add error monitoring so that when a user encounters a bug, it gets listed with a stack trace in Sentry.io.
+Later on, we will use GitHub to sign in to services like Vercel.com, which we will use to set up an automatic CI/CD pipeline that will automatically deploy our code. To sign up for a Sentry.io account which we will use for error monitoring so that when a user encounters a bug, it gets listed with a stack trace in Sentry.io.
 
 * [create a GitHub account](/web_development/posts/github)
 
-After creating a GitHub account, you need to **create a repository** on GitHub for our Code:
+After creating a GitHub account, we need to **create a repository** on GitHub for our Code:
 
 * [create a new GitHub repository](/web_development/posts/github#create-a-repository)
 
-Next, we need to **install git**, which is a version control tool that VSCode will use:
+Next, we need to **install git**, which is a version control tool that VSCode will use to synchronize our local code with our remote repository:
 
 * [install git](/web_development/posts/git)
 
@@ -75,14 +75,14 @@ Now we need to sign in to our GitHub account in VSCode and use the VSCode source
 
 * [clone GitHub repository in VSCode](/web_development/posts/vscode#cloning-your-github-repository-in-vscode)
 
-To be able to create a Javascript backend and run our Javascript code locally, we need to install the Node.js runtime:
+To be able to create a Javascript backend and run our Javascript code locally, we need to install the Node.js runtime (which comes with npm which we will use to manage our node_modules packages):
 
 * [install Node.js (and npm)](/web_development/posts/node-js)
 
 > [!NOTE]  
 > The **Next.js 14** "app directory features" require Node.js v18.17 or later, so if you skipped the Node.js installation document because you already have Node.js installed, then just make sure you have a version installed that is high enough
 >  
-> To do that, you can, for example, use the following command: `node -v`
+> To check what version is currently installed, you can use following command: `node -v`
 
 ## The road to React 19 and Next.js 15
 
@@ -95,8 +95,8 @@ If you have not built a project with Next.js 13/14/15 and React 18/19 yet, I rec
 > [!MORE]  
 > [chris.lu "The road to React 19 and Next.js 15" post](/web_development/posts/road-to-react-19-next-js-15)  
 
-<Pagination
+{/*<Pagination
     next={{ label: 'Project setup and first commit', href: '/web_development/tutorials/next-js-static-mdx-blog/project-setup-and-first-commit' }}
-/>
+/>*/}
 
 </article>
