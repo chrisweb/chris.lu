@@ -2,7 +2,7 @@
 title: VSCode
 keywords: ['VSCode', 'ide', 'programming', 'extension', 'theme']
 published: 2024-08-05T11:22:33.444Z
-modified: 2024-08-05T11:22:33.444Z
+modified: 2024-08-14T23:34:55.444Z
 permalink: https://chris.lu/web_development/posts/vscode
 section: Web development
 ---
@@ -39,16 +39,20 @@ export const metadata = {
 
 ![a woman wearing a vscode t-shirt and writing code](../../../../public/assets/images/app/web_development/posts/vscode/banner.png '{ banner }')
 
-**VSCode** (Visual Studio Code) is a versatile Integrated Development Environment (IDE) we will use to write our Javascript / Typescript code. I like VSCode because it has a lot of great features like smart code completion called [Intellisense](https://code.visualstudio.com/docs/editor/intellisense), code [refactoring](https://code.visualstudio.com/docs/editor/refactoring)...
+**VSCode** (Visual Studio Code) is a versatile Integrated Development Environment (IDE). VSCode is amazing to develop projects using Javascript / Typescript (and HTML, CSS) but it supports a wide range of other languages. I like VSCode because it has a lot of great features like smart code completion called [Intellisense](https://code.visualstudio.com/docs/editor/intellisense), code [refactoring](https://code.visualstudio.com/docs/editor/refactoring)...
 
-VSCode also comes with great [debugging](https://code.visualstudio.com/docs/editor/debugging) tools, meaning you can debug your frontend but also backend code within VSCode. For example, managing breakpoints is similar to debugging in the Chrome developer tools. The [VSCode debugger](https://code.visualstudio.com/docs/editor/debugging) launch configuration json file makes it very easy to adapt the debugger to any project, and the debugger launch.json can then be shared as part of your git repository to make it very easy for other developers that will work on your project and that also use VSCode to use the debugger without having to configure it themself 
+VSCode also comes with great [debugging](https://code.visualstudio.com/docs/editor/debugging) tools, meaning you can debug your frontend but also backend code within VSCode. For example, managing breakpoints is similar to debugging using the Chrome developer tools debugging tools. The [VSCode debugger](https://code.visualstudio.com/docs/editor/debugging) launch configuration json file (launch.json) makes it very easy to adapt the **debugger** to any project, and the debugger **launch.json** can then be shared as part of your git repository, to make it very easy for other developers that will work on your project, and that also use VSCode, to use the debugger without having to configure it themself
 
-What is also great is that it has [integrated source control (git) support](https://code.visualstudio.com/docs/sourcecontrol/overview). Staging, switching between branches, and pushing are all supported by VSCode, meaning we will be able to push our commits directly to GitHub from within VSCode with just one click. It also makes resolving conflicts and merging very easy using its visual diff (as opposed to using git in the terminal or any other command line tool, which is another option if you prefer).
+What is also great is that VSCode has [integrated source control (git) support](https://code.visualstudio.com/docs/sourcecontrol/overview). To just name a few, **Staging**, **switching** between branches, and **pushing** are all supported by VSCode, meaning we will be able to push our commits directly to GitHub from within VSCode with just one click. It also makes resolving conflicts and merging very easy using its visual diff (as opposed to using git in the terminal or any other command line tool, which is another option if you prefer).
 
 VSCode also has an [extensions (plugins) marketplace](https://code.visualstudio.com/docs/editor/extension-marketplace), which means that if one feature is not in VSCode core, you will probably find an extension that suits your needs.
 
 > [!NOTE]  
-> VSCode (the project itself) is open source, and everyone can access and contribute to its source code in the [VSCode GitHub repository](https://github.com/microsoft/vscode). The source code is licensed using the MIT license. VSCode, the build you download from Microsoft, uses the [Microsoft Software License](https://code.visualstudio.com/license). It is similar to Chrome (not open source) being the Chromium (open source) build from Google, which contains proprietary pieces, like the Chrome logo image, but also pre-installed extensions or codecs that are not part of Chromium, the fully open source variant. So if you want an opensource version of the VSCode build, you could check out [VSCodium](https://vscodium.com/) instead
+> VSCode (the project itself) is open source, and everyone can access and contribute to its source code in the [VSCode GitHub repository](https://github.com/microsoft/vscode). The source code is licensed using the MIT license. VSCode, the build you download from Microsoft, uses the [Microsoft Software License](https://code.visualstudio.com/license).
+>  
+> It is similar to how Chrome (not open source) is the Chromium (open source) build from Google, which contains proprietary pieces, like the Chrome logo image, but also pre-installed extensions or codecs that are not part of Chromium, the fully open source variant.
+>  
+> So if you want an opensource version of the VSCode build, I recommend you check out [VSCodium](https://vscodium.com/) instead
 
 > [!MORE]  
 > [VSCode documentation](https://code.visualstudio.com/docs)  
@@ -104,7 +108,7 @@ Option 1 & 2 next steps:
 
 **If you are not yet logged in with your GitHub account:**
 
-* VSCode will ask you to allow sign you in with GitHub:
+* VSCode will ask you to allow it, to sign you in with GitHub:
 
 ![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_github_extension_sign_in_modal.png)
 
@@ -122,14 +126,14 @@ Option 1 & 2 next steps:
 
 ![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_open_cloned_repository_modal.png)
 
-* next, (if you still need to trust that directory) you will see the following modal box asking you **do you trust the authors of the files in this directory**? Because all the projects in the parent directory are our own, we will check the box next to **Trust the authors...** and then click on **Yes, I trust the authors** (if it is a third-party project you are cloning then the VSCode recommends not to trust it and only enable those extra features if you need them. Storing third-party projects (you have cloned) in a directory separate from your own projects is recommended. Of course, all the usual security recommendations to protect your computer apply, like ensuring you have an antivirus installed, ...)
+* next, (if you still need to trust that directory) you will see the following modal box asking you **do you trust the authors of the files in this directory**? Because all the projects in the parent directory are our own, we will check the box next to **Trust the authors...** and then click on **Yes, I trust the authors** (if it is a third-party project you are cloning then the VSCode recommends not to trust it and only enable those extra features if you need them. Storing third-party projects (you have cloned) in a directory separate from your own projects is recommended. Of course, all the usual security recommendations to protect your computer apply too, like ensuring you have an antivirus installed, ...)
 
 ![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_trust_file_authors_modal.png)
 
 > [!TIP]  
-> To learn more about the I recommend reading the [VSCode "Workspace Trust" documentation](https://code.visualstudio.com/docs/editor/workspace-trust)
+> To learn more about "workspace security", I recommend reading the [VSCode "Workspace Trust" documentation](https://code.visualstudio.com/docs/editor/workspace-trust)
 
-**Option 3**: using the via the VSCode terminal / or your preferred command line tool
+**Option 3**: cloning a repository using the VSCode terminal (or your preferred command line tool):
 
 * the third option is to visit [GitHub](https://github.com/)
 * then, on the top right click on your Avatar image
@@ -152,7 +156,6 @@ Congratulations 🎉 you now have a local copy of your GitHub repository
 
 ## Open a folder in VSCode
 
-* Open VSCode
 * On the welcome screen, click on **Open Folder**; if you have no welcome screen, you can also (on top) click on **File** and then **Open Folder**; another option to open a folder is to use the keyboard shortcut `Ctrl+O` (macOS: `⌘O`, Linux: `Ctrl+O`)
 * Chose the same folder you chose when cloning your GitHub repository (if you followed the chapter [Cloning your GitHub repository in VSCode](#cloning-your-github-repository-in-vscode), it should be something like /users/YOUR_USERNAME/my_github_projects/MY_PROJECT) and then click on **Select folder**
 * If successful, you should now be able to see a list of files on the left
@@ -161,9 +164,9 @@ Congratulations 🎉 you now have a local copy of your GitHub repository
 
 To open a file, click on it in the list of files in the left sidebar.
 
-If you click once on a filename, you will notice that the filename in the tab is written in **italic**. This is because if you click only once on a filename, VSCode will open it in **preview mode**, meaning that if you do nothing and click on another filename, then VSCode will close the file again and instead open the new file you just clicked on, this is nice if you quickly want to lock at the content of some files and don't want to have to close them all then manually again.
+If you click once on a filename, you will notice that the filename in the tab is written in **italic**. This is because if you click only once on a filename, VSCode will open it in **preview mode**, meaning that if you do nothing and click on another filename, then VSCode will close the file and instead open the new file you just clicked on. This is nice if you quickly want to lock at the content of some files and don't want to end up with dozens of open files that you then need to close manually.
 
-To ensure a file stays open, click twice on the name. You will notice that the filename on top is no longer in italics. Now, if you click on another file, the previous one will automatically close again.
+To ensure a file stays open, click twice on the name. You will notice that the filename on top is no longer in italics. Now, if you click on another file, the previous one will NOT get closed automatically.
 
 An alternative way for the file to stay open is to click on the name once and then start editing it. As soon you start editing it, the name on top will go from italic to regular, and the file will not get closed automatically anymore.
 
@@ -181,9 +184,9 @@ Click on the **Source Control** icon on the left in the **Activity bar** (if you
 ![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_activity_bar_source_control_icon.png)
 
 * you will now see that all the files in which you made changes are listed in the category **Changes**
-* if you double click on a filename, it will open a **diff** view in VSCode that allows you to see what has changed between the current version and the previous one; the previous version of the file is on the left, the current one on the right, on the right side the lines that will change are highlighted with a green color, on the left highlighted in red are the lines that will get modified, if you want to undo a change and keep the previous version you can click on the arrow in the middle of the page next to the line you want to undo
-* you don't need to commit all files that have been changed all at once; if you do, then just enter a commit message on top and hit the **Commit** button; else, to choose which files to commit, click on the + icon next to the file, this will add the file to a category called **Staged changes**, now enter a commit message for the files you selected and click on commit, this will create a commit with on those files
-* next to each file, you also have an icon with an arrow that points to the left; if you want to discard all of the changes you made to a file, click on that icon, and it will reset the file (be careful this will delete all changes you did and you will not be able to recover them, if you are unsure create a new branch and commit the changes to that branch to have a backup just in case)
+* if you double click on a filename, it will open a **diff** view in VSCode that allows you to see what has changed between the current version and the previous one; the previous version of the file is on the left, the current one on the right, on the right side the lines that will change are highlighted with a green color, on the left highlighted in red are the lines that will get modified, if you want to undo a change and revert to the previous version you can click on the arrow in the middle of the page next to the line you want to undo
+* you don't need to commit all files that have been changed all at once; if you do, then just enter a commit message on top and hit the **Commit** button; else, to choose which files to commit, click on the + icon next to the file, this will add the file to a category called **Staged changes**, now enter a commit message for the files you selected and click on commit, this will create a commit with only those files
+* next to each file, you also have an icon with an arrow that points to the left; if you want to discard all of the changes you made to a file, click on that icon, and it will reset the file (be careful this will delete all changes you did and you will not be able to recover them, if you are unsure, first create a new branch and commit the changes to that branch to have a backup just in case)
 
 Committing creates a local commit, but it does not yet push that commit to the remote repository. To sync the changes with the remote repository, click on the icon with two circular arrows next to the branch name at the bottom of the sidebar.
 
@@ -200,14 +203,14 @@ If you have multiple users (GitHub / GitLab, … accounts) or, for example, a Gi
 
 ![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_git_credential_manager_modal.png)
 
+> [!TIP]  
+> To avoid getting asked every time, you can set a default user or token for a repository, which is what the next chapter is about
+
 > [!MORE]  
 > [GitHub "git-credential-manager" repository](https://github.com/git-ecosystem/git-credential-manager)  
 > [git-credential-manager documentation](https://github.com/git-ecosystem/git-credential-manager/blob/release/docs/README.md)  
 
 ### Setting a default user/token per repository
-
-> [!TIP]  
-> To avoid getting asked every time which account or token you want to use, you can set a default user for a repository
 
 To set a default user for a repository, you need to add the **USER_NAME** of the account you want to use to the remote URL of the repository.
 
@@ -232,7 +235,7 @@ cmdkey /list:git*
 
 ### Manage git credentials (on Windows)
 
-To manage the accounts on your machine, for example if you decide to delete one of them, then you can use the [credential manager](https://support.microsoft.com/en-us/windows/accessing-credential-manager-1b5c916a-6a16-889f-8581-fc16e8165ac0) to do so, click on the windows start icon and then type **credential manager** to find it (optionally you can also open a File Explorer and enter the following path: **Control Panel\All Control Panel Items\Credential Manager** to access it)
+To manage the accounts on your machine, for example if you decide to delete one of them, then you can use the [credential manager](https://support.microsoft.com/en-us/windows/accessing-credential-manager-1b5c916a-6a16-889f-8581-fc16e8165ac0) to do so, click on the windows start icon and then type **credential manager** to find it (optionally you can also open a File Explorer window and enter the following path: **Control Panel\All Control Panel Items\Credential Manager** to access it)
 
 Once the **credential manager** is open, select the second tab called **windows credentials**, then click on the down arrow next to the credentials you want to edit or remove, verify those are the correct credentials, and then click on either **Edit** or **Remove** depending on what you wish to do.
 
@@ -246,6 +249,9 @@ Click on the **Source Control** icon on the left in the **Activity bar** (if you
 ![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_activity_bar_source_control_icon.png)
 
 * on the bottom left, you will have your current branch that you are currently on; if you have not yet created a new branch, it will probably be called "main"
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_main_branch.png)
+
 * click on the branch name to open the branch options on top of VSCode; here, you can now choose a branch that you want to switch to (local branches have a branch icon in front of their name, branches that are on GitHub (remote branches that are in the cloud) have a cloud icon in front of their name and are called **origin**/branch_name)
   * why do I see some branch names twice? This is because a branch that, for example, got created by another developer will be listed as origin/BRANCH_NAME; when you check out the origin/BRANCH_NAME, it will now exist both locally as **BRANCH_NAME** and also remotely (on GitHub) as **origin/BRANCH_NAME**, hence it will be twice in the list
   * a branch that only exists in the remote repository (on GitHub) or a branch you created locally but did not yet push to the remote repository will only have one entry in the list
@@ -336,7 +342,14 @@ To edit settings first [open the settings UI or file version](#open-the-settings
 
 You have two types of settings:
 
-* **user** settings will apply to all your projects; these settings are saved in the computer user directory; for example, on Windows, this is something like this: these settings get synchronized between all VSCode tools where you are signed in
+* **user** settings will apply to all your projects; these settings are saved in the computer user directory; these settings get synchronized between all VSCode tools where you are signed in
+
+user settings locations:
+
+Windows: %APPDATA%\Code\User\settings.json.  
+macOS: $HOME/Library/Application\ Support/Code/User/settings.json.  
+Linux: $HOME/.config/Code/User/settings.json.  
+
 * **workspace** settings will only apply to the project (workspace) that is currently open in VSCode; those settings get saved into a `settings.json` file that is located in a `.vscode` directory of your project (workspace), meaning that you can commit that directory with your source code to share the settings with others
 
 Two tabs at the top of the settings page allow you to switch between user and workspace settings.
@@ -408,7 +421,7 @@ Even though VSCode is written in Javascript and hence uses CSS for styling, the 
 
 To view the content of the **output** in VSCode, you have two options:
 
-Option 1: On the bottom right of VSCode, there are curly brackets ({}); click on them, and it will open a little modal:
+Option 1: On the bottom right of VSCode, there are curly brackets (`{}`); click on them, and it will open a little modal:
 
 ![how to open the VSCode output channel](../../../../public/assets/images/app/web_development/posts/vscode/vscode_output_channel.png)
 
@@ -438,20 +451,22 @@ Here are a few tips that can make your life easier when editing markdown (like R
 
 ### easy way to add images to MDX content (using VSCODE)
 
-A great feature of VSCode is that adding images to MDX (or markdown) content is straightforward.
+A great feature of VSCode is that adding images to MDX (or markdown) content is very easy.
 
 All you need to do is select the file in the explorer on the right, drag it over the MDX (or markdown) document, press `Shift`, and drop the file into the document where you want it to be displayed; VSCode will automatically generate the markdown image syntax for you and add the correct path.
 
 > [!TIP]  
-> To select the image and be able to drag it into the document, click on the image using the left mouse button and **keep it pressed**, then move the file over the document and then release the mouse button when at the position in the document where you want to insert it, if you just do a single click on the image then it will open the image in the preview window
+> To select the image and be able to drag it into the document, click on the image using the left mouse button and **keep it pressed**, then move the file over the document at the position where you want to insert it, then press `Shift` and finally release the mouse button to drop it
+>  
+> [VSCode version 1.89 (April 2024)](https://code.visualstudio.com/updates/v1_89#_image-previews-in-markdown-path-completions) added a new preview feature for images in markdown documents, if you hover over the image it will show you a preview
+>  
+> If you want to see the original image, press `Ctrl` and then do a single left click on the image path, which will open the image in the preview window
 
-When you do that, VSCode will automatically generate the correct markdown image code and insert the relative path to the image. Now, if you want, you can manually add an alt text and/or a title, which gives you something like this:
+When you drop an image into a markdown (MDX) document, VSCode will automatically generate the correct markdown image code and insert the relative path to the image. Now, if you want, you can manually add an alt text and/or a title, which gives you something like this:
 
 ```md
 ![MY_ALT_TEXT](../../public/assets/images/foo.png 'MY_IMAGE_TITLE')
 ```
-
-Also, good to know [VSCode version 1.89 (April 2024)](https://code.visualstudio.com/updates/v1_89#_image-previews-in-markdown-path-completions) added a new feature that allows you to preview images and videos, just hover over the image path and VSCode will show a preview
 
 ### VSCode fix for markdown highlighting in mdx files
 
@@ -473,6 +488,8 @@ Then edit the `.vscode/settings.json` file and add the following setting for **f
 }
 ```
 
+This should fix the colors for markdown highlighting in mdx files
+
 ### VSCode markdown (and MDX) preview
 
 Because I work a lot with markdown (and MDX), I like the markdown preview feature in VSCode.
@@ -482,7 +499,7 @@ Because I work a lot with markdown (and MDX), I like the markdown preview featur
 
 To preview your markdown, click on the icon at the top right of the IDE, which consists of two panels and a magnifying glass.
 
-![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_markdown_preview.png)
+![vscode markdown preview icon](../../../../public/assets/images/app/web_development/posts/vscode/vscode_markdown_preview.png)
 
 This will display your Markdown document side by side with the preview. You can edit your Markdown, which will update the preview in real-time.
 
@@ -501,13 +518,15 @@ When opening an MDX file, you will notice there is no preview icon in the top le
 Now save the settings file and open a .mdx file. You should now have the preview icon.
 
 > [!NOTE]  
-> Of course, you will only see markdown and HTML in the preview. It will, however, NOT preview React components you might have imported into your MDX document. For that, we need to wait for a VSCode MDX preview feature, but even though React components are not getting displayed, I like the preview feature to check if my markdown syntax is ok quickly, and maybe you do too 😉
+> Of course, you will only see markdown and HTML in the preview. It will, however, NOT preview React components you might have imported into your MDX document. For that, we need to wait for a VSCode MDX preview feature, but even though React components are not getting displayed, I like the preview feature to quickly check if my markdown syntax is ok, and maybe you do too 😉
 
 ### VSCode markdown headings links
 
-To add links to headings inside a document, just use the default syntax, meaning you start with square brackets (`[]`), and between them, you add the link text (`[LINK_TEXT]`) then after the square brackets you use add regular brackets (`()`) for the inline link URL or a relative path (`(https://example.com)`), as path start with a number sign (`#`) and a modal will open listing all your headline IDs, just chose the ID you want the link to point to and it will get inserted for you
+To add links to headings inside a document, just use the default syntax for links, meaning you start with square brackets (`[]`), and between them, you add the link text (`[LINK_TEXT]`) then after the square brackets you use add regular brackets (`()`) for the path, as path start by typing a number sign (`#`) and a modal will open listing all your headline IDs, just chose the ID you want the link to point to and it will get inserted for you
 
-You can also link to headings in other documents. To do so, follow the previous steps, but instead of adding a single number sign (`#`) inside of the regular brackets (`()`), you add 2, like this (`(##)`). This will again open a modal, but this time, it will list the heading IDs of the current file as well as those found in other files.
+![vscode link to heading modal](../../../../public/assets/images/app/web_development/posts/vscode/vscode_link_to_heading_modal.png)
+
+You can also link to headings in other documents. To do so, follow the previous steps, but instead of adding a single number sign (`#`) inside of the regular brackets (`()`), you insert 2 number signs, like this (`(##)`). This will again open a modal, but this time, it will list the heading IDs of the current file as well as those found in other files.
 
 #### renaming headings (links)
 
@@ -516,7 +535,7 @@ To change a heading and update all the links pointing to it, just click inside t
 > [!MORE]  
 > [VSCode "Rename headers and links" documentation](https://code.visualstudio.com/docs/languages/markdown#_rename-headers-and-links)  
 
-## Git commands
+## Git commands using the VSCode command palette
 
 You can use the terminal and type any git command you want, but you can also do many things by using the VSCode command palette.
 
@@ -527,6 +546,6 @@ Press `Ctrl` + `Shift` + `p` to open the VSCode command palette and then type **
 To rename the current **local** branch (the one currently being displayed in the bottom left), press `Ctrl` + `Shift` + `p` to open the VSCode command palette, then type **Git** and choose **Git: Rename Branch...**
 
 > [!TIP]  
-> To rename another branch (other than the current one), first switch to the branch you want to rename
+> To rename another branch (other than the current one), first switch to the branch you want to rename and then follow the steps listed above
 
 </article>
