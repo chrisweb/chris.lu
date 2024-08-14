@@ -2,7 +2,7 @@
 title: Content Security Policy (CSP)
 keywords: ['CSP', 'Content Security Policy', 'Reporting', 'Logging', 'Debugging', 'policy', 'directive', 'violation']
 published: 2024-08-04T11:22:33.444Z
-modified: 2024-08-04T11:22:33.444Z
+modified: 2024-08-14T21:20:01.444Z
 permalink: https://chris.lu/web_development/posts/csp
 section: Web development
 ---
@@ -39,9 +39,9 @@ export const metadata = {
 
 ![a female robocop, in front of a police car with the text CSP on the side door, in a futuristic city](../../../../public/assets/images/app/web_development/posts/csp/banner.png '{ banner }')
 
-**Content Security Policy (CSP)** is important as it can help you prevent cross-site scripting (XSS), clickjacking, and other code injection attacks resulting from executing malicious content. That malicious content can be hidden in remote code from a banner ads system you included in your app or, for example, hidden in a client package from a compromised NPM account.
+**Content Security Policy (CSP)** is important as it can help you prevent cross-site scripting (XSS), clickjacking, and other code injection attacks resulting from executing malicious content. For example, malicious content can be hidden in remote code from a banner ads service you included in your app, or it could be hidden in code from a client side package you installed, which comes from a compromised NPM account.
 
-Using the Content-Security-Policy HTTP header to limit fetching resources only from sources you explicitly declared can mitigate the risks related to content injection attacks. OWASP has an interesting [OWASP "Content Security Policy (CSP)" cheat sheet](https://chromium.googlesource.com/chromium/src/+/HEAD/net/reporting/README.md) page with examples that show you what kind of malicious attacks the different CSP directives can help prevent
+For example, using the Content-Security-Policy HTTP header to limit fetching resources only from sources you explicitly declared can mitigate the risks related to content injection attacks. OWASP has an interesting [OWASP "Content Security Policy (CSP)" cheat sheet](https://chromium.googlesource.com/chromium/src/+/HEAD/net/reporting/README.md) page with examples that show you what kind of malicious attacks the different CSP directives can help prevent
 
 > [!MORE]  
 > [MDN "Content Security Policy (CSP)" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)  
@@ -68,7 +68,9 @@ A very basic [Content-Security-Policy](https://developer.mozilla.org/en-US/docs/
 Content-Security-Policy: default-src 'self'
 ```
 
-So far, we have used the Content-Security-Policy header, but there is a second header [Content-Security-Policy-Report-Only](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy-Report-Only) that can be used, the difference is that when using Content-Security-Policy the browser will enforce the policy, if using Content-Security-Policy-**Report-Only** the browser will only report violations but NOT enforce them
+Besides the Content-Security-Policy header, there is a second header [Content-Security-Policy-Report-Only](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy-Report-Only) that can be used, the difference is that when using Content-Security-Policy the browser will enforce the policy, and if you use Content-Security-Policy-**Report-Only** the browser will only report violations but NOT enforce them
+
+Here is the same example but without enforcing directives (only reporting them):
 
 ```shell
 Content-Security-Policy-Report-Only: default-src 'self'
@@ -111,15 +113,15 @@ Content-Security-Policy: default-src 'none'; img-src 'self'; script-src 'self'; 
 
 ### nonce, hash, and strict-dynamic
 
-An alternative to whitelisting an entire domain for external scripts is to use **hashes** or **nonces** to whitelist only certain scripts sources.
+An alternative to whitelisting an entire domain for external scripts, is to use **hashes** or **nonces** to whitelist only certain scripts from that source.
 
 Those nonces and hashes can also be used for inline scripts. When used for inline scripts, the big advantage is that you can avoid using unsafe-inline, which whitelists all inline scripts.
 
 **Hashes** are a powerful way of only allowing certain scripts instead of whitelisting an entire external source. This is preferred because if the domain gets taken over or hacked and the script(s) gets altered to include malicious code, the hash won't match anymore, and your code will refuse to use the script. This is much safer than whitelisting a domain and accepting whatever version of a script the domain is hosting.
 
-**Nonces** are very useful for your inline scripts. Instead of using **unsafe-inline**, you create a nonce for your inline script(s), hence only allowing scripts that have a nonce you made instead of allowing all inline scripts. Many frameworks support nonces, for example if you use Next.js check out their ["nonce" documentation](https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy#nonces) or Remix ["Streaming with a Content Security Policy" documentation](https://remix.run/docs/en/main/guides/streaming#streaming-with-a-content-security-policy) (you might also want to dig into this Remix [CSP nonce Issue #5162](https://github.com/remix-run/remix/issues/5162)) and for Astro check out [discussion #377](https://github.com/withastro/roadmap/discussions/377)
+**Nonces** are very useful for your inline scripts. Instead of using **unsafe-inline**, you create a nonce for your inline script(s), hence only allowing scripts that have a nonce you made instead of allowing all inline scripts. Many frameworks support nonces, for example if you use Next.js check out their ["nonce" documentation](https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy#nonces) or Remix ["Streaming with a Content Security Policy" documentation](https://remix.run/docs/en/main/guides/streaming#streaming-with-a-content-security-policy) (If you are using Remix, you might also want to dig into this Remix [CSP nonce Issue #5162](https://github.com/remix-run/remix/issues/5162)) and for Astro check out [discussion #377](https://github.com/withastro/roadmap/discussions/377)
 
-Finally, I recommend checking out the strict-dynamic source expression, which can be used when you want your trust in a script to be propagated to all the scripts getting loaded by the root script. But use with caution as allowing a script to load other scripts should only happen if you have unconditional trust in the scripts’ code and the sources it gets other scripts from
+Finally, I recommend checking out the strict-dynamic source expression, which can be used when you want your trust in a script to be propagated to all the scripts getting loaded by the that "root" script. But use with caution as allowing a script to load other scripts should only happen if you have unconditional trust in the source itself, as well as the sources your source gets other scripts from
 
 > [!MORE]  
 > [MDN "CSP hashes" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src#whitelisting_external_scripts_using_hashes)  
@@ -128,7 +130,7 @@ Finally, I recommend checking out the strict-dynamic source expression, which ca
 
 ### upgrade-insecure-requests and frame-ancestors
 
-The **upgrade-insecure-requests** directive can be used to upgrade any first-party as well as third-party requests to https. This is useful for cases where, for example, you have an image URL that has yet to be migrated from HTTP to HTTPS or where a mistake was made by using HTTP instead of HTTPS. This directive will tell the browser to rewrite the URL with HTTPS before the insecure requests get made, but be careful. This is NOT a replacement for the HSTS header.
+The **upgrade-insecure-requests** directive can be used to upgrade any first-party as well as third-party requests to https. This is useful for cases where, for example, you have an image URL that has yet to be migrated from HTTP to HTTPS or where a mistake was made by using HTTP instead of HTTPS. This directive will tell the browser to rewrite the URL with HTTPS before the insecure request gets made, but be careful. This is NOT a replacement for the HSTS header.
 
 Here is a quote from MDN that explains it well:
 
@@ -138,7 +140,7 @@ So even if you use the **upgrade-insecure-requests** directive, it is still reco
 
 You might still find examples on the web using the **block-all-mixed-content**. This one is, however, deprecated and not needed when using **upgrade-insecure-requests**
 
-The **frame-ancestors** directive is useful to specify what parent source may embed a page and can help prevent clickjacking attacks, so if you want to disallow anyone to put your pages into an iFrame then set this directive to none, when frame-ancestors is set to none it does the same thing as the **X-Frame-Options** header when set to deny, meaning that the frame-ancestors directive is a replacement for X-Frame-Options in modern browsers, so when you see a high enough support percentage on the [caniuse "frame-ancestors" page](https://caniuse.com/?search=frame-ancestors) then you can ditch the **X-Frame-Options** header
+The **frame-ancestors** directive is useful to specify what parent source may embed a page and can help prevent clickjacking attacks, so if you want to disallow anyone to put your pages into an iFrame then set this directive to none, when frame-ancestors is set to none it does the same thing as the **X-Frame-Options** header when set to deny, meaning that the frame-ancestors directive is a replacement for X-Frame-Options in modern browsers, so the day you see a high enough support percentage on the [caniuse "frame-ancestors" page](https://caniuse.com/?search=frame-ancestors) then you can ditch the **X-Frame-Options** header
 
 > [!MORE]  
 > [MDN "upgrade-insecure-requests" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/upgrade-insecure-requests)  
@@ -148,18 +150,18 @@ The **frame-ancestors** directive is useful to specify what parent source may em
 
 ### CSP online validation
 
-A tool that can help you improve your Content-Security-Policy HTTP header is [Google's CSP Evaluator](https://csp-evaluator.withgoogle.com/)
+A tool that can help you improve your Content-Security-Policy HTTP header is [Google's CSP Evaluator](https://csp-evaluator.withgoogle.com/), it will analyze your settings and make suggestions if it finds something that can be improved
 
 ## The state of violations reporting (as of February 2024)
 
-CSP violations can not only be seen in the console, as this would limit us only to see violations that occur when we (the developers) visit the app ourselves, but what about violations that happen when a user visits our project, for such cases you can use CSP violations reporting
+CSP violations can not only be seen in the console, as this would limit us to only see violations that occur when we (the developers of the project) visit our project ourselves, but what about violations that happen when a user visits our project, for such cases you can use CSP violations reporting
 
 However, how CSP violation reports work has changed over the years. The W3C has released several iterations of its Content Security Policy recommendations / working drafts and even created a draft for the Reporting API, a new header dedicated to sending reports to an endpoint.
 
 * in the [CSP level 1](https://www.w3.org/TR/2012/CR-CSP-20121115/) & [CSP level 2](https://www.w3.org/TR/CSP2/) recommendations, CSP violations get reported using a [report-uri](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-uri) reporting directive, if we look at [caniuse report-uri](https://caniuse.com/?search=report-uri) page we can see that it is supported by all major browsers
 * [CSP level 3](https://www.w3.org/TR/CSP3/) introduces a new [report-to](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-to) **reporting directive** and the w3c has marked the report-uri directive as deprecated. Have a look at the [caniuse report-to](https://caniuse.com/mdn-http_headers_content-security-policy_report-to) page to check how browser support evolves
 
-All browsers support the report-uri directive, but NOT all browsers support the report-to directive or the Report-To and Reporting-Endpoints headers:
+All browsers support the report-uri directive, but (as of now, june 2024) NOT all browsers support the report-to directive or the Report-To and Reporting-Endpoints headers:
 
 * Firefox supports the report-to directive but is behind a feature flag. The Firefox ["CSP: Implement report-to" Issue](https://bugzilla.mozilla.org/show_bug.cgi?id=1391243) is quite old, but one of the latest comments states that support has landed but is behind a feature flag). Support for the reporting API gets tracked using the ["Considering implementing the Reporting API" Issue](https://bugzilla.mozilla.org/show_bug.cgi?id=1492036) and first shipped in Firefox 65 but has also been behind a feature flag since
 * Safari added support for the report-to directive and the Reporting-Endpoints header in their [technology preview 154](https://developer.apple.com/documentation/safari-technology-preview-release-notes/stp-release-154#Reporting-API) and support landed in [Safari version 16.4](https://developer.apple.com/documentation/safari-release-notes/safari-16_4-release-notes) (released March 27, 2023)
@@ -263,7 +265,7 @@ A lot of the paid SAAS Error Monitoring services can also be used to log CSP vio
 
 An alternative is to host a logging tool on your own infrastructure. For example, Mozilla published an opensource [CSP logging service called "CSP Logger"](https://github.com/mozilla/csp-logger) on GitHub that is written in Javascript, but it only supports the report-uri directive and has not been updated in years
 
-You could also write your own CSP logging endpoint and store the reports in a database, but then you would probably also need an admin interface to filter and analyze the reports.
+You could also write your own CSP logging endpoint and store the reports in a database, but then you would probably also need to build an admin interface to filter and analyze the reports.
 
 > [!MORE]  
 > [Mozilla "CSP Logger" repository](https://github.com/mozilla/csp-logger)  
@@ -343,7 +345,7 @@ In staging (preview) / production environments, however, the **report-to** will 
 
 #### report-uri requests show up in the Network tab
 
-When using the **report-uri** directive, you can inspect requests utilizing the developer tools **Network tab** like any other POST request made by your app.
+When using the **report-uri** directive, you can inspect requests using the developer tools **Network tab** like any other POST request made by your app.
 
 #### report-to requests are Not in the Network but in the Application tab
 
@@ -355,7 +357,7 @@ To see the requests, open your developer tools, then click on the **Application*
 
 ### Adblockers may block CSP violation logging services
 
-If you are using report-uri and your logging tool does not receive the reports, then they might be **blocked**. To verify if the requests are blocked, open the developer tools in your browser and then go into the network tab. Look at the request rows and check if their **status is blocked**. In this case, you probably have an adblocker extension installed that blocks the requests. I, for example, use [Privacy Badger](https://privacybadger.org/) and have to allow the domain in the extension settings
+If you are using report-uri and your logging tool does not receive the reports, then they might be **blocked**. To verify if the requests are blocked, open the developer tools in your browser and then go into the network tab. Look at the request rows and check if their **status is blocked**. In this case, you probably have an adblocker extension installed that blocks the requests. I, for example, use [Privacy Badger](https://privacybadger.org/) and have to allow the domain (of the service I send reports to) in the extension settings
 
 ![](../../../../public/assets/images/app/web_development/posts/csp/privacy_badger_sentry_ingest_blocked.png)
 
@@ -460,7 +462,7 @@ To start the server, use the following command:
 node csp-logging.mjs
 ```
 
-If you need to set up a server to host the Node.js server, you might want to have a look at my [Tutorial: Node.js server on an AWS EC2 instance with an NGINX reverse proxy](/web_development/tutorials/node-js-app-aws-ec2/)
+{/*If you need to set up a server to host the Node.js server, you might want to have a look at my [Tutorial: Node.js server on an AWS EC2 instance with an NGINX reverse proxy](/web_development/tutorials/node-js-app-aws-ec2/)*/}
 
 ### Debugging Sentry.io dropping reports
 
