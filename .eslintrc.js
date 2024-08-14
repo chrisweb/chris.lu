@@ -14,6 +14,7 @@ module.exports = {
         '.next/',
         '.vscode/',
         'public/',
+        'LICENSE',
         // by default we always ignore our tests folder
         // to ensure the tests dont trigger errors in
         // staging / production deployments
