@@ -260,8 +260,9 @@ const securityHeadersConfig = (phase) => {
 
     const cspReportOnly = true;
 
-    const reportingUrl = 'https://o4504017992482816.ingest.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
-    const reportingDomainWildcard = 'https://*.ingest.sentry.io'
+    const reportingUrl = 'https://o4504017992482816.ingest.us.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
+
+    const reportingDomainWildcard = 'https://*.ingest.us.sentry.io'
 
     const cspHeader = () => {
 
