@@ -265,7 +265,7 @@ const securityHeadersConfig = (phase) => {
 
     const cspHeader = () => {
 
-        const upgradeInsecure = (phase !== PHASE_DEVELOPMENT_SERVER) ? 'upgrade-insecure-requests;' : ''
+        const upgradeInsecure = (phase !== PHASE_DEVELOPMENT_SERVER && !cspReportOnly) ? 'upgrade-insecure-requests;' : ''
 
         // report directive to be added at the end
         // with Reporting API fallback
