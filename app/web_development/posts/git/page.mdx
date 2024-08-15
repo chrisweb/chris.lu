@@ -2,7 +2,7 @@
 title: git
 keywords: ['git', 'commit', 'repository', 'branch']
 published: 2024-08-03T11:22:33.444Z
-modified: 2024-08-03T11:22:33.444Z
+modified: 2024-08-15T14:22:33.444Z
 permalink: https://chris.lu/web_development/posts/git
 section: Web development
 ---
@@ -119,7 +119,7 @@ git remote add origin https://DEFAULT_GIT_USER_NAME@github.com/GITHUB_USER_NAME/
 
 ## Cloning a repository
 
-VSCode has a source control tool that makes it easy to clone repositories, but if you prefer to do it manually via the command line, then use this command:
+To clone a repository first get the HTTPS web URL of the repository, and then use the following command:
 
 ```shell
 git clone https://github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
@@ -214,13 +214,13 @@ To create a new branch (and stay on the current branch), use the following comma
 git branch BRANCH_NAME
 ```
 
-To create a new branch and also switch to it, we use **checkout** with the `-b` option, like so:
+To create a new branch and also switch to it, use the **checkout** command with the `-b` option, like so:
 
 ```shell
 git checkout -b BRANCH_NAME
 ```
 
-Or we can use the new git **switch** with the `-c` option, like so:
+Or use the new git **switch** with the `-c` option, like so:
 
 ```shell
 git switch -c BRANCH_NAME
@@ -253,9 +253,9 @@ git push -u origin NEW_BRANCH_NAME
 
 The `-u` (alias for `--set-upstream-to`) option tells the local branch to track changes from the remote branch.
 
-Now, the branch with the new name is also available remotely, but git has copied the branch to rename the old one, meaning the old branch is still present remotely.
+Now, the branch with the new name is also available remotely, but git has copied the branch to rename the old one, meaning the old branch is still present remotely, you work alone on the project skip the next step but if you work with others don't delete the old branch just yet.
 
-At this point, letting everyone on the team know that you renamed the branch is recommended, as they might still have open commits. Tell them to execute the following commands so that they, too, switch to the new branch (those are the commands GitHub recommends after you rename a remote branch on GitHub):
+At this point, if you work with others on the project now is a good time to let everyone on the team know that you renamed the branch, as they might still have open commits. Tell them to execute the following commands so that they, too, switch to the new branch (those are the commands GitHub recommends after you rename a remote branch on GitHub):
 
 ```shell
 git checkout OLD_BRANCH_NAME
@@ -264,7 +264,7 @@ git fetch origin
 git branch -u origin/NEW_BRANCH_NAME
 ```
 
-First, they use **checkout** to switch to the old branch, then they rename it locally too using **branch -m**, then they **fetch the origin** to fetch the ref of all branches in origin, then they need to use the **branch -u** (which is an alias for set-upstream we used earlier) to tell the local branch to track the origin/NEW_BRANCH_NAME.
+First, they use **checkout** to switch to the old branch, then they rename their own local branch too, using **branch -m** command, then they **fetch the origin** to fetch the ref of all branches in origin, then they need to use the **branch -u** (which is an alias for set-upstream we used earlier) to tell the local branch to track the origin/NEW_BRANCH_NAME.
 
 If it is the default branch that got renamed, also update origin/HEAD:
 

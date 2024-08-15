@@ -47,3 +47,7 @@ If you have feedback or want to discuss something, please use the [chris.lu gith
 `npm run lint-debug`: linting command but more verbose output  
 `npm run lint-fix`: linting command that also attempts to automatically fix problems  
 `npm run info`: the default next.js script to get some info about the project  
+
+## License
+
+Link to the [license document](https://github.com/chrisweb/chris.lu/blob/main/LICENSE)  
