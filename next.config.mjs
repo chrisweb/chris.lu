@@ -260,12 +260,13 @@ const securityHeadersConfig = (phase) => {
 
     const cspReportOnly = true;
 
-    const reportingUrl = 'https://o4504017992482816.ingest.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
-    const reportingDomainWildcard = 'https://*.ingest.sentry.io'
+    const reportingUrl = 'https://o4504017992482816.ingest.us.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
+
+    const reportingDomainWildcard = 'https://*.ingest.us.sentry.io'
 
     const cspHeader = () => {
 
-        const upgradeInsecure = (phase !== PHASE_DEVELOPMENT_SERVER) ? 'upgrade-insecure-requests;' : ''
+        const upgradeInsecure = (phase !== PHASE_DEVELOPMENT_SERVER && !cspReportOnly) ? 'upgrade-insecure-requests;' : ''
 
         // report directive to be added at the end
         // with Reporting API fallback
@@ -322,7 +323,7 @@ const securityHeadersConfig = (phase) => {
                 ${defaultCSPDirectives}
                 font-src 'self';
                 style-src 'self' 'unsafe-inline';
-                script-src 'self' 'unsafe-inline';
+                script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval';
                 connect-src 'self' https://vitals.vercel-insights.com ${reportingDomainWildcard};
                 img-src 'self' data:;
                 frame-src 'none';
