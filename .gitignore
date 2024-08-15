@@ -35,3 +35,5 @@ node_modules/
 
 # localhost ssl certificate(s)
 certificates
+# Sentry Config File
+.env.sentry-build-plugin
