@@ -336,6 +336,17 @@ If after adding domains to the list, it will take a few minutes before the filte
 >  
 > To make sure the allowed domains are not the problem just replace the list with a single asterisk (`*`) to allow all requests from any domain and check if the error goes away, if that's the case then you know at least what the "real" problem is
 
+## Disable the "reports from localhost" filter
+
+If you want to disable (or re-enable) the Sentry.io reports from the localhost filter, do this:
+
+* visit Sentry.io and log in
+* in the left navigation on the bottom, click on **Settings**
+* then, in the Settings navigation on the left, click on **Projects**
+* click on the project name
+* then in navigation on the left, under **PROCESSING**, click on **Inbound Filters**
+* on that page, there is an option called **Filter out events coming from localhost**. Disable that option to not filter reports coming from localhost anymore
+
 ## Sentry v7 to v8 migration
 
 If you had Sentry v7 already installed in your project and now want to upgrade to Sentry v8, I recommend you use the [Sentry migration codemod](https://docs.sentry.io/platforms/javascript/migration/v7-to-v8/#migration-codemod) which will automatize the upgrading process and hence simplify the migration process a lot
@@ -376,16 +387,6 @@ This will hopefully help you understand if your requests got filtered, were inva
 
 > [!MORE]  
 > [Sentry.io "Sentry API organization events" documentation](https://docs.sentry.io/api/organizations/retrieve-event-counts-for-an-organization-v2/)  
-
-## Disable the "reports from localhost" filter
-
-If you want to disable (or re-enable) the Sentry.io reports from the localhost filter, do this:
-
-* visit Sentry.io and log in
-* in the left navigation on the bottom, click on **Settings**
-* then, in the Settings navigation on the left, click on **Projects**
-* click on the project name
-* then in navigation on the left, under **PROCESSING**, click on **Inbound Filters**
-* on that page, there is an option called **Filter out events coming from localhost**. Disable that option to not filter reports coming from localhost anymore
+> [Sentry.io "troubleshooting" documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/troubleshooting/)
 
 </article>
