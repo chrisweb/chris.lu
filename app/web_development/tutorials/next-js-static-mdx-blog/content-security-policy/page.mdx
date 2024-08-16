@@ -3,7 +3,7 @@ title: Content Security Policy (CSP) - Tutorial
 description: Content Security Policy (CSP) - Next.js static MDX blog | www.chris.lu Web development tutorials
 keywords: ['Content', 'Security', 'Policy', 'CSP', 'Headers', 'violation', 'report']
 published: 2024-08-15T17:17:17.444Z
-modified: 2024-08-15T17:17:17.444Z
+modified: 2024-08-16T15:30:33.444Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/content-security-policy
 section: Web development
 ---
@@ -211,7 +211,7 @@ If you now start your development server (using `npm run dev`), open `http://loc
 
 Let's edit the CSP rules we just added in our `next.config.mjs` file and make the **script-src** directive stricter by not using **unsafe-eval** as recommended by the CSP Evaluator service, like so:
 
-```js title="security.config.mjs" showLineNumbers{85} {6}#special
+```js title="security.config.mjs" showLineNumbers{86} {6}#special
     // for dev environment enable unsafe-eval for hot-reload
     return `
         ${defaultCSPDirectives}
@@ -285,37 +285,7 @@ First, you need to visit Sentry.io and copy the CSP reporting URL of your projec
 
 Next, we need to ensure violations get sent to Sentry.io (logged like any other error), to do that we will edit our CSP setup in the `next.config.mjs` file, like so:
 
-```js title="next.config.mjs" showLineNumbers {35-36} {42-43} {72} {75} {87} {90} /${reportingDomainWildcard}/#special /${reportCSPViolations}/#special
-import { withSentryConfig } from '@sentry/nextjs';
-import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
-
-const nextConfig = (phase) => {
-
-    /** @type {import('next').NextConfig} */
-    const nextConfigOptions = {
-        reactStrictMode: true,
-        poweredByHeader: false,
-        experimental: {
-            // experimental typescript "statically typed links"
-            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
-            // currently false in prod until PR #67824 lands in a stable release
-            // https://github.com/vercel/next.js/pull/67824
-            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
-        },
-        headers: async () => {
-            return [
-                {
-                    source: '/(.*)',
-                    headers: securityHeadersConfig(phase)
-                },
-            ];
-        },
-    }
-
-    return nextConfigOptions
-
-}
-
+```js title="next.config.mjs" showLineNumbers{31} {5-6} {12-13} {42} {45} {57} {60} /${reportingDomainWildcard}/#special /${reportCSPViolations}/#special
 const securityHeadersConfig = (phase) => {
 
     const cspReportOnly = true
@@ -416,14 +386,16 @@ Line 72 and 87: we add the **reportingDomainWildcard** to the connect-src direct
 Line 75 and 90: we add the **reportCSPViolations** variable, which contains a reporting directive, meaning we only report violations to sentry for preview and production deployments but NOT local development
 
 > [!NOTE]  
-> It is essential to add the **reportingDomainWildcard** to the connect-src directive, or CSP will block the reporting URL and not send reports to Sentry. We only add the **reportingDomainWildcard** to the connect-src for preview and production, but NOT development, as Sentry.io will filter out reports from localhost anyway.
->  
-> If you want to debug your code, you might want to also add the reporting for development. In that case, add the `${reportCSPViolations}` variable to the development directives too (same as for preview and production) and then check out the chapter about [disableng the "reports from localhost" filter](/web_development/posts/sentry-io/#disable-the-reports-from-locahost-filter) in my Sentry.io post as you will need to disable the filter for localhost reporting in your Sentry configuration on Sentry.io
+> It is essential to add the **reportingDomainWildcard** to the connect-src directive, or CSP will block the reporting URL and not send reports to Sentry. We only add the **reportingDomainWildcard** to the connect-src for preview and production, but NOT development, as Sentry.io will filter out reports from localhost anyway.  
 
-There is one more step, go back to your Sentry.io account, in the navigation on the left click on **Settings**, on the settings page there is now another navigation on the left, there click on **Projects**, now click on the **name of your project**, you are now in the general settings of your project, scroll down a bit until you see the **Client Security** section, in that section there is an option called **Allowed Domains**, in that field enter all the domains you will use for your project, for example if you deploy on Vercel you might want to add a wildcard for the `*.vercel.app` domain, and if you also have a custom domain for production then add that too: `*.vercel.app, *.example.com` (replace example.com with your own custom domain)
+> [!TIP]  
+> If you want to debug your code, you might want to also add the reporting for development. In that case, add the `${reportCSPViolations}` variable to the development directives too (same as for preview and production) and then check out the chapter about [disableng the "reports from localhost" filter](/web_development/posts/sentry-io/#disable-the-reports-from-locahost-filter) in my Sentry.io post as you will need to disable the filter for localhost reporting in your Sentry configuration on Sentry.io  
+>  
+> If you want to only allow certain domains to be able to send in reports, then you can whitelist those domains, meaning Sentry.io will filter out reports that come from other domains (and use your Sentry DSN), I have a chapter in my Sentry.io post that goes explains [how to set up an allowed domains list](/web_development/posts/sentry-io#allowed-domains-filter) using the Sentry UI
 
 > [!MORE]  
 > [Sentry.io "CSP violations logging" documentation](https://docs.sentry.io/product/security-policy-reporting/)  
+> [chris.lu "Sentry.io" post](/web_development/posts/sentry-io)  
 
 ## Adding security headers
 

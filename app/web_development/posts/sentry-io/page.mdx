@@ -2,7 +2,7 @@
 title: Sentry.io
 keywords: ['Sentry.io', 'logging', 'debugging', 'SaaS', 'wizard']
 published: 2024-08-07T11:22:33.444Z
-modified: 2024-08-15T11:22:33.444Z
+modified: 2024-08-16T14:31:32.444Z
 permalink: https://chris.lu/web_development/posts/sentry-io
 section: Web development
 ---
@@ -290,9 +290,53 @@ There is, however, one option in the server configuration that is commented out 
 > [!MORE]  
 > [Sentry.io "Extend your Next.js Configuration" documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration)  
 > [Sentry.io "Next.js SDK Configuration" documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/)  
+> [Sentry.io "Configure Tunneling to avoid Ad-Blockers" documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#configure-tunneling-to-avoid-ad-blockers)
 > [Spotlight js "Using Spotlight with Next.js" documentation](https://spotlightjs.com/setup/nextjs/)  
 
-#### Sentry v7 to v8 migration
+## Allowed domains filter
+
+By default Sentry.io will accept reports from whatever domain they originate as long as the DSN is yours, you can however explicitly whitelist **domains** that are **allowed** to send in reports, in which case Sentry will check the [Origin](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin) and [Referer](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer) headers and exclude reports from domains that you did not whitelist
+
+To specific domains instead of all, use the following steps:
+
+* open your Sentry.io account
+* in the navigation on the left click on **Settings**
+* on the settings page there is now another navigation on the left, there click on **Projects**
+* now, on the projects page, click on the **name of your project**
+* you are now in the general settings of your project, scroll down a bit until you see the **Client Security** section
+* in that section there is an option called **Allowed Domains**
+* in that field enter all the domains you will use for your project
+
+> [!TIP]  
+> The field for allowed domains is a textarea, meaning you don't add a comma seperated list but instead you add one domain per row, let's assume you want to whitelist your `example.com` domain as well as two subdomains `foo.example.com` and `bar.excample.com`, then this would be what your whitelist looks like:
+>  
+> ```txt
+> example.com  
+> *.example.com  
+> ```
+
+If you deploy on Vercel you might want to add a wildcard for the `*.vercel.app` domain, which is the domain that vercel uses for **branch** (preview) deployments
+
+```txt
+*.vercel.app
+example.com
+*.example.com
+```
+
+If after adding domains to the list, it will take a few minutes before the filter gets updated, so wait a little bit before testing your Sentry.io requests
+
+> [!WARN]  
+> If there is a problem with your allowed domains, then you might start seeing 403 errors (Failed to load resource: the server responded with a status of 403) for requests to sentry.io (or your tunnel URL), you might also notice that the error in body of the response is like this:
+>  
+> `{detail: "event submission rejected with_reason: Cors"}{:shell}`
+>  
+> This error messages mentions Cors, even though the error gets thrown by the allowed domains sentry filter, this is a known problem an there is a ticket to resolve this issue [#9856](https://github.com/getsentry/sentry-javascript/issues/9856)
+> 
+> So if you encounter this error have a look at your CORS settings but also double check your allowed domains list
+>  
+> To make sure the allowed domains are not the problem just replace the list with a single asterisk (`*`) to allow all requests from any domain and check if the error goes away, if that's the case then you know at least what the "real" problem is
+
+## Sentry v7 to v8 migration
 
 If you had Sentry v7 already installed in your project and now want to upgrade to Sentry v8, I recommend you use the [Sentry migration codemod](https://docs.sentry.io/platforms/javascript/migration/v7-to-v8/#migration-codemod) which will automatize the upgrading process and hence simplify the migration process a lot
 
