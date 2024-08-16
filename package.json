@@ -65,7 +65,7 @@
         "three": "0.167.1",
         "vfile-matter": "5.0.0",
         "waveform-visualizer": "4.2.0",
-        "web-audio-api-player": "5.3.1"
+        "web-audio-api-player": "github:chrisweb/web-audio-api-player"
     },
     "devDependencies": {
         "@next/bundle-analyzer": "14.2.5",
