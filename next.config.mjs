@@ -323,7 +323,7 @@ const securityHeadersConfig = (phase) => {
                 ${defaultCSPDirectives}
                 font-src 'self';
                 style-src 'self' 'unsafe-inline';
-                script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval';
+                script-src 'self' 'unsafe-inline';
                 connect-src 'self' https://vitals.vercel-insights.com ${reportingDomainWildcard};
                 img-src 'self' data:;
                 frame-src 'none';
@@ -390,6 +390,9 @@ const securityHeadersConfig = (phase) => {
 
 }
 
+export default nextConfig
+
+/*
 export default withSentryConfig(
     nextConfig,
     {
@@ -432,3 +435,4 @@ export default withSentryConfig(
         automaticVercelMonitors: true,
     }
 )
+*/

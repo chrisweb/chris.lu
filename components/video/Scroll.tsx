@@ -80,7 +80,7 @@ const VideoScroll: React.FC = () => {
         window.addEventListener('scroll', scrollPlay)
 
         return () => {
-            window.removeEventListener('scroll', scrollPlay)
+            window?.removeEventListener('scroll', scrollPlay)
         }
 
     }, [scrollPlay])
