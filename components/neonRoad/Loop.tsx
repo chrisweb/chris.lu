@@ -91,7 +91,7 @@ const Loop: React.FC<IProps> = (props) => {
             start()
         }
         return () => {
-            document.removeEventListener('visibilitychange', changeAnimationState)
+            document?.removeEventListener('visibilitychange', changeAnimationState)
         }
     }, [changeAnimationState, start, three.frameloop])
 
