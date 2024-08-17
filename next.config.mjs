@@ -390,14 +390,13 @@ const securityHeadersConfig = (phase) => {
 
 }
 
-export default nextConfig
-
-/*
 export default withSentryConfig(
     nextConfig,
     {
         // For all available options, see:
         // https://github.com/getsentry/sentry-webpack-plugin#options
+
+        telemetry: false,
 
         org: "chrisweb",
         project: "javascript-nextjs",
@@ -413,7 +412,7 @@ export default withSentryConfig(
 
         // Automatically annotate React components to show their full name in breadcrumbs and session replay
         reactComponentAnnotation: {
-            enabled: true,
+            enabled: false,
         },
 
         // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
@@ -435,4 +434,3 @@ export default withSentryConfig(
         automaticVercelMonitors: true,
     }
 )
-*/
