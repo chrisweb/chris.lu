@@ -2,7 +2,7 @@
 title: Sentry.io
 keywords: ['Sentry.io', 'logging', 'debugging', 'SaaS', 'wizard']
 published: 2024-08-07T11:22:33.444Z
-modified: 2024-08-16T14:31:32.444Z
+modified: 2024-08-18T19:56:56.444Z
 permalink: https://chris.lu/web_development/posts/sentry-io
 section: Web development
 ---
@@ -124,6 +124,13 @@ Now, Sentry will install the latest Sentry SDK for Next.js.
 
 **Do you want to enable React component annotations to make breadcrumbs and session replays more readable?** Next Sentry is asking if we want to use the feature called [React component annotations](https://docs.sentry.io/platforms/javascript/guides/react/features/component-names/) which attempts to use component names in reports instead of more cryptic selectors, I think this is a nice feature, so I selected **Yes**, if you already use Sentry.io and don't want to change how bug reports work, then leave it on **No**, you can always turn it on/off via the configuration later if you want
 
+> [!WARN]  
+> I turned **React component annotations** on and then noticed that my [react-three-fiber](https://github.com/pmndrs/react-three-fiber) animation had stopped working, this is because **React component annotations** adds data attrobites to components which React Three Fiber does not like, and which then creates bugs which print the following in your console:
+> 
+> > TypeError: Cannot read properties of undefined (reading 'sentry')
+>  
+> So if you plan on using **React Three Fiber** then you should answer to this question with **NO**, to learn more about this problem and how to disable **React component annotations** manually in the configuration have a look at my warning box in the [Sentry.io for Next.js configuration chapter](#sentryio-for-nextjs-configuration)
+
 **Do you want to create an example page** chose **YES** (we will later use it to test the Sentry setup, and then we will delete it)
 
 **Are you using a CI/CD tool to build and deploy your application?** chose **YES** (if you are using Vercel, GitHub actions, or any other CI/CD deployment tool); If you do NOT use one,  choose **NO**)
@@ -227,6 +234,13 @@ export default withSentryConfig(nextConfig, {
 
 > [!NOTE]  
 > By default, the options that the wizard set for us are good enough. As soon as you have the time, I recommend checking out the [Extend your Next.js Configuration](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration) Sentry.io documentation, which explains what each option does
+
+> [!WARN]  
+> To enable **reactComponentAnnotation** is usually a good idea as it makes reports more readable by using component names instead of long selectors, but to make this feature happen Sentry needs to add a data attributes to components, this does usually not pose a problem except for [react-three-fiber](https://github.com/pmndrs/react-three-fiber) which does not like those extra attributes at all, which means that **React component annotations** are great unless you use **React Three Fiber**
+>  
+> For now if you use **React three fiber** the only workaround is to turn the Sentry **React component annotations** option off, by setting the `reactComponentAnnotation` variable to false
+>  
+> It is only after I had opened an [Issue #13413](https://github.com/getsentry/sentry-javascript/issues/13413) in the **sentry-javascript** repository that I found the [Issue #530](https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/530) in the **sentry-javascript-bundler-plugins** repository, which has a comment by one of the Sentry SDK mainteners, they mentioned that they consider adding more options in the future to let you exclude components, however as of now those options are not available yet, so for now we can NOT enable **React component annotations** and exclude **React three fiber**, we MUST completly disable the feature
 
 Another file that got added to the root of our project is `sentry.client.config.ts`, which is used to configure Sentry.io for **client components**. Check out the [Next.js SDK Configuration Options](https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/) documentation for more details about each option. I slightly modified my configuration file to be like this:
 

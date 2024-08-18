@@ -3,7 +3,7 @@ title: Content Security Policy (CSP) - Tutorial
 description: Content Security Policy (CSP) - Next.js static MDX blog | www.chris.lu Web development tutorials
 keywords: ['Content', 'Security', 'Policy', 'CSP', 'Headers', 'violation', 'report']
 published: 2024-08-15T17:17:17.444Z
-modified: 2024-08-16T15:30:33.444Z
+modified: 2024-08-18T21:05:05.444Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/content-security-policy
 section: Web development
 ---
@@ -186,7 +186,7 @@ Line 37: we have added a `upgradeInsecure` variable that we will only contain th
 
 Lines 99 to 104: we create a header for our CSP rules, for the header **key** we use the **cspReportOnly** variable we added at the top, depending on the value of **cspReportOnly** we either set the CSP header to **Content-Security-Policy-Report-Only** (if cspReportOnly = true) or we set it to **Content-Security-Policy** (if cspReportOnly = false), this means that if **cspReportOnly** is true we will only report violations but not enforce them, so if for example you try to load a script from a source that is forbidden it will still get loaded but the browser will alert you about the violation, this mode is helpful for as long as we are unsure about our CSP setup and want to watch for potential violations but do NOT enforce them yet, when we are sure that our CSP rules have been fine tuned and will not block legit sources then we set **cspReportOnly** to false, meaning from now on we do NOT just report but actually also enforce the rules, finally as the header **value** we make a call to our `cspHeader(){:fn}` function which returns a string, we also use `replace{:fn}` to remove all line breaks
 
-> [!NOTE]  
+> [!TIP]  
 > When enforcing is enabled, it will still report the violations (besides enforcing them)  
 
 For now, we set the CSP mode to only report violations.
@@ -234,7 +234,7 @@ Go back into the browser and check the [Console Tab](https://developer.chrome.co
 Those violations are there because Next.js uses the JavaScript [eval()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval) function, eval is required for development scripts like the Hot Module Reload (HMR) tool, which is a tool that reloads our page every time we save a file.
 
 > [!WARN]  
-> JavaScript [eval()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#never_use_direct_eval!) function can be dangerous when mixed with code that uses user inputs, as a malicious actor could inject Javascript as a sting and then your eval would turn that string into executable Javascript that could do things like stealing user credentials
+> JavaScript [eval()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#never_use_direct_eval!) function can be dangerous when you display content that got through user inputs (like a textarea or an input field), as a malicious actor could inject Javascript as a sting and then your eval function would turn that string into executable Javascript that could do things like stealing user credentials to a server owned by the malicious actor
 
 For HMR to work, we need to re-add the **'unsafe-eval** value to the **script-src** rule. Do that now, and then save the file to fix violations again.
 
@@ -253,14 +253,19 @@ In a lot of places (when reading about Sentry.io CSP violation logging), includi
 
 The above works for Firefox, which does not yet support report-to but does support report-uri, so Firefox will fallback and use report-uri
 
-However this does NOT work when using chrome (or any chromium based browser like edge and brave), chrome (>96) will attempt to use the **report-to directive** (defined as fallback in the Sentry.io documentation example), chrome will then also assume you are using the **Reporting-Endpoints header** from the Reporting API v1, however the Sentry.io example uses the **Report-To header** from the Reporting API v0 which chrome (>96) does NOT support (anymore), meaning chrome will queue the reports and then attempt to send them, but as it will not find a valid endpoint definition the requests will fail (chrome will put their status back to "Queued" for another attempt and after a while will set the status to "MarkedForRemoval"). After failing to send the reports chrome will never fall back to using the **report-uri directive**. You might be tempted to replace the **Report-To header** from the Sentry.io example with the new **Reporting-Endpoints header** however Sentry.io does NOT support the Reporting-Endpoints header yet, so that's also not an option.
+> [!WARN]  
+> However this does NOT work when using chrome (or any chromium based browser like edge and brave), chrome (>96) will attempt to use the **report-to directive** (defined as fallback in the [Sentry.io documentation example](https://docs.sentry.io/security-legal-pii/security/security-policy-reporting/)), chrome will then also assume you are using the **Reporting-Endpoints header** from the Reporting API v1, however the Sentry.io example uses the **Report-To header** from the Reporting API v0 which chrome (>96) does NOT support (anymore).
+>  
+> Meaning chrome will queue the reports and then attempt to send them, but as it will not find a valid endpoint definition the requests will fail (chrome will put their status back to "Queued" for another attempt and after a while will set the status to "MarkedForRemoval").
+>  
+> After failing to send the reports chrome will never fall back to using the **report-uri directive**. You might be tempted to replace the **Report-To header** from the Sentry.io example with the new **Reporting-Endpoints header** however Sentry.io does NOT support the Reporting-Endpoints header yet, so that's also not an option.
+
+In the next chapter, we will use [Sentry.io](https://sentry.io) that we have set up earlier for error logging purposes and add CSP violations logging
 
 > [!TIP]  
 > For a more in-depth look at the evolution of CSP and violation logging, I recommend checking out my [CSP post](/web_development/posts/csp)
 
-In the next chapter, we will use [Sentry.io](https://sentry.io) that we have set up earlier for error logging purposes and add CSP violations logging
-
-However, we will only use the **report-uri** directive from the CSP v1 specification, as this solution works in Chrome, Firefox, and Safari.
+We will only use the **report-uri** directive from the **CSP v1 specification**, as this solution works in Chrome, Firefox, and Safari.
 
 > [!NOTE]  
 > Keep an eye on CSP violation logging techniques as browsers and logging services will, one after the other, start supporting the Reporting API v1, and when they all do, I recommend replacing the report-uri directive with the report-to directive and also start using the Reporting-Endpoints header as soon as Sentry supports it
@@ -374,10 +379,17 @@ const securityHeadersConfig = (phase) => {
 }
 ```
 
-Lines 35 to 36: we add two new variables to store the Sentry.io CSP logging URL and a wildcard for the Sentry.io ingest sub-domain
+Lines 35 to 36: we add two new variables to store the Sentry.io CSP logging URL and a wildcard for the Sentry.io **ingest** sub-domain
 
-* The first variable contains the CSP logging URL **INSET_YOUR_SENTRY_REPORT_URI_HERE** is the same for preview and prod; it is the endpoint URL where the reports will get sent to, which means we use that variable to tell the report-uri directive where to send CSP violations reports, make sure you replace the **INSET_YOUR_SENTRY_REPORT_URI_HERE** placeholder with your own DSN from Sentry.io as described at the top of this chapter
-* The second variable contains a wildcard for the sentry reporting domain so that we can add the domain to our connect-src directive (most users are in the US so the reporting domain wildcard should be ok, but if your Sentry account is in the EU, then you need to change this value to `https://*.ingest.eu.sentry.io`)
+* The first variable contains the CSP logging URL **INSET_YOUR_SENTRY_REPORT_URI_HERE**, we use that variable to tell the report-uri directive where to send CSP violations reports (to what endpoint), make sure you replace the **INSET_YOUR_SENTRY_REPORT_URI_HERE** placeholder with your own DSN from Sentry.io as described at the top of this chapter
+* The second variable contains a wildcard for the reporting domain, so that we can add the domain to our connect-src directive
+
+> [!NOTE]  
+> As most devs that use Sentry are using the service that is located in the US, the reporting domain wildcard should be ok as it is, but if your Sentry account is in the EU, then you need to change it to this value to `https://*.ingest.eu.sentry.io`
+>  
+> The difference is that we replace **us** with **eu** before the last part which is **sentry.io**
+>  
+> If using a wildcard does not work for you, you could also just put the full URL into the **reportingDomainWildcard** variable, that works too, the wildcard is just more flexible in case you generate a new DSN it will still be valid
 
 Lines 42 to 43: we use a template literal to create the reporting uri directive; this directive will tell the browser what URL it should use when sending the CSP reports
 
@@ -389,7 +401,7 @@ Line 75 and 90: we add the **reportCSPViolations** variable, which contains a re
 > It is essential to add the **reportingDomainWildcard** to the connect-src directive, or CSP will block the reporting URL and not send reports to Sentry. We only add the **reportingDomainWildcard** to the connect-src for preview and production, but NOT development, as Sentry.io will filter out reports from localhost anyway.  
 
 > [!TIP]  
-> If you want to debug your code, you might want to also add the reporting for development. In that case, add the `${reportCSPViolations}` variable to the development directives too (same as for preview and production) and then check out the chapter about [disableng the "reports from localhost" filter](/web_development/posts/sentry-io/#disable-the-reports-from-locahost-filter) in my Sentry.io post as you will need to disable the filter for localhost reporting in your Sentry configuration on Sentry.io  
+> If you want to debug your code, you might want to also add the reporting for development. In that case, add the `${reportCSPViolations}` and `${reportingDomainWildcard}` variables to the development directives too (same as for preview and production) and then check out the chapter about [disableng the "reports from localhost" filter](/web_development/posts/sentry-io/#disable-the-reports-from-locahost-filter) in my Sentry.io post as you will need to disable the filter for localhost reporting in your Sentry configuration on Sentry.io  
 >  
 > If you want to only allow certain domains to be able to send in reports, then you can whitelist those domains, meaning Sentry.io will filter out reports that come from other domains (and use your Sentry DSN), I have a chapter in my Sentry.io post that goes explains [how to set up an allowed domains list](/web_development/posts/sentry-io#allowed-domains-filter) using the Sentry UI
 
@@ -403,95 +415,19 @@ There are also some useful security headers besides CSP headers. Let's add 3 of 
 
 ### Next.js configuration security headers
 
-We just added the CSP setup to every page header by altering the Next.js configuration file, and now we are going to add 4 more security headers:
+For now we only added the CSP setup to every page header by altering the Next.js configuration file, next we are going to add 4 more security headers:
 
-```js title="next.config.mjs" showLineNumbers{30} {15-25} {90} {95-106}
-const securityHeadersConfig = (phase) => {
+```js title="next.config.mjs" showLineNumbers{107} {1-11} {14} {19-30}
+    // security headers for preview & production
+    const extraSecurityHeaders = []
 
-    const cspReportOnly = true;
-	
-	const reportingUrl = 'https://foo123.ingest.sentry.io/api/bar456/security/?sentry_key=baz789'
-	const reportingDomainWildcard = 'https://*.ingest.sentry.io'
-
-    const cspHeader = () => {
-
-        const upgradeInsecure = (phase !== PHASE_DEVELOPMENT_SERVER) ? 'upgrade-insecure-requests;' : ''
-		
-		// reporting uri (CSP v1)
-		const reportCSPViolations = `report-uri ${reportingUrl};`
-
-		// security headers for preview & production
-		const extraSecurityHeaders = []
-
-		if (phase !== PHASE_DEVELOPMENT_SERVER) {
-			extraSecurityHeaders.push(
-				{
-					key: 'Strict-Transport-Security',
-					value: 'max-age=31536000', // 1 year
-				},
-			)
-		}
-
-        // worker-src is for sentry replay
-        // child-src is because safari <= 15.4 does not support worker-src
-        const defaultCSPDirectives = `
-            default-src 'none';
-            media-src 'self';
-            object-src 'none';
-            worker-src 'self' blob:;
-            child-src 'self' blob:;
-            manifest-src 'self';
-            base-uri 'none';
-            form-action 'none';
-            require-trusted-types-for 'script';
-            frame-ancestors 'none';
-            ${upgradeInsecure}
-        `
-
-        // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
-        // and whitelist vercel's domains based on:
-        // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
-        // and white-list vitals.vercel-insights
-        // based on: https://vercel.com/docs/speed-insights#content-security-policy
-        if (process.env.VERCEL_ENV === 'preview') {
-            return `
-                ${defaultCSPDirectives}
-                font-src 'self' https://vercel.live/ https://assets.vercel.com https://fonts.gstatic.com;
-                style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
-                script-src 'self' 'unsafe-inline' https://vercel.live/;
-                connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/ ${reportingDomainWildcard};
-                img-src 'self' data: https://vercel.com/ https://vercel.live/;
-                frame-src 'self' https://vercel.live/;
-				${reportCSPViolations}
-            `
-        }
-
-        // for production environment white-list vitals.vercel-insights
-        // based on: https://vercel.com/docs/speed-insights#content-security-policy
-        if (process.env.VERCEL_ENV === 'production') {
-            return `
-                ${defaultCSPDirectives}
-                font-src 'self';
-                style-src 'self' 'unsafe-inline';
-                script-src 'self' 'unsafe-inline';
-                connect-src 'self' https://vitals.vercel-insights.com ${reportingDomainWildcard};
-				img-src 'self' data:;
-                frame-src 'none';
-				${reportCSPViolations}
-            `
-        }
-
-        // for dev environment enable unsafe-eval for hot-reload
-        return `
-            ${defaultCSPDirectives}
-            font-src 'self';
-            style-src 'self' 'unsafe-inline';
-            script-src 'self' 'unsafe-inline' 'unsafe-eval';
-            connect-src 'self';
-            img-src 'self' data:;
-            frame-src 'none';
-        `
-
+    if (phase !== PHASE_DEVELOPMENT_SERVER) {
+        extraSecurityHeaders.push(
+            {
+                key: 'Strict-Transport-Security',
+                value: 'max-age=31536000', // 1 year
+            },
+        )
     }
 
     const headers = [
@@ -515,23 +451,19 @@ const securityHeadersConfig = (phase) => {
     ]
 
     return headers
-
-}
-
-export default securityHeadersConfig
 ```
 
-Lines 44 to 54: we added a new `extraSecurityHeaders` variable to store the HSTS header, but as we want to exclude it in development where we don't have an SSL certificate, we check if the phase is NOT development
+Lines 107 to 117: we edit the content of our **securityHeadersConfig** function and add a new `extraSecurityHeaders` variable to store the HSTS header, but as we want to exclude it in development where we don't have an SSL certificate, we check if the phase is NOT **development**
 
-The HSTS header (`Strict-Transport-Security`) tells the browser that this app only supports HTTPS. We want the browser to always use HTTPS for every request, even if the scheme is HTTP in the page URL.
+The HSTS header (`Strict-Transport-Security`) tells the browser that this app only supports HTTPS. We want the browser to always use HTTPS for every request the code of the page will make, even if the URL scheme of the content it needs to fetch is HTTP.
 
-Line 119: we use the `extraSecurityHeaders` to add the `Strict-Transport-Security` header to the list of headers
+Line 120: we use the `extraSecurityHeaders` variable to add the `Strict-Transport-Security` header to the list of headers
 
-Lines 124 to 135: we add the 3 security headers to the list of headers:
+Lines 125 to 136: we add 3 more security headers to the list of headers:
 
-* the first one is a `Referrer-Policy` header tells the browser when and when NOT to include information about the origin in referrer header, the [MDN "Referrer-Policy" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy) does a very good at explaining the different values, I like to only set the referrer for internal pages but not for external pages, that's why I use the value **same-origin**
-* The second **X-Content-Type-Options** header tells the browser not to attempt to guess the MIME type of resource by itself 
-* The third one is the `X-Frame-Options` header, when set to **deny**, does the same thing as the **frame-ancestors** directive (we added earlier) when set to **none**, but it is for older browsers that did not have support for the directive
+* the first one is a `Referrer-Policy` header, which tells the browser when and when NOT to include information about the origin in referrer header, the [MDN "Referrer-Policy" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy) does a very good job at explaining the different values, I like to only set the referrer for internal pages but not for external pages, that's why I set the value **same-origin**
+* The second **X-Content-Type-Options** header tells the browser NOT to attempt to guess the MIME type of resource by itself (which is a technique called MIME type sniffing) and instead take the value that we (our CDN) puts into the header, the problem with MIME type sniffing is that a malicious actor could hide code in the MIME type string of a file to then perform an attack on the tool doing the MIME type sniffing 
+* The third one is the `X-Frame-Options` header, when set to **deny** it does the same thing as the **frame-ancestors** directive (we added earlier) when it is set to **none**, but it is for older browsers that did not have support for the directive, If you want to decide for yourself, then have a look at the [caniuse "frame-ancestors" page](https://caniuse.com/?search=frame-ancestors) and if you think support for the directive is high enough then you can drop [X-Frame-Options](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options)
 
 Congratulations 🎉 you just made your project a lot more secure by setting up CSP headers and reporting potential violations
 
