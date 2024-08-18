@@ -417,93 +417,17 @@ There are also some useful security headers besides CSP headers. Let's add 3 of 
 
 For now we only added the CSP setup to every page header by altering the Next.js configuration file, next we are going to add 4 more security headers:
 
-```js title="next.config.mjs" showLineNumbers{31} {15-25} {90} {95-106}
-const securityHeadersConfig = (phase) => {
+```js title="next.config.mjs" showLineNumbers{107} {1-11} {14} {19-30}
+    // security headers for preview & production
+    const extraSecurityHeaders = []
 
-    const cspReportOnly = true;
-	
-	const reportingUrl = 'https://foo123.ingest.sentry.io/api/bar456/security/?sentry_key=baz789'
-	const reportingDomainWildcard = 'https://*.ingest.sentry.io'
-
-    const cspHeader = () => {
-
-        const upgradeInsecure = (phase !== PHASE_DEVELOPMENT_SERVER) ? 'upgrade-insecure-requests;' : ''
-		
-		// reporting uri (CSP v1)
-		const reportCSPViolations = `report-uri ${reportingUrl};`
-
-		// security headers for preview & production
-		const extraSecurityHeaders = []
-
-		if (phase !== PHASE_DEVELOPMENT_SERVER) {
-			extraSecurityHeaders.push(
-				{
-					key: 'Strict-Transport-Security',
-					value: 'max-age=31536000', // 1 year
-				},
-			)
-		}
-
-        // worker-src is for sentry replay
-        // child-src is because safari <= 15.4 does not support worker-src
-        const defaultCSPDirectives = `
-            default-src 'none';
-            media-src 'self';
-            object-src 'none';
-            worker-src 'self' blob:;
-            child-src 'self' blob:;
-            manifest-src 'self';
-            base-uri 'none';
-            form-action 'none';
-            require-trusted-types-for 'script';
-            frame-ancestors 'none';
-            ${upgradeInsecure}
-        `
-
-        // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
-        // and whitelist vercel's domains based on:
-        // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
-        // and white-list vitals.vercel-insights
-        // based on: https://vercel.com/docs/speed-insights#content-security-policy
-        if (process.env.VERCEL_ENV === 'preview') {
-            return `
-                ${defaultCSPDirectives}
-                font-src 'self' https://vercel.live/ https://assets.vercel.com https://fonts.gstatic.com;
-                style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
-                script-src 'self' 'unsafe-inline' https://vercel.live/;
-                connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/ ${reportingDomainWildcard};
-                img-src 'self' data: https://vercel.com/ https://vercel.live/;
-                frame-src 'self' https://vercel.live/;
-				${reportCSPViolations}
-            `
-        }
-
-        // for production environment white-list vitals.vercel-insights
-        // based on: https://vercel.com/docs/speed-insights#content-security-policy
-        if (process.env.VERCEL_ENV === 'production') {
-            return `
-                ${defaultCSPDirectives}
-                font-src 'self';
-                style-src 'self' 'unsafe-inline';
-                script-src 'self' 'unsafe-inline';
-                connect-src 'self' https://vitals.vercel-insights.com ${reportingDomainWildcard};
-				img-src 'self' data:;
-                frame-src 'none';
-				${reportCSPViolations}
-            `
-        }
-
-        // for dev environment enable unsafe-eval for hot-reload
-        return `
-            ${defaultCSPDirectives}
-            font-src 'self';
-            style-src 'self' 'unsafe-inline';
-            script-src 'self' 'unsafe-inline' 'unsafe-eval';
-            connect-src 'self';
-            img-src 'self' data:;
-            frame-src 'none';
-        `
-
+    if (phase !== PHASE_DEVELOPMENT_SERVER) {
+        extraSecurityHeaders.push(
+            {
+                key: 'Strict-Transport-Security',
+                value: 'max-age=31536000', // 1 year
+            },
+        )
     }
 
     const headers = [
@@ -527,13 +451,9 @@ const securityHeadersConfig = (phase) => {
     ]
 
     return headers
-
-}
-
-export default securityHeadersConfig
 ```
 
-Lines 45 to 55: we add a new `extraSecurityHeaders` variable to store the HSTS header, but as we want to exclude it in development where we don't have an SSL certificate, we check if the phase is NOT **development**
+Lines 107 to 117: we edit the content of our **securityHeadersConfig** function and add a new `extraSecurityHeaders` variable to store the HSTS header, but as we want to exclude it in development where we don't have an SSL certificate, we check if the phase is NOT **development**
 
 The HSTS header (`Strict-Transport-Security`) tells the browser that this app only supports HTTPS. We want the browser to always use HTTPS for every request the code of the page will make, even if the URL scheme of the content it needs to fetch is HTTP.
 
