@@ -174,12 +174,9 @@ const nextConfig = (phase) => {
     }
 
     const withMDX = createMdx({
-        extension: /\.mdx?$/,
         options: {
             remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter, [remarkTableOfContents, remarkTableOfContentsOptions], [remarkGfm, remarkGfmOptions]],
             rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions], rehypeSlug, rehypeMDXImportMedia, [rehypeAutolinkHeadings, rehypeAutolinkHeadingsOptions], [rehypeGithubAlerts, rehypeGithubAlertsOptions]],
-            // If you use `MDXProvider`, uncomment the following line.
-            // providerImportSource: "@mdx-js/react",
         },
     })
 
