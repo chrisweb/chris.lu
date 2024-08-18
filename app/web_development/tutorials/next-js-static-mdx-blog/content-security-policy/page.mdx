@@ -253,14 +253,19 @@ In a lot of places (when reading about Sentry.io CSP violation logging), includi
 
 The above works for Firefox, which does not yet support report-to but does support report-uri, so Firefox will fallback and use report-uri
 
-However this does NOT work when using chrome (or any chromium based browser like edge and brave), chrome (>96) will attempt to use the **report-to directive** (defined as fallback in the Sentry.io documentation example), chrome will then also assume you are using the **Reporting-Endpoints header** from the Reporting API v1, however the Sentry.io example uses the **Report-To header** from the Reporting API v0 which chrome (>96) does NOT support (anymore), meaning chrome will queue the reports and then attempt to send them, but as it will not find a valid endpoint definition the requests will fail (chrome will put their status back to "Queued" for another attempt and after a while will set the status to "MarkedForRemoval"). After failing to send the reports chrome will never fall back to using the **report-uri directive**. You might be tempted to replace the **Report-To header** from the Sentry.io example with the new **Reporting-Endpoints header** however Sentry.io does NOT support the Reporting-Endpoints header yet, so that's also not an option.
+> [!WARN]  
+> However this does NOT work when using chrome (or any chromium based browser like edge and brave), chrome (>96) will attempt to use the **report-to directive** (defined as fallback in the [Sentry.io documentation example](https://docs.sentry.io/security-legal-pii/security/security-policy-reporting/)), chrome will then also assume you are using the **Reporting-Endpoints header** from the Reporting API v1, however the Sentry.io example uses the **Report-To header** from the Reporting API v0 which chrome (>96) does NOT support (anymore).
+>  
+> Meaning chrome will queue the reports and then attempt to send them, but as it will not find a valid endpoint definition the requests will fail (chrome will put their status back to "Queued" for another attempt and after a while will set the status to "MarkedForRemoval").
+>  
+> After failing to send the reports chrome will never fall back to using the **report-uri directive**. You might be tempted to replace the **Report-To header** from the Sentry.io example with the new **Reporting-Endpoints header** however Sentry.io does NOT support the Reporting-Endpoints header yet, so that's also not an option.
+
+In the next chapter, we will use [Sentry.io](https://sentry.io) that we have set up earlier for error logging purposes and add CSP violations logging
 
 > [!TIP]  
 > For a more in-depth look at the evolution of CSP and violation logging, I recommend checking out my [CSP post](/web_development/posts/csp)
 
-In the next chapter, we will use [Sentry.io](https://sentry.io) that we have set up earlier for error logging purposes and add CSP violations logging
-
-However, we will only use the **report-uri** directive from the CSP v1 specification, as this solution works in Chrome, Firefox, and Safari.
+We will only use the **report-uri** directive from the **CSP v1 specification**, as this solution works in Chrome, Firefox, and Safari.
 
 > [!NOTE]  
 > Keep an eye on CSP violation logging techniques as browsers and logging services will, one after the other, start supporting the Reporting API v1, and when they all do, I recommend replacing the report-uri directive with the report-to directive and also start using the Reporting-Endpoints header as soon as Sentry supports it
