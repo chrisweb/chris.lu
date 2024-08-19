@@ -1,0 +1,226 @@
+---
+title: React in MDX and MDX in react - Tutorial
+description: React in MDX and MDX in react - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['React', 'mdx', 'jsx', 'markdown', 'component']
+published: 2024-07-19T12:01:01.444Z
+modified: 2024-07-19T12:01:01.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/react-in-mdx-and-mdx-in-react
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
+
+# React in MDX and MDX in react
+
+You can add React components inside of MDX content, but the other way around works too. In this part of the tutorial, we will explore a bit how to use components in MDX, but also MDX in components
+
+## React components in MDX content
+
+Of course, the big advantage of MDX over regular markdown is that we can use any React component inside of our MDX content
+
+> [!TIP]  
+> we are about to create several folders and then add a file, so you might start by creating the first folder and then inside of it the second folder...
+>  
+> But did you know, that you can also right click inside of the File Explorer (in the primary sidebar) and then chose **New File...** and enter the whole `components/tutorial_examples/buttons/Counting.tsx` path at once, VSCode will create all of the folders as well as the file (all in one go)
+
+First, create a new folder `components` in the root of your project, then inside the `components` folder, create a `tutorial_examples` folder, and inside that folder, another `buttons` folder
+
+Now, inside of the `buttons` folder, create a `Counting.tsx` file and insert the following code:
+
+```tsx title="/components/tutorial_examples/buttons/Counting.tsx"
+'use client'
+
+import { useState } from 'react'
+
+const Counting: React.FC = () => {
+
+    const [count, setCount] = useState(0)
+
+    const handleClick = () => {
+        setCount(count + 1)
+    }
+
+    return (
+        <>
+            <button onClick={handleClick}>
+                Clicked {count} times
+            </button>
+        </>
+    )
+}
+
+export default Counting
+```
+
+Now let's edit the `/app/(tutorial_examples)/first_mdx_page/page.mdx` page we created earlier and add our Counting component to it, like so:
+
+```mdx title="/app/(tutorial_examples)/first_mdx_page/page.mdx"
+import Counting from '@/components/tutorial_examples/buttons/Counting'
+
+# Hello 👋 with MDX!
+
+<Counting />
+
+## headline 2nd level
+
+*italic* text
+
+**bold** text
+
+***bold and italic*** text
+
+> a quote
+
+[link to Next.js](https://nextjs.org)
+
+* foo
+* bar
+* baz
+
+![This is an octocat image](https://myoctocat.com/assets/images/base-octocat.svg 'I\'m the title of the octocat image')
+
+```
+
+> [!NOTE]  
+> Did you notice how we did NOT use the relative path that would be '../components/tutorial_examples/buttons/Counting'?
+>  
+> Instead, we used the **@/** alias, which we added when creating the project (using creat-next-app)
+>  
+> The advantage of using the alias is that no matter where we move our page, the path to the Button will always stay the same (of course, if we move the button, then we also need to update the import)
+
+Make sure your dev server is running (if it is not, start it using `npm run dev`)
+
+Then visit the updated MDX page in the browser at `http://localhost:3000/first_mdx_page` and try out the counting button
+
+Of course, this is just an example, you can import any component you want, for example, a chart component to visualize some statistics or a component displaying a 3d model of an object
+
+## MDX in pages and components
+
+Besides turning a whole page into an MDX page, as we saw in the previous chapter, you can also import MDX into typescript (.tsx) pages and React components
+
+### import MDX content into a typescript page
+
+First, inside of the `/app/(tutorial_examples)` folder, create a new `mdx_in_a_page` folder
+
+Then, in the `mdx_in_a_page` folder, create a file called `content.mdx` with the following content:
+
+```md title="/app/(tutorial_examples)/mdx_in_a_page/content.mdx"
+# Hello 👋 World!
+
+I'm MDX content that got imported into a regular page.tsx file
+
+```
+
+And then, in the same folder, create a `page.tsx` with the following content:
+
+```tsx title="/app/(tutorial_examples)/mdx_in_a_page/page.tsx"
+import ContentMDX from './content.mdx'
+
+export default function Page() {
+
+    return (
+        <>
+            <ContentMDX />
+        </>
+    )
+}
+```
+
+Make sure your dev server is running, if it is not, start it using `npm run dev`
+
+Then visit your newly created page in the browser at `http://localhost:3000/mdx_in_a_page`
+
+### import MDX into a component
+
+First, go into the `/components/tutorial_examples` folder and then create another folder called `mdx`
+
+Inside the `mdx` folder, create a `content.mdx` file and insert the following content:
+
+```md title="/components/tutorial_examples/mdx/content.mdx"
+# Hello 👋 World!
+
+I'm MDX content that got imported in a Component
+
+```
+
+And then, in the same folder, create an `Example.tsx` file with the following content:
+
+```tsx title="/components/tutorial_examples/mdx/Example.tsx"
+import ContentMDX from './content.mdx'
+
+const MDXExample: React.FC = () => {
+
+    return (
+        <>
+            <ContentMDX />
+        </>
+    )
+}
+
+export default MDXExample
+```
+
+Then, inside of the `/app/(tutorial_examples)` folder, create another new folder, `mdx_in_a_component`
+
+In the `mdx_in_a_component` folder, create a `page.tsx` file with the following content:
+
+```tsx title="/app/(tutorial_examples)/mdx_in_a_component/page.tsx"
+import MDXExample from '@/components/(tutorial_examples)/mdx/Example'
+
+export default function Page() {
+
+    return (
+        <>
+            <MDXExample />
+        </>
+    )
+}
+```
+
+Make sure your dev server is running, if it is not, start it using `npm run dev`
+
+Then visit your newly created MDX page in the browser at `http://localhost:3000/mdx_in_a_component`
+
+{/*<Pagination
+    previous={{ label: 'First MDX page and understanding of static rendering', href: '/web_development/tutorials/next-js-static-mdx-blog/first-mdx-page-and-understanding-static-rendering' }}
+    next={{ label: 'Linting setup using ESLint', href: '/web_development/tutorials/next-js-static-mdx-blog/linting-setup-using-eslint' }}
+/>*/}
+<Pagination
+    previous={{ label: 'First MDX page and understanding of static rendering', href: '/web_development/tutorials/next-js-static-mdx-blog/first-mdx-page-and-understanding-static-rendering' }}
+/>
+
+</article>
