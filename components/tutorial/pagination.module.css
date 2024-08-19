@@ -21,7 +21,6 @@
 
 .borderRight {
     width: 100%;
-    height: 100%;
     padding: 1px;
     --cornerSideLength: 12px;
     /* next line is a hack: in chrome a small line sometimes appears */
@@ -40,7 +39,6 @@
 
 .borderLeft {
     width: 100%;
-    height: 100%;
     padding: 1px;
     --cornerSideLength: 12px;
     /* next line is a hack: in chrome a small line sometimes appears */
@@ -76,7 +74,7 @@
     position: relative;
     display: flex;
     flex-flow: column;
-    justify-content: center;
+    justify-content: flex-start;
     background-color: var(--main-background-color);
     --cornerSideLength: 12px;
     /* next line is a hack: in chrome a small line sometimes appears */
@@ -97,7 +95,7 @@
     position: relative;
     display: flex;
     flex-flow: column;
-    justify-content: center;
+    justify-content: flex-start;
     background-color: var(--main-background-color);
     --cornerSideLength: 12px;
     /* next line is a hack: in chrome a small line sometimes appears */
