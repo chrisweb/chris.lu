@@ -369,6 +369,28 @@ And if you are in the file version, you will see an icon to switch to the UI ver
 > [!MORE]  
 > [VSCode "settings sync" documentation](https://code.visualstudio.com/docs/editor/settings-sync)  
 
+## VSCode indentation
+
+My editor keep replacing tabs with 2 spaces instead of 4
+
+So I checked my default VSCode **user** settings (if you don't know how to access the **user** settings, have a look at the previous chapter)
+
+I searched for the keyword **"Editor"** and saw that the **"Editor: Tab Size"** was already set to **4** (spaces) and **"Editor: Insert Spaces"** was enabled
+
+But when scrolling further down I noticed that there is an option that can overwrite both, it is called **"Editor: Detect Indentation"** and is enabled by default, here is what it does:
+
+> Controls whether Editor: Tab Size and Editor: Insert Spaces will be automatically detected when a file is opened based on the file contents.
+
+So I disabled this option, then went back to my file, did a right and chose **Format Document** (you can also use the shortcut `Shift+Alt+F` (macOS: `⇧⌥F`, Linux: `Ctrl+Shift+I`) instead) and this time my indentation was what I expected
+
+If you prefer to change this option on a workspace level, then edit your settings.json that is in the .vscode folder at the root of your project and add:
+
+```json
+{
+    "editor.detectIndentation": false
+}
+```
+
 ## VSCode themes
 
 The VSCode appearance can be easily customized using themes. My personal favorite is [SynthWave '84](https://marketplace.visualstudio.com/items?itemName=RobbOwen.synthwave-vscode)
