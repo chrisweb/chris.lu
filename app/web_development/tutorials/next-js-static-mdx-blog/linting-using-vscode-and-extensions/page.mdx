@@ -2,8 +2,8 @@
 title: Linting in VSCode using ESLint and MDX extensions - Tutorial
 description: Linting in VSCode using ESLint and MDX extensions - Next.js static MDX blog | www.chris.lu Web development tutorials
 keywords: ['CI/CD', 'Vercel', 'build', 'Production', 'preview']
-published: 2024-07-19T22:22:22.444Z
-modified: 2024-07-19T22:22:22.444Z
+published: 2024-08-19T22:22:22.444Z
+modified: 2024-08-20T14:14:14.444Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/linting-using-vscode-and-extensions
 section: Web development
 ---
@@ -137,11 +137,14 @@ To restart the eslint server in VSCode, press `ctrl` + `shift` + `p` to open the
 
 Congratulations 🎉 you just completed the ESLint setup of your project, you now have a linting command for your code as well as your MDX content, you installed 2 extensions in VSCode so that you now also have full ESLint and MDX (markdown) linting inside of our VSCode IDE
 
-## Ensure linting in VSCode works as intended 
+## Ensure linting in VSCode works as intended (optional)
 
 Now, the final question is: "But does it work?"
 
 To test if everything works as intended, we will create some errors in both the tsx and mdx files, and if we did the setup correctly, we should get linting errors both in VSCode as well as in the command line output
+
+> [!NOTE]  
+> The next few chapters are to verify our linting setup and give you and idea what kind of warning and errors to expect from the linting tools, if you prefer you can skip them and continue with the chapter [Disabling rules using comments](#disabling-rules-using-comments) or come back later to read the chapters you skiped, if you have some time though I recommend checking them out
 
 ### Testing the MDX file(s) linting process (in VSCode)
 
@@ -351,12 +354,9 @@ So if we do both things, we get something like this:
 > [Info - 8:41:03 PM] ESLint server is running.
 ```
 
-{/*<Pagination
-    previous={{ label: 'Linting MDX using remark-lint', href: '/web_development/tutorials/next-js-static-mdx-blog/linting-mdx-using-remark-lint' }}
-    next={{ label: 'Styling and CSS libraries', href: '/web_development/tutorials/next-js-static-mdx-blog/styling-and-css' }}
-/>*/}
 <Pagination
     previous={{ label: 'Linting MDX using remark-lint', href: '/web_development/tutorials/next-js-static-mdx-blog/linting-mdx-using-remark-lint' }}
+    next={{ label: 'Styling and CSS libraries', href: '/web_development/tutorials/next-js-static-mdx-blog/styling-and-css' }}
 />
 
 </article>
