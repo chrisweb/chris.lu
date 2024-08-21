@@ -54,7 +54,7 @@ When building our navigation earlier we saw why it is beneficial to use [next/li
 
 ## React component for external and internal links
 
-First, we are going to create a custom Link component that will use **next/link**, **next/link** extends the HTML `<a>` element to provide prefetching and client-side navigation between routes, and we are going to create a component that will use **next/link** for internal URLs and use a regular `<a>` element for external URLs, we will also add an icon to external URLs to give users a visible hint that if they click on that link, they will leave our app
+First, we are going to create a custom Link component that will use **next/link**, **next/link** extends the HTML `<a>{:html}` element to provide prefetching and client-side navigation between routes, and we are going to create a component that will use **next/link** for internal URLs and use a regular `<a>{:html}` element for external URLs, we will also add an icon to external URLs to give users a visible hint that if they click on that link, they will leave our app
 
 In the `/components` folder, add a new `base` folder
 
@@ -250,12 +250,9 @@ If you liked this post, please consider making a [donation](https://buymeacoffee
 > [!MORE]  
 > [VSCode "Markdown editing" documentation](https://code.visualstudio.com/docs/languages/markdown#_inserting-images-and-links-to-files)  
 
-{/*<Pagination
-    previous={{ label: 'The mdx-components file', href: '/web_development/tutorials/next-js-static-mdx-blog/mdx-components-file' }}
-    next={{ label: 'Optimizing images in MDX using next/image', href: '/web_development/tutorials/next-js-static-mdx-blog/optimizing-using-next-image' }}
-/>*/}
 <Pagination
     previous={{ label: 'The mdx-components file', href: '/web_development/tutorials/next-js-static-mdx-blog/mdx-components-file' }}
+    next={{ label: 'Optimizing images in MDX using next/image', href: '/web_development/tutorials/next-js-static-mdx-blog/optimizing-using-next-image' }}
 />
 
 </article>

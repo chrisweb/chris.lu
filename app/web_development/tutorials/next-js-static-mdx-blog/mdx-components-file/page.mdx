@@ -93,7 +93,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 }
 ```
 
-Lines 12 to 16: we have created a simple custom component for **ul lists**, what happens is that first, the markdown parser turns the markdown list into HTML, and then mdx-components will be used to add a CSS class called `listContainer` to each `<ul>` element
+Lines 12 to 16: we have created a simple custom component for **ul lists**, what happens is that first, the markdown parser turns the markdown list into HTML, and then mdx-components will be used to add a CSS class called `listContainer` to each `<ul>{:html}` element
 
 ## CSS class example using a MDX playground page
 
