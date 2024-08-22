@@ -184,7 +184,7 @@ Now have a look at the time we print on top of the navigation, click on the navi
 
 ## Using next/link instead of anchor elements
 
-Now let's replace the [anchor element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a) (`<a>`) we used in our navigation component with [next/link](https://nextjs.org/docs/app/api-reference/components/link)
+Now let's replace the [anchor element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a) (`<a>{:html}`) we used in our navigation component with [next/link](https://nextjs.org/docs/app/api-reference/components/link)
 
 ```tsx title="/components/header/Navigation.tsx" showLineNumbers {2} {21}#special {27}#special
 import type { Route } from 'next'
@@ -248,7 +248,7 @@ Finally, look again at the time we print on top of the navigation, and you will 
 > [!NOTE]  
 > To be clear, server component layouts **DO NOT** re-render on navigation but client components (when using the 'use client' directive in a layout) **DO** re-render
 
-You can now remove the `<p>{new Date().toString()}</p>` test (in `/app/layout.tsx` at line 20), which we added to demonstrate that the navigation does NOT re-render, we will not need it anymore
+You can now remove the `<p>{new Date().toString()}</p>{:html}` test (in `/app/layout.tsx` at line 20), which we added to demonstrate that the navigation does NOT re-render, we will not need it anymore
 
 > [!MORE]  
 > [Next.js "next/link" API reference](https://nextjs.org/docs/app/api-reference/components/link)  
@@ -336,7 +336,7 @@ Now launch the dev server if it isn't already running (using the `npm run dev` c
 
 Then right click into the page and select **Inspect**
 
-Have a look at the the two links inside of the `<nav>` element (inside of the `<header>` element), you will see that one of the two now has an `active` class and when you click on the links in the navigation that class will jump from one anchor to the other, depending on what page you are. In the next part of the tutorial we will add styling to make this active class more useful.
+Have a look at the the two links inside of the `<nav>{:html}` element (inside of the `<header>{:html}` element), you will see that one of the two now has an `.active{:css}` class and when you click on the links in the navigation that class will jump from one anchor to the other, depending on what page you are. In the next part of the tutorial we will add styling to make this active class more useful.
 
 Congratulations 🎉 you created your navigation component using next/link and next/navigation
 

@@ -217,7 +217,7 @@ I then enabled the option `reportUnusedDisableDirectives` to make sure ESLint wi
 
 The 1st override we add to the array is fairly short, as its only purpose is to tell ESLint which **rule sets** we want to use, no matter if it is mdx / markdown content in md(x) files or typescript code in ts(x) files
 
-We do this, because of a rule from the Next.js ESLint plugin that will recommend that you use [next/image](https://nextjs.org/docs/app/api-reference/components/image) instead of a regular `<img>` element, this rule can be useful in both MDX files and also for Typescript code in React components as well as in Next.js pages
+We do this, because of a rule from the Next.js ESLint plugin that will recommend that you use [next/image](https://nextjs.org/docs/app/api-reference/components/image) instead of a regular `<img>{:html}` element, this rule can be useful in both MDX files and also for Typescript code in React components as well as in Next.js pages
 
 Add the following object to the **overrides** array:
 
