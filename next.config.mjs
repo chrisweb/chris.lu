@@ -38,7 +38,7 @@ const nextConfig = (phase) => {
         keepBackground: true,
         tokensMap: {
             'function': 'entity.name.function',
-            'string': '.constant.numeric.decimal.js',
+            'string': 'string',
             'key': '.meta.object-literal.key',
         },
         defaultLang: {
@@ -245,6 +245,15 @@ const nextConfig = (phase) => {
                     ],
                 },
             ];
+        },
+        redirects: async () => {
+            return [
+                {
+                    source: '/myprojects',
+                    destination: '/web_development',
+                    permanent: true,
+                },
+            ]
         },
     }
 
