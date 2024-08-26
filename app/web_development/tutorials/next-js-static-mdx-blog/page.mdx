@@ -7,10 +7,9 @@ permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog
 section: Web development
 ---
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBug, faComments } from '@fortawesome/free-solid-svg-icons'
 import VideoScroll from '@/components/video/Scroll'
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Pagination from '@/components/tutorial/Pagination'
 
 export const metadata = {
     title: frontmatter.title,
@@ -42,26 +41,9 @@ export const metadata = {
 
 <VideoScroll />
 
-I tried to make this tutorial as beginner-friendly as possible. If, however you have a question feel free to ask on the <FontAwesomeIcon icon={faComments} size="1x" color='rgb(255, 0, 170)' /> [discussion](https://github.com/chrisweb/chris.lu/discussions) page and if you find a bug please report it using the <FontAwesomeIcon icon={faBug} size="1x" color='rgb(255, 0, 170)' /> [issues](https://github.com/chrisweb/chris.lu/issues)
-
-In this tutorial, we will:
-
-* create a fully static site using the Next.js v14.x (compatible with v13.x) app directory
-* create several components using React v18.x
-* add support for MDX content formatting via the @next/mdx package
-* add a plugin to generate a table of contents for each post automatically
-* add another plugin that will handle code block styling based on your favorite VSCode theme
-* add yet another plugin that will render GitHub like alerts, created using the github markdown syntax for alerts
-* add linting tools for both the code and the content (markdown lint)
-* add a CI/CD pipeline using Vercel.com so that every time we commit code to our GitHub repository, it gets automatically deployed (staging/production)
-* add bugs monitoring and Content Security Policy (CSP) violations logging using Sentry.io
-* install useful extensions for VSCode and learn how to use them
-
-> [!NOTE]  
-> I made this tutorial with total beginners in mind. However, if you are already an experienced Next.js dev, then there are some chapters you may want to skip
-
 ## Table of Contents
 
+* [Introduction](/web_development/tutorials/next-js-static-mdx-blog/introduction)
 * [Prerequisites](/web_development/tutorials/next-js-static-mdx-blog/prerequisites)
 * [Project setup and first commit](/web_development/tutorials/next-js-static-mdx-blog/project-setup-and-first-commit)
 * [Typescript plugin and typed routes](/web_development/tutorials/next-js-static-mdx-blog/typescript-plugin-and-typed-routes)
@@ -90,5 +72,10 @@ In this tutorial, we will:
 * [GitHub like alerts plugin](/web_development/tutorials/next-js-static-mdx-blog/github-like-alerts-plugin)
 * [Metadata (tsx and mdx pages)](/web_development/tutorials/next-js-static-mdx-blog/metadata)
 * [Frontmatter plugin](/web_development/tutorials/next-js-static-mdx-blog/frontmatter-plugin)
+
+<Pagination
+    previous={{ label: 'Web development', href: '/web_development' }}
+    next={{ label: 'Introduction', href: '/web_development/tutorials/next-js-static-mdx-blog/introduction' }}
+/>
 
 </article>
