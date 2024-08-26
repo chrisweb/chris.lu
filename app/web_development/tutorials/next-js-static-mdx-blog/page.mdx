@@ -2,15 +2,14 @@
 title: Next.js static MDX blog - Tutorial
 keywords: ['Next.js', 'Nextjs', 'static', 'mdx', 'blog', 'tutorial', 'react', 'ssg']
 published: 2024-08-13T17:12:21.444Z
-modified: 2024-08-25T17:12:21.444Z
+modified: 2024-08-26T06:06:06.444Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog
 section: Web development
 ---
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBug, faComments } from '@fortawesome/free-solid-svg-icons'
 import VideoScroll from '@/components/video/Scroll'
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Pagination from '@/components/tutorial/Pagination'
 
 export const metadata = {
     title: frontmatter.title,
@@ -42,26 +41,9 @@ export const metadata = {
 
 <VideoScroll />
 
-I tried to make this tutorial as beginner-friendly as possible. If, however you have a question feel free to ask on the <FontAwesomeIcon icon={faComments} size="1x" color='rgb(255, 0, 170)' /> [discussion](https://github.com/chrisweb/chris.lu/discussions) page and if you find a bug please report it using the <FontAwesomeIcon icon={faBug} size="1x" color='rgb(255, 0, 170)' /> [issues](https://github.com/chrisweb/chris.lu/issues)
-
-In this tutorial, we will:
-
-* create a fully static site using the Next.js v14.x (compatible with v13.x) app directory
-* create several components using React v18.x
-* add support for MDX content formatting via the @next/mdx package
-* add a plugin to generate a table of contents for each post automatically
-* add another plugin that will handle code block styling based on your favorite VSCode theme
-* add yet another plugin that will render GitHub like alerts, created using the github markdown syntax for alerts
-* add linting tools for both the code and the content (markdown lint)
-* add a CI/CD pipeline using Vercel.com so that every time we commit code to our GitHub repository, it gets automatically deployed (staging/production)
-* add bugs monitoring and Content Security Policy (CSP) violations logging using Sentry.io
-* install useful extensions for VSCode and learn how to use them
-
-> [!NOTE]  
-> I made this tutorial with total beginners in mind. However, if you are already an experienced Next.js dev, then there are some chapters you may want to skip
-
 ## Table of Contents
 
+* [Introduction](/web_development/tutorials/next-js-static-mdx-blog/introduction)
 * [Prerequisites](/web_development/tutorials/next-js-static-mdx-blog/prerequisites)
 * [Project setup and first commit](/web_development/tutorials/next-js-static-mdx-blog/project-setup-and-first-commit)
 * [Typescript plugin and typed routes](/web_development/tutorials/next-js-static-mdx-blog/typescript-plugin-and-typed-routes)
@@ -88,11 +70,12 @@ In this tutorial, we will:
 * [Table of Contents plugin and React Observer Hook](/web_development/tutorials/next-js-static-mdx-blog/table-of-contents-plugin)
 * [GitHub flawored markdown plugin](/web_development/tutorials/next-js-static-mdx-blog/github-flawored-markdown-plugin)
 * [GitHub like alerts plugin](/web_development/tutorials/next-js-static-mdx-blog/github-like-alerts-plugin)
+* [Metadata (tsx and mdx pages)](/web_development/tutorials/next-js-static-mdx-blog/metadata)
+* [Frontmatter plugin](/web_development/tutorials/next-js-static-mdx-blog/frontmatter-plugin)
 
-> [!NOTE]  
-> Today is the 25th of august 2024 and I have released almost all pages of this tutorial, the next pages listed here are almost done, I just need to finish setting the metadata, doing some spell checking, verify that the code examples work as intended, ... I will release the next pages over the course of the next few days, every time a page is done I will release it
-
-* Metadata (tsx and mdx pages)
-* Frontmatter plugin
+<Pagination
+    previous={{ label: 'Web development', href: '/web_development' }}
+    next={{ label: 'Introduction', href: '/web_development/tutorials/next-js-static-mdx-blog/introduction' }}
+/>
 
 </article>
