@@ -10,6 +10,7 @@ import remarkLintNoUndefinedReferences from 'remark-lint-no-undefined-references
 import remarkLintLinkTitleStyle from 'remark-lint-link-title-style'
 import remarkLintMaximumLineLength from 'remark-lint-maximum-line-length'
 import remarkLintListItemSpacing from 'remark-lint-list-item-spacing'
+import remarkFrontmatter from 'remark-frontmatter'
 
 const config = {
     plugins: [
@@ -30,6 +31,7 @@ const config = {
         [remarkLintMaximumLineLength, false],
         // https://www.npmjs.com/package/remark-lint-list-item-spacing
         [remarkLintListItemSpacing, false],
+        remarkFrontmatter
     ]
 }
 
