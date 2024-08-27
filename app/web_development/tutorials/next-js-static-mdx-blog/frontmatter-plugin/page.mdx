@@ -233,6 +233,67 @@ Line 11 and 12: we have two new meta tags, which have a property that is NOT pre
 
 Lines 13 to 16: we have the keywords that get used as tags for our open graph article, unlike the **keywords** meta tag, the **tags** get split into multiple tags
 
+## Frontmatter linting errors
+
+If you followed the remark lint tuturial part, you might have noticed that as soon as you add the frontmatter block to your MDX documents, remark-lint will start complaining about non valid content, if you hover with your mouse over the part that is underlined with a green wave, it will open a modal that shows you one of those linting problems:
+
+> Unexpected setext heading, expected ATX (remark-lint-heading-style)  
+
+If you launch use the `npm run lint` linting command you will see even more:
+
+> Unexpected setext heading, expected ATX (remark-lint-heading-style)  
+> Unexpected `xxx` characters in heading, expected at most `100` characters (remark-lint-maximum-heading-length)  
+> Unexpected reference to undefined definition, expected corresponding definition (`'foo'`) for a link or escaped opening bracket (`\[`) for regular text (remark-lint-no-undefined-references)  
+
+To solve this problem need to add frontmatter as a plugin to our **remark lint configuration** file (that is in root of the project):
+
+```js title=".remarkrc.mjs" showLineNumbers {13} {34} 
+// presets imports
+import remarkPresetLintRecommended from 'remark-preset-lint-consistent'
+import remarkPresetLintConsistent from 'remark-preset-lint-recommended'
+import remarkPresetLintMarkdownStyleGuide from 'remark-preset-lint-markdown-style-guide'
+
+// rules imports
+import remarkLintMaximumHeadingLength from 'remark-lint-maximum-heading-length'
+import remarkLintUnorderedListMarkerStyle from 'remark-lint-unordered-list-marker-style'
+import remarkLintNoUndefinedReferences from 'remark-lint-no-undefined-references'
+import remarkLintLinkTitleStyle from 'remark-lint-link-title-style'
+import remarkLintMaximumLineLength from 'remark-lint-maximum-line-length'
+import remarkLintListItemSpacing from 'remark-lint-list-item-spacing'
+import remarkFrontmatter from 'remark-frontmatter'
+
+const config = {
+    plugins: [
+        // presets
+        remarkPresetLintRecommended,
+        remarkPresetLintConsistent,
+        remarkPresetLintMarkdownStyleGuide,
+        // rules
+        // https://www.npmjs.com/package/remark-lint-maximum-heading-length
+        [remarkLintMaximumHeadingLength, [1, 100]],
+        // https://www.npmjs.com/package/remark-lint-unordered-list-marker-style
+        [remarkLintUnorderedListMarkerStyle, 'consistent'],
+        // https://www.npmjs.com/package/remark-lint-no-undefined-references
+        [remarkLintNoUndefinedReferences, { allow: ['!NOTE', '!TIP', '!IMPORTANT', '!WARNING', '!CAUTION', ' ', 'x'] }],
+        // https://www.npmjs.com/package/remark-lint-link-title-style
+        [remarkLintLinkTitleStyle, '\''],
+        // https://www.npmjs.com/package/remark-lint-maximum-line-length
+        [remarkLintMaximumLineLength, false],
+        // https://www.npmjs.com/package/remark-lint-list-item-spacing
+        [remarkLintListItemSpacing, false],
+        remarkFrontmatter
+    ]
+}
+
+export default config
+```
+
+Line 13: we import the frontmatter plugin
+
+Line 34: we add the frontmatter plugin to the remark lint configuration
+
+If you now run the linting process again the errors should be gone (if they are not gone yet, then you might want to [clear the ESLint cache](/web_development/tutorials/next-js-static-mdx-blog/linting-mdx-using-remark-lint#clearing-the-eslint-cache)) and they should also disappear in VSCode (you might have to [restart the ESLint server](/web_development/tutorials/next-js-static-mdx-blog/linting-using-vscode-and-extensions#restarting-the-eslint-server-in-vscode) in VSCode to update the linting process)
+
 Congratulations 🎉 you just learned how to set metadata for MDX pages and how to add frontmatter to MDX documents
 
 If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
