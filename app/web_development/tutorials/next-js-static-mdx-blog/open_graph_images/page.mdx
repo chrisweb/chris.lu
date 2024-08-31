@@ -1,0 +1,449 @@
+---
+title: Open Graph Image(s) - Tutorial | www.chris.lu
+description: Open Graph Image(s) - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['Open Graph', 'opengraph', 'OG image', 'Satori', 'ercel/og', 'next/og', 'dynamic opengraph image']
+published: 2024-08-28T16:16:16.444Z
+modified: 2024-08-28T16:16:16.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/open_graph_images
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image',
+          alt: frontmatter.title,
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
+
+# Open Graph Image(s)
+
+In the previous part, we saw how to use the Open Graph protocol in our metadata object, but an important part is still missing, which is why in this part, we are going to focus on creating open graph images
+
+Next.js comes with a great feature called [next/og](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image) which under the hood uses [@vercel/og](https://vercel.com/docs/functions/og-image-generation)
+
+To get a better idea of what it can do, I recommend visiting the ["OG image" playground](https://og-playground.vercel.app/), which has some good examples of what can be achieved
+
+**Next OG images** can do more than just use a static image as opengraph image. You can import custom fonts and images and even use CSS and HTML to build your opengraph scene, then **@vercel/og** will convert your code into an image using [Satori](https://github.com/vercel/satori) (and Satori is based on [resvg-js](https://github.com/yisibl/resvg-js))
+
+> [!MORE]  
+> [Next.js "opengraph-image" documentation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image)  
+> [Vercel "Open Graph (OG) Image Generation" documentation](https://vercel.com/docs/functions/og-image-generation)  
+> [Vercel "OG image examples" documentation](https://vercel.com/docs/functions/og-image-generation/og-image-examples)  
+> [Satori documentation](https://github.com/vercel/satori#documentation)  
+> [Vercel "OG image" playground](https://og-playground.vercel.app/)  
+
+## Static Open Graph Image (and static alt)
+
+First, we will create a simple static opengraph image
+
+We need 2 static assets to compose our og image, a **font** and a **background image**, as font we will use the same font we used in our `layout.tsx` for the [next/font examples](/web_development/tutorials/next-js-static-mdx-blog/navigation-styling-and-next-font), which is **Kablammo** from google fonts
+
+To get the font visit [https://fonts.google.com/specimen/Kablammo](Kablammo), and then click on the **Get font** button. On the next page, click on the **Download all** button (if the button is not there, first click on the **shopping bag icon** in the top right of the screen). Next, go into the public folder of your project and create a new `/fonts` folder. Now go into your download folder and unzip the font package (which you just downloaded from google fonts). Open the `/static` folder, and then copy the `Kablammo-Regular.ttf` file into the `/public/fonts` folder.
+
+Our font is pretty big, it is >500kb, which is quite heavy but still ok. Usually, fonts are smaller. Be careful, when choosing a font as some might be bigger than that. If you choose a font over 2MB, you will get the following error:
+
+> Error: Failed to set Next.js data cache, items over 2MB can not be cached
+
+As image, we will NOT reuse the one we downloaded earlier in the ["How to **NOT** add images to an MDX document"](/web_development/tutorials/next-js-static-mdx-blog/optimizing-using-next-image#how-to-not-add-images-to-an-mdx-document) part, because it is very heavy (>2.25MB) (and this time we won't have next/image optimize the image), a font that is >2.25MB would be too heavy (see cache error above). 
+
+Instead, we can go back to the ["Stranger Things 2 Sign in City at Night"](https://www.pexels.com/photo/stranger-things-2-sign-in-city-at-night-1089194/) download page, click again on **Free download**, and this time choose the **Medium 1280x800** version. The recommended size for opengraph images is **1200x630**, so our **1280x800** background image will only be a little bit too big, which is good enough. At a file size of **178kb**, it is also much smaller than the other version.
+
+Or, if you know how to use an image editor like [Gimp](https://www.gimp.org/), you could use the original image and resize it to be exactly **1280x800** pixels.
+
+Finally, move the image to the `/public/images` folder and rename it to `og_background.jpg`
+
+> [!TIP]  
+> If you only need one background image, you could resize and optimize it manually by using an online tool like [ezgif.com](https://ezgif.com/optijpeg)
+>  
+> If you need more than one image, then you might consider using [sharp](https://www.npmjs.com/package/sharp); which is the package that Next.js when it optimizes and resizes images locally; you could write a little script that automates the optimization of all the images you plan on using (as backgrounds or inside of your opengraph images)
+
+Now that we have our assets go into the `/app/blog` folder and create a new `opengraph-image.tsx` file:
+
+```tsx title="/app/blog/opengraph-image.tsx" showLineNumbers
+import { ImageResponse } from 'next/og'
+
+const title = 'Static Blog Title'
+
+// Route segment config
+export const runtime = 'edge'
+
+export const size = {
+    width: 1200,
+    height: 630,
+}
+
+export const contentType = 'image/png'
+export const alt = `Example.com ${title} banner`
+
+export default async function OGImage(/*props: IImageProps*/) {
+
+    //console.log(props)
+
+    // Font
+    const kablammoFont = fetch(
+        new URL('/public/fonts/Kablammo-Regular.ttf', import.meta.url)
+    ).then((res) => res.arrayBuffer())
+
+    // Background Image
+    const backgroundImage = await fetch(
+        new URL('/public/images/og_background.jpg', import.meta.url)
+    ).then((res) => res.arrayBuffer())
+
+    return new ImageResponse(
+        // ImageResponse JSX element
+        (
+            <div
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                {
+                    // eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element 
+                    <img
+                        // @ts-ignore: this is fine 🔥
+                        src={backgroundImage}
+                        style={{
+                            objectFit: 'cover',
+                            objectPosition: 'center',
+                        }}
+                    />
+                }
+                <div
+                    style={{
+                        position: 'absolute',
+                        width: '100%',
+                        height: '200',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: 0,
+                        fontFamily: 'Kablammo',
+                        fontWeight: 400,
+                        fontStyle: 'normal',
+                        fontSize: '80',
+                        background: 'rgb(0, 0, 0, 0.5)',
+                        color: 'rgb(255, 255, 255)',
+                    }}
+                >
+                    <span>{title}</span>
+                </div>
+            </div >
+        ),
+        // ImageResponse options
+        {
+            // For convenience, we can reuse the exported opengraph-image
+            // size config to also set the ImageResponse's width and height.
+            ...size,
+            fonts: [
+                {
+                    name: 'Kablammo',
+                    data: await kablammoFont,
+                    style: 'normal',
+                    weight: 400,
+                },
+            ],
+        }
+    )
+}
+```
+
+Line 1: we import the Next.js opengraph image tool
+
+Line 3: we set a static title for all our opengraph images, this variable will be used for the alt value of the image and inside of the image itself
+
+Lines 5 to 14: we export some variables that will tell Next.js metadata what values to use for the opengraph tags (the og:image tags which are related to the image)
+
+Lines 21 to 28: we use fetch to get both the font file and the background image
+
+Lines 33 to 72: we use basic HTML and CSS to create the content of our opengraph image; we created a div that covers the whole width and height and used the background image to fill it; then we put a smaller div inside, using **position: absolute** to position it over the background; that div will also display the title; we finally made the background of the title div a bit darker using a black color with the opacity set 0.5 to make it semi transparent
+
+Make sure the dev server is running and then visit the `http://localhost:3000/blog` blog page. If you then look at the tags inside of the `<head>{:html}` element, you will notice that Next.js has added 5 new opengraph tags for our image:
+
+```html
+<meta property="og:image:alt" content="Example.com Blog banner">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image" content="http://localhost:3001/blog/opengraph-image?CACHE_BUSTING_HASH">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+```
+
+## The "metadataBase" problem, 404 response
+
+There is one problem related to the [metadataBase](https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase), where the opengraph image will just return a **404**
+
+You might see an error like this in the terminal:
+ 
+> ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+
+If that is the case, the workaround I found to work well is to set the **metadataBase** in the **root layout** to a default value like this:
+
+```tsx title="/app/layout.tsx" showLineNumbers {9-11}
+import './global.css'
+import { Metadata } from 'next'
+import HeaderNavigation from '@/components/header/Navigation'
+import { Kablammo } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
+
+export const metadata: Metadata = {
+    metadataBase: process.env.VERCEL_URL
+        ? new URL(`https://${process.env.VERCEL_URL}`)
+        : new URL(`http://localhost:${3000 ?? process.env.PORT}`),
+    title: {
+        template: '%s | example.com',
+        default: 'Home | example.com',
+    },
+    description: 'My description',
+    openGraph: {
+        url: 'https://example.com/',
+        siteName: 'My website name',
+        locale: 'en_US',
+        type: 'website',
+    },
+}
+```
+
+Lines 9 to 11: we set the default **metadataBase** to use **localhost** in **development** and **VERCEL_URL** (otherwise if you don't use Vercel to deploy, either use an environment variable that works for your deployment tool or just set a static value that contains your domain)
+
+## Dynamic Open Graph Image
+
+Static images are a great start, but what about more advanced scenarios where you might need a dynamic opengraph image generator
+
+You could, of course, duplicate the opengraph script we just did and add one in each of your pages folders, but it is also possible to create a dynamic opengraph image using a tsx file
+
+> [!WARN]
+> If like me, you are on the Vercel free plan (Hobby plan), be careful NOT to use images that are very heavy or use a lot of images (or other assets like fonts) in your og image script because Vercel functions have a limit of 1MB; so if your PNG background image is 1.5 MB you will get this error during the build process: 
+>  
+> "Error: The Edge Function "web_development/opengraph-image" size is 1.68 MB, and your plan size limit is 1 MB. Learn More: https://vercel.link/edge-function-size"
+>  
+> In case you wonder Hobby: 1 MB, Pro: 2 MB, Enterprise: 4 MB
+
+### Dynamic OG Image for dynamic route segment
+
+If you use [dynamic route](https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes) and both the page(.tsx/.jsx) file and the opengraph-image(.tsx) file are in the same folder, then you can use a dynamic route segment for the post title (or a post id if you prefer)
+
+Let's create a new folder `/posts` in our `/app/blog` folder, and then inside of it another `/[title]` folder that will act as a dynamic segment for our route
+
+Finally, inside our new `/app/blog/posts/[title]` folder, create an `opengraph-image.tsx` file:
+
+```tsx title="/app/blog/posts/[title]/opengraph-image.tsx" showLineNumbers
+import { ImageResponse } from 'next/og'
+
+// Route segment config
+export const runtime = 'edge'
+
+const size = {
+    width: 1200,
+    height: 630,
+}
+
+interface OpenGraphImageProps {
+    params: {
+        title: string
+    }
+}
+
+export function generateImageMetadata({ params }: OpenGraphImageProps) {
+
+    return [
+        {
+            id: 'blog_opengraph',
+            alt: `${params.title} | example.com`,
+            size: size,
+            contentType: 'image/png',
+        },
+    ]
+}
+
+export default async function OGImage(props: OpenGraphImageProps) {
+
+    const { title } = props.params
+
+    // Font
+    const kablammoFont = fetch(
+        new URL('/public/fonts/Kablammo-Regular.ttf', import.meta.url)
+    ).then((res) => res.arrayBuffer())
+
+    // Background Image
+    const backgroundImage = await fetch(
+        new URL('/public/images/og_background.jpg', import.meta.url)
+    ).then((res) => res.arrayBuffer())
+
+    return new ImageResponse(
+        // ImageResponse JSX element
+        (
+            <div
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                {
+                    // eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element 
+                    <img
+                        // @ts-ignore: this is fine 🔥
+                        src={backgroundImage}
+                        style={{
+                            objectFit: 'cover',
+                            objectPosition: 'center',
+                        }}
+                    />
+                }
+                <div
+                    style={{
+                        position: 'absolute',
+                        width: '100%',
+                        height: '200',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: 0,
+                        fontFamily: 'Kablammo',
+                        fontWeight: 400,
+                        fontStyle: 'normal',
+                        fontSize: '80',
+                        background: 'rgb(0, 0, 0, 0.5)',
+                        color: 'rgb(255, 255, 255)',
+                    }}
+                >
+                    <span>{title}</span>
+                </div>
+            </div >
+        ),
+        // ImageResponse options
+        {
+            // For convenience, we can reuse the exported opengraph-image
+            // size config to also set the ImageResponse's width and height.
+            ...size,
+            fonts: [
+                {
+                    name: 'Kablammo',
+                    data: await kablammoFont,
+                    style: 'normal',
+                    weight: 400,
+                },
+            ],
+        }
+    )
+}
+```
+
+The code is very similar to the code we used for the "static" version. One difference is that we removed the static `title` variable, and we also don't export the `sizes` variable anymore (those static exports get replaced by the usage of the **generateImageMetadata** function lines 17 to 27)
+
+Lines 11 to 15: we added an interface to strictly type the Image function props
+
+Lines 17 to 27: we use the [generateImageMetadata](https://nextjs.org/docs/app/api-reference/functions/generate-image-metadata) function to create dynamic opengraph image metadata. The alt value will be dynamic because we use the `title` param (that contains the **title** value from our dynamic route segment)
+
+Line 31: we also get the `title` param inside of the Image function, as this is the value we will use now inside of our span line 83 as a replacement for the previously static title
+
+The rest of the code, including the styling, has not changed (compared to the previous static example)
+
+The last step is to create the posts page (to simplify the code of this example, we will only add the dynamic metadata part and not fetch any blog post content from the filesystem or database, but you could do just that using the Next.js [generateStaticParams](https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes#generating-static-params) function):
+
+```tsx title="/app/blog/posts/[title]/page.tsx" showLineNumbers
+import { sharedMetadata } from '@/shared/metadata'
+import { notFound } from 'next/navigation'
+
+const whitelist = ['foo'] as string[]
+
+export function generateMetadata({ params }: BlogPostsProps) {
+
+    let title = '' as string
+
+    (whitelist.includes(params.title)) ? { title } = params : ''
+
+    return {
+        title: title,
+        openGraph: {
+            ...sharedMetadata.openGraph,
+            url: `https://example.com/blog/posts/${title}`,
+        }
+    }
+
+}
+
+interface BlogPostsProps {
+    params: {
+        title: string
+    }
+}
+
+export default function Blog({ params }: BlogPostsProps) {
+
+    // as we are getting user data we need 
+    // to sanitize it or use a whitelist
+    let title = '' as string
+
+    (whitelist.includes(params.title)) ? { title } = params : notFound()
+
+    return (
+        <>
+            I&apos;m the &quot;{title}&quot; blog post page
+        </>
+    )
+}
+```
+
+Line 2: we import the notFound function from the next/navigation package; what the notFound function does is well explained in the typescript tooltip:
+
+> In a Server Component, this will insert a <meta name="robots" content="noindex" /> meta tag and set the status code to 404.
+> In a Route Handler or Server Action, it will serve a 404 to the caller.
+
+Line 4: as we will deal with params, which are content the user can modify, we must make sure those values get sanitized before we use them as a file path or in a database query; another solution would be to use a whitelist to exclude any dynamic value that does not match the values we have whitelisted, which is what we will do in this example
+
+Lines 6 to 20: we use the Next.js [generateMetadata](https://nextjs.org/docs/app/api-reference/functions/generate-metadata) function to get the title from the params; we then check if it is in our whitelist and if it is valid we create the metadata
+
+Lines 28 to 41: we do the same whitelist check again; if valid we use the title variable in our JSX; if invalid we use the notFound function from next/navigation to create a 404 response
+
+Make sure the dev server is running, and then you can visit the `http://localhost:3000/blog/posts/foo` dynamic page to have a look at the dynamic opengraph image metatags inside of `<head>{:html}` element
+
+Now that you know how to create dynamic versions, you could even go further, if for example you use similar code to the what we used to make our [sitemap dynamic](/web_development/tutorials/next-js-static-mdx-blog/sitemap_and_search_console#dynamic-sitemap). You could read the content of MDX files, extract the frontmatter and then use the frontmatter values for your dynamic opengraph images
+
+> [!MORE]  
+> [Next.js "generateImageMetadata" documentation](https://nextjs.org/docs/app/api-reference/functions/generate-image-metadata)  
+> [Next.js "generateStaticParams" documentation](https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes#generating-static-params)  
+> [Next.js "generateMetadata" documentation](https://nextjs.org/docs/app/api-reference/functions/generate-metadata)  
+
+<Pagination
+    previous={{ label: 'Metadata (for tsx and mdx pages)', href: '/web_development/tutorials/next-js-static-mdx-blog/metadata' }}
+    next={{ label: 'Frontmatter plugin', href: '/web_development/tutorials/next-js-static-mdx-blog/frontmatter-plugin' }}
+/>
+
+</article>
