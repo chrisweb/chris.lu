@@ -340,17 +340,11 @@ example.com
 If after adding domains to the list, it will take a few minutes before the filter gets updated, so wait a little bit before testing your Sentry.io requests
 
 > [!WARN]  
-> If there is a problem with your allowed domains, then you might start seeing 403 errors (Failed to load resource: the server responded with a status of 403) for requests to sentry.io (or your tunnel URL), you might also notice that the error in body of the response is like this:
->  
-> `{detail: "event submission rejected with_reason: Cors"}{:shell}`
->  
-> This error messages mentions Cors, even though the error gets thrown by the allowed domains sentry filter, this is a known problem an there is a ticket to resolve this issue [#9856](https://github.com/getsentry/sentry-javascript/issues/9856)
-> 
-> So if you encounter this error have a look at your CORS settings but also double check your allowed domains list
+> If there is a problem with your allowed domains, then you might start seeing 403 errors (Failed to load resource: the server responded with a status of 403) for requests to sentry.io (or your tunnel URL)
 >  
 > To make sure the allowed domains are not the problem just replace the list with a single asterisk (`*`) to allow all requests from any domain and check if the error goes away, if that's the case then you know at least what the "real" problem is
 
-## Disable the "reports from localhost" filter
+## Disable / Enable "reports from localhost" (filter)
 
 If you want to disable (or re-enable) the Sentry.io reports from the localhost filter, do this:
 
@@ -359,7 +353,7 @@ If you want to disable (or re-enable) the Sentry.io reports from the localhost f
 * then, in the Settings navigation on the left, click on **Projects**
 * click on the project name
 * then in navigation on the left, under **PROCESSING**, click on **Inbound Filters**
-* on that page, there is an option called **Filter out events coming from localhost**. Disable that option to not filter reports coming from localhost anymore
+* on that page, there is an option called **Filter out events coming from localhost**. Either disable or enable that option. When enabled Sentry will filter reports coming from localhost and when disabled it will NOT 
 
 ## Sentry v7 to v8 migration
 
@@ -368,7 +362,17 @@ If you had Sentry v7 already installed in your project and now want to upgrade t
 > [!MORE]  
 > [Sentry.io "Migration Codemod to migrate from 7.x to 8.x" documentation](https://docs.sentry.io/platforms/javascript/migration/v7-to-v8/#migration-codemod)  
 
-## Investigating Sentry.io dropped requests
+## Investigation failed request / missing reports
+
+If you have a feeling that something is wrong, you either get 403 responses from Sentry (or your tunnel URL), or you trigger an error but it won't show up, I recommend starting with the following steps:
+
+* if you are using the sentry domain whitelist feature, meaning you don't just have an asterisk (`*`) set as default value, then you might want to have a look at the [Allowed domains filter](#allowed-domains-filter) chapter and make sure the domain making the request is on the whitelist, maybe you are using a regex and the submain you are on is not covered by the regex
+* If you are on localhost, then maybe localhost request are blocked, in this case have a look at the [Disable the "reports from localhost" filter](#disable--enable-reports-from-localhost-filter) chapter, and make sure that localhost is set to **enabled**
+* Have a look at your [inbound filters](https://docs.sentry.io/concepts/data-management/filtering/), mayby one of those is excluding the Issues
+* Make sure the DSN you are using is correct, make sure the DSN (Sentry client key) that your project is using is correct, eventually it is wrong key from another project, or someone has disabled or even deleted a key that is still in use
+* Have a look at the following chapter [Using the Sentry.io API to debug issues](#using-the-sentryio-api-to-debug-issues) which will show you how to make quick requests to the Sentry.io API to help you narrow down the cause of the missing Issues
+
+### Using the Sentry.io API to debug issues
 
 When trying to log my CSP reports in Sentry.io, I could see that some reports got dropped, but the stats page did not give me the exact reason.
 
