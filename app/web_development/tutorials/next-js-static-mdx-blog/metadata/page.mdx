@@ -184,6 +184,29 @@ If you inspect the source of the playground page `http://localhost:3000/gfm_play
 
 Congratulations 🎉 you just learned how to add metadata using layouts and pages
 
+## favicon (mobile icons)
+
+Adding a **favicon** is important if you want to customize how the bookmarks of your project will look like or what the icon will be if a user adds a link to your website to their desktop
+
+It is also very simple to [add a favicon when using Next.js](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/app-icons), all you need to do is create a favicon.ico file and then put it into your `/app` folder
+
+Besides adding a **favicon.ico** file, you can also add **apple icons**. You can add more than one by adding a number at the end of their name. For example, you can put an apple-icon1.png, apple-icon2.png and apple-icon3.png files into your `/app` folder
+
+Next.js will detect your app and fav icon files in the `/app` folder and **automatically generate the meta tags** (and set attributes like the content-type and dimensions) for your:
+
+```html
+<link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16">
+<link rel="apple-touch-icon" href="/apple-icon1.png?foo" type="image/png" sizes="152x152">
+<link rel="apple-touch-icon" href="/apple-icon1.png?bar" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/apple-icon1.png?baz" type="image/png" sizes="512x512">
+```
+
+If you have an image and want to quickly create a favicon online then I recommend checking out [realfavicongenerator.net](https://realfavicongenerator.net/)
+
+> [!MORE]  
+> [Next.js "app icons" documentation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/app-icons)  
+> [online "favicon" generator](https://realfavicongenerator.net/)  
+
 ## Open Graph metadata
 
 The [Open Graph protocol](https://ogp.me/) is essential if you want to control what gets displayed when your content gets shared, but it is also helpful if you want to improve your SEO score. In the past, it was mostly regarded as a Facebook thing, but today a lot of social networks, messengers, search engines and a bunch of services will use the open graph data that your website provides
