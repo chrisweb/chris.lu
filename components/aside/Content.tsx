@@ -11,7 +11,7 @@ const AsideContent: React.FC = (): JSX.Element => {
     return (
         <div className={styles.content}>
             <ShareButton />
-            <a href="https://www.buymeacoffee.com/chriswwweb" className={`${styles.coffeeButton} shake`}>
+            <a href="https://www.buymeacoffee.com/chriswwweb" className={`${styles.coffeeButton} shake`} rel="noopener noreferrer" target="_blank">
                 <Image src={buyMeACoffeeImport} priority fill alt="buy me a coffee, please" />
             </a>
             <br />

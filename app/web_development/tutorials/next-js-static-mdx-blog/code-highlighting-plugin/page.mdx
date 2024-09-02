@@ -702,7 +702,9 @@ First, let's add a bit of CSS to our global.css to improve the styling of inline
 }
 ```
 
-Both code blocks and inline code use similar HTML elements, but there is one significant difference, which is that for code blocks, there is a `<pre>{:html}` element between the `<figure>{:html}` and the `<code>{:html}` element, but inline code has no `<pre>{:html}` element. We can use that to our advantage here, to make sure the styling we add only gets applied to inline code, by using a [CSS selector](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors) that will only apply our styling if the `<code>{:html}` element is a direct child of the `<figure>{:html}` element ,by using a child combinator (`>`); the CSS we add is nothing special, we add a small border radius, some padding and the same background-color we previously used for the code blocks `<pre>{:html}` element
+Both code blocks and inline code use similar HTML elements, but there is one significant difference, which is that for code blocks, there is a `<pre>{:html}` element between the `[data-rehype-pretty-code-figure]` (the `<figure>{:html}` element) and the `<code>{:html}` element, but inline code has no `<pre>{:html}` element between the two. We can use that to our advantage here, by using a child combinator (`>`) between `[data-rehype-pretty-code-figure]` and `code`. This ensures our styling will only get applied if the `<code>{:html}` element is a direct child of the `[data-rehype-pretty-code-figure]` (the `<figure>{:html}` element).
+
+The CSS we add is nothing special, we add a small border radius, some padding and the same background-color we previously used for the code blocks `<pre>{:html}` element
 
 ### Inline code language
 
