@@ -3,7 +3,7 @@ title: Optimizing images in MDX using next/image - Tutorial
 description: Optimizing images in MDX using next/image (LCP Core Web Vital optimization / VSCode MDX image drag and drop) - Next.js static MDX blog | www.chris.lu Web development tutorials
 keywords: ['Optimizing', 'images', 'MDX', 'next/image', 'Tutorial', 'LCP', 'nextjs', 'developer experience', 'drag and drop', 'accessibility', 'Core Web Vital']
 published: 2024-08-21T20:20:20.444Z
-modified: 2024-08-21T20:20:20.444Z
+modified: 2024-09-02T20:20:20.444Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/optimizing-using-next-image
 section: Web development
 ---
@@ -554,9 +554,15 @@ The title gets added at the very end after the path (before the closing parenthe
 > [HTML specification "Requirements for providing text to act as an alternative for images"](https://html.spec.whatwg.org/multipage/images.html#alt)  
 > [MDN "aria-hidden" documentation](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-hidden)  
 
-## 2 LCP optimizations
+## 2 LCP optimizations (core web vitals)
 
-In this chapter, we will do two things that will improve the [Largest Contentful Paint (LCP)](https://web.dev/articles/lcp), which is a **Core Web Vital metric**
+In this chapter, we will do two things that will improve the [Largest Contentful Paint (LCP)](https://web.dev/articles/lcp), which is a **Core Web Vitals metric**
+
+Optimizing the LCP (or any core web vitals in general) is important as it will save you costs (smaller images will result in less bandwidth consumption), it will make your pages faster which then make your users happy and it will improve your SEO score meaning you potentially get more traffic from search engines
+
+> [!MORE]  
+> [Vercel "How Core Web Vitals affect SEO" blog post](https://vercel.com/blog/how-core-web-vitals-affect-seo)  
+> [web.dev "Core Web Vitals" article](https://web.dev/articles/vitals)  
 
 ### Image formats (adding *.avif support)
 

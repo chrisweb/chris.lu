@@ -3,7 +3,7 @@ title: Metadata (for tsx and mdx pages) - Tutorial
 description: Metadata (for tsx and mdx pages) - Next.js static MDX blog | www.chris.lu Web development tutorials
 keywords: ['Metadata', 'tsx', 'mdx', 'pages', 'OpenGraph', 'SEO', 'nextjs']
 published: 2024-08-26T11:22:33.444Z
-modified: 2024-08-26T11:22:33.444Z
+modified: 2024-09-02T21:21:21.444Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/metadata
 section: Web development
 ---
@@ -92,7 +92,18 @@ Look at what is inside your page's `<head>{:html}` element. There are, for examp
 <meta name="description" content="My description">
 ```
 
-The `viewport` tag gets always added to every page by default (you can customize the **content** value if you need to).
+The `viewport` tag gets always added to every page by default, but you can customize the **content** value of the viewport using the [generateViewport](https://nextjs.org/docs/app/api-reference/functions/generate-viewport) function:
+
+```tsx title="custom viewport example"
+import type { Viewport } from 'next'
+ 
+export const viewport: Viewport = {
+	width: 'device-width',
+	initialScale: 1,
+	maximumScale: 1,
+	userScalable: false,
+}
+```
 
 The second `charset` tag gets also added by Next.js to every page
 
@@ -113,6 +124,9 @@ export default function Home() {
 ```
 
 As we saw when inspecting the `<head>{:html}` element of our page had meta tags, but our `page.tsx` file does not have any code related to the **metadata** object, this is because every page will inherit the metadata we have set in the layout, you only add a metadata object in the pages for which you want to override the default values from the layout or if you want to add a new metadata property that you didn't set in the layout
+
+> [!MORE]  
+> [Next.js "" documentation](https://nextjs.org/docs/app/api-reference/functions/generate-viewport)
 
 ## Metadata in typescript pages
 
@@ -169,6 +183,29 @@ Lines 1 to 3: we create a new **metadata** object and add a custom title for the
 If you inspect the source of the playground page `http://localhost:3000/gfm_playground`, you will see the MDX page has the correct title (and also makes use of the template from the layout)
 
 Congratulations 🎉 you just learned how to add metadata using layouts and pages
+
+## favicon (mobile icons)
+
+Adding a **favicon** is important if you want to customize how the bookmarks of your project will look like or what the icon will be if a user adds a link to your website to their desktop
+
+It is also very simple to [add a favicon when using Next.js](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/app-icons), all you need to do is create a favicon.ico file and then put it into your `/app` folder
+
+Besides adding a **favicon.ico** file, you can also add **apple icons**. You can add more than one by adding a number at the end of their name. For example, you can put an apple-icon1.png, apple-icon2.png and apple-icon3.png files into your `/app` folder
+
+Next.js will detect your app and fav icon files in the `/app` folder and **automatically generate the meta tags** (and set attributes like the content-type and dimensions) for your:
+
+```html
+<link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16">
+<link rel="apple-touch-icon" href="/apple-icon1.png?foo" type="image/png" sizes="152x152">
+<link rel="apple-touch-icon" href="/apple-icon1.png?bar" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/apple-icon1.png?baz" type="image/png" sizes="512x512">
+```
+
+If you have an image and want to quickly create a favicon online then I recommend checking out [realfavicongenerator.net](https://realfavicongenerator.net/)
+
+> [!MORE]  
+> [Next.js "app icons" documentation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/app-icons)  
+> [online "favicon" generator](https://realfavicongenerator.net/)  
 
 ## Open Graph metadata
 
