@@ -3,7 +3,7 @@ title: Next.js configuration - Tutorial
 description: Next.js configuration (react strict mode / powered by header) - Next.js static MDX blog | www.chris.lu Web development tutorials
 keywords: ['Next.js', 'Nextjs', 'configuration', 'app', 'directory', 'react strict mode', 'powered by header']
 published: 2024-08-14T20:25:33.444Z
-modified: 2024-08-14T20:25:33.444Z
+modified: 2024-09-03T19:19:19.444Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/nextjs-configuration
 section: Web development
 ---
@@ -203,12 +203,79 @@ export default nextConfig
 
 If you did any of the two changes I mentioned above, then save your `next.config.mjs` and commit/sync your latest changes to your git repository with a commit message like, for example: "turning off powered by the header as I see no reason to have it enabled"
 
+> [!MORE]  
+> [Next.js "Powered By Header" API reference](https://nextjs.org/docs/app/api-reference/next-config-js/poweredByHeader)  
+
+## Redirects
+
+If the project you are building is going to replace an existing project, then you might want to add some [redirects](https://nextjs.org/docs/pages/api-reference/next-config-js/redirects). When using Next.js, adding **redirects** is really easy, so I won't do a deep dive, but I just wanted to mention that this can be done in the `next.config.mjs`:
+
+```js title="static redirect example" {12-20}
+const nextConfig = (phase) => {
+
+    const withMDX = createMdx({
+        options: {
+            remarkPlugins: [],
+            rehypePlugins: [],
+        },
+    })
+
+    /** @type {import('next').NextConfig} */
+    const nextConfigOptions = {
+        redirects: async () => {
+            return [
+                {
+                    source: '/my-old-url',
+                    destination: '/my-new-url',
+                    permanent: true,
+                },
+            ]
+        },
+    }
+
+    return withMDX(nextConfigOptions)
+
+}
+```
+
+It is usually best to change URLs as few as possible because search engines have indexed those pages and some users might have bookmarked them. But especially when switching from the pages router to the app router, you might want to do some redirects for pages you have migrated to a new URL. For those cases, Next.js has a very powerful feature that allows you to redirect old dynamic routes to new dynamic routes:
+
+```js title="static redirect example" {12-20}
+const nextConfig = (phase) => {
+
+    const withMDX = createMdx({
+        options: {
+            remarkPlugins: [],
+            rehypePlugins: [],
+        },
+    })
+
+    /** @type {import('next').NextConfig} */
+    const nextConfigOptions = {
+        redirects: async () => {
+            return [
+                {
+                    source: '/my-old-url-with-a/:slug',
+                    destination: '/my-new-url-with-a/:slug',
+                    permanent: true,
+                },
+            ]
+        },
+    }
+
+    return withMDX(nextConfigOptions)
+
+}
+```
+
+A lot more is possible, if you want to know more about wildcards, regex support, and even redirects based on data in headers or cookies, then I recommend checking out the official [redirects](https://nextjs.org/docs/pages/api-reference/next-config-js/redirects) documentation, which has lots of examples
+
 Congratulations 🎉 you now know how to use phases and make adjustments to the Next.js configuration
 
 If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
 
 > [!MORE]  
-> [Next.js "Powered By Header" API reference](https://nextjs.org/docs/app/api-reference/next-config-js/poweredByHeader)  
+> [Next.js "redirects" documentation](https://nextjs.org/docs/pages/api-reference/next-config-js/redirects)  
 
 <Pagination
     previous={{ label: 'Typescript plugin and typed routes', href: '/web_development/tutorials/next-js-static-mdx-blog/typescript-plugin-and-typed-routes' }}
