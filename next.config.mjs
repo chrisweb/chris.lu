@@ -264,7 +264,7 @@ const nextConfig = (phase) => {
 
 const securityHeadersConfig = (phase) => {
 
-    const cspReportOnly = true;
+    const cspReportOnly = false;
 
     const reportingUrl = 'https://o4504017992482816.ingest.us.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
 
@@ -314,7 +314,7 @@ const securityHeadersConfig = (phase) => {
                 ${defaultCSPDirectives}
                 font-src 'self' https://vercel.live/ https://assets.vercel.com https://fonts.gstatic.com;
                 style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
-                script-src 'self' 'unsafe-inline' https://vercel.live/;
+                script-src 'self' 'unsafe-inline' 'unsafe-wasm-eval' https://vercel.live/;
                 connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/ ${reportingDomainWildcard};
                 img-src 'self' data: https://vercel.com/ https://vercel.live/;
                 frame-src 'self' https://vercel.live/;
@@ -329,7 +329,7 @@ const securityHeadersConfig = (phase) => {
                 ${defaultCSPDirectives}
                 font-src 'self';
                 style-src 'self' 'unsafe-inline';
-                script-src 'self' 'unsafe-inline';
+                script-src 'self' 'unsafe-inline' 'unsafe-wasm-eval';
                 connect-src 'self' https://vitals.vercel-insights.com ${reportingDomainWildcard};
                 img-src 'self' data:;
                 frame-src 'none';
@@ -342,7 +342,7 @@ const securityHeadersConfig = (phase) => {
             ${defaultCSPDirectives}
             font-src 'self';
             style-src 'self' 'unsafe-inline';
-            script-src 'self' 'unsafe-inline' 'unsafe-eval';
+            script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com;
             connect-src 'self';
             img-src 'self' data:;
             frame-src 'none';
