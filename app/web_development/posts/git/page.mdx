@@ -300,4 +300,38 @@ git remote show origin
 git branch --delete BRANCH_NAME
 ```
 
+## Windows: git ignorecase configuration option
+
+If you rename a file on Windows and only change the case, for example, you change a file with all small letters to camelCase, then that change will NOT trigger a commit
+
+Usually, something like this will lead to the problem: you are developing on Windows, where filenames are case agnostic, so importing a file on Windows and using all small letters (filename.ext) for a filename uses camelCase (fileName.ext) will NOT cause an error in your local development environment. Everything will be fine until you deploy your code on your staging (testing) environment, where you will probably use a Linux-based operating system. On staging, your import will trigger a **file not found** error. So now you want to fix your error and update the filename to use only small letters, but after editing the fileName, you realize there is no commit waiting to be done 
+
+To tell git to also commit changes where only the case of the filename changed, you have **2** options:
+
+**Option 1:** Using the config command
+
+In your terminal, go to the root of your repository, then use the following command to change the ignorecase configuration for your **current repository**:
+
+```shell 
+git config core.ignorecase true
+```
+
+If you want to make that change for all repositories (globally), then add the **--global** flag to the command:
+
+```shell 
+git config --global core.ignorecase true
+```
+
+**Option 2:** Edit the configuration file (manually)
+
+Edit the git config in your repository, change **ignorecase** from true to false, and then save the change
+
+```shell title=".git/config" 
+[core]
+	ignorecase = false
+```
+
+> [!MORE]  
+> [git "ignoreCase" documentation](https://www.git-scm.com/docs/git-config/2.14.6#Documentation/git-config.txt-coreignoreCase)
+
 </article>
