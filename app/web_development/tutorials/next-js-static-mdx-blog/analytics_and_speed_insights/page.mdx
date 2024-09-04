@@ -242,6 +242,33 @@ To see your **Speed Insights** in action, login to your Vercel account, click on
 > [Vercel "Speed Insights" quickstart](https://vercel.com/docs/speed-insights/quickstart)  
 > [Vercel "Speed Insights Configuration" documentation](https://vercel.com/docs/speed-insights/package)  
 
+## CSP directives update
+
+If you use either Vercel Analytics or Speed Insights and have added the CSP header as described in the [Adding CSP Headers in Next.js configuration](/web_development/tutorials/next-js-static-mdx-blog/content-security-policy#adding-csp-headers-in-nextjs-configuration) chapter, then you will have to make a few adjustements to your configuration
+
+Edit your `next.config.mjs` file and then in the `defaultCSPDirectives` variable remove the `require-trusted-types-for 'script'` directive
+
+If this directive is enabled you will get the following errors in your browser console:
+
+```shell
+This document requires 'TrustedScriptURL' assignment.
+```
+
+It might want to add a comment, inside of your `next.config.mjs` to let other developers that might wonder why this directive is missing why you haven't included it:
+
+```js
+// we removed the
+// require-trusted-types-for 'script';
+// directive from defaultCSPDirectives
+// because of vercel analytics and speed insights
+```
+
+A second change you need to do, when using Vercel analytics, is to add the `https://va.vercel-scripts.com` domain for the **development** environment, to the **srcipt-src** directive:
+
+```shell
+script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com;
+```
+
 <Pagination
     previous={{ label: 'Frontmatter plugin', href: '/web_development/tutorials/next-js-static-mdx-blog/frontmatter-plugin' }}
     next={{ label: 'Production release (custom domain)', href: '/web_development/tutorials/next-js-static-mdx-blog/production_release' }}
