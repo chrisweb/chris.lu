@@ -3,7 +3,7 @@ title: Vercel Analytics and Speed Insights - Tutorial
 description: Vercel Analytics and Speed Insights - Next.js static MDX blog | www.chris.lu Web development tutorials
 keywords: ['vercel', 'Analytics', 'Speed Insights', 'packages', 'gdpr']
 published: 2024-08-26T20:20:20.444Z
-modified: 2024-08-27T21:22:23.444Z
+modified: 2024-09-04T21:22:23.444Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/analytics_and_speed_insights
 section: Web development
 ---
@@ -241,6 +241,35 @@ To see your **Speed Insights** in action, login to your Vercel account, click on
 > [!MORE]  
 > [Vercel "Speed Insights" quickstart](https://vercel.com/docs/speed-insights/quickstart)  
 > [Vercel "Speed Insights Configuration" documentation](https://vercel.com/docs/speed-insights/package)  
+
+## CSP directives update
+
+If you use either Vercel Analytics or Speed Insights and have added the CSP header as described in the [Adding CSP Headers in Next.js configuration](/web_development/tutorials/next-js-static-mdx-blog/content-security-policy#adding-csp-headers-in-nextjs-configuration) chapter, then you will have to make a few adjustments to your configuration
+
+Edit your `next.config.mjs` file, and then in the `defaultCSPDirectives` variable, remove the `require-trusted-types-for 'script'` directive
+
+If this directive is enabled, you will get the following errors in your browser console:
+
+```shell
+This document requires 'TrustedScriptURL' assignment.
+```
+
+You might want to add a comment inside of your `next.config.mjs`, to let other developers that might wonder why this directive is missing, why you haven't included it:
+
+```js
+// we removed the
+// require-trusted-types-for 'script';
+// directive from defaultCSPDirectives
+// because of vercel analytics and speed insights
+```
+
+A second change you need to do (when using Vercel analytics), is to add the `https://va.vercel-scripts.com` domain for the **development** environment to the **srcipt-src** directive:
+
+```shell
+script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com;
+```
+
+This is only needed in development, in development Vercel Analytics does NOT track visits, but it is still loading a script from that domain, which is why we add it to the script-src directive
 
 <Pagination
     previous={{ label: 'Frontmatter plugin', href: '/web_development/tutorials/next-js-static-mdx-blog/frontmatter-plugin' }}
