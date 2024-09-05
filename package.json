@@ -62,7 +62,7 @@
         "remark-table-of-contents": "2.1.0",
         "shiki": "1.16.2",
         "simplex-noise": "4.0.3",
-        "three": "0.167.1",
+        "three": "0.168.0",
         "vfile-matter": "5.0.0",
         "waveform-visualizer": "4.2.0",
         "web-audio-api-player": "5.3.2"
