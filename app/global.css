@@ -92,6 +92,8 @@ html {
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-rendering */
+    /*text-rendering: optimizeLegibility;*/
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-size-adjust */
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
@@ -671,18 +673,6 @@ code[data-line-numbers-max-digits="3"]>[data-line]::before {
 
 [data-rehype-pretty-code-figure]>code [data-line] {
     padding: 0px;
-}
-
-article,
-section,
-code,
-nav,
-aside,
-header,
-footer {
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 }
 
 article,
