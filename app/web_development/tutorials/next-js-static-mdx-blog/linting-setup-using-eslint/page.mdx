@@ -221,7 +221,7 @@ We do this, because of a rule from the Next.js ESLint plugin that will recommend
 
 Add the following object to the **overrides** array:
 
-```js title=".eslintrc.js" showLineNumbers{19} {2-7}#special
+```js title=".eslintrc.js" showLineNumbers{19} {2-7}
 overrides: [
     {
         files: ['**/*.ts?(x)', '**/*.md?(x)'],
@@ -250,7 +250,7 @@ For this override, I have 2 options you can chose from:
 
 If you chose option 1 (the less strict version), then add the following override into your `.eslintrc.js`:
 
-```js title=".eslintrc.js" showLineNumbers{19} {8-29}#special
+```js title=".eslintrc.js" showLineNumbers{19} {8-29}
 overrides: [
     {
         files: ['**/*.ts?(x)', '**/*.md?(x)'],
@@ -320,7 +320,7 @@ We install version 7.18.0 for both plugins as this is (as of now July 2024) the 
 
 Next, we put the following override into our **overrides** array (**instead** of the one in option 1):
 
-```js title=".eslintrc.js" showLineNumbers{19} {8-48}#special
+```js title=".eslintrc.js" showLineNumbers{19} {8-48}
 overrides: [
     {
         files: ['**/*.ts?(x)', '**/*.md?(x)'],
