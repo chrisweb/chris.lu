@@ -175,6 +175,29 @@ Lines 30 to 50: we loop through all the pages that the glob package found; for e
 > [!MORE]  
 > [Vercel "Sitemap" documentation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap)
 
+## robots.txt
+
+Even if you don't plan on having a complex robots.txt, first it could be useful to help bots find your sitemap and second it will just avoid getting 404s every time a bot attempts to read your robots.txt
+
+You can of course create a static robots.txt and place it into your `/app` folder, or you can create a more complex and dynamic robots file using typescript:
+
+```ts title="/app/robots.ts" showLineNumbers
+import type { MetadataRoute } from 'next'
+
+export default function robots(): MetadataRoute.Robots {
+    return {
+        rules: {
+            userAgent: '*',
+            allow: '/',
+        },
+        sitemap: 'https://example.com/sitemap.xml',
+    }
+}
+```
+
+> [!MORE]  
+> [Vercel "robots.txt" documentation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/robots)  
+
 ## Google Search Console
 
 Start by visiting the [Google Search Console website](https://search.google.com/search-console) and then click on **Start now**
