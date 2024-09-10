@@ -1,9 +1,9 @@
 ---
-title: Sitemap (google search console and bing webmaster tools) - Tutorial
-description: Sitemap (google search console and bing webmaster tools) - Next.js static MDX blog | www.chris.lu Web development tutorials
-keywords: ['Sitemap', 'links', 'seo', 'google search console', 'bing webmaster tools']
+title: Sitemap (google search console and bing webmaster tools), robots.txt and manifest file in Next.js - Tutorial
+description: Sitemap (google search console and bing webmaster tools), robots.txt and manifest file - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['Sitemap', 'robots.txt', 'manifest', 'seo', 'google search console', 'bing webmaster tools']
 published: 2024-08-26T18:18:18.444Z
-modified: 2024-08-26T18:18:18.444Z
+modified: 2024-09-10T18:18:18.444Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/sitemap_and_search_console
 section: Web development
 ---
@@ -284,17 +284,17 @@ If you want to learn more about the Bing Webmaster Tools then have a look at the
 
 ## Manifest
 
-There is one more file you can create besides the sitemap.xml and robots.txt and that file is called a website manifest.
+You can create one more file besides the sitemap.xml and robots.txt, which is called a **manifest**.
 
-By using a manifest you tell the browser, how it should display your website when viewed as a progressive web app (PWA). Most browser support the format but they use it differently, I recommend having a look at the [caniuse manifest](https://caniuse.com/?search=manifest) pages for up to date information about manifest browser support
+By using a manifest, you tell the browser how it should display your website when viewed as a progressive web app (PWA). Most browsers support the format, but they use it differently, I recommend having a look at the [caniuse manifest](https://caniuse.com/?search=manifest) pages for up-to-date information about manifest browser support
 
-If you add a manifest file to your project, some browsers will show an icon when someone visits your website, a click on the icon will add your website their desktop or mobile device. Chrome for desktop for example displays a small icon (a screen with a down arrow) in the address bar next to the bookmark icon:
+If you add a manifest file to your project, some browsers will show an icon when someone visits your website. A click on the icon will add your website to their desktop or mobile device. Chrome for desktop for example displays a small icon (a screen with a down arrow) in the address bar next to the bookmark icon:
 
 ![chrome for desktop install app icon](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_desktop_install_app_icon.png)
 
-You can put a static `manifest.webmanifest` file into the `/app` folder. To create a static manifest you could for example use an [online generator](https://manifest-gen.netlify.app/) or you reuse the tool [realfavicongenerator.net](https://realfavicongenerator.net/) (we already saw when creating a favicon), as it does not only generate a favicon, the downloaded package will also contain a manifest
+You can put a static `manifest.webmanifest` file into the `/app` folder. To create a static manifest you could for example use an [online generator](https://manifest-gen.netlify.app/) or reuse the tool [realfavicongenerator.net](https://realfavicongenerator.net/) (we already saw when creating a favicon), as it does not only generate a favicon, the downloaded package will also contain a manifest
 
-If you prefer you can rename the manifest file to something else than `manifest.webmanifest`, the [specs](https://w3c.github.io/manifest/#using-a-link-element-to-link-to-a-manifest) specify that any name is valid and that the extension needs to be `.webmanifest`, their is one exception which the .json extension, you could use `manifest.json` as filename like for example GitHub does: [https://github.com/manifest.json](https://github.com/manifest.json)
+If you prefer you can rename the manifest file to something else than `manifest.webmanifest`, the [specs](https://w3c.github.io/manifest/#using-a-link-element-to-link-to-a-manifest) specify that any name is valid and that the extension needs to be `.webmanifest`, there is one exception which the .json extension, you could use `manifest.json` as filename like for example, GitHub does: [https://github.com/manifest.json](https://github.com/manifest.json)
 
 Or you can create a dynamic `manifest.ts` file in the `/app` folder, which is not only useful when you need it to be dynamic to fetch data, but as the typescript uses the **MetadataRoute** types you will benefit from code autocomplete for the manifest options
 
@@ -317,7 +317,7 @@ export default function manifest(): MetadataRoute.Manifest {
 }
 ```
 
-Now, make sure the dev server is running (`npm run dev`) and then open [http://localhost:3000/](http://localhost:3000/) in your browser, then Press `F12` or right click and then select **Inspect** to have a look at the elements insde of the `<head>`
+Now, make sure the dev server is running (`npm run dev`) and then open [http://localhost:3000/](http://localhost:3000/) in your browser, then Press `F12` or right-click and then select **Inspect** to have a look at the elements inside of the `<head>`
 
 You will see that Next.js automatically created the metadata for you:
 
@@ -337,7 +337,7 @@ If you want to have a look at your manifest, open [http://localhost:3000/manifes
 
 To debug your manifest file, open the developer tools of your browser and then open the **Application** tab, then there is a section called **Manifest**
 
-In firefox it will show you a preview of your manifest. Same in chrome, but chrome will also list errors and warnings regarding your manifest file:
+In Firefox, you will see a preview of your manifest. It is the same in Chrome, but Chrome will also list errors and warnings regarding your manifest file:
 
 ![chrome developer tools, application tab, manifest view](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_application_manifest.png)
 
