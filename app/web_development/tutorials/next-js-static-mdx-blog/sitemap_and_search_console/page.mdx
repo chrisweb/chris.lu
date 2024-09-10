@@ -172,7 +172,7 @@ Line 28: we use the glob package to find all our MDX pages, I set the **maxDepth
 
 Lines 30 to 50: we loop through all the pages that the glob package found; for each page we use the two node modules (we imported earlier) to create a full path and then read the content of the page file; next we use the vfile package to turn the page content (which is a sting) into a valid vfile; then we use the vfile-matter package to extract the frontmatter from the page and turn it into a frontmatter object; then for pages that have no permalink we create a default page url (if all your pages have frontmatter then you can delete or comment this line out); finally we create a sitemap entry using all the values we have gathered
 
-If you want to have a look at your sitemap, make sure the dev server is running (`npm run dev`) and then open [http://localhost:3000/sitemap.xml](http://localhost:3000/sitemap.xml) in your browser
+If you want to have a look at your sitemap, make sure the dev server is running (`npm run dev`) and then open `http://localhost:3000/sitemap.xml` in your browser
 
 > [!MORE]  
 > [Vercel "Sitemap" documentation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap)
@@ -199,7 +199,7 @@ export default function robots(): MetadataRoute.Robots {
 
 This is a basic robots.txt file, we define that all bots can crawl our website, no matter what URL. We also inform the bot about the location of sitemap.xml
 
-If you want to have a look at your robots.txt, make sure the dev server is running (`npm run dev`) and then open [http://localhost:3000/robots.txt](http://localhost:3000/robots.txt) in your browser
+If you want to have a look at your robots.txt, make sure the dev server is running (`npm run dev`) and then open `http://localhost:3000/robots.txt` in your browser
 
 > [!MORE]  
 > [Vercel "robots.txt" documentation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/robots)  
@@ -317,7 +317,7 @@ export default function manifest(): MetadataRoute.Manifest {
 }
 ```
 
-Now, make sure the dev server is running (`npm run dev`) and then open [http://localhost:3000/](http://localhost:3000/) in your browser, then Press `F12` or right-click and then select **Inspect** to have a look at the elements inside of the `<head>`
+Now, make sure the dev server is running (`npm run dev`) and then open `http://localhost:3000/` in your browser, then Press `F12` or right-click and then select **Inspect** to have a look at the elements inside of the `<head>`
 
 You will see that Next.js automatically created the metadata for you:
 
@@ -325,7 +325,7 @@ You will see that Next.js automatically created the metadata for you:
 <link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials">
 ```
 
-If you want to have a look at your manifest, open [http://localhost:3000/manifest.webmanifest](http://localhost:3000/manifest.webmanifest) in your browser
+If you want to have a look at your manifest, open `http://localhost:3000/manifest.webmanifest` in your browser
 
 > [!MORE]  
 > [Next.js "manifest" documentation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/manifest)  
