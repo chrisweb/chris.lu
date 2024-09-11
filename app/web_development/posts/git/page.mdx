@@ -154,6 +154,16 @@ git remote set-url origin https://DEFAULT_GIT_USER_NAME@github.com/GITHUB_USER_N
 > [GitHub "git-credential-manager" repository](https://github.com/git-ecosystem/git-credential-manager)  
 > [git-credential-manager documentation](https://github.com/git-ecosystem/git-credential-manager/blob/release/docs/README.md)  
 
+## git fetch vs pull
+
+A fetch will only **fetch** the changes from the remote repository into your local copy and then stops.
+
+A **pull** will also fetch the remote changes but then additionally (attempt) to merge, so **pull = fetch + merge** (a pull will abort if there are conflicts).
+
+So usually after a git fetch you would use the `git merge` command to also merge the changes. The advantage of NOT doing a pull but use a **fetch** instead, is that you can still save and commit your local changes before doing using the `git merge` command.
+
+A **pull** on the other hand is two commands in one and recommended for when you have no unsaved and uncommited changes in your local copy and just quickly want to fetch + merge the remote changes into your local files.
+
 ## remote vs upstream
 
 When you create a repository on GitHub (or another git service), then this repository will be your **remote** repository (also called the **origin**)
@@ -194,6 +204,18 @@ If there are changes in the repository you forked and you want to fetch those to
 
 ```shell
 git fetch upstream
+```
+
+Finally to merge the fetched changes with the code in your local repository, use this command:
+
+```shell
+git merge upstream/master master
+```
+
+Or if you prefer to do both at once (which is preferred if you have no uncommited changes), use the pull command instead, like this:
+
+```shell
+git pull upstream
 ```
 
 ## git status
