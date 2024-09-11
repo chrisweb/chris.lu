@@ -102,11 +102,11 @@ git init
 
 ## link the remote repository to your local project
 
-I will use GitHub as the origin, but you could use any other Git cloud service, like GitLab or Bitbucket if you prefer those services
+If you already have a GitHub repository (I will use GitHub, but you could use any other Git cloud service, like GitLab or Bitbucket if you prefer those services), and you have a local repository, but both are not linked, then this is what you need to do
 
-Next, go to GitHub and create a new repository by clicking on the "+" icon on the left of your user avatar (in the top right section of the page), then select "new repository".
+Go to [github.com](https://github.com) and create a new repository (if you haven't already created one), by clicking on the "+" icon on the left of your user avatar (in the top right section of the page), then select "new repository".
 
-Then use the following command to link the remote origin to your local git setup:
+Then use the following command to link the remote origin to your local git setup (if you have no local repository yet, check out the previous [initialze git](#initialize-git) chapter):
 
 ```shell
 git remote add origin https://github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
@@ -131,7 +131,7 @@ This should display two links to the origin, one for **fetch** and another one f
 
 ## Cloning a repository
 
-To clone a repository first get the HTTPS web URL of the repository, and then use the following command:
+To clone one of your repositories (hosted by remote git service like GitHub), first get the HTTPS web URL of the repository, and then use the following command:
 
 ```shell
 git clone https://github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
