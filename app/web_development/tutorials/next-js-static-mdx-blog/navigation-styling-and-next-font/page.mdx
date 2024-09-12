@@ -119,6 +119,13 @@ Lines 11 to 16: we set some options for the font:
 
 Line 24: we add the font style to our HTML element
 
+> [!WARN]  
+> In the last chapter of the [Next.js "font optimization" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/fonts#reusing-fonts), there is a very import information about how Next.js caches fonts at build time, quote:
+>  
+> > Every time you call the localFont or Google font function, that font is hosted as one instance in your application. Therefore, if you load the same font function in multiple files, multiple instances of the same font are hosted.
+>  
+> So if you have a font that you need in multiple pages it is probably best to load it in the layout and not load the same font in several different pages; have a look at the [Next.js "font optimization" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/fonts#reusing-fonts) where they list several options you can use to avoid having multiple instances of the same font file in your Next.js cache; this is important because if you have multiple instances of the font it would mean that the browser will load the font multiple times, instead of just once
+
 > [!MORE]  
 > [Next.js "next/font" documentation](https://nextjs.org/docs/app/api-reference/components/font)  
 
