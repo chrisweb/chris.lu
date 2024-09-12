@@ -222,7 +222,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 export const metadata: Metadata = {
     metadataBase: process.env.VERCEL_URL
         ? new URL(`https://${process.env.VERCEL_URL}`)
-        : new URL(`http://localhost:${3000 ?? process.env.PORT}`),
+        : `http://localhost:${process.env.PORT ?? 3000}`
     title: {
         template: '%s | example.com',
         default: 'Home | example.com',
