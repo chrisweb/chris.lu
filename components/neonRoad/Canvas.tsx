@@ -91,7 +91,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 //frameloop="never"
                 //onCreated={onCanvasCreatedHandler}
                 //ref={canvasRef}
-                camera={{} ?? cameraRef.current}
+                camera={cameraRef.current ?? {}}
             >
                 {/*<Suspense fallback={<Loader />}>*/}
                 <PerspectiveCamera

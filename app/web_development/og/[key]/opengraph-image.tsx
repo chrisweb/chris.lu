@@ -36,7 +36,7 @@ export default async function OGImage(props: IImageProps) {
 
     const baseUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
-    : `http://localhost:${3000 ?? process.env.PORT}`
+    : `http://localhost:${process.env.PORT ?? 3000}`
 
     // Font
     const permanentMarkerRegular = fetch(

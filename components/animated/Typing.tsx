@@ -69,8 +69,8 @@ const Button: React.FC<IProps> = ({ children, colorChange, randomize }) => {
     const characterIndexRef = useRef(0)
     const pauseIndexRef = useRef(20)
     const actionRef = useRef('type')
-    const withColorChange =  true ?? colorChange
-    const randomizeColors = false ?? randomize
+    const withColorChange =  colorChange ?? true
+    const randomizeColors = randomize ?? false
 
     const [wordState, setWordState] = useState('')
     const [colorState, setColorState] = useState<IColorGradient | null>(null)
