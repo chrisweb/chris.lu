@@ -2,7 +2,7 @@
 title: git
 keywords: ['git', 'commit', 'repository', 'branch']
 published: 2024-08-03T11:22:33.444Z
-modified: 2024-09-04T14:22:33.444Z
+modified: 2024-09-11T14:22:33.444Z
 permalink: https://chris.lu/web_development/posts/git
 section: Web development
 ---
@@ -97,11 +97,16 @@ To initialize a git project locally, you first need to use the following command
 git init
 ```
 
-I will use GitHub as the origin, but you could use any other Git cloud service, like GitLab.
+> [!MORE]  
+> [git documentation](https://git-scm.com/doc)  
 
-Next, go to GitHub and create a new repository by clicking on the "+" icon on the left of your user avatar (in the top right section of the page), then select "new repository".
+## link the remote repository to your local project
 
-Then use the following command to add the origin to your local git setup:
+If you already have a GitHub repository (I will use GitHub, but you could use any other Git cloud service, like GitLab or Bitbucket if you prefer those services), and you have a local repository, but both are not linked, then this is what you need to do
+
+Go to [github.com](https://github.com) and create a new repository (if you haven't already created one), by clicking on the "+" icon on the left of your user avatar (in the top right section of the page), then select "new repository".
+
+Then use the following command to link the remote origin to your local git setup (if you have no local repository yet, check out the previous [initialze git](#initialize-git) chapter):
 
 ```shell
 git remote add origin https://github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
@@ -113,13 +118,20 @@ If you are using the git credential manager and have multiple users, then you ma
 git remote add origin https://DEFAULT_GIT_USER_NAME@github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
 ```
 
+Finally you can verify that your local copy and the remote origin are linked by using the following command:
+
+```shell
+git remote -v
+```
+
+This should display two links to the origin, one for **fetch** and another one for **push** commands
+
 > [!MORE]  
-> [git documentation](https://git-scm.com/doc)  
 > [GitHub "Adding locally hosted code to GitHub" documentation](https://docs.github.com/github/importing-your-projects-to-github/adding-an-existing-project-to-github-using-the-command-line)  
 
 ## Cloning a repository
 
-To clone a repository first get the HTTPS web URL of the repository, and then use the following command:
+To clone one of your repositories (hosted by remote git service like GitHub), first get the HTTPS web URL of the repository, and then use the following command:
 
 ```shell
 git clone https://github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
@@ -141,6 +153,70 @@ git remote set-url origin https://DEFAULT_GIT_USER_NAME@github.com/GITHUB_USER_N
 > [git-credential-manager "Multiple users" documentation](https://github.com/git-ecosystem/git-credential-manager/blob/main/docs/multiple-users.md)  
 > [GitHub "git-credential-manager" repository](https://github.com/git-ecosystem/git-credential-manager)  
 > [git-credential-manager documentation](https://github.com/git-ecosystem/git-credential-manager/blob/release/docs/README.md)  
+
+## git fetch vs pull
+
+A fetch will only **fetch** the changes from the remote repository into your local copy and then stops.
+
+A **pull** will also fetch the remote changes but then additionally (attempt) to merge, so **pull = fetch + merge** (a pull will abort if there are conflicts).
+
+So usually after a git fetch you would use the `git merge` command to also merge the changes. The advantage of NOT doing a pull but use a **fetch** instead, is that you can still save and commit your local changes before doing using the `git merge` command.
+
+A **pull** on the other hand is two commands in one and recommended for when you have no unsaved and uncommited changes in your local copy and just quickly want to fetch + merge the remote changes into your local files.
+
+## remote vs upstream
+
+When you create a repository on GitHub (or another git service), then this repository will be your **remote** repository (also called the **origin**)
+
+When you do a fork of a repository, then the original repository will be the **updtream** repository and your fork will be the **remote** repository
+
+If you have cloned your fork (remote repository) locally and use the following command:
+
+```shell
+git remote -v
+```
+
+Then will display two links from your local, the first origin is for **fetch** and the second one is for **push** commands
+
+So when you use the following command (or if you want to immediatly merge the remote changes with your uncommited changes use `git pull` instead):
+
+```shell
+git fetch
+```
+
+You will get the remote changes (if there any)
+
+If you now want to also create a link to the upstream repository (the original one you forked earlier), then use the following command:
+
+```shell
+git remote add upstream https://github.com/ORIGINAL_REPOSITORY_USER/ORIGINAL_REPOSITORY_NAME.git
+```
+
+If you now use the **remote** command again, you will see that there are now 4 entries:
+
+```shell
+git remote -v
+```
+
+You now also have a link to the repository you forked, for fetch and push commands
+
+If there are changes in the repository you forked and you want to fetch those to update your local repository, then you use the fetch command like this:
+
+```shell
+git fetch upstream
+```
+
+Finally to merge the fetched changes with the code in your local repository, use this command:
+
+```shell
+git merge upstream/master master
+```
+
+Or if you prefer to do both at once (which is preferred if you have no uncommited changes), use the pull command instead, like this:
+
+```shell
+git pull upstream
+```
 
 ## git status
 
