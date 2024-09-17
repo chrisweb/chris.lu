@@ -52,7 +52,7 @@ Vercel has a (free) [Hobby](https://vercel.com/pricing) plan for developers who 
 * visit [vercel.com](https://vercel.com/)
 * click on **Sign Up** in the top right
 * select the [Hobby](https://vercel.com/pricing) plan
-* then a field pops up asking you for your name. Enter a name (you can use your full name, or as I did, use your GitHub username or any display name you like). If you already or later plan to work in a team, then I recommend you choose a name they will recognize)
+* then a field pops up, asking you for your name. Enter a name (you can use your full name, or as I did, use your GitHub username or any display name you like). If you already or later plan to work in a team, then I recommend you choose a name they will recognize)
 
 ### Select a Git provider to import an existing project from a Git Repository
 
@@ -70,26 +70,26 @@ Vercel has a (free) [Hobby](https://vercel.com/pricing) plan for developers who 
 
 ## Add a new project
 
-If you are NOT on the **new project** page yet, in the top left navigation click on **Overview**
+If you are NOT on the **new project** page yet, in the top left navigation, click on **Overview**
 
-On the overview page, on the top right click on **Add New...** and select **Project**
+On the overview page, on the top right, click on **Add New...** and select **Project**
 
-### Manage git repository permission to allow Vercel accessing it
+### Manage git repository permission to allow Vercel to access it
 
 The first step when creating a new Vercel project is **Import Git Repository**, but only repositories for which you have granted Vercel access will be listed
 
 If you created a Vercel account using an email address and do NOT have a git provider app connected yet, then this is the first thing you need to do is follow the steps in the previous chapter to [select a git provider (to import an existing repository)](#select-a-git-provider-to-import-an-existing-project-from-a-git-repository)
 
-If you have already connected a git provider in the past (I will use GitHub as provider in this example, you might have connected using another provider like Bitbucket or GitLab), then that provider will be selected by default, click on the down arrow if you want to add or switch to another provider
+If you have already connected to a git provider in the past (I will use GitHub as a provider in this example, you might have connected using another provider like Bitbucket or GitLab), then that provider will be selected by default, click on the down arrow if you want to add or switch to another provider
 
 Now that the git provider is selected, you will see a list of repositories
 
 If your repository is in the list, then you are done for this step and can jump to the next chapter to [import a git repository](#import-git-repository)
 
-If your repository is NOT in the list of repositories, because you have not granted Vercel persmissions to access it, then you have 2 options:
+If your repository is NOT in the list of repositories because you have not granted Vercel permissions to access it, then you have 2 options:
 
 > [!WARN]  
-> I had trouble using **option 1** recently, every time I clicked on the **Adjust App Permissions** Link I would get a red modal box telling me that:
+> I had trouble using **option 1** recently, every time I clicked on the **Adjust App Permissions** Link, I would get a red modal box telling me that:
 >  
 > > The popup to install the GitHub App could not be opened.
 >  
@@ -99,9 +99,9 @@ If your repository is NOT in the list of repositories, because you have not gran
 
 First, click on the **Adjust GitHub App Permissions** link to add access permissions for that repository
 
-Next click on the git provider button (in my case the **GitHub** button) to start the process
+Next, click on the git provider button (in my case, the **GitHub** button) to start the process
 
-Next, Vercel will open a modal asking you to give access to one or more repositories. I recommend only providing access to the repository where you store the code you want to deploy. To do so, click on the radio button next to **Only select repositories**, but if you prefer you can also just allow access to all repositories
+Next, Vercel will open a modal asking you to give access to one or more repositories. I recommend only providing access to the repository where you store the code you want to deploy. To do so, click on the radio button next to **Only select repositories**, but if you prefer, you can also just allow access to all repositories
 
 Now click on the **Select repositories** select box and select your git repository
 
@@ -113,13 +113,13 @@ Next, click on **Install** at the bottom of the modal
 
 Then click on the **Configure** button (on the Vercel row)
 
-Next scroll down to the **Repository access** section, there **Only select repositories** is selected, and below that is a **Select repositories** select box, click the down arrow and then search for the new repository you want to add
+Next, scroll down to the **Repository access** section, **Only select repositories** is selected, and below that is a **Select repositories** select box. Click the down arrow and then search for the new repository you want to add
 
 Then click on the repository in the results
 
-Now that it got added to the list of repositories that Vercel will have access, finally click on the **save** button to finilize the changes
+Now that it got added to the list of repositories Vercel will have access to, finally click on the **save** button to finalize the changes
 
-You are now done on GitHub, go back to [Vercel.com](https://vercel.com), you should now be on the overview page (of your Vercel account), on the top right click on **Add New...** and select **Project**
+You are now done on GitHub. Go back to [Vercel.com](https://vercel.com). You should now be on the overview page (of your Vercel account), on the top right, click on **Add New...** and select **Project**
 
 ### Import a git repository
 
@@ -131,15 +131,18 @@ Now that your repository is in the **Git Repository** list, the next step is to 
 
 Now you will be on a new **Configure Project** page, you can change the **Project Name** of the project (I left it as is, as I like it to match the name of my repository)
 
-Next you can choose a **Framework Preset**, select **Next.js** (or the framework you chose for your project)
+Next, you can choose a **Framework Preset**, I selected Next.js, but of course, you select the framework (Astro, Remix, ...) that you are using in your project
 
-The next option, **Root Directory**, you can leave it as is (if you use a monorepo that hosts multiple projects, you may want to set the root to the directory in which you placed your project)
+The next option, **Root Directory**, you can leave it as is if your project is located in the root of your repository (even if your code is an `./src` folder, the actual root of the project would still be `./`), if you use a monorepo that hosts multiple projects, then you may want to set the **Root Directory** to the path of your project, for example `./packages/PROJECT_NAME`
 
-We also don't need to touch the **Build and Output Settings**, as we chose a **Framework Preset** earlier. These values are already set (if you know what you are doing and depending on what Framework you chose, you may want to adapt those values)
+You can click on the **Build and Output Settings** to see what options are included, in this example, we don't need to touch the **Build and Output Settings** because we chose a **Framework Preset** earlier, meaning these values will already be set to defaults, if you know what you are doing and depending on what Framework you chose, you may want to adjust those values by using the **override** switch on the right and then entering your custom values
 
-The **Environment Variables** is something we have no use for just yet; it is, however, an interesting feature that lets you add environment variables to your project (instead of having a .env file in your project, you set the key-value pair here and can later download a copy of those variables into your development environment)
+We have no use for the **Environment Variables** just yet. It is, however, an interesting feature that you will probably use at some time, as it lets you add environment variables to your project. Instead of having a .env file in your project, you set the key/value pairs using the Vercel interface, and Vercel will then pass those env variables to the javascript runtime. You can later download a copy of those env variables into your development environment if you want to have an actual file in your codebase
 
 Finally, click on **Deploy** (unfortunately, the only way to **save** the imported project is to click Deploy, which will start a deployment. You may need more time to be ready to make your first deployment, and your main branch may still be empty. This doesn't matter; still, proceed and click Deploy. If the main branch is empty, the deployment will just fail, but your project will be saved. You can also click on **Cancel Deployment** if you want)
+
+> [!MORE]  
+> [vercel.com "Environment Variables" documentation](https://vercel.com/docs/projects/environment-variables)  
 
 ## Sentry integration for Vercel
 
