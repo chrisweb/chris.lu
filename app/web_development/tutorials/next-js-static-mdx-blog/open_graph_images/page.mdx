@@ -421,10 +421,10 @@ export default function Blog({ params }: BlogPostsProps) {
 }
 ```
 
-Line 2: we import the notFound function from the next/navigation package; what the notFound function does is well explained in the typescript tooltip:
+Line 2: we import the `notFound{:.function}` function from the next/navigation package; what the `notFound{:.function}` function does is well explained in the typescript tooltip:
 
-> In a Server Component, this will insert a <meta name="robots" content="noindex" /> meta tag and set the status code to 404.
-> In a Route Handler or Server Action, it will serve a 404 to the caller.
+> In a Server Component, this will insert a `<meta name="robots" content="noindex" />` meta tag and set the status code to **404**.
+> In a Route Handler or Server Action, it will serve a **404** to the caller.
 
 Line 4: as we will deal with params, which are content the user can modify, we must make sure those values get sanitized before we use them as a file path or in a database query; another solution would be to use a whitelist to exclude any dynamic value that does not match the values we have whitelisted, which is what we will do in this example
 
