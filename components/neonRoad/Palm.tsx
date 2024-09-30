@@ -4,8 +4,8 @@
 import { forwardRef } from 'react'
 import type { Mesh, Group, MeshStandardMaterial } from 'three'
 import { useGLTF } from '@react-three/drei'
-import { GLTF } from 'three-stdlib'
-import { GroupProps } from '@react-three/fiber'
+import type { GLTF } from 'three-stdlib'
+import type { GroupProps } from '@react-three/fiber'
 
 // types for the gltf version
 type GLTFResult = GLTF & {
@@ -31,7 +31,6 @@ const PALM_GLTF_PATH = '/assets/3d_models/palm/palm.gltf'
 // code for the gltf version
 const PalmModel = forwardRef<Group, GroupProps>((props, ref) => {
     
-    // types problem see: https://github.com/pmndrs/gltfjsx/issues/167
     const { nodes, materials } = useGLTF(PALM_GLTF_PATH) as GLTFResult
 
     return (
