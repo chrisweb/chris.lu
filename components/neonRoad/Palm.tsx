@@ -31,7 +31,11 @@ const PALM_GLTF_PATH = '/assets/3d_models/palm/palm.gltf'
 // code for the gltf version
 const PalmModel = forwardRef<Group, GroupProps>((props, ref) => {
     
-    const { nodes, materials } = useGLTF(PALM_GLTF_PATH) as GLTFResult
+    // second parameter is false to disable draco (wasm decompression tool)
+    // modern browsers support the CSP directive 'wasm-unsafe-eval'
+    // but older browsers require the 'unsafe-eval' directive
+    // when draco is disabled there is no need for wasm, so also no need for 'unsafe-eval'
+    const { nodes, materials } = useGLTF(PALM_GLTF_PATH, false) as GLTFResult
 
     return (
         <group name={'PalmModel'} {...props} ref={ref}>

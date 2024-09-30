@@ -304,6 +304,9 @@ const securityHeadersConfig = (phase) => {
         // unfortunatly because of fontawesome this is not possible (yet)
         // https://github.com/FortAwesome/Font-Awesome/issues/20001
 
+        // removed 'wasm-unsafe-eval' from script-src
+        // draco compression needed that directive, but it is now disabled (in Palm.tsx)
+
         // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
         // and whitelist vercel's domains based on:
         // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
@@ -314,7 +317,7 @@ const securityHeadersConfig = (phase) => {
                 ${defaultCSPDirectives}
                 font-src 'self' https://vercel.live/ https://assets.vercel.com https://fonts.gstatic.com;
                 style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
-                script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://vercel.live/;
+                script-src 'self' 'unsafe-inline' https://vercel.live/;
                 connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/ ${reportingDomainWildcard};
                 img-src 'self' data: https://vercel.com/ https://vercel.live/;
                 frame-src 'self' https://vercel.live/;
@@ -329,7 +332,7 @@ const securityHeadersConfig = (phase) => {
                 ${defaultCSPDirectives}
                 font-src 'self';
                 style-src 'self' 'unsafe-inline';
-                script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval';
+                script-src 'self' 'unsafe-inline';
                 connect-src 'self' https://vitals.vercel-insights.com ${reportingDomainWildcard};
                 img-src 'self' data:;
                 frame-src 'none';
