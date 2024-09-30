@@ -90,6 +90,7 @@ const PalmModel = forwardRef<Group, GroupProps>((props, ref) => {
 
 PalmModel.displayName = 'PalmGroupComponent'
 
-useGLTF.preload(PALM_GLTF_PATH)
+// see useGLTF comment (above)
+useGLTF.preload(PALM_GLTF_PATH, false)
 
 export default PalmModel
