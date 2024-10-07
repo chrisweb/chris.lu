@@ -3,7 +3,7 @@ title: Styling and CSS libraries - Tutorial
 description: Styling and CSS libraries - Next.js static MDX blog | www.chris.lu Web development tutorials
 keywords: ['styling', 'css', 'modules', 'next.js', 'css-in-js', 'library', 'UI']
 published: 2024-08-20T14:33:33.444Z
-modified: 2024-08-20T14:33:33.444Z
+modified: 2024-10-07T14:33:33.444Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/styling-and-css
 section: Web development
 ---
@@ -165,7 +165,9 @@ Then right-click, choose **Inspect** or press `F12` to open the dev tools, then 
 
 ![chrome dev tools elements tab showing how CSS modules class names look after compilation](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_inspect_css_modules.png)
 
-If you want to add more than one class, either use a package like [classnames](https://www.npmjs.com/package/classnames) or just use [native javascript template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) like so:
+If you want to add more than one class, either use a package like [clsx ](https://www.npmjs.com/package/clsx) or [classnames](https://www.npmjs.com/package/classnames)
+
+Another option to add multiple classes is to use native javascript [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) which is what I will use in this example:
 
 ```tsx title="/components/tutorial_examples/UI/Button.tsx" showLineNumbers {6} "&#x60;${styles.reset} ${styles.core}&#x60;"
 import styles from './button.module.css'
