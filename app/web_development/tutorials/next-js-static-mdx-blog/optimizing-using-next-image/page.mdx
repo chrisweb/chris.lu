@@ -576,7 +576,7 @@ Next, if you look at the [Content-Disposition](https://developer.mozilla.org/en-
 
 If you do NOT define any formats for images in your Next.js configuration file then Next.js will use a [default image config](https://github.com/vercel/next.js/blob/292fd4eb3f7a774c17990e3349b91ae5630db821/packages/next/src/shared/lib/image-config.ts) value which (as of now 01.05.2024) is `['image/webp']`
 
-This means that even though our source file is a [JPG](https://web.dev/learn/images/jpg) image, **next/image** has automatically converted it to a [WEBP](https://web.dev/learn/images/webp) image, this is already great as webp images are smaller than jpg files, but we want to use another **format** that creates even smaller files, and that format is [AVIF](https://web.dev/learn/images/avif). As we can see on the [avif caniuse page](https://caniuse.com/avif), **avif** is a format that is supported by most modern browsers but some older browsers don't, which is why we will also keep **webp** as a fallback
+This means that even though our source file is a [JPEG (JPG)](https://web.dev/learn/images/jpeg) image, **next/image** has automatically converted it to a [WEBP](https://web.dev/learn/images/webp) image, this is already great as webp images are smaller than jpg files, but we want to use another **format** that creates even smaller files, and that format is [AVIF](https://web.dev/learn/images/avif). As we can see on the [avif caniuse page](https://caniuse.com/avif), **avif** is a format that is supported by most modern browsers but some older browsers don't, which is why we will also keep **webp** as a fallback
 
 To tell next/image to convert images to **avif** as well, we need to edit our **nextConfigOptions** in the `next.config.mjs` like this:
 
