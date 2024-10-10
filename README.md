@@ -18,7 +18,7 @@ On [chris.lu](https://chris.lu), you will find my tutorials and can learn more a
 
 ## Technologies used
 
-During the development of the blog, I wrote a ["Next.js static MDX blog" tutorial](https://chris.lu/web-development/tutorials/next-js-static-mdx-blog) that showcases most of the technologies that I used
+During the development of the blog, I wrote a ["Next.js static MDX blog" tutorial](https://chris.lu/web_development/tutorials/next-js-static-mdx-blog) that showcases most of the technologies that I used
 
 The framework I used is [Next.js 14](https://github.com/vercel/next.js) with [React 18](https://github.com/facebook/react) (I plan on upgrading to Next.js 15 and React 19 as soon as the first stable versions get released and will update my tutorial accordingly)
 

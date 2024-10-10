@@ -124,7 +124,7 @@ Those nonces and hashes can also be used for inline scripts. When used for inlin
 Finally, I recommend checking out the strict-dynamic source expression, which can be used when you want your trust in a script to be propagated to all the scripts getting loaded by the that "root" script. But use with caution as allowing a script to load other scripts should only happen if you have unconditional trust in the source itself, as well as the sources your source gets other scripts from
 
 > [!MORE]  
-> [MDN "CSP hashes" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src#whitelisting_external_scripts_using_hashes)  
+> [MDN "CSP hashes" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src#allowlisting_external_scripts_using_hashes)  
 > [MDN "CSP nonce" documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce)  
 > [MDN "CSP strict-dynamic expression" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src#strict-dynamic)  
 
@@ -261,7 +261,7 @@ Reporting-Endpoints: default="https://csp-logging.example.com", second-endpoint=
 
 ## Logging CSP violations
 
-A lot of the paid SAAS Error Monitoring services can also be used to log CSP violations, [Sentry.io CSP logging documentation](https://docs.sentry.io/product/security-policy-reporting/), [raygun.com](https://raygun.com/documentation/language-guides/browser-reporting/crash-reporting/csp/) or [datadoghq.com](https://www.datadoghq.com/blog/content-security-policy-reporting-with-datadog/)
+A lot of the paid SAAS Error Monitoring services can also be used to log CSP violations, [Sentry.io CSP logging documentation](https://docs.sentry.io/security-legal-pii/security/security-policy-reporting/#content-security-policy), [raygun.com](https://raygun.com/documentation/language-guides/browser-reporting/crash-reporting/csp/) or [datadoghq.com](https://www.datadoghq.com/blog/content-security-policy-reporting-with-datadog/)
 
 An alternative is to host a logging tool on your own infrastructure. For example, Mozilla published an opensource [CSP logging service called "CSP Logger"](https://github.com/mozilla/csp-logger) on GitHub that is written in Javascript, but it only supports the report-uri directive and has not been updated in years
 
@@ -277,7 +277,7 @@ Sentry.io can be used to log CSP violations and will add those to your project i
 Sentry.io also supports [Certificate Transparency](https://developer.mozilla.org/en-US/docs/Web/Security/Certificate_Transparency) reports logging and [HTTP Public Key Pinning (HPKP)](https://developer.mozilla.org/en-US/docs/Glossary/HPKP). However, both those features are now obsolete.
 
 > [!MORE]  
-> [Sentry.io "Security Policy Reporting" documentation](https://docs.sentry.io/product/security-policy-reporting/)  
+> [Sentry.io "Security Policy Reporting" documentation](https://docs.sentry.io/security-legal-pii/security/security-policy-reporting/#content-security-policy)  
 
 #### Sentry.io does not have the Reporting-Endpoints header (yet)
 
@@ -309,7 +309,7 @@ The problem is that Chrome (>96) will attempt to use the new **report-to directi
 I suggest using the report-uri directive for the time being and adding the report-to directive only when browser support for that feature has significantly improved.
 
 > [!MORE]  
-> [Sentry.io "Content-Security-Policy reporting" documentation](https://docs.sentry.io/product/security-policy-reporting/)  
+> [Sentry.io "Content-Security-Policy reporting" documentation](https://docs.sentry.io/security-legal-pii/security/security-policy-reporting/#content-security-policy)  
 
 ## CSP debugging tips
 
