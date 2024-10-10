@@ -253,6 +253,11 @@ const nextConfig = (phase) => {
                     destination: '/web_development',
                     permanent: true,
                 },
+                {
+                    source: '/posts',
+                    destination: '/web_development',
+                    permanent: true,
+                },
             ]
         },
     }
