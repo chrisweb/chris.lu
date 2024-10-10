@@ -15,7 +15,7 @@ const ImageAnimatedEmoji: React.FC<IAnimatedEmojiProps> = (props): JSX.Element =
     // however if you add unoptimized it will set the cache-control header of the image to "no-store, must-revalidate"
     // after we comment the unoptimized option out, the cache-control is "public, max-age=315360000, immutable"
     const common = {
-        alt: '',
+        alt: props.alt,
         //unoptimized: true,
         width: 48,
         height: 48,
@@ -23,7 +23,7 @@ const ImageAnimatedEmoji: React.FC<IAnimatedEmojiProps> = (props): JSX.Element =
     }
 
     const {
-        props: { src: gifSourceSrc, alt: gifAlt, ...rest },
+        props: { src: gifSourceSrc, ...rest },
     } = getImageProps({
         ...common,
         placeholder: 'blur',
@@ -45,7 +45,8 @@ const ImageAnimatedEmoji: React.FC<IAnimatedEmojiProps> = (props): JSX.Element =
         <>
             <picture>
                 <source srcSet={webpSource} type="image/webp" />
-                <Image src={gifSource} alt={gifAlt} {...rest} className="animatedEmoji" />
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                <Image src={gifSource} {...rest} className="animatedEmoji" />
             </picture>
         </>
     )
