@@ -23,7 +23,7 @@ const ImageAnimatedEmoji: React.FC<IAnimatedEmojiProps> = (props): JSX.Element =
     }
 
     const {
-        props: { src: gifSourceSrc, ...rest },
+        props: { src: gifSourceSrc, alt: gifAlt, ...rest },
     } = getImageProps({
         ...common,
         placeholder: 'blur',
@@ -38,8 +38,6 @@ const ImageAnimatedEmoji: React.FC<IAnimatedEmojiProps> = (props): JSX.Element =
         src: props.webpStaticImport
     })
 
-    delete rest.srcSet
-
     const webpSource = webpSourceSrc.replace('w=96', 'w=48')
     const gifSource = gifSourceSrc.replace('w=96', 'w=48')
 
@@ -47,7 +45,7 @@ const ImageAnimatedEmoji: React.FC<IAnimatedEmojiProps> = (props): JSX.Element =
         <>
             <picture>
                 <source srcSet={webpSource} type="image/webp" />
-                <Image src={gifSource} alt={props.alt} {...rest} className="animatedEmoji" />
+                <Image src={gifSource} alt={gifAlt} {...rest} className="animatedEmoji" />
             </picture>
         </>
     )
