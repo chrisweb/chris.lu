@@ -48,7 +48,8 @@ const ImageAnimatedPicture: React.FC<IAnimatedPictureProps> = (props): JSX.Eleme
             <picture>
                 <source srcSet={avifSource} type="image/avif" />
                 <source srcSet={webpSource} type="image/webp" />
-                <Image src={webpSource} alt={props.alt} {...rest} />
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                <Image src={webpSource} {...rest} />
             </picture>
         </>
     )
