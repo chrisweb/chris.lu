@@ -73,7 +73,7 @@ npm install -g npm@latest
 **package-lock.json** is a file that gets created when you install packages using a package manager. It lists the exact version of each installed package and its dependencies (unlike the package.json itself, which often allows a range of versions to be installed). This file is important as it can be used to create reproducible builds. When you test your project on the staging server and then deploy it to production, you don't want the package versions to be different, as this could introduce bugs after you are done testing if a package uses a newer version in production than previously on the staging server.
 
 > [!MORE]  
-> [npmjs.com "package.json" documentation](https://docs.npmjs.com/cli/configuring-npm/package-json)  
+> [npmjs.com "package.json" documentation](https://docs.npmjs.com/cli/configuring-npm/package-json/)  
 > [nodejs.org "Modules: Packages" documentation](https://nodejs.org/api/packages.html)  
 
 ### creating a package.json
@@ -187,7 +187,7 @@ For example, if adding a repository with the latest commit ID being **d29f7d9**,
 
 I will list a few methods here and add some links to the relevant documentation, but I will not add a complete walkthrough as those differ quite a lot depending on what platform your code is hosted on and based on what tools are in your deployment pipeline (if, however, I see that there is interest in such a tutorial in the [GitHub discussions for chris.lu](https://github.com/chrisweb/chris.lu/discussions) then I might write one in the future)
 
-An alternative to using private GitHub repositories is to use npm to host [private packages](https://docs.npmjs.com/creating-and-publishing-private-packages) but be aware that this is a paid service
+An alternative to using private GitHub repositories is to use npm to host [private packages](https://docs.npmjs.com/creating-and-publishing-private-packages/) but be aware that this is a paid service
 
 ##### using a GitHub personal access token
 
