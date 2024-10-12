@@ -287,7 +287,7 @@ The reporting API v1 **Reporting-Endpoints** header is not yet supported by sent
 
 Your localhost requests might get filtered by Sentry.io if you or a team member have enabled that feature; if you use **report-uri**, you will see the successful requests in the Network tab, but they won't show up in Sentry.io.
 
-For a guide about how to disable the filter, check out the chapter about [disabling the "reports from localhost" filter](/web_development/posts/sentry-io/#disable--enable-reports-from-localhost-filter) in my Sentry.io post
+For a guide about how to disable the filter, check out the chapter about [disabling the "reports from localhost" filter](/web_development/posts/sentry-io#disable--enable-reports-from-localhost-filter) in my Sentry.io post
 
 > [!TIP]  
 > You probably don't want to keep the localhost reports filter disabled for too long as developing locally will generate all sorts of error logs that are not very useful, so just remember to turn the filter back on when you don't need the localhost reports anymore
@@ -462,15 +462,13 @@ To start the server, use the following command:
 node csp-logging.mjs
 ```
 
-{/*If you need to set up a server to host the Node.js server, you might want to have a look at my [Tutorial: Node.js server on an AWS EC2 instance with an NGINX reverse proxy](/web_development/tutorials/node-js-app-aws-ec2/)*/}
-
 ### Debugging Sentry.io dropping reports
 
 While testing the CSP reporting feature on Sentry.io, I had trouble understanding why some reports would not go through.
 
 In the **Stats** page on Sentry.io, I would only see that a certain number of requests had been dropped, but I would not know why.
 
-If you want to get a little bit more information as to why requests get dropped, you can use the Sentry.io API. I recommend having a look at the [Sentry.io API chapter in my Sentry.io Post](/web_development/posts/sentry-io/#investigating-sentryio-dropped-requests)
+If you want to get a little bit more information as to why requests get dropped, you can use the Sentry.io API. I recommend having a look at the [Sentry.io API chapter in my Sentry.io Post](/web_development/posts/sentry-io#investigating-sentryio-dropped-requests)
 
 ### Debugging Chrome requests using Netlog
 
