@@ -1,0 +1,172 @@
+.cassette {
+    position: absolute;
+    left: 7px;
+    top: 3px;
+    /* perspective is set on walkman, use preserve-3d to ensure the children of cassette are in the same 3d space as the one created by the walkman perspective*/
+    transform-style: preserve-3d;
+}
+
+@media all and (max-width: 1120px) {
+    .cassette {
+        transform: scale(0.8);
+    }
+}
+
+.songTitle,
+.artistName {
+    font-size: 16px;
+    line-height: 16px;
+    width: 335px;
+    font-family: var(--font-architectsDaughter), cursive;
+    color: white;
+    text-decoration: none;
+    display: block;
+    cursor: var(--cursor-pointer);
+    letter-spacing: 1px;
+    background-color: rgba(var(--main-background-value) / 0.2);
+    border-radius: 7px;
+    padding: 3px 0;
+    margin: 0 auto;
+}
+
+/* experimental: p3 colors */
+@media (color-gamut: p3) {
+    .songTitle,
+    .artistName {
+        background-color: color(display-p3 var(--main-background-value) / 0.2);
+    }
+}
+
+.songTitle {
+    margin-top: 16px;
+}
+
+.artistName {
+    margin-top: 4px;
+}
+
+.shield {
+    width: 240px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    -webkit-perspective: 130;
+    perspective: 130px;
+    position: absolute;
+    bottom: 0;
+    left: 67px;
+}
+
+.shield::after {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border-top: 2px solid var(--primary-light-color);
+    border-left: 2px solid var(--primary-light-color);
+    border-right: 2px solid var(--primary-light-color);
+    box-shadow: rgba(0 0 0 / 0.6) 0px 0px 20px;
+    content: '';
+    left: 0;
+    top: 0;
+    z-index: -1;
+    -webkit-transform: rotateX(20deg) rotateY(0deg);
+    transform: rotateX(20deg) rotateY(0deg);
+}
+
+.slideIn {
+    transition-property: transform;
+    transition-duration: 2s;
+    transition-delay: 700ms;
+    transform: translateZ(0px) rotateY(0deg);
+}
+
+.slideOut {
+    transition-property: transform;
+    transition-duration: 2s;
+    transform: translateZ(0px) rotateX(25deg);
+}
+
+.face {
+    position: absolute;
+    border: 2px solid var(--primary-light-color);
+    font-size: 40px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+}
+
+.front,
+.back {
+    width: 386px;
+    height: 238px;
+}
+
+.left,
+.right {
+    width: 48px;
+    height: 238px;
+    /* (width - depth) / 2 */
+    /* (386 - 48) / 2 = 143 */
+    left: 169px;
+}
+
+.top,
+.bottom {
+    width: 386px;
+    height: 48px;
+    /* (height - depth) / 2 */
+    /* (238 - 48) / 2 = 69 */
+    top: 95px;
+}
+
+.front {
+    background: rgba(var(--primary-light-value) / 0.6);
+    transform: rotateY(0deg) translateZ(24px);
+    mask-image: radial-gradient(circle 20px at 115px 110px,
+            transparent 19px,
+            #000 0),
+        radial-gradient(circle 20px at 270px 110px,
+            transparent 19px,
+            #000 0);
+    mask-repeat: no-repeat;
+    mask-size: 100% 100%;
+    -webkit-mask-composite: destination-in;
+    mask-composite: intersect;
+    /* to make the font sharp */
+    backface-visibility: hidden;
+}
+
+.back {
+    transform: rotateX(180deg) translateZ(24px);
+}
+
+.right {
+    transform: rotateY(90deg) translateZ(193px);
+}
+
+.left {
+    transform: rotateY(-90deg) translateZ(193px);
+}
+
+.top {
+    transform: rotateX(90deg) translateZ(119px);
+}
+
+.bottom {
+    background: rgba(var(--primary-light-value) / 0.4);
+    transform: rotateX(-90deg) translateZ(119px);
+}
+
+/* experimental: p3 colors */
+@media (color-gamut: p3) {
+    .front {
+        background: color(display-p3 var(--primary-light-value) / 0.6);
+    }
+
+    .bottom {
+        background: color(display-p3 var(--primary-light-value) / 0.4);
+    }
+}

@@ -1,0 +1,1043 @@
+/* https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties */
+:root {
+    --main-background-value: 20 0 35;
+    --main-background-color: rgb(var(--main-background-value));
+    --main-text-value: 245 240 245;
+    --main-text-color: rgb(var(--main-text-value));
+    /* https://bitsofco.de/the-new-system-font-stack/ */
+    --main-frontFamily-default: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    /* 40px */
+    --main-fontSize-big1: 4rem;
+    /* 32px */
+    --main-fontSize-big2: 2.25rem;
+    /* 28px */
+    --main-fontSize-big3: 2rem;
+    /* 24px */
+    --main-fontSize-big4: 1.75rem;
+    /* 22px */
+    --main-fontSize-big5: 1.5rem;
+    /* 20 px */
+    --main-fontSize-big6: 1.25rem;
+    /* 18px */
+    --main-fontSize-default: 1.125rem;
+    /* 16px */
+    --main-fontSize-small: 1rem;
+    /* 14px */
+    --main-fontSize-smaller: 0.875rem;
+    --main-lineHeight-heading: 1.2;
+    --main-lineHeight-default: 1.6;
+    --main-fontWeight-default: 400;
+    --main-fontWeight-bold: 600;
+    --main-fontWeight-bolder: 700;
+    --main-fontWeight-headline: 700;
+    --main-fontWeight-links: 500;
+    --main-fontWeight-activeLinks: 600;
+    --main-textUnderlineOffset-links: 0.2rem;
+    --main-spacing: 32px;
+    --main-maxWidth: 1120px;
+    --main-middle-maxWidth: 768px;
+    --main-aside-maxWidth: 352px;
+    /* some useful tools to pick colors
+    https://www.canva.com/colors/color-wheel/
+    https://www.google.com/search?q=google+color+picker
+    */
+    --primary-light-value: 255 0 170;
+    --primary-light-color: rgb(var(--primary-light-value));
+    --secondary-light-value: 0 255 240;
+    --secondary-light-color: rgb(var(--secondary-light-value));
+    --tertiary-light-value: 255 185 0;
+    --tertiary-light-color: rgb(var(--tertiary-light-value));
+    --quaternary-light-value: 215 110 255;
+    --quaternary-light-color: rgb(var(--quaternary-light-value));
+    --codebloc-font-family: var(--font-sourceCodePro), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --header-navbar-height: 50px;
+    --cursor-default: url(/assets/cursors/secondary_mouse_default.cur), default;
+    --cursor-pointer: url(/assets/cursors/secondary_mouse_pointer.cur), pointer;
+}
+
+/* experimental: p3 colors */
+@media (color-gamut: p3) {
+    :root {
+        --main-background-value: 0.07 0.00 0.13;
+        --main-background-color: color(display-p3 var(--main-background-value));
+        --main-text-value: 0.96 0.94 0.96;
+        --main-text-color: color(display-p3 var(--main-text-value));
+        --primary-light-value: 1.00 0.00 0.63;
+        --primary-light-color: color(display-p3 var(--primary-light-value));
+        --secondary-light-value: 0.00 1.00 0.91;
+        --secondary-light-color: color(display-p3 var(--secondary-light-value));
+        --tertiary-light-value: 1.00 0.76 0.23;
+        --tertiary-light-color: color(display-p3 var(--tertiary-light-value));
+        --quaternary-light-value: 0.81 0.45 1.00;
+        --quaternary-light-color: color(display-p3 var(--quaternary-light-value));
+    }
+}
+
+/* high contrast mode */
+@media (prefers-contrast: more) {
+    :root {
+        --main-background-value: 0, 0, 0;
+        --main-text-value: 255, 255, 255;
+    }
+}
+
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-rendering */
+    /*text-rendering: optimizeLegibility;*/
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-size-adjust */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* custom cursor */
+    cursor: var(--cursor-default);
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/tab-size */
+    tab-size: 4;
+    position: relative;
+    font-size: 100%;
+}
+
+/* not on mobile */
+@media (hover: hover) {
+    html {
+        /* fix layout shift when no scrollbar on the right */
+        /* https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-gutter */
+        scrollbar-gutter: stable;
+    }
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    * {
+        /* scrollbar styling (w3c standard) */
+        /* chrome in v121 now supports the standard too
+        https://developer.chrome.com/docs/css-ui/scrollbar-styling */
+        scrollbar-width: auto;
+        /* scrollbar-color: the first color is for the thumb of the scrollbar and the second color for the track */
+        scrollbar-color: rgba(var(--secondary-light-value) / 0.9) rgba(var(--secondary-light-value) / 0.1);
+    }
+
+    /* experimental: p3 colors */
+    @media (color-gamut: p3) {
+        * {
+            scrollbar-color: color(display-p3 var(--secondary-light-value) / 0.9) color(display-p3 var(--secondary-light-value) / 0.1);
+        }
+    }
+}
+
+@supports selector(::-webkit-scrollbar) {
+
+    /* scrollbar styling (webkit vendor prefix) */
+    *::-webkit-scrollbar {
+        /* for vertical scrollbar */
+        width: 13px;
+        /* for horizontal scrollbar */
+        height: 13px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background-color: rgba(var(--secondary-light-value) / 0.1);
+    }
+
+    /* experimental: p3 colors */
+    @media (color-gamut: p3) {
+        *::-webkit-scrollbar-track {
+            background-color: color(display-p3 var(--secondary-light-value) / 0.1);
+        }
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background: linear-gradient(var(--secondary-light-color) 0%, var(--primary-light-color) 95%);
+    }
+
+    *::-webkit-scrollbar-thumb:horizontal {
+        background: linear-gradient(95deg, var(--secondary-light-color) 0%, var(--primary-light-color) 95%);
+    }
+
+    /* experimental: p3 colors */
+    @media (color-gamut: p3) {
+
+        *::-webkit-scrollbar-thumb {
+            background: linear-gradient(in srgb, var(--secondary-light-color) 0%, var(--primary-light-color) 95%);
+        }
+
+        *::-webkit-scrollbar-thumb:horizontal {
+            background: linear-gradient(95deg in srgb, var(--secondary-light-color) 0%, var(--primary-light-color) 95%);
+        }
+
+    }
+
+}
+
+body {
+    /* reset default margin added by browser(s) */
+    margin: 0;
+    /* default values */
+    background-color: var(--main-background-color);
+    color: var(--main-text-color);
+    font-family: var(--main-frontFamily-default);
+    font-size: var(--main-fontSize-default);
+    line-height: var(--main-lineHeight-default);
+    text-rendering: optimizeLegibility;
+}
+
+/* prevent any scrolling when dialog is open */
+/* https://github.com/whatwg/html/issues/7732 */
+body:has(dialog.disablePageScroll[open]) {
+    overflow: hidden;
+}
+
+/* not on mobile */
+@media not screen and (hover: hover) {
+
+    /* remove focus for elements in dialogs */
+    dialog :focus {
+        outline: none;
+    }
+}
+
+@media print {
+    body {
+        background-color: white;
+    }
+}
+
+header {
+    margin-bottom: var(--main-spacing);
+}
+
+footer {
+    margin-top: var(--main-spacing);
+    min-height: calc(var(--main-spacing) * 2);
+}
+
+main {
+    display: flex;
+    max-width: var(--main-maxWidth);
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: calc(var(--main-spacing) * 4);
+}
+
+/* on phones put aside below article */
+@media all and (max-width: 768px) {
+    main {
+        margin-bottom: calc(var(--main-spacing) * 2);
+        flex-flow: column;
+    }
+}
+
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    background-size: 200% 100%;
+    background-image: linear-gradient(90deg, var(--primary-light-color) 5%, var(--tertiary-light-color) 50%, var(--primary-light-color) 95%);
+}
+
+/* experimental: p3 colors */
+@media (color-gamut: p3) {
+
+    .h1,
+    .h2,
+    .h3,
+    .h4,
+    .h5,
+    .h6 {
+        background-image: linear-gradient(90deg in srgb, var(--primary-light-color) 5%, var(--tertiary-light-color) 50%, var(--primary-light-color) 95%);
+    }
+
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+
+    .h1,
+    .h2,
+    .h3,
+    .h4,
+    .h5,
+    .h6 {
+        animation: colorwave 10s infinite linear;
+        -webkit-animation: colorwave 10s infinite linear;
+        -moz-animation: colorwave 10s infinite linear;
+    }
+}
+
+@-moz-keyframes colorwave {
+    100% {
+        background-position: 200% 0
+    }
+}
+
+@-webkit-keyframes colorwave {
+    100% {
+        background-position: 200% 0
+    }
+}
+
+@keyframes colorwave {
+    100% {
+        background-position: 200% 0
+    }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    line-height: var(--main-lineHeight-heading);
+    font-weight: var(--main-fontWeight-headline);
+    /* add a scroll margin because of the top navbar */
+    /* fixes the scrollIntoView position */
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-margin-top */
+    scroll-margin-top: 80px;
+    overflow-wrap: break-word;
+    position: relative;
+    font-family: var(--font-anta), sans-serif;
+}
+
+h1 {
+    margin-block: 0 1em;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-block: 2em 1em;
+}
+
+p {
+    margin-block: 1.8em;
+}
+
+h1 {
+    font-size: var(--main-fontSize-big1);
+}
+
+h2 {
+    font-size: var(--main-fontSize-big2);
+}
+
+h3 {
+    font-size: var(--main-fontSize-big3);
+}
+
+h4 {
+    font-size: var(--main-fontSize-big4);
+}
+
+h5 {
+    font-size: var(--main-fontSize-big5);
+}
+
+h6 {
+    font-size: var(--main-fontSize-big6);
+}
+
+@media all and (max-width: 1120px) {
+    h1 {
+        font-size: 1.9rem;
+    }
+
+    h2 {
+        font-size: 1.7rem;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    h4 {
+        font-size: 1.4rem;
+    }
+
+    h5 {
+        font-size: 1.3rem;
+    }
+
+    h6 {
+        font-size: 1.2rem;
+    }
+
+    .h1,
+    .h2,
+    .h3,
+    .h4,
+    .h5,
+    .h6 {
+        background-size: initial;
+        background-image: linear-gradient(90deg, var(--primary-light-color) 5%, var(--tertiary-light-color) 50%, var(--primary-light-color) 95%);
+        line-height: 1;
+    }
+
+    .h2,
+    .h3,
+    .h4,
+    .h5,
+    .h6 {
+        margin: calc(var(--main-spacing)* 1.5) 0 var(--main-spacing) 0;
+    }
+}
+
+.h1>.emoji,
+.h2>.emoji,
+.h3>.emoji,
+.h4>.emoji,
+.h5>.emoji,
+.h6>.emoji {
+    -webkit-text-fill-color: var(--main-background-color);
+    background-color: var(--main-background-color);
+}
+
+.animatedEmoji {
+    width: 48px;
+    height: auto;
+}
+
+.animatedPicture {
+    width: 480px;
+    height: auto;
+}
+
+@media all and (max-width: 768px) {
+    .animatedEmoji {
+        width: 24px;
+    }
+}
+
+a {
+    color: var(--primary-light-color);
+    backface-visibility: hidden;
+    font-weight: var(--main-fontWeight-links);
+    text-underline-offset: var(--main-textUnderlineOffset-links);
+    cursor: var(--cursor-pointer);
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action */
+    touch-action: pan-y;
+}
+
+/* not on mobile */
+@media (hover: hover) {
+
+    a:hover {
+        color: var(--secondary-light-color);
+        text-shadow: 0px 0px 10px var(--secondary-light-color), 0px 0px 20px var(--secondary-light-color);
+    }
+
+    .animatedUnderline {
+        /* underline animation */
+        /* https://nickymeuleman.netlify.app/blog/css-animated-wrapping-underline */
+        background-image: linear-gradient(var(--secondary-light-color) 0%, var(--secondary-light-color) 100%);
+        background-size: 0% 1px;
+        background-position-y: 100%;
+        background-position-x: 0%;
+        background-repeat: no-repeat;
+        transition: background-size 0.2s ease-in-out;
+    }
+
+    .animatedUnderline:hover {
+        background-size: 100% 1px;
+    }
+
+}
+
+/* experimental: p3 colors */
+@media (hover: hover) and (color-gamut: p3) {
+
+    .animatedUnderline {
+        background-image: linear-gradient(in srgb, var(--secondary-light-color) 0%, var(--secondary-light-color) 100%);
+    }
+
+}
+
+/* if using background clip underline disappears in chrome */
+/* https://github.com/w3c/csswg-drafts/issues/900 */
+/* https://github.com/w3c/csswg-drafts/issues/7394 */
+/* I just found another bug in chrome 114, if background rule it won't do the text clip */
+.hyperLink {
+    font-weight: 700;
+    text-decoration: underline;
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-color */
+    text-decoration-color: var(--primary-light-color);
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-thickness */
+    text-decoration-thickness: 2px;
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-thickness */
+    text-underline-offset: var(--main-textUnderlineOffset-links);
+    /* warning! don't add "in srgb" to this gradient, will fail to render in safari */
+    background: linear-gradient(45deg, var(--primary-light-color), var(--tertiary-light-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* not on mobile */
+@media (hover: hover) {
+    .hyperLink:hover {
+        text-decoration-thickness: 2px;
+        text-decoration-color: var(--secondary-light-color);
+        text-shadow: none;
+    }
+}
+
+/* outline style: important use focus-visible and not focus */
+/* when using focus the outline also appears when clicked */
+/* https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible */
+*:focus-visible {
+    outline: 2px dashed var(--primary-light-color);
+    outline-offset: 2px;
+}
+
+video {
+    width: 100%;
+    height: auto;
+}
+
+audio {
+    margin: calc(var(--main-spacing) / 2) 0;
+    width: 100%;
+}
+
+audio::-webkit-media-controls-enclosure {
+    border-radius: 0px;
+}
+
+b,
+strong {
+    font-weight: var(--main-fontWeight-bolder);
+}
+
+button,
+input,
+optgroup,
+select,
+textarea,
+figure {
+    font-family: inherit;
+    font-size: 100%;
+    line-height: 1.15;
+    margin: 0;
+}
+
+figcaption {
+    font-weight: var(--main-fontWeight-bold);
+}
+
+blockquote {
+    border-left-width: 2px;
+    border-left-style: solid;
+    border-left-color: var(--primary-light-color);
+    padding-inline-start: 2ch;
+    margin: var(--main-spacing);
+}
+
+button {
+    min-height: 48px;
+    min-width: 48px;
+    user-select: none;
+}
+
+progress {
+    vertical-align: baseline;
+}
+
+/* https://rehype-pretty-code.netlify.app/ */
+/* code blocks styling */
+[data-rehype-pretty-code-figure] {
+    margin: var(--main-spacing) 0;
+}
+
+[data-rehype-pretty-code-figure] pre {
+    margin: 0;
+    padding: calc(var(--main-spacing) / 2);
+    overflow: auto;
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/white-space-collapse */
+    white-space-collapse: preserve;
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap */
+    text-wrap: nowrap;
+}
+
+code {
+    font-family: var(--codebloc-font-family);
+    font-size: var(--main-fontSize-small);
+    counter-reset: line;
+}
+
+code[data-line-numbers]>[data-line]::before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    width: 1rem;
+    margin-right: 2rem;
+    text-align: right;
+    color: #999999;
+}
+
+code[data-line-numbers-max-digits="2"]>[data-line]::before {
+    width: 2rem;
+}
+
+code[data-line-numbers-max-digits="3"]>[data-line]::before {
+    width: 3rem;
+}
+
+[data-line] {
+    padding-right: calc(var(--main-spacing) / 2);
+    line-height: 1.4;
+    border-left-width: 2px;
+    border-left-style: solid;
+    border-left-color: transparent;
+}
+
+[data-highlighted-line] {
+    background-color: #3f2046;
+    border-left-color: var(--primary-light-color);
+}
+
+[data-highlighted-line][data-highlighted-line-id="special"] {
+    background-color: #61286c;
+}
+
+[data-highlighted-chars] {
+    background-color: #502858;
+    border-radius: 4px;
+    padding: 0px 4px;
+}
+
+[data-highlighted-chars][data-chars-id="special"] {
+    background-color: #61286c;
+}
+
+[data-rehype-pretty-code-title] {
+    background-color: #262335;
+    padding-top: calc(var(--main-spacing) / 2);
+    padding-left: calc(var(--main-spacing) / 2);
+    padding-right: calc(var(--main-spacing) / 2);
+    padding-bottom: 0;
+    margin-top: calc(var(--main-spacing) / 2);
+    --cornerSideLength: 30px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
+    height: 45px;
+    clip-path:
+        polygon(0 0,
+            calc(100% - var(--cornerSideLength)) 0,
+            100% var(--cornerSideLength),
+            100% 100%,
+            0 100%);
+}
+
+[data-rehype-pretty-code-caption] {
+    background-color: #262335;
+    padding-top: 0;
+    padding-left: calc(var(--main-spacing) / 2);
+    padding-right: calc(var(--main-spacing) / 2);
+    padding-bottom: calc(var(--main-spacing) / 2);
+    margin-bottom: calc(var(--main-spacing) / 2);
+    text-align: end;
+    font-size: medium;
+    --cornerSideLength: 30px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
+    height: 45px;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% 100%,
+            var(--cornerSideLength) 100%,
+            0 calc(100% - var(--cornerSideLength)));
+}
+
+/* styling for inline code blocks */
+[data-rehype-pretty-code-figure]>code {
+    border-radius: 5px;
+    padding: 2px 6px;
+}
+
+[data-rehype-pretty-code-figure]>code [data-line] {
+    padding: 0px;
+}
+
+article,
+.middle,
+.core {
+    width: 100%;
+    padding-left: var(--main-spacing);
+    padding-right: var(--main-spacing);
+    margin-bottom: calc(var(--main-spacing) * 2);
+    /* for mobile when a chain of characters is extremly long */
+    overflow-x: clip;
+}
+
+article,
+.middle {
+    max-width: var(--main-middle-maxWidth);
+}
+
+.core {
+    max-width: var(--main-maxWidth);
+}
+
+@media all and (max-width: 1120px) {
+    article {
+        max-width: 100%;
+    }
+}
+
+article {
+    order: 1;
+}
+
+aside {
+    width: var(--main-aside-maxWidth);
+    /* aside is first in the HTML
+    but displayed after <article> */
+    order: 2;
+}
+
+@media all and (max-width: 768px) {
+    aside {
+        width: 100%;
+        padding-left: var(--main-spacing);
+        padding-right: var(--main-spacing);
+        /* this sticky is a hack to fix a nextjs bug
+        https://github.com/vercel/next.js/issues/45187
+        because this element has an order 2 next/link will
+        scroll to it, but because it it on the bottom of the page
+        it will result in the opposite of what is intended (a scroll to top)
+        if an element is sticky or fixed nextjs will ignore it
+        this is why I set this element to be sticky but I don't 
+        set a top value so the sticky will actually have no effect */
+        position: sticky;
+    }
+}
+
+.asideCore {
+    --aside-height-offset: (var(--header-navbar-height) + var(--main-spacing));
+
+    position: sticky;
+    top: calc(var(--header-navbar-height) + var(--main-spacing));
+    overflow-y: auto;
+    height: calc(100vh - var(--aside-height-offset));
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior */
+    overscroll-behavior: contain;
+}
+
+@media all and (max-width: 768px) {
+    .asideCore {
+        position: revert;
+        top: unset;
+        overflow-y: none;
+        height: auto;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .shake>img:hover {
+        animation: 2s shake infinite alternate;
+    }
+}
+
+@keyframes shake {
+    0% {
+        transform: skewX(-15deg);
+    }
+
+    2% {
+        transform: skewX(15deg);
+    }
+
+    4% {
+        transform: skewX(-15deg);
+    }
+
+    6% {
+        transform: skewX(15deg);
+    }
+
+    8% {
+        transform: skewX(0deg);
+    }
+
+    100% {
+        transform: skewX(0deg);
+    }
+}
+
+.alignRight {
+    text-align: right;
+    width: 100%;
+}
+
+.alignLeft {
+    text-align: left;
+    width: 100%;
+}
+
+.noUnderline {
+    text-decoration: none;
+}
+
+/* "external link" icon styling */
+.externalLinkIcon {
+    color: var(--primary-light-color);
+    margin-left: calc(var(--main-spacing) / 5);
+}
+
+/* github like heading anchor */
+.headingAnchor {
+    position: absolute;
+    top: 0;
+    left: -30px;
+}
+
+h1 .headingAnchor {
+    line-height: 0.92;
+}
+
+h2 .headingAnchor {
+    line-height: 1.06;
+}
+
+h3 .headingAnchor {
+    line-height: 1.1;
+}
+
+h4 .headingAnchor {
+    line-height: 1.25;
+}
+
+h5 .headingAnchor {
+    line-height: 1.5;
+}
+
+h6 .headingAnchor {
+    line-height: 1;
+}
+
+/* helper middle line */
+/*h1::before,
+h2::before,
+h3::before,
+h4::before,
+h5::before,
+h6::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -25px;
+    border-top: 1px solid white;
+    width: 100%;
+}*/
+
+.fontSmall {
+    font-size: var(--main-fontSize-small);
+}
+
+.fontSmaller {
+    font-size: var(--main-fontSize-smaller);
+}
+
+.fontBig {
+    font-size: var(--main-fontSize-big6);
+    line-height: var(--main-lineHeight-heading);
+}
+
+.fontBigger {
+    font-size: var(--main-fontSize-big5);
+    line-height: var(--main-lineHeight-heading);
+}
+
+/* if the color-mix css feature is supported
+make the text color a bit darker */
+@supports (color: color-mix(in srgb, var(--main-text-color), black 20%)) {
+
+    .fontDarker {
+        color: color-mix(in srgb, var(--main-text-color), black 20%);
+    }
+
+}
+
+/* if the color-mix css feature is supported
+make the text color a bit darker */
+@supports (color: color-mix(in srgb, var(--main-text-color), white 20%)) {
+
+    .fontDarker {
+        color: color-mix(in srgb, var(--main-text-color), white 20%);
+    }
+
+}
+
+.icon {
+    display: inline-block;
+    overflow: visible;
+    fill: #fff;
+}
+
+.ripple {
+    animation-duration: 600ms;
+    animation-name: rippleAnimation;
+}
+
+.linksList {
+    list-style-type: none;
+    padding-inline-start: 2ch;
+}
+
+.linksList li {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--main-spacing);
+}
+
+.linksList .social {
+    margin-right: calc(var(--main-spacing) / 2);
+}
+
+@keyframes rippleAnimation {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 1);
+    }
+
+    100% {
+        box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+    }
+}
+
+.markdown-alert {
+    margin: var(--main-spacing) 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1px;
+    --cornerSideLength: 30px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
+            0 100%);
+}
+
+.makrdown-alert-fake-border {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    background-color: var(--main-background-color);
+    --cornerSideLength: 30px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
+            0 100%);
+}
+
+.markdown-alert-header {
+    display: flex;
+    align-items: center;
+    width: 160px;
+    padding: 0 calc(var(--main-spacing) / 2);
+    font-weight: 600;
+    --cornerSideLength: 35px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
+            0 100%);
+}
+
+.markdown-alert-body {
+    padding: 0 var(--main-spacing);
+}
+
+.markdown-alert-note,
+.markdown-alert-note .markdown-alert-header {
+    background-color: var(--secondary-light-color);
+}
+
+.markdown-alert-warn,
+.markdown-alert-warn .markdown-alert-header {
+    background-color: var(--tertiary-light-color);
+}
+
+.markdown-alert-tip,
+.markdown-alert-tip .markdown-alert-header {
+    background-color: var(--quaternary-light-color);
+}
+
+.markdown-alert-more,
+.markdown-alert-more .markdown-alert-header {
+    background-color: var(--primary-light-color);
+}
+
+.markdown-alert-note .markdown-alert-header,
+.markdown-alert-warn .markdown-alert-header,
+.markdown-alert-tip .markdown-alert-header,
+.markdown-alert-more .markdown-alert-header {
+    color: var(--main-background-color);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--main-spacing);
+}
+
+.grid p {
+    margin: 0;
+    padding: 0;
+}
+
+@media all and (max-width: 1120px) {
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+#skipToc {
+    width: 0px;
+    height: 0px;
+}
+
+.skipToc {
+    color: transparent;
+    display: block;
+    height: 0px;
+}
+
+.skipToc:focus-visible {
+    color: var(--primary-light-color);
+    height: 30px;
+    padding-left: calc(var(--main-spacing) / 2);
+}

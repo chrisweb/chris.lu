@@ -1,0 +1,27 @@
+.content {
+    width: 100%;
+    text-align: center;
+    margin-bottom: var(--main-spacing);
+}
+
+.content p {
+    padding: 0 calc(var(--main-spacing) / 2);
+}
+
+@media all and (max-width: 768px) {
+    .content p {
+        padding: 0;
+    }
+}
+
+.coffeeButton {
+    position: relative;
+    display: block;
+    width: 240px;
+    height: 48px;
+    margin: 0 auto;
+}
+
+.coffeeButton>img {
+    object-fit: "contain";
+}

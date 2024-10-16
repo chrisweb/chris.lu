@@ -1,0 +1,96 @@
+---
+title: Introduction - Next.js static MDX blog Tutorial
+description: Introduction - Next.js static MDX blog | Web development tutorials | www.chris.lu
+keywords: ['Introduction', 'tsx', 'mdx', 'static', 'pages', 'developer', 'blog', 'nextjs', 'Next.js', 'developer profile', 'markdown']
+published: 2024-08-26T16:16:16.444Z
+modified: 2024-08-27T11:11:11.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit/introduction
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBug, faComments } from '@fortawesome/free-solid-svg-icons'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit' },
+]} />
+
+# Introduction
+
+I tried to make this tutorial as beginner-friendly as possible. If, however you have a question feel free to ask on the <FontAwesomeIcon icon={faComments} size="1x" color='rgb(255, 0, 170)' /> [discussion](https://github.com/chrisweb/chris.lu/discussions) page and if you find a bug please report it using the <FontAwesomeIcon icon={faBug} size="1x" color='rgb(255, 0, 170)' /> [issues](https://github.com/chrisweb/chris.lu/issues)
+
+The main goal of this tutorial is to build a blazingly fast Next.js 15 project that is static first, meaning we will make sure as nuch of our content gets pre-rendered during the build phase (when we do the deployment using our CI/CD pipeline). Some content will be dynamic but we will stream those components to make sure our Largest Contentful Paint (LCP) is fast. We will build our components using the latest features from React 19 and use the React compiler to make sure our components are fast, too.
+
+A secondary goal is to create a project that has a low maintenance core and a great developer experience (DX) so that we can add new features quickly in the future. We will achieve great DX by using Typescript (which gives us type safety and code autocomplete in VSCode through Intelisense). By adding linting for both code and content using a custom ESLint 9 (flat config) and ESLint MDX.
+
+This tutorial is based on my experience building chris.lu, and hopefully it will help you build your own dream project. After reading this tutorial you should be able to get great lighthouse scores. For example, here is a screenshot of the lighthouse score for the homepage of this blog:
+
+![lighthouse analysis results showing a 100% score for performance, accessibility, best practices, SEO](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-first-mdx-starterkit/lighthouse.png)
+
+## Preview
+
+In this tutorial, we will:
+
+* create a "static first" project using the Next.js v15.x app directory
+* create several components using React v19.x (optimized using React compiler)
+* add support for MDX content formatting via the @next/mdx package
+* Add linting for both code and content (using ESLint MDX and ESLint v9 flat config)
+* add MDX plugins to generate a table of contents, code block syntax highlighting (using your favorite VSCode theme), as well as support for GitHub flawored markdown and GitHub like alerts
+* add a CI/CD pipeline using Vercel.com so that every time we commit code to our GitHub repository, it gets automatically deployed (staging/production)
+* add bugs monitoring and Content Security Policy (CSP) violations logging using Sentry.io
+* install useful extensions for VSCode and learn how to use them
+
+> [!NOTE]  
+> I made this tutorial with total beginners in mind. However, if you are already an experienced Next.js dev, then there are some chapters you may want to skip
+
+## Technology stack
+
+> [!NOTE]  
+> There is a previous version of this tutorial, that uses Next.js 14.x (and is compatible with Next.js 13). So if you are not (yet) using the latest Next.js 15 then you might want to check out the [Next.js 14 static mdx blog](/web_development/tutorials/next-js-static-mdx-blog) tutorial instead
+
+* backend framework: Next.js 15.x
+* frontend framework: React 19.x (with React compiler support)
+* MDX support: @next/mdx 15.x
+* linting: ESLint 9.x
+
+## Source code
+
+All the source code for this tutorial can be found in the [next-js-static-first-mdx-starterkit_tutorial_chris.lu](https://github.com/chrisweb/next-js-static-first-mdx-starterkit_tutorial_chris.lu) repository on GitHub, every chapter of this tutorial is a seperate branch in the repository. To view the full code, have a look at the last branch ["32_sitemap"](https://github.com/chrisweb/next-js-static-first-mdx-starterkit_tutorial_chris.lu/tree/32_sitemap)
+
+<Pagination
+    previous={{ label: 'Table of Contents', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit' }}
+    next={{ label: 'Prerequisites', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/prerequisites' }}
+/>
+
+</article>

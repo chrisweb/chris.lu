@@ -1,0 +1,332 @@
+---
+title: The road to React 19 and Next.js 15
+keywords: ['Next.js', 'nextjs', 'React', 'react 19', 'Next.js 15', 'Server Components', 'react compiler', 'Server Actions']
+published: 2024-08-12T11:22:33.444Z
+modified: 2024-08-14T19:10:33.444Z
+permalink: https://chris.lu/web_development/posts/road-to-react-19-next-js-15
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+
+export const metadata = {
+    title: frontmatter.title,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/posts_road-to-react-19-next-js-15/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+# The road to React 19 and Next.js 15
+
+![a futuristic city with two signs "react" and "next.js"](../../../../public/assets/images/app/web_development/posts/road-to-react-19-next-js-15/banner.png '{ banner }')
+
+This post is based on research I did a while ago when I first heard about Server Components. I wanted to understand what makes them different from what I was using at that time. I have kept track of the React and Next.js releases, which are the first few chapters, and then I had some discussions with other devs about the need or not to migrate. This is why I wrote the ["do I need to migrate all my code today?"](#do-i-need-to-migrate-all-my-code-today) chapter, and finally, the last chapters are about finding out what the major changes between the Next.js pages directory and app directory are
+
+I will try to keep this document up to date as things evolve continuously. If you find mistakes, please use the [issues](https://github.com/chrisweb/chris.lu/issues) on GitHub to report them, and if you want to discuss something related to the article, feel free to open post it in the [discussions](https://github.com/chrisweb/chris.lu/discussions) on GitHub
+
+## React 18.x and beyond
+
+React updates recap:
+
+* On December 21, 2020, the react team announced in a [blog post on react.org](https://reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html) that they had just published the [RFC: React Server Components](https://github.com/reactjs/rfcs/blob/main/text/0188-server-components.md) on GitHub, as well as an experimental demo [video of React Server Components (RSC) on YouTube](https://www.youtube.com/watch?v=TQQPAU21ZUw)
+* In March 2022, they released a blog post announcing the release of [React v18.0](https://reactjs.org/blog/2022/03/29/react-v18.html) and in that post they also mentioned that the **Server Components** were still in development and would get released in a future update, they also posted a new guide on React.dev to help developers [migrate to React 18](https://react.dev/blog/2022/03/08/react-18-upgrade-guide), the [React 18 changelog](https://github.com/facebook/react/releases/tag/v18.0.0) lists a lot improvements, the first one is the introduction of **Concurrent React**, some new hooks mostly useful for CSS-in-JS libraries and external data stores got added to make those libraries work well during concurrent rendering. The second big feature was [Suspense](https://react.dev/reference/react/Suspense), **Suspense** is a new feature related to concurrent rendering and the one that makes other new features like **Streaming Server Rendering** and **Selective Hydration** even possible (features that would get used mainly by frameworks in upcoming releases)
+* In April 2022, react released the first major update [React 18.1](https://github.com/facebook/react/releases/tag/v18.1.0), a maintenance version with many fixes. Most were for React DOM
+* That same year, in June 2022, the React team released [React 18.2](https://github.com/facebook/react/releases/tag/v18.2.0), another maintenance release with again lots of improvements for React DOM
+* One year after the first release of React 18 in March 2023, we got another update from the React Team in a blog post [What We've Been Working On](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023), one of the new features they mentioned to be working on was Server Actions (which then first appeared in Next.js 14 in October 2023)
+* In May 2023, the React team announced the [Canary release channel](https://react.dev/blog/2023/05/03/react-canaries). The canary releases are officially supported, meaning that if any regressions land, they will treat them with a similar urgency to bugs in stable releases. This meant for us, that from now on, we could use canary releases in production, a lot of frameworks like Next.js, Remix, Astro, ... for example started using those canary releases, which is why frameworks had support for **Server Components** and **Server Actions** even though those features were NOT yet in a stable React release
+* In February 2024 the React team released another [post](https://react.dev/blog/2024/02/15/react-labs-what-we-have-been-working-on-february-2024) in their series called **What We've Been Working On** (2024 edition), one big announcement was that they were preparing the first open source release of the **React compiler** in the upcoming months, they also announced that they were working on a client only version of **Server Actions** called **Actions**
+* In April 2024, the React team released [React 18.3.0](https://github.com/facebook/react/releases/tag/v18.3.0), which was identical to React 18.2.0 but included new warnings for APIs that should now be considered deprecated and other changes needed for the transition to React 19.x. A day later they released [React 18.3.1](https://github.com/facebook/react/releases/tag/v18.3.1) that included a minor update to what gets exported
+
+> [!MORE]  
+> [React (react.dev) blog](https://react.dev/blog)  
+> [React releases list and changelogs on GitHub](https://github.com/facebook/react/releases)  
+
+## React 19
+
+* On April 25, 2024 the react team released the **first beta** 🚀 of **React 19** on [npmjs.com](https://www.npmjs.com/package/react/v/19.0.0-beta-94eed63c49-20240425), they announced the [release of React 19 (beta)](https://react.dev/blog/2024/04/25/react-19) in a blog post that same day, the post contains a recap of the most interesting features that are included in React 19, the new **client Actions** that are the counterpart to Server Actions but the client ones are just called Actions (not Client Actions), the new **use** API, **Server Components** and **Server Actions** that you might already be using as frameworks like Next.js and Remix (to just name those two) already had access to those features via the canary releases, support for document metadata and a lot more that I won't list here as I recommend you check out their [release of React 19 (beta)](https://react.dev/blog/2024/04/25/react-19) a blog post for a more complete list and details
+* In April 2024, the React team published the first React 19 migration guide, which lists the upcoming changes in React 19. There is also a valuable [chapter about codemods](https://react.dev/blog/2024/04/25/react-19-upgrade-guide#codemods); codemods are a great help, especially when you intend to migrate the types and already have a big codebase
+* During [React Conf 2024](https://react.dev/blog/2024/05/22/react-conf-2024-recap) in April 2024, the React team announced the release of the first [React 19 RC](https://react.dev/blog/2024/04/25/react-19) (release candidate), another big announcement was the experimental release of the [React Compiler](https://react.dev/learn/react-compiler)
+
+> [!MORE]  
+> [react.dev "React 19 (beta)" post](https://react.dev/blog/2024/04/25/react-19)  
+> [react.dev "React 19 migration" guide](https://react.dev/blog/2024/04/25/react-19-upgrade-guide)  
+> [react.dev "React 19 RC" post](https://react.dev/blog/2024/04/25/react-19)  
+> [react.dev "React Compiler" documentation](https://react.dev/learn/react-compiler)  
+
+## New features in Next.js before v13
+
+Since version v10.2.1 Next.js enabled [Incremental type checking](https://www.typescriptlang.org/tsconfig#incremental), making builds much faster and then in version 12. Next.js typescript compilation got another speed boost, because Next.js started using ["SWC"](https://swc.rs/) a compiler written in Rust. For a bit of history and more in-depth information, check out their [Next.js "SWC compiler" documentation](https://nextjs.org/docs/advanced-features/compiler). Also in [version 12 Next.js](https://nextjs.org/blog/next-12#react-server-components) they started experimenting with React Server Components (alpha version). This version of Next.js did NOT include the app directory yet.
+
+> [!MORE]  
+> [Next.js "TypeScript" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript)  
+> [Next.js "SWC compiler" documentation](https://nextjs.org/docs/advanced-features/compiler)  
+
+## Next.js v13
+
+In May 2022, the next.js team released the [Layouts RFC](https://nextjs.org/blog/layouts-rfc) and sketched out their ideas for server components, but also improved data fetching and things like nested layouts. Alongside the RFC posted on their blog, they opened a [github discussion regarding the layouts RFC](https://github.com/vercel/next.js/discussions/37136)
+
+Next.js 13 releases:
+
+* In october 2022, the next.js team released [Next.js 13](https://nextjs.org/blog/next-13) which included the first beta version of the new `app` directory (**App Router**), with the new app router and thanks to React 18 Next.js another new feature they added were the **React Server Components** (beta version), in this release we also got the first alpha of [Turbopack](https://turbo.build/pack) a new bundler written in Rust that someday should replace webpack in Next.js projects, next/image got a complete overhaul in that version and the previous version got renamed to [next/legacy/image](https://nextjs.org/docs/pages/api-reference/components/image-legacy) (if you migrate your code to a newer Next.js version but don't want to migrate your code related to images, then you can use the legacy image component but for new projects (using Next.js 13.x) it is highly recommended that you use the new version of next/image). Another new component they introduced in that version was next/font (in beta), a component which will optimize your font usage by making them self hosted (compared to fetching them from a remote CDN) which reduces layout shifts when using fonts that are not installed on the users device. Yet another new component they updated is next/link which now does NOT require you to add `<a>{:html}` element as child anymore
+* Two months later, in December 2022, [Next.js 13.1](https://nextjs.org/blog/next-13-1) got released, it contained a lot of improvements for the new app directory but also for middlewares, Turbopack as well as [SWC](https://swc.rs/) a tool written in Rust to replace babel
+* In february 2023, we got [Next.js 13.2](https://nextjs.org/blog/next-13-2) which introduced the new [Metadata Files API](https://nextjs.org/docs/app/api-reference/file-conventions/metadata) for built SEO support and [MDX](https://mdxjs.com/) for Server Components ([MDX app directory support](https://nextjs.org/docs/app/building-your-application/configuring/mdx))
+* In April 2023, we got [Next.js 13.3](https://nextjs.org/blog/next-13-3), which brought improvements for SEO tools like the [Metadata Files API](https://nextjs.org/docs/app/api-reference/file-conventions/metadata) and automatically generated [OpenGraph Images](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image), as well as a new routes feature that looks very promising called [Parallel Routes](https://nextjs.org/docs/app/building-your-application/routing/parallel-routes) which allows you to render the content of two (or more) routes in a single layout, which is probably going to be very helpful when building things like dashboards or complex admin panels
+* In May 203, we got [Next.js 13.4](https://nextjs.org/blog/next-13-4), which is the first version of next.js 13 in which the **App Router** is considered stable (meaning it has left beta), another big new feature in Next.js 13.4 was the introduction of **Server Actions** in alpha, the goal with the new [Server Actions](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations) is to allow devs to mutate data without the use of an API and also make it possible to create progressively enhanced forms (forms that work even if javascript has not been loaded yet), Turbopack got updated too and is now considered beta (previously alpha)
+* The last 13.x version the Next.js team released was [Next.js 13.5](https://nextjs.org/blog/next-13-5) in September 2023. This version had almost no new features but a lot of performance optimizations as well as bug fixes
+
+## Next.js 14
+
+* In october 2023 (one year after the release of Next.js 13), the Next.js team released the first [Next.js 14](https://nextjs.org/blog/next-14) version, in this version the **Server Actions** feature (that they introduced in version 13.4 as alpha) is now considered being stable (meaning you can safely use it in production now), this version also introduced another interesting new feature called **Partial Prerendering (PPR)** (currently in preview / experimental), [Partial Prerendering](https://nextjs.org/docs/app/api-reference/next-config-js/partial-prerendering) will allow us to mix static and dynamic content in a route (page). As of now, if you use the **noStore cache option** or the **cookies() function** then your entire route will **opt out of static rendering** (and become dynamic), however with partial rendering you will be able to include dynamic components into a page and if you wrap them into a **suspense boundary** then the component will be dynamic but the rest of the page will remain static. **PPR** is only available for testing and should not be used for production, if you want to try it out **you MUST use next@canary** and enable it manually in the Next.js configuration
+* In January 2024, the Next.js team released [Next.js 14.1](https://nextjs.org/blog/next-14-1), providing a stable version of custom cache handlers, and there is now a configuration option to instruct Next.js to log cache **HITs** and **SKIPs** when running in development mode, this version also came with many improvements for fast refresh, error messages, parallel & intercepted routes and Turbo
+* In April 2024, the Next.js team released [Next.js 14.2](https://nextjs.org/blog/next-14-2) and added a new experimental option to called [staleTimes](https://nextjs.org/docs/app/api-reference/next-config-js/staleTimes) to let developers set custom revalidation times for the [Router Cache](https://nextjs.org/docs/app/building-your-application/caching#router-cache), this version also came with some changes intended to improve Tree-shaking and builds should now use less memory
+
+> [!MORE]  
+> [Next.js 13 to 14 upgrade guide](https://rc.nextjs.org/docs/app/building-your-application/upgrading/version-14)  
+> [Next.js "partial prerendering" documentation](https://nextjs.org/docs/app/api-reference/next-config-js/partial-prerendering)  
+> [Turbopack "are we turbo yet" (percentage of tests Turbopack passes)](https://areweturboyet.com/)  
+
+## Next.js 15
+
+* In may 2024, the Next.js team released the first [Next.js 15 RC](https://nextjs.org/blog/next-15-rc) (release candidate) which included a big change for [caching](https://nextjs.org/blog/next-15-rc#caching-updates), the Next.js team decided that from now on all caching would be opt-in instead of being enabled by default. The problem with caching being enabled by default was that in development even though caching was enabled the content (fetch requests, routes, client navigation) would not get cached, caching would only happen during the build process, this made it hard to detect problems linked to caching before publishing the app. Another change is that Next.js now includes React 19 RC (see my [React 19 chapter](#react-19) for details about what's new in React 19), **Partial Prerendering (PPR)** which previously was only available when using the release candidates is now included in this release and there is a new **experimental_ppr** feature that allows you to enable PPR only on certain pages. Also included is a new feature called **next/after** (which is an experimental API to execute code after your content got streamed to the user), a new layout for **create-next-app** as well as new configuration options to opt out of bundling for certain packages
+
+> [!MORE]  
+> [Next.js 14 to 15 upgrade guide](https://rc.nextjs.org/docs/app/building-your-application/upgrading/version-15)  
+
+## do I need to migrate all my code today?
+
+Do I need to move all my code from pages to the app directory, and do I need to use Server Components and/or Server Actions?
+
+{/* eslint-disable-next-line mdx/remark */}
+**TLDR: NO!**
+
+The app directory and server-side React are features you can opt into when ready, but nobody forces you to use them. The pages directory still exists in Next.js 13 and 14, and React still has all the client components features it had before. Yes they added Server Components and Server Actions but they also add new client side features like (client) Actions.
+
+This means you can still start a new project today and use the pages directory (but I don't recommend it as I think projects can be much more powerful if they use the app router). If you have an existing codebase, you don't need to migrate everything at once from pages to the app directory. You can do it bit by bit. If, however, you start a new project from scratch, then I recommend that you consider using the app directory as well as Server Components and, eventually, Server Actions because those technologies are more future-proof and also include a lot of great features the pages router or React client side only projects do not have
+
+If you are already using a previous version of Next.js and are migrating to one of the latest versions then I highly recommend you first check out the [Next.js "codemods" documentation](https://nextjs.org/docs/pages/building-your-application/upgrading/codemods) as these might save you a lot of time, another good read is the [Next.js app router migration guide](https://nextjs.org/docs/app/building-your-application/upgrading/app-router-migration)
+
+> [!MORE]  
+> [Next.js "App Router Incremental Adoption" documentation](https://nextjs.org/docs/app/building-your-application/upgrading/app-router-migration)  
+> [Next.js "codemods" documentation](https://nextjs.org/docs/pages/building-your-application/upgrading/codemods)  
+
+## pages VS app router
+
+This is an introduction to the differences between the Next.js app and the pages router.
+
+### routing in pages VS app
+
+For some time Next.js only had the **pages** directory, but since the first release of Next.js 13, Next.js now has two directories to choose from the **pages** and **app** directories, which correspond to the [pages router](https://nextjs.org/docs/pages/building-your-application/routing) and the [app router](https://nextjs.org/docs/app/building-your-application/routing), both are file-based routers but how files are being used differs:
+
+* when using the **pages** router (`/pages` directory) a page file `/pages/foo.tsx` will be available at the URL `example.com/foo` and `/pages/bar/baz.tsx` will be reachable at `example.com/bar/baz`, as you can see the page name becomes a segment of the URL (as do the directory names in which it resides)
+* with the **app** router, things are a bit different. The page file name is always the same; every page is a `page.tsx` (or page.js or page.mdx depending on what language you use), so only the directory structure defines the route segments, so the URL `example.com/foo` would be a file in `/app/foo/page.tsx` and `example.com/bar/baz` a file in `/app/bar/baz/page.tsx`
+
+When using **app router** (`/app` directory), each URL segment corresponds to a directory, which means we can put more than just pages in a directory. One of those [routing files](https://nextjs.org/docs/getting-started/project-structure#routing-files), for example, is a `layout.tsx` file, which allows us to build nested layouts, another one is the `loading.tsx` file to add a loader that gets displayed while the content of the page is getting fetched
+
+The app router supports features you already know from the pages router, like dynamic or catch-all route segments, but it also makes routing more flexible, and even more new features got added since the first release, like the parallel routes that got introduced in Next.js 13.3
+
+> [!MORE]  
+> [Next.js "pages routing" documentation](https://nextjs.org/docs/pages/building-your-application/routing)  
+> [Next.js "app routing" documentation](https://nextjs.org/docs/app/building-your-application/routing)  
+> [Next.js "routing files" documentation](https://nextjs.org/docs/getting-started/project-structure#routing-files)  
+
+### layout(s) in pages VS app
+
+With the [pages router layouts](https://nextjs.org/docs/pages/building-your-application/routing/pages-and-layouts), you have the possibility to wrap the **children** prop in your `_app.tsx` with a layout component which then gets applied to every page, if however you want to use more than one layout, then you have to write custom code to make it work, for example by adding custom code inside of your _app.tsx, you could check which route you are on and, based on that, switch to another layout, or you could import different layout components in each page file
+
+With the [app router layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts), it is much easier to have different layouts for different segments of your website, all you need to do is add a **layout.tsx** file (or a layout.jsx or layout.mdx file, depending on what language you use) into a directory and it will apply to the segment it is in as well as all segments nested below that, so not only is it easy to have multiple layouts it is also easy to create a cascade of nested layouts
+
+So, even the app router layout system does not have many new features (the page layout system is already quite feature-rich), in my opinion, the DX has improved greatly, and hence, it is easier to manage complex scenarios.
+
+> [!MORE]  
+> [Next.js "pages router layout" documentation](https://nextjs.org/docs/pages/building-your-application/routing/pages-and-layouts)  
+> [Next.js "app router layout" documentation](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts)  
+
+### Data fetching and rendering
+
+This is an introduction to the differences between fetching and rendering when using the pages router compared to fetching and rendering when using the new app router.
+
+#### using the pages router
+
+Here is a little recap of the 1st and 2nd generation of data fetching features using the pages router (`/pages` directory):
+
+* first, there was [getInitialProps](https://nextjs.org/docs/pages/api-reference/functions/get-initial-props). Because the first page gets rendered on the server, **getInitialProps** would be called on the server. Then, if visiting another page using next/link or next/router, that second page would get generated in the client, so any code in getInitialProps would, this time, get executed on the client side. This, however, meant that you had to be aware if you were currently on the server and could use server-side code to make a direct call to the database (to fetch data) or if you were in the client and hence had to fetch the data via an ajax call (making a request to an API endpoint). Besides that, it was also important to be careful about how and what packages you were importing, as you might have been using a package in your getInitialProps on the server, but you wanted to avoid it getting included in your client code. This is why the biggest pain point was that if you wanted to prevent some server dependencies leaking into the client code, then you had to exclude those packages from the client by either using dynamic imports encapsulated into conditions (that would check if the code is being executed on the server or the client and based on that decide to call the dynamic import or not), or you had to use bundler plugins that would automatically exclude those "server only" packages at build time for you.
+* the newer [getServerSideProps](https://nextjs.org/docs/pages/building-your-application/data-fetching/get-server-side-props) (which first appeared in March 2020 with [Next.js 9.3](https://nextjs.org/blog/next-9-3)) is an async function that fetches the data and populates the props object of your page function. Same as with getInitialProps for the first page, the code gets executed on the server, but if you visit a second page, **getServerSideProps** will again get executed on the server, and the data it returns will get sent as JSON to the client. Using getServerSideProps instead of getInitialProps eliminates two pain points, first, you do not have to care about your imports anymore as next.js will exclude those "server only" packages for you from the client bundle automatically, and the second pain point it eliminates is that you do NOT have to write extra "fetch data" code in the client as Next.js will call getServerSideProps on the server for you and then fetch the data as JSON.
+* [getStaticProps](https://nextjs.org/docs/pages/building-your-application/data-fetching/get-static-props) appeared alongside getServerSideProps, the difference between the two is that getServerSideProps disables ["Automatic Static Optimization"](https://nextjs.org/docs/pages/building-your-application/rendering/automatic-static-optimization) but getStaticProps does not, **getStaticProps** is useful to fetch data not at "runtime" but at "build time", so when a user visits a page no data call is being made, all data got already fetched at build time (and the page props have been put in a static json file), which means for any request being made by a user your data won't change. This can be very interesting to build pages that load super fast as they use data that does not change between two builds, however getStaticProps has a feature so that you can "revalidate" data in the background, this is what gets used by "[Incremental Static Regeneration](https://nextjs.org/docs/pages/building-your-application/data-fetching/incremental-static-regeneration)" and allows you to update the static data you got at build time.
+
+#### using the app router
+
+To do **data fetching** in the **app Router**, you do NOT use the getServerSideProps anymore. Instead, you use Server Components that fetch data on the server and then send it to the client, together with your pre-rendered client components and compiled CSS.
+
+In the app router (in my opinion), getting data from an API is easier than using the getServerSideProps in pages (as there is less framework-specific syntax you need to remember). A regular fetch will do (fetch in Next.js got extended with framework-specific features like a caching mechanism, but in the end, it still works like a regular fetch). Here is a straightforward example:
+
+```jsx
+export default async function MyPage() {
+    const data = await fetch('https://api.example.com/...')
+    return (<>{data.foo}</>)
+}
+```
+
+When getting data in the Server Component and calling an API endpoint, it is highly recommended to use **fetch** as not only does it fetch data but also allows you to use the caching layer to make sure you reduce the amount of fetches by re-using cached data. You can fine-tune the caching of requests by, for example, defining when the cache should expire by setting the revalidate value manually:
+
+```jsx /{ next: { revalidate: 3600 } }/#special
+export default async function MyPage() {
+    // revalidate if cache older than an hour
+    const data = await fetch(
+        'https://api.example.com/...',
+        { next: { revalidate: 3600 } }
+    )
+    return (<>{data.foo}</>)
+}
+```
+
+It is also possible to use tags, they are useful when you need to revalidated multiple cached fetches, all at once based on their common tag:
+
+```jsx /{ next: { tags: ['collection'] } }/#special title="page.tsx"
+export default async function MyPage() {
+    // revalidate if cache older than an hour
+    const data = await fetch(
+        'https://api.example.com/...',
+        { next: { tags: ['my_custom_tag'] } }
+    )
+    return (<>{data.foo}</>)
+}
+```
+
+```jsx {6} title="action.ts"
+'use server'
+ 
+import { revalidateTag } from 'next/cache'
+ 
+export default async function action() {
+    revalidateTag('my_custom_tag')
+}
+```
+
+> [!TIP]  
+> I highly recommend doing a deep dive in the [Next.js "Data Fetching, Caching, and Revalidating" documentation](https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating) to better understand how this works and what options you have.  
+
+Fetch is not the only way to get data in server components. You can also directly use a database client packages or even an ORM, but in that case, you need to set up the caching yourself by, for example, using [react cache](https://react.dev/reference/react/cache). There is more information in the Next.js documentation about [fetching data on the server with third-party libraries](https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating#fetching-data-on-the-server-with-third-party-libraries).
+
+```jsx
+import { cache } from 'react'
+import { client } from 'third_party_database_client'
+ 
+export const getData = cache(async (id) => {
+    const data = await client.queryById({ id })
+    return data
+})
+
+export default async function MyPage({ params: { id } }) {
+    const data = await getData(id)
+    return (<>{data.foo}</>)
+}
+```
+
+Another option for caching database requests was introduced in **Next.js 14**, where it was marked as unstable (so be aware that the API might change in the future). The new next/cache feature is called [unstable_cache](https://nextjs.org/docs/app/api-reference/functions/unstable_cache). It is the same caching mechanism used by fetch by for one's own queries using the database client you prefer:
+
+```jsx
+import { unstable_cache } from 'next/cache'
+import { client } from 'third_party_database_client'
+ 
+const getData = unstable_cache(async (id) => {
+    const data = await client.queryById({ id })
+    return data
+}, ['my_custom_tag'])
+
+export default async function MyPage({ params: { id } }) {
+    const data = await getData(id)
+    return (<>{data.foo}</>)
+}
+```
+
+In version 14.1, Next.js got some improvements for [custom cache handlers](https://nextjs.org/docs/app/building-your-application/deploying#configuring-caching), which got released as a stable version (most useful when not deploying your project on Vercel and when using your own custom cache storage), the two configuration options are now called [cacheHandler](https://nextjs.org/docs/app/api-reference/next-config-js/incrementalCacheHandlerPath) and **cacheMaxMemorySize**:
+
+```js title="next.config.mjs"
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    cacheHandler: require.resolve('./MY_CUSTOM_CACHE_HANDLER.js'),
+    cacheMaxMemorySize: 0,
+}
+```
+
+In version 14.2, the Next.js team added a new experimental option called [staleTimes](https://nextjs.org/docs/app/api-reference/next-config-js/staleTimes) to let developers set custom revalidation times for the [Router Cache](https://nextjs.org/docs/app/building-your-application/caching#router-cache):
+
+```js title="next.config.mjs"
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    experimental: {
+        staleTimes: {
+            dynamic: 30,
+            static: 180,
+        },
+    },
+}
+```
+
+In version 15, Next.js changed [caching](https://nextjs.org/blog/next-15-rc#caching-updates) to be disabled by default, meaning you now need to opt-in caching manually
+
+> [!MORE]  
+> [Next.js "Data Fetching, Caching, and Revalidating" documentation](https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating)  
+> [Next.js "unstable_cache" API reference](https://nextjs.org/docs/app/api-reference/functions/unstable_cache)  
+> [React "Cache (Server components)" documentation](https://react.dev/reference/react/cache)  
+> [Vercel "Fetching data faster with the App Router" article](https://vercel.com/blog/nextjs-app-router-data-fetching)  
+> [Next.js "Configuring Caching" documentation](https://nextjs.org/docs/app/building-your-application/deploying#configuring-caching)  
+> [Next.js "Router Cache" documentation](https://nextjs.org/docs/app/building-your-application/caching#router-cache)  
+> [Next.js 15 "caching changes" blog post](https://nextjs.org/blog/next-15-rc#caching-updates)  
+
+### Server components and server actions
+
+When using the app directory, Next.js will assume that every component is a **Server Component** by default, meaning if you don't specify anything, then a component (or page/layout) with no directive (either 'use client' or 'use server') is **automatically considered being a Server Component**. There are things you can't do in a Server Component, like using `useEffect{:js}` or listening for an `onClick{:js}` event. If you want to use these, you must add the 'use client' directive on top of your component to turn it into a client component.
+
+It is recommended that as few components be turned into client components as possible. Next.js always renders client components on the server, then sends the HTML to the client, and finally performs a hydration step to make the page interactive. However, server components use an SSR technique called React Server Component Payload (RSC Payload), which results in less client code and reduced page load times.
+
+It is also recommended that you do all data fetching in Server Components. This allows you to import packages that will only be used on the Server, meaning they will not be bundled with other client-side code, hence reducing the payload that is being sent to the client. Another benefit is that you can use environment variables like an API key, and those will stay secret and not be exposed to the client when you use them in Server Components.
+
+**Server Actions** allow us to mutate data on the server (from within a client component) without, for example, calling an API endpoint. By using the directive 'use server' inside a client component, you turn a part of your client component into a Server Component. That code will get executed on the server but will reside inside the client component. Server Actions have the potential to simplify our code. For example, using Server Actions you can update or insert data into a database next to the client code that handles the onSubmit of a form, keeping all the logic of your data flow in one place. Server Actions also make it easy to progressively enhance forms, meaning a form will be usable even before JavaScript is done loading.
+
+```jsx
+'use client'
+
+import { client } from 'my-database-lib'
+
+export default function MyPage() {
+    async function formAction(formData) {
+        'use server'
+        client.insert({ name: formData.get('username') })
+    }
+    return (<form action={formAction} method="POST">
+        <input type="text" id="username">
+    </form>)
+}
+```
+
+Below are links to documents I think will help to fully understand the potential of **App router** data fetching (and caching), **Server Components**, and **Server Actions**:
+
+> [!MORE]  
+> [Next.js "Server Components" documentation](https://nextjs.org/docs/app/building-your-application/rendering/server-components)  
+> [Next.js "Server Actions and Mutations" documentation](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations)  
+> [Next.js "rendering" documentation](https://nextjs.org/docs/app/building-your-application/rendering)  
+> [Next.js "App Router common mistakes and how to fix them" blog post](https://vercel.com/blog/common-mistakes-with-the-next-js-app-router-and-how-to-fix-them)  
+> [Next.js "Server Components and Server Actions Security" blog post](https://nextjs.org/blog/security-nextjs-server-components-actions)  
+> [Vercel "Understanding React Server Components" article](https://vercel.com/blog/understanding-react-server-components)  
+
+</article>

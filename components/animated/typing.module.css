@@ -1,0 +1,32 @@
+.blinkingCarret {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font-weight: 700;
+}
+
+.blinkingCarret::after {
+    content: "";
+    width: 2px;
+    height: var(--main-fontSize-big5);
+    background: var(--primary-light-color);
+    display: inline-block;
+}
+
+.clip {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .blinkingCarret::after {
+        animation: blinkingCarretAnimation 1s steps(2) infinite;
+    }
+}
+
+@keyframes blinkingCarretAnimation {
+    50% {
+        opacity: 0;
+    }
+}

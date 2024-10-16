@@ -1,0 +1,39 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# environment variables file
+.env
+
+# Next.js build output
+.next
+
+# Next bundle analyzer
+/analyze
+
+# Serverless directories
+.serverless/
+
+# Sentry Config File
+.sentryclirc
+
+# localhost ssl certificate(s)
+certificates
+# Sentry Config File
+.env.sentry-build-plugin

@@ -1,0 +1,47 @@
+Song: 50 Million Year Trip
+Album: Gore
+Artist: Karl Casey
+Source: https://karlcasey.bandcamp.com/track/50-million-year-trip
+License: https://creativecommons.org/licenses/by/3.0/
+
+Song: Athena
+Album: White Bat XXV
+Artist: Karl Casey
+Source: https://karlcasey.bandcamp.com/track/athena
+License: https://creativecommons.org/licenses/by/3.0/
+
+Song: City Streets 1 (Double Dragon 1 - Mission 1)
+Album: Double Dragon Neon
+Artist: Jake Kaufman
+Source: https://virt.bandcamp.com/track/city-streets-1-double-dragon-1-mission-1
+License: https://creativecommons.org/licenses/by-nc-sa/3.0/
+
+Song: Hackers
+Album: /
+Artist: Karl Casey
+Source: https://whitebataudio.com/hackers/
+License: https://creativecommons.org/licenses/by/3.0/
+
+Song: Sunset
+Album: Ghosts
+Artist: LukHash
+Source: https://www.jamendo.com/track/1575624/sunset
+License: https://creativecommons.org/licenses/by-nc-nd/4.0/
+
+Song: Synthwave Vibe
+Album: Synthwave Vibe Single
+Artist: Meydän
+Source: https://meydan.bandcamp.com/track/synthwave-vibe
+License: https://creativecommons.org/licenses/by/3.0/
+
+Song: Little Calculations
+Album: Infinity
+Artist: Shirobon
+Source: https://shirobon.bandcamp.com/track/little-calculations
+License: https://creativecommons.org/licenses/by-nc-sa/3.0/
+
+Song: Out Of Love
+Album: Dimensions
+Artist: Shirobon
+Source: https://shirobon.bandcamp.com/track/out-of-love-2
+License: https://creativecommons.org/licenses/by-nc-sa/3.0/

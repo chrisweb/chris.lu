@@ -1,0 +1,148 @@
+import webpMindBlowingStaticImport from '/public/assets/images/animated/mind_blowing.webp'
+import ImageAnimatedPicture from '@/components/base/image/AnimatedPicture'
+import { sharedMetaData } from '@/shared/metadata'
+
+export const metadata = {
+    title: 'About me',
+    alternates: {
+        canonical: 'https://chris.lu/about_me',
+    },
+    openGraph: {
+        ...sharedMetaData,
+        url: 'https://chris.lu/about_me',
+    },
+}
+
+%toc%
+
+<article>
+
+# About me
+
+It's a me, ChrisWeb! This page is mainly about my journey as a web developer. I program, coach, manage teams, and write about web and app development for a living and as a hobby. I have more information about my other hobbies on the different pages of my blog.
+
+## Early programming days
+
+As I described in my [games](/games) section, I started programming with an Amstrad CPC computer at a young age. I loved playing games and, after a while, started wondering if I could learn to make my own games 👾. I bought my first programming book about making games in [BASIC](https://en.wikipedia.org/wiki/BASIC) and started typing several pages-long examples into files. After a while, I began writing my own code. I copied my small games to floppy disks 😲, and then shared them with friends to see if they enjoyed playing them as much as I did.
+
+A few years later, I got my first PC and started using [Pascal](https://en.wikipedia.org/wiki/Pascal_(programming_language)). I remember one of the first games I did on my own. It had very basic vector graphics and was a bit like an [Out Run](https://en.wikipedia.org/wiki/Out_Run) game but in space. So, instead of driving a car, you were piloting a spaceship.
+
+## First website on GeoCities
+
+When I got my second PC, it came with a modem, which meant I now had access to the internet, it was mind-blowing
+
+<p>
+    <ImageAnimatedPicture avifPath='/assets/images/animated/mind_blowing.avif' webpStaticImport={webpMindBlowingStaticImport} alt="clip from a 2009 episode of the &quotTim &amp Eric Awesome Show, Great Job!&quot television series, showing a person pantomiming his mind being &quotblown&quot, accompanied by images of cosmic explosions" className="animatedPicture" />
+</p>
+
+That's when I discovered that a new service called [GeoCities](https://en.wikipedia.org/wiki/GeoCities) had just been launched. Little did I know that this would be the start of my web development journey. I started learning HTML and later [DHTML](https://en.wikipedia.org/wiki/Dynamic_HTML), which consisted of learning how to use [&lt;blink&gt;](https://en.wikipedia.org/wiki/Blink_element), `<center>{:html}` and how to add a small image (that repeats itself indefinitely) as background 😂. To understand what we were building, check out this [geocities archive](https://geocities.restorativland.org/). When I tell designers who just finished their studies that back in the day, we used a transparent 1x1 pixel gif to do more advanced positioning of elements in our pages, they think I'm making those stories up 😅
+
+## TombRaider.net and dropping out of school
+
+I had read news in gaming magazines (yes, we got our news from magazines that came with a floppy disk and later CD-Roms containing game demos) about an upcoming game called [Tomb Raider](https://en.wikipedia.org/wiki/Tomb_Raider_(1996_video_game)) starring [Lara Croft](https://en.wikipedia.org/wiki/Lara_Croft) a female Indiana Jones like character. It was a promising game, so I searched for available domains. Of course, tombraider.com had already been registered by the game's developers, but I was fortunate to be able to register tombraider.net 🙂.
+
+> [!NOTE]  
+> I was able to find traces of my [tombraider.net website from April 1999](https://web.archive.org/web/20000510125725/http://www.tombraider.net/) in the [internet archive](https://archive.org/), but unfortunately, none of the images got saved 😥
+
+On tombraider.net, I had a "music box" (similar to the jukebox I now have on this blog), but the music tracks were midi songs. The browsers at that time supported an `<embed>{:html}` element that allowed you to add midi (.mid) music tracks to your website. Modern browsers have dropped support for MIDI files, so I had to convert the songs to OGG/MP3 files to post them here. I was able to retrieve two Tomb Raider midi files (composed initially by [Nathan McCree](https://en.wikipedia.org/wiki/Nathan_McCree)):
+
+<div className="grid">
+    <div>
+        <figure>
+            <figcaption>Tombraider 1 inspired midi song:</figcaption>
+            <audio controls>
+                <source src="/assets/music/tombraider_net/sound06.ogg" type="audio/ogg" />
+                <source src="/assets/music/tombraider_net/sound06.mp3" type="audio/mp3" />
+            </audio>
+            <a href="/assets/music/tombraider_net/sound06.mid">Original midi file download</a>
+        </figure>
+    </div>
+    <div>
+        <figure>
+            <figcaption>Tombraider 2 inspired midi song:</figcaption>
+            <audio controls>
+                <source src="/assets/music/tombraider_net/sound07.ogg" type="audio/ogg" />
+                <source src="/assets/music/tombraider_net/sound07.mp3" type="audio/mp3" />
+            </audio>
+            <a href="/assets/music/tombraider_net/sound07.mid">Original midi file download</a>
+        </figure>
+    </div>
+</div>
+
+I was also able to retrieve a third song. It is only now that I realize how melancholic it sounds, maybe I was anticipating what mood I would be in 20 years later when reviewing my past work 😉:
+
+<div className="grid">
+    <div>
+        <figure>
+            <figcaption>Evening Falls (by Etherea):</figcaption>
+            <audio controls>
+                <source src="/assets/music/tombraider_net/sound02.ogg" type="audio/ogg" />
+                <source src="/assets/music/tombraider_net/sound02.mp3" type="audio/mp3" />
+            </audio>
+            <a href="/assets/music/tombraider_net/sound02.mid">Original midi file download</a>
+        </figure>
+    </div>
+</div>
+
+When reviewing the tombraider.net source code, I found something that made me smile. When I built my first websites, I did not use any IDE to write HTML and JavaScript, so I always added this little comment to my code: `&lt;!-- MADE WITH NOTEPAD 1.0 --&gt;{:.comment}` 😋
+
+The website's popularity kept increasing, generating more and more traffic. A year later, just before the release of the second Tomb Raider game, I got in contact with people from GX Media, an American start-up operating gamers.com, and the GX Network, an advertising platform for gaming websites. After adding their banner code to tombraider.net, I started getting monthly checks.
+
+Getting paid to create and operate a gaming website on my own was a dream come true. Because of that and because, at that time, web development wasn't something you could learn at school, I decided to drop out of high school during my final year. Yes, my parents were less enthusiastic than I was (to say the least), but they still supported me.
+
+After the third Tomb Raider game, the number of visits started dropping, and so did the numbers on the checks.
+
+## Non-profit work
+
+Around that time, I met some people who were active in non-profit organizations, and they had planned to rent a house near where I was living so that we could move in together and build a community of like-minded people. I decided to join them and founded a non-profit organization. I wanted to use my web development skills to help other non-profit organizations better promote their ideas using modern digital tools like websites and interactive CD-Roms. At first, I used [Delphi](https://en.wikipedia.org/wiki/Delphi_(software)) to create a no-code Windows software that allowed non-developers to organize content without having any HTML skills. When done, a click on the publish button would convert the navigation and pages into HTML documents, ready to be published on a server. After a while, I started using [PHP](https://en.wikipedia.org/wiki/PHP) to make the pages more dynamic and build other tools like discussion boards.
+
+This period included ups and downs, with financial struggles leading to a return to my parent's home. Looking back, I enjoyed the years I had spent helping non-profit organizations embrace digital transformation. Still, by the end, I was depressed 😢 for not having been able to secure the required funding to continue.
+
+## Getting back up
+
+I had lost some confidence in myself, but my passion for web development was intact, I spent my days expanding my skill set in various programming languages and web development technologies. Here is what my bookshelves looked like at that time
+
+<div className="grid">
+    <div>
+        ![my first bookshelf](../../public/assets/images/app/about_me/bookshelf_01.jpg '{ photo }')
+    </div>
+    <div>
+        ![my second bookshelf](../../public/assets/images/app/about_me/bookshelf_02.jpg '{ photo }')
+    </div>
+</div>
+
+My increased skill set eventually helped me secure my first "real" job as a web developer.
+
+## The green triangle
+
+My second job started with a hilarious moment. I was very interested in learning how to create better and more intuitive interfaces using CSS and Javascript. I applied for a web designer position at a big media house, and the task during the interview was to build a website for a fictional gardening company called "the green triangle". My Photoshop skills were not up to the task, and my green triangle at the top right of the page led both the interviewer and me to laugh at the result. They were, however, impressed by the amount and quality of the code I had written and asked me to apply again for another PHP developer position that had yet to be published. I applied the next week, and this time, I got the job.
+
+I worked for several years for Saint-Paul Luxembourg as a PHP developer. Even though the company was a big Luxembourgish media house, the development team was small and had a familiar atmosphere. We worked hard during the day, but I also remember playing online video games with my teammates after work, which helped reduce our stress and also helped us get to know each other better. I spent a lot of my free time doing prototypes with PHP frameworks that were popular at that time, which helped me become a better developer. I had started as a junior developer, sometimes wondering about the imposter syndrome many developers experience at one point in their careers, but I left a few years later as a senior developer with increased confidence in my skills.
+
+## Jamendo
+
+At jamendo.com, I started helping to transition the API backend to [Zend Framework](https://github.com/zendframework/zf1) and the frontend to [Backbone.js](https://github.com/jashkenas/backbone). Later we transitioned the page backend to [Node.js](https://nodejs.org/) and the mobile apps to [Cordova](https://github.com/apache/cordova), which meant we were now able to use a single programming language ([typescript](https://www.typescriptlang.org/)) and allowed us to reuse code from Server Side Rendering (SSR) in the client (browser) as well as in the mobile apps.
+
+I was very interested in the product (I mean, who doesn't like music 😉) and kept bringing up ideas for new features, so after two years as a developer, I switched to a product management/team leader role. We built a multi-disciplinary team of developers, designers, and music managers, which worked together to rethink, rewrite, and redesign most of Jamendo Music. One idea I was eager to try out was the concept of music communities so that instead of having only one global charts page on the homepage, we would also have dozens of music communities by music genre, where each one would have its own charts, curated playlists and a trending section. Being an indie music platform meant we had to overcome challenges the other music platforms did not have. For example, we knew that even a great search engine would not deliver a good UX, as searching mainstream artists in a database of indie artists would not yield the results our users were expecting. This is why we put a lot of effort into improving our ranking and similarity algorithms, better promoting our music team's playlists, and using our community's collective curation efforts to help users find music and artists they like.
+
+We also made smaller adjustments, like merging the like and bookmark buttons into a single ❤️ (heart) button to reduce UI clutter. We spent a lot of time creating prototypes, analyzing data from our current users, and creating Google forms to gather feedback so that we could make decisions based on numbers and not solely on our assumptions. We learned valuable lessons about user engagement and product evolution during that period.
+
+## Clubee.com and Covid-19 challenges
+
+When I started at Clubee, the biggest challenge was to move parts of the existing infrastructure to the cloud to help us reduce the amount of time spent dealing with DevOps tasks and be able to focus more on the development of new features. Another challenge was improving the developer experience (DX) to reduce the time needed to develop and release new features into production, which we achieved by enhancing our automatic deployment workflows and upgrading our debugging and monitoring tools. I also spent some time helping the team choose the best technologies based on our needs, budget, and team members' knowledge.
+
+When the COVID-19 pandemic started to impact us all, it created new challenges we had to overcome. We were partially ready for remote work, but adapting to full-time remote work and maintaining productivity by keeping motivation up were still challenges. Having worked a lot from home in the past, I gave the team tips about creating a daily routine, avoiding potential distractions around you when working from home, and staying healthy and happy. A fun change we made was to transform our in-person after-work events into online events, which meant everyone on the team would prepare their favorite drink(s) and snack(s) and then join the others via webcam to play online games.
+
+## Sabbatical and current projects
+
+I have taken a [sabbatical](https://en.wikipedia.org/wiki/Sabbatical) to update my skills once again. I also developed an Android and iOS app called [Beavo](https://beavo.com), it is a web app for Beach Volleyball players using [React](https://react.dev/) and [Capacitor.js](https://capacitorjs.com/), that I did for a friend. I used Xcode Cloud to create a CI/CD pipeline to automatically build the app and distribute it to testers whenever a new pull request is entered into the GitHub repository.
+
+I rebuilt my personal blog using [Next.js](https://nextjs.org/) and focused on [MDX](https://mdxjs.com/) (markdown) content formatting to create a static blog, which led to the creation of 2 new open source plugins [remark-table-of-contents](https://github.com/chrisweb/remark-table-of-contents) and [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts). I also updated my [web-audio-api-player](https://github.com/chrisweb/web-audio-api-player) project which is powering the jukebox on top of this blog and had a lot of fun working on the header ("Press Start" in the top header to see the animation) using [React-three-fiber](https://docs.pmnd.rs/react-three-fiber/getting-started/introduction) a React renderer for three.js (WebGL).
+
+I read countless articles and watched educational videos on YouTube about web development and game development (using the [Godot Engine](https://godotengine.org/)) and contributed to open-source projects on GitHub, fixing bugs and helping improve documentation, for example, my latest PR for Next.js [Next.js PR #61412](https://github.com/vercel/next.js/pull/61412) just got accepted recently
+
+I also wrote countless articles for this blog as I love teaching new technologies as much as I love learning about them. I plan on keeping my content free because I believe that all forms of education should always be free, but I also ask for donations to be able to write more such content in the future.
+
+To be continued...
+
+</article>

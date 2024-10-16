@@ -1,0 +1,209 @@
+---
+title: Project setup and first commit - Tutorial
+description: Project setup and first commit - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['project', 'setup', 'first', 'commit', 'preview', 'git flow', 'VSCode']
+published: 2024-08-14T15:31:33.444Z
+modified: 2024-08-14T15:31:33.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/project-setup-and-first-commit
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
+
+# Project setup and first commit
+
+If you have closed VSCode since last time, launch VSCode and open the project directory we created in the **Prerequisites** chapter (if you need help to open a directory in VSCode, check out my chapter [open a project folder in VSCODE](/web_development/posts/vscode#open-a-folder-in-vscode) from the VSCode post).
+
+## Branching Strategy
+
+For this project we will use a simple branching strategy. Which means we will have a **main** branch and an extra **preview** branch. We will develop locally and commit into the preview branch, then we will synchronize the changes with the remote preview branch. Then a CI/CD pipeline will deploy the preview branch. When we are done testing the preview deployment we will create a pull request to merge the review branch into our main branch. The CI/CD pipeline will then deploy the main branch into production. 
+
+Dependeing on the amount of people that will work on your project with you might want to chose a more complex strategy. If you want to learn more about branching strategies, have a look at my [Choosing a git Branching Strategy](/web_development/posts/git#choosing-a-git-branching-strategy) chapter in the git post
+
+### "preview" git branch
+
+Open VSCode and then create a new branch **from the main branch** and call it **preview**
+
+If you are new to VSCode or Git, to learn how to create a new branch from another branch (and then publish it), I recommend you check the chapter ["Creating a new branch" from the VSCode post](/web_development/posts/vscode#create-a-new-branch-from-based-on-another-branch) in my VSCode post
+
+> [!TIP]  
+> We call our branch **preview** because later in this tutorial, we will add a CI/CD pipeline via vercel.com and will use the **preview** branch to do preview deployments
+>  
+> The main (default) branch will be used to make production deployments
+
+Now that you have created the branch, you will see at the bottom of VSCode that the new branch is already the one selected
+
+The branch exists locally, but it has not been published yet, it is up to you if you want to publish it immediately or wait
+
+You could consider not publishing it until you are sure that you will use the code, but I prefer to always immediately publish them and then also push my commits every few hours (at least once a day). The advantage is that if something happens to my computer, I still have a backup of my code in the cloud.
+
+Of course, once published, it is a bit more work if you want to delete a published branch, as you need to do so locally as well as remotely, but I still prefer that to losing several hours or even days' worth of work
+
+> [!MORE]  
+> [chris.lu "VSCode" post](/web_development/posts/vscode)  
+
+## Create Next App (CNA)
+
+To create a new Next.js project, we are going to use [Create Next App](https://www.npmjs.com/package/create-next-app) (CNA)
+
+**CNA** is a **CLI tool** created by Next.js to get you started quickly
+
+> [!WARN]  
+> We will create the new project in the root of our project directory (not a sub-directory), the create-next-app tool will attempt to create a README, and hence it finds an already existing README.md it will abort
+>  
+> If there is a README.md file (in the root of the repository you just created), first delete it and then commit the changes (if you need help to commit changes using VSCode, check out my chapter [commit your changes to GitHub using the VSCode version control tool](/web_development/posts/vscode#commit-your-changes-to-github-using-the-vscode-version-control-tool) from the VSCode post)
+
+> [!NOTE]  
+> We will use the `--use-npm` flag to tell CNA that I plan on using npm to manage packages, if you prefer using another package manager, you can change the option to `--use-pnpm` for [pnpm](https://pnpm.io/), `--use-yarn` for [yarn](https://yarnpkg.com/) or `--use-bun` for [bun](https://bun.sh/package-manager)
+>  
+> We will also use the `--typescript` flag to tell CNA that we want to develop using Typescript, meaning we will NOR get asked if we prefer Javascript or Typescript
+
+> [!TIP]  
+> I will not argue in favor or against Typescript here, this is not the right place, but I recommend and will be using Typescript in this tutorial.
+>  
+> If you prefer Javascript then remove the `--typescript` flag before executing the CNA command
+>  
+> However if you never used Typescript before, then maybe just give it a try while building this project and see for yourself how different it is from using Javascript. Then when the project is done you will be able to judge for yourself which one you like more.
+
+Make sure the VSCode terminal is open (if you need help to open the terminal in VSCode, check out my chapter [open a VSCode terminal](/web_development/posts/vscode#open-a-vscode-terminal) from the VSCode post)
+
+Then copy the following command into your terminal and then press `ENTER`:
+
+```shell title="terminal"
+npx create-next-app@latest ./ --use-npm --typescript
+```
+
+**Create Next App** will tell you it needs to be installed first, accept by typing `y` and then press `ENTER`
+
+Next, you will get asked some more questions so that Next.js knows what it needs to install and set up for you:
+
+* **Would you like to use ESLint?**, we choose **Yes** (which is preselected), so just press `ENTER` to validate the choice and move on to the next question; we add [ESLint](https://eslint.org/) to our project because it is a great tool that will improve our DX by helping us find and correct errors in your code, which is why I highly recommend installing it (if you really don't want to use it later on you can still disable some of the rules you don't like)
+* **Would you like to use Tailwind CSS?**, for this tutorial I choose **No**,  press `←` (the left arrow key), and then `ENTER`; I won't use Tailwind in this tutorial, instead we will use another styling solution, but more on that later. I recommend exploring another solution with me through this project, by selecting "No" too. However, if you already know Tailwind CSS and want to use it instead, feel free to keep it on "Yes"
+* **Would you like to use `src/` directory?** I will leave this on **No** and then press `ENTER`, if you prefer to place all your code in an `src/` directory, then press the `→` right arrow key to select "Yes"; some people prefer it, for example, to be able to restrict searches in files to files that are in the `src/` directory and hence avoid getting a result from the node_modules directory, my personal preference for small projects like the one we are about to build, is to NOT use the `src/` directory as I like to see all my directories in the root (without having to first open a sub-directory)
+* **Would you like to use App Router?** definitely keep this on **Yes** and then press `ENTER`; since Next.js 13 you have two routers (directories) to choose from, you can use the pages router and add your pages into the **pages** directory which is the older version, or you could use the more modern version, which is the **app** router (directory), I highly recommend enabling the app directory (you can still create the pages directory manually at a later stage, if you want to use it, both can be used alongside each other), in this tutorial we will only use the app directory
+* **Would you like to use Turbopack for next dev?** for now we keep this on **Yes** and then press `ENTER`; Next.js recommends using their new Rust bundling and build tool called Turbopack (in dev), which is why it is now an option when using CNA. However in some cases it needs to get disabled, we will have a more detailed look at such a case later in this tutorial
+* **Would you like to customize the default import alias (@/*)?** press `→` (the right arrow key) to select **Yes** and then press `ENTER`; if you selected **TypeScript** in the first question, enabling this will tell CNA to add an alias for a given path in the `tsconfig.json` (the Typescript configuration file), if you chose **Javascript** it will create the alias in the `jsconfig.json` file (this alias can be used for imports as a "base path" to a dependency (package), to learn more about this feature I recommend you have a quick look at the [Next.js "Absolute Imports and Module Path Aliases" documentation](https://nextjs.org/docs/app/building-your-application/configuring/absolute-imports-and-module-aliases)), however, if you don't want it to feel free to leave it on "No"
+* **What import alias would you like configured?** I personally keep the default `@/*`, but feel free to choose another one if you prefer, then press `ENTER`
+
+That's it the **Create Next App** will now install Next.js and React (and React DOM) for us, it will then also install some development dependencies based on what we chose, like Typescript and ESLint, and then it will create some default configuration files for those tools
+
+> [!TIP]  
+> When you use CNA, some of the options you chose will get stored so that the next time you use it again, it will take your stored preferences instead of default values
+>  
+> If you want to reset those stored preferences, you can use the `--reset-preferences` option like so `npx create-next-app --reset-preferences`, if successful CNA prints the following message "**Preferences reset successfully**"  
+
+> [!MORE]  
+> [Next.js "create-next-app" documentation](https://nextjs.org/docs/app/api-reference/create-next-app)  
+> [VSCode "jsconfig.json" documentation](https://code.visualstudio.com/docs/languages/jsconfig)  
+> [Next.js "Absolute Imports and Module Path Aliases" documentation](https://nextjs.org/docs/app/building-your-application/configuring/absolute-imports-and-module-aliases)  
+
+## First commit
+
+Now that create next app is done, it is a good time to do your first commit
+
+If you need help to commit changes (and then synchronize them) using VSCode, check out my chapter [commit your changes to GitHub using the VSCode version control tool](/web_development/posts/vscode#commit-your-changes-to-github-using-the-vscode-version-control-tool) from the VSCode post
+
+After you have committed the files and synchronized the changes with the remote repository, you can then go to [github.com](https://github.com/) and check out your repository or go directly to your repository if you remember the name
+
+The URL should be in the format `https://github.com/MY_GITHUB_USER_NAME/MY_REPOSITORY_NAME`
+
+By default, the content of the **main** branch gets displayed on the repository homepage, and because we committed our changes into the **preview** branch, you need to switch to the **preview** branch on GitHub to see your files (if you don't know how to switch branches on GitHub check out the [switch branches](/web_development/posts/github#switch-branches) chapter in my GitHub post)
+
+If the commit and syncing were successful, you will see that all the new files and directories are now listed in your GitHub repository
+
+> [!TIP]  
+> I recommend you commit often, as it will make it a lot easier to revert your last commit if a situation arises where you need to
+>  
+> Having only the code from a single step in one commit will make it easy to undo just that step
+>  
+> If you also included the code of several other steps in your commit but you want to keep those, then reverting will be difficult
+> 
+> It will also create a nicer commit history where the commit messages are short and related to just a few changes in few files, as opposed to a commit messages containing multiple task descriptions getting applied to lots of different files
+> 
+> Also, committing and synchronizing often reduces the risk that you lose code and hence hours or days of work if something happens to your local machine, and finally, it reduces the risk that you end up having conflicts, which you will likely get if you are not the only one working on the repository and only rarely commit your code
+
+## README.md update
+
+> [!NOTE]  
+> It is always helpful to have a well-documented project for your future self and for others who might contribute to your project. Which is why we will update the README.md and place some documentation in it
+>  
+> However, if you prefer to store such information somewhere else, this is fine too, what really matters is to update the documentation regularly so that it will not become a tedious task at some point and also to ensure it is a helpful resource right from the start of your project
+
+Open the `README.md` in VSCode but double clicking on it
+
+Then I recommend you remove everything that is currently in the README.md (not that the default Next.js content is terrible advice or bad, but we will just structure it differently and add some more information to it)
+
+Next copy/paste the following content into your `README.md` file:
+
+```md title="README.md"
+# MY_PROJECT
+
+## npm commands (package.json scripts)
+
+`npm run dev`: to start the development server (using turbopack)  
+`npm run build`: to make a production build  
+`npm run start`: to start the server on a production server using the build we made with the previous command  
+`npm run lint`: to run a linting script that will scan our code and help us find problems in our code  
+
+```
+
+> [!TIP]  
+> I added 2 spaces after each line, for the 4 commands
+>  
+> This ensures that there is a line break after each of them  
+
+This adds documentation to the README for 4 commands that are available after setting up a project with CNA
+
+Then change **MY_PROJECT** (in the first heading) to whatever you want to name your project
+
+> [!TIP]  
+> Did you know you can preview markdown files in VSCode? If not, check out my short ["VSCode markdown preview" chapter](/web_development/posts/vscode#vscode-markdown-and-mdx-preview) in the VSCode post  
+
+Now save the file (to save the file, you can use the VSCode shortcut `Ctrl+S` (macOS: `⌘S`, Linux: `Ctrl+S`))
+
+Finally, commit the changes and then synchronize them
+
+Congratulations 🎉 you just created a solid foundation for your project using create next app and did your first commit
+
+If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+
+<Pagination
+    previous={{ label: 'Prerequisites', href: '/web_development/tutorials/next-js-static-mdx-blog/prerequisites' }}
+    next={{ label: 'Typescript plugin and typed routes', href: '/web_development/tutorials/next-js-static-mdx-blog/typescript-plugin-and-typed-routes' }}
+/>
+
+</article>

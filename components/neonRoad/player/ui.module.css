@@ -1,0 +1,40 @@
+.playerUI {
+    z-index: 9999;
+    position: fixed;
+    top: 0;
+    bottom: auto;
+    right: var(--main-spacing);
+    display: flex;
+    height: var(--header-navbar-height);
+    align-items: center;
+    flex-direction: row;
+}
+
+@media all and (max-width: 1120px) {
+
+    .playerUI {
+        right: 5px;
+    }
+
+}
+
+.playerButtons {
+    display: flex;
+    flex-direction: row;
+}
+
+.audioWaveForm {
+    display: flex;
+    align-items: center;
+    margin-right: var(--main-spacing);
+}
+
+.audioWaveForm:hover {
+    cursor: var(--cursor-pointer);
+}
+
+@media all and (max-width: 1120px) {
+    .audioWaveForm {
+        display: none;
+    }
+}

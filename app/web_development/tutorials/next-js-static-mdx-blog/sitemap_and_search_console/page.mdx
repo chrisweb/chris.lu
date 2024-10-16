@@ -1,0 +1,266 @@
+---
+title: Sitemap (google search console and bing webmaster tools) - Tutorial
+description: Sitemap (google search console and bing webmaster tools) - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['Sitemap', 'links', 'seo', 'google search console', 'bing webmaster tools']
+published: 2024-08-26T18:18:18.444Z
+modified: 2024-08-26T18:18:18.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/sitemap_and_search_console
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBug, faComments } from '@fortawesome/free-solid-svg-icons'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
+
+# Sitemap
+
+In this chapter, we will ensure all major search engines like **Google Search**, **Bing**, **DuckDuckGo** (through Bing), are indexing our website by providing **Google Search Console** and **Bing Webmaster Tools** with an initial **sitemap** that will contain links to all our pages
+
+We have 3 options when it comes to creating a sitemap for our Next.js project, either search for a free [online sitemap generator](https://www.xml-sitemaps.com/), or create a [sitemap.xml manually](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap) and add it into your `/app` folder or generate a dynamic sitemap using code
+
+## Static sitemap
+
+First, we are going to create a static sitemap, go into the `/app` folder, and create a `sitemap.ts` file:
+
+```ts title="/app/sitemap.ts" showLineNumbers
+import { MetadataRoute } from 'next'
+
+export default function sitemap(): MetadataRoute.Sitemap {
+
+    return [
+        {
+            url: 'https://example.com',
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 1,
+        },
+    ]
+    
+}
+```
+
+Line 1: we import the `MetadataRoute` type from Next.js which we use (line 3) to strictly type our sitemap response
+
+Lines 7 to 10: we create a sitemap entry for our homepage
+
+Now that your sitemap is done, make sure your dev server is running, and then have a look at your sitemap `http://localhost:3000/sitemap.xml` in the browser
+
+This is of course the most basic possible version, at least you may want to add more pages or have a look at the next chapter, where we will create a dynamic sitemap
+
+## Dynamic sitemap
+
+One way of doing a more advanced sitemap, is by listing your MDX files (pages) that are in folder and then loop through the result to create the entries of the sitemap, one for each page you find
+
+For that we first need a glob pattern package, I compared [fast-glob](https://www.npmjs.com/package/fast-glob), [glob](https://www.npmjs.com/package/glob), [globby](https://www.npmjs.com/package/globby) using [npm-compare](https://npm-compare.com/fast-glob,glob,globby), there is also a very interesting section at the end of the [glob repository readme](https://github.com/isaacs/node-glob?tab=readme-ov-file#comparison-to-other-javascript-glob-implementations) with is a comparison of the 3 and it also has some benchmarks
+
+In the end I decided to use glob, as it seems to be well supported, has a decent amount of stars and has all the features I need:
+
+```shell title="terminal"
+npm i glob --save-exact
+```
+
+Another package we need to add is [vfile-matter](https://www.npmjs.com/package/vfile-matter?activeTab=readme) a package we will use to read the frontmatter of our documents:
+
+```shell title="terminal"
+npm i vfile-matter --save-exact
+```
+
+This dynamic sitemap generator will use a third package called [vfile](https://github.com/vfile/vfile) but we do NOT need to install it manually because it already got installed when we added support for MDX documents (vfile is a dependency of @mdx-js/mdx which is a dependency of @mdx-js/loader)
+
+```ts title="/app/sitemap.ts" showLineNumbers
+import { MetadataRoute } from 'next'
+import path from 'node:path'
+import fs from 'node:fs'
+import { glob } from 'glob'
+import { VFile } from 'vfile'
+import { matter } from 'vfile-matter'
+
+declare module 'vfile' {
+    interface DataMap {
+        matter: {
+            modified?: string
+            permalink?: string
+        }
+    }
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+
+    const defaultDate = 'August 12, 2024'
+
+    const siteMap: MetadataRoute.Sitemap = [{
+        url: 'https://example.com',
+        lastModified: new Date(defaultDate),
+        changeFrequency: 'weekly',
+        priority: 1,
+    }]
+
+    const mainPages = await glob('app/**/page.mdx', { maxDepth: 4 })
+
+    mainPages.map((page) => {
+
+        const pagePath = path.join(process.cwd(), page)
+
+        const pageContent = fs.readFileSync(pagePath, 'utf8')
+
+        const vfile = new VFile(pageContent)
+
+        matter(vfile, { strip: true })
+
+        const frontmatter = vfile.data.matter
+
+        const pageUrl = 'https://example.com' + page.replace('app', '').replaceAll('\\', '/').replace('/page.mdx', '')
+
+        siteMap.push({
+            url: frontmatter?.permalink ? frontmatter.permalink : pageUrl,
+            lastModified: frontmatter?.modified ? new Date(frontmatter.modified) : new Date(defaultDate),
+            changeFrequency: 'weekly',
+            priority: 0.9,
+        })
+    })
+
+    return siteMap
+
+}
+```
+
+Lines 2 and 3: we import two modules from nodejs which we will use to create a path and open the pages we want to include in our sitemap
+
+Lines 4 to 6: we import 3 more packages, glob will be used to get a list of pages in a directory, vfile will be used to turn the page content from a string into a vfile and finally vfile-matter will be used to extract the frontmatter from the vfile. The last two packages are part of [unifiedjs](https://github.com/unifiedjs) which is the organization that does all those amazing packages like remark, rehype, mdx and a lot more
+
+Lines 8 to 15: we declare a module for our vfile content to strictly type the frontmatter we will extract as they suggest doing in the [vfile-matter README](https://github.com/vfile/vfile-matter?tab=readme-ov-file#types). This will tell typescript that frontmatter.modified and frontmatter.permalink are **strings** instead of having typescript assume that they are of type **any**.
+
+Line 19: we set a default date for all pages that don't have frontmatter and hence no last updated date
+
+Lines 21 to 26: we create a first entry for our sitemap which is for the homepage of our website/blog
+
+Line 28: we use the glob package to find all our MDX pages, I set the **maxDepth** glob option to 4 meaning it will only fetch pages that 4 levels deep (to only fetch **main** pages and no pages in sub-folders); if you want to fetch all pages then you can remove this option entirely, or if you want to go a little bit deeper then increase the value to what suits your needs
+
+Lines 30 to 50: we loop through all the pages that the glob package found; for each page we use the two node modules (we imported earlier) to create a full path and then read the content of the page file; next we use the vfile package to turn the page content (which is a sting) into a valid vfile; then we use the vfile-matter package to extract the frontmatter from the page and turn it into a frontmatter object; then for pages that have no permalink we create a default page url (if all your pages have frontmatter then you can delete or comment this line out); finally we create a sitemap entry using all the values we have gathered
+
+> [!MORE]  
+> [Vercel "Sitemap" documentation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap)
+
+## Google Search Console
+
+Start by visiting the [Google Search Console website](https://search.google.com/search-console) and then click on **Start now**
+
+Then you need log in or if you don't have a google account yet, you will need to create one, you can do so with any email address, so NOT just with a gmail address, for example an @hotmail.com email address works too
+
+If this is your first domain you will have a field in the middle of the page asking you what domain you want to add, enter your domain name and then click on **Continue**
+
+If you already added a domain in the past, on the top left click on the down arrow of the domains select box and then select **+ Add property**, then enter your domain name and then click on **Continue**
+
+Next, you need to verify that you own the domain (property) by either adding a txt or CNAME record
+
+As we deployed our website using Vercel and added our domain in Vercel for the production website, we need to also use the Vercel DNS tool to add the txt record
+
+First, visit [Vercel.com](https://vercel.com) and then log in
+
+You should now be on the overview page, in the top navigation click on **domains**
+
+Now click on the 3 dots next to your domain name and click on **configure**
+
+We are now going to create a new DNS record, the **Name** (**subdomain**) field we **leave it empty**
+
+Then as **Type** chose **TXT**
+
+For the **value** go back to the search console and copy the google verification string from the verification modal box, then go back to vercel and paste the **google-site-verification=xxxxxxx** into the value field
+
+The **TTL** value we use the default **60 seconds**, and **Priority** we **leave empty**, the **comment** is **optional**, I left it empty but if you want you can add one
+
+Now click on add and you are done on vercel, so back to the Google Search Console interface
+
+Now you can click on the **Verify** button, if it fails just wait one minute and try again, it might take a few minutes before google sees your new DNS entry
+
+Now in the left navigation click on **Sitemaps**, then enter your sitemap URL (https://example.com/sitemap.xml) and then click on **Submit**
+
+The [Google Search Console documentation](https://support.google.com/webmasters/answer/34592?hl=en) says that after the verification, data should start appearing after a few days
+
+> [!MORE]  
+> [Google Search Console](https://search.google.com/search-console)  
+
+## Bing Webmaster Tools
+
+Start by visiting the [Bing Webmaster Tools website](https://www.bing.com/webmasters/about) and then click on **Get started** (or **Sign In**)
+
+Then you need log in or if you don't have a Microsoft account yet, you will need to create one
+
+After you have signed in, you will need to let the Webmaster Tools access your Microsoft account data, click on **Accept**
+
+If this is your first domain you will get asked if you want to import your data from the Google Search Console, this is the easiest way to get started, as Bing will reuse your Google Search Console website verification, but if you don't want to link both services you can also pick the **Add your site manually** option
+
+If you want to add your site manually, either put a file in your public folder and then deploy your project before telling Bing to start the verification or you can add CNAME to the DNS of your domain
+
+As we deployed our website using Vercel, and added our domain in Vercel for the production website, we need to also use the Vercel DNS tool to add the CNAME record
+
+First, visit [Vercel.com](https://vercel.com) and then log in
+
+You should now be on the overview page, in the top navigation click on **domains**
+
+Next, click on the 3 dots next to your domain name and click on **configure**
+
+We are now going to create a new DNS record, the **subdomain** field add the Bing hash (the long series of numbers and letters)
+
+Then as **Type** choose **CNAME**
+
+For the **value** insert the **verify.bing.com** Bing subdomain into the value field
+
+The TTL value we use the default 60 seconds and Priority we leave empty, the comment is optional, I left it empty but if you want you can add one
+
+Now click on add and you are done on vercel, so back to the Bing Webmaster Tools page
+
+On the top right, click on the **Submit sitemap** button, then enter your sitemap URL (https://example.com/sitemap.xml) and then click on **Submit**
+
+When this is done, next time you want to re-submit the sitemap, just click on the 3 dots on the right or the sitemap row and select **Re-submit**
+
+If you want to learn more about the Bing Webmaster Tools then have a look at their [documentation](https://www.bing.com/webmasters/help/home-05a5a164)
+
+> [!MORE]  
+> [Bing Webmaster Tools](https://www.bing.com/webmasters/about)  
+
+## Fin
+
+Congratulations 🎉 you made it through all of the pages of this tutorial.
+
+If you have feedback, suggestions or a question, then please use the <FontAwesomeIcon icon={faComments} size="1x" color='rgb(255, 0, 170)' /> [discussion](https://github.com/chrisweb/chris.lu/discussions) page and if you found a bug please report it using the <FontAwesomeIcon icon={faBug} size="1x" color='rgb(255, 0, 170)' /> [issues](https://github.com/chrisweb/chris.lu/issues).
+
+<Pagination
+    previous={{ label: 'Production release (custom domain)', href: '/web_development/tutorials/next-js-static-mdx-blog/production_release' }}
+/>
+
+</article>

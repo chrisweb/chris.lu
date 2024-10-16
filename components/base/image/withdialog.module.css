@@ -1,0 +1,64 @@
+.buttonCore {
+    transition: box-shadow .5s ease;
+}
+
+.buttonCore:hover {
+    box-shadow: 0px 0px 20px 10px rgba(var(--primary-light-value) / 0.5);
+}
+
+/* experimental: p3 colors */
+@media (color-gamut: p3) {
+    .buttonCore:hover {
+        box-shadow: 0px 0px 20px 10px color(display-p3 var(--primary-light-value) / 0.5);
+    }
+}
+
+.buttonReset {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0;
+}
+
+.buttonCore {
+    overflow: hidden;
+    cursor: var(--cursor-pointer);
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+
+.buttonCore svg {
+    color: var(--secondary-light-color);
+}
+
+.imageContainer {
+    width: 90vw;
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+    cursor: var(--cursor-pointer);
+}
+
+.iconPositioning {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 20;
+}
+
+.icon {
+    backdrop-filter: saturate(200%) blur(5px);
+    -webkit-backdrop-filter: saturate(200%) blur(5px);
+    background-color: rgba(var(--primary-light-value) / 0.01);
+    padding: calc(var(--main-spacing) / 4);
+}
+
+/* experimental: p3 colors */
+@media (color-gamut: p3) {
+    .icon {
+        background-color: color(display-p3 var(--primary-light-value) / 0.01);
+    }
+}

@@ -1,0 +1,69 @@
+import BaseLink from '@/components/base/Link'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpotify } from '@fortawesome/free-brands-svg-icons'
+import styles from './page.module.css'
+import Link from 'next/link'
+import ImageDispatch from '@/components/base/image/Dispatch'
+import AsideContent from '@/components/aside/Content'
+import { sharedMetaData } from '@/shared/metadata'
+
+export const metadata = {
+    title: 'Music',
+    alternates: {
+        canonical: 'https://chris.lu/music',
+    },
+    openGraph: {
+        ...sharedMetaData,
+        url: 'https://chris.lu/music',
+    },
+}
+
+<aside>
+    <div className="asideCore">
+        <ul className="linksList">
+            <li>
+                <FontAwesomeIcon icon={faSpotify} color='white' size="2x" className="social" /> <BaseLink href="https://open.spotify.com/user/chriswwweb/playlists">My Spotify Playlists</BaseLink>
+            </li>
+        </ul>
+        <AsideContent />
+    </div>
+</aside>
+<section id="music" className="middle">
+    # Music
+    ![a band of alian musicians and a human singer](../../public/assets/images/app/music/banner.png '{ banner }')
+    ## Spotify Playlists
+    <div className="grid">
+        <Link href="https://open.spotify.com/playlist/0ju1z7ELlpnSeabW2kEuQT" className={styles.preview}>
+            ![indie summer playlist cover showing a beach with palms and the sea](../../public/assets/images/app/music/indie_summer.png '{ card }')
+            <span className={styles.title}>Indie summer ☀️</span>
+        </Link>
+        <Link href="https://open.spotify.com/playlist/341fyZWfso1OzWrQjfnHyV" className={styles.preview}>
+            ![indie rock playlist cover showing an oldschool rock guitar](../../public/assets/images/app/music/indie_rock.png '{ card }')
+            <span className={styles.title}>Indie rock 🎸</span>
+        </Link>
+        <Link href="https://open.spotify.com/playlist/67UDicGisTxY0heokY0Xuz" className={styles.preview}>
+            ![happy hipster playlist cover showing a smiling kitten](../../public/assets/images/app/music/happy_hipster.jpg '{ card }')
+            <span className={styles.title}>happy hipster 😄</span>
+        </Link>
+        <Link href="https://open.spotify.com/playlist/0s3e11aWxOCbXBfCoI066J" className={styles.preview}>
+            ![indie love sad edition playlist cover with the words: I love you](../../public/assets/images/app/music/indie_love_sad.jpg '{ card }')
+            <span className={styles.title}>Indie ❤️ love (sad edition)</span>
+        </Link>
+        <Link href="https://open.spotify.com/playlist/6QMS1aXyGbebKuyGaixz34" className={styles.preview}>
+            ![monkey playlist cover showing a monkey playing electric guitar](../../public/assets/images/app/music/monkey_music.jpg '{ card }')
+            <span className={styles.title}>If you&apos;ve got the monkey 🐵 I got the music 🎶</span>
+        </Link>
+        <Link href="https://open.spotify.com/playlist/1TRFxCiaBoqrhJsIoSREfx" className={styles.preview}>
+            ![indie pop playlist cover showing a mix of colorful lights](../../public/assets/images/app/music/indie_pop.jpg '{ card }')
+            <span className={styles.title}>Indie pop 🎉</span>
+        </Link>
+        <Link href="https://open.spotify.com/playlist/68FWf8WueCZwFWmZstyjkX" className={styles.preview}>
+            ![indie chill sunset playlist showing a sun gowing down in front of a red and purple sky](../../public/assets/images/app/music/indie_chill_sunset.jpg '{ card }')
+            <span className={styles.title}>Indie chill sunset 🌇</span>
+        </Link>
+        <Link href="https://open.spotify.com/playlist/6h3ikUhQu8CxFsuTTJC8TR" className={styles.preview}>
+            ![easy playlist cover showing an neo sign on a brick world that reads: people](../../public/assets/images/app/music/easy_indie_hipster_mix.jpg '{ card }')
+            <span className={styles.title}>Easy 🎵 the indie hipster mix</span>
+        </Link>
+    </div>
+</section>

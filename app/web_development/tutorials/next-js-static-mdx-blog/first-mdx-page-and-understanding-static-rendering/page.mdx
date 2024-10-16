@@ -1,0 +1,141 @@
+---
+title: First MDX page and understanding of static rendering - Tutorial
+description: First MDX page and understanding of static rendering - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['static', 'rendering', 'SSG', 'first', 'MDX', 'page', 'next/mdx']
+published: 2024-08-19T15:42:42.444Z
+modified: 2024-08-19T15:42:42.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/first-mdx-page-and-understanding-static-rendering
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
+
+# First MDX page and understanding static rendering
+
+We have reached yet another milestone, now that we did [set up MDX support for Next.js](/web_development/tutorials/next-js-static-mdx-blog/nextjs-mdx-setup), it is now time to create our very first MDX page, and after that, we will see how to know if pages got statically generated (or not)
+
+## Our first MDX page
+
+In the `app` folder, create a new `(tutorial_examples)` folder (note that the name is in parenthesis (`()`), this is important, more about this in the next chapter) and then in it another `first_mdx_page` folder (this time no parenthesis)
+
+Then, inside of the `first_mdx_page` folder, add a `page.mdx` (note that we set **extension** to **mdx** and NOT tsx), and then paste the following content into it:
+
+```md title="/app/(tutorial_examples)/first_mdx_page/page.mdx"
+# Hello 👋 with MDX!
+
+## headline 2nd level
+
+*italic*
+
+**bold**
+
+***bold and italic***
+
+> a quote
+
+[link to Next.js](https://nextjs.org)
+
+* foo
+* bar
+* baz
+
+![This is an octocat image](https://myoctocat.com/assets/images/base-octocat.svg 'I\'m the title of the octocat image')
+
+```
+
+Make sure your dev server is running, if it is not, start it using `npm run dev`
+
+Then visit your newly created MDX page in the browser at `http://localhost:3000/first_mdx_page`
+
+Congratulations 🎉 you just added MDX support to your Next.js project and learned how to create MDX pages
+
+### Next.js route groups
+
+We just created our first route group by adding parenthesis (`()`) around the `tutorial_examples` folder name
+
+The page in `/app/(tutorial_examples)/first_mdx_page/page.mdx` will produce the following URL `http://localhost:3000/first_mdx_page`, as you can see **tutorial_examples** did NOT become a segment of the URL, that is because folders which use parenthesis are called **route groups** and their purpose is to allow us to better organize our files without impacting the structure of the URL
+
+By putting files into different folders the amount of files per folder can become more managable without impacting the resulting URL
+
+> [!MORE]  
+> [Next.js "route groups" documentation](https://nextjs.org/docs/app/building-your-application/routing/route-groups)  
+
+## Static rendering
+
+Putting our content into the first MDX page instead of fetching it from a database means we just used [Static Rendering](https://nextjs.org/docs/app/building-your-application/rendering/server-components#static-rendering-default) for our first page with MDX support
+
+To check if a page is fully **static**, you can do a (local) build using the `npm run build` command:
+
+```shell
+npm run build
+```
+
+After the build is done, look at the output in your terminal:
+
+```shell
+Route (app)                              Size     First Load JS
+┌ ○ /                                    307 B           187 kB
+├ ○ /_not-found                          1.02 kB         188 kB
+└ ○ /first_mdx_page                      307 B           187 kB
+
+○  (Static)  prerendered as static content
+```
+
+The empty circle (`○`) in front of our `/first_mdx_page` indicates that Next.js will statically generate routes (pages) at build time instead of on-demand at request time
+
+Because Next.js will automatically choose the [server rendering strategy](https://nextjs.org/docs/app/building-your-application/rendering/server-components#server-rendering-strategies) for each route based on the features you use, your page at some point might not be **static** anymore, for example when you use a **dynamic function** like [searchParams](https://nextjs.org/docs/app/api-reference/file-conventions/page#searchparams-optional) or when you fetch data and do NOT use [generateStaticParams](https://nextjs.org/docs/app/api-reference/functions/generate-static-params) then your page becomes **dynamic**, which is why it is recommended to launch the build locally from time to time and check if the pages you want to be static still are, if they are not static anymore you might want to find the cause and for example use **generateStaticParams** to make it fully static again.
+
+If all of your pages are static, you can do a [static export](https://nextjs.org/docs/app/building-your-application/deploying/static-exports), meaning `npm run build` will produce an `out` folder and put all the HTML/CSS/JS static assets into it, then you can take that folder and for example deploy your app on [GitHub pages](https://pages.github.com/) or use a CDN to deliver your static content.
+
+Another feature you might be interested in is called [assetPrefix](https://nextjs.org/docs/app/api-reference/next-config-js/assetPrefix), the **assetPrefix** is a `next.config.mjs` configuration option that is useful when the images are NOT stored on the same domain (sub-domain) as the content itself, for example if your static project is at `www.example.com` but the images are at `cdn.example.com`.
+
+Congratulations 🎉 you now know how to check if pages are static or dynamic, which is essential because the more static content you have, the less work the server will need to do during runtime, and this will result in pages that load blazingly fast
+
+If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+
+> [!MORE]  
+> [Next.js "Server Rendering Strategies" documentation](https://nextjs.org/docs/app/building-your-application/rendering/server-components#server-rendering-strategies)  
+> [Vercel.com "How to choose the best rendering strategy for your app" blog post](https://vercel.com/blog/how-to-choose-the-best-rendering-strategy-for-your-app)  
+> [Next.js "generateStaticParams" documentation](https://nextjs.org/docs/app/api-reference/functions/generate-static-params)  
+> [Next.js "Static Exports" documentation](https://nextjs.org/docs/app/building-your-application/deploying/static-exports)  
+
+<Pagination
+    previous={{ label: 'Next.js MDX support', href: '/web_development/tutorials/next-js-static-mdx-blog/nextjs-mdx-setup' }}
+    next={{ label: 'React in MDX and MDX in react', href: '/web_development/tutorials/next-js-static-mdx-blog/react-in-mdx-and-mdx-in-react' }}
+/>
+
+</article>

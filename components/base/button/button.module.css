@@ -1,0 +1,77 @@
+.reset {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.cursor {
+    cursor: var(--cursor-pointer);
+}
+
+.base {
+    width: 100%;
+    max-width: 240px;
+    margin-bottom: var(--main-spacing);
+}
+
+.border {
+    height: 48px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1px;
+    --cornerSideLength: 12px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
+            0 100%);
+    background: linear-gradient(90deg, var(--quaternary-light-color) 0%, var(--primary-light-color) 95%);
+    border: 0;
+    color: var(--primary-light-color);
+    font-weight: 600;
+}
+
+/* experimental: p3 colors */
+@media (color-gamut: p3) {
+    .border {
+        background: linear-gradient(90deg in srgb, var(--quaternary-light-color) 0%, var(--primary-light-color) 95%);
+    }
+}
+
+@media all and (max-width: 1120px) {
+
+    .base {
+        height: 44px;
+    }
+
+}
+
+.border:hover {
+    color: var(--secondary-light-color);
+    text-shadow: 0px 0px 10px var(--secondary-light-color), 0px 0px 20px var(--secondary-light-color);
+}
+
+.core {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    background-color: var(--main-background-color);
+    --cornerSideLength: 12px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% calc(100% - var(--cornerSideLength)),
+            calc(100% - var(--cornerSideLength)) 100%,
+            0 100%);
+}

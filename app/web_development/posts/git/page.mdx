@@ -1,0 +1,353 @@
+---
+title: git
+keywords: ['git', 'commit', 'repository', 'branch']
+published: 2024-08-03T11:22:33.444Z
+modified: 2024-09-04T14:22:33.444Z
+permalink: https://chris.lu/web_development/posts/git
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+
+export const metadata = {
+    title: frontmatter.title,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/posts_git/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+# git
+
+![two super heros pointing at each other, it represents two versions of a file getting compared in a git diff](../../../../public/assets/images/app/web_development/posts/git/banner.png 'when two files meet in git diff { banner }')
+
+**git** is an open-source version control system used for tracking changes in source code during software development. Git gives every developer a local copy of a project. After a developer has made his changes, they create a new commit and then push it to a central repository. Other developers can then pull that commit from the central repository into their local copy. Git makes branching (creating a separate line of development) and merging (combining changes from different branches) easy.
+
+## Installation
+
+### on Windows
+
+Go to [git-scm.com/download/win](https://git-scm.com/download/win) and click on **Click here to download** which will automatically download the latest (64bit) windows version
+
+Double-click on the **exe** file when the download has finished to start the installation.
+
+You will get asked a bunch of stuff. I usually keep the default settings but feel free to change the default values to fit your needs.
+
+### on Linux
+
+If you are on a distribution (like Fedora or CentOS) that comes with **dnf**, then use this command:
+
+```shell
+sudo dnf install git-all
+```
+
+For distributions (like Debian or Ubuntu) that come with **apt**, then use this command:
+
+```shell
+sudo apt install git-all
+```
+
+### on macOS
+
+If you have the Xcode command line tools installed on your machine, then you already have git.
+
+You can check if it is already installed using this command:
+
+```shell
+git --version
+```
+
+If it is not yet installed, you can visit [git-scm.com/download/mac](https://git-scm.com/download/mac) to see all the options. My favorite way of installing git is via brew using the following command:
+
+```shell
+brew install git
+```
+
+## check what version is installed
+
+Use the following command in your VSCode terminal (or favorite command line tool):
+
+```shell
+git --version
+```
+
+## initialize git
+
+To initialize a git project locally, you first need to use the following command:
+
+```shell
+git init
+```
+
+I will use GitHub as the origin, but you could use any other Git cloud service, like GitLab.
+
+Next, go to GitHub and create a new repository by clicking on the "+" icon on the left of your user avatar (in the top right section of the page), then select "new repository".
+
+Then use the following command to add the origin to your local git setup:
+
+```shell
+git remote add origin https://github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
+```
+
+If you are using the git credential manager and have multiple users, then you may want to set the default. To do so, add your DEFAULT_GIT_USER_NAME to the URL like this:
+
+```shell
+git remote add origin https://DEFAULT_GIT_USER_NAME@github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
+```
+
+> [!MORE]  
+> [git documentation](https://git-scm.com/doc)  
+> [GitHub "Adding locally hosted code to GitHub" documentation](https://docs.github.com/github/importing-your-projects-to-github/adding-an-existing-project-to-github-using-the-command-line)  
+
+## Choosing a Git Branching Strategy
+
+There are a lot of different approaches when it comes to managing code using branches, some popular Git branching strategies are for example [Git Flow](https://nvie.com/posts/a-successful-git-branching-model/), [GitHub Flow](https://docs.github.com/en/get-started/using-github/github-flow), [GitLab Flow](https://about.gitlab.com/topics/version-control/what-is-gitlab-flow/), [Trunk-based development](https://www.atlassian.com/continuous-delivery/continuous-integration/trunk-based-development) and many more.
+
+There is no right or wrong when chosing a Git branching strategy, the goal is NOT to use the most popular Git flow, the goal is to find and use the one that best suits your workflow. I recommend checking out the above links and familiarizing yourself with the different workflows, then try the one out that you (your team) think is best suited, and if it does not fit perfectly you can still adjust the rules and make your own Git flow 😉.
+
+Also don't overthink it, you can still switch to another git flow later. Why not just start with a rather simple Git flow with only two branches. The **main** branch a second branch that you could name **preview** (some prefer to call it **staging** or **testing**). When you develop locally you do in the preview branch and then commit your code updates into the remote preview (on GitHub, Gitlab). If you have a CI/CD pipeline in place should trigger an automatic deployment. After testing the preview deployment you are ready to make a pull request (PR) to merge the code into the main branch, the main branch will then get deployed in production.
+
+If you work with others on your blog project, to avoid having to deal with merge conflicts regularly, you might want to create a branch per feature (hence called feature branches) and use that branch for development, before merging your code into preview (and later into main)
+
+> [!MORE]  
+> [Git Flow](https://nvie.com/posts/a-successful-git-branching-model/)  
+> [GitHub Flow](https://docs.github.com/en/get-started/using-github/github-flow)  
+> [GitLab Flow](https://about.gitlab.com/topics/version-control/what-is-gitlab-flow/)  
+> [Trunk-based development](https://www.atlassian.com/continuous-delivery/continuous-integration/trunk-based-development)  
+
+## Cloning a repository
+
+To clone a repository first get the HTTPS web URL of the repository, and then use the following command:
+
+```shell
+git clone https://github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
+```
+
+If you are using the git credential manager and have multiple users, then you may want to set the default. To do so, add your DEFAULT_GIT_USER_NAME into the URL like this when cloning:
+
+```shell
+git clone https://DEFAULT_GIT_USER_NAME@github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
+```
+
+If you have already cloned the repository and want to add or change the default user, then use this command:
+
+```shell
+git remote set-url origin https://DEFAULT_GIT_USER_NAME@github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
+```
+
+> [!MORE]  
+> [git-credential-manager "Multiple users" documentation](https://github.com/git-ecosystem/git-credential-manager/blob/main/docs/multiple-users.md)  
+> [GitHub "git-credential-manager" repository](https://github.com/git-ecosystem/git-credential-manager)  
+> [git-credential-manager documentation](https://github.com/git-ecosystem/git-credential-manager/blob/release/docs/README.md)  
+
+## git status
+
+To list the local files that differ from the ones in the remote repository and list files that are not tracked, use the following command:
+
+```shell
+git status
+```
+
+> [!MORE]  
+> [git "status" documentation](https://git-scm.com/docs/git-status)  
+
+## switch to another branch
+
+To switch to another branch, use the following command:
+
+```shell
+git checkout BRANCH_NAME
+```
+
+Or you can use the new **git switch**, like so:
+
+```shell
+git switch BRANCH_NAME
+```
+
+> [!MORE]  
+> [git "checkout" documentation](https://git-scm.com/docs/git-checkout)  
+> [git "switch" documentation](https://git-scm.com/docs/git-switch)  
+> [git "Git Branching - Branches in a Nutshell" documentation](https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell)  
+
+### shortcut to return to the previous branch
+
+There is a shortcut to switch back to the previous branch:
+
+```shell
+git checkout -
+```
+
+Or using the new switch:
+
+```shell
+git switch -
+```
+
+### Stash your changes before switching
+
+If you want to switch to another branch but have uncommitted changes, then either commit them or stash them away using this command:
+
+```shell
+git stash
+```
+
+Now, if you want to see the changes that are currently stashed, use this command:
+
+```shell
+git stash show
+```
+
+Finally, to restore the files, use the following:
+
+```shell
+git stash apply
+```
+
+## Create a new branch
+
+To create a new branch (and stay on the current branch), use the following command:
+
+```shell
+git branch BRANCH_NAME
+```
+
+To create a new branch and also switch to it, use the **checkout** command with the `-b` option, like so:
+
+```shell
+git checkout -b BRANCH_NAME
+```
+
+Or use the new git **switch** with the `-c` option, like so:
+
+```shell
+git switch -c BRANCH_NAME
+```
+
+> [!MORE]  
+> [git "branch" documentation](https://git-scm.com/docs/git-branch)  
+> [git "checkout" documentation](https://git-scm.com/docs/git-checkout)  
+> [git "switch" documentation](https://git-scm.com/docs/git-switch)  
+
+## renaming a branch
+
+### rename a local branch
+
+Renaming a local branch is easy if you haven't pushed the branch yet. Just use the following command in your terminal (command line tool):
+
+```shell
+git branch --move OLD_BRANCH_NAME NEW_BRANCH_NAME
+```
+
+### Renaming a remote branch
+
+To rename a remote branch (a remote branch that has already been pushed), first use the command from the previous chapter to rename it locally.
+
+Then use the following command in your terminal (command line tool) to push it:
+
+```shell
+git push -u origin NEW_BRANCH_NAME
+```
+
+The `-u` (alias for `--set-upstream-to`) option tells the local branch to track changes from the remote branch.
+
+Now, the branch with the new name is also available remotely, but git has copied the branch to rename the old one, meaning the old branch is still present remotely, you work alone on the project skip the next step but if you work with others don't delete the old branch just yet.
+
+At this point, if you work with others on the project now is a good time to let everyone on the team know that you renamed the branch, as they might still have open commits. Tell them to execute the following commands so that they, too, switch to the new branch (those are the commands GitHub recommends after you rename a remote branch on GitHub):
+
+```shell
+git checkout OLD_BRANCH_NAME
+git branch -m NEW_BRANCH_NAME
+git fetch origin
+git branch -u origin/NEW_BRANCH_NAME
+```
+
+First, they use **checkout** to switch to the old branch, then they rename their own local branch too, using **branch -m** command, then they **fetch the origin** to fetch the ref of all branches in origin, then they need to use the **branch -u** (which is an alias for set-upstream we used earlier) to tell the local branch to track the origin/NEW_BRANCH_NAME.
+
+If it is the default branch that got renamed, also update origin/HEAD:
+
+```shell
+git remote set-head origin -a
+```
+
+After the other members of your team have updated their local environment, too, then you can go ahead and delete the old branch using this command:
+
+```shell
+git push origin --delete OLD_BRANCH_NAME
+```
+
+## Update the list of remote branches (locally)
+
+To update/refresh the list of remote branches locally, use this command:
+
+```shell
+git remote update origin --prune
+```
+
+## Get an overview of all local and remote branches
+
+To get an overview of all branches that exist remotely and locally, what local branches track remote branches, ... use this command:
+
+```shell
+git remote show origin
+```
+
+## Delete a local branch
+
+```shell
+git branch --delete BRANCH_NAME
+```
+
+## Windows: git ignorecase configuration option
+
+If you rename a file on Windows and only change the case, for example, you change a file with all small letters to camelCase, then that change will NOT trigger a commit
+
+Usually, something like this will lead to the problem: you are developing on Windows, where filenames are case agnostic, so importing a file on Windows and using all small letters (filename.ext) for a filename uses camelCase (fileName.ext) will NOT cause an error in your local development environment. Everything will be fine until you deploy your code on your staging (testing) environment, where you will probably use a Linux-based operating system. On staging, your import will trigger a **file not found** error. So now you want to fix your error and update the filename to use only small letters, but after editing the fileName, you realize there is no commit waiting to be done 
+
+To tell git to also commit changes where only the case of the filename changed, you have **2** options:
+
+**Option 1:** Using the config command
+
+In your terminal, go to the root of your repository, then use the following command to change the ignorecase configuration for your **current repository**:
+
+```shell 
+git config core.ignorecase true
+```
+
+If you want to make that change for all repositories (globally), then add the **--global** flag to the command:
+
+```shell 
+git config --global core.ignorecase true
+```
+
+**Option 2:** Edit the configuration file (manually)
+
+Edit the git config in your repository, change **ignorecase** from true to false, and then save the change
+
+```shell title=".git/config" 
+[core]
+	ignorecase = false
+```
+
+> [!MORE]  
+> [git "ignoreCase" documentation](https://www.git-scm.com/docs/git-config/2.14.6#Documentation/git-config.txt-coreignoreCase)
+
+</article>

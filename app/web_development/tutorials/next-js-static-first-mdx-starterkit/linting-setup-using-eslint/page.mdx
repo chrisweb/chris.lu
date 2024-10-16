@@ -1,0 +1,461 @@
+---
+title: Linting setup using ESLint - Tutorial
+description: Linting setup using ESLint - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['Linting', 'ESLint', 'flat config', 'nextjs', 'mdx', 'plugin', 'parser']
+published: 2024-08-19T18:45:45.444Z
+modified: 2024-08-19T18:45:45.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/linting-setup-using-eslint
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
+
+# Linting setup using ESLint
+
+Adding linting to a project is something I recommend doing as early as possible, similar to adding CSP to a project
+
+Those are things that, if you postpone them, then you will have a lot more work later, which is why it is best to add linting as early as possible and then fix linting-related problems one by one as soon as they come up
+
+## The state of ESLint v9 and ESLint flat config files in Next.js 15
+
+> [!TIP]  
+> If you already have a custom ESLint setup in your project and want to migrate your ESLint configuration file from ESLint classic configuration files to Flat Config files, then have a look at [ESLint configuration migrator](https://eslint.org/docs/latest/use/configure/migration-guide#migrate-your-config-file) as it will automize a big chunk if not all of the migration for you (in some cases with very complex configurations the plugin might fail, in my personal tests it always worked well)  
+>  
+> Another tip is for cases where you need to use a plugin that has not finished the migration to ESLint v9. You might see errors like this:
+> 
+> ```shell
+> TypeError: context.foo is not a function
+> ```
+> 
+> In that case have a look at the [ESLint Compatibility Utilities](https://eslint.org/blog/2024/05/eslint-compatibility-utilities/)
+
+Next.js 14 was still using ESLint v8, meaning it was using the [ESLint "Classic" configuration files](https://eslint.org/docs/latest/use/configure/configuration-files-deprecated), which was the default for all ESLint versions below 9
+
+In ESLint 9, those configuration files are now **deprecated*,* and it is recommended to use the new [flat config files](https://eslint.org/docs/latest/use/configure/configuration-files), which are the new default since the release of ESLint 9
+
+ESLint mentions in their documentation:
+
+> We are transitioning to a new config system in ESLint v9.0.0. The config system shared on this page is currently the default but will be deprecated in v9.0.0. You can opt-in to the new config system by following the instructions in the documentation.
+
+Also, support for [**eslintrc** (classic) configuration files will be removed in version 10.0.0](https://eslint.org/blog/2023/10/flat-config-rollout-plans/#eslintrc-removed-in-eslint-v10.0.0)
+
+In a recent [comment (14th Oct. 2024)](https://github.com/vercel/next.js/issues/64409#issuecomment-2411304733) a member of the Next.js team confirmed that Next.js would use ESLint v9 flat configs:
+
+> we're on it, gonna land very very soon, thank you all for your patience! And yes, it will be part of Next 15!
+>  
+> The reason why it took us so long to get to is that some of the upstream dependencies were also not up to date, so we were waiting on them.
+
+I have tracked some of those dependencies myself, here is a small recap if you are interesting in such things:
+
+* The plugin maintainers have started to add to support for ESLint v9 to their projects but not all have released a stable version with ESLint v9 support (as of now oct. 2024).
+* For example the plugin [eslint-plugin-react-hooks](https://github.com/facebook/react/releases/tag/eslint-plugin-react-hooks%405.0.0) introduced support for ESLint v9 on Oct. 11 2024 (in eslint-plugin-react-hooks v5.0.0).
+* Another plugin that you see in a lot of projects is typescript-eslint, in May 13 2024 they announced in their [typescript-eslint Issue #8211](https://github.com/typescript-eslint/typescript-eslint/issues/8211) that the first alpha of [typescript-eslint v8 (with ESLint v9 support)](https://github.com/typescript-eslint/typescript-eslint/pull/9002) got merged.
+* A great resource to check the state of many resources connected or depending on ESLint v9 is the [flat config rollout](https://github.com/eslint/eslint/issues/18093) Issue on GitHub, which shows you which tools completed the transition to ESLint 9 flat config and which are still working on it.
+
+> [!MORE]  
+> [ESLint "configuration migrator" issue](https://eslint.org/docs/latest/use/configure/migration-guide#migrate-your-config-file)  
+> [ESLint "migration guide" documentation](https://eslint.org/docs/latest/use/configure/migration-guide)  
+> [ESLint "flat config rollout" issue](https://github.com/eslint/eslint/issues/18093)  
+> [ESLint "flag config part 1" blog post](https://eslint.org/blog/2022/08/new-config-system-part-1/)  
+> [ESLint "flag config part 2" blog post](https://eslint.org/blog/2022/08/new-config-system-part-2/)  
+> [ESLint "flag config part 3" blog post](https://eslint.org/blog/2022/08/new-config-system-part-3/)  
+> [ESLint "flat config files" RFC](https://github.com/eslint/rfcs/tree/main/designs/2019-config-simplification)  
+
+## Answering some questions regarding the linting setup
+
+> [!NOTE]  
+> The next 3 chapters contain a lot of theory:
+>  
+> * The 1st chapter explains what **create-next-app** did in regards to linting  
+> * The 2nd chapter explains what packages related to linting Next.js has  
+> * The 3rd explains why we do want to modify the current ESLint setup
+>  
+> So if you prefer to get straight to the solution (code) then skip ahead to the ["Installing the MDX ESLint plugin and parser" chapter](#installing-the-mdx-eslint-plugin-and-parser) if you have the time and are interested in understanding the *"Why"** then I recommend reading on
+
+### But didn't Next.js already set up linting?
+
+Yes, Next.js has built-in linting support, this chapter is a recap of what Next.js has done so far
+
+Earlier in this tutorial, we used **create-next-app**, which has installed [ESLint](https://github.com/eslint/eslint) as well as the **eslint-config-next** package for us (both packages got added to the devDependencies in the `package.json`)
+
+**create-next-app** has also added a `.eslintrc.json` file in the root of the project, in that file, Next.js has added a default configuration that works best for most projects, Next.js has added the `.eslintrc.json` file so that the linting setup that gets used by the lint command can also be used by your (VSCode) IDE itself
+
+If [install ESLint for Next.js manually](https://nextjs.org/docs/app/building-your-application/configuring/eslint) (without creating lint configuration file manually and do NOT use create next app) but add this lint command `"lint": "next lint"` to your package.json scripts and then execute it for the first time, then Next.js will detect that there is no `.eslintrc.json` and it will ask you if you want to use the **Base** mode or the **Strict** mode, because we used **create-next-app**, it did not let us chose if we prefer the **Base** mode or the **Strict** mode, that's because when using **create-next-app** it chooses the strict mode by default, which is why in your `.eslintrc.json` there is an extends of **next/core-web-vitals** (which is the strict mode) and not just an extends of **next** (which is the base mode)
+
+**next/core-web-vitals** is a set of extra rules that will check your code and inform you about potential optimizations you can do that are related to core web vitals metrics, like rules to improve page loading speed, but **next/core-web-vitals** will also extend the base **next** rules
+
+Because **create-next-app** has added the `"lint": "next lint"{:json}` to your package.json `scripts`, you can use the command `npm run lint`, which will execute `next lint`. `next lint` is the Next.js CLI command for linting
+
+> [!MORE]  
+> [web.dev "Core Web Vitals" page](https://web.dev/articles/vitals)  
+
+### Why does Next.js have two packages related to ESLINT?
+
+Next.js has **2 packages** that are related to ESLint, one is called eslint-**config**-next (ESLint Config), and the other one is called eslint-**plugin**-next (ESLint Plugin)
+
+* [eslint-config-next](https://www.npmjs.com/package/eslint-config-next)
+* [eslint-plugin-next](https://www.npmjs.com/package/@next/eslint-plugin-next)
+
+Package 1: **eslint-config-next** (ESLint Config) intends to make it easier to get started with ESLint by installing and configuring several plugins for us, some of these plugins are:
+
+* [eslint-plugin-react](https://www.npmjs.com/package/eslint-plugin-react)
+* [eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks)
+* [eslint-plugin-next](https://www.npmjs.com/package/@next/eslint-plugin-next)
+* and some more, if you want the full list of plugins that eslint-config-next installs, check out the [eslint-config-next package.json dependencies](https://github.com/vercel/next.js/blob/b2625477c002343e7fe083204c45af1fdd7cd407/packages/eslint-config-next/package.json)
+
+Package 2: **eslint-plugin-next** is the actual ESLint plugin for Nextjs (called **@next/eslint-plugin-next** on npmjs), it aims to catch common problems in a Next.js application
+
+For a complete list of rules that the Next.js ESLint plugin adds check out the [Nextjs "ESLint rules" documentation](https://nextjs.org/docs/app/building-your-application/configuring/eslint#eslint-plugin) or have a look at the [eslint-plugin-next rules directory on GitHub](https://github.com/vercel/next.js/tree/b2625477c002343e7fe083204c45af1fdd7cd407/packages/eslint-plugin-next/src/rules)
+
+> [!MORE]  
+> [Next.js "ESLint" documentation](https://nextjs.org/docs/app/building-your-application/configuring/eslint)  
+
+### Why are we changing the Next.js linting setup?
+
+The Next.js linting setup lints code in `.ts` and `.tsx` files using the typescript-eslint parser, however, it does not lint markdown syntax and code in MDX files for which you need to have an MDX parser installed
+
+This is why we are going to add 3 packages to do the linting of markdown content in MDX pages:
+
+* the first one is a **remark plugin** called [remark lint](https://github.com/remarkjs/remark-lint) that will lint the markdown syntax we use to format our content in MDX pages
+* the second one is an **ESLint plugin** called [eslint-plugin-mdx](https://github.com/mdx-js/eslint-mdx/tree/master/packages/eslint-plugin-mdx) which contains the configuration and rules for linting MDX
+* the third one is a **parser** called [eslint-mdx](https://www.npmjs.com/package/eslint-mdx) which will parse the content of MDX files
+
+**The recommended way** to add [eslint-plugin-mdx as described in their README](https://github.com/mdx-js/eslint-mdx#notice) is to use the **overrides** feature of ESLint (if you want to know more about the parsing issues you might have if NOT using **overrides** to check out the [eslint-plugin-mdx GitHub issue #251](https://github.com/mdx-js/eslint-mdx/issues/251#issuecomment-736139224))
+
+One problem we are facing is that, even though Next.js has created a `.eslintrc.json` for us that lets us do some fine-tuning of rules, adding a new **overrides** for markdown will not work due to a limitation how the **next lint** CLI works (there is open discussion [next lint command doesn't support overrides #35228](https://github.com/vercel/next.js/issues/35228) where the limitation gets discussed), **next lint** doesn't use the `.eslintrc.json` that **create-next-app** added to the root of project, it just added that file so that our IDE (VSCode) can do linting in files using the same setup as Next.js
+
+As the **next lint** command ignores custom **overrides** that are in your `.eslintrc.json`, we will NOT be able to use the **next lint** CLI. Instead, we will create a custom **lint** command in our `package.json` scripts, by using our command we ensure that the eslint configuration file in the root of our project gets used to configure the linting process. This solution will be used for linting in the IDE, that happens while we are coding as well as the linting that will happen when using the `npm run lint` command
+
+Finally, there is yet another problem, the Next.js CLI **build** command does not use the `package.json` **lint** script but uses the Next.js **lint** CLI directly, this means that we will need to tell the **build** CLI NOT to do linting during builds (using the default Next.js CLI linting) and then we will manually re-add linting for builds by changing the `package.json` **build** script so that it uses our `package.json` **lint** script before doing an actual build
+
+> [!MORE]  
+> [ESLint "how eslint overrides work" documentation](https://eslint.org/docs/v8.x/use/configure/configuration-files#how-do-overrides-work)  
+
+## Installing the MDX ESLint plugin and parser
+
+First, we need to make sure the [MDX eslint plugin](https://www.npmjs.com/package/eslint-plugin-mdx) (and parser) are installed by using the following command:
+
+```shell
+npm i eslint-plugin-mdx@latest --save-exact --save-dev
+```
+
+The ESLint MDX plugin has the [ESLint MDX parser (called eslint-mdx)](https://www.npmjs.com/package/eslint-mdx) listed as a dependency so we don't need to explicitly list it as it will get installed too, alongside other packages like the [eslint-plugin-markdown](https://www.npmjs.com/package/eslint-plugin-markdown) and a few others
+
+## ESLint configuration step 1: Basic ESLint configuration file
+
+**create next app** has added a `.eslintrc.json` in the root of our project, as we will add our own custom eslint configuration, we can get rid of that file
+
+The first thing we need to do is delete the current `.eslintrc.json`
+
+**create next app** should have installed all dependencies needed, so at this point we do NOT need to install any new packages
+
+If you didn't use **create-next-app** as we did in this tutorial, then I recommend using this command to ensure all packages are installed: 
+
+```shell
+npm i eslint@latest eslint-config-next@latest --save-exact --save-dev
+```
+
+> [!WARN]
+> As the new ESLint 9 did get released, you might encounter backward compatibility problems when using the latest version in combination with the next config eslint or other plugins, in that case, I recommend using the latest version of the 8.x branch until the flat config is more widely supported, as of now this is [ESLint 8.57.0](https://www.npmjs.com/package/eslint/v/8.57.0)
+
+Then create a new `.eslintrc.js` (in the root of your project) and add the following content:
+
+```js title=".eslintrc.js"
+module.exports = {
+    root: true,
+    parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+    },
+    'env': {
+        browser: true,
+        es2021: true,
+        node: true,
+    },
+    ignorePatterns: [
+        'node_modules/',
+        '.next/',
+        '.vscode/',
+        'public/',
+    ],
+    reportUnusedDisableDirectives: true,
+    overrides: [
+    ],
+}
+
+```
+
+> [!NOTE]  
+> You may have noticed that I chose javascript for the eslint configuration file and not JSON. I usually use javascript over json as it allows me to add comments
+>  
+> However, if you prefer json, feel free to create a `.eslintrc.json` instead of a `.eslintrc.js` or use one of the many other [ESLint configuration file formats](https://eslint.org/docs/latest/use/configure/configuration-files-deprecated#configuration-file-formats) that are supported
+
+The above basic setup is inspired by what you get if you use the [eslint init](https://eslint.org/docs/v8.x/use/getting-started) script to setup ESLint in a new project, using **eslint init** in a sandbox folder is a good way to see what kind of basic setup the ESLint team recommends
+
+I added `root: true` to make sure eslint [stops at the root of my project](https://eslint.org/docs/v8.x/use/configure/configuration-files#cascading-and-hierarchy) and does not attempt to check for other eslint configuration files in parent directories
+
+I also added some entries in the `ignorePatterns` to make sure ESLint is not going to lint anything in those folders. You might want to add other folders to this list over time if you want ESLint to exclude those folders from linting
+
+I then enabled the option `reportUnusedDisableDirectives` to make sure ESLint will trigger a [warning if it finds unused disable eslint comments](https://eslint.org/docs/v8.x/use/configure/rules#report-unused-eslint-disable-comments), which can happen when code gets deleted or moved around and suddenly an `// eslint-disable-next-line` comment becomes useless
+
+## ESLint configuration step 2: ESLint ts(x) and md(x) files override
+
+The 1st override we add to the array is fairly short, as its only purpose is to tell ESLint which **rule sets** we want to use, no matter if it is mdx / markdown content in md(x) files or typescript code in ts(x) files
+
+We do this, because of a rule from the Next.js ESLint plugin that will recommend that you use [next/image](https://nextjs.org/docs/app/api-reference/components/image) instead of a regular `<img>{:html}` element, this rule can be useful in both MDX files and also for Typescript code in React components as well as in Next.js pages
+
+Add the following object to the **overrides** array:
+
+```js title=".eslintrc.js" showLineNumbers{19} {2-7}
+overrides: [
+    {
+        files: ['**/*.ts?(x)', '**/*.md?(x)'],
+        extends: [
+            'next/core-web-vitals',
+        ],
+    },
+],
+```
+
+What this override does:
+
+* **files** will include any code file that has a **ts** or **tsx** extension and any content file that has a **md** or **mdx** extension, meaning this override is for both code in our typescript files as well as content in our MDX files
+* **extends** is set so that it will use the rules from the **core-web-vitals** (Next.js linting strict mode), **core-web-vitals** will add a few rules related to core web vitals, but also extends the next base rules (so there is no need to add 'next' to the extends too)
+
+## ESLint configuration step 3: ESLint ts(x) files only override
+
+The 2nd override is specifically for **typescript** code, its primary purpose is to tell ESLint to use the **@typescript-eslint/parser** parser to parse ts(x) files
+
+For this override, I have 2 options you can chose from:
+
+* the 1st option: this is what Next.js uses in **eslint-config-next** WITHOUT any of the **@typescript-eslint** rule sets enabled 
+* the 2nd option is more **strict** version, that will also include the **@typescript-eslint/recommended** rule set, using it will add a bunch of typescript-related rules, like the [no-unnecessary-type-assertion](https://typescript-eslint.io/rules/no-unnecessary-type-assertion/) rule that checks if you have type assertions that are not needed; it is possible to get an even stricter version if you also enable the **stylistic-type-checked** rule set, which will, for example, use [prefer-nullish-coalescing](https://typescript-eslint.io/rules/prefer-nullish-coalescing/) in cases where you could have, but did NOT, use the [Nullish coalescing operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing)
+
+### Option 1: typescript only parser + Next.js config (which includes react, react-hooks, ...)
+
+If you chose option 1 (the less strict version), then add the following override into your `.eslintrc.js`:
+
+```js title=".eslintrc.js" showLineNumbers{19} {8-29}
+overrides: [
+    {
+        files: ['**/*.ts?(x)', '**/*.md?(x)'],
+        extends: [
+            'next/core-web-vitals',
+        ],
+    },
+    {
+        files: ['**/*.ts?(x)'],
+        parser: '@typescript-eslint/parser',
+        parserOptions: {
+            sourceType: 'module',
+            ecmaFeatures: {
+                jsx: true,
+            },
+            warnOnUnsupportedTypeScriptVersion: true,
+        },
+        rules: {
+            quotes: [
+                'error',
+                'single',
+                { "allowTemplateLiterals": true },
+            ],
+            semi: [
+                'error',
+                'never',
+            ],
+        },
+    },
+],
+```
+
+What this override does:
+
+* **files** is set to **ts(x)**, meaning this override is only for **ts** and **tsx** files
+* there is no **extends** defined, as it will already use the **extends** of the previous override in which we extended **next/core-web-vitals** (next/core-web-vitals will then extend the base **next** rule set)
+* because this **overrides** is specifically for **typescript** files, we set the parser to use the **@typescript-eslint** parser (instead of the default eslint parser, which only supports parsing javascript)
+
+### Option 2: everything that is in option 1 + typescript code rules
+
+I like option 2 best as it adds a lot of good rules that will check your typescript code and give you feedback if needed. If you too decide to use this option, but it finds too many problems in your code, then maybe set the rules to **warn** instead of **error** until you have time to fix problems that get reported. Later you can switch back to **error** to enforce the rules (or you might want to disactivate some of the rules completly)
+
+If you chose option 2 (the stricter version with more typescript-related rules), we first need to install the additional **@typescript-eslint/eslint-plugin** package, but to ensure that this package uses the same version as the **@typescript-eslint/parser** package, I recommend installing both, like so:
+
+```shell
+npm i @typescript-eslint/parser@7.18.0 @typescript-eslint/eslint-plugin@7.18.0 --save-exact --save-dev
+```
+
+We install version 7.18.0 for both plugins as this is (as of now July 2024) the latest version of the 7.x branch (v8.x are for ESLint 9)
+
+> [!WARN]  
+> If you get an NPM error because the version of the installed typescript-eslint/parser and the typescript-eslint/plugin version doesn't match:  
+>
+>> npm ERR! code ERESOLVE  
+>> npm ERR! ERESOLVE could not resolve  
+>> Conflicting peer dependency: @typescript-eslint/parser
+>
+> Then use the following command to remove the parser:  
+>
+>```shell
+> npm remove @typescript-eslint/parser  
+> ```
+>
+> Then delete your `package-lock.json` (NOT the `package.json` file) file in the root in the repository  
+>  
+> Finally, try out the installation command (above) again  
+
+Next, we put the following override into our **overrides** array (**instead** of the one in option 1):
+
+```js title=".eslintrc.js" showLineNumbers{19} {8-48}
+overrides: [
+    {
+        files: ['**/*.ts?(x)', '**/*.md?(x)'],
+        extends: [
+            'next/core-web-vitals',
+        ],
+    },
+    {
+        files: ['**/*.ts?(x)'],
+        extends: [
+            'plugin:@typescript-eslint/recommended-type-checked',
+            'plugin:@typescript-eslint/stylistic-type-checked',
+        ],
+        parser: '@typescript-eslint/parser',
+        parserOptions: {
+            sourceType: 'module',
+            ecmaFeatures: {
+                jsx: true,
+            },
+            warnOnUnsupportedTypeScriptVersion: true,
+            project: './tsconfig.json',
+        },
+        plugins: [
+            '@typescript-eslint',
+        ],
+        rules: {
+            quotes: [
+                'error',
+                'single',
+                { "allowTemplateLiterals": true },
+            ],
+            semi: [
+                'error',
+                'never',
+            ],
+            '@typescript-eslint/consistent-indexed-object-style': 'off',
+            '@typescript-eslint/ban-ts-comment': [
+                'error',
+                {
+                    'ts-expect-error': 'allow-with-description',
+                    'ts-ignore': 'allow-with-description',
+                    'ts-nocheck': false,
+                    'ts-check': false,
+                    minimumDescriptionLength: 3,
+                },
+            ],
+        },
+    },
+],
+```
+
+> [!WARN]
+> This overrides is not in addition to the overrides in option 1, it is a full replacement
+>  
+> So you chose to either add option 1 or option 2, but NOT BOTH
+
+What this override does:
+
+* **files** is set to **ts(x)**, meaning this override is only for **ts** and **tsx** files
+* **extends** is set to extend the **recommended** rules of the **@typescript-eslint** plugin as well as the **stylistic** rules, if you only want the recommended rules but NOT the stylistic, then comment the `'plugin:@typescript-eslint/stylistic-type-checked',` line out
+* because this **overrides** is specifically for **typescript** files, we set the parser to use the **@typescript-eslint** parser (instead of the default eslint parser, which only supports parsing javascript)
+* **plugins** is set to typescript-eslint, but this is not the only plugin that will be used for typescript files, in the previous overrides, we already added the Next.js eslint plugin, so there is no need to add it again here (the Next.js eslint config will include a bunch of other plugins like react, react-hooks and some more)
+* finally, we have the **rules** option, here you can add whatever rules you need in your project
+  * I like to single quotes and not double quotes in my javascript code this is why I set **quotes** to **single** (feel free to set it to **double** if you prefer)
+  * then I set the rule for semicolons at the end of a javascript line to **never** because I don't use semicolons at the end of lines in my code (as long as they are optional, in the few cases where they are required, I of course use them, but those cases are very rare)
+  * next, I also disable the [consistent-indexed-object-style](https://typescript-eslint.io/rules/consistent-indexed-object-style/) rule, I usually like consistency but in this case, I think the rule goes too far, different variants are supported by typescript and as long as there their syntax is right I feel like letting the dev chose which one he prefers, feel free to remove this line if you prefer enforcing the consistency
+  * finally, I added a configuration for the [ban-ts-comment](https://typescript-eslint.io/rules/ban-ts-comment/) rule to allow the **ts-expect-error** and **ts-ignore** comments but only when there is a description as to why those comments got added to the code (by default no comments are allowed)
+
+> [!MORE]  
+> [typescript-eslint "rules" overview](https://typescript-eslint.io/rules/)  
+
+## ESLint configuration step 4: ESLint md(x) files only overrides
+
+The 3rd and final overrides is specifically for **markdown / mdx** content, its primary purpose is to tell ESLint to use the **eslint-mdx** parser to parse md(x) files, insert this into your`overrides: []` array at the end:
+
+```js title=".eslintrc.js"
+    {
+        files: ['**/*.md?(x)'],
+        extends: [
+            'plugin:mdx/recommended',
+        ],
+        parser: 'eslint-mdx',
+        parserOptions: {
+            markdownExtensions: ['*.md, *.mdx'],
+        },
+        settings: {
+            'mdx/code-blocks': false,
+            'mdx/remark': true,
+        },
+        rules: {
+            'react/no-unescaped-entities': 0,
+        }
+        // markdown rules get configured in remarkrc.mjs
+    },
+```
+
+* **files** is set to **md(x)**, meaning this **overrides** is only for **md** and **mdx** files
+* **extends** is set to extend the recommended recommended **MDX plugin** rules
+* because this **overrides** is specifically for **MDX (and markdown)** files, we set the parser to use the **MDX parser** (instead of the default eslint parser, which only supports parsing javascript)
+* **settings** is for to do 2 things:
+  * **mdx/code-blocks** is set to **false** to disable the linting of code blocks, you may want to enable this instead, it can be a very nice feature to have **eslint MDX** use ESLint to lint the code inside of code blocks, I, however, shorten code in code blocks, and this creates a case where rules get triggered just because not all the code is in every code block, like using a variable that has not been created or using a package but the import is missing, this is why for myself I disabled this (I sometimes enable it periodically to lint a new files but then disable it before committing the code for the reasons I just described)
+  * **mdx/remark** is set to **true** because this enables [eslint-mdx to use the remark-lint plugin](https://github.com/mdx-js/eslint-mdx?tab=readme-ov-file#mdxremark), it will read `.remarkrc.mjs` configuration file and use all the remark-line rules that are listed in that file, this means that when ESLint will now be capable to also lint our markdown content (both in the IDE and when using the `npm run lint` command)
+* finally, in the **rules**, I disable the react eslint plugin [react/no-unescaped-entities](https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/no-unescaped-entities.md) rule because I don't want to have to escape entities in my markdown files, I understand that the **react/no-unescaped-entities** is useful in react components but not in markdown content, all other react rules we keep them as is (those rules are enabled because in the very first overrides we added **next/core-web-vitals**, which extends the **next** config, which then adds a bunch of eslint packages, each comes with their own set comes, to see which ones it adds look at the [Why does Next.js have two packages related to ESLINT?](#why-does-nextjs-have-two-packages-related-to-eslint) chapter and have a look at **Package 1: eslint-config-next**)
+
+This was the last **overrides**, which means our configuration file is now complete, you can now save the `.eslintrc.js` file
+
+Congratulations 🎉 if you made it this far, we had to make a lot of changes, but you now know a lot more about how ESLint works, and we are now ready to start adding linting for MDX content in the next part of this tutorial
+
+If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+
+> [!MORE]  
+> [eslint-plugin-react "rules" repository](https://github.com/jsx-eslint/eslint-plugin-react/tree/master/docs/rules)  
+
+<Pagination
+    previous={{ label: 'React in MDX and MDX in react', href: '/web_development/tutorials/next-js-static-mdx-blog/react-in-mdx-and-mdx-in-react' }}
+    next={{ label: 'Linting MDX using remark-lint', href: '/web_development/tutorials/next-js-static-mdx-blog/linting-mdx-using-remark-lint' }}
+/>
+
+</article>
