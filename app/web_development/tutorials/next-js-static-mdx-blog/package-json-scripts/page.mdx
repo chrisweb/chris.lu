@@ -3,7 +3,7 @@ title: package.json (npm run) scripts - Tutorial
 description: package.json (npm run) scripts - Next.js static MDX blog | www.chris.lu Web development tutorials
 keywords: ['package.json', 'npm run', 'scripts', 'npm', 'package']
 published: 2024-08-14T22:35:33.444Z
-modified: 2024-08-14T22:35:33.444Z
+modified: 2024-10-18T18:18:18.444Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/package-json-scripts
 section: Web development
 ---
@@ -114,6 +114,22 @@ You will see that now Next.js uses the port you have told it to use because the 
 
 > [!NOTE]  
 > Now, I recommend you discard the changes we just made. It is preferred to let Next.js choose the port for you and use 3000 by default. Only set the port to a specific value if you have a use case for it.
+
+## Changing the Next.js start (production) server port
+
+To manually change the port used by the npm run start command you can do it in the package.json like so:
+
+```json title="package.json"
+    "scripts": {
+        "start": "next start --port 3001",
+    },
+```
+
+This would always set the port to 3001, but for production you may prefer to use the following command to let your deployment script use a specific value like so:
+
+```shell
+npm run start -- --port 3001
+```
 
 ## Next.js CLI commands and NPM npx
 
