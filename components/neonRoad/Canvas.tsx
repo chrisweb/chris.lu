@@ -11,7 +11,7 @@ import City from './City'
 import Trees from './Trees'
 import Terrains from './Terrains'
 //import Loop from './Loop'
-import { EffectComposer, Bloom } from '@react-three/postprocessing'
+//import { EffectComposer, Bloom } from '@react-three/postprocessing'
 
 interface IProps extends React.PropsWithChildren {
     altText: string
@@ -126,13 +126,13 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 <Trees />
                 <Terrains />
                 {/*<Loop />*/}
-                <EffectComposer>
+                {/*<EffectComposer>
                     <Bloom
                         luminanceThreshold={0.08}
                         intensity={0.7}
                         luminanceSmoothing={0.01}
                     />
-                </EffectComposer>
+                </EffectComposer>*/}
                 {/*<axesHelper />*/}{/*enable for development*/}
                 {/*<OrbitControls camera={cameraRef.current} />*/}{/*enable for development*/}
                 {/*<StatsGl />*/}{/*enable for development*/}

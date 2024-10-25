@@ -1,16 +1,16 @@
 'use client'
 
-import { forwardRef, useRef, useEffect, useCallback } from 'react'
+import { useRef, useEffect, useCallback } from 'react'
 import type { Mesh, CanvasTexture } from 'three'
-import type { MeshProps } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
 import { createNoise2D } from 'simplex-noise'
 
-export interface IProps extends MeshProps {
+export interface IProps extends Mesh {
     zPosition: number
+    terrainRef: Mesh
 }
 
-const Terrain = forwardRef<Mesh, IProps>((props, terrainRef) => {
+const Terrain = (props: IProps) => {
 
     const FLOOR_TEXTURE_PATH = '/assets/images/neonroad/grid_4096x8192-min.png'
     const EMISSIVE_MAP_PATH = '/assets/images/neonroad/emissive_map_4096x8192-min.png'
@@ -149,13 +149,13 @@ const Terrain = forwardRef<Mesh, IProps>((props, terrainRef) => {
 
     useEffect(() => {
         procedurallyGenerateDisplacementMap()
-    }, [procedurallyGenerateDisplacementMap])
+    }, [])
 
     return (
         <mesh
             rotation={[-Math.PI * 0.5, 0, 0]}
             position={[0, 0, props.zPosition]}
-            ref={terrainRef}
+            ref={props.terrainRef}
             receiveShadow={true} // default is false
         >
             <planeGeometry args={[1, 1, 32, 64]} />
@@ -173,13 +173,13 @@ const Terrain = forwardRef<Mesh, IProps>((props, terrainRef) => {
                 <canvasTexture
                     ref={displacementMapRef}
                     attach="displacementMap"
-                    image={canvasRef.current}
+                    args={[canvasRef.current]}
                 />
             </meshStandardMaterial>
         </mesh>
     )
 
-})
+}
 
 Terrain.displayName = 'TerrainMeshComponent'
 

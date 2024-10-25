@@ -47,7 +47,7 @@ const ImageAnimatedEmoji: React.FC<IAnimatedEmojiProps> = (props): JSX.Element =
         <>
             <picture>
                 <source srcSet={webpSource} type="image/webp" />
-                <Image src={gifSource} alt={props.alt} {...rest} className="animatedEmoji" />
+                <Image src={gifSource} {...rest} className="animatedEmoji" />
             </picture>
         </>
     )
