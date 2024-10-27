@@ -44,7 +44,7 @@ export const metadata = {
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
 
-# Next.js configuration
+# Next.js 15 configuration
 
 In this part, we will learn about **config phases** and tweak the **react strict mode** as well as the **powered by header** configuration
 
@@ -62,11 +62,11 @@ The third option to know the current context is to use the Next.js config proper
 
 We open our `next.config.ts` file again and this time we change the code to this:
 
-```js title="next.config.mjs" showLineNumbers {2} {4} {7}#special
+```js title="next.config.ts" showLineNumbers {2} {4} {7}#special
 import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
 
-const nextConfig = (phase: unknown) => {
+const nextConfig = (phase: string) => {
 
     if (phase === PHASE_DEVELOPMENT_SERVER) {
         console.log('happy development session ;)')
@@ -124,11 +124,11 @@ If, for some reason, you don't want it to be enabled in your entire app or if yo
 
 We will, however, leave the strict mode enabled as this is recommended:
 
-```js title="next.config.mjs" showLineNumbers {11}#special
+```js title="next.config.ts" showLineNumbers {11}#special
 import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
 
-const nextConfig = (phase: unknown) => {
+const nextConfig = (phase: string) => {
 
     if (phase === PHASE_DEVELOPMENT_SERVER) {
         console.log('happy development session ;)')
@@ -178,11 +178,11 @@ So I agree that setting the poweredByHeader option in the Next.js configuration 
 
 So, if you also want to turn the `poweredByHeader` option off, open the Next.js configuration file and change it to this:
 
-```js title="next.config.mjs" showLineNumbers {12} /typedRoutes/#special
+```js title="next.config.ts" showLineNumbers {12} /typedRoutes/#special
 import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
 
-const nextConfig = (phase: unknown) => {
+const nextConfig = (phase: string) => {
 
     if (phase === PHASE_DEVELOPMENT_SERVER) {
         console.log('happy development session ;)')
@@ -214,11 +214,11 @@ If you did any of the two changes I mentioned above, then save your `next.config
 
 If the project you are building is going to replace an existing project, then you might want to add some [redirects](https://nextjs.org/docs/pages/api-reference/next-config-js/redirects). When using Next.js, adding **redirects** is really easy, so I won't do a deep dive, but I just wanted to mention that this can be done in the `next.config.mjs`:
 
-```js title="static redirect example" {18-26}
+```js title="static route redirect example" {18-26}
 import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
 
-const nextConfig = (phase: unknown) => {
+const nextConfig = (phase: string) => {
 
     if (phase === PHASE_DEVELOPMENT_SERVER) {
         console.log('happy development session ;)')
@@ -254,7 +254,7 @@ Lines 18 to 26: we added our first redirect, by passing an array of redirect obj
 
 It is usually best to change URLs as few as possible because search engines have indexed those pages and some users might have bookmarked them. But especially when switching from the pages router to the app router, you might want to do some redirects for pages you have migrated to a new URL. For those cases, Next.js has a very powerful feature that allows you to redirect old dynamic routes to new dynamic routes:
 
-```js title="static redirect example" {18-26}
+```js title="dynamic route redirect example" {18-26}
 import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
 
