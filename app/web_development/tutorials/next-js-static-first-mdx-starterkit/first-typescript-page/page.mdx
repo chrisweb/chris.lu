@@ -82,7 +82,7 @@ If you haven't read my [The road to React 19 and Next.js 15](/web_development/po
 
 Start by opening the `app` folder, which create-next-app created for us during the initial setup of our project
 
-If you have a bit of time, have a look at what Next.js has put in there (it's always good to have a look at what the Next.js team recommends), but after that, delete all the files in the `/app` folder as I want to go step by step through the process of creating a Next.js blog, you can also delete the content in the `/public` folder as we won't need the assets of the demo project anymore
+If you have a bit of time, have a look at what Next.js has put in there (it's always good to have a look at what the Next.js team recommends), but after that, **delete** all the files in the `/app` folder as I want to go step by step through the process of creating a Next.js blog, you can also **delete** the content in the `/public` folder as we won't need the assets of the demo project anymore
 
 Next, create a new file in the `app` folder and name it `page.tsx` (or `page.jsx` if you choose to use javascript)
 
@@ -102,7 +102,7 @@ export default function Home() {
 
 Congratulations 🎉 you just coded your first Next.js page in typescript, next we will make sure the page actually works
 
-## Start the dev(elopment) server
+## Start the development server
 
 Now open the VSCode terminal if it isn't open yet (or use your favorite command line tool), and let's use one of the 4 commands create-next-app added to the package.json scripts (and which we documented in README.md earlier) to start the development server:
 
@@ -121,6 +121,24 @@ Go back to VSCode and look at the list of files in the sidebar
 You will notice that Next.js re-added the `/app/layout.tsx` file (when we started the dev server) we just deleted earlier. This is because this layout file is called the **root layout** and it is **required** (and because Next.js is a clever framework that in many places helps you do the right thing 😉), also if you look at your VSCode terminal you will see that Next.js printed the following line, informing us that it created the layout file for us:
 
 > ⚠ Your page app/page.tsx did not have a root layout. We created app\layout.tsx for you.
+
+### No root layout for you Turbo users
+
+We just saw that when using the `npm run dev` command, Next.js will automatically create a root layout file, this is however only the case when you have removed the `--turbo` from the dev script (in our package.json) as we did in a previous [Typescript plugin and typed routes](/web_development/tutorials/next-js-static-first-mdx-starterkit/typescript-plugin-and-typed-routes) chapter
+
+If you use the `npm run dev-turbo` command (or if you prefer, use `npm run dev -- --turbo`) and have no root Layout, then Next.js will **NOT** automatically create one for you 😔.
+
+After starting the development server **with turbo**, if you then visit your localhost (`http://localhost:3000/`) in the browser, instead of getting a root layout file you will see the following error message:
+
+```md
+Missing required html tags
+The following tags are missing in the Root Layout: <html>, <body>.
+Read more at https://nextjs.org/docs/messages/missing-root-layout-tags
+```
+
+The fix for Turbo users is to create the layout file you will see in the next chapter manually 😏.
+
+## Root layout content
 
 If you open the `/app/layout.tsx` file, you will see that on top, there is the following code:
 
