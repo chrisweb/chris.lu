@@ -119,6 +119,16 @@ You will see that now Next.js uses the port you have told it to use because the 
 > [!NOTE]  
 > Now, I recommend you discard the changes we just made. It is preferred to let Next.js choose the port for you and use 3000 by default. Only set the port to a specific value if you have a use case for it.
 
+### Changing script options without editing the script in the package.json
+
+In some situations you don't want to edit your package.json and prefer a more dynamic solution, for such situations there is an alternative way, it is just a bit longer, but adds flexibility you might need at some point, and the result will be the same as the one we got in the previous chapter, a development server running on port 4000
+
+In our run script we use two hyphen (`--`) tho indicate that it is the end of the run script options, every argument we add after will get passed to the script itself
+
+For example to launch the dev server on port 4000 without editing the package.json we could us this command:
+
+`npm run dev -- -p 4000`
+
 ## Next.js CLI commands and NPM npx
 
 When using a command like `npm run dev`, npm will check for a script alias and then execute the corresponding command. In the case of `npm run dev`, it will execute `next dev`
