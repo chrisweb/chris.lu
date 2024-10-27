@@ -4,7 +4,7 @@ description: Typescript plugin and typed routes - Next.js static MDX blog | www.
 keywords: ['Typescript', 'plugin', 'typed', 'routes', 'Tutorial']
 published: 2024-08-14T17:11:21.444Z
 modified: 2024-08-14T17:11:21.444Z
-permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/typescript-plugin-and-typed-routes
+permalink: https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit/typescript-plugin-and-typed-routes
 section: Web development
 ---
 
@@ -80,14 +80,14 @@ Finally, I recommend you commit/sync the new `.vscode/settings.json`.
 > [!MORE]  
 > [Next.js "TypeScript" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript)  
 
-## Statically Typed Links (Routes)
+## Statically Typed Links (Typed Routes)
 
-To ensure we benefit from **statically typed links** we need to enable the feature in our Next.js configuration file
+To ensure we benefit from **Statically Typed Links** we need to enable the feature in our Next.js configuration file
 
 > [!NOTE]  
-> I noticed a major change in Next.js 15, which is that the **next.config** file now has a **.ts** extension (when creating a project using CNA and using the `--typescript` as we did in the previous [Project setup and first commit](/web_development/tutorials/next-js-static-mdx-blog/project-setup-and-first-commit) tutorial page), in Next.js 14 the **next.config** file was still a Javascript file with an **.mjs** extension
+> There is a major change in Next.js 15, which is that the **next.config** file can now have a **.ts** extension (and by default has when creating a project using CNA and using the `--typescript` flag as we did in the previous [Project setup and first commit](/web_development/tutorials/next-js-static-mdx-blog/project-setup-and-first-commit) tutorial page), in Next.js 14 all **next.config** files were still a Javascript file with an **.mjs** extension (but if you prefer to keep using mjs files this is fine too)
 
-Open the `next.config.ts` and then add the **experimental** typedRoutes to your Next.js configuration file like so:
+Open the `next.config.ts` and then add the **experimental** **typedRoutes** option to your Next.js configuration file like so:
 
 ```ts title="next.config.ts" showLineNumbers {4-8}
 import type { NextConfig } from 'next'
@@ -107,17 +107,56 @@ Line 1: we import the NextConfig type, which means that when you start typing in
 
 Lines 4-8: we use the typedRoutes (experimental) option and enabled it, which means that when using `npm run dev` or `npm run build` when building for production, Next.js will generate a `.next/types/link.d.ts` file that contains information about all existing routes in our application, the advantage of this is that if we now use [next/link](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#link-component) but set the href to a route that doesn't exist we will see an error in VSCode getting displayed and builds will fail until we fix the typo in our URL
 
-Then save your `next.config.ts` and commit/sync your latest changes.
-
-Congratulations 🎉 you just made sure your typescript support is done correctly, which is a significant milestone before starting to code, and you now also have typed routes that will further improve your DX, adding more pages to your project
-
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+Then save your `next.config.ts` and add a commit message to explain that we enabled typed routes, and finally sync your latest changes into your remote repository
 
 > [!MORE]  
 > [Next.js "configuration options" reference](https://nextjs.org/docs/app/api-reference/next-config-js)  
 > [Typescript "JSDoc" reference](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html)  
 > [Next.js "Statically Typed Links" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript#statically-typed-links)  
 > [Next.js "typedRoutes (experimental)" reference](https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes)  
+
+### Turbopack (in Next.js 15) does not yet support Typed Routes
+
+We can now finally start the development server to verify that everything works as intended, using the following command:
+
+`npm run dev`
+
+In Next.js 14 that would be it, in Next.js 15 there is unfortunately more, as indicates the message we get in our terminal:
+
+```shell
+ ⨯ You are using configuration and/or tools that are not yet
+supported by Next.js with Turbopack:
+
+- Unsupported Next.js configuration option(s) (next.config.js)
+  To use Turbopack, remove the following configuration options:
+    - experimental.typedRoutes
+```
+
+There is no workaround here, but you can make one of two choices:
+
+* If you decide that you want to continue using **Turbopack**, then you need to set the **typedRoutes** option to `false` (in your `next.config.ts`)
+* Else if you prefer to keep the **typed routes enabled**, then this means you can't use Turbopack, but as Turbopack will get updated some day to support typed routes I recommend keeping the command as backup (in your package.json) and creating a new **command without turbo** to use today like so:
+
+```json title="package.json"
+{
+    "scripts": {
+        "dev": "next dev",
+        "dev-turbo": "next dev --turbopack",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
+    },
+}
+
+Then commit your `package.json` with a commit message that explains that we removed turbo from dev script but also created a new dev-turbo script as backup that uses the turbo flag, then sync your latest changes with your remote git provider
+
+An alternative way is to just have the dev command and when you want to run with turbo, you first use two hyphen (`--`) to indicate this is the end of the npm options, then you can add arguments that will get passed to the script, in this case we pass `--turbopack` flag to the `next lint` command, the result is the following command:
+
+`npm run dev -- --turbo`
+
+Congratulations 🎉 you just made sure your typescript support is done correctly, which is a significant milestone before starting to code, and you now also have either turbopack or typed routes that will further improve your DX
+
+If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
 
 <Pagination
     previous={{ label: 'Project setup and first commit', href: '/web_development/tutorials/next-js-static-mdx-blog/project-setup-and-first-commit' }}
