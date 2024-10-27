@@ -148,11 +148,26 @@ There is no workaround here, but you can make one of two choices:
     },
 }
 
-Then commit your `package.json` with a commit message that explains that we removed turbo from dev script but also created a new dev-turbo script as backup that uses the turbo flag, then sync your latest changes with your remote git provider
-
 An alternative way is to just have the dev command and when you want to run with turbo, you first use two hyphen (`--`) to indicate this is the end of the npm options, then you can add arguments that will get passed to the script, in this case we pass `--turbopack` flag to the `next lint` command, the result is the following command:
 
 `npm run dev -- --turbo`
+
+As we added a new script to our `package.json`, we are also going to quickly update our `README.md` to keep it up to date:
+
+```md title="README.md" showLineNumbers {6}
+# MY_PROJECT
+
+## npm commands (package.json scripts)
+
+`npm run dev`: to start the development server (NOT using turbopack)  
+`npm run dev-turbo`: to start the development server (using turbopack)  
+`npm run build`: to make a production build  
+`npm run start`: to start the server on a production server using the build we made with the previous command  
+`npm run lint`: to run a linting script that will scan our code and help us find problems in our code  
+
+```
+
+Then commit your `package.json` and `README.md` with a commit message that explains that we removed turbo from dev script but also created a new dev-turbo script as backup that uses the turbo flag, then sync your latest changes with your remote git provider
 
 Congratulations 🎉 you just made sure your typescript support is done correctly, which is a significant milestone before starting to code, and you now also have either turbopack or typed routes that will further improve your DX
 
