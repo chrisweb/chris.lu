@@ -4,7 +4,7 @@ description: Project setup and first commit - Next.js static MDX blog | www.chri
 keywords: ['project', 'setup', 'first', 'commit', 'preview', 'git flow', 'VSCode']
 published: 2024-08-14T15:31:33.444Z
 modified: 2024-08-14T15:31:33.444Z
-permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/project-setup-and-first-commit
+permalink: https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit/project-setup-and-first-commit
 section: Web development
 ---
 
@@ -101,10 +101,18 @@ To create a new Next.js project, we are going to use [Create Next App](https://w
 
 Make sure the VSCode terminal is open (if you need help to open the terminal in VSCode, check out my chapter [open a VSCode terminal](/web_development/posts/vscode#open-a-vscode-terminal) from the VSCode post)
 
-Then copy the following command into your terminal and then press `ENTER`:
+You now have two options, either you install the **latest** version, in which case npm will download the stable version of Next.js (which is good to build something that is intended to go into production soon), or you can install the canary version which is more experimental but it has the advantage that features like PPR are enabled. Of course you can start with canary version while you experiment and then at some point switch to stable (for example by using the [Version Lens](https://marketplace.visualstudio.com/items?itemName=pflannery.vscode-versionlens) VSCode extension)
+
+To install the **latest** Next.js 15.x version, copy the following command into your terminal and then press `ENTER`:
 
 ```shell title="terminal"
 npx create-next-app@latest ./ --use-npm --typescript
+```
+
+To install the **canary** Next.js 15.x version, copy the following command into your terminal and then press `ENTER`:
+
+```shell title="terminal"
+npx create-next-app@canary ./ --use-npm --typescript
 ```
 
 **Create Next App** will tell you it needs to be installed first, accept by typing `y` and then press `ENTER`
