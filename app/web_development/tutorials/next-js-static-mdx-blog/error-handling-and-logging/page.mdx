@@ -93,7 +93,7 @@ As you can see, the Next.js documentation example uses a `useEffect(){:.function
 > [!MORE]  
 > [Next.js "Handling Errors" documentation](https://nextjs.org/docs/app/building-your-application/routing/error-handling)  
 
-## Sentry.io SDK for Next.js setup
+## Using Sentry.io to log errors
 
 In this chapter, we will use [Sentry.io](https://sentry.io) (which has a free plan for side projects) to add error logging to the Next.js error file we just created
 
@@ -101,9 +101,239 @@ First, you need to have or create an account on [Sentry.io](https://sentry.io) (
 
 Now we need to create a new project on Sentry.io (if you need help with that step, check out my chapter [Create a Sentry.io project](/web_development/posts/sentry-io#create-a-sentryio-project) in the Sentry.io post)
 
-Now that the project is created, we will use the Sentry.io Wizard tool to install the Sentry.io SDK for Next.js (if you need help with that step, check out my chapter [Sentry.io SDK for Next.js installation](/web_development/posts/sentry-io#sentryio-sdk-for-nextjs-installation) in the Sentry.io post)
+### Sentry.io SDK for Next.js installation
+
+Now that the project is created, we will use the Sentry.io Wizard tool to install the Sentry.io SDK for Next.js
+
+You can use the Sentry Wizard or follow their manual [setup tutorial](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/). I chose to use the Wizard as it guides you through setting up Sentry.
+
+I will also install some test files to ensure everything is working. If you chose manual, you may want to copy the **DSN** they give you at the end of the page (a Sentry DSN is an API key you will use when setting up your SDK)
+
+> [!TIP]  
+> Before using the wizard, I recommend committing your latest changes (if you haven't already) and doing a last sync before launching the sentry wizard, this way you will be able to see what stuff Sentry.io will add to your project, and you will see what got changed in existing files like the next.config.mjs file
+
+### Sentry wizard (Next.js 14.x)
+
+In your VSCode terminal (or your preferred command line tool), type the following command to use the wizard:
+
+```shell
+npx @sentry/wizard@latest -i nextjs
+```
+
+Or, if you prefer to use the wizard without sending telemetry data to sentry.io (usage statics and crash reports), then add the `--disable-telemetry` option to the command, like so:
+
+```shell
+npx @sentry/wizard@latest -i nextjs --disable-telemetry
+```
+
+### wizard Q&A
+
+First, you will get asked if you accept installing the sentry wizard npm package. Press `y` to accept and press `Enter` to move on
+
+After the installation, the wizard will automatically get launched, and it will start asking you questions about your setup preferences: 
+
+**Are you using Sentry SaaS or self-hosted Sentry?** You probably want to choose **Sentry SaaS (sentry.io)** like I did (but if you are a company and need a custom solution, then you might want to look at the hosted version), then press `Enter`.
+
+**Do you already have an account?** chose **Yes** (if you did follow the previous chapter or already had an account before), then press `Enter` (or choose **No** if you have no account yet and follow the [account creation](#create-an-account-sign-up) process)
+
+Then, the sentry wizard will ask you to log in, which will open the sentry login page in your default browser. Log into your account, then go back to your terminal.
+
+**Select your Sentry project**, choose your Sentry Project from the list (when using the wizard, Sentry will have automatically created a project for the SDK you chose earlier for you; if, however, you don't see a Project listed here, you can check out the [Create a Sentry.io project](#create-a-sentryio-project) chapter to create a project first)
+
+Now, Sentry will install the latest Sentry SDK for Next.js.
+
+**Do you want to route Sentry requests in the browser through your NextJS server to avoid ad blockers?** Sentry wants to know if it should route its requests through your Next.js server. By doing so, Sentry attempts to bypass the block lists of adblocker addons that are installed in some browsers. This means Sentry will first send the client-side requests to a URL on your server, and then your server will forward the request to the Sentry API. I personally chose **Yes** as I want to increase the chance of getting bug reports but feel free to answer **No** (if for example, you don't want to have the extra traffic, on your server backend, that this redirect will cause)
+
+**Do you want to enable React component annotations to make breadcrumbs and session replays more readable?** Next Sentry is asking if we want to use the feature called [React component annotations](https://docs.sentry.io/platforms/javascript/guides/react/features/component-names/) which attempts to use component names in reports instead of more cryptic selectors, I think this is a nice feature, so I selected **Yes**, if you already use Sentry.io and don't want to change how bug reports work, then leave it on **No**, you can always turn it on/off via the configuration later if you want
+
+> [!WARN]  
+> I turned **React component annotations** on and then noticed that my [react-three-fiber](https://github.com/pmndrs/react-three-fiber) animation had stopped working, this is because **React component annotations** adds data attributes to components which React Three Fiber does not like, and which then creates bugs which print the following in your console:
+> 
+> > TypeError: Cannot read properties of undefined (reading 'sentry')
+>  
+> So if you plan on using **React Three Fiber** then you should answer to this question with **NO**, to learn more about this problem and how to disable **React component annotations** manually in the configuration have a look at my warning box in the [Sentry.io for Next.js configuration chapter](#sentryio-for-nextjs-configuration)
+
+**Do you want to create an example page** chose **YES** (we will later use it to test the Sentry setup, and then we will delete it)
+
+**Are you using a CI/CD tool to build and deploy your application?** chose **YES** (if you are using Vercel, GitHub actions, or any other CI/CD deployment tool); If you do NOT use one,  choose **NO**)
+
+The Sentry.io Wizard will give you a **SENTRY_AUTH_TOKEN** string if you choose yes. If you use a CI/CD for your deployments, copy the token, and save it in a secure location, you will need this token later if, for example, you set up a custom GitHub action. You will want to add that token environment variable to your GitHub secrets. If you use another CI/CD service, check out their documentation to learn how to use that token to upload source maps to Sentry automatically. If using Vercel, you can use the [Sentry integration for Vercel](https://vercel.com/integrations/sentry), which will set the Vercel environment variables for you, or if you prefer you can add the token manually to your environment variables using the [Vercel environment variables interface](https://vercel.com/docs/projects/environment-variables).
+
+CI/CD tools can authenticate themselves to Sentry.io using the **SENTRY_AUTH_TOKEN** environment variable and then use the Sentry.io API to automatically upload the source maps of your build to Sentry.io. Later, if there is a bug report on Sentry.io, it will be able to use the source maps instead of the minified build files to show you where the error occurred.
+
+**Did you configure CI as shown above?** chose **YES**
+
+That was the last question:
+
+> Successfully installed the Sentry Next.js SDK!
+
+After answering all questions, the Sentry SDK will edit your next.config.mjs to add the **withSentryConfig** Sentry configuration, and it will have added several sentry.*.config files (to the root of your project) that contain environment-specific configurations, it will also create some other files depending on what answers you gave, like a page.tsx that we can now use to test the setup
+
+> [!NOTE]  
+> If you use Vercel for your deployments, then you don't need to set the **SENTRY_AUTH_TOKEN** yourself; you can use the [Sentry integration for Vercel](https://vercel.com/integrations/sentry), which will set the Vercel environment variables for you, I recommend you do that now, as all you need to do is click on the **Add integration** button, and then continue with the tutorial  
+
+### Sentry.io for Next.js configuration
+
+Sentry.io can be customized a lot and has several places to change the default configuration.
+
+Sentry wizard has edited our `next.config.mjs`, and it should now look like this:
+
+```js title="next.config.mjs"
+import { withSentryConfig } from '@sentry/nextjs';
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+
+const nextConfig = (phase) => {
+
+    /** @type {import('next').NextConfig} */
+    const nextConfigOptions = {
+        reactStrictMode: true,
+        poweredByHeader: false,
+        experimental: {
+            // experimental typescript "statically typed links"
+            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
+            // currently false in prod until PR #67824 lands in a stable release
+            // https://github.com/vercel/next.js/pull/67824
+            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        },
+    }
+
+    return nextConfigOptions
+
+}
+
+export default withSentryConfig(nextConfig, {
+    // For all available options, see:
+    // https://github.com/getsentry/sentry-webpack-plugin#options
+
+    org: "YOUR_ORG_NAME",
+    project: "YOUR_PROJECT_NAME",
+
+    // Only print logs for uploading source maps in CI
+    silent: !process.env.CI,
+
+    // For all available options, see:
+    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+
+    // Upload a larger set of source maps for prettier stack traces (increases build time)
+    widenClientFileUpload: true,
+
+    // Automatically annotate React components to show their full name in breadcrumbs and session replay
+    reactComponentAnnotation: {
+        enabled: true,
+    },
+
+    // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
+    // This can increase your server load as well as your hosting bill.
+    // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
+    // side errors will fail.
+    tunnelRoute: "/monitoring",
+
+    // Hides source maps from generated client bundles
+    hideSourceMaps: true,
+
+    // Automatically tree-shake Sentry logger statements to reduce bundle size
+    disableLogger: true,
+
+    // Enables automatic instrumentation of Vercel Cron Monitors. (Does not yet work with App Router route handlers.)
+    // See the following for more information:
+    // https://docs.sentry.io/product/crons/
+    // https://vercel.com/docs/cron-jobs
+    automaticVercelMonitors: true,
+});
+```
+
+> [!NOTE]  
+> By default, the options that the wizard set for us are good enough. As soon as you have the time, I recommend checking out the [Extend your Next.js Configuration](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration) Sentry.io documentation, which explains what each option does
+
+> [!WARN]  
+> To enable **reactComponentAnnotation** is usually a good idea as it makes reports more readable by using component names instead of long selectors, but to make this feature happen Sentry needs to add a data attributes to components, this does usually not pose a problem except for [react-three-fiber](https://github.com/pmndrs/react-three-fiber) which does not like those extra attributes at all, which means that **React component annotations** are great unless you use **React Three Fiber**
+>  
+> For now if you use **React three fiber** the only workaround is to turn the Sentry **React component annotations** option off, by setting the `reactComponentAnnotation` variable to false
+>  
+> It is only after I had opened an [Issue #13413](https://github.com/getsentry/sentry-javascript/issues/13413) in the **sentry-javascript** repository that I found the [Issue #530](https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/530) in the **sentry-javascript-bundler-plugins** repository, which has a comment by one of the Sentry SDK mainteners, they mentioned that they consider adding more options in the future to let you exclude components, however as of now those options are not available yet, so for now we can NOT enable **React component annotations** and exclude **React three fiber**, we MUST completly disable the feature
+
+Another file that got added to the root of our project is `sentry.client.config.ts`, which is used to configure Sentry.io for **client components**. Check out the [Next.js SDK Configuration Options](https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/) documentation for more details about each option. I slightly modified my configuration file to be like this:
+
+```ts title="sentry.client.config.ts" showLineNumbers {3-12} {18} {23} {27} {38}
+import * as Sentry from '@sentry/nextjs'
+
+let replaysOnErrorSampleRate = 0
+let tracesSampleRate = 0.1
+
+if (process.env.NODE_ENV === 'production') {
+    replaysOnErrorSampleRate = 1
+}
+
+if (process.env.NODE_ENV === 'development') {
+    tracesSampleRate = 0
+}
+
+Sentry.init({
+    dsn: 'YOUR_SENTRY_DSN_URL',
+
+    // Adjust this value in production, or use tracesSampler for greater control
+    tracesSampleRate: tracesSampleRate,
+
+    // Setting this option to true will print useful information to the console while setting up Sentry.
+    debug: false,
+
+    replaysOnErrorSampleRate: replaysOnErrorSampleRate,
+
+    // This sets the sample rate to be 10%. You may want this to be 100% while
+    // in development and sample at a lower rate in production
+    replaysSessionSampleRate: 0,
+
+    // You can remove this option if you're not planning to use the Sentry Session Replay feature:
+    integrations: [
+        Sentry.replayIntegration({
+            // Additional Replay configuration goes in here, for example:
+            maskAllText: true,
+            blockAllMedia: true,
+        }),
+    ],
+
+    environment: process.env.NODE_ENV ? process.env.NODE_ENV : '',
+})
+```
+
+Lines 3-12: I added two variables for the **replaysOnErrorSampleRate** and the **tracesSampleRate**, replaysOnErrorSampleRate I set to zero by default to not produce replays when not in production, then line 6-8 I added a check to verify if the current environment is **production** and if it is I tell Sentry to always make a replay if there is an error (be careful with this option, in the free plan you only have 50 replays per month, which is why I only turn it on in production, also in development it is usually the developer themself that triggers the error so there is not really a need for a replay); the tracesSampleRate I set it to 0.1, meaning 10% of the traces will get sent to Sentry but then line 10-12 I disable them in development (this is to ensure no performance metrics are getting calculated when the app is running on a local computer, to check local performance it is preferred to use the developer tools), you may want a lower or higher value depending on what plan you are on and then check if you reach your limits or not and then adjust over time
+
+Line 27: I completely disabled **replaysSessionSampleRate**, meaning there will be no replays being made when there is no error; the free plan has 50 replays per month, and I prefer to keep all the replays for cases where there is a bug
+
+Line 38: I pass the environment to Sentry, meaning Sentry will know if the environment is preview or production (that value is based on the Vercel environment on which Next.js got deployed)
+
+> [!WARN]  
+> If you copy paste the `sentry.client.config.ts` above into your project make sure you update the **YOUR_SENTRY_DSN_URL** placeholder with your own Sentry DSN  
+
+`sentry.edge.config.ts` are the options for when Next.js uses the [Vercel Edge Network](https://vercel.com/docs/edge-network/overview). I kept that file, but feel free to adjust any values to fit your use case.
+
+`sentry.server.config.ts` is again similar to the previous two, just this one is specifically for Next.js server-side options. I also kept this file as is
+
+There is, however, one option in the server configuration that is commented out (by default) that you might want to consider. The option lets you use the [Spotlight js](https://spotlightjs.com/) package by Sentry. If you're going to use it, I recommend checking out the documentation to [install and setup Spotlight in a Next.js project](https://spotlightjs.com/setup/nextjs/)
+
+> [!MORE]  
+> [Sentry.io "Extend your Next.js Configuration" documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration)  
+> [Sentry.io "Next.js SDK Configuration" documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/)  
+> [Sentry.io "Configure Tunneling to avoid Ad-Blockers" documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#configure-tunneling-to-avoid-ad-blockers)
+> [Spotlight js "Using Spotlight with Next.js" documentation](https://spotlightjs.com/setup/nextjs/)  
+
+### Sentry.io Next.js example page
+
+Next, as suggested by the wizard at the end of the installation process, it is recommended to start the development server using the `npm run dev` command, and then we visit the Sentry example page in our browser at `http://localhost:3000/sentry-example-page`
+
+On that page, hit the **Throw Error!** button and then click on the link just below to **visit your Sentry projects issues page**
+
+Now wait for the backend and frontend errors to appear (this can take a few minutes, which is a good time to refresh your cup of coffee ☕ (or whatever beverage you prefer))
+
+As soon as the two errors appear, feel free to click on them and have a look at what error logging on Sentry.io looks like
+
+Before we commit/sync all the changes Sentry.io did in our project, **delete** the `app\sentry-example-page\` folder, including the `page.jsx` **example page**, and then also delete the `app\api\sentry-example-api\` folder including the `route.js` **API example route** file that Sentry.io created to test the error logging, you will not need them anymore.
+
+## Sentry Vercel integration
 
 After creating a Sentry.io project and setting up the SDK, I recommend also using the [Sentry.io integration on Vercel](https://vercel.com/integrations/sentry) as this will automate the part **"Adding the Sentry authentication token as an environment variable to your CI setup"** that we just saw when using the Sentry.io wizard (if you need help with that step, check out my chapter [Sentry integration for Vercel](/web_development/posts/vercel#sentry-integration-for-vercel) in the Vercel post)
+
+## Sentry fine tuning
 
 Finally, now that you have installed the SDK, you might want to do some fine-tuning of the Sentry.io configuration (if you need help with that step, check out my chapter [Sentry.io for Next.js configuration](/web_development/posts/sentry-io#sentryio-for-nextjs-configuration) in the Sentry.io post)
 
