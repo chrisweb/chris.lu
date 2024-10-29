@@ -1,0 +1,544 @@
+---
+title: Error handling and logging - Tutorial
+description: Error handling and logging - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['error', 'handling', 'logging', 'Boundary', 'react', 'sentry.io', 'nextjs']
+published: 2024-08-15T14:01:01.444Z
+modified: 2024-08-15T14:01:01.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/error-handling-and-logging
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
+
+# Error handling and logging
+
+As we saw earlier, each route segment is a directory into we can put different files. We already created the page(.tsx/.jsx/.mdx) file, then Next.js created a default layout file for us, the third file we will now create is an error page
+
+How this works is that Next.js will automatically wrap the children of your page with a **React Error Boundary**, meaning that when an error gets thrown in a page, then the error boundary will contain it and then use the error file that is the closest (either an error file that is in the same directory as the page itself or a parent directory), that error page can do different things with the error, obviously it can display an error message to the user but you can also use it to do other things like save the error in your database or send a request to your logging service
+
+Let's create our first error file inside of our `/app` directory, and let's use the example from the Next.js documentation like so:
+
+```ts title="app/error.tsx" showLineNumbers {10} {13-16} {21-26}
+'use client' // Error components must be Client Components
+
+import { useEffect } from 'react'
+
+export default function Error({
+    error,
+    reset,
+}: {
+    error: Error & { digest?: string }
+    reset: () => void
+}) {
+
+    useEffect(() => {
+        // Log the error to an error reporting service
+        console.error(error)
+    }, [error])
+
+    return (
+        <div>
+            <h1>Sorry, something went wrong 😞</h1>
+            <button
+                // Attempt to recover by trying to re-render the segment
+                onClick={() => reset()} 
+            >
+                Try again
+            </button>
+        </div>
+    )
+}
+```
+
+Lines 13 to 16 every time the component receives an error, it will use `console.log` to print the error in the console
+
+Lines 21 to 26 there is the second feature of this component, a `button` which will trigger the `reset` function we got from the component props (line 10), this function provided by Next.js will attempt to rerender the segment that triggered an error, this is helpful if the error was caused by something that occurs sporadically and might allow the user to continue
+
+As you can see, the Next.js documentation example uses a `useEffect(){:.function}` function (lines 13 to 16) and inside of it we use a `console.log` to print an error in the console of the browser, but what happens if the error is getting triggered on a user's computer, then we won't know about it. This is why in the next chapter, we will use a third-party service called [Sentry.io](https://sentry.io) to do the logging for us (of course if you prefer you can also develop and run your logging service instead)
+
+> [!MORE]  
+> [Next.js "Handling Errors" documentation](https://nextjs.org/docs/app/building-your-application/routing/error-handling)  
+
+## Using Sentry.io to log errors
+
+In this chapter, we will use [Sentry.io](https://sentry.io) (which has a free plan for side projects) to add error logging to the Next.js error file we just created
+
+First, you need to have or create an account on [Sentry.io](https://sentry.io) (if you need help with that step, check out my chapter [Create a Sentry account (sign up)](/web_development/posts/sentry-io#create-an-account-sign-up) in the Sentry.io post)
+
+Now we need to create a new project on Sentry.io (if you need help with that step, check out my chapter [Create a Sentry.io project](/web_development/posts/sentry-io#create-a-sentryio-project) in the Sentry.io post)
+
+### Sentry.io SDK for Next.js installation
+
+Now that the project is created, we will use the Sentry.io Wizard tool to install the Sentry.io SDK for Next.js
+
+You can use the Sentry Wizard or follow their manual [setup tutorial](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/). I chose to use the Wizard as it guides you through setting up Sentry.
+
+I will also install some test files to ensure everything is working. If you chose manual, you may want to copy the **DSN** they give you at the end of the page (a Sentry DSN is an API key you will use when setting up your SDK)
+
+> [!TIP]  
+> Before using the wizard, I recommend committing your latest changes (if you haven't already) and doing a last sync before launching the sentry wizard, this way you will be able to see what stuff Sentry.io will add to your project, and you will see what got changed in existing files like the next.config.mjs file
+
+### Sentry wizard (Next.js 15.x)
+
+Currently the **latest** version of Sentry for Next.js has a peer dependency for Next.js that is set to be satisfied if Next.js is 14 or 15.0.0-rc.0, so if you use the wizard and have Next.js 15 installed than there is a high chance that you are going to encounter an error during the installation:
+
+```shell
+Error: Command failed: npm add @sentry/nextjs
+│  npm error code ERESOLVE
+│  npm error ERESOLVE unable to resolve dependency tree
+```
+
+You can bypass this error by using the overrides in your package.json, here is an example of what your package would look like with an overrides for Next.js 15 canary:
+
+```json title="package.json" showLineNumbers {22-24}
+{
+    "name": "MY_PROJECT",
+    "version": "0.0.1",
+    "scripts": {
+        "dev": "next dev",
+        "dev-turbo": "next dev --turbopack",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "next": "15.0.2-canary.9",
+        "react": "19.0.0-rc-1631855f-20241023",
+        "react-dom": "19.0.0-rc-1631855f-20241023"
+    },
+    "devDependencies": {
+        "@types/node": "^20",
+        "@types/react": "^18",
+        "@types/react-dom": "^18",
+        "typescript": "^5"
+    },
+    "overrides": {
+        "next": "15.0.2-canary.9"
+    }
+}
+```
+
+Lines 22 to 24 we add an **overrides** that will tell npm that it should use this Next.js version instead of the one it finds in the peer dependencies for Sentry and potentially other packages as well
+
+> [!NOTE]  
+> The version (15.0.2-canary.9) that I used in my overrides is currently the latest canary, however by the time you read this I'm sure that newer versions will be available, so you should update that version manually, to know which versions are the latest (either for the stable or the canary branch) you can have a look at the [npm versions page for Next.js](https://www.npmjs.com/package/next?activeTab=versions)  
+>  
+> Make sure that update both Next.js versions, the one in your dependencies and the one you use in the overrides
+
+```shell
+npx @sentry/wizard@latest -i nextjs --disable-telemetry
+```
+
+Or, if you prefer to use the wizard without sending telemetry data to sentry.io (usage statics and crash reports), then add the `--disable-telemetry` option to the command, like so:
+
+```shell
+npx @sentry/wizard@latest -i nextjs --disable-telemetry
+```
+
+If you use the wizard it will always use the **latest** version of Sentry for Next.js, which means that after the wizard is done you might want to upgrade your [Sentry for Next.js version](https://www.npmjs.com/package/@sentry/nextjs?activeTab=versions) manually to a more experimental **alpha** or **beta**
+
+Sentry for Next.js has a **next** branch that is similar to a canary in Next.js, if you want to install that version (instead of the latest that the wizard installed), then use the following command:
+
+```shell
+npm i @sentry/nextjs@next --save-exact
+```
+
+### wizard Q&A
+
+First, you will get asked if you accept installing the sentry wizard npm package. Press `y` to accept and press `Enter` to move on
+
+After the installation, the wizard will automatically get launched, and it will start asking you questions about your setup preferences: 
+
+**Are you using Sentry SaaS or self-hosted Sentry?** You probably want to choose **Sentry SaaS (sentry.io)** like I did (but if you are a company and need a custom solution, then you might want to look at the hosted version), then press `Enter`.
+
+**Do you already have an account?** chose **Yes** (if you did follow the previous chapter or already had an account before), then press `Enter` (or choose **No** if you have no account yet and follow the [account creation](#create-an-account-sign-up) process)
+
+Then, the sentry wizard will ask you to log in, which will open the sentry login page in your default browser. Log into your account, then go back to your terminal.
+
+**Select your Sentry project**, choose your Sentry Project from the list (when using the wizard, Sentry will have automatically created a project for the SDK you chose earlier for you; if, however, you don't see a Project listed here, you can check out the [Create a Sentry.io project](#create-a-sentryio-project) chapter to create a project first)
+
+Now, Sentry will install the latest Sentry SDK for Next.js.
+
+**Do you want to route Sentry requests in the browser through your NextJS server to avoid ad blockers?** Sentry wants to know if it should route its requests through your Next.js server. By doing so, Sentry attempts to bypass the block lists of adblocker addons that are installed in some browsers. This means Sentry will first send the client-side requests to a URL on your server, and then your server will forward the request to the Sentry API. I personally chose **Yes** as I want to increase the chance of getting bug reports but feel free to answer **No** (if for example, you don't want to have the extra traffic, on your server backend, that this redirect will cause)
+
+**Do you want to enable React component annotations to make breadcrumbs and session replays more readable?** Next Sentry is asking if we want to use the feature called [React component annotations](https://docs.sentry.io/platforms/javascript/guides/react/features/component-names/) which attempts to use component names in reports instead of more cryptic selectors, I think this is a nice feature, so I selected **Yes**, if you already use Sentry.io and don't want to change how bug reports work, then leave it on **No**, you can always turn it on/off via the configuration later if you want
+
+> [!WARN]  
+> I turned **React component annotations** on and then noticed that my [react-three-fiber](https://github.com/pmndrs/react-three-fiber) animation had stopped working, this is because **React component annotations** adds data attrobites to components which React Three Fiber does not like, and which then creates bugs which print the following in your console:
+> 
+> > TypeError: Cannot read properties of undefined (reading 'sentry')
+>  
+> So if you plan on using **React Three Fiber** then you should answer to this question with **NO**, to learn more about this problem and how to disable **React component annotations** manually in the configuration have a look at my warning box in the [Sentry.io for Next.js configuration chapter](#sentryio-for-nextjs-configuration)
+
+**Do you want to create an example page** chose **YES** (we will later use it to test the Sentry setup, and then we will delete it)
+
+**Are you using a CI/CD tool to build and deploy your application?** chose **YES** (if you are using Vercel, GitHub actions, or any other CI/CD deployment tool); If you do NOT use one,  choose **NO**)
+
+The Sentry.io Wizard will give you a **SENTRY_AUTH_TOKEN** string if you choose yes. If you use a CI/CD for your deployments, copy the token, and save it in a secure location, you will need this token later if, for example, you set up a custom GitHub action. You will want to add that token environment variable to your GitHub secrets. If you use another CI/CD service, check out their documentation to learn how to use that token to upload source maps to Sentry automatically. If using Vercel, you can use the [Sentry integration for Vercel](https://vercel.com/integrations/sentry), which will set the Vercel environment variables for you, or if you prefer you can add the token manually to your environment variables using the [Vercel environment variables interface](https://vercel.com/docs/projects/environment-variables).
+
+CI/CD tools can authenticate themselves to Sentry.io using the **SENTRY_AUTH_TOKEN** environment variable and then use the Sentry.io API to automatically upload the source maps of your build to Sentry.io. Later, if there is a bug report on Sentry.io, it will be able to use the source maps instead of the minified build files to show you where the error occurred.
+
+**Did you configure CI as shown above?** chose **YES**
+
+That was the last question:
+
+> Successfully installed the Sentry Next.js SDK!
+
+After answering all questions, the Sentry SDK will edit your next.config.mjs to add the **withSentryConfig** Sentry configuration, and it will have added several sentry.*.config files (to the root of your project) that contain environment-specific configurations, it will also create some other files depending on what answers you gave, like a page.tsx that we can now use to test the setup
+
+> [!NOTE]  
+> If you use Vercel for your deployments, then you don't need to set the **SENTRY_AUTH_TOKEN** yourself; you can use the [Sentry integration for Vercel](https://vercel.com/integrations/sentry), which will set the Vercel environment variables for you, I recommend you do that now, as all you need to do is click on the **Add integration** button, and then continue with the tutorial  
+
+## Next.js typescript configuration for Sentry
+
+Sentry.io can be customized a lot and has several places to change the default configuration.
+
+> [!WARN]  
+> As of now the Sentry wizard will not detect `next.config.ts` files, so instead of merging the Sentry configuration into our `next.config.ts` Sentry will instead create a new `next.config.js` file, this means that we need to copy paste the content of the js file our ts and we need to convert the [JSDoc **@type** tag](https://jsdoc.app/tags-type) into a typescript type import
+
+After merging the content from the `next.config.js` your `next.config.ts` file should look like this:
+
+```ts title="next.config.ts"
+import type { NextConfig } from 'next'
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
+import { withSentryConfig } from '@sentry/nextjs'
+
+const nextConfig = (phase: string) => {
+
+    if (phase === PHASE_DEVELOPMENT_SERVER) {
+        console.log('happy development session ;)')
+    }
+
+    const nextConfigOptions: NextConfig = {
+        reactStrictMode: true,
+        poweredByHeader: false,
+        experimental: {
+            // experimental typescript "statically typed links"
+            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
+            typedRoutes: true,
+        }
+    };
+
+    return nextConfigOptions
+
+}
+
+const nextConfigWithSentry = withSentryConfig(
+    nextConfig,
+    {
+        // For all available options, see:
+        // https://github.com/getsentry/sentry-webpack-plugin#options
+
+        // Only print logs when uploading source maps during CI
+        silent: !process.env.CI,
+
+        org: "MY_ORGANIZATION_NAME",
+        project: "MY_PROJECT_NAME",
+
+        // For all available options, see:
+        // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+
+        // Upload a larger set of source maps for prettier stack traces (increases build time)
+        widenClientFileUpload: true,
+
+        // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
+        tunnelRoute: "/monitoring",
+
+        // Hides source maps from generated client bundles
+        hideSourceMaps: true,
+
+        // Automatically tree-shake Sentry logger statements to reduce bundle size
+        disableLogger: true,
+
+        // Enables automatic instrumentation of Vercel Cron Monitors.
+        // See the following for more information:
+        // https://docs.sentry.io/product/crons/
+        // https://vercel.com/docs/cron-jobs
+        automaticVercelMonitors: true,
+    }
+)
+
+export default nextConfigWithSentry
+```
+
+Now save the updated `next.config.ts` and then you can delete the `next.config.js` that the wizard added as this is not needed anymore, finally I think this is a good time to commit
+
+> [!NOTE]  
+> By default, the options that the wizard set for us are good enough. As soon as you have the time, I recommend checking out the [Extend your Next.js Configuration](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration) Sentry.io documentation, which explains what each option does
+
+> [!WARN]  
+> To enable **reactComponentAnnotation** is usually a good idea as it makes reports more readable by using component names instead of long selectors, but to make this feature happen Sentry needs to add a data attributes to components, this does usually not pose a problem except for [react-three-fiber](https://github.com/pmndrs/react-three-fiber) which does not like those extra attributes at all, which means that **React component annotations** are great unless you use **React Three Fiber**
+>  
+> For now if you use **React three fiber** the only workaround is to turn the Sentry **React component annotations** option off, by setting the `reactComponentAnnotation` variable to false
+>  
+> It is only after I had opened an [Issue #13413](https://github.com/getsentry/sentry-javascript/issues/13413) in the **sentry-javascript** repository that I found the [Issue #530](https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/530) in the **sentry-javascript-bundler-plugins** repository, which has a comment by one of the Sentry SDK maintainers, they mentioned that they consider adding more options in the future to let you exclude components, however as of now those options are not available yet, so for now we can NOT enable **React component annotations** and exclude **React three fiber**, we MUST completely disable the feature
+
+### Sentry configuration fine tuning
+
+Finally, now that you have installed the SDK, you might want to do some fine-tuning of the Sentry.io configuration (if you need help with that step, check out my chapter [Sentry.io for Next.js configuration](/web_development/posts/sentry-io#sentryio-for-nextjs-configuration) in the Sentry.io post)
+
+> [!MORE]  
+> [chris.lu "Sentry" post](/web_development/posts/sentry-io)
+
+## The missing instrumentation file
+
+Not sure this will be your case too, but when I used the latest wizard it did not create an `instrumentation.ts` file for me
+
+The result is you will get these Sentry warnings (when you start the development server) in your terminal:
+
+```shell
+[@sentry/nextjs] It appears you've configured a `sentry.server.config.ts` file. Please ensure to put this file's content into the `register()` function of a Next.js instrumentation hook instead. To ensure correct functionality of the SDK, `Sentry.init` must be called inside `instrumentation.ts`. Learn more about setting up an instrumentation hook in Next.js: https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation. You can safely delete the `sentry.server.config.ts` file afterward.
+[@sentry/nextjs] It appears you've configured a `sentry.edge.config.ts` file. Please ensure to put this file's content into the `register()` function of a Next.js instrumentation hook instead. To ensure correct functionality of the SDK, `Sentry.init` must be called inside `instrumentation.ts`. Learn more about setting up an instrumentation hook in Next.js: https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation. You can safely delete the `sentry.edge.config.ts` file afterward.
+```
+
+One warning is about the `sentry.server.config.ts` not getting imported in your instrumentation file and the second one is about the `sentry.edge.config.ts` file
+
+To fix this, in the root of your project create a new `instrumentation.ts` file and insert the following code:
+
+```ts title="instrumentation.ts" showLineNumbers
+export async function register() {
+    if (process.env.NEXT_RUNTIME === 'nodejs') {
+        await import('./sentry.server.config')
+    }
+
+    if (process.env.NEXT_RUNTIME === 'edge') {
+        await import('./sentry.edge.config')
+    }
+}
+```
+
+That's it, if you now start the development server the warnings should be gone, you can now save and commit the instrumentation file
+
+## Sentry Client Configuration file
+
+Another file that got added to the root of our project is `sentry.client.config.ts`, which is used to configure Sentry.io for **client components**. Check out the [Next.js SDK Configuration Options](https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/) documentation for more details about each option. I slightly modified my configuration file to be like this:
+
+> [!WARN]  
+> I used the latest wizard (as of now, version 3.34.2) with Next.js 15 (as of now, version 15.0.2-canary.11) and it installed Sentry for Next.js (as of now, version 8.36.0-alpha.1).
+>  
+> In my `sentry.client.config.ts` file there was a bug:
+>  
+> > TypeError: _sentry_nextjs__WEBPACK_IMPORTED_MODULE_1__.Replay is not a constructor
+>  
+> Instead of `Sentry.replayIntegration()` as a function, my file contained the previous class based version `new Sentry.Replay()`, so in the integration example below I fixed it too use new functional version
+
+```ts title="sentry.client.config.ts" showLineNumbers {7-16} {22} {27} {31} {42}
+// This file configures the initialization of Sentry on the client.
+// The config you add here will be used whenever a users loads a page in their browser.
+// https://docs.sentry.io/platforms/javascript/guides/nextjs/
+
+import * as Sentry from '@sentry/nextjs'
+
+let replaysOnErrorSampleRate = 0
+let tracesSampleRate = 0.1
+
+if (process.env.NODE_ENV === 'production') {
+    replaysOnErrorSampleRate = 1
+}
+
+if (process.env.NODE_ENV === 'development') {
+    tracesSampleRate = 0
+}
+
+Sentry.init({
+    dsn: 'YOUR_SENTRY_DSN_URL',
+
+    // Adjust this value in production, or use tracesSampler for greater control
+    tracesSampleRate: tracesSampleRate,
+
+    // Setting this option to true will print useful information to the console while setting up Sentry.
+    debug: false,
+
+    replaysOnErrorSampleRate: replaysOnErrorSampleRate,
+
+    // This sets the sample rate to be 10%. You may want this to be 100% while
+    // in development and sample at a lower rate in production
+    replaysSessionSampleRate: 0,
+
+    // You can remove this option if you're not planning to use the Sentry Session Replay feature:
+    integrations: [
+        Sentry.replayIntegration({
+            // Additional Replay configuration goes in here, for example:
+            maskAllText: true,
+            blockAllMedia: true,
+        }),
+    ],
+
+    environment: process.env.NODE_ENV ? process.env.NODE_ENV : '',
+})
+```
+
+Lines 3-12: I added two variables for the **replaysOnErrorSampleRate** and the **tracesSampleRate**, replaysOnErrorSampleRate I set to zero by default to not produce replays when not in production, then line 6-8 I added a check to verify if the current environment is **production** and if it is I tell Sentry to always make a replay if there is an error (be careful with this option, in the free plan you only have 50 replays per month, which is why I only turn it on in production, also in development it is usually the developer that triggers the error so there is not really a need for a replay); the tracesSampleRate I set it to 0.1, meaning 10% of the traces will get sent to Sentry but then line 10-12 I disable them in development (this is to ensure no performance metrics are getting calculated when the app is running on a local computer, to check local performance it is preferred to use the developer tools), you may want a lower or higher value depending on what plan you are on and then check if you reach your limits or not and then adjust over time
+
+Line 27: I completely disabled **replaysSessionSampleRate**, meaning there will be no replays being made when there is no error; the free plan has 50 replays per month, and I prefer to keep all the replays for cases where there is a bug
+
+Line 38: I pass the environment to Sentry, meaning Sentry will know if the environment is preview or production (that value is based on the Vercel environment on which Next.js got deployed)
+
+> [!WARN]  
+> If you copy paste the `sentry.client.config.ts` above into your project make sure you update the **YOUR_SENTRY_DSN_URL** placeholder with your own Sentry DSN  
+
+`sentry.edge.config.ts` are the options for when Next.js uses the [Vercel Edge Network](https://vercel.com/docs/edge-network/overview). I kept that file, but feel free to adjust any values to fit your use case.
+
+`sentry.server.config.ts` is again similar to the previous two, just this one is specifically for Next.js server-side options. I also kept this file as is
+
+There is, however, one option in the server configuration that is commented out (by default) that you might want to consider. The option lets you use the [Spotlight js](https://spotlightjs.com/) package by Sentry. If you're going to use it, I recommend checking out the documentation to [install and setup Spotlight in a Next.js project](https://spotlightjs.com/setup/nextjs/)
+
+> [!MORE]  
+> [Sentry.io "Extend your Next.js Configuration" documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration)  
+> [Sentry.io "Next.js SDK Configuration" documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/)  
+> [Sentry.io "Configure Tunneling to avoid Ad-Blockers" documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#configure-tunneling-to-avoid-ad-blockers)
+> [Spotlight js "Using Spotlight with Next.js" documentation](https://spotlightjs.com/setup/nextjs/)  
+
+## Sentry Next.js example page
+
+Next, as suggested by the wizard at the end of the installation process, it is recommended to start the development server using the `npm run dev` command, and then we visit the Sentry example page in our browser at `http://localhost:3000/sentry-example-page`
+
+On that page, hit the **Throw Error!** button and then click on the link just below to **visit your Sentry projects issues page**
+
+Now wait for the backend and frontend errors to appear (this can take a few minutes, which is a good time to refresh your cup of coffee ☕ (or whatever beverage you prefer))
+
+As soon as the two errors appear, feel free to click on them and have a look at what error logging on Sentry.io looks like
+
+Before we commit/sync all the changes Sentry.io did in our project, **delete** the `app\sentry-example-page\` folder, including the `page.jsx` **example page**, and then also delete the `app\api\sentry-example-api\` folder including the `route.js` **API example route** file that Sentry.io created to test the error logging, you will not need them anymore.
+
+## Error page with Sentry error logging
+
+Now that Sentry.io is set up, we can modify the error file we created earlier and add an import of the Sentry SDK, and then add the Sentry.io logging function inside of the `useEffect(){:.function}` to replace console.log example, like so:
+
+```tsx title="app/error.tsx" showLineNumbers {3} {14-17}
+'use client' // Error components must be Client Components
+
+import * as Sentry from '@sentry/nextjs'
+import { useEffect } from 'react'
+
+export default function Error({
+    error,
+    reset,
+}: {
+    error: Error & { digest?: string }
+    reset: () => void
+}) {
+
+    useEffect(() => {
+        // log the error to Sentry.io
+        Sentry.captureException(error)
+    }, [error])
+
+    return (
+        <>
+            <h1>Sorry, something went wrong 😞</h1>
+            <button
+                onClick={() => reset()} // attempt to recover by trying to re-render the segment
+            >
+                Try again
+            </button>
+        </>
+    )
+}
+```
+
+> [!MORE]  
+> [Sentry.io "Next.js SDK" documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/)  
+
+## Handling global errors
+
+The Sentry.io wizard we just used has created a Next.js `app/global-error.jsx` file for us
+
+The Next.js documentation explains well why this file is essential:
+
+> The root app/error boundary does not catch errors thrown in the root app/layout or app/template component.
+>
+> To specifically handle errors in these root components, use a variation of error.js called global-error.js located in the root `/app` directory.
+>
+> global-error is the least granular error UI and can be considered "catch-all" error handling for the whole application.
+
+> [!WARN]  
+> same as for the warnings above, if you used the current wizard with Next.js and a typescript configuration file then the wizard will have created a `app/global-error.jsx` file, if this is your case then delete the `app/global-error.jsx` and create a new `app/global-error.tsx` file, then insert the code as shown below
+
+We will update the global-error file Sentry just created, and add a slightly different UI using the same reset button we added to the regular error page instead of using the Next.js built in **NextError** component, the final version looks like this:
+
+```ts title="app/global-error.tsx" showLineNumbers
+'use client' // Error components must be Client Components
+
+import * as Sentry from '@sentry/nextjs'
+import { useEffect } from 'react'
+
+export default function GlobalError({
+    error,
+    reset,
+}: {
+    error: Error & { digest?: string }
+    reset: () => void
+}) {
+
+    useEffect(() => {
+        // log the error to Sentry.io
+        Sentry.captureException(error)
+    }, [error])
+
+    return (
+        <html>
+            <body>
+                <h1>Sorry, something went wrong 😞</h1>
+                <button
+                    onClick={() => reset()} // attempt to recover by trying to re-render the segment
+                >
+                    Try again
+                </button>
+            </body>
+        </html>
+    )
+}
+```
+
+The global error handling file will handle root layout errors and act as a catch-all for app errors
+
+Time to save, commit, and sync
+
+Congratulations 🎉 you now have error handling and logging for pages as well as global error handling in your project
+
+If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+
+> [!MORE]  
+> [Next.js "handling errors in root layouts" documentation](https://nextjs.org/docs/app/building-your-application/routing/error-handling#handling-errors-in-root-layouts)  
+
+<Pagination
+    previous={{ label: 'CI/CD pipeline for automatic deployments', href: '/web_development/tutorials/next-js-static-mdx-blog/ci-cd-pipeline-setup' }}
+    next={{ label: 'Content Security Policy (CSP)', href: '/web_development/tutorials/next-js-static-mdx-blog/content-security-policy' }}
+/>
+
+</article>
