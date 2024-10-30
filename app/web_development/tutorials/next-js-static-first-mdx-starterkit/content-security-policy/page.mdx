@@ -53,24 +53,26 @@ Using [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/W
 
 ## Adding CSP Headers in Next.js configuration
 
-In this chapter, we are to add CSP rules to our `next.config.mjs` configuration file (which is in the root of the project) like so:
+In this chapter, we are to add CSP rules to our `next.config.ts` configuration file (which is in the root of the project) like so:
 
-```js title="next.config.mjs" showLineNumbers {17-24} {33} /cspReportOnly/#special /upgradeInsecure/#special {35-97} {99-104}
-import { withSentryConfig } from '@sentry/nextjs';
-import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+```js title="next.config.ts" showLineNumbers {17-24} {33} /cspReportOnly/#special /upgradeInsecure/#special {35-97} {99-104}
+import type { NextConfig } from 'next'
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
+import { withSentryConfig } from '@sentry/nextjs'
 
-const nextConfig = (phase) => {
+const nextConfig = (phase: string) => {
 
-    /** @type {import('next').NextConfig} */
-    const nextConfigOptions = {
+    if (phase === PHASE_DEVELOPMENT_SERVER) {
+        console.log('happy development session ;)')
+    }
+
+    const nextConfigOptions: NextConfig = {
         reactStrictMode: true,
         poweredByHeader: false,
         experimental: {
             // experimental typescript "statically typed links"
             // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
-            // currently false in prod until PR #67824 lands in a stable release
-            // https://github.com/vercel/next.js/pull/67824
-            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+            typedRoutes: true,
         },
         headers: async () => {
             return [
@@ -80,13 +82,13 @@ const nextConfig = (phase) => {
                 },
             ];
         },
-    }
+    };
 
     return nextConfigOptions
 
 }
 
-const securityHeadersConfig = (phase) => {
+const securityHeadersConfig = (phase: string) => {
 
     const cspReportOnly = true
 
@@ -291,12 +293,14 @@ First, you need to visit Sentry.io and copy the CSP reporting URL of your projec
 Next, we need to ensure violations get sent to Sentry.io (logged like any other error), to do that we will edit our CSP setup in the `next.config.mjs` file, like so:
 
 ```js title="next.config.mjs" showLineNumbers{31} {5-6} {12-13} {42} {45} {57} {60} /${reportingDomainWildcard}/#special /${reportCSPViolations}/#special
-const securityHeadersConfig = (phase) => {
+const securityHeadersConfig = (phase: string) => {
 
     const cspReportOnly = true
 
     const reportingUrl = 'INSET_YOUR_SENTRY_REPORT_URI_HERE'
     const reportingDomainWildcard = 'https://*.ingest.us.sentry.io'
+    // if in the EU, uncomment next line, and comment out previous one
+    //const reportingDomainWildcard = 'https://*.ingest.eu.sentry.io'
 
     const cspHeader = () => {
 
@@ -417,7 +421,7 @@ There are also some useful security headers besides CSP headers. Let's add 3 of 
 
 For now we only added the CSP setup to every page header by altering the Next.js configuration file, next we are going to add 4 more security headers:
 
-```js title="next.config.mjs" showLineNumbers{107} {1-11} {14} {19-30}
+```js title="next.config.ts" showLineNumbers{107} {1-11} {14} {19-30}
     // security headers for preview & production
     const extraSecurityHeaders = []
 

@@ -138,7 +138,6 @@ There is no workaround here, but you can make one of two choices:
 * Else if you prefer to keep the **typed routes enabled**, then this means you can't use Turbopack, but as Turbopack will get updated some day to support typed routes I recommend keeping the command as backup (in your package.json) and creating a new **command without turbo** to use today like so:
 
 ```json title="package.json"
-{
     "scripts": {
         "dev": "next dev",
         "dev-turbo": "next dev --turbopack",
@@ -146,7 +145,7 @@ There is no workaround here, but you can make one of two choices:
         "start": "next start",
         "lint": "next lint"
     },
-}
+```
 
 An alternative way is to just have the dev command and when you want to run with turbo, you first use two hyphen (`--`) to indicate this is the end of the npm options, then you can add arguments that will get passed to the script, in this case we pass `--turbopack` flag to the `next lint` command, the result is the following command:
 

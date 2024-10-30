@@ -101,6 +101,9 @@ First, you need to have or create an account on [Sentry.io](https://sentry.io) (
 
 Now we need to create a new project on Sentry.io (if you need help with that step, check out my chapter [Create a Sentry.io project](/web_development/posts/sentry-io#create-a-sentryio-project) in the Sentry.io post)
 
+> [!MORE]  
+> [chris.lu "Sentry" post](/web_development/posts/sentry-io)
+
 ### Sentry.io SDK for Next.js installation
 
 Now that the project is created, we will use the Sentry.io Wizard tool to install the Sentry.io SDK for Next.js
@@ -117,9 +120,10 @@ I will also install some test files to ensure everything is working. If you chos
 Currently the **latest** version of Sentry for Next.js has a peer dependency for Next.js that is set to be satisfied if Next.js is 14 or 15.0.0-rc.0, so if you use the wizard and have Next.js 15 installed than there is a high chance that you are going to encounter an error during the installation:
 
 ```shell
-Error: Command failed: npm add @sentry/nextjs
-│  npm error code ERESOLVE
-│  npm error ERESOLVE unable to resolve dependency tree
+npm error ERESOLVE unable to resolve dependency tree
+│  npm error
+│  npm error While resolving: nextjs15_sentry_wizard_reproduction@0.1.0
+│  npm error Found: next@15.0.3-canary.1
 ```
 
 You can bypass this error by using the overrides in your package.json, here is an example of what your package would look like with an overrides for Next.js 15 canary:
@@ -136,7 +140,7 @@ You can bypass this error by using the overrides in your package.json, here is a
         "lint": "next lint"
     },
     "dependencies": {
-        "next": "15.0.2-canary.9",
+        "next": "15.0.3-canary.1",
         "react": "19.0.0-rc-1631855f-20241023",
         "react-dom": "19.0.0-rc-1631855f-20241023"
     },
@@ -147,7 +151,7 @@ You can bypass this error by using the overrides in your package.json, here is a
         "typescript": "^5"
     },
     "overrides": {
-        "next": "15.0.2-canary.9"
+        "next": "15.0.3-canary.1"
     }
 }
 ```
@@ -155,26 +159,18 @@ You can bypass this error by using the overrides in your package.json, here is a
 Lines 22 to 24 we add an **overrides** that will tell npm that it should use this Next.js version instead of the one it finds in the peer dependencies for Sentry and potentially other packages as well
 
 > [!NOTE]  
-> The version (15.0.2-canary.9) that I used in my overrides is currently the latest canary, however by the time you read this I'm sure that newer versions will be available, so you should update that version manually, to know which versions are the latest (either for the stable or the canary branch) you can have a look at the [npm versions page for Next.js](https://www.npmjs.com/package/next?activeTab=versions)  
+> The version (15.0.3-canary.1) that I used in my overrides is currently the latest canary, however by the time you read this I'm sure that newer versions will be available, so you should update that version manually, to know which versions are the latest (either for the stable or the canary branch) you can have a look at the [npm versions page for Next.js](https://www.npmjs.com/package/next?activeTab=versions)  
 >  
 > Make sure that update both Next.js versions, the one in your dependencies and the one you use in the overrides
 
 ```shell
-npx @sentry/wizard@latest -i nextjs --disable-telemetry
+npx @sentry/wizard@latest -i nextjs
 ```
 
 Or, if you prefer to use the wizard without sending telemetry data to sentry.io (usage statics and crash reports), then add the `--disable-telemetry` option to the command, like so:
 
 ```shell
 npx @sentry/wizard@latest -i nextjs --disable-telemetry
-```
-
-If you use the wizard it will always use the **latest** version of Sentry for Next.js, which means that after the wizard is done you might want to upgrade your [Sentry for Next.js version](https://www.npmjs.com/package/@sentry/nextjs?activeTab=versions) manually to a more experimental **alpha** or **beta**
-
-Sentry for Next.js has a **next** branch that is similar to a canary in Next.js, if you want to install that version (instead of the latest that the wizard installed), then use the following command:
-
-```shell
-npm i @sentry/nextjs@next --save-exact
 ```
 
 ### wizard Q&A
@@ -223,19 +219,32 @@ After answering all questions, the Sentry SDK will edit your next.config.mjs to 
 > [!NOTE]  
 > If you use Vercel for your deployments, then you don't need to set the **SENTRY_AUTH_TOKEN** yourself; you can use the [Sentry integration for Vercel](https://vercel.com/integrations/sentry), which will set the Vercel environment variables for you, I recommend you do that now, as all you need to do is click on the **Add integration** button, and then continue with the tutorial  
 
+## Update sentry version (to use alpha or beta)
+
+If you use the wizard it will always use the **latest** version of Sentry for Next.js
+
+If you want to try out the latest alpha or beta versions, but don't know what versions are currently available, then have a look at the [Sentry for Next.js version](https://www.npmjs.com/package/@sentry/nextjs?activeTab=versions) page
+
+Sentry for Next.js has a **next** branch that is similar to a canary in Next.js, if you want to install that version (instead of the latest that the wizard installed), then use the following command:
+
+```shell
+npm i @sentry/nextjs@next --save-exact
+```
+
+This will replace the current version of Sentry for Next.js with a more up to date but also more experimental version
+
 ## Next.js typescript configuration for Sentry
 
 Sentry.io can be customized a lot and has several places to change the default configuration.
 
-> [!WARN]  
-> As of now the Sentry wizard will not detect `next.config.ts` files, so instead of merging the Sentry configuration into our `next.config.ts` Sentry will instead create a new `next.config.js` file, this means that we need to copy paste the content of the js file our ts and we need to convert the [JSDoc **@type** tag](https://jsdoc.app/tags-type) into a typescript type import
+The main part of the Sentry for Next.js configuration is in your `next.config.ts` file (which is in the root of your project)
 
-After merging the content from the `next.config.js` your `next.config.ts` file should look like this:
+Sentry has updated your `next.config.ts` based on the answers you gave to the wizard questions, I formatted mine (in VSCode, you can right click and then select **Format Document**) to look like this:
 
 ```ts title="next.config.ts"
+import { withSentryConfig } from '@sentry/nextjs'
 import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
-import { withSentryConfig } from '@sentry/nextjs'
 
 const nextConfig = (phase: string) => {
 
@@ -251,23 +260,23 @@ const nextConfig = (phase: string) => {
             // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
             typedRoutes: true,
         }
-    };
+    }
 
     return nextConfigOptions
 
 }
 
-const nextConfigWithSentry = withSentryConfig(
+export default withSentryConfig(
     nextConfig,
     {
         // For all available options, see:
         // https://github.com/getsentry/sentry-webpack-plugin#options
 
-        // Only print logs when uploading source maps during CI
-        silent: !process.env.CI,
-
         org: "MY_ORGANIZATION_NAME",
         project: "MY_PROJECT_NAME",
+
+        // Only print logs for uploading source maps in CI
+        silent: !process.env.CI,
 
         // For all available options, see:
         // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
@@ -275,7 +284,15 @@ const nextConfigWithSentry = withSentryConfig(
         // Upload a larger set of source maps for prettier stack traces (increases build time)
         widenClientFileUpload: true,
 
-        // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
+        // Automatically annotate React components to show their full name in breadcrumbs and session replay
+        reactComponentAnnotation: {
+            enabled: true,
+        },
+
+        // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
+        // This can increase your server load as well as your hosting bill.
+        // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
+        // side errors will fail.
         tunnelRoute: "/monitoring",
 
         // Hides source maps from generated client bundles
@@ -284,18 +301,16 @@ const nextConfigWithSentry = withSentryConfig(
         // Automatically tree-shake Sentry logger statements to reduce bundle size
         disableLogger: true,
 
-        // Enables automatic instrumentation of Vercel Cron Monitors.
+        // Enables automatic instrumentation of Vercel Cron Monitors. (Does not yet work with App Router route handlers.)
         // See the following for more information:
         // https://docs.sentry.io/product/crons/
         // https://vercel.com/docs/cron-jobs
         automaticVercelMonitors: true,
     }
 )
-
-export default nextConfigWithSentry
 ```
 
-Now save the updated `next.config.ts` and then you can delete the `next.config.js` that the wizard added as this is not needed anymore, finally I think this is a good time to commit
+Now save the updated `next.config.ts` and then is probably a good time to commit
 
 > [!NOTE]  
 > By default, the options that the wizard set for us are good enough. As soon as you have the time, I recommend checking out the [Extend your Next.js Configuration](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration) Sentry.io documentation, which explains what each option does
@@ -307,27 +322,11 @@ Now save the updated `next.config.ts` and then you can delete the `next.config.j
 >  
 > It is only after I had opened an [Issue #13413](https://github.com/getsentry/sentry-javascript/issues/13413) in the **sentry-javascript** repository that I found the [Issue #530](https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/530) in the **sentry-javascript-bundler-plugins** repository, which has a comment by one of the Sentry SDK maintainers, they mentioned that they consider adding more options in the future to let you exclude components, however as of now those options are not available yet, so for now we can NOT enable **React component annotations** and exclude **React three fiber**, we MUST completely disable the feature
 
-### Sentry configuration fine tuning
+## The instrumentation file
 
-Finally, now that you have installed the SDK, you might want to do some fine-tuning of the Sentry.io configuration (if you need help with that step, check out my chapter [Sentry.io for Next.js configuration](/web_development/posts/sentry-io#sentryio-for-nextjs-configuration) in the Sentry.io post)
+Next.js has added support for a new [instrumentation](https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation) which has the goal to improve the integration of monitoring and logging tools into Next.js
 
-> [!MORE]  
-> [chris.lu "Sentry" post](/web_development/posts/sentry-io)
-
-## The missing instrumentation file
-
-Not sure this will be your case too, but when I used the latest wizard it did not create an `instrumentation.ts` file for me
-
-The result is you will get these Sentry warnings (when you start the development server) in your terminal:
-
-```shell
-[@sentry/nextjs] It appears you've configured a `sentry.server.config.ts` file. Please ensure to put this file's content into the `register()` function of a Next.js instrumentation hook instead. To ensure correct functionality of the SDK, `Sentry.init` must be called inside `instrumentation.ts`. Learn more about setting up an instrumentation hook in Next.js: https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation. You can safely delete the `sentry.server.config.ts` file afterward.
-[@sentry/nextjs] It appears you've configured a `sentry.edge.config.ts` file. Please ensure to put this file's content into the `register()` function of a Next.js instrumentation hook instead. To ensure correct functionality of the SDK, `Sentry.init` must be called inside `instrumentation.ts`. Learn more about setting up an instrumentation hook in Next.js: https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation. You can safely delete the `sentry.edge.config.ts` file afterward.
-```
-
-One warning is about the `sentry.server.config.ts` not getting imported in your instrumentation file and the second one is about the `sentry.edge.config.ts` file
-
-To fix this, in the root of your project create a new `instrumentation.ts` file and insert the following code:
+Sentry wizard will have created such a `instrumentation.ts` file for us, with the following content:
 
 ```ts title="instrumentation.ts" showLineNumbers
 export async function register() {
@@ -341,20 +340,12 @@ export async function register() {
 }
 ```
 
-That's it, if you now start the development server the warnings should be gone, you can now save and commit the instrumentation file
+> [!MORE]  
+> [Next.js "instrumentation" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation)
 
 ## Sentry Client Configuration file
 
 Another file that got added to the root of our project is `sentry.client.config.ts`, which is used to configure Sentry.io for **client components**. Check out the [Next.js SDK Configuration Options](https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/) documentation for more details about each option. I slightly modified my configuration file to be like this:
-
-> [!WARN]  
-> I used the latest wizard (as of now, version 3.34.2) with Next.js 15 (as of now, version 15.0.2-canary.11) and it installed Sentry for Next.js (as of now, version 8.36.0-alpha.1).
->  
-> In my `sentry.client.config.ts` file there was a bug:
->  
-> > TypeError: _sentry_nextjs__WEBPACK_IMPORTED_MODULE_1__.Replay is not a constructor
->  
-> Instead of `Sentry.replayIntegration()` as a function, my file contained the previous class based version `new Sentry.Replay()`, so in the integration example below I fixed it too use new functional version
 
 ```ts title="sentry.client.config.ts" showLineNumbers {7-16} {22} {27} {31} {42}
 // This file configures the initialization of Sentry on the client.
