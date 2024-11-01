@@ -223,7 +223,7 @@ After answering all questions, the Sentry SDK will edit your next.config.mjs to 
 
 If you use the wizard it will always use the **latest** version of Sentry for Next.js
 
-If you want to try out the latest alpha or beta versions, but don't know what versions are currently available, then have a look at the [Sentry for Next.js version](https://www.npmjs.com/package/@sentry/nextjs?activeTab=versions) page
+If you are feeling adventurous, you could try out the latest alpha or beta versions, to know what versions are currently available I recommend having a look at the [Sentry for Next.js version](https://www.npmjs.com/package/@sentry/nextjs?activeTab=versions) page and check out what the latest versions are
 
 Sentry for Next.js has a **next** branch that is similar to a canary in Next.js, if you want to install that version (instead of the latest that the wizard installed), then use the following command:
 
@@ -232,6 +232,9 @@ npm i @sentry/nextjs@next --save-exact
 ```
 
 This will replace the current version of Sentry for Next.js with a more up to date but also more experimental version
+
+> [!WARN]  
+> be careful when you chose what version you install as there is not always an alpha or beta available, sometimes the newest beta or alpha that is tagged with **next** (on npmjs) will actually be older than the version tagged as **latest**  
 
 ## Next.js typescript configuration for Sentry
 
