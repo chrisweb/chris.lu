@@ -48,6 +48,10 @@ If you have feedback or want to discuss something, please use the [chris.lu gith
 `npm run lint-fix`: linting command that also attempts to automatically fix problems  
 `npm run info`: the default next.js script to get some info about the project  
 
+## Node.js version
+
+Next.js [requires >=18.18.0](https://github.com/vercel/next.js/commit/ecd2be6d3b74d7af2513a8b355408a8f88ec6b25) (same as ESLint v9), Typescript ESLint [requires Node.js >=20.11.0](https://typescript-eslint.io/getting-started/typed-linting) (for import.meta.dirname in ESM files), this projects [package.json](./package.json) has the engines node set to 20.11.0, the latest Node.js LTS is 22.11.0 (Nov. 2024)
+
 ## License
 
 Link to the [license document](https://github.com/chrisweb/chris.lu/blob/main/LICENSE)  
