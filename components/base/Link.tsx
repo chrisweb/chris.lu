@@ -51,7 +51,7 @@ const isUrlMe = (url: string): boolean => {
 
 }
 
-const BaseLink: React.FC<IBaseLinkProps> = (props): JSX.Element => {
+const BaseLink: React.FC<IBaseLinkProps> = (props): React.JSX.Element => {
 
     const { href, children, ...linkProps } = props
 

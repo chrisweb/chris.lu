@@ -13,7 +13,7 @@ export interface IPaginationProps {
     list: IListItem[]
 }
 
-const Breadcrumbs: React.FC<IPaginationProps> = (props): JSX.Element => {
+const Breadcrumbs: React.FC<IPaginationProps> = (props): React.JSX.Element => {
 
     const { list } = props
 

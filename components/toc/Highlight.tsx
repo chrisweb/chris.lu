@@ -19,7 +19,7 @@ interface IChildProps {
 }
 
 
-const TocHighlight: React.FC<IProps> = (props): JSX.Element => {
+const TocHighlight: React.FC<IProps> = (props): React.JSX.Element => {
 
     const { headingsToObserve, rootMargin, threshold } = props
 

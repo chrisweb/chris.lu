@@ -8,7 +8,7 @@ interface IAnimatedPictureProps extends Omit<ImageProps, 'src'> {
     webpStaticImport: StaticImageData
 }
 
-const ImageAnimatedPicture: React.FC<IAnimatedPictureProps> = (props): JSX.Element => {
+const ImageAnimatedPicture: React.FC<IAnimatedPictureProps> = (props): React.JSX.Element => {
 
     // Next.js displays this message in the terminal
     // The requested resource "/_next/static/media/wave_32.178d7408.webp" is an animated image so it will not be optimized. Consider adding the "unoptimized" property to the <Image>.

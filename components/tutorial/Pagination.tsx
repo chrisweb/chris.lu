@@ -14,7 +14,7 @@ export interface IPaginationProps {
     next?: IPaginationItem
 }
 
-const Pagination: React.FC<IPaginationProps> = (props): JSX.Element => {
+const Pagination: React.FC<IPaginationProps> = (props): React.JSX.Element => {
 
     const { previous, next } = props
 

@@ -17,7 +17,7 @@ export interface IUIModalProps extends PropsWithChildren {
     className?: string
 }
 
-const UIModal: React.FC<IUIModalProps> = (props): JSX.Element => {
+const UIModal: React.FC<IUIModalProps> = (props): React.JSX.Element => {
 
     const { isOpen, hasCloseButton, onCloseCallback, children, ...rest } = props
 

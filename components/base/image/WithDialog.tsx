@@ -10,7 +10,7 @@ import styles from './withdialog.module.css'
 
 const UIModal = dynamic(() => import('@/components/ui/Modal'), { ssr: false })
 
-const ImageWithDialog: React.FC<ImageProps> = (props): JSX.Element => {
+const ImageWithDialog: React.FC<ImageProps> = (props): React.JSX.Element => {
 
     const [imageDialogIsOpenState, setImageDialogIsOpenState] = useState(false)
 
