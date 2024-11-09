@@ -52,7 +52,7 @@ How this works is that Next.js will automatically wrap the children of your page
 
 Let's create our first error file inside of our `/app` directory, and let's use the example from the Next.js documentation like so:
 
-```ts title="app/error.tsx" showLineNumbers {10} {13-16} {21-26}
+```tsx title="app/error.tsx" showLineNumbers {10} {13-16} {21-26}
 'use client' // Error components must be Client Components
 
 import { useEffect } from 'react'
@@ -74,8 +74,10 @@ export default function Error({
         <div>
             <h1>Sorry, something went wrong 😞</h1>
             <button
-                // Attempt to recover by trying to re-render the segment
-                onClick={() => reset()} 
+                onClick={() => {
+                    // attempt to recover by trying to re-render the segment
+                    reset()
+                }}
             >
                 Try again
             </button>
@@ -456,7 +458,10 @@ export default function Error({
         <>
             <h1>Sorry, something went wrong 😞</h1>
             <button
-                onClick={() => reset()} // attempt to recover by trying to re-render the segment
+                onClick={() => {
+                    // attempt to recover by trying to re-render the segment
+                    reset()
+                }}
             >
                 Try again
             </button>
@@ -509,7 +514,10 @@ export default function GlobalError({
             <body>
                 <h1>Sorry, something went wrong 😞</h1>
                 <button
-                    onClick={() => reset()} // attempt to recover by trying to re-render the segment
+                    onClick={() => {
+                        // attempt to recover by trying to re-render the segment
+                        reset()
+                    }}
                 >
                     Try again
                 </button>
