@@ -1,21 +1,24 @@
 'use client'
 
-import { useRef, useEffect, useCallback } from 'react'
+import React, { useRef, useLayoutEffect, useMemo } from 'react'
 import type { Mesh, CanvasTexture } from 'three'
 import { useTexture } from '@react-three/drei'
-import { createNoise2D } from 'simplex-noise'
+import { createNoise2D, type NoiseFunction2D } from 'simplex-noise'
+//import { useFrame } from '@react-three/fiber'
 
-export interface IProps extends Mesh {
+type refType = (ref: Mesh) => void
+
+export interface ITerrainProps extends Partial<Mesh> {
     zPosition: number
-    terrainRef: Mesh
+    ref: refType
 }
 
-const Terrain = (props: IProps) => {
+const Terrain = (props: ITerrainProps) => {
 
     const FLOOR_TEXTURE_PATH = '/assets/images/neonroad/grid_4096x8192-min.png'
     const EMISSIVE_MAP_PATH = '/assets/images/neonroad/emissive_map_4096x8192-min.png'
 
-    const [floorTexture, displacementMap, emissiveMap] = useTexture([
+    const [floorTexture, emissiveMap] = useTexture([
         FLOOR_TEXTURE_PATH,
         EMISSIVE_MAP_PATH,
     ])
@@ -41,12 +44,18 @@ const Terrain = (props: IProps) => {
 
     const inRange = (value: number, range: [number, number]) => value >= range[0] && value <= range[1]
 
-    const procedurallyGenerateDisplacementMap = useCallback(() => {
+    const noise2D = useMemo<NoiseFunction2D>(() => { return createNoise2D() }, [createNoise2D])
+
+    console.log('####### Terrain')
+
+    const procedurallyGenerateDisplacementMap = () => {
+
+        console.log('####### Terrain procedurallyGenerateDisplacementMap')
+
+        if (!displacementMapRef.current) return
 
         const width = 32
         const height = 64
-
-        const noise2D = createNoise2D()
 
         //const canvas = canvasRef.current
         const canvas = canvasRef.current
@@ -143,25 +152,39 @@ const Terrain = (props: IProps) => {
 
         }
 
-        displacementMapRef.current!.needsUpdate = true
+        displacementMapRef.current.needsUpdate = true
 
-    }, [])
+    }
 
-    useEffect(() => {
+    // fixes a problem where using useEffect would create
+    // displacement maps after the texture update so that
+    // the result was a flat surface with no displacement
+    useLayoutEffect(() => {
         procedurallyGenerateDisplacementMap()
+        return () => {
+            // I don't know if this is necessary, but it's better to be safe than sorry
+            // cleanup: dispose of the canvas texture and remove the canvas element from dom
+            if (displacementMapRef.current !== null) {
+                displacementMapRef.current.dispose()
+            }
+            canvasRef.current.remove()
+         }
     }, [])
+
+    /*useFrame(() => {
+        procedurallyGenerateDisplacementMap()
+    })*/
 
     return (
         <mesh
             rotation={[-Math.PI * 0.5, 0, 0]}
             position={[0, 0, props.zPosition]}
-            ref={props.terrainRef}
             receiveShadow={true} // default is false
+            ref={props.ref}
         >
             <planeGeometry args={[1, 1, 32, 64]} />
             <meshStandardMaterial
                 map={floorTexture}
-                displacementMap={displacementMap}
                 displacementScale={displacementScale}
                 emissiveMap={emissiveMap}
                 emissive={'#11166c'}

@@ -10,7 +10,7 @@ import type { IOptions as RehypeGithubAlertsOptionsType, DefaultBuildType as Reh
 import type { ElementContent as HastElementContent } from 'hast'
 import type { Options as RehypeAutolinkHeadingsOptionsType } from 'rehype-autolink-headings'
 import createMdx from '@next/mdx'
-//import rehypePrettyCode from 'rehype-pretty-code'
+import rehypePrettyCode from 'rehype-pretty-code'
 import { remarkTableOfContents } from 'remark-table-of-contents'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
@@ -32,7 +32,7 @@ const nextConfig = (phase: string): NextConfig => {
     })*/
 
     // https://rehype-pretty-code.netlify.app/
-    /*const rehypePrettyCodeOptions: RehypePrettyCodeOptionsType = {
+    const rehypePrettyCodeOptions: RehypePrettyCodeOptionsType = {
         // VSCode "SynthWave '84" theme
         theme: 'synthwave-84',
         // Keep the background or use a custom background color?
@@ -46,7 +46,7 @@ const nextConfig = (phase: string): NextConfig => {
             block: 'tsx',
             inline: 'shell',
         },
-    }*/
+    }
 
     // https://github.com/chrisweb/remark-table-of-contents#options
     const remarkTableOfContentsOptions: IRemarkTableOfContentsOptions = {
@@ -170,7 +170,7 @@ const nextConfig = (phase: string): NextConfig => {
     const withMDX = createMdx({
         options: {
             remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter, [remarkTableOfContents, remarkTableOfContentsOptions], [remarkGfm, remarkGfmOptions]],
-            rehypePlugins: [/*[rehypePrettyCode, rehypePrettyCodeOptions],*/ rehypeSlug, rehypeMDXImportMedia, [rehypeAutolinkHeadings, rehypeAutolinkHeadingsOptions], [rehypeGithubAlerts, rehypeGithubAlertsOptions]],
+            rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions], rehypeSlug, rehypeMDXImportMedia, [rehypeAutolinkHeadings, rehypeAutolinkHeadingsOptions], [rehypeGithubAlerts, rehypeGithubAlertsOptions]],
         },
     })
 

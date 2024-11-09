@@ -1,15 +1,10 @@
 'use client'
 
-import { useRef/*, useMemo*/ } from 'react'
-import type { Group } from 'three'
+import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import PalmModel from './Palm'
 import { moveFromAToBInLoop } from './lib/helpers'
-
-interface ITreeModel {
-    xPosition: number
-    zPosition: number
-}
+import { Vector3, Euler, type Group } from 'three'
 
 function randomDegrees() {
     const min = 0
@@ -27,21 +22,8 @@ const Trees: React.FC = () => {
 
     // the three fiber render() will trigger useFrame()
     useFrame((state, delta /*, xrFrame*/) => {
-
-        moveFromAToBInLoop({
-            delta,
-            objectsRef: leftSideTreesRefs,
-            cameraZPosition: 1,
-            distanceToNextObject: 0.2
-        })
-
-        moveFromAToBInLoop({
-            delta,
-            objectsRef: rightSideTreesRefs,
-            cameraZPosition: 1,
-            distanceToNextObject: 0.2
-        })
-
+        moveFromAToBInLoop(delta,leftSideTreesRefs.current,1,0.2)
+        moveFromAToBInLoop(delta, rightSideTreesRefs.current, 1, 0.2)
     })
 
     const treesElements: React.ReactElement[] = []
@@ -55,23 +37,22 @@ const Trees: React.FC = () => {
 
         for (let i = 0; i < amountOfTreesPerSide; i++) {
 
-            const treeModelSetup: ITreeModel = {
-                xPosition: side === 'right' ? -0.21 : 0.21,
-                zPosition: positionChange,
-            }
+            const position = new Vector3(side === 'right' ? -0.21 : 0.21, 0, positionChange)
+            const scale = new Vector3(0.009, 0.009, 0.009)
+            const rotation = new Euler(0, randomDegrees(), 0)
 
             treesElements.push(
                 <PalmModel
-                    position={[treeModelSetup.xPosition, 0, treeModelSetup.zPosition]}
-                    ref={ref => {
-                        if (ref === null) return
-                        side === 'right' ? rightSideTreesRefs.current[i] = ref : leftSideTreesRefs.current[i] = ref
+                    position={position}
+                    ref={treeGroup => {
+                        if (treeGroup === null) return
+                        side === 'right' ? rightSideTreesRefs.current[i] = treeGroup : leftSideTreesRefs.current[i] = treeGroup
                     }}
-                    scale={[0.009, 0.009, 0.009]}
+                    scale={scale}
                     castShadow={true} // default is false
                     receiveShadow={false}
                     key={side + i}
-                    rotation={[0, randomDegrees(), 0]}
+                    rotation={rotation}
                 />
             )
 

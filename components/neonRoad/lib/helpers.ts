@@ -1,21 +1,25 @@
-import type { MutableRefObject } from 'react'
-import type { Mesh, Group } from 'three'
+import type { Mesh, Group, Vector3 } from 'three'
 
-interface IProps {
-    delta: number
-    objectsRef: MutableRefObject<Mesh[] | Group[]>
-    cameraZPosition: number
-    distanceToNextObject: number
+interface IMoveFromAToBInLoop<Objects_Refs> {
+    (delta: number, objectsRefs: Objects_Refs[], cameraZPosition: number, distanceToNextObject: number): void
 }
 
-const moveFromAToBInLoop = ({ delta, objectsRef, cameraZPosition, distanceToNextObject }: IProps) => {
+const moveFromAToBInLoop: IMoveFromAToBInLoop<Group | Mesh> = (delta, objectsRefs, cameraZPosition, distanceToNextObject) => {
 
     const objectsBehindCamera = []
     const speed = 0.05
     const newZPosition = delta * speed
 
     // move all the objects by newZPosition
-    for (const object of objectsRef.current) {
+    for (const object of objectsRefs) {
+
+        if (!object) {
+            break
+        }
+
+        if (!object.position) {
+            continue
+        }
 
         object.position.z += newZPosition
 
@@ -27,7 +31,7 @@ const moveFromAToBInLoop = ({ delta, objectsRef, cameraZPosition, distanceToNext
         // and gets removed
         const removeWhenAtZ = cameraZPosition + (distanceToNextObject / 2)
 
-        if (object.position.z > removeWhenAtZ) {
+        if ((object.position as Vector3).z > removeWhenAtZ) {
             objectsBehindCamera.push(object)
         }
 
@@ -37,23 +41,23 @@ const moveFromAToBInLoop = ({ delta, objectsRef, cameraZPosition, distanceToNext
 
         // order objecta by their z position
         // from highest z position to lowest
-        objectsRef.current.sort((a, b) => b.position.z - a.position.z)
+        objectsRefs.sort((a, b) => (b.position! as Vector3).z - (a.position! as Vector3).z)
 
         // get the last object (if there is one)
         // last object is the one closest to the sun
         // and hence furthest away from the camera
-        const lastObject = objectsRef.current[objectsRef.current.length - 1]
+        const lastObject = objectsRefs[objectsRefs.length - 1]
 
         // if there are no visible objects (if deltatime is very big
         // it might happen that all objects are out of the field of view)
         // we put the first objects, at where the camera - distance to
         // the objects center
-        if (objectsBehindCamera.length === objectsRef.current.length) {
-            nextObject.position.z = cameraZPosition - (distanceToNextObject / 2)
+        if (objectsBehindCamera.length === objectsRefs.length) {
+            (nextObject.position as Vector3).z = cameraZPosition - (distanceToNextObject / 2)
         } else {
             // if there at least one object in front of the camera
             // then the next object is placed behind the last object
-            nextObject.position.z = lastObject.position.z - distanceToNextObject
+            (nextObject.position as Vector3).z = (lastObject.position as Vector3).z - distanceToNextObject
         }
 
         objectsBehindCamera.pop()

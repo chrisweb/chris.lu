@@ -1,25 +1,18 @@
 'use client'
 
-import { useRef } from 'react'
-import type { Mesh } from 'three'
+import { useRef, useState, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import Terrain from './Terrain'
+import { Mesh } from 'three'
 import { moveFromAToBInLoop } from './lib/helpers'
 
 const Terrains: React.FC = () => {
 
-    const terrainsRef = useRef<Mesh[]>([])
+    const terrainsRefs = useRef<Mesh[]>([])
 
-    // the three fiber render() will trigger useFrame()
+    // new three fiber 9 useUpdate (replaces useFrame)
     useFrame((state, delta /*, xrFrame*/) => {
-
-        moveFromAToBInLoop({
-            delta,
-            objectsRef: terrainsRef,
-            cameraZPosition: 1,
-            distanceToNextObject: 1
-        })
-
+        moveFromAToBInLoop(delta, terrainsRefs.current, 1, 1)
     })
 
     const terrainElements: React.ReactElement[] = []
@@ -27,8 +20,8 @@ const Terrains: React.FC = () => {
     // the distance between the city (when the terrain comes
     // into view) and the bottom of the camera field of view
     // (at which point the terrain goes out of view) 
-    // is approximativly 2 units, so we need 3 terrains
-    // pnaels (of 1x1 in size), to ensure the distance between
+    // is approximately 2 units, so we need 3 terrains
+    // panels (of 1x1 in size), to ensure the distance between
     // the camera and city is covered at all times
     const terrainsZStartPositions = [0.5, -0.5, -1.5]
 
@@ -40,17 +33,15 @@ const Terrains: React.FC = () => {
             <Terrain
                 zPosition={zPosition}
                 key={i}
-                ref={ref => {
-                    if (ref === null) return
-                    terrainsRef.current[i] = ref
+                ref={(terrainMesh) => {
+                    if (terrainMesh === null) return
+                    terrainsRefs.current[i] = terrainMesh
                 }}
             />
         )
-
     }
 
     return (<>{terrainElements}</>)
-
 }
 
 export default Terrains

@@ -1,9 +1,9 @@
 'use client'
 
-import { useRef/*, Suspense, useState*/ } from 'react'
+import { useRef, Suspense, useEffect } from 'react'
 import type { PerspectiveCamera as PerspectiveCameraType } from 'three'
 import { Canvas } from '@react-three/fiber'
-import { PerspectiveCamera, SoftShadows/*, OrbitControls, PerformanceMonitor, PerformanceMonitorApi, StatsGl, Hud, useDetectGPU, useProgress*/} from '@react-three/drei'
+import { PerspectiveCamera, SoftShadows, AdaptiveDpr/*, OrbitControls*//*, PerformanceMonitor, PerformanceMonitorApi/*, Hud, useDetectGPU, useProgress, StatsGl*/ } from '@react-three/drei'
 import NightSky from './NightSky'
 import Sun from './Sun'
 import SunLight from './SunLight'
@@ -65,7 +65,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
     }*/
 
     const Fallback = () => {
-        return (<>3D Canvas not supported on this device</>)
+        return (<>Sorry, this 3D animation can not be displayed on your device</>)
     }
 
     const aspect = (props.containerRef?.current !== null && props.containerRef?.current.clientWidth) ? props.containerRef?.current.clientWidth / props.containerRef?.current.clientHeight : 2
@@ -93,51 +93,53 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 //ref={canvasRef}
                 camera={cameraRef.current ?? {}}
             >
-                {/*<Suspense fallback={<Loader />}>*/}
-                <PerspectiveCamera
-                    makeDefault={true}
-                    ref={cameraRef}
-                    fov={75}
-                    near={0.01}
-                    far={3}
-                    position={[0, 0.06, 1]}
-                    aspect={aspect}
-                />
-                {/*<PerformanceMonitor onChange={onPerformanceChangeHandler} />*/}
-                <color attach="background" args={['#2f0f30']} />
-                <ambientLight color={'#ecd7e2'} intensity={15} />
-                <SoftShadows />
-                <NightSky
-                    position={[0, 1, -2.1]}
-                    scale={[20, 3, 1]}
-                />
-                <Sun
-                    position={[0, 0.5, -1.6]}
-                    scale={[2, 2, 0]}
-                />
-                <SunLight
-                    position={[0, 0.5, -1.4]}
-                    intensity={8}
-                />
-                <City
-                    position={[0, 0.12, -1]}
-                    scale={[0.8, 0.3, 0]}
-                />
-                <Trees />
-                <Terrains />
-                {/*<Loop />*/}
-                {/*<EffectComposer>
-                    <Bloom
-                        luminanceThreshold={0.08}
-                        intensity={0.7}
-                        luminanceSmoothing={0.01}
+                <Suspense fallback={<Fallback />}>
+                    <AdaptiveDpr pixelated />
+                    {/*<Loader />*/}
+                    <PerspectiveCamera
+                        makeDefault={true}
+                        ref={cameraRef}
+                        fov={75}
+                        near={0.01}
+                        far={3}
+                        position={[0, 0.06, 1]}
+                        aspect={aspect}
                     />
-                </EffectComposer>*/}
-                {/*<axesHelper />*/}{/*enable for development*/}
-                {/*<OrbitControls camera={cameraRef.current} />*/}{/*enable for development*/}
-                {/*<StatsGl />*/}{/*enable for development*/}
-                {/*GUI: https://github.com/pmndrs/leva*/}
-                {/*</Suspense>*/}
+                    {/*<PerformanceMonitor onChange={onPerformanceChangeHandler} />*/}
+                    <color attach="background" args={['#2f0f30']} />
+                    <ambientLight color={'#ecd7e2'} intensity={15} />
+                    <SoftShadows />
+                    <NightSky
+                        position={[0, 1, -2.1]}
+                        scale={[20, 3, 1]}
+                    />
+                    <Sun
+                        position={[0, 0.5, -1.6]}
+                        scale={[2, 2, 0]}
+                    />
+                    <SunLight
+                        position={[0, 0.5, -1.4]}
+                        intensity={8}
+                    />
+                    <City
+                        position={[0, 0.12, -1]}
+                        scale={[0.8, 0.3, 0]}
+                    />
+                    <Trees />
+                    <Terrains />
+                    {/*<Loop />*/}
+                    {/*<EffectComposer>
+                        <Bloom
+                            luminanceThreshold={0.08}
+                            intensity={0.7}
+                            luminanceSmoothing={0.01}
+                        />
+                    </EffectComposer>*/}
+                    {/*<axesHelper />*/}{/*enable for development*/}
+                    {/*<OrbitControls camera={cameraRef.current} />*/}{/*enable for development*/}
+                    {/*<StatsGl />*/}{/*enable for development*/}
+                    {/*GUI: https://github.com/pmndrs/leva*/}
+                </Suspense>
             </Canvas>
         </>
 
