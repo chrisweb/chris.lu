@@ -1,3 +1,7 @@
+// generated with npx @eslint/migrate-config .eslintrc.js
+// based on this .eslintrc.js
+// https://github.com/chrisweb/chris.lu/blob/eeb38430ee5c075f9c885c6e2aefe0705598cf54/.eslintrc.js
+
 import globals from "globals";
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
@@ -34,7 +38,6 @@ export default [{
             ...globals.browser,
             ...globals.node,
         },
-
         ecmaVersion: "latest",
         sourceType: "module",
     },
