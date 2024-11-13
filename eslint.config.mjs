@@ -1,127 +1,157 @@
-// generated with npx @eslint/migrate-config .eslintrc.js
-// based on this .eslintrc.js
-// https://github.com/chrisweb/chris.lu/blob/eeb38430ee5c075f9c885c6e2aefe0705598cf54/.eslintrc.js
+import js from '@eslint/js'
+import { FlatCompat } from '@eslint/eslintrc'
+import importX from 'eslint-plugin-import-x'
+import * as mdx from 'eslint-plugin-mdx'
+import react from 'eslint-plugin-react'
+import tseslint from 'typescript-eslint'
+import reactHooks from 'eslint-plugin-react-hooks'
+import jsxA11y from 'eslint-plugin-jsx-a11y'
 
-import globals from "globals";
-import typescriptEslint from "@typescript-eslint/eslint-plugin";
-import tsParser from "@typescript-eslint/parser";
-import parser from "eslint-mdx";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
+const compat = new FlatCompat()
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
-});
-
-export default [{
-    ignores: [
-        "**/node_modules/",
-        "**/.next/",
-        "**/.vscode/",
-        "**/public/",
-        "**/LICENSE",
-        "tests/eslint/",
+// when using eslint-config-next it becomes complicated
+// to exclude MDX files from setup it does
+// to avoid getting "parsing error: Invalid character"
+/*const compatNextESLintConfig = [
+    ...compat.extends('next/core-web-vitals'),
+]*/
+// so instead we use the same ESLint compat package
+// but only include the eslint-plugin-next
+const compatNextESLintPlugin = compat.config({
+    extends: [
+        // will get applied to all files
+        // https://github.com/vercel/next.js/discussions/49337
+        'plugin:@next/eslint-plugin-next/core-web-vitals',
     ],
-}, {
-    linterOptions: {
-        reportUnusedDisableDirectives: true,
-    },
+})
 
-    languageOptions: {
-        globals: {
-            ...globals.browser,
-            ...globals.node,
-        },
-        ecmaVersion: "latest",
-        sourceType: "module",
-    },
-}, ...compat.extends("next/core-web-vitals").map(config => ({
-    ...config,
-    files: ["**/*.ts?(x)", "**/*.md?(x)"],
-})), ...compat.extends(
-    "plugin:@react-three/recommended",
-    "plugin:@typescript-eslint/recommended-type-checked",
-    "plugin:@typescript-eslint/stylistic-type-checked",
-).map(config => ({
-    ...config,
-    files: ["**/*.ts?(x)"],
-})), {
-    files: ["**/*.ts?(x)"],
-
-    plugins: {
-        "@typescript-eslint": typescriptEslint,
-    },
-
-    languageOptions: {
-        parser: tsParser,
-        ecmaVersion: 5,
-        sourceType: "module",
-
-        parserOptions: {
-            ecmaFeatures: {
-                jsx: true,
+const tsESLintConfig = tseslint.config(
+    {
+        name: 'tsESLintConfig',
+        // as we did not use eslint-config-next we will now
+        // manually add the packages it would have added
+        extends: [
+            //...tseslint.configs.recommended,
+            // OR more type checked rules
+            //...tseslint.configs.recommendedTypeChecked,
+            // OR more strict rules
+            //...tseslint.configs.strict,
+            // OR more strict and type checked rules
+            ...tseslint.configs.strictTypeChecked,
+            // optional stylistic rules
+            //...tseslint.configs.stylistic,
+            // OR the type checked version
+            ...tseslint.configs.stylisticTypeChecked,
+            react.configs.flat.recommended,
+            react.configs.flat['jsx-runtime'],
+            jsxA11y.flatConfigs.recommended,
+            importX.flatConfigs.recommended,
+            // the following is only needed if you use typescript
+            importX.flatConfigs.typescript,
+        ],
+        files: ['**/*.mjs', '**/*.ts?(x)'],
+        // only needed if you use TypeChecked rules
+        languageOptions: {
+            parserOptions: {
+                // https://typescript-eslint.io/getting-started/typed-linting
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+                // react recommended is already adding the ecmaFeatures
+                /*ecmaFeatures: {
+                    jsx: true,
+                },*/
+                // following option already added by eslint recommended
+                // which we added in the jsESLintConfig
+                //warnOnUnsupportedTypeScriptVersion: false,
             },
-
-            warnOnUnsupportedTypeScriptVersion: true,
-            project: "./tsconfig.json",
         },
-    },
-
-    rules: {
-        quotes: ["error", "single", {
-            allowTemplateLiterals: true,
-        }],
-
-        semi: ["error", "never"],
-
-        "@typescript-eslint/naming-convention": ["error", {
-            selector: "interface",
-            format: ["PascalCase"],
-
-            custom: {
-                regex: "^I[A-Z]",
-                match: true,
+        plugins: {
+            react,
+            'react-hooks': reactHooks,
+        },
+        rules: {
+            ...reactHooks.configs.recommended.rules,
+            // rules from eslint-config-next
+            'import-x/no-anonymous-default-export': 'warn',
+            'react/no-unknown-property': 'off',
+            'react/react-in-jsx-scope': 'off',
+            'react/prop-types': 'off',
+            'jsx-a11y/alt-text': ['warn', { elements: ['img'], img: ['Image'], },],
+            'jsx-a11y/aria-props': 'warn',
+            'jsx-a11y/aria-proptypes': 'warn',
+            'jsx-a11y/aria-unsupported-elements': 'warn',
+            'jsx-a11y/role-has-required-aria-props': 'warn',
+            'jsx-a11y/role-supports-aria-props': 'warn',
+            'react/jsx-no-target-blank': 'off',
+        },
+        settings: {
+            react: {
+                version: 'detect',
             },
-        }],
-
-        "@typescript-eslint/consistent-indexed-object-style": "off",
-
-        "@typescript-eslint/ban-ts-comment": ["error", {
-            "ts-expect-error": "allow-with-description",
-            "ts-ignore": "allow-with-description",
-            "ts-nocheck": false,
-            "ts-check": false,
-            minimumDescriptionLength: 3,
-        }],
-    },
-}, ...compat.extends("plugin:mdx/recommended").map(config => ({
-    ...config,
-    files: ["**/*.md?(x)"],
-})), {
-    files: ["**/*.md?(x)"],
-
-    languageOptions: {
-        parser: parser,
-        ecmaVersion: 5,
-        sourceType: "script",
-
-        parserOptions: {
-            markdownExtensions: ["*.md, *.mdx"],
         },
     },
-
-    settings: {
-        "mdx/code-blocks": false,
-        "mdx/remark": true,
+    {
+        // disable type-aware linting on JS files
+        // only needed if you use TypeChecked rules
+        files: ['**/*.mjs'],
+        ...tseslint.configs.disableTypeChecked,
     },
+    {
+        name: 'nextConfigSpecial',
+            "files": ['next.config.ts'],
+            "rules": {
+              "@typescript-eslint/require-await": ['off'],
+            }
+          
+    }
+)
 
-    rules: {
-        "react/no-unescaped-entities": 0,
+const jsESLintConfig = [
+    {
+        name: 'jsESLintConfig',
+        // all files expect mdx files
+        files: ['**/*.mjs', '**/*.ts?(x)'],
+        ...js.configs.recommended,
     },
-}];
+]
+
+const mdxESLintConfig = [
+    // https://github.com/mdx-js/eslint-mdx/blob/d6fc093fb32ab58fb226e8cf42ac77399b8a4758/README.md#flat-config
+    {
+        name: 'mdxFlatESLintConfig',
+        files: ['**/*.mdx'],
+        ...mdx.flat,
+        processor: mdx.createRemarkProcessor({
+            lintCodeBlocks: false,
+            languageMapper: {},
+        }),
+    },
+    {
+        name: 'mdxFlatCodeBlocksESLintConfig',
+        files: ['**/*.mdx'],
+        ...mdx.flatCodeBlocks,
+        rules: {
+            ...mdx.flatCodeBlocks.rules,
+            'no-var': 'error',
+            'prefer-const': 'error',
+        },
+    },
+]
+
+// eslint-disable-next-line import-x/no-anonymous-default-export
+export default [
+    {
+        name: 'ignoreESLintConfig',
+        // the ignores option needs to be in a separate configuration object
+        // replaces the .eslintignore file
+        ignores: [
+            '.next/',
+            '.vscode/',
+            'public/',
+        ]
+    },
+    ...jsESLintConfig,
+    ...tsESLintConfig,
+    ...mdxESLintConfig,
+    ...compatNextESLintPlugin,
+]
