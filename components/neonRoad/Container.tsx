@@ -38,7 +38,7 @@ const Container: React.FC = () => {
     const playCallback = useCallback((playMusic: boolean) => {
         setAnimationState(true)
         if (playMusic) {
-            playerRef.current?.play().catch((error): void => {
+            playerRef.current?.play().catch((error: unknown): void => {
                 if (process.env.NODE_ENV === 'development') {
                     console.log('player play() error: ', error)
                 }
@@ -50,7 +50,7 @@ const Container: React.FC = () => {
 
     const powerOffCallback = useCallback(() => {
         setAnimationState(false)
-        playerRef.current?.stop().catch((error): void => {
+        playerRef.current?.stop().catch((error: unknown): void => {
             if (process.env.NODE_ENV === 'development') {
                 console.log('player stop() error: ', error)
             }

@@ -4,7 +4,7 @@ import ShareButton from '@/components/base/button/Share'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faBug, faComments } from '@fortawesome/free-solid-svg-icons'
 import Image from 'next/image'
-import buyMeACoffeeImport from '/public/assets/images/buy_me_a_coffee_button.png'
+import buyMeACoffeeImport from '@/public/assets/images/buy_me_a_coffee_button.png'
 
 const AsideContent: React.FC = (): React.JSX.Element => {
 

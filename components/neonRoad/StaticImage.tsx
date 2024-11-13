@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import fallback from '/public/assets/images/neonroad/fallback.png'
+import fallback from '@/public/assets/images/neonroad/fallback.png'
 
 interface IProps {
     altText: string

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef, useLayoutEffect, useMemo } from 'react'
+import { useRef, useLayoutEffect, useMemo } from 'react'
 import type { Mesh, CanvasTexture } from 'three'
 import { useTexture } from '@react-three/drei'
 import { createNoise2D, type NoiseFunction2D } from 'simplex-noise'

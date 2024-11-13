@@ -273,7 +273,6 @@ const securityHeadersConfig = (phase) => {
 
     const cspHeader = () => {
 
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         const upgradeInsecure = (phase !== PHASE_DEVELOPMENT_SERVER && !cspReportOnly) ? 'upgrade-insecure-requests;' : ''
 
         // report directive to be added at the end
@@ -367,7 +366,6 @@ const securityHeadersConfig = (phase) => {
     const headers = [
         ...extraSecurityHeaders,
         {
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
             value: cspHeader().replace(/\n/g, ''),
         },

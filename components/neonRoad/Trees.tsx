@@ -45,13 +45,16 @@ const Trees: React.FC = () => {
                 <PalmModel
                     position={position}
                     ref={treeGroup => {
-                        if (treeGroup === null) return
-                        side === 'right' ? rightSideTreesRefs.current[i] = treeGroup : leftSideTreesRefs.current[i] = treeGroup
+                        if (side === 'right') {
+                            rightSideTreesRefs.current[i] = treeGroup;
+                        } else {
+                            leftSideTreesRefs.current[i] = treeGroup;
+                        }
                     }}
                     scale={scale}
                     castShadow={true} // default is false
                     receiveShadow={false}
-                    key={side + i}
+                    key={side + '_' + i.toString()}
                     rotation={rotation}
                 />
             )

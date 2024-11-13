@@ -287,13 +287,13 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
 
     const onClickTogglePlayPauseCallback = () => {
         if (isPlayingState) {
-            getPlayer()?.pause().catch((error): void => {
+            getPlayer()?.pause().catch((error: unknown): void => {
                 if (process.env.NODE_ENV === 'development') {
                     console.log('player pause() error: ', error)
                 }
             })
         } else {
-            getPlayer()?.play().catch((error): void => {
+            getPlayer()?.play().catch((error: unknown): void => {
                 if (process.env.NODE_ENV === 'development') {
                     console.log('player play() error: ', error)
                 }
@@ -302,7 +302,7 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
     }
 
     const onClickNextHandler = () => {
-        getPlayer()?.next().catch((error): void => {
+        getPlayer()?.next().catch((error: unknown): void => {
             if (process.env.NODE_ENV === 'development') {
                 console.log('player next() error: ', error)
             }
@@ -358,7 +358,7 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
     }
 
     const onWaveClickHandler = useCallback((clickHorizontalPositionInPercent: number) => {
-        getPlayer()?.setPosition(clickHorizontalPositionInPercent).catch((error): void => {
+        getPlayer()?.setPosition(clickHorizontalPositionInPercent).catch((error: unknown): void => {
             if (process.env.NODE_ENV === 'development') {
                 console.log('player setPosition() error: ', error)
             }
@@ -383,7 +383,7 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
 
         return () => {
             if (typeof playerRef !== 'function' && playerRef !== null) {
-                playerRef.current?.disconnect().catch((error): void => {
+                playerRef.current?.disconnect().catch((error: unknown): void => {
                     if (process.env.NODE_ENV === 'development') {
                         console.log('player disconnect() error: ', error)
                     }

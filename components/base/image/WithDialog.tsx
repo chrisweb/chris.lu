@@ -10,11 +10,14 @@ import styles from './withdialog.module.css'
 
 const UIModal = dynamic(() => import('@/components/ui/Modal'), { ssr: false })
 
-const ImageWithDialog: React.FC<ImageProps> = (props): React.JSX.Element => {
+interface IImageWithDialog extends Omit<ImageProps, 'src' | 'alt'> {
+    withOpenButton?: boolean
+    src: StaticImageData
+}
+
+const ImageWithDialog: React.FC<IImageWithDialog> = (props): React.JSX.Element => {
 
     const [imageDialogIsOpenState, setImageDialogIsOpenState] = useState(false)
-
-    const withOpenButton = false
 
     const imageButtonClickHandler = () => {
         setImageDialogIsOpenState(true)
@@ -24,7 +27,7 @@ const ImageWithDialog: React.FC<ImageProps> = (props): React.JSX.Element => {
         setImageDialogIsOpenState(false)
     }, [])
 
-    const staticImageData = props.src as StaticImageData
+    const staticImageData = props.src
 
     const intrinsicWidth = staticImageData.width
     const intrinsicHeight = staticImageData.height
@@ -44,7 +47,7 @@ const ImageWithDialog: React.FC<ImageProps> = (props): React.JSX.Element => {
                     placeholder="blur"
                     {...props}
                 />
-                {withOpenButton && (
+                {props.withOpenButton && (
                     <FontAwesomeIcon icon={faMagnifyingGlass} size="xl" color='white' className={`${styles.iconPositioning}  ${styles.icon}`} />
                 )}
             </button>

@@ -35,16 +35,12 @@ const TocHighlight: React.FC<IProps> = (props): React.JSX.Element => {
 
             if (isValidElement<IChildProps>(child)) {
 
-                if (child.props.children) {
+                const children = Children.toArray(child.props.children)
 
-                    const children = Children.toArray(child.props.children)
-
-                    child = cloneElement(
-                        child,
-                        { children: recursiveChildren(children, activeIdState) as ReactElement<IChildProps> }
-                    )
-
-                }
+                child = cloneElement(
+                    child,
+                    { children: recursiveChildren(children, activeIdState) as ReactElement<IChildProps> }
+                )
 
                 if ('href' in child.props) {
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
+import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import Terrain from './Terrain'
 import { Mesh } from 'three'
@@ -34,7 +34,6 @@ const Terrains: React.FC = () => {
                 zPosition={zPosition}
                 key={i}
                 ref={(terrainMesh) => {
-                    if (terrainMesh === null) return
                     terrainsRefs.current[i] = terrainMesh
                 }}
             />
