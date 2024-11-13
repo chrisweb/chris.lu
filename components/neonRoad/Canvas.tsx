@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, Suspense, useEffect } from 'react'
+import { useRef, Suspense } from 'react'
 import type { PerspectiveCamera as PerspectiveCameraType } from 'three'
 import { Canvas } from '@react-three/fiber'
 import { PerspectiveCamera, SoftShadows, AdaptiveDpr/*, OrbitControls*//*, PerformanceMonitor, PerformanceMonitorApi/*, Hud, useDetectGPU, useProgress, StatsGl*/ } from '@react-three/drei'

@@ -1,7 +1,5 @@
 export interface IPropsSearchParams {
-    searchParams?: {
-        [key: string]: string | string[] | undefined
-    }
+    searchParams?: Record<string, string | string[] | undefined>
 }
 
 export interface IProps extends IPropsSearchParams {

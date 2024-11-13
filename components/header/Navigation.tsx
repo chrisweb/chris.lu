@@ -23,6 +23,7 @@ const HeaderNavigation: React.FC = () => {
     // on click on the hamburger toggle navigation open/close
     const onClickHamburgerHandler = () => {
         setNavigationIsOpenState((previousState) => {
+            // eslint-disable-next-line no-constant-binary-expression, @typescript-eslint/no-unnecessary-condition
             return previousState === (true || null) ? false : true
         })
     }
@@ -99,7 +100,7 @@ const HeaderNavigation: React.FC = () => {
                 <span className={styles.hamburgerInner}></span>
             </button>
             <div className={`${styles.layoutNavbarContainer} ${navigationIsOpenState === null ? '' : (navigationIsOpenState ? styles.openNavbar : styles.closeNavbar)}`} {...swipeHandlers} ref={swipeableRefPassthrough}>
-                <nav id="navigation" className={`${styles.layoutNavbar}`} >
+                <nav id="navigation" className={styles.layoutNavbar} >
                     {mainMenuItems.map((menuItem) => {
                         return (
                             <Link

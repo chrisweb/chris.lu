@@ -55,7 +55,7 @@ const Loop: React.FC<IProps> = (props) => {
         requestAnimationFrameRef.current = requestAnimationFrame(loop)
 
     }, [three])
-    
+
     const start = useCallback(() => {
 
         three.clock.start()
@@ -74,14 +74,16 @@ const Loop: React.FC<IProps> = (props) => {
 
         three.clock.stop()
 
-        if (requestAnimationFrameRef.current !== null) {
-            cancelAnimationFrame(requestAnimationFrameRef.current)
-        }
+        cancelAnimationFrame(requestAnimationFrameRef.current)
 
     }, [three.clock])
 
     const changeAnimationState = useCallback(() => {
-        document.hidden ? stop() : start()
+        if (document.hidden) {
+            stop();
+        } else {
+            start();
+        }
     }, [stop, start])
 
     useEffect(() => {
