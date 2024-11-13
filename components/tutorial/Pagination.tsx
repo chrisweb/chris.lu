@@ -6,7 +6,7 @@ import styles from './pagination.module.css'
 
 interface IPaginationItem {
     label: string
-    href: Route<string> | URL
+    href: Route | URL
 }
 
 export interface IPaginationProps {

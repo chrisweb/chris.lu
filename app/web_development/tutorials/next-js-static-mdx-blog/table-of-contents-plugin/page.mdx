@@ -270,26 +270,29 @@ const useIntersectionObserver = (querySelector: string, rootMargin: string, thre
 
     useEffect(() => {
 
-        const handleObsever = (entries: IntersectionObserverEntry[]) => {
+        const handleObserver = (entries: IntersectionObserverEntry[]) => {
 
             entries.forEach((entry) => {
-                if (entry?.isIntersecting) {
+                if (entry.isIntersecting) {
                     setActiveIdState(entry.target.id)
                 }
             })
 
         }
 
-        if (observerRef !== undefined) {
+        if (typeof observerRef !== 'undefined') {
 
-            observerRef.current = new IntersectionObserver(handleObsever, {
+            observerRef.current = new IntersectionObserver(handleObserver, {
                 rootMargin: rootMargin,
                 threshold: threshold,
             })
 
             const elements = document.querySelectorAll(querySelector)
 
-            elements.forEach((elem) => observerRef.current !== null ? observerRef.current.observe(elem) : null)
+            elements.forEach((elem) => {
+                if (observerRef.current === null) return
+                observerRef.current.observe(elem)
+            })
         }
 
         return () => {

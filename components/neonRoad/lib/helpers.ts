@@ -1,10 +1,8 @@
-import type { Mesh, Group, Vector3 } from 'three'
+import type { Mesh, Group } from 'three'
 
-interface IMoveFromAToBInLoop<Objects_Refs> {
-    (delta: number, objectsRefs: Objects_Refs[], cameraZPosition: number, distanceToNextObject: number): void
-}
+type MoveFromAToBInLoopType<Objects_Refs> = (delta: number, objectsRefs: Objects_Refs[], cameraZPosition: number, distanceToNextObject: number) => void
 
-const moveFromAToBInLoop: IMoveFromAToBInLoop<Group | Mesh> = (delta, objectsRefs, cameraZPosition, distanceToNextObject) => {
+const moveFromAToBInLoop: MoveFromAToBInLoopType<Group | Mesh> = (delta, objectsRefs, cameraZPosition, distanceToNextObject) => {
 
     const objectsBehindCamera = []
     const speed = 0.05
@@ -12,14 +10,6 @@ const moveFromAToBInLoop: IMoveFromAToBInLoop<Group | Mesh> = (delta, objectsRef
 
     // move all the objects by newZPosition
     for (const object of objectsRefs) {
-
-        if (!object) {
-            break
-        }
-
-        if (!object.position) {
-            continue
-        }
 
         object.position.z += newZPosition
 
@@ -31,7 +21,7 @@ const moveFromAToBInLoop: IMoveFromAToBInLoop<Group | Mesh> = (delta, objectsRef
         // and gets removed
         const removeWhenAtZ = cameraZPosition + (distanceToNextObject / 2)
 
-        if ((object.position as Vector3).z > removeWhenAtZ) {
+        if (object.position.z > removeWhenAtZ) {
             objectsBehindCamera.push(object)
         }
 
@@ -41,7 +31,7 @@ const moveFromAToBInLoop: IMoveFromAToBInLoop<Group | Mesh> = (delta, objectsRef
 
         // order objecta by their z position
         // from highest z position to lowest
-        objectsRefs.sort((a, b) => (b.position! as Vector3).z - (a.position! as Vector3).z)
+        objectsRefs.sort((a, b) => b.position.z - a.position.z)
 
         // get the last object (if there is one)
         // last object is the one closest to the sun
@@ -53,11 +43,11 @@ const moveFromAToBInLoop: IMoveFromAToBInLoop<Group | Mesh> = (delta, objectsRef
         // we put the first objects, at where the camera - distance to
         // the objects center
         if (objectsBehindCamera.length === objectsRefs.length) {
-            (nextObject.position as Vector3).z = cameraZPosition - (distanceToNextObject / 2)
+            nextObject.position.z = cameraZPosition - (distanceToNextObject / 2)
         } else {
             // if there at least one object in front of the camera
             // then the next object is placed behind the last object
-            (nextObject.position as Vector3).z = (lastObject.position as Vector3).z - distanceToNextObject
+            nextObject.position.z = lastObject.position.z - distanceToNextObject
         }
 
         objectsBehindCamera.pop()

@@ -5,7 +5,7 @@ import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 import type { Route } from 'next'
 
 export interface IBaseLinkProps extends PropsWithChildren {
-    href: Route<string> | URL
+    href: Route | URL
     target?: string
     rel?: string
     className?: string

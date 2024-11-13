@@ -4,18 +4,17 @@ import styles from './layout.module.css'
 import { Permanent_Marker, VT323, Architects_Daughter, Source_Code_Pro, Anta } from 'next/font/google'
 import HeaderNavigation from '@/components/header/Navigation'
 import BaseLink from '@/components/base/Link'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { sharedMetaData } from '@/shared/metadata'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
-import type { Viewport } from 'next'
 
 export const metadata: Metadata = {
     // default next.js value
     // added this just to make the console message go away
     metadataBase: process.env.VERCEL_URL
         ? new URL(`https://${process.env.VERCEL_URL}`)
-        : new URL(`http://localhost:${process.env.PORT ?? 3000}`),
+        : new URL(`http://localhost:${process.env.PORT ?? '3000'}`),
     title: {
         template: '%s | chris.lu',
         default: 'Home | chris.lu',

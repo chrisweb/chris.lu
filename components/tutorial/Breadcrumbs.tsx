@@ -6,7 +6,7 @@ import styles from './breadcrumbs.module.css'
 
 export interface IListItem {
     label: string
-    href: Route<string> | URL
+    href: Route | URL
 }
 
 export interface IPaginationProps {

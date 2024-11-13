@@ -48,7 +48,7 @@ const VolumeDialog: React.FC<IProps> = (props) => {
     }
 
     useEffect(() => {
-        if (isOpen === true) {
+        if (isOpen) {
             openModal()
         } else {
             closeModal()
@@ -74,7 +74,7 @@ const VolumeDialog: React.FC<IProps> = (props) => {
             ref={dialogRef}
             onKeyDown={onKeyDownHandler}
             onAnimationEnd={animationEndHandler}
-            className={`${styles.reset} ${styles.dialog} ${closeAnimationState === true ? styles.close : ''}`}
+            className={`${styles.reset} ${styles.dialog} ${closeAnimationState ? styles.close : ''}`}
         >
             {children}
         </dialog>,

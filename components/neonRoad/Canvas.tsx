@@ -68,7 +68,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
         return (<>Sorry, this 3D animation can not be displayed on your device</>)
     }
 
-    const aspect = (props.containerRef?.current !== null && props.containerRef?.current.clientWidth) ? props.containerRef?.current.clientWidth / props.containerRef?.current.clientHeight : 2
+    const aspect = (props.containerRef?.current !== null && props.containerRef?.current.clientWidth) ? props.containerRef.current.clientWidth / props.containerRef.current.clientHeight : 2
 
     // https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/unpackColorSpace
     const rendererProps = {

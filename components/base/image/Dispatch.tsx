@@ -7,23 +7,20 @@ function extractImageType(imageProps: ImageProps) {
 
     let imageType = ''
 
-    if (imageProps !== null) {
+    const imageTypeMatch = imageProps.title?.match(/\{(.*?)\}/)
 
-        const imageTypeMatch = imageProps.title?.match(/\{(.*?)\}/)
+    if (imageTypeMatch) {
+        // the full match, for example "{ banner }"
+        const imageTypeFull = imageTypeMatch[0]
+        // the type only, for example "banner"
+        imageType = imageTypeMatch[1].trim()
+        // remove the image type info from the title
+        const newTitle = imageProps.title?.replace(imageTypeFull, '').trim()
 
-        if (imageTypeMatch) {
-            // the full match, for example "{ banner }"
-            const imageTypeFull = imageTypeMatch[0]
-            // the type only, for example "banner"
-            imageType = imageTypeMatch[1].trim()
-            // remove the image type info from the title
-            const newTitle = imageProps.title?.replace(imageTypeFull, '').trim()
-
-            if (newTitle !== '') {
-                imageProps.title = newTitle
-            } else {
-                delete imageProps.title
-            }
+        if (newTitle !== '') {
+            imageProps.title = newTitle
+        } else {
+            delete imageProps.title
         }
 
     }
@@ -41,7 +38,7 @@ const ImageDispatch: React.FC<ImageProps> = (props): React.JSX.Element => {
     const staticImageData = props.src as StaticImageData
     const src = staticImageData.src
 
-    if (src?.endsWith('gif') || imageType === 'animated') {
+    if (src.endsWith('gif') || imageType === 'animated') {
         newImageProps.blurDataURL = rgbDataURL(255, 0, 125)
     }
 
