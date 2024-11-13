@@ -1,5 +1,5 @@
 import BaseLink from '@/components/base/Link'
-import webpNotFoundStaticImport from '/public/assets/images/animated/404.webp'
+import webpNotFoundStaticImport from '@/public/assets/images/animated/404.webp'
 import ImageAnimatedPicture from '@/components/base/image/AnimatedPicture'
 
 export default function NotFound() {
