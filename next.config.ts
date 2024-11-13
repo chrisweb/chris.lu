@@ -10,7 +10,7 @@ import type { IOptions as RehypeGithubAlertsOptionsType, DefaultBuildType as Reh
 import type { ElementContent as HastElementContent } from 'hast'
 import type { Options as RehypeAutolinkHeadingsOptionsType } from 'rehype-autolink-headings'
 import createMdx from '@next/mdx'
-import rehypePrettyCode from 'rehype-pretty-code'
+import { rehypePrettyCode } from 'rehype-pretty-code'
 import { remarkTableOfContents } from 'remark-table-of-contents'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
@@ -280,6 +280,7 @@ const securityHeadersConfig = (phase: string) => {
 
     const cspHeader = () => {
 
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         const upgradeInsecure = (phase !== PHASE_DEVELOPMENT_SERVER && !cspReportOnly) ? 'upgrade-insecure-requests;' : ''
 
         // report directive to be added at the end
@@ -373,6 +374,7 @@ const securityHeadersConfig = (phase: string) => {
     const headers = [
         ...extraSecurityHeaders,
         {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
             value: cspHeader().replace(/\n/g, ''),
         },
