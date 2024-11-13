@@ -98,11 +98,11 @@ const tsESLintConfig = tseslint.config(
     },
     {
         name: 'nextConfigSpecial',
-            "files": ['next.config.ts'],
-            "rules": {
-              "@typescript-eslint/require-await": ['off'],
-            }
-          
+        files: ['next.config.ts'],
+        rules: {
+            '@typescript-eslint/require-await': 'off',
+        }
+
     }
 )
 
