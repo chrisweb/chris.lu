@@ -96,14 +96,6 @@ const tsESLintConfig = tseslint.config(
         files: ['**/*.mjs'],
         ...tseslint.configs.disableTypeChecked,
     },
-    {
-        name: 'nextConfigSpecial',
-        files: ['next.config.ts'],
-        rules: {
-            '@typescript-eslint/require-await': 'off',
-        }
-
-    }
 )
 
 const jsESLintConfig = [
