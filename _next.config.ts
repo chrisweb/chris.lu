@@ -228,6 +228,7 @@ const nextConfig = (phase: string): NextConfig => {
         eslint: {
             ignoreDuringBuilds: true,
         },
+        // eslint-disable-next-line @typescript-eslint/require-await
         headers: async () => {
             return [
                 {
@@ -254,6 +255,7 @@ const nextConfig = (phase: string): NextConfig => {
                 },
             ];
         },
+        // eslint-disable-next-line @typescript-eslint/require-await
         redirects: async () => {
             return [
                 {
