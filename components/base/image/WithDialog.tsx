@@ -10,7 +10,7 @@ import styles from './withdialog.module.css'
 
 const UIModal = dynamic(() => import('@/components/ui/Modal'), { ssr: false })
 
-interface IImageWithDialog extends Omit<ImageProps, 'src' | 'alt'> {
+interface IImageWithDialog extends Omit<ImageProps, 'src'> {
     withOpenButton?: boolean
     src: StaticImageData
 }
