@@ -46,9 +46,9 @@ const Trees: React.FC = () => {
                     position={position}
                     ref={treeGroup => {
                         if (side === 'right') {
-                            rightSideTreesRefs.current[i] = treeGroup;
+                            rightSideTreesRefs.current[i] = treeGroup
                         } else {
-                            leftSideTreesRefs.current[i] = treeGroup;
+                            leftSideTreesRefs.current[i] = treeGroup
                         }
                     }}
                     scale={scale}

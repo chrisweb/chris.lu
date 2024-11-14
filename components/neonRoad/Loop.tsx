@@ -80,9 +80,9 @@ const Loop: React.FC<IProps> = (props) => {
 
     const changeAnimationState = useCallback(() => {
         if (document.hidden) {
-            stop();
+            stop()
         } else {
-            start();
+            start()
         }
     }, [stop, start])
 

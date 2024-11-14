@@ -83,6 +83,39 @@ const tsESLintConfig = tseslint.config(
             'jsx-a11y/role-has-required-aria-props': 'warn',
             'jsx-a11y/role-supports-aria-props': 'warn',
             'react/jsx-no-target-blank': 'off',
+            // chris.lu customizations below
+            '@typescript-eslint/ban-ts-comment': [
+                'error',
+                {
+                    'ts-expect-error': 'allow-with-description',
+                    'ts-ignore': 'allow-with-description',
+                    'ts-nocheck': false,
+                    'ts-check': false,
+                    minimumDescriptionLength: 3,
+                },
+            ],
+            quotes: [
+                'error',
+                'single',
+                { 'allowTemplateLiterals': true },
+            ],
+            semi: [
+                'error',
+                'never',
+            ],
+            '@typescript-eslint/naming-convention': [
+                'error',
+                {
+                    'selector': 'interface',
+                    'format': [
+                        'PascalCase',
+                    ],
+                    'custom': {
+                        'regex': '^I[A-Z]',
+                        'match': true,
+                    },
+                }
+            ],
         },
         settings: {
             react: {
