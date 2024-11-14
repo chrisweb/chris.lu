@@ -34,7 +34,7 @@ const ShareButton = forwardRef<ButtonWithIconRefType, IProps>((props, buttonRef)
                     if (process.env.NODE_ENV === 'development') {
                         console.log('shared')
                     }
-                }).catch((error) => {
+                }).catch((error: unknown) => {
                     if (process.env.NODE_ENV === 'development') {
                         console.log(error)
                     }
