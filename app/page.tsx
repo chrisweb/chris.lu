@@ -2,8 +2,8 @@ import Typing from '@/components/animated/Typing'
 import styles from './page.module.css'
 import Link from 'next/link'
 import ImageAnimatedEmoji from '@/components/base/image/AnimatedEmoji'
-import gifWaveStaticImport from '/public/assets/images/noto_emoji_animated/48/waving.gif'
-import webpWaveStaticImport from '/public/assets/images/noto_emoji_animated/48/waving.webp'
+import gifWaveStaticImport from '@/public/assets/images/noto_emoji_animated/48/waving.gif'
+import webpWaveStaticImport from '@/public/assets/images/noto_emoji_animated/48/waving.webp'
 
 export default function Homepage() {
 
