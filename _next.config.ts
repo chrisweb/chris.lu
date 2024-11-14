@@ -253,7 +253,7 @@ const nextConfig = (phase: string): NextConfig => {
                         },
                     ],
                 },
-            ];
+            ]
         },
         // eslint-disable-next-line @typescript-eslint/require-await
         redirects: async () => {
@@ -274,7 +274,7 @@ const nextConfig = (phase: string): NextConfig => {
 
 const securityHeadersConfig = (phase: string) => {
 
-    const cspReportOnly = false;
+    const cspReportOnly = false
 
     const reportingUrl = 'https://o4504017992482816.ingest.us.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
 
@@ -416,8 +416,8 @@ export default withSentryConfig(
 
         telemetry: false,
 
-        org: "chrisweb",
-        project: "javascript-nextjs",
+        org: 'chrisweb',
+        project: 'javascript-nextjs',
 
         // Only print logs for uploading source maps in CI
         silent: !process.env.CI,
@@ -437,7 +437,7 @@ export default withSentryConfig(
         // This can increase your server load as well as your hosting bill.
         // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
         // side errors will fail.
-        tunnelRoute: "/monitoring",
+        tunnelRoute: '/monitoring',
 
         // Hides source maps from generated client bundles
         hideSourceMaps: true,
