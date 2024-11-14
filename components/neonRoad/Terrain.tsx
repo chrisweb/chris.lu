@@ -44,7 +44,9 @@ const Terrain = (props: ITerrainProps) => {
 
     const inRange = (value: number, range: [number, number]) => value >= range[0] && value <= range[1]
 
-    const noise2D = useMemo<NoiseFunction2D>(() => { return createNoise2D() }, [createNoise2D])
+    const noise2D = useMemo<NoiseFunction2D>(() => {
+        return createNoise2D()
+    }, [])
 
     console.log('####### Terrain')
 
