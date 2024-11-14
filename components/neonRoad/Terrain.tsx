@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useLayoutEffect, useMemo } from 'react'
+import { useRef, useLayoutEffect, useMemo, useCallback } from 'react'
 import type { Mesh, CanvasTexture } from 'three'
 import { useTexture } from '@react-three/drei'
 import { createNoise2D, type NoiseFunction2D } from 'simplex-noise'
@@ -50,7 +50,7 @@ const Terrain = (props: ITerrainProps) => {
 
     console.log('####### Terrain')
 
-    const procedurallyGenerateDisplacementMap = () => {
+    const procedurallyGenerateDisplacementMap = useCallback(() => {
 
         console.log('####### Terrain procedurallyGenerateDisplacementMap')
 
@@ -156,7 +156,7 @@ const Terrain = (props: ITerrainProps) => {
 
         displacementMapRef.current.needsUpdate = true
 
-    }
+    }, [noise2D])
 
     // fixes a problem where using useEffect would create
     // displacement maps after the texture update so that
@@ -167,11 +167,13 @@ const Terrain = (props: ITerrainProps) => {
             // I don't know if this is necessary, but it's better to be safe than sorry
             // cleanup: dispose of the canvas texture and remove the canvas element from dom
             if (displacementMapRef.current !== null) {
+                // eslint-disable-next-line react-hooks/exhaustive-deps
                 displacementMapRef.current.dispose()
             }
+            // eslint-disable-next-line react-hooks/exhaustive-deps
             canvasRef.current.remove()
          }
-    }, [])
+    }, [procedurallyGenerateDisplacementMap])
 
     /*useFrame(() => {
         procedurallyGenerateDisplacementMap()
