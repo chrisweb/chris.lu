@@ -69,7 +69,7 @@ const Button: React.FC<IProps> = ({ children, colorChange, randomize }) => {
     const characterIndexRef = useRef(0)
     const pauseIndexRef = useRef(20)
     const actionRef = useRef('type')
-    const withColorChange =  colorChange ?? true
+    const withColorChange = colorChange ?? true
     const randomizeColors = randomize ?? false
 
     const [wordState, setWordState] = useState('')
@@ -171,7 +171,9 @@ const Button: React.FC<IProps> = ({ children, colorChange, randomize }) => {
 
     return (
         <>
-            <span className={`${styles.blinkingCarret} ${styles.clip}`} style={{ backgroundImage: `linear-gradient(to right, hsl(${colorState?.start}) 0%, hsl(${colorState?.end}) 100%)` }}>{wordState}</span>
+            {colorState !== null &&
+                <span className={`${styles.blinkingCarret} ${styles.clip}`} style={{ backgroundImage: `linear-gradient(to right, hsl(${colorState.start}) 0%, hsl(${colorState.end}) 100%)` }}>{wordState}</span>
+            }
         </>
     )
 }
