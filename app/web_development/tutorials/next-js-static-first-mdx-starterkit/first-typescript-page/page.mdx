@@ -124,11 +124,11 @@ You will notice that Next.js re-added the `/app/layout.tsx` file (when we starte
 
 ### No root layout for you Turbo users
 
-We just saw that when using the `npm run dev` command, Next.js will automatically create a root layout file, this is however only the case when you have removed the `--turbo` from the dev script (in our package.json) as we did in a previous [Typescript plugin and typed routes](/web_development/tutorials/next-js-static-first-mdx-starterkit/typescript-plugin-and-typed-routes) chapter
+We just saw that when using the `npm run dev` command, Next.js will automatically create a root layout file, this is however only the case when you have removed the `--turbopack` from the dev script (in our package.json) as we did in a previous [Typescript plugin and typed routes](/web_development/tutorials/next-js-static-first-mdx-starterkit/typescript-plugin-and-typed-routes) chapter
 
-If you use the `npm run dev-turbo` command (or if you prefer, use `npm run dev -- --turbo`) and have no root Layout, then Next.js will **NOT** automatically create one for you 😔.
+If you use the `npm run dev-turbo` command (or if you prefer, use `npm run dev -- --turbopack`) and have no root Layout, then Next.js will **NOT** automatically create one for you 😔.
 
-After starting the development server **with turbo**, if you then visit your localhost (`http://localhost:3000/`) in the browser, instead of getting a root layout file you will see the following error message:
+After starting the development server **with turbopack**, if you then visit your localhost (`http://localhost:3000/`) in the browser, instead of getting a root layout file you will see the following error message:
 
 ```md
 Missing required html tags
