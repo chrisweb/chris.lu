@@ -4,7 +4,7 @@
     "main": "index.js",
     "scripts": {
         "dev": "next dev",
-        "dev-turbo": "next dev --turbo",
+        "dev-turbo": "next dev --turbopack",
         "dev-ssl": "next dev --experimental-https",
         "build": "npm run lint && next build",
         "build-debug": "next build --debug",
@@ -36,7 +36,7 @@
         "@fortawesome/free-solid-svg-icons": "6.6.0",
         "@fortawesome/react-fontawesome": "0.2.2",
         "@mdx-js/loader": "3.1.0",
-        "@next/mdx": "15.0.4-canary.9",
+        "@next/mdx": "15.0.4-canary.12",
         "@react-three/drei": "9.116.0",
         "@react-three/fiber": "9.0.0-rc.0",
         "@react-three/postprocessing": "2.16.3",
@@ -46,10 +46,10 @@
         "glob": "11.0.0",
         "hast": "1.0.0",
         "hast-util-from-html-isomorphic": "2.0.0",
-        "next": "15.0.4-canary.9",
+        "next": "15.0.4-canary.12",
         "postprocessing": "6.36.4",
-        "react": "19.0.0-rc-7ac8e612-20241113",
-        "react-dom": "19.0.0-rc-7ac8e612-20241113",
+        "react": "19.0.0-rc-e1ef8c95-20241115",
+        "react-dom": "19.0.0-rc-e1ef8c95-20241115",
         "react-error-boundary": "4.1.2",
         "react-swipeable": "7.0.2",
         "rehype-autolink-headings": "7.1.0",
@@ -69,17 +69,17 @@
         "web-audio-api-player": "5.3.2"
     },
     "devDependencies": {
-        "@eslint/eslintrc": "3.1.0",
+        "@eslint/eslintrc": "3.2.0",
         "@eslint/js": "9.14.0",
-        "@next/bundle-analyzer": "15.0.4-canary.9",
-        "@next/eslint-plugin-next": "15.0.4-canary.9",
+        "@next/bundle-analyzer": "15.0.4-canary.12",
+        "@next/eslint-plugin-next": "15.0.4-canary.12",
         "@react-three/eslint-plugin": "0.1.1",
         "@types/node": "22.9.0",
         "@types/react": "npm:types-react@rc",
         "@types/react-dom": "npm:types-react-dom@rc",
         "babel-plugin-react-compiler": "19.0.0-beta-a7bf2bd-20241110",
         "eslint": "9.14.0",
-        "eslint-config-next": "15.0.4-canary.9",
+        "eslint-config-next": "15.0.4-canary.12",
         "eslint-plugin-import-x": "4.4.2",
         "eslint-plugin-mdx": "3.1.5",
         "globals": "15.12.0",
@@ -91,10 +91,10 @@
         "typescript-eslint": "8.14.0"
     },
     "overrides": {
-        "react": "19.0.0-rc-7ac8e612-20241113",
-        "react-dom": "19.0.0-rc-7ac8e612-20241113",
+        "react": "19.0.0-rc-e1ef8c95-20241115",
+        "react-dom": "19.0.0-rc-e1ef8c95-20241115",
         "@react-three/fiber": "9.0.0-rc.0",
-        "next": "15.0.4-canary.9"
+        "next": "15.0.4-canary.12"
     },
     "browserslist": [
         ">0.1%, not dead, not Opera < 100, not op_mini all, not and_uc < 15, not samsung < 21, not android > 0, not and_ff < 117, not and_qq < 13, not ie <= 11"
