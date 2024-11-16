@@ -309,6 +309,27 @@ experimental: {
 },
 ```
 
+#### Which means also no Turbo (with plugins)
+
+Turbopack depends on SWC to compile content like MDX and as we saw in the previous chapter SWC has no support for (remark and rehype) plugins yet, which means Turbo will exit with an error if you attempt to use it and have configured either remark or rehype plugins:
+
+> Error: loader PATH_TO_PROJECT\node_modules\@mdx-js\loader\index.cjs for match "*.mdx" does not have serializable options. Ensure that options passed are plain JavaScript objects and values.
+
+If you get an error like this it is likely that you have the following command in your package.json scripts:
+
+```json
+"dev": "next dev --turbopack",
+```
+
+I recommend you change your scripts to this:
+
+```json
+"dev": "next dev",
+"dev-turbo": "next dev --turbopack",
+```
+
+Now your default run dev command will not use Turbopack anymore, but you still have a backup so that you can change again later (when Turbopack and SWC start supporting MDX plugins)
+
 ## Disabling mdxRs and installing @mdx-js/loader instead
 
 Later in this tutorial, we will add several plugins, which is why we are going to turn mdxRs off for now by setting the experimental **mdxRs** configuration option to **false**, but also add a comment as to why, so that in the future as soon as support for plugins gets shipped, we just need to turn it on:
