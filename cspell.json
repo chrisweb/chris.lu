@@ -3,7 +3,16 @@
     "ignorePaths": [],
     "dictionaryDefinitions": [],
     "dictionaries": [],
-    "words": [],
-    "ignoreWords": [],
+    "words": [
+        "turbopack"
+    ],
+    "ignoreWords": [
+        "chrisweb",
+        "drei",
+        "frontmatter",
+        "nocache",
+        "shiki",
+        "swipeable"
+    ],
     "import": []
 }
