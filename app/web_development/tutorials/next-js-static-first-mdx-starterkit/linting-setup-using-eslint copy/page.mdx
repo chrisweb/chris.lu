@@ -304,6 +304,36 @@ eslint: {
 > [!MORE]  
 > [Next.js "ignoreDuringBuilds" documentation](https://nextjs.org/docs/app/api-reference/next-config-js/eslint)  
 
+### Adding even more scripts
+
+We could add more scripts related to linting, for example here we add a backup of the command that Next.js used, we also add a command without the use of a cache, the last two use different flags (to debug ESLint configurations and fix problems automatically)
+
+First we update our `package.json` file (in the root) and add the following scripts:
+
+```json title="package.json" {4-8}
+"scripts": {
+    "dev": "next dev --turbopack",
+    "dev-turbo": "next dev --turbopack",
+    "build": "npm run lint && next build",
+    "start": "next start",
+    "next-lint": "next lint",
+    "lint": "eslint --flag unstable_ts_config --cache --cache-location .next/cache/eslint/",
+    "lint-nocache": "eslint",
+    "lint-debug": "eslint --debug",
+    "lint-fix": "eslint --fix"
+},
+```
+
+Then if you want you could update the README with these explanations:
+
+```md title="README.md"
+`npm run next-lint`: a backup of the original next.js linting command
+`npm run lint`: to manually use our (custom) linting command, it will scan our code and help us find problems in it (gets used by the build command before building)
+`npm run lint-nocache`: same as **lint** command without cache, takes longer but can be useful when testing changes
+`npm run lint-debug`: the **lint** with the ESLint **debug** flag (for a more verbose output)
+`npm run lint-fix`: the **lint** command with the **fix** flag activated (to automatically fix errors and warnings if it can), you probably want to create a new branch before running this as it might produce a big quantity of changed files
+```
+
 ## ESLint debugging tools
 
 Here are 3 tools I found while working on this ESLint tutorial (I wish I had found earlier 😉) that will improve your ESLint debugging experience greatly
@@ -523,7 +553,7 @@ Line Y: we import a type from the @typescript-eslint utilities (instead of the [
 
 Lines A to B: we use the `config()` function from the typescript-eslint package to add the basic eslint rules, followed by typescript-eslint rules:
 
-For the [typescript-eslint rules](https://typescript-eslint.io/users/configs) you have 3 `tseslint.configs.*` options, **recommended** the basic set of recommended rules (this is what Next.js uses), or **recommendedTypeChecked** which adds recommended rules that require type information; which I both commented out as in this tutorial we will use **strictTypeChecked**, which is adds rules that are considered being more opinionated (which is why some projects don't use them, however they can help catch bugs so I recommend trying to have them enabled as well)
+For the [typescript-eslint rules](https://typescript-eslint.io/users/configs) you have 3 `tseslint.configs.*` options, **recommended** is the basic set of recommended rules (this is what Next.js uses), there is also **recommendedTypeChecked** which adds recommended rules that require type information; Next we have **strict** and **StrictTypeChecked**, which you could use instead of the recommended rules, these sets include rules are more opinionated (which is why some projects don't use them, however they can help catch bugs so I recommend giving it a try, you can still disable them later by switching back to **recommended** rules or you could disable some of the rules by setting them to off)
 
 Then we have to chose between two more sets of rules, the **stylistic** set contains rules that do NOT impact program logic but focus on enforcing "simpler code patterns", which means they are even more , and then there is **stylisticTypeChecked** the second option (which I will use in this tutorial) which adds a few more stylistic rules that require type information
 
@@ -539,7 +569,7 @@ Line D: we use the type from the @typescript-eslint utilities as type for our de
 
 ### Config type from ESLint VS typescript-eslint
 
-An alternative to using the type from **typescript-eslint** is to use the [type from the ESLint package](https://eslint.org/docs/latest/use/configure/configuration-files#typescript-configuration-files) as we did in the first examples:
+In the first ESLint chapters, we used the [type from the ESLint package](https://eslint.org/docs/latest/use/configure/configuration-files#typescript-configuration-files) like this:
 
 ```ts
 import type { Linter } from 'eslint'
@@ -554,6 +584,8 @@ However if do keep using those types and want to use typescript-eslint then you 
 > Type `(Config | FlatConfig)[]` does not satisfy the expected type `Config<RulesRecord>[]`.
 
 There are several related tickets about this, like for example [issue #8613](https://github.com/typescript-eslint/typescript-eslint/issues/8613#issuecomment-1983584487) and [issue #9724](https://github.com/typescript-eslint/typescript-eslint/issues/9724), the TLDR is use the types from typescript-eslint
+
+This is why in the latest example, we switched to use the type from the typescript-eslint package instead:
 
 ```ts
 import type { FlatConfig } from '@typescript-eslint/utils/ts-eslint'
