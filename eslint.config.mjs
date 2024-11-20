@@ -44,7 +44,9 @@ const tsESLintConfig = tseslint.config(
             ...tseslintConfigs.stylisticTypeChecked,
             react.configs.flat.recommended,
             react.configs.flat['jsx-runtime'],
-            jsxA11y.flatConfigs.recommended,
+            //jsxA11y.flatConfigs.recommended,
+            // OR more strict rules
+            jsxA11y.flatConfigs.strict,
             importX.flatConfigs.recommended,
             // the following is only needed if you use typescript
             importX.flatConfigs.typescript,
