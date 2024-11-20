@@ -415,7 +415,7 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
             <WalkmanDialog isOpen={isEjectedState} onCloseCallback={onWalkmanDialogCloseCallback}>
                 <Cassette credits={creditsState} />
             </WalkmanDialog>
-            <VolumeDialog isOpen={isVolumeModalOpenState} onCloseCallback={onVolumeDialogCloseCallback} onOpenCallback={onVolumeDialogOpenCallback}>
+            <VolumeDialog isOpen={isVolumeModalOpenState} withEscKeyListener={true} onCloseCallback={onVolumeDialogCloseCallback} onOpenCallback={onVolumeDialogOpenCallback}>
                 <VolumeSlider ref={volumeSliderRef} onInputVolumeHandler={onInputVolumeHandler} />
             </VolumeDialog>
         </>
