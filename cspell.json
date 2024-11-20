@@ -4,6 +4,10 @@
     "dictionaryDefinitions": [],
     "dictionaries": [],
     "words": [
+        "npmjs",
+        "opengraph",
+        "proptypes",
+        "tseslint",
         "turbopack"
     ],
     "ignoreWords": [
@@ -11,6 +15,7 @@
         "drei",
         "frontmatter",
         "nocache",
+        "rushstack",
         "shiki",
         "swipeable"
     ],
