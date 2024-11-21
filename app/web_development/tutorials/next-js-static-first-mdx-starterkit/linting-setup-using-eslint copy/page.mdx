@@ -83,18 +83,14 @@ If you are interested in the progress of more packages and plugins, then have a 
 
 In the [previous version of this tutorial (using Next.js 14)](/web_development/tutorials/next-js-static-mdx-blog/linting-setup-using-eslint) CNA installed ESLint v8, ESLint v8 had support for **eslintrc** (classic) configuration files, but eslintrc files are now **deprecated**.
 
-Also good to know, is that support for [**eslintrc** (classic) configuration files will be removed in version 10.0.0](https://eslint.org/blog/2023/10/flat-config-rollout-plans/#eslintrc-removed-in-eslint-v10.0.0)
+Also good to know, is that support for [**eslintrc** (classic) configuration files will be removed in ESLint version 10.0.0](https://eslint.org/blog/2023/10/flat-config-rollout-plans/#eslintrc-removed-in-eslint-v10.0.0)
 
 The [next 15 blog post](https://nextjs.org/blog/next-15#eslint-9-support) mentioned that:
 
 * you can now use ESLint v9 (or continue using v8)
-* that if Next.js detects that you are still using ESLint v8 they automatically set the `ESLINT_USE_FLAT_CONFIG=false` flag, which [enables support for flat config files in ESLint v8](https://eslint.org/docs/latest/use/configure/migration-guide#start-using-flat-config-files)
+* if Next.js detects that you are still using ESLint v8 they automatically set the `ESLINT_USE_FLAT_CONFIG=false` flag, which [enables support for flat config files in ESLint v8](https://eslint.org/docs/latest/use/configure/migration-guide#start-using-flat-config-files)
 
 Most of that work happened in the [PR #71218](https://github.com/vercel/next.js/pull/71218/files)
-
-Overall if you compare the setup we are about to make using ESLint v9 compared to the [previous version of this tutorial (using Next.js 14)](/web_development/tutorials/next-js-static-mdx-blog/linting-setup-using-eslint), then you will notice that this Next.js 15 / ESLint v9 version will be much shorter
-
-I'm sure linting is an Next.js feature that will get some updates in the next weeks / months, so remember that if find information in my tutorial that is outdated, you can mention such a change using the [discussions](https://github.com/chrisweb/chris.lu/discussions) page or if you want to suggest an edit to a page of this blog you can use the [issues](https://github.com/chrisweb/chris.lu/issues)
 
 ### Not everything is ESLint v9 and flat config (yet)
 
@@ -104,9 +100,9 @@ If you use the latest **create-next-app** (CNA) it will NOT install ESLint v9, i
 
 If you use npm run lint (next lint cli) and have no eslint configuration file, then next lint will install ESLint v9
 
-No matter if you have used the CNA or next lint, both still create eslintrc files and NOT flat config files
+No matter if you have used the CNA or next lint, both still create eslintrc files and NOT flat config files, so yes Next.js has updated their packages to support ESLint v9 but they have NOT yet updated their packages to support [shareable flat config](https://eslint.org/docs/latest/extend/shareable-configs) files
 
-Both CNA and next lint installed the latest [eslint-config-next](https://github.com/vercel/next.js/tree/canary/packages/eslint-config-next), however the latest **eslint-config-next** is not compatible with flat config files, as we will see in one of the upcoming chapters, which does NOT mean you can't use eslint-config-next with flat configs, it means that if you do you will need to add another compatibility layer that is provided by ESLint in a separate package
+Both CNA and next lint installed the latest [eslint-config-next](https://github.com/vercel/next.js/tree/canary/packages/eslint-config-next), however the latest **eslint-config-next** is not compatible with flat config files, as we will see in one of the upcoming chapters, which does NOT mean you can NOT use eslint-config-next with flat configs, but it means that if you do you will need to add a compatibility layer for it wo work (which is what we will do in one of the upcoming chapters)
 
 ## Why does Next.js have two packages related to ESLINT?
 
@@ -317,10 +313,11 @@ First we update our `package.json` file (in the root) and add the following scri
     "build": "npm run lint && next build",
     "start": "next start",
     "next-lint": "next lint",
+    "next-lint": "next lint",
     "lint": "eslint --flag unstable_ts_config --cache --cache-location .next/cache/eslint/",
-    "lint-nocache": "eslint",
-    "lint-debug": "eslint --debug",
-    "lint-fix": "eslint --fix"
+    "lint-nocache": "eslint --flag unstable_ts_config",
+    "lint-debug": "eslint --flag unstable_ts_config --debug",
+    "lint-fix": "eslint --flag unstable_ts_config --fix"
 },
 ```
 
@@ -354,7 +351,7 @@ If however you want to learn more about the options that are available, then hav
 When experimenting with ESLint and trying out setups, you might at some point add disable comments, but then later you decide to completely disable the rule using the ESLint rules configuration, in which case the disable comment becomes unused
 
 > [!WARN]  
-> If you are using the eslint recommend rules, then eslint will already add the **reportUnusedDisableDirectives** to the configuration
+> If you are using the ESLint recommend rules, then ESLint will already add the **reportUnusedDisableDirectives** to the configuration
 
 The easy way to spot those unused comments is by activating the ESLint Linter option:
 
@@ -520,7 +517,7 @@ npm i typescript-eslint --save-dev --save-exact
 
 Next we will fine tune our typescript linting by adding a custom configuration for `.ts` and `.tsx` files:
 
-```ts title="eslint.config.ts" showLineNumbers
+```ts title="eslint.config.ts" showLineNumbers {4-5}
 import js from '@eslint/js'
 import { FlatCompat } from '@eslint/eslintrc'
 import tseslint, { configs as tseslintConfigs } from 'typescript-eslint'
@@ -617,13 +614,20 @@ Then we have to chose between two more sets of rules, the **stylistic** set cont
 > [!TIP]  
 > To better understand what is in those sets I **highly** recommend checking out the typescript-eslint [rules overview](https://typescript-eslint.io/rules/) page
 
-Lines F to G: Then we add some parser options, this configuration is needed if you use one of the "type checked" sets (if are NOT using **TypeChecked** rules, then you can delete those lines from your configuration)
+Lines F to G: We use the `files` option to tell ESLint which files (extensions) we want to include, for this tutorial we will enable linting for regular typescript (.ts) and typescript react files (.tsx)
 
-Lines F to G: And finally we set which file extensions we want to include, for this tutorial we will enable linting for regular typescript and typescript react files
+Lines F to G: Then we add some parser options, this configuration is needed if you use one of the **"type checked"** sets (if are NOT using `TypeChecked` rules, then you can delete the `languageOptions` from your configuration)
 
-Line C: we can now remove 'next/typescript' from the compatibility mode (as it gets replaced by our custom flat config using typescript-eslint that we added above)
+> [!NOTE]  
+> the **ecmaFeatures** and **warnOnUnsupportedTypeScriptVersion** parser options in the **languageOptions** are commented out because there are other configurations that we already use or will use in an upcoming chapter that set these options for us (I keep those lines as a reminder that the two options exist but if you prefer you can delete them)
 
-Line D: we use the type from the @typescript-eslint utilities as type for our default export
+Line C: we can now remove `next/typescript` from the compatibility mode (as it gets replaced by our custom flat config using typescript-eslint that we added above)
+
+Line D: we set the **Config** type from the @typescript-eslint package as type for our default export
+
+> [!MORE]  
+> [typescript-eslint "rules" overview](https://typescript-eslint.io/rules/)  
+> [typescript-eslint "type checked" documentation](https://typescript-eslint.io/getting-started/typed-linting/)  
 
 ### Why we switched from ESLint to typescript-eslint types
 
@@ -658,18 +662,18 @@ import type { FlatConfig } from '@typescript-eslint/utils/ts-eslint'
 Before we can start adding linting for MDX files and markdown content we first need to get rid of **eslint-config-next**
 
 > [!WARN]  
-> I usually never recommend to remove a component or disable a feature of a framework unless really necessary, as doing so will increase your maintenance costs and your technical debt counter will go up
+> I usually never recommend to remove a component or disable a feature of a framework unless really necessary, as doing so will increase your maintenance costs and your technical debt counter will go up, there are however situations where it is required to make the transition, which is why in this chapter we will replace **eslint-config-next** with a [sharable flat config](https://eslint.org/docs/latest/extend/shareable-configs), which will unlock all the features that come with ESLint v9 flat config(s)
 >  
-> However in this case though, by using the **eslint-config-next** component we are applying rules (from several plugins it uses) to all files (even MDX files) and this will pose a problem when later we start adding linting for our markdown content, for example if we would keep using **eslint-config-next** it would attempt to use the typescript-eslint parser, but we want our MDX files to be parsed using a remark parser (which we will create using the MDX ESLint package)
+> If **eslint-config-next** adds features without migrating first to ESLint v9 flat config, then we will have to maintain our implementation by backporting their latest update (changes) into our own custom config
 >  
-> The problem with removing **eslint-config-next** is that, if in the future they add another great plugin to their recommend linting setup, then we will NOT benefit from the update (as we are not using their package anymore) and we will have to maintain our implementation by manually backporting their update into our own ESLint configuration
+> In the future **eslint-config-next** will hopefully get converted to a real ESLint v9 [sharable flat config](https://eslint.org/docs/latest/extend/shareable-configs) and then this chapter will be obsolete
 
 As we saw in the [Why does Next.js have two packages related to ESLINT?](#why-does-nextjs-have-two-packages-related-to-eslint) **eslint-config-next** will add several plugins to your linting setup, however as we want to get rid of **eslint-config-next** we will now need to manually re-add support for those packages
 
 > [!NOTE]  
-> In this tutorial we will use [eslint-plugin-import-x](https://www.npmjs.com/package/eslint-plugin-import-x), but if you prefer you can use [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import) instead, and if you do use **eslint-plugin-import** as well as typescript, then you will probably also want to add [eslint-import-resolver-typescript](https://www.npmjs.com/package/eslint-import-resolver-typescript)
+> In this tutorial we will use [eslint-plugin-import-x](https://www.npmjs.com/package/eslint-plugin-import-x), but if you prefer you can use [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import) instead, and if you do use **eslint-plugin-import** as well as typescript, then you will probably also want to add [eslint-import-resolver-typescript](https://www.npmjs.com/package/eslint-import-resolver-typescript)  
 >  
-> We will also NOT use [@rushstack/eslint-patch](https://www.npmjs.com/package/@rushstack/eslint-patch), but if you prefer to use it, you can do so, as it is now [ESLint v9 compatible](https://github.com/microsoft/rushstack/pull/4719). So if you intend to use Next.js in a big monorepo then you should probably install / configure it too
+> We will also NOT use [@rushstack/eslint-patch](https://www.npmjs.com/package/@rushstack/eslint-patch), but if you prefer to use it, you can do so, as it is now [ESLint v9 compatible](https://github.com/microsoft/rushstack/pull/4719). So if you intend to use Next.js in a big monorepo then you should probably install / configure it too  
 
 The plugins we will use are [eslint-plugin-import-x](https://www.npmjs.com/package/eslint-plugin-import-x), [eslint-plugin-react](https://www.npmjs.com/package/eslint-plugin-react), [eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks), [eslint-plugin-jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y), and we install them using the following command: 
 
@@ -680,10 +684,128 @@ npm i eslint-plugin-import-x@latest eslint-plugin-react@latest eslint-plugin-rea
 If you are using Typescript, you will also want to install the following types:
 
 ```shell
-npm i 
+npm i @types/eslint__eslintrc@latest @types/eslint-plugin-jsx-a11y@latest --save-dev --save-exact
 ```
 
-As we are attempting to reproduce what **eslint-config-next**, this means that we are installing dependencies that we already in the project, the reason we still use it is because by using the @latest tag on each of them we make sure our package.json will contain the latest versions for each of them (before we start using them)
+As we are attempting to reproduce what **eslint-config-next**, this means that we are installing dependencies that we already in the project, but it will make sure that we are not missing a package in our stack and it will ensure we have the latest version installed for each of them (as we added the @latest tag in the command(s))
+
+Now that we have our packages installed we can finally start updating our eslint.config.ts again:
+
+```ts title="eslint.config.ts" showLineNumbers {4-5}
+import js from '@eslint/js'
+import { FlatCompat } from '@eslint/eslintrc'
+import tseslint, { configs as tseslintConfigs } from 'typescript-eslint'
+import type { FlatConfig } from '@typescript-eslint/utils/ts-eslint'
+import importX from 'eslint-plugin-import-x'
+import react from 'eslint-plugin-react'
+// @ts-expect-error this package has no types
+import reactHooks from 'eslint-plugin-react-hooks'
+import jsxA11y from 'eslint-plugin-jsx-a11y'
+
+const compat = new FlatCompat()
+
+const jsESLintConfig = [
+    {
+        name: 'jsESLintConfig',
+        // all files expect mdx files
+        files: ['**/*.mjs', '**/*.ts?(x)'],
+        ...js.configs.recommended,
+    },
+]
+
+const tsESLintConfig = tseslint.config(
+    {
+        name: 'tsESLintConfig',
+        extends: [
+            ...tseslintConfigs.recommended,
+            // OR more type checked rules
+            //...tseslintConfigs.recommendedTypeChecked,
+            // OR more strict rules
+            //...tseslintConfigs.strict,
+            // OR more strict and type checked rules
+            //...tseslintConfigs.strictTypeChecked,
+            // optional stylistic rules
+            ...tseslintConfigs.stylistic,
+            // OR the type checked version
+            //...tseslintConfigs.stylisticTypeChecked,
+            react.configs.flat?.recommended,
+            react.configs.flat?.['jsx-runtime'],
+            jsxA11y.flatConfigs.recommended,
+            importX.flatConfigs.recommended,
+            // the following is only needed if you use typescript
+            importX.flatConfigs.typescript,
+        ] as FlatConfig.ConfigArray,
+        files: ['**/*.mjs', '**/*.ts?(x)'],
+        // only needed if you use TypeChecked rules
+        languageOptions: {
+            parserOptions: {
+                // https://typescript-eslint.io/getting-started/typed-linting
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+                // react recommended is already adding the ecmaFeatures
+                /*ecmaFeatures: {
+                    jsx: true,
+                },*/
+                // following option already added by eslint recommended
+                // which we added in the jsESLintConfig
+                //warnOnUnsupportedTypeScriptVersion: false,
+            },
+        },
+    },
+    {
+        // disable type-aware linting on JS files
+        // only needed if you use TypeChecked rules
+        files: ['**/*.mjs'],
+        ...tseslintConfigs.disableTypeChecked,
+    },
+)
+
+export default [
+    ...compat.extends('next/core-web-vitals'),
+    {
+        name: 'ignoreESLintConfig',
+        // the ignores option needs to be in a separate configuration object
+        // replaces the .eslintignore file
+        ignores: [
+            '.next/',
+            '.vscode/',
+            'public/',
+        ]
+    },
+    {
+        linterOptions: {
+            reportUnusedDisableDirectives: 'warn'
+        }
+    },
+    ...jsESLintConfig,
+    ...tsESLintConfig,
+] satisfies FlatConfig.Config[]
+```
+
+Lines A to B: we import the 4 plugins
+
+> [!NOTE]  
+> If our configuration is a typescript file, then you have to use a typescript comment to inform typescript that it will not find any types for the eslint-plugin-react-hooks
+>  
+> as of now I couldn't find any types for this package, which is why I added the @ts-expect-error comment (if you do find types, then install them and remove the comment)
+
+Lines C to D: we extend the shared flat configs from 3 of our plugins:
+
+* we use the react (eslint plugin) recommended flat config that will take of configuring and adding rules for React to our linting setup
+* next we add the react **jsx-runtime** config (since [React 17 the new JSX transform](https://legacy.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html#removing-unused-react-imports) will automatically import the necessary react/jsx-runtime functions, which is why this additional configuration will disable a few rules that were checking if React was in scope when using JSX)
+* the third config from which we will extend is the eslint-plugin-jsx-a11y flat config, this plugin offers two sets of [rules](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y?tab=readme-ov-file#shareable-configs) the **recommended** and the **strict**, we will use the strict version (feel free to use recommended instead if you prefer less strict rules or disable some of the more strict rules manually)
+* the importX plugin also has two flat configs, we add the recommended rules and then also the importX.flatConfigs.typescript configuration (the second one is only needed if you use typescript)
+
+For the eslint-plugin-react-hooks things are a bit different, they [PR (#28773)](https://github.com/facebook/react/pull/28773) to add ESLint v9 support for eslint-plugin-react-hooks got merged, however the ticket about adding [support for flat config](https://github.com/facebook/react/issues/28313) is not done yet, there is however a [PR (#30774)](https://github.com/facebook/react/pull/30774)
+
+As we saw in the 
+            
+
+
+
+
+
+
 
 
 
