@@ -363,6 +363,26 @@ On this overview page you see why it is a good idea to give your configurations 
 
 Each configuration (row) is a disclosure widget, expand it and it will show you even more information about each of your configurations
 
+If you want you can add those commands to your package json scripts:
+
+```json title="package.json"
+"scripts": {
+    "lint-debug-config": "eslint --flag unstable_ts_config --debug eslint.config.ts",
+    "lint-print-config": "eslint --flag unstable_ts_config --print-config eslint.config.ts",
+    "lint-inspect-config": "eslint --flag unstable_ts_config --inspect-config eslint.config.ts"
+},
+```
+
+Next update your README accordingly:
+
+```md title="README.md"
+`npm run lint-debug-config`: will print debugging information about what gets loaded by our ESLint config
+`npm run lint-print-config`: print out a json representation of what is in our ESLint config
+`npm run lint-inspect-config`: will open `http://localhost:7777/` in your browser, which is a tool to help you visualize the content of our ESLint config
+```
+
+Congratulations 🎉 you are now a master ESLint debugger (and it's a good time to commit the latest changes)
+
 > [!MORE]  
 > [ESLint "Debug Your Configuration" documentation](https://eslint.org/docs/latest/use/configure/debug)  
 > [ESLint "Config Inspector" readme](https://eslint.org/docs/latest/use/configure/debug)  
@@ -828,8 +848,6 @@ Lines C to D: we extend the shared flat configs from 3 of our plugins:
 
 For the eslint-plugin-react-hooks things are a bit different, the [PR (#28773)](https://github.com/facebook/react/pull/28773) to add "ESLint v9 support" to the react-hooks plugin got merged, however the ticket about adding [support for flat config](https://github.com/facebook/react/issues/28313) is not closed (yet), there is however a [PR (#30774)](https://github.com/facebook/react/pull/30774) in the works
 
-As we saw in the 
-            
 
 
 
