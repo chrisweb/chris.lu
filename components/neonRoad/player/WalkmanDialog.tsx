@@ -7,6 +7,7 @@ import styles from './walkmanDialog.module.css'
 
 interface IProps extends PropsWithChildren {
     isOpen: boolean
+    withEscKeyListener: boolean
     onOpenCallback?: () => void
     onCloseCallback?: () => void
 }
@@ -34,11 +35,11 @@ const WalkmanDialog: React.FC<IProps> = (props) => {
         setIsDialogOpenState(false)
     }, [onCloseCallback])
 
-    const onKeyDownHandler = (event: React.KeyboardEvent<HTMLDialogElement>) => {
+    const onKeyDownHandler = useCallback((event: KeyboardEvent) => {
         if (event.key === 'Escape') {
             closeModal()
         }
-    }
+    }, [closeModal])
 
     const animationEndHandler = (event: AnimationEvent<HTMLDialogElement>) => {
         if (event.animationName.startsWith('walkmanDialog_close')) {
@@ -46,6 +47,17 @@ const WalkmanDialog: React.FC<IProps> = (props) => {
             setCloseAnimationState(false)
         }
     }
+
+    useEffect(() => {
+        if (props.withEscKeyListener) {
+            document.addEventListener('keydown', onKeyDownHandler, false)
+        }
+        return () => {
+            if (props.withEscKeyListener) {
+                document.removeEventListener('keydown', onKeyDownHandler, false)
+            }
+        }
+    }, [onKeyDownHandler, props.withEscKeyListener])
 
     useEffect(() => {
         if (isOpen) {
@@ -72,7 +84,6 @@ const WalkmanDialog: React.FC<IProps> = (props) => {
     return createPortal(
         <dialog
             ref={dialogRef}
-            onKeyDown={onKeyDownHandler}
             onAnimationEnd={animationEndHandler}
             className={`${styles.reset} ${styles.dialog} ${closeAnimationState ? styles.close : ''}`}
         >

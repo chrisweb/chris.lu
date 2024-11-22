@@ -49,12 +49,15 @@ const VolumeDialog: React.FC<IProps> = (props) => {
     }
 
     useEffect(() => {
-        document.addEventListener('keydown', onKeyDownHandler, false)
-
-        return () => {
-            document.removeEventListener('keydown', onKeyDownHandler, false)
+        if (props.withEscKeyListener) {
+            document.addEventListener('keydown', onKeyDownHandler, false)
         }
-    }, [onKeyDownHandler])
+        return () => {
+            if (props.withEscKeyListener) {
+                document.removeEventListener('keydown', onKeyDownHandler, false)
+            }
+        }
+    }, [onKeyDownHandler, props.withEscKeyListener])
 
     useEffect(() => {
         if (isOpen) {

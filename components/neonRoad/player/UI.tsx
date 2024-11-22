@@ -412,7 +412,7 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
                     </RippleButton>
                 </div>
             </div>
-            <WalkmanDialog isOpen={isEjectedState} onCloseCallback={onWalkmanDialogCloseCallback}>
+            <WalkmanDialog isOpen={isEjectedState} withEscKeyListener={true} onCloseCallback={onWalkmanDialogCloseCallback}>
                 <Cassette credits={creditsState} />
             </WalkmanDialog>
             <VolumeDialog isOpen={isVolumeModalOpenState} withEscKeyListener={true} onCloseCallback={onVolumeDialogCloseCallback} onOpenCallback={onVolumeDialogOpenCallback}>
