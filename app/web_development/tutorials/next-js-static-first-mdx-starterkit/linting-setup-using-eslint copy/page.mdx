@@ -671,7 +671,7 @@ Before we can start adding linting for MDX files and markdown content we first n
 As we saw in the [Why does Next.js have two packages related to ESLINT?](#why-does-nextjs-have-two-packages-related-to-eslint) **eslint-config-next** will add several plugins to your linting setup, however as we want to get rid of **eslint-config-next** we will now need to manually re-add support for those packages
 
 > [!NOTE]  
-> In this tutorial we will use [eslint-plugin-import-x](https://www.npmjs.com/package/eslint-plugin-import-x), but if you prefer you can use [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import) instead, and if you do use **eslint-plugin-import** as well as typescript, then you will probably also want to add [eslint-import-resolver-typescript](https://www.npmjs.com/package/eslint-import-resolver-typescript)  
+> In this tutorial we will use [eslint-plugin-import-x](https://www.npmjs.com/package/eslint-plugin-import-x), but if you prefer you can use the [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import) package instead, and if you do use **eslint-plugin-import** as well as typescript, then you will probably also want to add [eslint-import-resolver-typescript](https://www.npmjs.com/package/eslint-import-resolver-typescript)  
 >  
 > We will also NOT use [@rushstack/eslint-patch](https://www.npmjs.com/package/@rushstack/eslint-patch), but if you prefer to use it, you can do so, as it is now [ESLint v9 compatible](https://github.com/microsoft/rushstack/pull/4719). So if you intend to use Next.js in a big monorepo then you should probably install / configure it too  
 
@@ -796,7 +796,7 @@ Lines C to D: we extend the shared flat configs from 3 of our plugins:
 * the third config from which we will extend is the eslint-plugin-jsx-a11y flat config, this plugin offers two sets of [rules](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y?tab=readme-ov-file#shareable-configs) the **recommended** and the **strict**, we will use the strict version (feel free to use recommended instead if you prefer less strict rules or disable some of the more strict rules manually)
 * the importX plugin also has two flat configs, we add the recommended rules and then also the importX.flatConfigs.typescript configuration (the second one is only needed if you use typescript)
 
-For the eslint-plugin-react-hooks things are a bit different, they [PR (#28773)](https://github.com/facebook/react/pull/28773) to add ESLint v9 support for eslint-plugin-react-hooks got merged, however the ticket about adding [support for flat config](https://github.com/facebook/react/issues/28313) is not done yet, there is however a [PR (#30774)](https://github.com/facebook/react/pull/30774)
+For the eslint-plugin-react-hooks things are a bit different, the [PR (#28773)](https://github.com/facebook/react/pull/28773) to add "ESLint v9 support" to the react-hooks plugin got merged, however the ticket about adding [support for flat config](https://github.com/facebook/react/issues/28313) is not closed (yet), there is however a [PR (#30774)](https://github.com/facebook/react/pull/30774) in the works
 
 As we saw in the 
             

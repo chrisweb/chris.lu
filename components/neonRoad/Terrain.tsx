@@ -172,7 +172,7 @@ const Terrain = (props: ITerrainProps) => {
             }
             // eslint-disable-next-line react-hooks/exhaustive-deps
             canvasRef.current.remove()
-         }
+        }
     }, [procedurallyGenerateDisplacementMap])
 
     /*useFrame(() => {
