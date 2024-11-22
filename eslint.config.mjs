@@ -99,12 +99,13 @@ const tsESLintConfig = tseslint.config(
             quotes: [
                 'error',
                 'single',
-                { 'allowTemplateLiterals': true },
+                { 'allowTemplateLiterals': true, 'avoidEscape': true },
             ],
             semi: [
                 'error',
                 'never',
             ],
+            'indent': ['warn', 4, { 'SwitchCase': 1 }],
             '@typescript-eslint/naming-convention': [
                 'error',
                 {
