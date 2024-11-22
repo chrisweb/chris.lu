@@ -105,6 +105,7 @@ const tsESLintConfig = tseslint.config(
                 'error',
                 'never',
             ],
+            // https://eslint.org/docs/latest/rules/indent
             'indent': ['warn', 4, { 'SwitchCase': 1 }],
             '@typescript-eslint/naming-convention': [
                 'error',
