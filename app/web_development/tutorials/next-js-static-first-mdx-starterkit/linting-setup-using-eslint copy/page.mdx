@@ -335,7 +335,37 @@ Then if you want you could update the README with these explanations:
 
 Here are 3 tools I found while working on this ESLint tutorial (I wish I had found earlier 😉) that will improve your ESLint debugging experience greatly
 
-TODO: finish
+Our first tool is a cli command:
+
+```shell
+npx eslint --debug eslint.config.ts
+```
+
+This is a fantastic tool (cli command) that will output a lot of information that could help you while debugging, run the same command without a path to your configuration file and it will show you even more debugging information by performing a very verbose linting (if you don't use a typescript eslint flat config then you need to adjust the name, for example to `npx eslint --debug eslint.config.mjs` for a javascript flat config)
+
+```shell
+npx eslint --print-config eslint.config.ts
+```
+
+Another cli command that will print a json representation of what it found in your configuration file, which is a great tool to verify if everything you have set up is included
+
+The third tool is the one that helped me the most while writing this guide, this tool greatly improves the **(developer experience) DX** when working with the new flat config files by helping you visualize the structure and content of your eslint flat config:
+
+```shell
+npx eslint --inspect-config eslint.config.ts
+```
+
+After running the command, the **ESLint Config Inspector** will launch a server on `http://localhost:7777/` (it should automatically use your default browser)
+
+The main page displays a nice overview of your files, ignores, options, plugins and rules, for each of your configurations
+
+On this overview page you see why it is a good idea to give your configurations a name 😉
+
+Each configuration (row) is a disclosure widget, expand it and it will show you even more information about each of your configurations
+
+> [!MORE]  
+> [ESLint "Debug Your Configuration" documentation](https://eslint.org/docs/latest/use/configure/debug)  
+> [ESLint "Config Inspector" readme](https://eslint.org/docs/latest/use/configure/debug)  
 
 ## Language and Linter Options (optional)
 
