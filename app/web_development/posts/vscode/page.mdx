@@ -177,118 +177,6 @@ The easiest way to save a file in VSCode is to use the keyboard shortcut `Ctrl+S
 > [!MORE]  
 > [VSCode "Editing basics" documentation](https://code.visualstudio.com/docs/editor/codebasics)  
 
-## Commit your changes to GitHub using the VSCode version control tool
-
-Click on the **Source Control** icon on the left in the **Activity bar** (if you have already customized VSCode, your Activity bar might be in another location) or use the keyboard shortcut `Ctrl+Shift+G` (macOS: `⇧⌘G`, Linux: `Ctrl+Shift+G`)
-
-![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_activity_bar_source_control_icon.png)
-
-* you will now see that all the files in which you made changes are listed in the category **Changes**
-* if you double click on a filename, it will open a **diff** view in VSCode that allows you to see what has changed between the current version and the previous one; the previous version of the file is on the left, the current one on the right, on the right side the lines that will change are highlighted with a green color, on the left highlighted in red are the lines that will get modified, if you want to undo a change and revert to the previous version you can click on the arrow in the middle of the page next to the line you want to undo
-* you don't need to commit all files that have been changed all at once; if you do, then just enter a commit message on top and hit the **Commit** button; else, to choose which files to commit, click on the + icon next to the file, this will add the file to a category called **Staged changes**, now enter a commit message for the files you selected and click on commit, this will create a commit with only those files
-* next to each file, you also have an icon with an arrow that points to the left; if you want to discard all of the changes you made to a file, click on that icon, and it will reset the file (be careful this will delete all changes you did and you will not be able to recover them, if you are unsure, first create a new branch and commit the changes to that branch to have a backup just in case)
-
-Committing creates a local commit, but it does not yet push that commit to the remote repository. To sync the changes with the remote repository, click on the icon with two circular arrows next to the branch name at the bottom of the sidebar.
-
-![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_sync_changes.png)
-
-> [!TIP]  
-> Synching means that the GitHub version control tool will first pull in changes from the remote repository and then right after that also do a push of your local changes to the remote repository  
-
-## git credential manager
-
-### VSCode asks me to choose a GitHub account every time I sync
-
-If you have multiple users (GitHub / GitLab, … accounts) or, for example, a GitHub account but also a personal token on your machine, then the [git credential manager](https://github.com/git-ecosystem/git-credential-manager) will not know which one you want to use. Hence, it will ask you, meaning that every time you hit the sync button, it will open a modal that looks like this:
-
-![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_git_credential_manager_modal.png)
-
-> [!TIP]  
-> To avoid getting asked every time, you can set a default user or token for a repository, which is what the next chapter is about
-
-> [!MORE]  
-> [GitHub "git-credential-manager" repository](https://github.com/git-ecosystem/git-credential-manager)  
-> [git-credential-manager documentation](https://github.com/git-ecosystem/git-credential-manager/blob/release/docs/README.md)  
-
-### Setting a default user/token per repository
-
-To set a default user for a repository, you need to add the **USER_NAME** of the account you want to use to the remote URL of the repository.
-
-To do so, open your VSCode terminal (or use your preferred command line tool) and then use the following command:
-
-```shell
-git remote set-url origin https://USER_NAME@github.com/USER_NAME/REPOSITORY_NAME.git
-```
-
-Then press `ENTER`, and you are done.
-
-> [!MORE]  
-> [git-credential-manager "Multiple users" documentation](https://github.com/git-ecosystem/git-credential-manager/blob/main/docs/multiple-users.md)  
-
-### getting a list of git credentials (on Windows)
-
-If you want to list all your git credentials that exist on your machine, you can use the following command in your terminal:
-
-```shell
-cmdkey /list:git*
-```
-
-### Manage git credentials (on Windows)
-
-To manage the accounts on your machine, for example if you decide to delete one of them, then you can use the [credential manager](https://support.microsoft.com/en-us/windows/accessing-credential-manager-1b5c916a-6a16-889f-8581-fc16e8165ac0) to do so, click on the windows start icon and then type **credential manager** to find it (optionally you can also open a File Explorer window and enter the following path: **Control Panel\All Control Panel Items\Credential Manager** to access it)
-
-Once the **credential manager** is open, select the second tab called **windows credentials**, then click on the down arrow next to the credentials you want to edit or remove, verify those are the correct credentials, and then click on either **Edit** or **Remove** depending on what you wish to do.
-
-> [!MORE]  
-> [accessing the Windows (10) "Credential Manager"](https://support.microsoft.com/en-us/windows/accessing-credential-manager-1b5c916a-6a16-889f-8581-fc16e8165ac0)  
-
-## switching between branches
-
-Click on the **Source Control** icon on the left in the **Activity bar** (if you have already customized VSCode, your Activity bar might be in another location) or use the keyboard shortcut `Ctrl+Shift+G` (macOS: `⇧⌘G`, Linux: `Ctrl+Shift+G`)
-
-![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_activity_bar_source_control_icon.png)
-
-* on the bottom left, you will have your current branch that you are currently on; if you have not yet created a new branch, it will probably be called "main"
-
-![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_main_branch.png)
-
-* click on the branch name to open the branch options on top of VSCode; here, you can now choose a branch that you want to switch to (local branches have a branch icon in front of their name, branches that are on GitHub (remote branches that are in the cloud) have a cloud icon in front of their name and are called **origin**/branch_name)
-  * why do I see some branch names twice? This is because a branch that, for example, got created by another developer will be listed as origin/BRANCH_NAME; when you check out the origin/BRANCH_NAME, it will now exist both locally as **BRANCH_NAME** and also remotely (on GitHub) as **origin/BRANCH_NAME**, hence it will be twice in the list
-  * a branch that only exists in the remote repository (on GitHub) or a branch you created locally but did not yet push to the remote repository will only have one entry in the list
-
-![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_local_and_remote_branch.png)
-
-## Creating a new branch
-
-On the bottom left, you will have your current branch that you are currently on. If you have not yet created a new branch, it will probably be called "main"
-
-Click on the branch name to open the options (on top of the IDE).
-
-![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_main_branch.png)
-
-Now you have two options when it comes to creating branches: creating a new empty branch or creating a new branch based on what is in another branch (making a copy)
-
-### Create a new (empty) branch
-
-This will open the branch options on top of VSCode. Then click on **+ Create new branch** to create a new (empty) branch.
-
-![alt text](../../../../public/assets/images/app/web_development/posts/vscode/vscode_create_new_branch.png)
-
-Then, enter a name for that new branch, and you are done.
-
-### Create a new branch from (based on) another branch
-
-This will open the branch options on top of VSCode. Then click on **+ Create new branch from...** to create a new branch by copying an existing branch.
-
-![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_create_new_branch_from.png)
-
-* First, select which branch you want to use to create the new branch
-* then enter a name for that new branch
-
-Now that the new branch has been created, I recommend you publish it immediately (push it to the remote repository) by clicking on the cloud icon next to its name at the bottom left of VSCode.
-
-![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_publish_branch.png)
-
 ## Open a VSCode terminal
 
 VSCode has a terminal (command line tool) that, by default, is closed. To open the terminal, click on **View** in the top navigation bar and then **Terminal**
@@ -308,6 +196,24 @@ Or you can use the VSCode navigation on top, click on **View**, and then click o
 
 > [!MORE]  
 > [VSCode "User Interface > Command Palette" documentation](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette)  
+
+## VSCode diff (compare) two files
+
+It is easy to compare two files using a diff in VSCode.
+
+On the right make sure the file explorer is open
+
+Then right click on a file and select **Select for Compare**
+
+Then right click on another file and choose **Compare with Selected**
+
+This will open a nice diff panel with both files next to each other, the changes in both files will be highlighted and you have action buttons to revert changes
+
+### files are in the wrong order
+
+You can easily swap both files by using the **Swap Left and Right Side** icon on the top right of the diff panel
+
+You can also achieve this by using the [VSCode command palette](#vscode-command-palette), when open start typing **Compare** and then select the **Compare: Swap Left and Right Editor Side** command (command is only available when a diff panel is open)
 
 ## VSCode typescript version
 
@@ -567,11 +473,63 @@ To change a heading and update all the links pointing to it, just click inside t
 > [!MORE]  
 > [VSCode "Rename headers and links" documentation](https://code.visualstudio.com/docs/languages/markdown#_rename-headers-and-links)  
 
-## Git commands using the VSCode command palette
+## VSCode git support
 
-You can use the terminal and type any git command you want, but you can also do many things by using the VSCode command palette.
+If you like to use git commands then you can do so using the VSCode built in **terminal** support (you might want to read the [open a VSCode terminal](#open-a-vscode-terminal) chapter first)
 
-Press `Ctrl` + `Shift` + `p` to open the VSCode command palette and then type **Git**, then chose the Git command you wish to execute
+The first alternative to using the terminal (or any other command line tool) is to use the VSCode **command palette** (you might want to read the [VSCode command palette](#vscode-command-palette) chapter first)
+
+The third option is to the VSCode **Source Control** tools. I find the [source control graph](https://code.visualstudio.com/docs/sourcecontrol/overview#_source-control-graph) very useful to quickly get an overview of the incoming (and outgoing) commits. I also like to be able to just do a quick commit by clicking a button.
+
+> [!MORE]  
+> [VSCode "source control" documentation](https://code.visualstudio.com/docs/sourcecontrol/overview)
+
+### Switching between branches
+
+Click on the **Source Control** icon on the left in the **Activity bar** (if you have already customized VSCode, your Activity bar might be in another location) or use the keyboard shortcut `Ctrl+Shift+G` (macOS: `⇧⌘G`, Linux: `Ctrl+Shift+G`)
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_activity_bar_source_control_icon.png)
+
+* on the bottom left, you will have your current branch that you are currently on; if you have not yet created a new branch, it will probably be called "main"
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_main_branch.png)
+
+* click on the branch name to open the branch options on top of VSCode; here, you can now choose a branch that you want to switch to (local branches have a branch icon in front of their name, branches that are on GitHub (remote branches that are in the cloud) have a cloud icon in front of their name and are called **origin**/branch_name)
+  * why do I see some branch names twice? This is because a branch that, for example, got created by another developer will be listed as origin/BRANCH_NAME; when you check out the origin/BRANCH_NAME, it will now exist both locally as **BRANCH_NAME** and also remotely (on GitHub) as **origin/BRANCH_NAME**, hence it will be twice in the list
+  * a branch that only exists in the remote repository (on GitHub) or a branch you created locally but did not yet push to the remote repository will only have one entry in the list
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_local_and_remote_branch.png)
+
+### Creating a new branch
+
+On the bottom left, you will have your current branch that you are currently on. If you have not yet created a new branch, it will probably be called "main"
+
+Click on the branch name to open the options (on top of the IDE).
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_main_branch.png)
+
+Now you have two options when it comes to creating branches: creating a new empty branch or creating a new branch based on what is in another branch (making a copy)
+
+#### Create a new (empty) branch
+
+This will open the branch options on top of VSCode. Then click on **+ Create new branch** to create a new (empty) branch.
+
+![alt text](../../../../public/assets/images/app/web_development/posts/vscode/vscode_create_new_branch.png)
+
+Then, enter a name for that new branch, and you are done.
+
+#### Create a new branch from (based on) another branch
+
+This will open the branch options on top of VSCode. Then click on **+ Create new branch from...** to create a new branch by copying an existing branch.
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_create_new_branch_from.png)
+
+* First, select which branch you want to use to create the new branch
+* then enter a name for that new branch
+
+Now that the new branch has been created, I recommend you publish it immediately (push it to the remote repository) by clicking on the cloud icon next to its name at the bottom left of VSCode.
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_publish_branch.png)
 
 ### Rename the current git branch
 
@@ -579,5 +537,70 @@ To rename the current **local** branch (the one currently being displayed in the
 
 > [!TIP]  
 > To rename another branch (other than the current one), first switch to the branch you want to rename and then follow the steps listed above
+
+### Commit your changes to GitHub using the VSCode version control tool
+
+Click on the **Source Control** icon on the left in the **Activity bar** (if you have already customized VSCode, your Activity bar might be in another location) or use the keyboard shortcut `Ctrl+Shift+G` (macOS: `⇧⌘G`, Linux: `Ctrl+Shift+G`)
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_activity_bar_source_control_icon.png)
+
+* you will now see that all the files in which you made changes are listed in the category **Changes**
+* if you double click on a filename, it will open a **diff** view in VSCode that allows you to see what has changed between the current version and the previous one; the previous version of the file is on the left, the current one on the right, on the right side the lines that will change are highlighted with a green color, on the left highlighted in red are the lines that will get modified, if you want to undo a change and revert to the previous version you can click on the arrow in the middle of the page next to the line you want to undo
+* you don't need to commit all files that have been changed all at once; if you do, then just enter a commit message on top and hit the **Commit** button; else, to choose which files to commit, click on the + icon next to the file, this will add the file to a category called **Staged changes**, now enter a commit message for the files you selected and click on commit, this will create a commit with only those files
+* next to each file, you also have an icon with an arrow that points to the left; if you want to discard all of the changes you made to a file, click on that icon, and it will reset the file (be careful this will delete all changes you did and you will not be able to recover them, if you are unsure, first create a new branch and commit the changes to that branch to have a backup just in case)
+
+Committing creates a local commit, but it does not yet push that commit to the remote repository. To sync the changes with the remote repository, click on the icon with two circular arrows next to the branch name at the bottom of the sidebar.
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_sync_changes.png)
+
+> [!TIP]  
+> Synching means that the GitHub version control tool will first pull in changes from the remote repository and then right after that also do a push of your local changes to the remote repository  
+
+## git credential manager
+
+### VSCode asks me to choose a GitHub account every time I sync
+
+If you have multiple users (GitHub / GitLab, … accounts) or, for example, a GitHub account but also a personal token on your machine, then the [git credential manager](https://github.com/git-ecosystem/git-credential-manager) will not know which one you want to use. Hence, it will ask you, meaning that every time you hit the sync button, it will open a modal that looks like this:
+
+![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_git_credential_manager_modal.png)
+
+> [!TIP]  
+> To avoid getting asked every time, you can set a default user or token for a repository, which is what the next chapter is about
+
+> [!MORE]  
+> [GitHub "git-credential-manager" repository](https://github.com/git-ecosystem/git-credential-manager)  
+> [git-credential-manager documentation](https://github.com/git-ecosystem/git-credential-manager/blob/release/docs/README.md)  
+
+### Setting a default user/token per repository
+
+To set a default user for a repository, you need to add the **USER_NAME** of the account you want to use to the remote URL of the repository.
+
+To do so, open your VSCode terminal (or use your preferred command line tool) and then use the following command:
+
+```shell
+git remote set-url origin https://USER_NAME@github.com/USER_NAME/REPOSITORY_NAME.git
+```
+
+Then press `ENTER`, and you are done.
+
+> [!MORE]  
+> [git-credential-manager "Multiple users" documentation](https://github.com/git-ecosystem/git-credential-manager/blob/main/docs/multiple-users.md)  
+
+### getting a list of git credentials (on Windows)
+
+If you want to list all your git credentials that exist on your machine, you can use the following command in your terminal:
+
+```shell
+cmdkey /list:git*
+```
+
+### Manage git credentials (on Windows)
+
+To manage the accounts on your machine, for example if you decide to delete one of them, then you can use the [credential manager](https://support.microsoft.com/en-us/windows/accessing-credential-manager-1b5c916a-6a16-889f-8581-fc16e8165ac0) to do so, click on the windows start icon and then type **credential manager** to find it (optionally you can also open a File Explorer window and enter the following path: **Control Panel\All Control Panel Items\Credential Manager** to access it)
+
+Once the **credential manager** is open, select the second tab called **windows credentials**, then click on the down arrow next to the credentials you want to edit or remove, verify those are the correct credentials, and then click on either **Edit** or **Remove** depending on what you wish to do.
+
+> [!MORE]  
+> [accessing the Windows (10) "Credential Manager"](https://support.microsoft.com/en-us/windows/accessing-credential-manager-1b5c916a-6a16-889f-8581-fc16e8165ac0)  
 
 </article>
