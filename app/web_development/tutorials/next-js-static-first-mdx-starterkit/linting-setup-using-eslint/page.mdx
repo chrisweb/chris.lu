@@ -44,86 +44,67 @@ export const metadata = {
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
 
-# Linting setup using ESLint
+# Next.js 15 and ESLint v9 linting setup 
 
 Adding linting to a project is something I recommend doing as early as possible, similar to adding CSP to a project
 
 Those are things that, if you postpone them, then you will have a lot more work later, which is why it is best to add linting as early as possible and then fix linting-related problems one by one as soon as they come up
 
-## The state of ESLint v9 and ESLint flat config files in Next.js 15
+> [!NOTE]
+> the 5 upcoming chapters only contain background information, if you prefer you can also go straight to coding part in the ["ESLint 9 flat config for Next.js 15" chapter](#eslint-9-flat-config-for-nextjs-15)
 
-> [!TIP]  
-> If you already have a custom ESLint setup in your project and want to migrate your ESLint configuration file from ESLint classic configuration files to Flat Config files, then have a look at [ESLint configuration migrator](https://eslint.org/docs/latest/use/configure/migration-guide#migrate-your-config-file) as it will automize a big chunk if not all of the migration for you (in some cases with very complex configurations the plugin might fail, in my personal tests it always worked well)  
->  
-> Another tip is for cases where you need to use a plugin that has not finished the migration to ESLint v9. You might see errors like this:
-> 
-> ```shell
-> TypeError: context.foo is not a function
-> ```
-> 
-> In that case have a look at the [ESLint Compatibility Utilities](https://eslint.org/blog/2024/05/eslint-compatibility-utilities/)
+## Linting library choice
 
-Next.js 14 was still using ESLint v8, meaning it was using the [ESLint "Classic" configuration files](https://eslint.org/docs/latest/use/configure/configuration-files-deprecated), which was the default for all ESLint versions below 9
+If you would prefer an alternative linting solution, I recommend checking out [Biome](https://biomejs.dev/), they have an interesting [playground](https://biomejs.dev/playground/) to learn more about biome (compared to Prettier), they also have a very good documentation, for example I like that their [Getting Started](https://biomejs.dev/guides/getting-started/) page will show you the commands for npm, yarn, pnpm, bun and deno
 
-In ESLint 9, those configuration files are now **deprecated*,* and it is recommended to use the new [flat config files](https://eslint.org/docs/latest/use/configure/configuration-files), which are the new default since the release of ESLint 9
+## The state of ESLint v9 and flat config
 
 ESLint mentions in their documentation:
 
 > We are transitioning to a new config system in ESLint v9.0.0. The config system shared on this page is currently the default but will be deprecated in v9.0.0. You can opt-in to the new config system by following the instructions in the documentation.
 
-Also, support for [**eslintrc** (classic) configuration files will be removed in version 10.0.0](https://eslint.org/blog/2023/10/flat-config-rollout-plans/#eslintrc-removed-in-eslint-v10.0.0)
+You can still use **eslintrc** (classic) configuration files but it is recommended that you switch to the new [flat config files](https://eslint.org/docs/latest/use/configure/configuration-files)
 
-In a recent [comment (14th Oct. 2024)](https://github.com/vercel/next.js/issues/64409#issuecomment-2411304733) a member of the Next.js team confirmed that Next.js would use ESLint v9 flat configs:
+Most projects have added support for ESLint v9:
 
-> we're on it, gonna land very very soon, thank you all for your patience! And yes, it will be part of Next 15!
->  
-> The reason why it took us so long to get to is that some of the upstream dependencies were also not up to date, so we were waiting on them.
+* For example the plugin [eslint-plugin-react-hooks](https://github.com/facebook/react/releases/tag/eslint-plugin-react-hooks%405.0.0) introduced support for ESLint v9 on Oct. 11 2024 (in eslint-plugin-react-hooks v5.0.0); this is one of the plugins Next.js was waiting for
+* Another plugin that you see in a lot of projects is typescript-eslint, in May 13 2024 they announced in their [typescript-eslint Issue #8211](https://github.com/typescript-eslint/typescript-eslint/issues/8211) that the first alpha of [typescript-eslint v8 (with ESLint v9 support)](https://github.com/typescript-eslint/typescript-eslint/pull/9002) got merged
 
-I have tracked some of those dependencies myself, here is a small recap if you are interesting in such things:
-
-* The plugin maintainers have started to add to support for ESLint v9 to their projects but not all have released a stable version with ESLint v9 support (as of now oct. 2024).
-* For example the plugin [eslint-plugin-react-hooks](https://github.com/facebook/react/releases/tag/eslint-plugin-react-hooks%405.0.0) introduced support for ESLint v9 on Oct. 11 2024 (in eslint-plugin-react-hooks v5.0.0).
-* Another plugin that you see in a lot of projects is typescript-eslint, in May 13 2024 they announced in their [typescript-eslint Issue #8211](https://github.com/typescript-eslint/typescript-eslint/issues/8211) that the first alpha of [typescript-eslint v8 (with ESLint v9 support)](https://github.com/typescript-eslint/typescript-eslint/pull/9002) got merged.
-* A great resource to check the state of many resources connected or depending on ESLint v9 is the [flat config rollout](https://github.com/eslint/eslint/issues/18093) Issue on GitHub, which shows you which tools completed the transition to ESLint 9 flat config and which are still working on it.
+If you are interested in the progress of more packages and plugins, then have a look at the Issue in the ESLint repository that keeps track of the [flat config rollout](https://github.com/eslint/eslint/issues/18093)
 
 > [!MORE]  
-> [ESLint "configuration migrator" issue](https://eslint.org/docs/latest/use/configure/migration-guide#migrate-your-config-file)  
-> [ESLint "migration guide" documentation](https://eslint.org/docs/latest/use/configure/migration-guide)  
 > [ESLint "flat config rollout" issue](https://github.com/eslint/eslint/issues/18093)  
 > [ESLint "flag config part 1" blog post](https://eslint.org/blog/2022/08/new-config-system-part-1/)  
 > [ESLint "flag config part 2" blog post](https://eslint.org/blog/2022/08/new-config-system-part-2/)  
 > [ESLint "flag config part 3" blog post](https://eslint.org/blog/2022/08/new-config-system-part-3/)  
 > [ESLint "flat config files" RFC](https://github.com/eslint/rfcs/tree/main/designs/2019-config-simplification)  
 
-## Answering some questions regarding the linting setup
+## Next.js 15 ESLint v9 update
 
-> [!NOTE]  
-> The next 3 chapters contain a lot of theory:
->  
-> * The 1st chapter explains what **create-next-app** did in regards to linting  
-> * The 2nd chapter explains what packages related to linting Next.js has  
-> * The 3rd explains why we do want to modify the current ESLint setup
->  
-> So if you prefer to get straight to the solution (code) then skip ahead to the ["Installing the MDX ESLint plugin and parser" chapter](#installing-the-mdx-eslint-plugin-and-parser) if you have the time and are interested in understanding the *"Why"** then I recommend reading on
+In the [previous version of this tutorial (using Next.js 14)](/web_development/tutorials/next-js-static-mdx-blog/linting-setup-using-eslint) CNA installed ESLint v8, ESLint v8 had support for **eslintrc** (classic) configuration files, but eslintrc files are now **deprecated**.
 
-### But didn't Next.js already set up linting?
+Also good to know, is that support for [**eslintrc** (classic) configuration files will be removed in ESLint version 10.0.0](https://eslint.org/blog/2023/10/flat-config-rollout-plans/#eslintrc-removed-in-eslint-v10.0.0)
 
-Yes, Next.js has built-in linting support, this chapter is a recap of what Next.js has done so far
+The [next 15 blog post](https://nextjs.org/blog/next-15#eslint-9-support) mentioned that:
 
-Earlier in this tutorial, we used **create-next-app**, which has installed [ESLint](https://github.com/eslint/eslint) as well as the **eslint-config-next** package for us (both packages got added to the devDependencies in the `package.json`)
+* you can now use ESLint v9 (or continue using v8)
+* if Next.js detects that you are still using ESLint v8 they automatically set the `ESLINT_USE_FLAT_CONFIG=false` flag, which [enables support for flat config files in ESLint v8](https://eslint.org/docs/latest/use/configure/migration-guide#start-using-flat-config-files)
 
-**create-next-app** has also added a `.eslintrc.json` file in the root of the project, in that file, Next.js has added a default configuration that works best for most projects, Next.js has added the `.eslintrc.json` file so that the linting setup that gets used by the lint command can also be used by your (VSCode) IDE itself
+Most of that work happened in the [PR #71218](https://github.com/vercel/next.js/pull/71218/files)
 
-If [install ESLint for Next.js manually](https://nextjs.org/docs/app/building-your-application/configuring/eslint) (without creating lint configuration file manually and do NOT use create next app) but add this lint command `"lint": "next lint"` to your package.json scripts and then execute it for the first time, then Next.js will detect that there is no `.eslintrc.json` and it will ask you if you want to use the **Base** mode or the **Strict** mode, because we used **create-next-app**, it did not let us chose if we prefer the **Base** mode or the **Strict** mode, that's because when using **create-next-app** it chooses the strict mode by default, which is why in your `.eslintrc.json` there is an extends of **next/core-web-vitals** (which is the strict mode) and not just an extends of **next** (which is the base mode)
+### Not everything is ESLint v9 and flat config (yet)
 
-**next/core-web-vitals** is a set of extra rules that will check your code and inform you about potential optimizations you can do that are related to core web vitals metrics, like rules to improve page loading speed, but **next/core-web-vitals** will also extend the base **next** rules
+If you use the latest **create-next-app** (CNA) it will NOT install ESLint v9, instead CNA sets ESLint to ^8 (in the package.json) which means npm will attempt to install v8.57.1 and doing so will trigger a npm warn deprecated message:
 
-Because **create-next-app** has added the `"lint": "next lint"{:json}` to your package.json `scripts`, you can use the command `npm run lint`, which will execute `next lint`. `next lint` is the Next.js CLI command for linting
+> eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
 
-> [!MORE]  
-> [web.dev "Core Web Vitals" page](https://web.dev/articles/vitals)  
+If you use npm run lint (next lint cli) and have no eslint configuration file, then next lint will install ESLint v9
 
-### Why does Next.js have two packages related to ESLINT?
+No matter if you have used the CNA or next lint, both still create eslintrc files and NOT flat config files, so yes Next.js has updated their packages to support ESLint v9 but they have NOT yet updated their packages to support [shareable flat config](https://eslint.org/docs/latest/extend/shareable-configs) files
+
+Both CNA and next lint installed the latest [eslint-config-next](https://github.com/vercel/next.js/tree/canary/packages/eslint-config-next), however the latest **eslint-config-next** is not compatible with flat config files, as we will see in one of the upcoming chapters, which does NOT mean you can NOT use eslint-config-next with flat configs, but it means that if you do you will need to add a compatibility layer for it wo work (which is what we will do in one of the upcoming chapters)
+
+## Why does Next.js have two packages related to ESLINT?
 
 Next.js has **2 packages** that are related to ESLint, one is called eslint-**config**-next (ESLint Config), and the other one is called eslint-**plugin**-next (ESLint Plugin)
 
@@ -139,312 +120,897 @@ Package 1: **eslint-config-next** (ESLint Config) intends to make it easier to g
 
 Package 2: **eslint-plugin-next** is the actual ESLint plugin for Nextjs (called **@next/eslint-plugin-next** on npmjs), it aims to catch common problems in a Next.js application
 
-For a complete list of rules that the Next.js ESLint plugin adds check out the [Nextjs "ESLint rules" documentation](https://nextjs.org/docs/app/building-your-application/configuring/eslint#eslint-plugin) or have a look at the [eslint-plugin-next rules directory on GitHub](https://github.com/vercel/next.js/tree/b2625477c002343e7fe083204c45af1fdd7cd407/packages/eslint-plugin-next/src/rules)
+For a complete list of rules that the Next.js ESLint plugin adds check out the [Nextjs "ESLint rules" documentation](https://nextjs.org/docs/app/building-your-application/configuring/eslint#eslint-plugin) or have a look at the [eslint-plugin-next rules directory on GitHub](https://github.com/vercel/next.js/tree/canary/packages/eslint-plugin-next/src/rules)
 
 > [!MORE]  
 > [Next.js "ESLint" documentation](https://nextjs.org/docs/app/building-your-application/configuring/eslint)  
 
-### Why are we changing the Next.js linting setup?
+## ESLint 9 flat config for Next.js 15
 
-The Next.js linting setup lints code in `.ts` and `.tsx` files using the typescript-eslint parser, however, it does not lint markdown syntax and code in MDX files for which you need to have an MDX parser installed
+First we are going to make sure we have the latest ESLint v9.x version installed by using the following command:
 
-This is why we are going to add 3 packages to do the linting of markdown content in MDX pages:
+```shell
+npm i eslint@latest --save-dev --save-exact
+```
 
-* the first one is a **remark plugin** called [remark lint](https://github.com/remarkjs/remark-lint) that will lint the markdown syntax we use to format our content in MDX pages
-* the second one is an **ESLint plugin** called [eslint-plugin-mdx](https://github.com/mdx-js/eslint-mdx/tree/master/packages/eslint-plugin-mdx) which contains the configuration and rules for linting MDX
-* the third one is a **parser** called [eslint-mdx](https://www.npmjs.com/package/eslint-mdx) which will parse the content of MDX files
+In the [Project setup and Next.js 15 installation](/web_development/tutorials/next-js-static-first-mdx-starterkit/project-setup-and-first-commit) chapter we used **create-next-app** (CNA) which created an .eslintrc.json, which is a **classic** ESLint configuration file, in this chapter we want to convert that **classic** configuration file into a [**flat config** file](https://eslint.org/docs/latest/use/configure/configuration-files)
 
-**The recommended way** to add [eslint-plugin-mdx as described in their README](https://github.com/mdx-js/eslint-mdx#notice) is to use the **overrides** feature of ESLint (if you want to know more about the parsing issues you might have if NOT using **overrides** to check out the [eslint-plugin-mdx GitHub issue #251](https://github.com/mdx-js/eslint-mdx/issues/251#issuecomment-736139224))
+At this point we can check out the [ESLint "Migrate Your Config File" documentation](https://eslint.org/docs/latest/use/configure/migration-guide) which tells us to use the [ESLint Configuration Migrator](https://eslint.org/blog/2024/05/eslint-configuration-migrator/) which is tool to help us convert eslintrc configuration files to Flat Config files
 
-One problem we are facing is that, even though Next.js has created a `.eslintrc.json` for us that lets us do some fine-tuning of rules, adding a new **overrides** for markdown will not work due to a limitation how the **next lint** CLI works (there is open discussion [next lint command doesn't support overrides #35228](https://github.com/vercel/next.js/issues/35228) where the limitation gets discussed), **next lint** doesn't use the `.eslintrc.json` that **create-next-app** added to the root of project, it just added that file so that our IDE (VSCode) can do linting in files using the same setup as Next.js
+Our eslintrc file currently looks like this:
 
-As the **next lint** command ignores custom **overrides** that are in your `.eslintrc.json`, we will NOT be able to use the **next lint** CLI. Instead, we will create a custom **lint** command in our `package.json` scripts, by using our command we ensure that the eslint configuration file in the root of our project gets used to configure the linting process. This solution will be used for linting in the IDE, that happens while we are coding as well as the linting that will happen when using the `npm run lint` command
+```json title=".eslintrc.json"
+{
+    "extends": [
+        "next/core-web-vitals",
+        "next/typescript"
+    ]
+}
+```
 
-Finally, there is yet another problem, the Next.js CLI **build** command does not use the `package.json` **lint** script but uses the Next.js **lint** CLI directly, this means that we will need to tell the **build** CLI NOT to do linting during builds (using the default Next.js CLI linting) and then we will manually re-add linting for builds by changing the `package.json` **build** script so that it uses our `package.json` **lint** script before doing an actual build
+To convert it we launch the ESLint Configuration Migrator, using the following command (depending on what extension you use for your eslintrc, if you do NOT use json then you need to adjust the file name in the command):
+
+```shell
+npx @eslint/migrate-config .eslintrc.json
+```
+
+The configuration migrator will convert your `.eslintrc.json` classic configuration file into an `eslint.config.mjs` flat config file
+
+At the end of the update the configuration migrator will display a message, in which it recommends to now install the following dependencies, we follow through by executing the following command:
+
+```shell
+npm install @eslint/js @eslint/eslintrc --save-dev --save-exact
+```
+
+The 2 dependencies we just installed are needed by the `eslint.config.mjs` file, as it will import and use code from **@eslint/js** and **@eslint/eslintrc**
+
+Now that we have converted our classic configuration to a flat configuration, let's open the `eslint.config.mjs` file and have a look at what is inside:
+
+```js title="eslint.config.mjs"
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import js from "@eslint/js";
+import { FlatCompat } from "@eslint/eslintrc";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const compat = new FlatCompat({
+    baseDirectory: __dirname,
+    recommendedConfig: js.configs.recommended,
+    allConfig: js.configs.all
+});
+export default [...compat.extends("next/core-web-vitals", "next/typescript")];
+```
+
+We can see that the extends that was in our `.eslintrc.json` file got converted into the extends from the compatibility layer (which it has created using the `FlatCompat` class from the `@eslint/eslintrc` package)
+
+> [!TIP]  
+> If you are not creating a new project from scratch but instead have to upgrade a legacy ESLint setup, then I recommend checking out the [ESLint Compatibility Utilities](https://eslint.org/blog/2024/05/eslint-compatibility-utilities/) blog post from May 2024, it has some details about yet another package which has tools that can fix problems common problems that arise when using legacy rules and configurations
+
+One last thing, the migration script has NOT deleted our original eslintrc file, so I recommend deleting the `.eslintrc.json` (in the root of the project) manually, we won't need it anymore
+
+At this point you have a working ESLint setup using ESLint v9 and flat config files, you can use the following command to try it out:
+
+```shell
+npm run lint
+```
+
+### Typescript ESLint configuration files
+
+As we converted our **next.config** file to a (`next.config.ts`) typescript file, to be consistent we will also convert our **eslint.config** to an `eslint.config.ts` file (but if you prefer not to and want to keep the eslint.config.mjs as is, then feel free to skip to the [ignores and linter options](#ignore-folders-and-setting-linter-options) chapter)
+
+First we rename our ESlint configuration file to `eslint.config.ts` (you can also use `eslint.config.mts` or `eslint.config.cts` if you prefer), in this tutorial I will use **eslint.config.ts** (to match how we named the **next.config.ts** file)
+
+Next we need to install additional [@types/eslint__eslintrc](https://www.npmjs.com/package/@types/eslint__eslintrc) types for the [@eslint/eslintrc](https://www.npmjs.com/package/@eslint/eslintrc) package:
+
+```shell
+npm i @types/eslint__eslintrc --save-dev --save-exact
+```
+
+Then we need to add the [jiti](https://www.npmjs.com/package/jiti) dependency (when using Node.js, Deno and Bun users don't need it) which is required to read typescript configuration files:
+
+```shell
+npm i jiti --save-dev --save-exact
+```
 
 > [!MORE]  
-> [ESLint "how eslint overrides work" documentation](https://eslint.org/docs/v8.x/use/configure/configuration-files#how-do-overrides-work)  
+> [ESLint "typescript configuration files" documentation](https://eslint.org/docs/latest/use/configure/configuration-files#typescript-configuration-files)  
 
-## Installing the MDX ESLint plugin and parser
+#### Add types to the ESLint configuration file
 
-First, we need to make sure the [MDX eslint plugin](https://www.npmjs.com/package/eslint-plugin-mdx) (and parser) are installed by using the following command:
+We edit the `eslint.config.ts` file and make the following few changes:
 
-```shell
-npm i eslint-plugin-mdx@latest --save-exact --save-dev
+```ts title="eslint.config.ts" showLineNumbers {5}
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import js from '@eslint/js'
+import { FlatCompat } from '@eslint/eslintrc'
+import type { Linter } from 'eslint'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const compat = new FlatCompat({
+    baseDirectory: __dirname,
+    recommendedConfig: js.configs.recommended,
+    allConfig: js.configs.all
+})
+
+export default [
+    ...compat.extends('next/core-web-vitals', 'next/typescript'),
+] satisfies Linter.Config[]
 ```
 
-The ESLint MDX plugin has the [ESLint MDX parser (called eslint-mdx)](https://www.npmjs.com/package/eslint-mdx) listed as a dependency so we don't need to explicitly list it as it will get installed too, alongside other packages like the [eslint-plugin-markdown](https://www.npmjs.com/package/eslint-plugin-markdown) and a few others
+Line 5: we import the ESLint **Linter** type
 
-## ESLint configuration step 1: Basic ESLint configuration file
-
-**create next app** has added a `.eslintrc.json` in the root of our project, as we will add our own custom eslint configuration, we can get rid of that file
-
-The first thing we need to do is delete the current `.eslintrc.json`
-
-**create next app** should have installed all dependencies needed, so at this point we do NOT need to install any new packages
-
-If you didn't use **create-next-app** as we did in this tutorial, then I recommend using this command to ensure all packages are installed: 
-
-```shell
-npm i eslint@latest eslint-config-next@latest --save-exact --save-dev
-```
-
-> [!WARN]
-> As the new ESLint 9 did get released, you might encounter backward compatibility problems when using the latest version in combination with the next config eslint or other plugins, in that case, I recommend using the latest version of the 8.x branch until the flat config is more widely supported, as of now this is [ESLint 8.57.0](https://www.npmjs.com/package/eslint/v/8.57.0)
-
-Then create a new `.eslintrc.js` (in the root of your project) and add the following content:
-
-```js title=".eslintrc.js"
-module.exports = {
-    root: true,
-    parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-    },
-    'env': {
-        browser: true,
-        es2021: true,
-        node: true,
-    },
-    ignorePatterns: [
-        'node_modules/',
-        '.next/',
-        '.vscode/',
-        'public/',
-    ],
-    reportUnusedDisableDirectives: true,
-    overrides: [
-    ],
-}
-
-```
+Line X: we use the [satisfies operator](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html#the-satisfies-operator) (that got introduced in TypeScript 4.9) to tell Typescript that our default export will be an array of **Linter.Config**, each **ESLint Linter Config** contains information about which files should get included or ignored, custom rules configurations, you can give it a name and some more which we will see more in detail in the upcoming chapters
 
 > [!NOTE]  
-> You may have noticed that I chose javascript for the eslint configuration file and not JSON. I usually use javascript over json as it allows me to add comments
->  
-> However, if you prefer json, feel free to create a `.eslintrc.json` instead of a `.eslintrc.js` or use one of the many other [ESLint configuration file formats](https://eslint.org/docs/latest/use/configure/configuration-files-deprecated#configuration-file-formats) that are supported
+> Because we added the types for `@eslint/eslintrc` package in the previous chapter we now have a typed FlatCompat (in case you want to check out what other options are available)  
 
-The above basic setup is inspired by what you get if you use the [eslint init](https://eslint.org/docs/v8.x/use/getting-started) script to setup ESLint in a new project, using **eslint init** in a sandbox folder is a good way to see what kind of basic setup the ESLint team recommends
+#### Replacing next lint with eslint
 
-I added `root: true` to make sure eslint [stops at the root of my project](https://eslint.org/docs/v8.x/use/configure/configuration-files#cascading-and-hierarchy) and does not attempt to check for other eslint configuration files in parent directories
+The typescript eslint configuration files are not supported by the Next.js 15.x lint cli (as of now), the file gets mentioned in the [Next.js **runLintCheck** code](https://github.com/vercel/next.js/blob/c3bc7d05983d3c5604d4532ceb706d5973aef642/packages/next/src/lib/eslint/runLintCheck.ts#L366) but there is no implementation (yet)
 
-I also added some entries in the `ignorePatterns` to make sure ESLint is not going to lint anything in those folders. You might want to add other folders to this list over time if you want ESLint to exclude those folders from linting
+If you have converted your ESLint configuration to an `eslint.config.ts` file and use the linting command `npm run lint` then `next lint` will not find our configuration file, and instead starts the wizard (which is supposed to guide us through setting up a new ESLint classic configuration)
 
-I then enabled the option `reportUnusedDisableDirectives` to make sure ESLint will trigger a [warning if it finds unused disable eslint comments](https://eslint.org/docs/v8.x/use/configure/rules#report-unused-eslint-disable-comments), which can happen when code gets deleted or moved around and suddenly an `// eslint-disable-next-line` comment becomes useless
+As we can't use next lint we need to create our own linting command:
 
-## ESLint configuration step 2: ESLint ts(x) and md(x) files override
-
-The 1st override we add to the array is fairly short, as its only purpose is to tell ESLint which **rule sets** we want to use, no matter if it is mdx / markdown content in md(x) files or typescript code in ts(x) files
-
-We do this, because of a rule from the Next.js ESLint plugin that will recommend that you use [next/image](https://nextjs.org/docs/app/api-reference/components/image) instead of a regular `<img>{:html}` element, this rule can be useful in both MDX files and also for Typescript code in React components as well as in Next.js pages
-
-Add the following object to the **overrides** array:
-
-```js title=".eslintrc.js" showLineNumbers{19} {2-7}
-overrides: [
-    {
-        files: ['**/*.ts?(x)', '**/*.md?(x)'],
-        extends: [
-            'next/core-web-vitals',
-        ],
-    },
-],
-```
-
-What this override does:
-
-* **files** will include any code file that has a **ts** or **tsx** extension and any content file that has a **md** or **mdx** extension, meaning this override is for both code in our typescript files as well as content in our MDX files
-* **extends** is set so that it will use the rules from the **core-web-vitals** (Next.js linting strict mode), **core-web-vitals** will add a few rules related to core web vitals, but also extends the next base rules (so there is no need to add 'next' to the extends too)
-
-## ESLint configuration step 3: ESLint ts(x) files only override
-
-The 2nd override is specifically for **typescript** code, its primary purpose is to tell ESLint to use the **@typescript-eslint/parser** parser to parse ts(x) files
-
-For this override, I have 2 options you can chose from:
-
-* the 1st option: this is what Next.js uses in **eslint-config-next** WITHOUT any of the **@typescript-eslint** rule sets enabled 
-* the 2nd option is more **strict** version, that will also include the **@typescript-eslint/recommended** rule set, using it will add a bunch of typescript-related rules, like the [no-unnecessary-type-assertion](https://typescript-eslint.io/rules/no-unnecessary-type-assertion/) rule that checks if you have type assertions that are not needed; it is possible to get an even stricter version if you also enable the **stylistic-type-checked** rule set, which will, for example, use [prefer-nullish-coalescing](https://typescript-eslint.io/rules/prefer-nullish-coalescing/) in cases where you could have, but did NOT, use the [Nullish coalescing operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing)
-
-### Option 1: typescript only parser + Next.js config (which includes react, react-hooks, ...)
-
-If you chose option 1 (the less strict version), then add the following override into your `.eslintrc.js`:
-
-```js title=".eslintrc.js" showLineNumbers{19} {8-29}
-overrides: [
-    {
-        files: ['**/*.ts?(x)', '**/*.md?(x)'],
-        extends: [
-            'next/core-web-vitals',
-        ],
-    },
-    {
-        files: ['**/*.ts?(x)'],
-        parser: '@typescript-eslint/parser',
-        parserOptions: {
-            sourceType: 'module',
-            ecmaFeatures: {
-                jsx: true,
-            },
-            warnOnUnsupportedTypeScriptVersion: true,
-        },
-        rules: {
-            quotes: [
-                'error',
-                'single',
-                { "allowTemplateLiterals": true },
-            ],
-            semi: [
-                'error',
-                'never',
-            ],
-        },
-    },
-],
-```
-
-What this override does:
-
-* **files** is set to **ts(x)**, meaning this override is only for **ts** and **tsx** files
-* there is no **extends** defined, as it will already use the **extends** of the previous override in which we extended **next/core-web-vitals** (next/core-web-vitals will then extend the base **next** rule set)
-* because this **overrides** is specifically for **typescript** files, we set the parser to use the **@typescript-eslint** parser (instead of the default eslint parser, which only supports parsing javascript)
-
-### Option 2: everything that is in option 1 + typescript code rules
-
-I like option 2 best as it adds a lot of good rules that will check your typescript code and give you feedback if needed. If you too decide to use this option, but it finds too many problems in your code, then maybe set the rules to **warn** instead of **error** until you have time to fix problems that get reported. Later you can switch back to **error** to enforce the rules (or you might want to disactivate some of the rules completly)
-
-If you chose option 2 (the stricter version with more typescript-related rules), we first need to install the additional **@typescript-eslint/eslint-plugin** package, but to ensure that this package uses the same version as the **@typescript-eslint/parser** package, I recommend installing both, like so:
+* as we can NOT use **next lint**, we will use the **eslint cli** instead
+* we will also enable the [(experimental) typescript support](https://eslint.org/docs/latest/use/configure/configuration-files#typescript-configuration-files) for ESLint Flat Config files by adding an extra flag to our command (typescript support for configuration files is a feature that got added in [ESLint v9.9.0](https://eslint.org/blog/2024/08/eslint-v9.9.0-released/#experimental-typescript-configuration-files))
+* finally we will enable caching (as would next lint do) and we set the cache folder path to the same folder that Next.js uses
 
 ```shell
-npm i @typescript-eslint/parser@7.18.0 @typescript-eslint/eslint-plugin@7.18.0 --save-exact --save-dev
+npx eslint --flag unstable_ts_config --cache --cache-location .next/cache/eslint/
 ```
 
-We install version 7.18.0 for both plugins as this is (as of now July 2024) the latest version of the 7.x branch (v8.x are for ESLint 9)
+Now that we have created a new command we can update our package.json (in the root of the project) to update our linting script(s):
+
+```json title="package.json" {6}
+"scripts": {
+    "dev": "next dev",
+    "dev-turbo": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint --flag unstable_ts_config --cache --cache-location .next/cache/eslint/"
+},
+```
+
+There is one more problem left, the **next build** script uses **next lint** by default, as we just replaced **next lint** with the **eslint cli** we also need to replace the build script like so:
+
+```json title="package.json" {4}
+"scripts": {
+    "dev": "next dev --turbopack",
+    "dev-turbo": "next dev --turbopack",
+    "build": "npm run lint && next build",
+    "start": "next start",
+    "lint": "eslint --flag unstable_ts_config --cache --cache-location .next/cache/eslint/"
+},
+```
+
+And now that we have updated the build script to use our custom linting command, we need to edit the Next.js configuration file and tell Next.js to NOT do its own linting during builds:
+
+```ts title="next.config.ts" showLineNumbers{43}
+eslint: {
+    // we have added a lint command to the package.json build script
+    // which is why we disable the default next lint (during builds) here
+    ignoreDuringBuilds: true,
+},
+```
+
+> [!MORE]  
+> [Next.js "ignoreDuringBuilds" documentation](https://nextjs.org/docs/app/api-reference/next-config-js/eslint)  
+
+### Adding even more scripts
+
+We could add more scripts related to linting, for example here we add a backup of the command that Next.js used, we also add a command without the use of a cache, the last two use different flags (to debug ESLint configurations and fix problems automatically)
+
+First we update our `package.json` file (in the root) and add the following scripts:
+
+```json title="package.json" {4-8}
+"scripts": {
+    "dev": "next dev --turbopack",
+    "dev-turbo": "next dev --turbopack",
+    "build": "npm run lint && next build",
+    "start": "next start",
+    "next-lint": "next lint",
+    "next-lint": "next lint",
+    "lint": "eslint --flag unstable_ts_config --cache --cache-location .next/cache/eslint/",
+    "lint-nocache": "eslint --flag unstable_ts_config",
+    "lint-debug": "eslint --flag unstable_ts_config --debug",
+    "lint-fix": "eslint --flag unstable_ts_config --fix"
+},
+```
+
+Then if you want you could update the README with these explanations:
+
+```md title="README.md"
+`npm run next-lint`: a backup of the original next.js linting command
+`npm run lint`: to manually use our (custom) linting command, it will scan our code and help us find problems in it (gets used by the build command before building)
+`npm run lint-nocache`: same as **lint** command without cache, takes longer but can be useful when testing changes
+`npm run lint-debug`: the **lint** with the ESLint **debug** flag (for a more verbose output)
+`npm run lint-fix`: the **lint** command with the **fix** flag activated (to automatically fix errors and warnings if it can), you probably want to create a new branch before running this as it might produce a big quantity of changed files
+```
+
+## ESLint debugging tools
+
+Here are 3 tools I found while working on this ESLint tutorial (I wish I had found earlier 😉) that will improve your ESLint debugging experience greatly
+
+Our first tool is a cli command:
+
+```shell
+npx eslint --debug eslint.config.ts
+```
+
+This is a fantastic tool (cli command) that will output a lot of information that could help you while debugging, run the same command without a path to your configuration file and it will show you even more debugging information by performing a very verbose linting (if you don't use a typescript eslint flat config then you need to adjust the name, for example to `npx eslint --debug eslint.config.mjs` for a javascript flat config)
+
+```shell
+npx eslint --print-config eslint.config.ts
+```
+
+Another cli command that will print a json representation of what it found in your configuration file, which is a great tool to verify if everything you have set up is included
+
+The third tool is the one that helped me the most while writing this guide, this tool greatly improves the **(developer experience) DX** when working with the new flat config files by helping you visualize the structure and content of your eslint flat config:
+
+```shell
+npx eslint --inspect-config eslint.config.ts
+```
+
+After running the command, the **ESLint Config Inspector** will launch a server on `http://localhost:7777/` (it should automatically use your default browser)
+
+The main page displays a nice overview of your files, ignores, options, plugins and rules, for each of your configurations
+
+On this overview page you see why it is a good idea to give your configurations a name 😉
+
+Each configuration (row) is a disclosure widget, expand it and it will show you even more information about each of your configurations
+
+If you want you can add those commands to your package json scripts:
+
+```json title="package.json"
+"scripts": {
+    "lint-debug-config": "eslint --flag unstable_ts_config --debug eslint.config.ts",
+    "lint-print-config": "eslint --flag unstable_ts_config --print-config eslint.config.ts",
+    "lint-inspect-config": "eslint --flag unstable_ts_config --inspect-config eslint.config.ts"
+},
+```
+
+Next update your README accordingly:
+
+```md title="README.md"
+`npm run lint-debug-config`: will print debugging information about what gets loaded by our ESLint config
+`npm run lint-print-config`: print out a json representation of what is in our ESLint config
+`npm run lint-inspect-config`: will open `http://localhost:7777/` in your browser, which is a tool to help you visualize the content of our ESLint config
+```
+
+Congratulations 🎉 you are now a master ESLint debugger (and it's a good time to commit the latest changes)
+
+> [!MORE]  
+> [ESLint "Debug Your Configuration" documentation](https://eslint.org/docs/latest/use/configure/debug)  
+> [ESLint "Config Inspector" readme](https://eslint.org/docs/latest/use/configure/debug)  
+
+## Language and Linter Options (optional)
+
+We could add global **language options** like the **ecmaVersion** or set a default **parser**, but in the upcoming chapters we will use shared configuration objects, which will set those options for us
+
+If however you want to learn more about the options that are available, then have a look at the [ESLint "configuration objects" documentation](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-objects)
+
+> [!MORE]  
+> [ESLint "configuration objects" documentation](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-objects)
+
+### Reporting unused "eslint-disable comments" (optional)
+
+When experimenting with ESLint and trying out setups, you might at some point add disable comments, but then later you decide to completely disable the rule using the ESLint rules configuration, in which case the disable comment becomes unused
 
 > [!WARN]  
-> If you get an NPM error because the version of the installed typescript-eslint/parser and the typescript-eslint/plugin version doesn't match:  
->
->> npm ERR! code ERESOLVE  
->> npm ERR! ERESOLVE could not resolve  
->> Conflicting peer dependency: @typescript-eslint/parser
->
-> Then use the following command to remove the parser:  
->
->```shell
-> npm remove @typescript-eslint/parser  
-> ```
->
-> Then delete your `package-lock.json` (NOT the `package.json` file) file in the root in the repository  
->  
-> Finally, try out the installation command (above) again  
+> If you are using the ESLint recommend rules, then ESLint will already add the **reportUnusedDisableDirectives** to the configuration
 
-Next, we put the following override into our **overrides** array (**instead** of the one in option 1):
+The easy way to spot those unused comments is by activating the ESLint Linter option:
 
-```js title=".eslintrc.js" showLineNumbers{19} {8-48}
-overrides: [
-    {
-        files: ['**/*.ts?(x)', '**/*.md?(x)'],
-        extends: [
-            'next/core-web-vitals',
-        ],
-    },
-    {
-        files: ['**/*.ts?(x)'],
-        extends: [
-            'plugin:@typescript-eslint/recommended-type-checked',
-            'plugin:@typescript-eslint/stylistic-type-checked',
-        ],
-        parser: '@typescript-eslint/parser',
-        parserOptions: {
-            sourceType: 'module',
-            ecmaFeatures: {
-                jsx: true,
-            },
-            warnOnUnsupportedTypeScriptVersion: true,
-            project: './tsconfig.json',
-        },
-        plugins: [
-            '@typescript-eslint',
-        ],
-        rules: {
-            quotes: [
-                'error',
-                'single',
-                { "allowTemplateLiterals": true },
-            ],
-            semi: [
-                'error',
-                'never',
-            ],
-            '@typescript-eslint/consistent-indexed-object-style': 'off',
-            '@typescript-eslint/ban-ts-comment': [
-                'error',
-                {
-                    'ts-expect-error': 'allow-with-description',
-                    'ts-ignore': 'allow-with-description',
-                    'ts-nocheck': false,
-                    'ts-check': false,
-                    minimumDescriptionLength: 3,
-                },
-            ],
-        },
-    },
-],
+```ts title="eslint.config.mjs"
+{
+    linterOptions: {
+        reportUnusedDisableDirectives: 'warn'
+    }
+},
 ```
 
-> [!WARN]
-> This overrides is not in addition to the overrides in option 1, it is a full replacement
+Line X: we add a new configuration object to our flat config to enable the **reportUnusedDisableDirectives** option
+
+## Ignore folders
+
+In this chapter we will add an **ignores** config to exclude some folders from linting, so that we end up with a file that looks like this:
+
+```ts title="eslint.config.ts" showLineNumbers {16-21}
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import js from '@eslint/js'
+import { FlatCompat } from '@eslint/eslintrc'
+import type { Linter } from 'eslint'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const compat = new FlatCompat({
+    baseDirectory: __dirname,
+    recommendedConfig: js.configs.recommended,
+    allConfig: js.configs.all
+})
+
+const ignoresConfig = [
+    {
+        name: 'custom/eslint/ignores',
+        // the ignores option needs to be in a separate configuration object
+        // replaces the .eslintignore file
+        ignores: [
+            '.next/',
+            '.vscode/',
+            'public/',
+        ]
+    },
+] as Linter.Config[]
+
+export default [
+    ...compat.extends('next/core-web-vitals', 'next/typescript'),
+    ...ignoresConfig,
+] satisfies Linter.Config[]
+```
+
+Line X: we create a new **ignoresConfig** flat config
+
+Line X: we give our config a name (we lousily follow the [ESLint Configuration Naming Conventions](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-naming-conventions)), having a name will make it easier to find the config when using debugging tools (as we saw in the [ESLint debugging tools](#eslint-debugging-tools) chapter), feel free to for example replace "custom" in the name with the name of your project, that works well too
+
+Lines X to Y: we use the **ignores** option to tell ESLint which folders it should exclude from linting
+
+Line Z: we add the custom **ignoresConfig** to the default export
+
+> [!TIP]  
+> when the **ignores** option gets used in its own configuration block, then it acts as global ignores, meaning it tells ESLint to always exclude those files from linting
 >  
-> So you chose to either add option 1 or option 2, but NOT BOTH
+> however if the ignores is in a configuration block with other keys, then the ignores only applies to that configuration
 
-What this override does:
+> [!MORE]  
+> [ESLint "ignores" documentation](https://eslint.org/docs/latest/use/configure/ignore)  
+> [ESLint "Report unused eslint-disable comments" documentation](https://eslint.org/docs/latest/use/configure/rules#report-unused-eslint-disable-comments)
 
-* **files** is set to **ts(x)**, meaning this override is only for **ts** and **tsx** files
-* **extends** is set to extend the **recommended** rules of the **@typescript-eslint** plugin as well as the **stylistic** rules, if you only want the recommended rules but NOT the stylistic, then comment the `'plugin:@typescript-eslint/stylistic-type-checked',` line out
-* because this **overrides** is specifically for **typescript** files, we set the parser to use the **@typescript-eslint** parser (instead of the default eslint parser, which only supports parsing javascript)
-* **plugins** is set to typescript-eslint, but this is not the only plugin that will be used for typescript files, in the previous overrides, we already added the Next.js eslint plugin, so there is no need to add it again here (the Next.js eslint config will include a bunch of other plugins like react, react-hooks and some more)
-* finally, we have the **rules** option, here you can add whatever rules you need in your project
-  * I like to single quotes and not double quotes in my javascript code this is why I set **quotes** to **single** (feel free to set it to **double** if you prefer)
-  * then I set the rule for semicolons at the end of a javascript line to **never** because I don't use semicolons at the end of lines in my code (as long as they are optional, in the few cases where they are required, I of course use them, but those cases are very rare)
-  * next, I also disable the [consistent-indexed-object-style](https://typescript-eslint.io/rules/consistent-indexed-object-style/) rule, I usually like consistency but in this case, I think the rule goes too far, different variants are supported by typescript and as long as there their syntax is right I feel like letting the dev chose which one he prefers, feel free to remove this line if you prefer enforcing the consistency
-  * finally, I added a configuration for the [ban-ts-comment](https://typescript-eslint.io/rules/ban-ts-comment/) rule to allow the **ts-expect-error** and **ts-ignore** comments but only when there is a description as to why those comments got added to the code (by default no comments are allowed)
+### Ignoring folders by using gitignore
+
+An alternative to having an ignores list in the ESLint configuration is to use the content of the `.gitignore` file to create an ESLint ignores list
+
+```ts title="eslint.config.ts" showLineNumbers
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import js from '@eslint/js'
+import { FlatCompat } from '@eslint/eslintrc'
+import type { Linter } from 'eslint'
+import { includeIgnoreFile } from '@eslint/compat'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const compat = new FlatCompat({
+    baseDirectory: __dirname,
+    recommendedConfig: js.configs.recommended,
+    allConfig: js.configs.all
+})
+const gitignorePath = path.resolve(__dirname, '.gitignore')
+
+export default [
+    ...compat.extends('next/core-web-vitals', 'next/typescript'),
+    includeIgnoreFile(gitignorePath),
+] satisfies Linter.Config[]
+```
+
+Line X: we import the **includeIgnoreFile** function from ESLint compat package
+
+Line Y: we set the path to our gitignore file, which is at root of our project
+
+Line Z: we use the **includeIgnoreFile** function, which will scan the gitignore file content and turn it into a list of files and folders ESLint will **ignore**
+
+For this to work you need to install one more dependency [@eslint/compat](https://www.npmjs.com/package/@eslint/compat):
+
+```shell
+npm i @eslint/compat --save-dev --save-exact
+```
+
+## ESLint recommended
+
+The second custom config that we are going to add is an ESLint custom config, which help us get rid of some FlatCompat options:
+
+```ts title="eslint.config.ts" showLineNumbers {16-21}
+import eslintPlugin from '@eslint/js'
+import { FlatCompat } from '@eslint/eslintrc'
+import type { Linter } from 'eslint'
+
+const compat = new FlatCompat()
+
+const eslintConfig = [
+    {
+        name: 'custom/eslint/recommended',
+        files: ['**/*.ts?(x)'],
+        ...eslintPlugin.configs.recommended,
+    },
+]
+
+const ignoresConfig = [
+    {
+        name: 'custom/eslint/ignores',
+        // the ignores option needs to be in a separate configuration object
+        // replaces the .eslintignore file
+        ignores: [
+            '.next/',
+            '.vscode/',
+            'public/',
+        ]
+    },
+] as Linter.Config[]
+
+export default [
+    ...compat.extends('next/core-web-vitals', 'next/typescript'),
+    ...eslintConfig,
+    ...ignoresConfig,
+] satisfies Linter.Config[]
+```
+
+Lines A to B: first we remove two Node.js module imports as we will NOT need them anymore
+
+Line X: we renamed the **@eslint/js** import from **js** to **eslintPlugin** for consistency (with the next plugin imports we will add soon)
+
+Lines C to D: we remove the **FlatCompat** options as the eslint config (that we are adding next) will take care of adding the recommended ESLint rules for Javascript (and Typescript) files
+
+Lines X to Y: we create a custom ESLint configuration to apply a recommended set of linting rules to our Javascript (and Typescript files):
+
+* we add a name to our config
+* we set the files option to `'**/*.ts?(x)'` because now that converted the last 2 .mjs files (eslint.config.mjs and next.config.mjs) to typescript we don't need to include the .mts extension anymore (if your project still uses .mts files then change the files option to `'**/*.ts?(x)', '**/*.mjs'`), good to know (as mentioned in the comment) is that a **global** ignores needs to be in a config on it's own, a global ignores tells ESLint which files and folders should get excluded from linting 
+
+Line Z: we add the custom **eslintConfig** to the default export
+
+> [!NOTE]  
+> the changes we did here, moved the usage of ESLint recommended from the **FlatCompat** options to a custom flat config as this is more future proof (as you will see in an upcoming chapter it is possible to get rid of the compat mode completely), but mainly because it ensures that the rules only get applied to Javascript (and Typescript) files, which matters as (in a future chapter) we will lint files (like .mdx) for which we do NOT want to apply these rules
+
+## Typescript Linting
+
+When [we used CNA (earlier in this tutorial)](/web_development/tutorials/next-js-static-first-starterkit/project-setup-using-CNA-and-first-commit) we told it that we wanted to enable Typescript, which means our current configuration uses [next/typescript](https://nextjs.org/docs/app/building-your-application/configuring/eslint#typescript), which (as the documentation explains well) adds the [recommended rules](https://typescript-eslint.io/users/configs/#recommended) from the [@typescript-eslint/eslint-plugin](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin)
+
+> [!NOTE]  
+> There is one major difference between classic configs and flat config setups for **typescript-eslint**, for an ESLint v8 setup you would usually install two packages, [@typescript-eslint/eslint-plugin](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin) the package to the tseslint plugin and also the [@typescript-eslint/parser](https://www.npmjs.com/package/@typescript-eslint/parser) parser package, but since ESLint 9 most tutorials (that I saw) had switched to using a single [typescript-eslint](https://www.npmjs.com/package/typescript-eslint) package that contains the plugin, the parser as well as configurations
+
+We start by installing **typescript-eslint** package using the following command: 
+
+```shell
+npm i typescript-eslint --save-dev --save-exact
+```
+
+Next we will fine tune our typescript linting by adding a custom configuration for `.ts` and `.tsx` files:
+
+```ts title="eslint.config.ts" showLineNumbers {4-5}
+import eslintPlugin from '@eslint/js'
+import { FlatCompat } from '@eslint/eslintrc'
+import tseslint, { configs as tseslintConfigs } from 'typescript-eslint'
+import type { FlatConfig } from '@typescript-eslint/utils/ts-eslint'
+
+const compat = new FlatCompat()
+
+const eslintConfig = [
+    {
+        name: 'custom/eslint/recommended',
+        files: ['**/*.ts?(x)'],
+        ...eslintPlugin.configs.recommended,
+    },
+]
+
+const ignoresConfig = [
+    {
+        name: 'custom/eslint/ignores',
+        // the ignores option needs to be in a separate configuration object
+        // replaces the .eslintignore file
+        ignores: [
+            '.next/',
+            '.vscode/',
+            'public/',
+        ]
+    },
+] as Linter.Config[]
+
+const tseslintConfig = tseslint.config(
+    {
+        name: 'custom/typescript-eslint/recommended',
+        files: ['**/*.ts?(x)'],
+        extends: [
+            ...tseslintConfigs.recommended,
+            // OR more type checked rules
+            //...tseslintConfigs.recommendedTypeChecked,
+            // OR more strict rules
+            //...tseslintConfigs.strict,
+            // OR more strict and type checked rules
+            //...tseslintConfigs.strictTypeChecked,
+            // optional stylistic rules
+            ...tseslintConfigs.stylistic,
+            // OR the type checked version
+            //...tseslintConfigs.stylisticTypeChecked,
+        ] as FlatConfig.ConfigArray,
+        // only needed if you use TypeChecked rules
+        languageOptions: {
+            parserOptions: {
+                // https://typescript-eslint.io/getting-started/typed-linting
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+                // react recommended is already adding the ecmaFeatures
+                /*ecmaFeatures: {
+                    jsx: true,
+                },*/
+                // better keep it turned on, if needed uncomment
+                //warnOnUnsupportedTypeScriptVersion: false,
+            },
+        },
+    },
+    {
+        // disable type-aware linting on JS files
+        // only needed if you use TypeChecked rules
+        // (and you have javascript files in your project)
+        files: ['**/*.mjs'],
+        ...tseslintConfigs.disableTypeChecked,
+    },
+)
+
+export default [
+    ...compat.extends('next/core-web-vitals', 'next/typescript'),
+    ...eslintConfig,
+    ...ignoresConfig,
+    ...tseslintConfig,
+] satisfies FlatConfig.Config[]
+```
+
+Line X: we import typescript-eslint (which we installed in the previous step)
+
+Line Y: we import the **Config** type from the **@typescript-eslint** utilities (which we will use to replace the [type from the ESLint package](https://eslint.org/docs/latest/use/configure/configuration-files#typescript-configuration-files))
+
+Line A: we use the `config()` function from the typescript-eslint package to create a typescript eslint config
+
+Line X: first we specify that the name for custom flat config will be **tseslintConfig**
+
+Line F: We use the `files` option to tell ESLint which files (extensions) we want to include (for this tutorial we will enable linting for regular typescript (.ts) and typescript react files (.tsx))
+
+Lines X to X: we use the extends option to add full sets of rules to our setup (you can still fine tune rules from those sets using the rules config option):
+
+For the [typescript-eslint rules](https://typescript-eslint.io/users/configs) you have different `tseslint.configs.*` you can chose from, the **recommended** is config contains a set of recommended rules (this is what Next.js uses), there is also **recommendedTypeChecked** which adds recommended rules that require type information; Next we have **strict** and **StrictTypeChecked**, which you could use instead of the recommended rules, these sets include rules are more opinionated (which is why some projects don't use them, however they can help catch bugs so I recommend giving it a try, you can still disable them later by switching back to **recommended** rules or you could disable some of the rules by setting them to off)
+
+Then we have to chose between two more sets of rules, the **stylistic** set contains rules that do NOT impact program logic but focus on enforcing "simpler code patterns", which means they are even more , and then there is **stylisticTypeChecked** the second option (which I will use in this tutorial) which adds a few more stylistic rules that require type information
+
+> [!TIP]  
+> To better understand what is in those sets I **highly** recommend checking out the typescript-eslint [rules overview](https://typescript-eslint.io/rules/) page
+
+Lines F to G: Then we add some parser options, those are needed if you use one of the **"type checked"** sets (if are NOT using any `TypeChecked` rules, then you can delete (or uncomment) the `languageOptions` block)
+
+> [!NOTE]  
+> the **ecmaFeatures** and **warnOnUnsupportedTypeScriptVersion** parser options in the **languageOptions** are commented out because there are other configurations that we already use or will use in an upcoming chapter that set these options for us (I keep those lines as a reminder that the two options exist but if you prefer you can delete them)
+
+Line C: we can now remove `next/typescript` from the compatibility mode (as it gets replaced by our custom flat config using typescript-eslint that we added above)
+
+Line D: we set the **Config** type from the **@typescript-eslint** utilities as type for our default export (to replace the [type from the ESLint package](https://eslint.org/docs/latest/use/configure/configuration-files#typescript-configuration-files) which is what we were using previously), the reason to switch for the **Config** type from ESLint to the one from **@typescript-eslint** utilities is because of issues related with the type of the default export, you can read more about those issues in the next chapter
 
 > [!MORE]  
 > [typescript-eslint "rules" overview](https://typescript-eslint.io/rules/)  
+> [typescript-eslint "type checked" documentation](https://typescript-eslint.io/getting-started/typed-linting/)  
 
-## ESLint configuration step 4: ESLint md(x) files only overrides
+### Why we switched from ESLint to typescript-eslint types
 
-The 3rd and final overrides is specifically for **markdown / mdx** content, its primary purpose is to tell ESLint to use the **eslint-mdx** parser to parse md(x) files, insert this into your`overrides: []` array at the end:
+In the first ESLint chapters, we used the [type from the ESLint package](https://eslint.org/docs/latest/use/configure/configuration-files#typescript-configuration-files) like this:
 
-```js title=".eslintrc.js"
-    {
-        files: ['**/*.md?(x)'],
-        extends: [
-            'plugin:mdx/recommended',
-        ],
-        parser: 'eslint-mdx',
-        parserOptions: {
-            markdownExtensions: ['*.md, *.mdx'],
-        },
-        settings: {
-            'mdx/code-blocks': false,
-            'mdx/remark': true,
-        },
-        rules: {
-            'react/no-unescaped-entities': 0,
-        }
-        // markdown rules get configured in remarkrc.mjs
-    },
+```ts
+import type { Linter } from 'eslint'
+```
+(...)
+```ts
+] satisfies Linter.Config[]
 ```
 
-* **files** is set to **md(x)**, meaning this **overrides** is only for **md** and **mdx** files
-* **extends** is set to extend the recommended recommended **MDX plugin** rules
-* because this **overrides** is specifically for **MDX (and markdown)** files, we set the parser to use the **MDX parser** (instead of the default eslint parser, which only supports parsing javascript)
-* **settings** is for to do 2 things:
-  * **mdx/code-blocks** is set to **false** to disable the linting of code blocks, you may want to enable this instead, it can be a very nice feature to have **eslint MDX** use ESLint to lint the code inside of code blocks, I, however, shorten code in code blocks, and this creates a case where rules get triggered just because not all the code is in every code block, like using a variable that has not been created or using a package but the import is missing, this is why for myself I disabled this (I sometimes enable it periodically to lint a new files but then disable it before committing the code for the reasons I just described)
-  * **mdx/remark** is set to **true** because this enables [eslint-mdx to use the remark-lint plugin](https://github.com/mdx-js/eslint-mdx?tab=readme-ov-file#mdxremark), it will read `.remarkrc.mjs` configuration file and use all the remark-line rules that are listed in that file, this means that when ESLint will now be capable to also lint our markdown content (both in the IDE and when using the `npm run lint` command)
-* finally, in the **rules**, I disable the react eslint plugin [react/no-unescaped-entities](https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/no-unescaped-entities.md) rule because I don't want to have to escape entities in my markdown files, I understand that the **react/no-unescaped-entities** is useful in react components but not in markdown content, all other react rules we keep them as is (those rules are enabled because in the very first overrides we added **next/core-web-vitals**, which extends the **next** config, which then adds a bunch of eslint packages, each comes with their own set comes, to see which ones it adds look at the [Why does Next.js have two packages related to ESLINT?](#why-does-nextjs-have-two-packages-related-to-eslint) chapter and have a look at **Package 1: eslint-config-next**)
+However if do keep using those types and want to use typescript-eslint then you do will start to see typescript errors like this one:
 
-This was the last **overrides**, which means our configuration file is now complete, you can now save the `.eslintrc.js` file
+> Type `(Config | FlatConfig)[]` does not satisfy the expected type `Config<RulesRecord>[]`.
+
+There are several related tickets about this, like for example [issue #8613](https://github.com/typescript-eslint/typescript-eslint/issues/8613#issuecomment-1983584487) and [issue #9724](https://github.com/typescript-eslint/typescript-eslint/issues/9724), the TLDR is use the types from typescript-eslint
+
+This is why in the latest example, we switched to use the type from the typescript-eslint package instead:
+
+```ts
+import type { FlatConfig } from '@typescript-eslint/utils/ts-eslint'
+```
+(...)
+```ts
+] satisfies FlatConfig.Config[]
+```
+
+## Replacing **eslint-config-next** with a custom flat config
+
+Before we can start adding linting for MDX files and markdown content we first need to get rid of **eslint-config-next**
+
+> [!WARN]  
+> I usually recommend to only remove component(s) or disable a feature(s) of a framework if it is really necessary, as doing so will increase your maintenance costs and your technical debt counter will go up, there are however situations where it is ok to make the transition  
+>  
+> In the future **eslint-config-next** will hopefully get converted to a real ESLint v9 [sharable flat config](https://eslint.org/docs/latest/extend/shareable-configs) and then this chapter will be obsolete  
+
+As we saw in the [Why does Next.js have two packages related to ESLINT?](#why-does-nextjs-have-two-packages-related-to-eslint) **eslint-config-next** has added several plugins to your linting setup, however as we want to get rid of **eslint-config-next** we will now need to manually re-add support for those packages
+
+> [!NOTE]  
+> In this tutorial we will use the [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import) package (as does eslint-config-next), however there is also [eslint-plugin-import-x](https://www.npmjs.com/package/eslint-plugin-import-x), which is another popular choice you might want to try out 
+>  
+> We will also NOT use [@rushstack/eslint-patch](https://www.npmjs.com/package/@rushstack/eslint-patch) (which is now [ESLint v9 compatible](https://github.com/microsoft/rushstack/pull/4719)), however if you use Next.js in a big monorepo then you should probably install / configure it too  
+
+The plugins we will use are [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import) (and if you use typescript also [eslint-import-resolver-typescript](https://www.npmjs.com/package/eslint-import-resolver-typescript)), [eslint-plugin-react](https://www.npmjs.com/package/eslint-plugin-react), [eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks), [eslint-plugin-jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y), and we install them using the following command: 
+
+```shell
+npm i eslint-plugin-import@latest eslint-import-resolver-typescript@latest eslint-plugin-react@latest eslint-plugin-react-hooks@latest eslint-plugin-jsx-a11y@latest --save-dev --save-exact
+```
+
+As we are attempting to reproduce what **eslint-config-next**, this means that we are installing dependencies that we already in the project, but it will make sure that we are not missing a package in our stack and it will ensure we have the latest version installed for each of them (as we added the @latest tag in the command(s))
+
+If you are using Typescript, you will also want to install the following types:
+
+```shell
+npm i @types/eslint__eslintrc@latest @types/eslint-plugin-jsx-a11y@latest --save-dev --save-exact
+```
+
+> [!NOTE]  
+> Unfortunately several packages (eslint-plugin-react-hooks, eslint-plugin-import and @next/eslint-plugin-next) have no types, but I assume this will change as more users transition to .ts config files
+
+Now that we have our packages installed we can finally start updating our eslint.config.ts again:
+
+```ts title="eslint.config.ts" showLineNumbers {4-5}
+import eslintPlugin from '@eslint/js'
+import { FlatCompat } from '@eslint/eslintrc'
+import tseslint, { configs as tseslintConfigs } from 'typescript-eslint'
+import type { FlatConfig } from '@typescript-eslint/utils/ts-eslint'
+// @ts-expect-error this package has no types
+import importPlugin from 'eslint-plugin-import'
+import reactPlugin from 'eslint-plugin-react'
+// @ts-expect-error this package has no types
+import reactHooksPlugin from 'eslint-plugin-react-hooks'
+import jsxA11yPlugin from 'eslint-plugin-jsx-a11y'
+// @ts-expect-error this package has no types
+import nextPlugin from '@next/eslint-plugin-next'
+
+const compat = new FlatCompat()
+
+const eslintConfig = [
+    {
+        name: 'custom/eslint/recommended',
+        files: ['**/*.ts?(x)'],
+        ...eslintPlugin.configs.recommended,
+    },
+]
+
+const ignoresConfig = [
+    {
+        name: 'custom/eslint/ignores',
+        // the ignores option needs to be in a separate configuration object
+        // replaces the .eslintignore file
+        ignores: [
+            '.next/',
+            '.vscode/',
+            'public/',
+        ]
+    },
+] as Linter.Config[]
+
+const tseslintConfig = tseslint.config(
+    {
+        name: 'custom/typescript-eslint/recommended',
+        files: ['**/*.ts?(x)'],
+        extends: [
+            ...tseslintConfigs.recommended,
+            // OR more type checked rules
+            //...tseslintConfigs.recommendedTypeChecked,
+            // OR more strict rules
+            //...tseslintConfigs.strict,
+            // OR more strict and type checked rules
+            //...tseslintConfigs.strictTypeChecked,
+            // optional stylistic rules
+            ...tseslintConfigs.stylistic,
+            // OR the type checked version
+            //...tseslintConfigs.stylisticTypeChecked,
+        ] as FlatConfig.ConfigArray,
+        // only needed if you use TypeChecked rules
+        languageOptions: {
+            parserOptions: {
+                // https://typescript-eslint.io/getting-started/typed-linting
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+                // react recommended is already adding the ecmaFeatures
+                /*ecmaFeatures: {
+                    jsx: true,
+                },*/
+                // better keep it turned on, if needed uncomment
+                //warnOnUnsupportedTypeScriptVersion: false,
+            },
+        },
+    },
+    {
+        // disable type-aware linting on JS files
+        // only needed if you use TypeChecked rules
+        // (and you have javascript files in your project)
+        files: ['**/*.mjs'],
+        ...tseslintConfigs.disableTypeChecked,
+    },
+)
+
+const nextConfig = [
+    {
+        name: 'custom/next/config',
+        // no files for this config as we want to apply it to all files
+        plugins: {
+            'react': reactPlugin,
+            'jsx-a11y': jsxA11yPlugin,
+            /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+            'react-hooks': reactHooksPlugin,
+            '@next/next': nextPlugin,
+            'import': importPlugin,
+            /* eslint-enable @typescript-eslint/no-unsafe-assignment */
+        },
+        rules: {
+            ...reactPlugin.configs.recommended.rules,
+            ...reactPlugin.configs['jsx-runtime'].rules,
+            /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+            ...reactHooksPlugin.configs.recommended.rules,
+            ...nextPlugin.configs.recommended.rules,
+            // this is the nextjs strict mode
+            ...nextPlugin.configs['core-web-vitals'].rules,
+            ...importPlugin.configs.recommended.rules,
+            // the following is only needed if you use typescript
+            // don't use the typescript rules from the plugin import
+            // https://github.com/import-js/eslint-plugin-import/issues/2969
+            //...importPlugin.configs.typescript.rules,
+            //...importTypescriptPlugin.configs.recommended.rules,
+            /* eslint-enable @typescript-eslint/no-unsafe-member-access */
+            // rules from eslint-config-next
+            'import/no-anonymous-default-export': 'warn',
+            'react/no-unknown-property': 'off',
+            'react/react-in-jsx-scope': 'off',
+            'react/prop-types': 'off',
+            'jsx-a11y/alt-text': ['warn', { elements: ['img'], img: ['Image'], },],
+            'jsx-a11y/aria-props': 'warn',
+            'jsx-a11y/aria-proptypes': 'warn',
+            'jsx-a11y/aria-unsupported-elements': 'warn',
+            'jsx-a11y/role-has-required-aria-props': 'warn',
+            'jsx-a11y/role-supports-aria-props': 'warn',
+            'react/jsx-no-target-blank': 'off',
+        } as FlatConfig.Rules,
+        settings: {
+            'react': {
+                version: 'detect',
+            },
+            // only needed if you use (eslint-import-resolver-)typescript
+            'import/parsers': {
+                '@typescript-eslint/parser': ['.ts', '.tsx', '.mjs']
+            },
+            'import/resolver': {
+                typescript: {
+                    alwaysTryTypes: true
+                }
+            }
+        },
+    }
+] as FlatConfig.Config[]
+
+export default [
+    ...compat.extends('next/core-web-vitals', 'next/typescript'),
+    ...eslintConfig,
+    ...ignoresConfig,
+    ...tseslintConfig,
+    ...nextConfig,
+] satisfies FlatConfig.Config[]
+```
+
+Lines A to B: we import the 5 plugins
+
+> [!NOTE]  
+> If our configuration is a typescript file, then you have to use a typescript comment to inform typescript that it will not find the types for some of the packages
+
+Line X: we create a custom config to replace configuration from eslint-config-next package
+
+Line X: we set the name of our config to **custom/next/config**
+
+Lines X to X: we add the 5 plugins to the config (we use an eslint disable comment as 3 plugins don't have types)
+
+Lines X to X: we use rules option to add entire sets of rules to our config but then also to fine tune some of the rules (from those sets): 
+
+* we use the react (eslint plugin) recommended flat config that will take of configuring and adding rules for React to our linting setup
+* next we add the react **jsx-runtime** config (since [React 17 the new JSX transform](https://legacy.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html#removing-unused-react-imports) will automatically import the necessary react/jsx-runtime functions, which is why this additional configuration will disable a few rules that were checking if React was in scope when using JSX)
+* the third config from which we will extend is the eslint-plugin-jsx-a11y flat config, this plugin offers two sets of [rules](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y?tab=readme-ov-file#shareable-configs) the **recommended** and the **strict**, we will use the strict version (feel free to use recommended instead if you prefer less strict rules or disable some of the more strict rules manually)
+* the importX plugin also has two flat configs, we add the recommended rules and then also the importX.flatConfigs.typescript configuration (the second one is only needed if you use typescript)
+
+For the eslint-plugin-react-hooks things are a bit different, the [PR (#28773)](https://github.com/facebook/react/pull/28773) to add "ESLint v9 support" to the react-hooks plugin got merged, however the ticket about adding [support for flat config](https://github.com/facebook/react/issues/28313) is not closed (yet), there is however a [PR (#30774)](https://github.com/facebook/react/pull/30774) in the works
+
+
+
+
+
+
+
+
+
+
+
+Congratulations 🎉 you just added linting for your typescript, React and Next.js code, at this stage you can again use the linting command as usual:
+
+```shell
+npm run lint
+```
+
+> [!MORE]  
+> [typescript-eslint "configuration" documentation](https://typescript-eslint.io/users/configs)  
+> [typescript-eslint "rules overview" page](https://typescript-eslint.io/rules/)  
+
+## MDX ESLint
+
+We have added linting for our code next we will add linting for our MDX (markdown) content
+
+First we install the MDX ESLint plugin:
+
+```shell
+npm i eslint-plugin-mdx --save-dev --save-exact
+```
+
+Then we can update out ESLint configuration and to use the MDX plugin:
+
+```ts title="eslint.config.ts" showLineNumbers
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import js from '@eslint/js'
+import { FlatCompat } from '@eslint/eslintrc'
+import tseslint from 'typescript-eslint'
+import type { FlatConfig } from '@typescript-eslint/utils/ts-eslint'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const compat = new FlatCompat({
+    baseDirectory: __dirname,
+    recommendedConfig: js.configs.recommended,
+    allConfig: js.configs.all
+})
+
+const tsESLintConfig = tseslint.config(
+    // eslint recommended rules
+    js.configs.recommended,
+    //...tseslint.configs.recommended,
+    // OR more type checked rules
+    //...tseslint.configs.recommendedTypeChecked,
+    // OR more strict rules
+    ...tseslint.configs.strictTypeChecked,
+    // optional stylistic rules
+    //...tseslint.configs.stylistic
+    // OR the type checked version
+    ...tseslint.configs.stylisticTypeChecked,
+    {
+        languageOptions: {
+            parserOptions: {
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+            },
+        }
+    },
+    {
+        files: ['**/*.ts', '**/*.tsx']
+    }
+)
+
+export default [
+    ...compat.extends('next/core-web-vitals'),
+    {
+        ignores: [
+            '.next/',
+            '.vscode/',
+            'public/',
+        ]
+    },
+    {
+        linterOptions: {
+            reportUnusedDisableDirectives: 'warn'
+        }
+    },
+    ...tsESLintConfig,
+] satisfies FlatConfig.Config[]
+```
+
+TODO: finish
+
+
 
 Congratulations 🎉 if you made it this far, we had to make a lot of changes, but you now know a lot more about how ESLint works, and we are now ready to start adding linting for MDX content in the next part of this tutorial
 
@@ -452,6 +1018,7 @@ If you liked this post, please consider making a [donation](https://buymeacoffee
 
 > [!MORE]  
 > [eslint-plugin-react "rules" repository](https://github.com/jsx-eslint/eslint-plugin-react/tree/master/docs/rules)  
+> [typescript-eslint "rules" overview](https://typescript-eslint.io/rules/)  
 
 <Pagination
     previous={{ label: 'React in MDX and MDX in react', href: '/web_development/tutorials/next-js-static-mdx-blog/react-in-mdx-and-mdx-in-react' }}
