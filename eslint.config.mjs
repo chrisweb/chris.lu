@@ -81,6 +81,33 @@ const tseslintConfig = tseslint.config(
                 //warnOnUnsupportedTypeScriptVersion: false,
             },
         },
+        rules: {
+            '@typescript-eslint/naming-convention': [
+                'error',
+                {
+                    'selector': 'interface',
+                    'format': [
+                        'PascalCase',
+                    ],
+                    'custom': {
+                        'regex': '^I[A-Z]',
+                        'match': true,
+                    },
+                }
+            ],
+            '@typescript-eslint/ban-ts-comment': [
+                'error',
+                {
+                    'ts-expect-error': 'allow-with-description',
+                    'ts-ignore': 'allow-with-description',
+                    'ts-nocheck': false,
+                    'ts-check': false,
+                    minimumDescriptionLength: 3,
+                },
+            ],
+            // https://typescript-eslint.io/rules/consistent-indexed-object-style/
+            //'@typescript-eslint/consistent-indexed-object-style': 'off',
+        },
     },
     {
         // disable type-aware linting on JS files
@@ -118,6 +145,7 @@ const nextConfig = [
             'react/react-in-jsx-scope': 'off',
             'react/prop-types': 'off',
             'jsx-a11y/alt-text': ['warn', { elements: ['img'], img: ['Image'], },],
+            'jsx-a11y/media-has-caption': 'warn',
             'jsx-a11y/aria-props': 'warn',
             'jsx-a11y/aria-proptypes': 'warn',
             'jsx-a11y/aria-unsupported-elements': 'warn',
