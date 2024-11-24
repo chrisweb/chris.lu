@@ -68,7 +68,7 @@ There is also the **rehype "GitHub" plugins repository**, which lists a lot of p
 
 By adding the [remark "GitHub Flavored Markdown" (GFM) plugin](https://www.npmjs.com/package/remark-gfm), we extend the syntax features provided by the original markdown with extensions for autolink literals, footnotes, strikethrough, tables, tasklists and some more. You may already know most of them from writing markdown in GitHub READMEs, Issues and comments and might have thought they were part of the base markdown syntax
 
-Installing and setting up the plugin is easy, as we will see in a bit, but if you want to know more about this plugin, then I recommend checking out their [remark-gfm](https://github.com/remarkjs/remark-gfm#install) repository, it has a README that has a well-written chapter about "what it is" and "what it does" as well as some examples and there you can also havo a look at the previous releases list
+Installing and setting up the plugin is easy, as we will see in a bit, but if you want to know more about this plugin, then I recommend checking out their [remark-gfm](https://github.com/remarkjs/remark-gfm#install) repository, it has a README that has a well-written chapter about "what it is" and "what it does" as well as some examples and there you can also have a look at the previous releases list
 
 We first need to install the **remark-gfm** package by using the following command:
 
@@ -290,7 +290,7 @@ input: (props) => {
 },
 ```
 
-Lines 50 to 55: we add a comment to disable the eslint `@typescript-eslint/no-unused-vars` for the next lline, as we won't use the `disabled` variable; we then use a destructuring assignment to split the original props into the disabled attribute and the remaining props; then we create a new input element and pass the remaining props
+Lines 50 to 55: we add a comment to disable the eslint `@typescript-eslint/no-unused-vars` for the next line, as we won't use the `disabled` variable; we then use a destructuring assignment to split the original props into the disabled attribute and the remaining props; then we create a new input element and pass the remaining props
 
 > [!TIP]  
 > When you make changes to the `mdx-components.tsx` file, Next.js will not always instantly detect those changes and reload the project, the easiest trick I have found to make sure Next.js notices the changes, is to also to open the `next.config.mjs` configuration file and make a small change like adding a line break at the end, then save the Next.js configuration file, this will cause a reload of the project, which ensures your mdx-components changes get taken into account too
@@ -412,7 +412,7 @@ Line 51: we remove the previous code, then we add a function that checks if it t
 
 Of course, depending on your needs, what you would do now is update the **BaseCheckbox** onChange handler with some code to do something useful based on your needs, like for example, add code that uses a POST request to send some data to the server or add code that updates a value in the localstorage of the user's browser
 
-There is only problem though with this solution, the checkboxes have no **name** or **ID**, so you might want edit the HTML that gets rendered for a tasklist or switch to a completly different plugin that has more of the features you need. A very good read at this point is this ["HtmlExtension" chapter](https://github.com/micromark/micromark?tab=readme-ov-file#htmlextension) in the micromark readme
+There is only problem though with this solution, the checkboxes have no **name** or **ID**, so you might want edit the HTML that gets rendered for a tasklist or switch to a completely different plugin that has more of the features you need. A very good read at this point is this ["HtmlExtension" chapter](https://github.com/micromark/micromark?tab=readme-ov-file#htmlextension) in the micromark readme
 
 > [!MORE]  
 > [GitHub "remark-gfm" repository](https://github.com/remarkjs/remark-gfm)  
@@ -586,7 +586,7 @@ const nextConfig = (phase) => {
     })
 ```
 
-Lines 57 to 60: we add the options for the footnotes to the **remarkRehypeOptions** object and NOT (as one might assume) to the **remarkGfmOptions** object (whic is at lines 47 to 49)
+Lines 57 to 60: we add the options for the footnotes to the **remarkRehypeOptions** object and NOT (as one might assume) to the **remarkGfmOptions** object (which is at lines 47 to 49)
 
 If you launch the dev server then open the playground URL `http://localhost:3000/gfm_playground` in your browser, you will notice that the footnotes label changed from the default "Footnotes" to "Notes" (this can be useful if you have a website that has content in multiple languages and you want to translate the label), then we also changed the element of the label (which by default is a `<h2>{:html}`) to a `<span>{:html}`
 
