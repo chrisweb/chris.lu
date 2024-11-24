@@ -327,7 +327,7 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
 
     const onClickVolumeHandler = () => {
         if (!isVolumeModalOpenState) {
-            // if the casette is open, close it first
+            // if the cassette is open, close it first
             if (isEjectedState) {
                 setIsEjectedState(false)
             }
