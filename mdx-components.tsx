@@ -50,7 +50,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                 {children}
             </BaseLink>
         ),
-        img: (props) => (<ImageDispatch {...props as ImageProps} />),
+        img: props => (<ImageDispatch {...props as ImageProps} />),
         aside: ({ children, ...props }) => (
             <>
                 {props.id === 'articleToc' ? (
@@ -70,8 +70,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                     <aside {...props}>
                         {children}
                     </aside>
-                )
-                }
+                )}
             </>
         ),
         ...components,

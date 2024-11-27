@@ -9,8 +9,7 @@ interface ISharedMetaData extends Metadata {
     }
 }
 
-export const sharedMetaData: ISharedMetaData =
-{
+export const sharedMetaData: ISharedMetaData = {
     openGraph: {
         url: 'https://chris.lu/',
         siteName: 'Chris.lu',

@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useEffect, useState } from 'react'
-import type { AnimationEvent , PropsWithChildren } from 'react'
+import type { AnimationEvent, PropsWithChildren } from 'react'
 import { createPortal } from 'react-dom'
 
 import ButtonWithIcon from '../base/button/WithIcon'
@@ -87,7 +87,6 @@ const UIModal: React.FC<IUIModalProps> = (props): React.JSX.Element => {
                     }
                 }}
             />
-            
             {withCloseButton && (
                 <ButtonWithIcon clickCallback={closeHandler} whichIcon={faClose} />
             )}

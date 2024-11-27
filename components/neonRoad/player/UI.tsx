@@ -399,16 +399,16 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
                 <WaveformCanvas ref={waveformRef} onWaveClickHandler={onWaveClickHandler} waveData={creditsState.wave}></WaveformCanvas>
                 <div className={styles.playerButtons}>
                     <RippleButton clickCallback={onClickTogglePlayPauseCallback} name={isPlayingState ? 'Pause' : 'Play'}>
-                        <FontAwesomeIcon icon={isPlayingState ? faPause : faPlay} size="xl" color='white' />
+                        <FontAwesomeIcon icon={isPlayingState ? faPause : faPlay} size="xl" color="white" />
                     </RippleButton>
                     <RippleButton clickCallback={onClickNextHandler} name="Forward">
-                        <FontAwesomeIcon icon={faForwardStep} size="xl" color='white' />
+                        <FontAwesomeIcon icon={faForwardStep} size="xl" color="white" />
                     </RippleButton>
                     <RippleButton clickCallback={onClickVolumeHandler} className="volume" name="Open Volume Dialog">
-                        <FontAwesomeIcon icon={faVolumeHigh} size="xl" color='white' />
+                        <FontAwesomeIcon icon={faVolumeHigh} size="xl" color="white" />
                     </RippleButton>
                     <RippleButton clickCallback={onClickEjectHandler} name="Open Song Credits Dialog">
-                        <FontAwesomeIcon icon={faEject} size="xl" color='white' />
+                        <FontAwesomeIcon icon={faEject} size="xl" color="white" />
                     </RippleButton>
                 </div>
             </div>
