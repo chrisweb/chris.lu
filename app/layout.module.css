@@ -33,7 +33,7 @@
     }
 }
 
-.layoutFooterSeperator {
+.layoutFooterSeparator {
     width: 100%;
     border-color: var(--primary-light-color)
 }
