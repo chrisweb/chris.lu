@@ -171,9 +171,9 @@ const nextConfig = [
     }
 ]
 
-const stylisicConfig = [
+const stylisticConfig = [
     {
-        name: 'custom/stylisic/recommended',
+        name: 'custom/stylistic/recommended',
         files: ['**/*.ts?(x)'],
         // no files for this config as we want to apply it to all files
         plugins: {
@@ -186,8 +186,17 @@ const stylisicConfig = [
             ...stylisticPlugin.configs['recommended-flat'].rules,
             // custom rules
             '@stylistic/indent': ['warn', 4],
-            '@stylistic/quotes': ['warn', 'single'],
+            '@stylistic/quotes': ['warn', 'single', { avoidEscape: true }],
             '@stylistic/semi': ['warn', 'never'],
+            '@stylistic/eol-last': 'off',
+            '@stylistic/comma-dangle': ['warn', 'only-multiline'],
+            '@stylistic/padded-blocks': 'off',
+            '@stylistic/spaced-comment': 'off',
+            '@stylistic/jsx-one-expression-per-line': ['warn', { allow: 'non-jsx' }],
+            '@stylistic/jsx-indent-props': ['warn', 4],
+            '@stylistic/multiline-ternary': ['warn', 'always-multiline', { ignoreJSX: true }],
+            '@stylistic/arrow-parens': ['warn', 'as-needed', { "requireForBlockBody": true }],
+            '@stylistic/brace-style': ['warn', '1tbs'],
         },
     }
 ]
@@ -222,7 +231,7 @@ const config = [
     ...eslintConfig,
     ...tseslintConfig,
     ...nextConfig,
-    ...stylisicConfig,
+    ...stylisticConfig,
     ...mdxConfig,
 ];
 
