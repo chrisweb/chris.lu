@@ -6,6 +6,7 @@ import reactPlugin from 'eslint-plugin-react'
 import reactHooksPlugin from 'eslint-plugin-react-hooks'
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y'
 import nextPlugin from '@next/eslint-plugin-next'
+import stylisticPlugin from '@stylistic/eslint-plugin'
 import * as mdxPlugin from 'eslint-plugin-mdx'
 
 //const compat = new FlatCompat()
@@ -26,6 +27,15 @@ import * as mdxPlugin from 'eslint-plugin-mdx'
     ],
 })*/
 
+const eslintConfig = [
+    {
+        name: 'custom/eslint/recommended',
+        // all files expect mdx files
+        files: ['**/*.mjs', '**/*.ts?(x)'],
+        ...eslintPlugin.configs.recommended,
+    },
+]
+
 const ignoresConfig = [
     {
         name: 'custom/eslint/ignores',
@@ -35,15 +45,6 @@ const ignoresConfig = [
             '.vscode/',
             'public/',
         ]
-    },
-]
-
-const eslintConfig = [
-    {
-        name: 'custom/eslint/recommended',
-        // all files expect mdx files
-        files: ['**/*.mjs', '**/*.ts?(x)'],
-        ...eslintPlugin.configs.recommended,
     },
 ]
 
@@ -72,13 +73,10 @@ const tseslintConfig = tseslint.config(
                 // https://typescript-eslint.io/getting-started/typed-linting
                 projectService: true,
                 tsconfigRootDir: import.meta.dirname,
-                // react recommended is already adding the ecmaFeatures
-                /*ecmaFeatures: {
+                ecmaFeatures: {
                     jsx: true,
-                },*/
-                // following option already added by eslint recommended
-                // which we added in the jsESLintConfig
-                //warnOnUnsupportedTypeScriptVersion: false,
+                },
+                warnOnUnsupportedTypeScriptVersion: true,
             },
         },
         rules: {
@@ -173,6 +171,27 @@ const nextConfig = [
     }
 ]
 
+const stylisicConfig = [
+    {
+        name: 'custom/stylisic/recommended',
+        files: ['**/*.ts?(x)'],
+        // no files for this config as we want to apply it to all files
+        plugins: {
+            '@stylistic': stylisticPlugin,
+        },
+        rules: {
+            // this removes all legacy rules from eslint, typescript-eslint and react
+            ...stylisticPlugin.configs['disable-legacy'].rules,
+            // this adds the recommended rules from stylistic
+            ...stylisticPlugin.configs['recommended-flat'].rules,
+            // custom rules
+            '@stylistic/indent': ['warn', 4],
+            '@stylistic/quotes': ['warn', 'single'],
+            '@stylistic/semi': ['warn', 'never'],
+        },
+    }
+]
+
 const mdxConfig = [
     // https://github.com/mdx-js/eslint-mdx/blob/d6fc093fb32ab58fb226e8cf42ac77399b8a4758/README.md#flat-config
     {
@@ -202,8 +221,9 @@ const config = [
     ...ignoresConfig,
     ...eslintConfig,
     ...tseslintConfig,
-    ...mdxConfig,
     ...nextConfig,
+    ...stylisicConfig,
+    ...mdxConfig,
 ];
 
 export default config
