@@ -923,59 +923,14 @@ Congratulations 🎉 you just added a custom next config to your linting setup, 
 > ["eslint-plugin-import" rules](https://github.com/import-js/eslint-plugin-import?tab=readme-ov-file#rules)  
 > ["eslint-plugin-jsx-a11y" rules](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y?tab=readme-ov-file#supported-rules)
 
-### Removing the ESLint and types
+### Removing ESLintRC support
 
-After removing **next/typescript** (in a previous chapter) we now also removed **next/core-web-vitals** (as we now add those rules to our ESLint setup using the custom next config we just created).
+In the early chapter [ESLint 9 flat config for Next.js 15](#eslint-9-flat-config-for-nextjs-15) of this page we first converted our classic ESLintRC config to a flat config. After conversion we had two plugins that needed the **FlatCompat** import from **@eslint/eslintrc** package. Later in the [Typescript Linting](#typescript-linting) chapter we added our own Typescript-eslint configuration, which allowed us to remove **next/typescript** (the first of two plugins still depending on the compatibility mode). Then in the previews chapter we have added a custom **nextConfig**, which allowed us to remove **next/core-web-vitals**.
 
-As both packages that needed a compatibility layer were gone, we also removed the **FlatCompat import** (from the ESLintRC Library) in our code
-
-The last step is to also remove the classic configurations **ESLintRC Library** (as well as the types package) from our dependencies using the following command:
+Now that we got rid of both plugins that required a compatibility mode we can finally also remove the **ESLintRC Library** package (as well as the types package if like me you use typescript) from our dependencies, using the following command:
 
 ```shell
 npm remove @eslint/eslintrc @types/eslint__eslintrc
-```
-
-## Adding stylistic rules like 
-
-If you use prettier in your project then you probably don't need the rules we are about to add, the [@stylistic/eslint-plugin](https://www.npmjs.com/package/@stylistic/eslint-plugin) adds rules (and auto fix) that are related to coding style, like double or single quotes, 2 or 4 spaces indentation, semicolons at the end of a line or not, ...
-
-> [!TIP]  
-> If you use VSCode and want to quickly format your code (which has a good javascript source code formatting tool) then you can either right click into your document and choose **Format Document** or you can use the shortcut `Shift+Alt+F` (macOS: `⇧⌥F`, Linux: `Ctrl+Shift+I`) to tell VSCode to format your code
-
-The **@stylistic/eslint-plugin** is the recommended plugin, as it contains support for Javascript, Typescript and JSX, it includes different other plugins [@stylistic/eslint-plugin-js](https://www.npmjs.com/package/@stylistic/eslint-plugin-js), [@stylistic/eslint-plugin-ts](https://www.npmjs.com/package/@stylistic/eslint-plugin-ts), [@stylistic/eslint-plugin-jsx](https://www.npmjs.com/package/@stylistic/eslint-plugin-jsx) and [@stylistic/eslint-plugin-plus](https://www.npmjs.com/package/@stylistic/eslint-plugin-plus)
-
-For a list of the **@stylistic rules** check out the [rules section in their documentation](https://eslint.style/packages/default#rules)
-
-First we need to add the plugin to our dev dependencies:
-
-```shell
-npm i @stylistic/eslint-plugin@latest --save-dev --save-exact
-```
-
-
-
-
-
-
-
-TODO: finish 
-
-```shell
-@stylistic/eslint-plugin
-
-
-            quotes: [
-                'error',
-                'single',
-                { 'allowTemplateLiterals': true, 'avoidEscape': true },
-            ],
-            semi: [
-                'error',
-                'never',
-            ],
-            // https://eslint.org/docs/latest/rules/indent
-            'indent': ['warn', 4, { 'SwitchCase': 1 }],
-
 ```
 
 ## MDX ESLint
@@ -985,7 +940,7 @@ We have added linting for our code next we will add linting for our MDX (markdow
 First we install the MDX ESLint plugin:
 
 ```shell
-npm i eslint-plugin-mdx --save-dev --save-exact
+npm i eslint-plugin-mdx@latest --save-dev --save-exact
 ```
 
 Then we can update out ESLint configuration and to use the MDX plugin:
