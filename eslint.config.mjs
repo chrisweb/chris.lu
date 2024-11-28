@@ -196,7 +196,22 @@ const stylisticConfig = [
             '@stylistic/jsx-indent-props': ['warn', 4],
             '@stylistic/multiline-ternary': ['warn', 'always-multiline', { ignoreJSX: true }],
             '@stylistic/arrow-parens': ['warn', 'as-needed', { "requireForBlockBody": true }],
-            '@stylistic/brace-style': ['warn', '1tbs'],
+            '@stylistic/brace-style': ['warn', '1tbs', { allowSingleLine: true }],
+            '@stylistic/operator-linebreak': ['warn', 'after'],
+            '@stylistic/jsx-wrap-multilines': ['warn', {
+                declaration: 'parens-new-line',
+                assignment: 'parens-new-line',
+                return: 'parens-new-line',
+                arrow: 'parens-new-line',
+                condition: 'parens-new-line',
+                logical: 'parens-new-line',
+                prop: 'parens-new-line',
+                propertyValue: 'parens-new-line',
+            }],
+            '@stylistic/jsx-curly-newline': ['warn', {
+                multiline: 'consistent',
+                singleline: 'consistent',
+            }],
         },
     }
 ]
