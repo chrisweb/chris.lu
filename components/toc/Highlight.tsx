@@ -18,7 +18,6 @@ interface IChildProps {
     children: ReactElement<IChildProps>
 }
 
-
 const TocHighlight: React.FC<IProps> = (props): React.JSX.Element => {
 
     const { headingsToObserve, rootMargin, threshold } = props
@@ -31,7 +30,7 @@ const TocHighlight: React.FC<IProps> = (props): React.JSX.Element => {
 
     function recursiveChildren(children: ReactNode[], activeIdState: string): ReactNode {
 
-        const newChildren = Children.map(children, child => {
+        const newChildren = Children.map(children, (child) => {
 
             if (isValidElement<IChildProps>(child)) {
 

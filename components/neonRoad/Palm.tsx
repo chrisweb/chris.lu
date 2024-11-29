@@ -44,7 +44,7 @@ const PalmModel = (props: IPalmProps) => {
     const { name, ...palmProps } = props
 
     return (
-        <group name={'PalmModel'} {...palmProps}>
+        <group name="PalmModel" {...palmProps}>
             <mesh
                 castShadow={true} // default is false
                 geometry={nodes.tronc_tronc1_0.geometry}

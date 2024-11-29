@@ -19,7 +19,7 @@ const Terrains: React.FC = () => {
 
     // the distance between the city (when the terrain comes
     // into view) and the bottom of the camera field of view
-    // (at which point the terrain goes out of view) 
+    // (at which point the terrain goes out of view)
     // is approximately 2 units, so we need 3 terrains
     // panels (of 1x1 in size), to ensure the distance between
     // the camera and city is covered at all times

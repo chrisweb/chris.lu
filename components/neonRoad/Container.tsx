@@ -64,20 +64,20 @@ const Container: React.FC = () => {
             <PlayerUI ref={playerRef} />
             <div ref={containerRef} className={styles.neonRoadContainer}>
                 <HeaderTitle />
-                {!animationState &&
+                {!animationState && (
                     <>
                         <StaticImage altText={altText} />
                         <StartScreen playCallback={playCallback} />
                     </>
-                }
-                {animationState &&
+                )}
+                {animationState && (
                     <>
                         <ErrorBoundary fallback={<div className="error">Error</div>}>
                             <NeonRoadCanvas altText={altText} containerRef={containerRef} />
                         </ErrorBoundary>
                         <ButtonWithIcon clickCallback={powerOffCallback} whichIcon={faPowerOff} ref={powerOffButtonRef} />
                     </>
-                }
+                )}
             </div>
         </>
     )

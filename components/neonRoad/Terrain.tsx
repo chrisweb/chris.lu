@@ -191,7 +191,7 @@ const Terrain = (props: ITerrainProps) => {
                 map={floorTexture}
                 displacementScale={displacementScale}
                 emissiveMap={emissiveMap}
-                emissive={'#11166c'}
+                emissive="#11166c"
                 emissiveIntensity={0.02}
                 toneMapped={false} // default true
                 roughness={0.75}

@@ -22,7 +22,7 @@ const Trees: React.FC = () => {
 
     // the three fiber render() will trigger useFrame()
     useFrame((state, delta /*, xrFrame*/) => {
-        moveFromAToBInLoop(delta,leftSideTreesRefs.current,1,0.2)
+        moveFromAToBInLoop(delta, leftSideTreesRefs.current, 1, 0.2)
         moveFromAToBInLoop(delta, rightSideTreesRefs.current, 1, 0.2)
     })
 
@@ -44,7 +44,7 @@ const Trees: React.FC = () => {
             treesElements.push(
                 <PalmModel
                     position={position}
-                    ref={treeGroup => {
+                    ref={(treeGroup) => {
                         if (side === 'right') {
                             rightSideTreesRefs.current[i] = treeGroup
                         } else {

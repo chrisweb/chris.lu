@@ -83,7 +83,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#new-pixel-ratio-default
                 //dpr={Math.min(window.devicePixelRatio, 2)} // pixel ratio, should be 1 or 2
                 // https://docs.pmnd.rs/react-three-fiber/api/canvas#render-defaults
-                shadows={'soft'} // PCFsoft
+                shadows="soft" // PCFsoft
                 fallback={<Fallback />}
                 aria-label={props.altText}
                 role="img"
@@ -107,7 +107,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                     />
                     {/*<PerformanceMonitor onChange={onPerformanceChangeHandler} />*/}
                     <color attach="background" args={['#2f0f30']} />
-                    <ambientLight color={'#ecd7e2'} intensity={15} />
+                    <ambientLight color="#ecd7e2" intensity={15} />
                     <SoftShadows />
                     <NightSky
                         position={[0, 1, -2.1]}
@@ -135,10 +135,11 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                             luminanceSmoothing={0.01}
                         />
                     </EffectComposer>*/}
-                    {/*<axesHelper />*/}{/*enable for development*/}
-                    {/*<OrbitControls camera={cameraRef.current} />*/}{/*enable for development*/}
-                    {/*<StatsGl />*/}{/*enable for development*/}
-                    {/*GUI: https://github.com/pmndrs/leva*/}
+                    {/* the following components can be useful in development */}
+                    {/*<axesHelper />*/}
+                    {/*<OrbitControls camera={cameraRef.current} />*/}
+                    {/*<StatsGl />*/}
+                    {/* GUI: https://github.com/pmndrs/leva */}
                 </Suspense>
             </Canvas>
         </>

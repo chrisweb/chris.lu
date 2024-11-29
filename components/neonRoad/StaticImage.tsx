@@ -20,7 +20,7 @@ const StaticImage: React.FC<IProps> = (props) => {
             }}
             sizes="100vw"
             priority
-            placeholder='blur'
+            placeholder="blur"
         />
     )
 }

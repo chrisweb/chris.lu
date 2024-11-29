@@ -35,8 +35,16 @@ const Walkman: React.FC<IProps> = (props) => {
                         Warning: An empty string ("") was passed to the href attribute.
                         To fix this, either do not render the element at all or pass null to
                         href instead of an empty string. */}
-                    <a href={creditsState.license} target="_blank" rel="noreferrer" className={styles.songTitle}>{creditsState.name} <FontAwesomeIcon icon={faCreativeCommons} color='white' /></a>
-                    <a href={creditsState.artistWebsite} target="_blank" rel="noreferrer" className={styles.artistName}>{creditsState.artistName} <FontAwesomeIcon icon={faArrowUpRightFromSquare} color='white' /></a>
+                    <a href={creditsState.license} target="_blank" rel="noreferrer" className={styles.songTitle}>
+                        {creditsState.name}
+                        &nbsp;
+                        <FontAwesomeIcon icon={faCreativeCommons} color="white" />
+                    </a>
+                    <a href={creditsState.artistWebsite} target="_blank" rel="noreferrer" className={styles.artistName}>
+                        {creditsState.artistName}
+                        &nbsp;
+                        <FontAwesomeIcon icon={faArrowUpRightFromSquare} color="white" />
+                    </a>
                     <div className={styles.spoolLeft}></div>
                     <div className={styles.spoolRight}></div>
                     <div className={styles.shield}></div>
