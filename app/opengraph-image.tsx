@@ -46,18 +46,15 @@ export default async function OGImage(/*props: IImageProps*/) {
                     justifyContent: 'center',
                 }}
             >
-                {
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                        // @ts-ignore: this is fine 🔥
-                        src={imageData}
-                        style={{
-                            objectFit: 'cover',
-                            objectPosition: 'center',
-                        }}
-                        alt=""
-                    />
-                }
+                {/* eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element */}
+                <img
+                    // @ts-ignore: this is fine 🔥
+                    src={imageData}
+                    style={{
+                        objectFit: 'cover',
+                        objectPosition: 'center',
+                    }}
+                />
                 <span
                     style={{
                         position: 'absolute',

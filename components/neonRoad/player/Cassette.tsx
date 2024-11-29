@@ -31,10 +31,6 @@ const Walkman: React.FC<IProps> = (props) => {
         <>
             <div className={styles.cassette}>
                 <div className={`${styles.face} ${styles.front}`}>
-                    {/* I set the href to '/' by default, because if I set it to empty '' I get this error:
-                        Warning: An empty string ("") was passed to the href attribute.
-                        To fix this, either do not render the element at all or pass null to
-                        href instead of an empty string. */}
                     <a href={creditsState.license} target="_blank" rel="noreferrer" className={styles.songTitle}>
                         {creditsState.name}
                         &nbsp;

@@ -128,13 +128,13 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                     <Trees />
                     <Terrains />
                     {/*<Loop />*/}
-                    {/*<EffectComposer>
+                    {/* <EffectComposer>
                         <Bloom
                             luminanceThreshold={0.08}
                             intensity={0.7}
                             luminanceSmoothing={0.01}
                         />
-                    </EffectComposer>*/}
+                    </EffectComposer> */}
                     {/* the following components can be useful in development */}
                     {/*<axesHelper />*/}
                     {/*<OrbitControls camera={cameraRef.current} />*/}
