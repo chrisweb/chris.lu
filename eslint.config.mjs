@@ -211,7 +211,7 @@ const stylisticConfig = [
             }],
             '@stylistic/jsx-curly-newline': ['warn', {
                 multiline: 'consistent',
-                singleline: 'consistent',
+                singleline: 'forbid',
             }],
         },
     }
