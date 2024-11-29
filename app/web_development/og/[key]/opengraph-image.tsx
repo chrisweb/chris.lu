@@ -12,7 +12,7 @@ export const size = {
 
 export const contentType = 'image/png'
 
-export const alt = `Chris.lu article banner`
+export const alt = 'Chris.lu article banner'
 
 interface IImageProps {
     params: {
@@ -30,19 +30,19 @@ export default async function OGImage(props: IImageProps) {
     const imageTitle = imageInfo[props.params.key][0]
     const imagePath = imageInfo[props.params.key][1]
 
-    const baseUrl = process.env.VERCEL_URL
-        ? `https://${process.env.VERCEL_URL}`
-        : `http://localhost:${process.env.PORT ?? '3000'}`
+    const baseUrl = process.env.VERCEL_URL ?
+        `https://${process.env.VERCEL_URL}` :
+        `http://localhost:${process.env.PORT ?? '3000'}`
 
     // Font
     const permanentMarkerRegular = fetch(
         new URL('/public/assets/fonts/PermanentMarker-Regular.ttf', import.meta.url)
-    ).then((res) => res.arrayBuffer())
+    ).then(res => res.arrayBuffer())
 
     // using new URL(myPath, import.meta.url) did not work
     const imageData = await fetch(
         baseUrl + '/assets/images/app/web_development/' + imagePath + '/opengraph.jpg'
-    ).then((res) => res.arrayBuffer())
+    ).then(res => res.arrayBuffer())
 
     return new ImageResponse(
         // ImageResponse JSX element
@@ -55,7 +55,7 @@ export default async function OGImage(props: IImageProps) {
                 }}
             >
                 {
-                    // eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element 
+                    // eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element
                     <img
                         // @ts-ignore: this is fine 🔥
                         src={imageData}
@@ -85,7 +85,7 @@ export default async function OGImage(props: IImageProps) {
                 >
                     {imageTitle} | Chris.lu
                 </div>
-            </div >
+            </div>
         ),
         // ImageResponse options
         {

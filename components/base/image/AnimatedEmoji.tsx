@@ -2,7 +2,6 @@ import Image, { getImageProps } from 'next/image'
 import type { StaticImageData, ImageProps } from 'next/image'
 import { rgbDataURL } from '@/lib/image'
 
-
 interface IAnimatedEmojiProps extends Omit<ImageProps, 'src'> {
     gifStaticImport: StaticImageData
     webpStaticImport: StaticImageData

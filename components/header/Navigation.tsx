@@ -59,7 +59,7 @@ const HeaderNavigation: React.FC = () => {
 
     // https://github.com/FormidableLabs/react-swipeable/issues/189#issuecomment-656302682
     const swipeableRefPassthrough = (element: HTMLDivElement) => {
-        // call useSwipeables ref prop with el    
+        // call useSwipeables ref prop with element
         swipeHandlers.ref(element)
         // set the el to a ref you can access yourself
         layoutNavbarContainerRef.current = element
@@ -100,7 +100,7 @@ const HeaderNavigation: React.FC = () => {
                 <span className={styles.hamburgerInner}></span>
             </button>
             <div className={`${styles.layoutNavbarContainer} ${navigationIsOpenState === null ? '' : (navigationIsOpenState ? styles.openNavbar : styles.closeNavbar)}`} {...swipeHandlers} ref={swipeableRefPassthrough}>
-                <nav id="navigation" className={styles.layoutNavbar} >
+                <nav id="navigation" className={styles.layoutNavbar}>
                     {mainMenuItems.map((menuItem) => {
                         return (
                             <Link

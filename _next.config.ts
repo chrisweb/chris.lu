@@ -23,7 +23,6 @@ import remarkFrontmatter from 'remark-frontmatter'
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
 
 const nextConfig = (phase: string): NextConfig => {
-    
     // to use the bundle analyzer uncomment the following lines
     // then uncomment the return to use withBundleAnalyzer
     /*const withBundleAnalyzer = WithBundleAnalyzer({
@@ -38,9 +37,9 @@ const nextConfig = (phase: string): NextConfig => {
         // Keep the background or use a custom background color?
         keepBackground: true,
         tokensMap: {
-            'function': 'entity.name.function',
-            'string': 'string',
-            'key': '.meta.object-literal.key',
+            function: 'entity.name.function',
+            string: 'string',
+            key: '.meta.object-literal.key',
         },
         defaultLang: {
             block: 'tsx',
@@ -66,9 +65,9 @@ const nextConfig = (phase: string): NextConfig => {
             //console.log(node)
             const headingText = hastToString(node.children[0])
             return {
-                class: 'headingAnchor',
+                'class': 'headingAnchor',
                 'aria-label': 'Heading permalink for: ' + headingText,
-                title: 'Heading permalink for: ' + headingText,
+                'title': 'Heading permalink for: ' + headingText,
             }
         },
         content: fromHtmlIsomorphic(

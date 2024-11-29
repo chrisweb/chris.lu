@@ -10,7 +10,7 @@ import styles from './withdialog.module.css'
 
 const UIModal = dynamic(() => import('@/components/ui/Modal'), { ssr: false })
 
-interface IImageWithDialog extends Omit<ImageProps, 'src'> {
+export interface IImageWithDialog extends Omit<ImageProps, 'src'> {
     withOpenButton?: boolean
     src: StaticImageData
 }
@@ -28,14 +28,14 @@ const ImageWithDialog: React.FC<IImageWithDialog> = (props): React.JSX.Element =
     }, [])
 
     const staticImageData = props.src
-
     const intrinsicWidth = staticImageData.width
     const intrinsicHeight = staticImageData.height
+
+    const { alt: altText, ...rest } = props
 
     return (
         <>
             <button onClick={imageButtonClickHandler} className={`${styles.buttonReset}  ${styles.buttonCore}`}>
-                {/* eslint-disable-next-line jsx-a11y/alt-text */}
                 <Image
                     style={{
                         width: '100%',
@@ -45,10 +45,11 @@ const ImageWithDialog: React.FC<IImageWithDialog> = (props): React.JSX.Element =
                     // thumbnail width = (middle max width - (2 x spacing) - grid space between two columns) / 2
                     sizes="(max-width: 768px) 100vw, 336px"
                     placeholder="blur"
-                    {...props}
+                    alt={`thumbnail: ${altText}`}
+                    {...rest}
                 />
-                {props.withOpenButton && (
-                    <FontAwesomeIcon icon={faMagnifyingGlass} size="xl" color='white' className={`${styles.iconPositioning}  ${styles.icon}`} />
+                {rest.withOpenButton && (
+                    <FontAwesomeIcon icon={faMagnifyingGlass} size="xl" color="white" className={`${styles.iconPositioning}  ${styles.icon}`} />
                 )}
             </button>
             <UIModal
@@ -57,7 +58,6 @@ const ImageWithDialog: React.FC<IImageWithDialog> = (props): React.JSX.Element =
                 hasCloseButton={false}
             >
                 <div className={styles.imageContainer}>
-                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
                     <Image
                         style={{
                             objectFit: 'contain',
@@ -68,7 +68,8 @@ const ImageWithDialog: React.FC<IImageWithDialog> = (props): React.JSX.Element =
                         }}
                         sizes="100vw"
                         placeholder="blur"
-                        {...props}
+                        alt={altText}
+                        {...rest}
                     />
                 </div>
             </UIModal>

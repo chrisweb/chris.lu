@@ -171,9 +171,9 @@ const Button: React.FC<IProps> = ({ children, colorChange, randomize }) => {
 
     return (
         <>
-            {colorState !== null &&
+            {colorState !== null && (
                 <span className={`${styles.blinkingCarret} ${styles.clip}`} style={{ backgroundImage: `linear-gradient(to right, hsl(${colorState.start}) 0%, hsl(${colorState.end}) 100%)` }}>{wordState}</span>
-            }
+            )}
         </>
     )
 }

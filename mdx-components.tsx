@@ -53,24 +53,26 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         img: props => (<ImageDispatch {...props as ImageProps} />),
         aside: ({ children, ...props }) => (
             <>
-                {props.id === 'articleToc' ? (
-                    <>
-                        <aside>
-                            <BaseLink href="#skipToc" className="skipToc">Skip table of contents</BaseLink>
-                            <div className="asideCore">
-                                <TocHighlight>
-                                    {children}
-                                </TocHighlight>
-                                <AsideContent />
-                            </div>
+                {(props.id === 'articleToc') ?
+                    (
+                        <>
+                            <aside>
+                                <BaseLink href="#skipToc" className="skipToc">Skip table of contents</BaseLink>
+                                <div className="asideCore">
+                                    <TocHighlight>
+                                        {children}
+                                    </TocHighlight>
+                                    <AsideContent />
+                                </div>
+                            </aside>
+                            <div id="skipToc" tabIndex={-1} />
+                        </>
+                    ) :
+                    (
+                        <aside {...props}>
+                            {children}
                         </aside>
-                        <div id="skipToc" tabIndex={-1} />
-                    </>
-                ) : (
-                    <aside {...props}>
-                        {children}
-                    </aside>
-                )}
+                    )}
             </>
         ),
         ...components,

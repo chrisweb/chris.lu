@@ -16,9 +16,31 @@ const AsideContent: React.FC = (): React.JSX.Element => {
             </a>
             <br />
             <span className="fontDarker">* Please 😉</span>
-            <p className="fontSmall fontDarker alignLeft"><FontAwesomeIcon icon={faHeart} size="1x" color='rgb(255, 0, 170)' /> <BaseLink href="https://buymeacoffee.com/chriswwweb">Donations</BaseLink> are not mandatory but greatly appreciated, as they allow me to work on more content and keep the project free for everyone</p>
-            <p className="fontSmall fontDarker alignLeft"><FontAwesomeIcon icon={faBug} size="1x" color='rgb(255, 0, 170)' /> If you find a bug / typo or you want to suggest a new feature, then please open an <BaseLink href="https://github.com/chrisweb/chris.lu/issues">Issue</BaseLink> on GitHub.</p>
-            <p className="fontSmall fontDarker alignLeft"><FontAwesomeIcon icon={faComments} size="1x" color='rgb(255, 0, 170)' /> Suggestions and Ideas are appricated, please use the <BaseLink href="https://github.com/chrisweb/chris.lu/discussions">discussion board</BaseLink> to leave feedback or ask a question.</p>
+            <p className="fontSmall fontDarker alignLeft">
+                <FontAwesomeIcon icon={faHeart} size="1x" color="rgb(255, 0, 170)" />
+                &nbsp;
+                <BaseLink href="https://buymeacoffee.com/chriswwweb">Donations</BaseLink>
+                &nbsp;
+                are not mandatory but greatly appreciated, as they allow me to work on more content and keep the project free for everyone
+            </p>
+            <p className="fontSmall fontDarker alignLeft">
+                <FontAwesomeIcon icon={faBug} size="1x" color="rgb(255, 0, 170)" />
+                &nbsp;
+                If you find a bug / typo or you want to suggest a new feature, then please open an
+                &nbsp;
+                <BaseLink href="https://github.com/chrisweb/chris.lu/issues">Issue</BaseLink>
+                &nbsp;
+                on GitHub.
+            </p>
+            <p className="fontSmall fontDarker alignLeft">
+                <FontAwesomeIcon icon={faComments} size="1x" color="rgb(255, 0, 170)" />
+                &nbsp;
+                Suggestions and Ideas are appreciated, please use the
+                &nbsp;
+                <BaseLink href="https://github.com/chrisweb/chris.lu/discussions">discussion board</BaseLink>
+                &nbsp;
+                to leave feedback or ask a question.
+            </p>
         </div>
     )
 }

@@ -19,7 +19,11 @@ export default function Error({
 
     return (
         <section className="core">
-            <h1 className="h1">Sorry, something went wrong <span className="emoji">😞</span></h1>
+            <h1 className="h1">
+                Sorry, something went wrong
+                &nbsp;
+                <span className="emoji">😞</span>
+            </h1>
             <BaseButton
                 clickCallback={() => {
                     // attempt to recover by trying to re-render the segment

@@ -71,18 +71,20 @@ const BaseLink: React.FC<IBaseLinkProps> = (props): React.JSX.Element => {
 
     return (
         <>
-            {isExternal ? (
-                <>
-                    <a href={href.toString()} {...newLinkProps}>
+            {isExternal ?
+                (
+                    <>
+                        <a href={href.toString()} {...newLinkProps}>
+                            {children}
+                        </a>
+                        <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="sm" className="externalLinkIcon" />
+                    </>
+                ) :
+                (
+                    <Link href={href} {...newLinkProps}>
                         {children}
-                    </a>
-                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="sm" className="externalLinkIcon" />
-                </>
-            ) : (
-                <Link href={href} {...newLinkProps}>
-                    {children}
-                </Link>
-            )}
+                    </Link>
+                )}
         </>
     )
 }

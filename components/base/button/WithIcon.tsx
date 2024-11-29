@@ -28,12 +28,12 @@ const ButtonWithIcon = forwardRef<ButtonWithIconRefType, IProps>((props, buttonR
                 onClick={buttonClickHandler}
                 className={`${styles.bottomRight} ${styles.cursor} ${styles.reset}`}
                 ref={buttonRef}
-                type='button'
+                type="button"
                 {...rest}
             >
                 <div className={styles.border}>
                     <div className={styles.core}>
-                        <FontAwesomeIcon icon={whichIcon} size="xl" color='white' />
+                        <FontAwesomeIcon icon={whichIcon} size="xl" color="white" />
                     </div>
                 </div>
             </button>

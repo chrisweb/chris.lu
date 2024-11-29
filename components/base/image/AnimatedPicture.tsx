@@ -2,7 +2,6 @@ import Image, { getImageProps } from 'next/image'
 import type { StaticImageData, ImageProps } from 'next/image'
 import { rgbDataURL } from '@/lib/image'
 
-
 interface IAnimatedPictureProps extends Omit<ImageProps, 'src'> {
     avifPath: string
     webpStaticImport: StaticImageData
