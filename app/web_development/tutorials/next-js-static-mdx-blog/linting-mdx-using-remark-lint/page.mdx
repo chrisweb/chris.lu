@@ -57,15 +57,15 @@ The next step is to install and then configure **remark-lint**, but first, we ne
 Use the following command to install all 4 packages:
 
 ```shell
-npm i remark-lint@latest remark-preset-lint-consistent@latest remark-preset-lint-recommended@latest remark-preset-lint-markdown-style-guide@latest --save-exact --save-dev
+npm i remark-lint@latest remark-preset-lint-recommended@latest remark-preset-lint-consistent@latest remark-preset-lint-markdown-style-guide@latest --save-exact --save-dev
 ```
 
 Remark-lint rules don't get added to `.eslintrc.js`, but instead, we create a new file called `.remarkrc.mjs` (in the root of our project) and add the following content:
 
 ```js title=".remarkrc.mjs"
 // presets imports
-import remarkPresetLintRecommended from 'remark-preset-lint-consistent'
-import remarkPresetLintConsistent from 'remark-preset-lint-recommended'
+import remarkPresetLintRecommended from 'remark-preset-lint-recommended'
+import remarkPresetLintConsistent from 'remark-preset-lint-consistent'
 import remarkPresetLintMarkdownStyleGuide from 'remark-preset-lint-markdown-style-guide'
 
 // rules imports
