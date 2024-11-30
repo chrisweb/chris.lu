@@ -1,6 +1,6 @@
 // presets imports
-import remarkPresetLintRecommended from 'remark-preset-lint-consistent'
-import remarkPresetLintConsistent from 'remark-preset-lint-recommended'
+import remarkPresetLintRecommended from 'remark-preset-lint-recommended'
+import remarkPresetLintConsistent from 'remark-preset-lint-consistent'
 import remarkPresetLintMarkdownStyleGuide from 'remark-preset-lint-markdown-style-guide'
 
 // rules imports
