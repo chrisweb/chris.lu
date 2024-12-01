@@ -1,10 +1,10 @@
 ---
-title: Linting MDX using remark-lint - Tutorial
-description: Linting MDX using remark-lint - Next.js static MDX blog | www.chris.lu Web development tutorials
+title: ESLint MDX plugin and remark-lint - Tutorial
+description: ESLint MDX plugin and remark-lint - Next.js static MDX blog | www.chris.lu Web development tutorials
 keywords: ['Linting', 'MDX', 'markdown', 'remark', 'remark-lint', 'plugin', 'rules', 'eslint', 'nextjs']
 published: 2024-08-19T20:20:20.444Z
 modified: 2024-08-19T20:20:20.444Z
-permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/linting-mdx-using-remark-lint
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/eslint-mdx-plugin-and-remark-lint
 section: Web development
 ---
 
@@ -44,7 +44,7 @@ export const metadata = {
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
 
-# Markdown (MDX) Linting
+# ESLint MDX plugin and remark-lint
 
 We have added linting for our code next we will add linting for our MDX (markdown) content
 
@@ -334,6 +334,30 @@ npm run lint
 
 We had to do a lot of changes to get this new linting setup up and running, but I hope you agree with me that it was worth it, we have greatly improved our DX by automating both the linting of code and content, which will ensure we write cleaner code and ensure our markdown content is well formatted
 
+## remark-lint disable comments (in MDX)
+
+To **disable remark-lint rules** we added by using **MDX plugin** you do **NOT** specify the **rule name**:
+
+```mdx title="THIS EXAMPLE IS WRONG"
+{/* eslint-disable-next-line remark-lint-no-undefined-references) */}
+> [Info - 8:41:03 PM] ESLint server is running.
+```
+
+If you do, you will get an error like this:
+
+> Error: Definition for rule **remark-lint-no-undefined-references** was not found
+
+Instead, you need to use **mdx/remark** for **ANY** rule you want to disable
+
+In **MDX** files to add an **eslint-disable** comment, you need to use **JSX comments**
+
+So if we do both things, we get something like this:
+
+```mdx
+{/* eslint-disable-next-line mdx/remark */}
+> [Info - 8:41:03 PM] ESLint server is running.
+```
+
 ## Clearing the ESLint cache
 
 Because by default, we use a cache to speed up the linting process when using the `npm run lint` command, we need to delete the cache manually after making changes to the `.eslintrc.js` ESLint configuration file or the `.remarkrc.mjs` remark-lint configuration file
@@ -349,7 +373,7 @@ If you liked this post, please consider making a [donation](https://buymeacoffee
 
 <Pagination
     previous={{ label: 'Linting setup using ESLint', href: '/web_development/tutorials/next-js-static-mdx-blog/linting-setup-using-eslint' }}
-    next={{ label: 'Linting in VSCode using ESLint and MDX extensions', href: '/web_development/tutorials/next-js-static-mdx-blog/linting-using-vscode-and-extensions' }}
+    next={{ label: 'Linting in VSCode using ESLint and MDX extensions', href: '/web_development/tutorials/next-js-static-mdx-blog/linting-in-vscode-using-extensions' }}
 />
 
 </article>

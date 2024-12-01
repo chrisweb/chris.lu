@@ -4,7 +4,7 @@ description: Linting in VSCode using ESLint and MDX extensions - Next.js static 
 keywords: ['CI/CD', 'Vercel', 'build', 'Production', 'preview']
 published: 2024-08-19T22:22:22.444Z
 modified: 2024-08-20T14:14:14.444Z
-permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/linting-using-vscode-and-extensions
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/linting-in-vscode-using-extensions
 section: Web development
 ---
 
@@ -330,32 +330,12 @@ To disable them both, you do it like this:
 > [!MORE]  
 > [ESLint "disabling rules using comments" documentation](https://eslint.org/docs/latest/use/configure/rules#disabling-rules)  
 
-### remark-lint disable comments (in MDX)
+Congratulations 🎉 you just added linting to your VSCode IDE using extensions, meaning you will now get linting messages as you code (instead of having to manually run the command from time to time or even worse have all the linting errors and warnings show up the moment you create a build to deploy)
 
-To **disable remark-lint rules** we added by using **MDX plugin** you do **NOT** specify the **rule name**:
-
-```mdx title="THIS EXAMPLE IS WRONG"
-{/* eslint-disable-next-line remark-lint-no-undefined-references) */}
-> [Info - 8:41:03 PM] ESLint server is running.
-```
-
-If you do, you will get an error like this:
-
-> Error: Definition for rule **remark-lint-no-undefined-references** was not found
-
-Instead, you need to use **mdx/remark** for **ANY** rule you want to disable
-
-In **MDX** files to add an **eslint-disable** comment, you need to use **JSX comments**
-
-So if we do both things, we get something like this:
-
-```mdx
-{/* eslint-disable-next-line mdx/remark */}
-> [Info - 8:41:03 PM] ESLint server is running.
-```
+If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
 
 <Pagination
-    previous={{ label: 'Linting MDX using remark-lint', href: '/web_development/tutorials/next-js-static-mdx-blog/linting-mdx-using-remark-lint' }}
+    previous={{ label: 'ESLint MDX plugin and remark-lint', href: '/web_development/tutorials/next-js-static-mdx-blog/eslint-mdx-plugin-and-remark-lint' }}
     next={{ label: 'Styling and CSS libraries', href: '/web_development/tutorials/next-js-static-mdx-blog/styling-and-css' }}
 />
 
