@@ -1,5 +1,4 @@
 import eslintPlugin from '@eslint/js'
-//import { FlatCompat } from '@eslint/eslintrc'
 import tseslint, { configs as tseslintConfigs } from 'typescript-eslint'
 import importPlugin from 'eslint-plugin-import'
 import reactPlugin from 'eslint-plugin-react'
@@ -8,24 +7,6 @@ import jsxA11yPlugin from 'eslint-plugin-jsx-a11y'
 import nextPlugin from '@next/eslint-plugin-next'
 import stylisticPlugin from '@stylistic/eslint-plugin'
 import * as mdxPlugin from 'eslint-plugin-mdx'
-
-//const compat = new FlatCompat()
-
-// when using eslint-config-next it becomes complicated
-// to exclude MDX files from setup it does
-// to avoid getting "parsing error: Invalid character"
-/*const compatNextESLintConfig = [
-    ...compat.extends('next/core-web-vitals'),
-]*/
-// so instead we use the same ESLint compat package
-// but only include the eslint-plugin-next
-/*const compatNextESLintPlugin = compat.config({
-    extends: [
-        // will get applied to all files
-        // https://github.com/vercel/next.js/discussions/49337
-        'plugin:@next/eslint-plugin-next/core-web-vitals',
-    ],
-})*/
 
 const eslintConfig = [
     {
@@ -52,19 +33,8 @@ const tseslintConfig = tseslint.config(
     {
         name: 'custom/typescript-eslint/recommended',
         files: ['**/*.mjs', '**/*.ts?(x)'],
-        // as we did not use eslint-config-next we will now
-        // manually add the packages it would have added
         extends: [
-            //...tseslintConfigs.recommended,
-            // OR more type checked rules
-            //...tseslintConfigs.recommendedTypeChecked,
-            // OR more strict rules
-            //...tseslintConfigs.strict,
-            // OR more strict and type checked rules
             ...tseslintConfigs.strictTypeChecked,
-            // optional stylistic rules
-            //...tseslintConfigs.stylistic,
-            // OR the type checked version
             ...tseslintConfigs.stylisticTypeChecked,
         ],
         // only needed if you use TypeChecked rules
@@ -103,8 +73,6 @@ const tseslintConfig = tseslint.config(
                     minimumDescriptionLength: 3,
                 },
             ],
-            // https://typescript-eslint.io/rules/consistent-indexed-object-style/
-            //'@typescript-eslint/consistent-indexed-object-style': 'off',
         },
     },
     {
@@ -118,7 +86,7 @@ const tseslintConfig = tseslint.config(
 const nextConfig = [
     {
         name: 'custom/next/config',
-        // no files for this config as we want to apply it to all files
+        // no files (option) for this config as we want to apply it to all files
         plugins: {
             'react': reactPlugin,
             'jsx-a11y': jsxA11yPlugin,
