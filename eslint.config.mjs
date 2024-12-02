@@ -7,6 +7,7 @@ import jsxA11yPlugin from 'eslint-plugin-jsx-a11y'
 import nextPlugin from '@next/eslint-plugin-next'
 import stylisticPlugin from '@stylistic/eslint-plugin'
 import * as mdxPlugin from 'eslint-plugin-mdx'
+import reactCompilerPlugin from 'eslint-plugin-react-compiler'
 
 const eslintConfig = [
     {
@@ -80,6 +81,7 @@ const tseslintConfig = tseslint.config(
         // only needed if you use TypeChecked rules
         files: ['**/*.mjs'],
         ...tseslintConfigs.disableTypeChecked,
+        name: 'custom/typescript-eslint/disable-type-checked',
     },
 )
 
@@ -132,11 +134,12 @@ const nextConfig = [
         },
     },
     {
+        name: 'custom/next/config-mdx',
         files: ['**/*.mdx'],
         rules: {
             'react/no-unescaped-entities': 'off',
         },
-    }
+    },
 ]
 
 const stylisticConfig = [
@@ -210,6 +213,19 @@ const mdxConfig = [
     },
 ]
 
+const reactCompilerConfig = [
+    {
+        name: 'custom/react-compiler/recommended',
+        files: ['**/*.ts?(x)'],
+        plugins: {
+            'react-compiler': reactCompilerPlugin,
+        },
+        rules: {
+            'react-compiler/react-compiler': 'warn',
+        },
+    },
+]
+
 const config = [
     ...ignoresConfig,
     ...eslintConfig,
@@ -217,6 +233,7 @@ const config = [
     ...nextConfig,
     ...stylisticConfig,
     ...mdxConfig,
+    ...reactCompilerConfig,
 ];
 
 export default config
