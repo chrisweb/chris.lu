@@ -13,6 +13,9 @@
         "lint": "eslint --cache --cache-location .next/cache/eslint/",
         "lint-nocache": "eslint",
         "lint-debug": "eslint --debug",
+        "lint-debug-config": "eslint --debug eslint.config.mjs",
+        "lint-print-config": "eslint --print-config eslint.config.mjs",
+        "lint-inspect-config": "eslint --inspect-config eslint.config.mjs",
         "lint-fix": "eslint --fix",
         "info": "next info"
     },
