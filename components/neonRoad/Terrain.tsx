@@ -28,14 +28,16 @@ const Terrain = (props: ITerrainProps) => {
     //const { gl } = useThree()
     //console.log(gl.capabilities.getMaxAnisotropy())
 
-    floorTexture.anisotropy = 2
+    const floorTextureClone = floorTexture.clone()
+
+    floorTextureClone.anisotropy = 2
 
     // https://threejs.org/examples/#webgl_materials_texture_filters
     // https://threejs.org/docs/#api/en/textures/Texture.magFilter
     // https://threejs.org/docs/index.html#api/en/constants/Textures
     //import { NearestFilter , NearestMipmapNearestFilter } from 'three'
-    //floorTexture.magFilter = NearestFilter
-    //floorTexture.minFilter = NearestMipmapNearestFilter
+    //floorTextureClone.magFilter = NearestFilter
+    //floorTextureClone.minFilter = NearestMipmapNearestFilter
 
     const displacementScale = 0.5
 
@@ -162,16 +164,16 @@ const Terrain = (props: ITerrainProps) => {
     // displacement maps after the texture update so that
     // the result was a flat surface with no displacement
     useLayoutEffect(() => {
+        const displacementMap = displacementMapRef.current
+        const canvas = canvasRef.current
         procedurallyGenerateDisplacementMap()
         return () => {
             // I don't know if this is necessary, but it's better to be safe than sorry
             // cleanup: dispose of the canvas texture and remove the canvas element from dom
-            if (displacementMapRef.current !== null) {
-                // eslint-disable-next-line react-hooks/exhaustive-deps
-                displacementMapRef.current.dispose()
+            if (displacementMap !== null) {
+                displacementMap.dispose()
             }
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-            canvasRef.current.remove()
+            canvas.remove()
         }
     }, [procedurallyGenerateDisplacementMap])
 
@@ -188,7 +190,7 @@ const Terrain = (props: ITerrainProps) => {
         >
             <planeGeometry args={[1, 1, 32, 64]} />
             <meshStandardMaterial
-                map={floorTexture}
+                map={floorTextureClone}
                 displacementScale={displacementScale}
                 emissiveMap={emissiveMap}
                 emissive="#11166c"
