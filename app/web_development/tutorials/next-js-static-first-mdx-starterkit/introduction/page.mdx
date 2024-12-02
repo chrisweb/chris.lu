@@ -48,15 +48,16 @@ export const metadata = {
 
 # Introduction
 
-I tried to make this tutorial as beginner-friendly as possible, but also complete enough to be helpful for senior developers. If you have a question feel free to ask on the <FontAwesomeIcon icon={faComments} size="1x" color='rgb(255, 0, 170)' /> [discussion](https://github.com/chrisweb/chris.lu/discussions) page and if you find a bug please report it using the <FontAwesomeIcon icon={faBug} size="1x" color='rgb(255, 0, 170)' /> [issues](https://github.com/chrisweb/chris.lu/issues).
+Static first means that we first create a static base, where we use static site generation (SSG) to generate our pages at **build time**, to hopefully minimize Server Side Rendering (SSR) at **run time**. If parts of your pages get prerendered at built time (when deploying), will lead to faster loading of your pages and decrease the load on your servers. Beyond this tutorial, when the static part is done you will be able to use Next.js 15 features like **PPR** (experimental) and **component streaming** (using React 19 suspend) to add in dynamic parts.
 
-The main goal of this tutorial is to build a blazingly fast Next.js 15 project that is static first. Static first does NOT mean you can't add dynamic parts after finishing this tutorial. Static first means we first create a base, where we use static site generation ([SSG](https://nextjs.org/docs/pages/building-your-application/rendering/static-site-generation)) to generate our pages, meaning no SSR / no work is done at runtime, all the work is done at built time (when deploying). We will add CSP headers to make sure our app is secure, we will use Next.js features like next/image and next/font to further improve the loading times of our pages.
+Our secondary goal focuses on adding MDX support to a Next.js 15 project (as well as several related features) because MDX pages can be great to create a **developer portfolio**, a **documentation website**, a **blog** and a lot more.
 
-A secondary goal is to create a project that has a low maintenance core and a great developer experience (DX) so that we can add new features quickly in the future (instead of having to do maintenance work). We will achieve great DX by using Typescript (which gives us type safety and code autocomplete in VSCode through Intelisense) and by using VSCode and several extensions. We will use services like Vercel to automate our deployments (saving us time) and Sentry to log errors (helping us track and understand errors). We will also improve the DX by adding linting for both code and content using a custom ESLint 9 (flat config).
-
-This tutorial is based on my experience building chris.lu, and hopefully it will help you build your own dream project. After reading this tutorial you should be able to get great lighthouse scores. For example, here is a screenshot of the lighthouse score for the homepage of this blog:
+This tutorial is based on my experience building chris.lu (the source code can be found in my [chris.lu repository](https://github.com/chrisweb/chris.lu)). So hopefully after reading this tutorial you will be able to get a great lighthouse score, too:
 
 ![lighthouse analysis results showing a 100% score for performance, accessibility, best practices, SEO](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-first-mdx-starterkit/lighthouse.png)
+
+> [!NOTE]  
+> I tried to make this tutorial as **beginner-friendly** as possible, but also complete enough to be helpful for **senior developers**. This version of the tutorial uses Next.js 15, React 19, and ESLint 9, if you need a Next.js 14 version of this tutorial visit ["Next.js 14 static mdx blog" tutorial](/web_development/tutorials/next-js-static-mdx-blog). If you have a question feel free to ask on the <FontAwesomeIcon icon={faComments} size="1x" color='rgb(255, 0, 170)' /> [discussion](https://github.com/chrisweb/chris.lu/discussions) page and if you find a bug please report it using the <FontAwesomeIcon icon={faBug} size="1x" color='rgb(255, 0, 170)' /> [issues](https://github.com/chrisweb/chris.lu/issues).
 
 ## Preview
 
@@ -76,13 +77,10 @@ In this tutorial, we will:
 
 ## Technology stack
 
-> [!NOTE]  
-> There is a previous version of this tutorial, that uses Next.js 14.x (and is compatible with Next.js 13). So if you are not (yet) using the latest Next.js 15 then you might want to check out the [Next.js 14 static mdx blog](/web_development/tutorials/next-js-static-mdx-blog) tutorial instead
-
-* backend framework: Next.js 15.x
-* frontend framework: React 19.x (with React compiler support)
-* MDX support: @next/mdx 15.x
-* linting: ESLint 9.x
+* Backend framework: **Next.js 15.x**
+* Frontend framework: **React 19.x** (with React compiler support)
+* Linting: **ESLint 9.x** (flat config)
+* MDX support: **@next/mdx 15.x**
 
 ## Source code
 
