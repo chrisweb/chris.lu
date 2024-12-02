@@ -184,6 +184,8 @@ const stylisticConfig = [
                 multiline: 'consistent',
                 singleline: 'forbid',
             }],
+            '@stylistic/no-multiple-empty-lines': ['warn'],
+            '@stylistic/no-trailing-spaces': ['warn'],
         },
     }
 ]
