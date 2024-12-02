@@ -576,7 +576,7 @@ We start by installing **typescript-eslint** package using the following command
 npm i typescript-eslint@latest --save-dev --save-exact
 ```
 
-Next we will fine tune our typescript linting by adding a custom configuration for `.ts` and `.tsx` files:
+Next we will fine tune our typescript linting by adding a **custom/typescript-eslint/recommended** config:
 
 ```ts title="eslint.config.ts" showLineNumbers {4-5}
 import eslintPlugin from '@eslint/js'
@@ -645,6 +645,7 @@ const tseslintConfig = tseslint.config(
         // (and you have javascript files in your project)
         files: ['**/*.mjs'],
         ...tseslintConfigs.disableTypeChecked,
+        name: 'custom/typescript-eslint/disable-type-checked',
     },
 )
 
@@ -664,7 +665,7 @@ Line A: we use the `config()` function from the typescript-eslint package to cre
 
 Line X: first we specify that the name for custom flat config will be **tseslintConfig**
 
-Line F: We use the `files` option to tell ESLint which files (extensions) we want to include (for this tutorial we will enable linting for regular [Typescript](https://www.typescriptlang.org/) (.ts), Typescript and [JSX](https://www.typescriptlang.org/docs/handbook/jsx.html) files (.tsx) and [ES Module (esm)](https://nodejs.org/api/esm.html#modules-ecmascript-modules) files (.mjs))
+Line F: We use the `files` option to tell ESLint which files (extensions) we want to include (for this tutorial we will enable linting for [ES Module (esm)](https://nodejs.org/api/esm.html#modules-ecmascript-modules) files (.mjs), for regular [Typescript](https://www.typescriptlang.org/) (.ts) and also for Typescript & [JSX](https://www.typescriptlang.org/docs/handbook/jsx.html) files (.tsx))
 
 Lines X to X: we use the extends option to add full sets of rules to our setup (you can still fine tune rules from those sets using the rules config option):
 
@@ -684,7 +685,12 @@ Lines F to G: Then we add some parser options, those are needed if you use one o
 
 Line X: It is recommended to keep the typescript-eslint [warnOnUnsupportedTypeScriptVersion](https://typescript-eslint.io/packages/parser/#warnonunsupportedtypescriptversion) option enabled (which is why I explicitly added it to the config), if the Typescript version that you have installed is higher than the version typescript-eslint supports then it will show a warning message (when launching the linting process)
 
-Line C: we can now remove `next/typescript` from the compatibility mode (as it gets replaced by our custom flat config using typescript-eslint that we added above)
+Lines X to X: we create yet another config to tell typescript eslint to apply the **disableTypeChecked** option when parsing [ES Module (esm)](https://nodejs.org/api/esm.html#modules-ecmascript-modules) files (.mjs)
+
+> [!NOTE]  
+> For this config we add the custom/typescript-eslint/disable-type-checked **name** at the end, this is because the order matters; if we would have set the name first and then added the **disableTypeChecked** config, then our name would get replaced by the name that the config sets; but because we add our name last it will replace the name that got set by the disableTypeChecked config
+
+Line C: we can now remove `next/typescript` from the compatibility mode (compat.extends), as it gets replaced by our custom typescript-eslint config
 
 Line D: we set the **Config** type from the **@typescript-eslint** utilities as type for our default export (to replace the [type from the ESLint package](https://eslint.org/docs/latest/use/configure/configuration-files#typescript-configuration-files) which is what we were using previously), the reason to switch for the **Config** type from ESLint to the one from **@typescript-eslint** utilities is because of issues related with the type of the default export, you can read more about those issues in the next chapter
 
@@ -825,6 +831,7 @@ const tseslintConfig = tseslint.config(
         // (and you have javascript files in your project)
         files: ['**/*.mjs'],
         ...tseslintConfigs.disableTypeChecked,
+        name: 'custom/typescript-eslint/disable-type-checked',
     },
 )
 
