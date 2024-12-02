@@ -589,7 +589,7 @@ const compat = new FlatCompat()
 const eslintConfig = [
     {
         name: 'custom/eslint/recommended',
-        files: ['**/*.ts?(x)'],
+        files: ['**/*.mjs', '**/*.ts?(x)'],
         ...eslintPlugin.configs.recommended,
     },
 ]
@@ -610,7 +610,7 @@ const ignoresConfig = [
 const tseslintConfig = tseslint.config(
     {
         name: 'custom/typescript-eslint/recommended',
-        files: ['**/*.ts?(x)'],
+        files: ['**/*.mjs', '**/*.ts?(x)'],
         extends: [
             ...tseslintConfigs.recommended,
             // OR more type checked rules
@@ -630,7 +630,11 @@ const tseslintConfig = tseslint.config(
                 // https://typescript-eslint.io/getting-started/typed-linting
                 projectService: true,
                 tsconfigRootDir: import.meta.dirname,
-                // better keep it turned on, unless you need to
+                // react recommended is already adding the ecmaFeatures
+                /*ecmaFeatures: {
+                    jsx: true,
+                },*/
+                // it is recommended to keep version warnings turned on
                 warnOnUnsupportedTypeScriptVersion: true,
             },
         },
@@ -660,7 +664,7 @@ Line A: we use the `config()` function from the typescript-eslint package to cre
 
 Line X: first we specify that the name for custom flat config will be **tseslintConfig**
 
-Line F: We use the `files` option to tell ESLint which files (extensions) we want to include (for this tutorial we will enable linting for regular typescript (.ts) and typescript react files (.tsx))
+Line F: We use the `files` option to tell ESLint which files (extensions) we want to include (for this tutorial we will enable linting for regular [Typescript](https://www.typescriptlang.org/) (.ts), Typescript and [JSX](https://www.typescriptlang.org/docs/handbook/jsx.html) files (.tsx) and [ES Module (esm)](https://nodejs.org/api/esm.html#modules-ecmascript-modules) files (.mjs))
 
 Lines X to X: we use the extends option to add full sets of rules to our setup (you can still fine tune rules from those sets using the rules config option):
 
@@ -674,7 +678,11 @@ Then we have to chose between two more sets of rules, the **stylistic** set cont
 Lines F to G: Then we add some parser options, those are needed if you use one of the **"type checked"** sets (if are NOT using any `TypeChecked` rules, then you can delete (or uncomment) the `languageOptions` block)
 
 > [!NOTE]  
-> the **ecmaFeatures** and **warnOnUnsupportedTypeScriptVersion** parser options in the **languageOptions** are commented out because there are other configurations that we already use or will use in an upcoming chapter that set these options for us (I keep those lines as a reminder that the two options exist but if you prefer you can delete them)
+> the **ecmaFeatures** parser option in the **languageOptions** is commented out because there are other configurations (that we will add to our setup in an upcoming chapter) that set these options for us  
+>  
+> I keep the comment for now as reminder, but will delete it when we add the eslint-plugin-react package, as this package will already set the option  
+
+Line X: It is recommended to keep the typescript-eslint [warnOnUnsupportedTypeScriptVersion](https://typescript-eslint.io/packages/parser/#warnonunsupportedtypescriptversion) option enabled (which is why I explicitly added it to the config), if the Typescript version that you have installed is higher than the version typescript-eslint supports then it will show a warning message (when launching the linting process)
 
 Line C: we can now remove `next/typescript` from the compatibility mode (as it gets replaced by our custom flat config using typescript-eslint that we added above)
 
@@ -765,7 +773,7 @@ import nextPlugin from '@next/eslint-plugin-next'
 const eslintConfig = [
     {
         name: 'custom/eslint/recommended',
-        files: ['**/*.ts?(x)'],
+        files: ['**/*.mjs', '**/*.ts?(x)'],
         ...eslintPlugin.configs.recommended,
     },
 ]
@@ -786,7 +794,7 @@ const ignoresConfig = [
 const tseslintConfig = tseslint.config(
     {
         name: 'custom/typescript-eslint/recommended',
-        files: ['**/*.ts?(x)'],
+        files: ['**/*.mjs', '**/*.ts?(x)'],
         extends: [
             ...tseslintConfigs.recommended,
             // OR more type checked rules
@@ -806,11 +814,7 @@ const tseslintConfig = tseslint.config(
                 // https://typescript-eslint.io/getting-started/typed-linting
                 projectService: true,
                 tsconfigRootDir: import.meta.dirname,
-                // react recommended is already adding the ecmaFeatures
-                /*ecmaFeatures: {
-                    jsx: true,
-                },*/
-                // better keep it turned on, if needed uncomment
+                // it is recommended to keep version warnings turned on
                 //warnOnUnsupportedTypeScriptVersion: false,
             },
         },
@@ -827,7 +831,7 @@ const tseslintConfig = tseslint.config(
 const nextConfig = [
     {
         name: 'custom/next/config',
-        // no files for this config as we want to apply it to all files
+        // no files (option) for this config as we want to apply it to all files
         plugins: {
             'react': reactPlugin,
             'jsx-a11y': jsxA11yPlugin,
