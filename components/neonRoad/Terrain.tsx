@@ -13,7 +13,7 @@ export interface ITerrainProps extends Partial<Mesh> {
     ref: refType
 }
 
-const Terrain = (props: ITerrainProps) => {
+const Terrain: React.FC<ITerrainProps> = (props) => {
 
     const FLOOR_TEXTURE_PATH = '/assets/images/neonroad/grid_4096x8192-min.png'
     const EMISSIVE_MAP_PATH = '/assets/images/neonroad/emissive_map_4096x8192-min.png'
@@ -28,9 +28,10 @@ const Terrain = (props: ITerrainProps) => {
     //const { gl } = useThree()
     //console.log(gl.capabilities.getMaxAnisotropy())
 
+    // I assume react compiler will add a useMemo if needed
     const floorTextureClone = floorTexture.clone()
 
-    floorTextureClone.anisotropy = 2
+    floorTextureClone.anisotropy = 4 // default is 1
 
     // https://threejs.org/examples/#webgl_materials_texture_filters
     // https://threejs.org/docs/#api/en/textures/Texture.magFilter
@@ -50,18 +51,13 @@ const Terrain = (props: ITerrainProps) => {
         return createNoise2D()
     }, [])
 
-    console.log('####### Terrain')
-
     const procedurallyGenerateDisplacementMap = useCallback(() => {
-
-        console.log('####### Terrain procedurallyGenerateDisplacementMap')
 
         if (!displacementMapRef.current) return
 
         const width = 32
         const height = 64
 
-        //const canvas = canvasRef.current
         const canvas = canvasRef.current
         const ctx = canvas.getContext('2d')
 
