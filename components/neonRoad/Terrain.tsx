@@ -4,7 +4,6 @@ import { useRef, useLayoutEffect, useMemo, useCallback } from 'react'
 import type { Mesh, CanvasTexture } from 'three'
 import { useTexture } from '@react-three/drei'
 import { createNoise2D, type NoiseFunction2D } from 'simplex-noise'
-//import { useFrame } from '@react-three/fiber'
 
 type refType = (ref: Mesh) => void
 
@@ -31,7 +30,9 @@ const Terrain: React.FC<ITerrainProps> = (props) => {
     // I assume react compiler will add a useMemo if needed
     const floorTextureClone = floorTexture.clone()
 
-    floorTextureClone.anisotropy = 4 // default is 1
+    // when using 1 the image is very blurry, 2 is good, 4 is great
+    // default is 1
+    floorTextureClone.anisotropy = 4
 
     // https://threejs.org/examples/#webgl_materials_texture_filters
     // https://threejs.org/docs/#api/en/textures/Texture.magFilter
@@ -41,8 +42,13 @@ const Terrain: React.FC<ITerrainProps> = (props) => {
     //floorTextureClone.minFilter = NearestMipmapNearestFilter
 
     const displacementScale = 0.5
+    const width = 32
+    const height = 64
 
-    const canvasRef = useRef<HTMLCanvasElement>(document.createElement('canvas'))
+    const offscreenCanvas = useMemo(() => {
+        return new OffscreenCanvas(width, height)
+    }, [width, height])
+
     const displacementMapRef = useRef<CanvasTexture>(null)
 
     const inRange = (value: number, range: [number, number]) => value >= range[0] && value <= range[1]
@@ -55,14 +61,10 @@ const Terrain: React.FC<ITerrainProps> = (props) => {
 
         if (!displacementMapRef.current) return
 
-        const width = 32
-        const height = 64
+        const ctx = offscreenCanvas.getContext('2d')
 
-        const canvas = canvasRef.current
-        const ctx = canvas.getContext('2d')
-
-        canvas.width = width
-        canvas.height = height
+        offscreenCanvas.width = width
+        offscreenCanvas.height = height
 
         for (let x = 0; x < width; x++) {
 
@@ -154,14 +156,13 @@ const Terrain: React.FC<ITerrainProps> = (props) => {
 
         displacementMapRef.current.needsUpdate = true
 
-    }, [noise2D])
+    }, [noise2D, offscreenCanvas])
 
     // fixes a problem where using useEffect would create
     // displacement maps after the texture update so that
     // the result was a flat surface with no displacement
     useLayoutEffect(() => {
         const displacementMap = displacementMapRef.current
-        const canvas = canvasRef.current
         procedurallyGenerateDisplacementMap()
         return () => {
             // I don't know if this is necessary, but it's better to be safe than sorry
@@ -169,7 +170,7 @@ const Terrain: React.FC<ITerrainProps> = (props) => {
             if (displacementMap !== null) {
                 displacementMap.dispose()
             }
-            canvas.remove()
+            //canvas?.remove()
         }
     }, [procedurallyGenerateDisplacementMap])
 
@@ -198,7 +199,7 @@ const Terrain: React.FC<ITerrainProps> = (props) => {
                 <canvasTexture
                     ref={displacementMapRef}
                     attach="displacementMap"
-                    args={[canvasRef.current]}
+                    args={[offscreenCanvas]}
                 />
             </meshStandardMaterial>
         </mesh>
