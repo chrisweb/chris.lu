@@ -2,7 +2,7 @@
 title: The road to React 19 and Next.js 15
 keywords: ['Next.js', 'nextjs', 'React', 'react 19', 'Next.js 15', 'Server Components', 'react compiler', 'Server Actions']
 published: 2024-08-12T11:22:33.444Z
-modified: 2024-08-14T19:10:33.444Z
+modified: 2024-12-03T03:12:12.333Z
 permalink: https://chris.lu/web_development/posts/road-to-react-19-next-js-15
 section: Web development
 ---
@@ -65,6 +65,20 @@ React updates recap:
 * On April 25, 2024 the react team released the **first beta** 🚀 of **React 19** on [npmjs.com](https://www.npmjs.com/package/react/v/19.0.0-beta-94eed63c49-20240425), they announced the [release of React 19 (beta)](https://react.dev/blog/2024/04/25/react-19) in a blog post that same day, the post contains a recap of the most interesting features that are included in React 19, the new **client Actions** that are the counterpart to Server Actions but the client ones are just called Actions (not Client Actions), the new **use** API, **Server Components** and **Server Actions** that you might already be using as frameworks like Next.js and Remix (to just name those two) already had access to those features via the canary releases, support for document metadata and a lot more that I won't list here as I recommend you check out their [release of React 19 (beta)](https://react.dev/blog/2024/04/25/react-19) a blog post for a more complete list and details
 * In April 2024, the React team published the first React 19 migration guide, which lists the upcoming changes in React 19. There is also a valuable [chapter about codemods](https://react.dev/blog/2024/04/25/react-19-upgrade-guide#codemods); codemods are a great help, especially when you intend to migrate the types and already have a big codebase
 * During [React Conf 2024](https://react.dev/blog/2024/05/22/react-conf-2024-recap) in April 2024, the React team announced the release of the first [React 19 RC](https://react.dev/blog/2024/04/25/react-19) (release candidate), another big announcement was the experimental release of the [React Compiler](https://react.dev/learn/react-compiler)
+* In oct. 2024 the React team announced the release of the [first React Compiler beta](https://react.dev/blog/2024/10/21/react-compiler-beta-release)
+* After the announcement of the first RC, a feature that had been in the canary version for some time got "a lot of attention", I recommend reading through details of the comment in [issue #29898](https://github.com/facebook/react/issues/29898#issuecomment-2477449973) as it is a very good summary of the problem and how it got addressed, here is a small quote:
+
+> In React 19 RC0, we stopped rendering the siblings so that the fallback could be committed immediately. (...)
+> 
+> This change meant lazy requests initiated at render time would be forced to waterfall. (...)
+
+Meaning that prior to the release of the first RC for React 19, if you had several components making requests inside of one Suspense then those requests were running in parallel (asynchronously), after the change their were running one after the other (synchronously).
+
+* In nov. 2024 the React team announced the release of the second RC of React ([React RC1](https://www.npmjs.com/package/react/v/19.0.0-rc.1)), as they explain in the comment on GitHub regarding the fix for the **Suspense problem**, what changes is this:
+
+> This means we're able to get the benefits of committing the fallback immediately, without the downsides of creating waterfalls for lazy requests
+
+As of now (dec. 2024) there is no stable release for React 19 yet, but the team is actively working on it, they release updates to their canary channel on regular basis (if you want to get an overview of the latest version and channels that are available then I recommend checking out the [npmjs React versions page](https://www.npmjs.com/package/react/v/19.0.0-rc.1?activeTab=versions))
 
 > [!MORE]  
 > [react.dev "React 19 (beta)" post](https://react.dev/blog/2024/04/25/react-19)  
