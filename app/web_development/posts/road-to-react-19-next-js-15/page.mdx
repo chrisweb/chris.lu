@@ -107,9 +107,20 @@ Next.js 13 releases:
 ## Next.js 15
 
 * In may 2024, the Next.js team released the first [Next.js 15 RC](https://nextjs.org/blog/next-15-rc) (release candidate) which included a big change for [caching](https://nextjs.org/blog/next-15-rc#caching-updates), the Next.js team decided that from now on all caching would be opt-in instead of being enabled by default. The problem with caching being enabled by default was that in development even though caching was enabled the content (fetch requests, routes, client navigation) would not get cached, caching would only happen during the build process, this made it hard to detect problems linked to caching before publishing the app. Another change is that Next.js now includes React 19 RC (see my [React 19 chapter](#react-19) for details about what's new in React 19), **Partial Prerendering (PPR)** which previously was only available when using the release candidates is now included in this release and there is a new **experimental_ppr** feature that allows you to enable PPR only on certain pages. Also included is a new feature called **next/after** (which is an experimental API to execute code after your content got streamed to the user), a new layout for **create-next-app** as well as new configuration options to opt out of bundling for certain packages
+* On Oct. 2024 the Next.js team released a new [blog post about the second RC for Next.js 15](https://nextjs.org/blog/next-15-rc2)
+* Still oct. 2024 (a few days later) Vercel announced the first stable version of [Next.js 15 on their blog](https://nextjs.org/blog/next-15), it included the features already mentioned for the first RC, but they also added support for **ESLint 9** (no flat config support yet) as well as the possibility to use Typescript for "next.config**.ts**" configuration files, and on the same day they announced (in a separate post) that [Turbopack Dev is Now Stable](https://nextjs.org/blog/turbopack-for-development-stable)
+
+Since the release of the first stable version the Next.js team has released several updates (they also ported fixes back and released new Next.js 14 versions), to get an overview I recommend checking out their [releases page](https://github.com/vercel/next.js/releases)
+
+Next.js also continues to get canary channel updates on a regular basis (if you want to get an overview of what channels are available and what the latest versions for each of them is, then I recommend checking out the [Next.js versions page on npmjs](https://www.npmjs.com/package/next?activeTab=versions))
+
+> [!TIP]  
+> When upgrading to Next.js 15 and React 19 it is recommended to first read the documentation, but it is also important that you have a look at the [Next.js codemods](https://nextjs.org/docs/canary/app/building-your-application/upgrading/codemods) as those could potentially save you a lot of time
 
 > [!MORE]  
-> [Next.js 14 to 15 upgrade guide](https://rc.nextjs.org/docs/app/building-your-application/upgrading/version-15)  
+> [Next.js 15 upgrade documentation](https://rc.nextjs.org/docs/app/building-your-application/upgrading/version-15)  
+> [Next.js codemods](https://nextjs.org/docs/canary/app/building-your-application/upgrading/codemods)  
+> [Next.js 15 and React 19 upgrade guide (with optional types tips)](https://nextjs.org/docs/canary/app/building-your-application/upgrading/version-15#react-19)  
 
 ## do I need to migrate all my code today?
 
