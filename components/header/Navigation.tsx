@@ -1,9 +1,8 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import styles from './navigation.module.css'
 import Link from 'next/link'
-import useClickOutside, { TypeCallback } from '@/hooks/useClickOutside'
 import { useRouter, usePathname } from 'next/navigation'
 import { useSwipeable } from 'react-swipeable'
 import type { Route } from 'next'
@@ -16,7 +15,7 @@ interface IMainMenuItem {
 const HeaderNavigation: React.FC = () => {
 
     const [navigationIsOpenState, setNavigationIsOpenState] = useState<null | boolean>(null)
-
+    const navigationElementRef = useRef<HTMLDivElement | null>(null)
     const router = useRouter()
     const currentPagePathname = usePathname()
 
@@ -28,14 +27,14 @@ const HeaderNavigation: React.FC = () => {
         })
     }
 
-    // on click outside of the navigation (mobile) close it
-    const onClickOutsideHandler = useCallback<TypeCallback>(() => {
+    // on touch outside of the navigation (mobile) closes it
+    const onClickOutsideHandler = useCallback((event: MouseEvent) => {
         if (navigationIsOpenState === true) {
-            setNavigationIsOpenState(false)
+            if (navigationElementRef.current && !navigationElementRef.current.contains(event.target as Node)) {
+                setNavigationIsOpenState(false)
+            }
         }
     }, [navigationIsOpenState])
-
-    const layoutNavbarContainerRef = useClickOutside(onClickOutsideHandler)
 
     // on click on a link close navigation too
     const onClickLinkHandler = (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -57,12 +56,15 @@ const HeaderNavigation: React.FC = () => {
         ...swipeableConfiguration,
     })
 
-    // https://github.com/FormidableLabs/react-swipeable/issues/189#issuecomment-656302682
+    // in the jsx we use this passthrough for the ref
     const swipeableRefPassthrough = (element: HTMLDivElement) => {
-        // call useSwipeables ref prop with element
+
+        // the following issue explains how the passthrough works
+        // https://github.com/FormidableLabs/react-swipeable/issues/189#issuecomment-656302682
         swipeHandlers.ref(element)
-        // set the el to a ref you can access yourself
-        layoutNavbarContainerRef.current = element
+
+        // then we set the element to a ref we can access
+        navigationElementRef.current = element
     }
 
     const mainMenuItems: IMainMenuItem[] = [
@@ -93,6 +95,13 @@ const HeaderNavigation: React.FC = () => {
 
         return isActiveClass
     }
+
+    useEffect(() => {
+        document.addEventListener('click', onClickOutsideHandler)
+        return () => {
+            document.removeEventListener('click', onClickOutsideHandler)
+        }
+    }, [onClickOutsideHandler])
 
     return (
         <>
