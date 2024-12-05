@@ -4,7 +4,7 @@ description: Code highlighting plugin - Next.js static MDX blog | www.chris.lu W
 keywords: ['highlighting', 'rehype', 'plugin', 'pretty', 'code', 'shiki']
 published: 2024-08-22T17:17:17.444Z
 modified: 2024-08-26T16:32:08.444Z
-permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/code-highlighting-plugin
+permalink: https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit/code-highlighting-plugin
 section: Web development
 ---
 
@@ -106,7 +106,7 @@ Next, we edit our `next.config.mjs` file (in the root of our project) to add the
 ```js title="next.config.mjs" showLineNumbers {5} {14} /rehypePrettyCode/2
 import { withSentryConfig } from '@sentry/nextjs';
 //import type { NextConfig } from 'next'
-import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 import createMdx from '@next/mdx'
 import rehypeMDXImportMedia from 'rehype-mdx-import-media'
 import rehypePrettyCode from 'rehype-pretty-code'
@@ -123,9 +123,13 @@ const nextConfig = (phase/*: string*/) => {
     })
 ```
 
-Line 5: we import our new **rehypePrettyCode** plugin
+Line 2: as we went back to using Javascript for our next.config file, we need to comment out type imports (we keep them as we will transition back to Typescript as soon as the [next.config.ts has no support for ESM only packages](#no-nextconfigts) problem we discussed earlier is fixed)
 
-Line 14: we add the plugin to the rehype plugins configuration
+Line 3: As this is not Typescript code anymore, and we are importing a file (have a look at the Node.js documentation explaining why [file extensions are mandatory](https://nodejs.org/api/esm.html#mandatory-file-extensions) for more details), which is why we added the extension to the constants file path (`next/constants.js`)
+
+Line 6: we import our new **rehypePrettyCode** plugin
+
+Line 15: we add the plugin to the rehype plugins configuration
 
 Now have another look at the playground page in your browser, and you will notice that this already looks a lot better when using the shiki default colors for highlighting:
 
@@ -148,12 +152,13 @@ To add a theme that **shiki** supports, all we need to do is edit the **rehype-p
 
 ```js title="next.config.mjs" showLineNumbers {9}#special {10-12} {19} /[rehypePrettyCode, rehypePrettyCodeOptions]/#special
 import { withSentryConfig } from '@sentry/nextjs';
+//import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 import createMdx from '@next/mdx'
 import rehypeMDXImportMedia from 'rehype-mdx-import-media'
 import rehypePrettyCode from 'rehype-pretty-code'
 
-const nextConfig = (phase) => {
+const nextConfig = (phase/*: string*/) => {
 
     /** @type {import('rehype-pretty-code').Options} */
     const rehypePrettyCodeOptions = {
@@ -218,13 +223,14 @@ Then you go into your Next.js configuration file and change the code to this:
 
 ```js title="next.config.mjs" showLineNumbers {6} {10-11} {15} /JSON.parse(themeFileContent)/
 import { withSentryConfig } from '@sentry/nextjs';
+//import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 import createMdx from '@next/mdx'
 import rehypeMDXImportMedia from 'rehype-mdx-import-media'
 import rehypePrettyCode from 'rehype-pretty-code'
 import { readFileSync } from 'fs'
 
-const nextConfig = (phase) => {
+const nextConfig = (phase/*: string*/) => {
 
     const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
     const themeFileContent = readFileSync(themePath, 'utf-8')
@@ -309,7 +315,7 @@ const rehypePrettyCodeOptions = {
 
 Line 16: we set the `keepBackground` option to false, which disables the default theme background color
 
-Then we add our background color to our rehype-pretty-code CSS in the `global.css` file:
+Then we **add** our background color to our rehype-pretty-code CSS in the `global.css` file:
 
 ```css title="/app/global.css" showLineNumbers{135} {11}
 [data-rehype-pretty-code-figure],
@@ -570,9 +576,9 @@ function helloWorld() {
 
 ````
 
-Gives you this (only the second occurence of "greeting" is highlighted):
+Gives you this (only the second occurrence of "greeting" is highlighted):
 
-![tell the code block to highlight the "greeting" characters but only the second occurence](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/rehype-pretty-code_plugin_highlight_characters_but_only_second_occurence.png)
+![tell the code block to highlight the "greeting" characters but only the second occurrence](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/rehype-pretty-code_plugin_highlight_characters_but_only_second_occurence.png)
 
 ## Code block language flag
 
@@ -602,19 +608,22 @@ Line 3: we changed the language flag from js to **jsx**
 >  
 > You can check out the complete list of language flags that are available by looking at the [shiki languages file](https://github.com/shikijs/shiki/blob/main/packages/shiki/src/assets/langs-bundle-full.ts#L1248)  
 
+### Configuring the code block default language
+
 There is a second option to specify the programming language. This option is helpful if all your code blocks contain code written in the same language and you want to avoid having to set the language flag for every code block.
 
 In this case, you can use the rehype pretty code configuration to set a default language:
 
 ```js title="next.config.mjs" showLineNumbers {17-19}
 import { withSentryConfig } from '@sentry/nextjs';
+//import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 import createMdx from '@next/mdx'
 import rehypeMDXImportMedia from 'rehype-mdx-import-media'
 import rehypePrettyCode from 'rehype-pretty-code'
 import { readFileSync } from 'fs'
 
-const nextConfig = (phase) => {
+const nextConfig = (phase/*: string*/) => {
 
     const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
     const themeFileContent = readFileSync(themePath, 'utf-8')
@@ -638,9 +647,9 @@ Now that we have a default language set, we can remove the language flag we had 
 
 ```
 function helloWorld() {
- // this is a comment
- let greeting = 'Hello World!'
- console.log(greeting)
+    // this is a comment
+    let greeting = 'Hello World!'
+    console.log(greeting)
 }
 ```
 
@@ -660,6 +669,27 @@ If you want to remove the linting warning, use a [comment to disable the remark-
 
 > [!NOTE]  
 > If you don't set a default language and also don't set a language flag on a code block, then rehype pretty code will **NOT** get activated for that code block, as it needs to know the programming language to be able to choose the correct colors when highlighting  
+
+### diff (+/- lines) language flag
+
+I mention the **diff** language flag separately as it has an extra feature, by adding a **+** or **-** sign to the start of a line you can tell the code highlighter to display the rows starting with a plus sign as if they had been added and the rows starting with a minus sign as if they had been removed (meaning lines that got added are green and lines that got removed are red)
+
+````md title="/app/(tutorial_examples)/code-highlighting_playground/page.mdx" showLineNumbers
+<article>
+
+```diff
+function helloWorld() {
+-    // this is a comment
++    let greeting = 'Hello World!'
+    console.log(greeting)
+}
+```
+
+</article>
+
+````
+
+With this language you can use the **+** and **-** signs to tell the code highlighter to display the rows starting with a plus sign as if they had been added and the rows starting with a minus sign as if they had been removed
 
 ## Highlighting inline code
 
@@ -737,13 +767,14 @@ Instead, we are going to use the **2nd option** which consists of setting a **de
 
 ```js title="next.config.mjs" showLineNumbers {19}
 import { withSentryConfig } from '@sentry/nextjs';
+//import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 import createMdx from '@next/mdx'
 import rehypeMDXImportMedia from 'rehype-mdx-import-media'
 import rehypePrettyCode from 'rehype-pretty-code'
 import { readFileSync } from 'fs'
 
-const nextConfig = (phase) => {
+const nextConfig = (phase/*: string*/) => {
 
     const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
     const themeFileContent = readFileSync(themePath, 'utf-8')
@@ -787,7 +818,7 @@ Now, the color is what we would expect it to be for a function.
 
 Tokens are similar to language flags, but the difference is that they are inside of curly brackets at the end of inline code, and **tokens start with a colon and a dot** (`:.`) while **language flags only begin with a colon** (`:`)
 
-Finally, you might wonder how you know what tokens are available.
+### How do I know which tokens are available?
 
 In a previous chapter, we used a VSCode theme and VSCode has a guide on their website about [what tokens to use when building themes](https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers), on top of the page there is a list of **Standard token types** and on the bottom you will find a list of **Predefined TextMate scope mappings** 
 
@@ -796,6 +827,11 @@ Another way to find out what tokens your theme uses is to look at the json file 
 In that json file, there is a section called **tokenColors**, which is the list of all the tokens and colors the theme uses
 
 For example, this is the [json file for the OneDark Pro theme](https://github.com/Binaryify/OneDark-Pro/blob/2d42e24be590925e686a477113723b7c28015a50/themes/OneDark-Pro.json) on GitHub, it is not always easy to find that json file, for example, the Dracula theme needs to get built first, on GitHub the Dracula theme uses a [yaml file to configure the tokens and colors](https://github.com/dracula/visual-studio-code/blob/e475d548db27773fa0004b252c0a4701f187fb7e/src/dracula.yml), if the YAML file is not enough you could check out the repository and build the Dracula theme yourself, or if you have it installed in VSCode, you could look at the json file in the theme folder (on Windows the path to themes folder is: `%USERPROFILE%\.vscode\extensions`, on macOS it is `~/.vscode/extensions` and on Linux, it is `~/.vscode/extensions`)
+
+> [!MORE]  
+> [VSCode "Semantic Highlight" guide](https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers)  
+
+### token aliases
 
 There is one last feature I want to bring up, which is **token aliases**, if you don't want always to have to remember and type the full token name, which can be tedious as some tokens have rather complex names like `.meta.object-literal.key`
 
@@ -888,12 +924,12 @@ If we used the correct tokens to create our aliases map, the colors in the list 
 
 ![the result when using rehype pretty code for a code block and some inline code examples](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/rehype-pretty-code_code_block_and_inline_code_examples.png)
 
+> [!TIP]  
+> There are even more features like **shiki transformers**, **visitor hooks** and **custom highlighters** (which we will not see in this tutorial), but you can find more info about them in the [rehype pretty code](https://rehype-pretty.pages.dev/) and [shiki](https://shiki.style/) docs websites
+
 Congratulations 🎉 you finished learning about how to highlight code using a remark plugin and learned how to use most of its features (including using VSCode themes)
 
 If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
-
-> [!MORE]  
-> [VSCode "Semantic Highlight" guide](https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers)  
 
 <Pagination
     previous={{ label: 'MDX plugins', href: '/web_development/tutorials/next-js-static-mdx-blog/mdx-plugins' }}
