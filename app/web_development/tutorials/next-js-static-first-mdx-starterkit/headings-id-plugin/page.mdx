@@ -46,9 +46,11 @@ export const metadata = {
 
 # Rehype slug plugin to add IDs to headings
 
-The [rehype-slug](https://github.com/rehypejs/rehype-slug) plugin does not do much on its own, but it does something useful for other plugins, which is adding an ID to headings. This ID can then be used by plugins like [rehype-autolink-headings](https://github.com/rehypejs/rehype-autolink-headings) or a table of contents (TOC) plugin like [remark-table-of-contents](https://github.com/chrisweb/remark-table-of-contents)
+The [rehype-slug](https://github.com/rehypejs/rehype-slug) plugin does not do much on its own, but it does something very useful needed by other plugins, by automatically transforming the text of headings into heading IDs. It will ensure IDs are unique, if detects that two (or more) headings have the same text, then the plugin will add a number to the ID.
 
-The **rehype-slug** plugin will transform the text of a heading into an ID, if there are two headings with the same text, then the plugin will add a number to the ID to make sure every heading has a unique ID
+It uses [github-slugger](https://github.com/Flet/github-slugger) under the hood, meaning the slugs will be similar to those GitHub produces. 
+
+The heading IDs can then be used by plugins like [rehype-autolink-headings](https://github.com/rehypejs/rehype-autolink-headings) or a table of contents (TOC) plugin like [remark-table-of-contents](https://github.com/chrisweb/remark-table-of-contents)
 
 ## rehype-slug installation
 
@@ -62,6 +64,7 @@ Now that the plugin is installed, we need to edit our Next.js configuration file
 
 ```js title="next.config.mjs" showLineNumbers {7} {38} /rehypeSlug/2#special
 import { withSentryConfig } from '@sentry/nextjs';
+//import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 import createMdx from '@next/mdx'
 import rehypeMDXImportMedia from 'rehype-mdx-import-media'
@@ -69,7 +72,7 @@ import rehypePrettyCode from 'rehype-pretty-code'
 import { readFileSync } from 'fs'
 import rehypeSlug from 'rehype-slug'
 
-const nextConfig = (phase) => {
+const nextConfig = (phase/*: string*/) => {
 
     const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
     const themeFileContent = readFileSync(themePath, 'utf-8')
