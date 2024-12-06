@@ -39,7 +39,7 @@
         "@fortawesome/free-solid-svg-icons": "6.7.1",
         "@fortawesome/react-fontawesome": "0.2.2",
         "@mdx-js/loader": "3.1.0",
-        "@next/mdx": "15.0.4-canary.36",
+        "@next/mdx": "15.0.4-canary.45",
         "@react-three/drei": "9.119.0",
         "@react-three/fiber": "9.0.0-rc.1",
         "@react-three/postprocessing": "2.16.3",
@@ -49,7 +49,7 @@
         "glob": "11.0.0",
         "hast": "1.0.0",
         "hast-util-from-html-isomorphic": "2.0.0",
-        "next": "15.0.4-canary.36",
+        "next": "15.0.4-canary.45",
         "postprocessing": "6.36.4",
         "react": "19.0.0-rc-de68d2f4-20241204",
         "react-dom": "19.0.0-rc-de68d2f4-20241204",
@@ -73,8 +73,8 @@
     },
     "devDependencies": {
         "@eslint/js": "9.16.0",
-        "@next/bundle-analyzer": "15.0.4-canary.36",
-        "@next/eslint-plugin-next": "15.0.4-canary.36",
+        "@next/bundle-analyzer": "15.0.4-canary.45",
+        "@next/eslint-plugin-next": "15.0.4-canary.45",
         "@react-three/eslint-plugin": "0.1.1",
         "@stylistic/eslint-plugin": "2.11.0",
         "@types/eslint-plugin-jsx-a11y": "6.10.0",
@@ -83,7 +83,7 @@
         "@types/react-dom": "npm:types-react-dom@rc",
         "babel-plugin-react-compiler": "19.0.0-beta-df7b47d-20241124",
         "eslint": "9.16.0",
-        "eslint-config-next": "15.0.4-canary.36",
+        "eslint-config-next": "15.0.4-canary.45",
         "eslint-import-resolver-typescript": "3.7.0",
         "eslint-plugin-import": "2.31.0",
         "eslint-plugin-jsx-a11y": "6.10.2",
@@ -101,11 +101,11 @@
         "typescript-eslint": "8.17.0"
     },
     "overrides": {
-        "react": "19.0.0-rc-b01722d5-20241114",
-        "react-dom": "19.0.0-rc-b01722d5-20241114",
+        "react": "19.0.0-rc-de68d2f4-20241204",
+        "react-dom": "19.0.0-rc-de68d2f4-20241204",
         "@react-three/fiber": "9.0.0-rc.1",
         "three": "0.171.0",
-        "next": "15.0.4-canary.36"
+        "next": "15.0.4-canary.45"
     },
     "browserslist": [
         ">0.1%, not dead, not Opera < 100, not op_mini all, not and_uc < 15, not samsung < 21, not android > 0, not and_ff < 117, not and_qq < 13, not ie <= 11"
