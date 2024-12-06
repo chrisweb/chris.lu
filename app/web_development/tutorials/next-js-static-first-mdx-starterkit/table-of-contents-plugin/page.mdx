@@ -1,0 +1,529 @@
+---
+title: Table of contents (TOC) plugin - Tutorial
+description: Table of contents (TOC) remark plugin (remark-table-of-contents) - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['Table', 'contents', 'Table of contents', 'TOC', 'plugin', 'Next.js', 'MDX', 'remark', 'placeholder', 'support', 'markdown', 'typescript', 'react', 'observer', 'hook']
+published: 2024-08-24T15:22:33.444Z
+modified: 2024-08-25T15:22:33.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/table-of-contents-plugin
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
+
+# Table of contents (TOC) plugin and React Observer Hook
+
+You have probably already seen such **table of contents (TOC)** widgets in blog posts and documentation that display a list of the main sections. This navigation allows our users to quickly navigate to a headline of a chapter
+
+This is why the third plugin we are about to add to our MDX setup will do just that. It will automatically turn our headings (`# level 1{:md}`, `## level 2{:md}`, ...) into a **table of contents (TOC)** for each of our mdx pages, which is great as this means we won't have to make those lists manually and also if we change, add or remove headings the list will get updated automatically for us.
+
+In the second part of this tutorial we will build a React Observer Hook and a React Highlight TOC component that together will highlight the link in the toc that corresponds to the heading which is currently in the viewport
+
+## Why I created my own TOC plugin
+
+I tried several remark and rehype table of contents (toc) plugins, but none were suitable for my use case. I will still list them here because maybe they are a good fit for your use case, and you want to use them. I will also explain a bit why I chose not to use them:
+
+* [remark-toc](https://www.npmjs.com/package/remark-toc): This is a great plugin, but I chose not to use this plugin because the only way to insert the toc into a page is by placing a heading into the page. This works well for some use cases, but for my own blog (the one you are reading right now), I wanted a toc inside of an `<aside>{:html}` element that would show up on the right side of my article(s); also, this is a markdown plugin, which I think is why it had trouble with my MDX content, because when I placed the toc placeholder (after some jsx) in an MDX document, then it had trouble finding the headline that tells the plugin where to put the toc and did not display a toc as a consequence
+* [mdast-util-toc](https://www.npmjs.com/package/mdast-util-toc): the remark-toc plugin we just saw uses this plugin under the hood, this plugin converts your mdast list of headings into a toc object, again this plugin is great at doing what it is supposed to do, but for my use case I needed a plugin that creates a toc as markdown or as HTML, so that I can directly insert the toc into my MDX documents
+* [remark-mdx-toc](https://www.npmjs.com/package/remark-mdx-toc): this plugin as the name suggests got fine tuned for MDX documents, but for my use case it has the same problem as the previous plugin, it will generate a toc and then it will generate an array that you can then use to create the toc markup
+* [@jsdevtools/rehype-toc](https://www.npmjs.com/package/@jsdevtools/rehype-toc): this plugin is not a remark but a rehype plugin, which is not a problem, as long as it does what I need it to do. Unfortunately, this plugin does not use a placeholder to let you specify where to place the toc. It only allows you to use configuration options to put the toc relative to the position of your `<body>{:html}` element or a `<main>{:html}` element. Both options did not work for me as I wanted my toc to be inside of an `<aside>{:html}` element that itself is inside of an `<article>{:html}` element
+
+I also checked out what solutions other frameworks like [docusaurus toc](https://docusaurus.io/docs/next/markdown-features/toc) and [gatsby table of contents](https://www.gatsbyjs.com/plugins/gatsby-remark-table-of-contents/) use, to create a table of contents (toc), those seemed to do a fine job, but only if you use the framework they were specifically built for
+
+As I couldn't find a plugin suitable for my use case, I decided to learn how to create remark plugins and build one myself. My attempt at creating (yet another toc plugin) is called **remark-table-of-contents**. You can check out the README and source code in the [remark-table-of-contents repository](https://github.com/chrisweb/remark-table-of-contents) (on GitHub) or get it from [npmjs.com (remark-table-of-contents plugin page)](https://www.npmjs.com/package/remark-table-of-contents), it is a remark plugin that similar to other plugins parses your markdown (or MDX) document, creates a list of all the headings it can find and then turns them into a "table of contents" (TOC), the toc can be freely placed where ever you want as it uses a placeholder that you insert into your document and which then gets replaced by the toc at build time
+
+> [!MORE]  
+> [remark-table-of-contents](https://www.npmjs.com/package/remark-table-of-contents)  
+> [unifiedjs.com "creating a plugin with unified (remark / rehype plugins)" documentation](https://unifiedjs.com/learn/guide/create-a-plugin/)  
+
+## Using the TOC plugin
+
+First we need to add the Table of Contents plugin to our project, by using the following command:
+
+```shell
+npm i remark-table-of-contents --save-exact
+```
+
+Now that **remark-table-of-contents** package is installed, we need to edit our Next.js configuration file and add it to our MDX setup:
+
+```js title="next.config.mjs" showLineNumbers {8} {34-43} {49} /[remarkTableOfContents, remarkTableOfContentsOptions]/#special
+import { withSentryConfig } from '@sentry/nextjs';
+//import type { NextConfig } from 'next'
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+import createMdx from '@next/mdx'
+import rehypeMDXImportMedia from 'rehype-mdx-import-media'
+import rehypePrettyCode from 'rehype-pretty-code'
+import { readFileSync } from 'fs'
+import rehypeSlug from 'rehype-slug'
+import { remarkTableOfContents } from 'remark-table-of-contents'
+
+const nextConfig = (phase/*: string*/) => {
+
+    const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
+    const themeFileContent = readFileSync(themePath, 'utf-8')
+
+    /** @type {import('rehype-pretty-code').Options} */
+    const rehypePrettyCodeOptions = {
+        theme: JSON.parse(themeFileContent),
+        keepBackground: false,
+        defaultLang: {
+            block: 'js',
+            inline: 'js',
+        },
+        tokensMap: {
+            fn: 'entity.name.function',
+            cmt: 'comment',
+            str: 'string',
+            var: 'entity.name.variable',
+            obj: 'variable.other.object',
+            prop: 'meta.property.object',
+            int: 'constant.numeric',
+        },
+    }
+
+    /** @type {import('remark-table-of-contents').IRemarkTableOfContentsOptions} */
+    const remarkTableOfContentsOptions = {
+        containerAttributes: {
+            id: 'articleToc',
+        },
+        navAttributes: {
+            'aria-label': 'table of contents'
+        },
+        maxDepth: 3,
+    }
+
+    const withMDX = createMdx({
+        extension: /\.mdx$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [[remarkTableOfContents, remarkTableOfContentsOptions]],
+            rehypePlugins: [rehypeSlug, [rehypePrettyCode, rehypePrettyCodeOptions], rehypeMDXImportMedia],
+        },
+    })
+```
+
+Line 8: we import the **remark-table-of-contents** plugin
+
+Lines 34 to 43: first, we add the import for the **IRemarkTableOfContentsOptions** type, which will make sure our options object is strictly typed, meaning that we will get an autocomplete that will help us discover the available options without having to look them up in the documentation (the plugins README.md), the plugin has NO mandatory configuration options but we have used 3 to demonstrate a bit how the toc can be customized:
+
+* by default, a toc will be wrapped in an `<aside>{:html}` element, which acts as a container for the headings links list (you can disable the creation of this aside container if you prefer). In this case, we use the **containerAttributes** option to specify that we want to have an `id` attribute with a value set to `articleToc`, meaning we will have a toc container element like this `<aside id="articleToc">{:html}`
+* inside of the `<aside>{:html}` container, the toc will add a `<nav>{:html}` element. We use the **navAttributes** option to specify that we want to set the `aria-label` attribute of the `<nav>{:html}` element to `table of contents`, which is not mandatory, but I hope that it is beneficial for accessibility purposes, to help the user understand that this element is not the main navigation but a more specific navigation for the article chapters
+* the 3rd option we set will let the plugin know that we only want to include headings into the toc up to level 3, which means it will ignore all headings that are levels 4, 5, and 6 
+
+Line 49: we add an array with our plugin and its options to the **remarkPlugins** configuration
+
+> [!NOTE]  
+> In this example, we have only used a few configuration options. There are more options available. As I mentioned, you can disable a container's creation if you want. You can also customize the placeholder itself.  
+>
+> For a complete list of configuration options, as well as more examples of how to use the plugin, I recommend having a look at the [**remark-table-of-contents** README](https://github.com/chrisweb/remark-table-of-contents) on GitHub
+
+Now that the plugin is ready to be used, the last thing we need to do is insert the TOC placeholder into our playground page like so:
+
+```md title="/app/(tutorial_examples)/toc_playground/page.mdx" showLineNumbers
+<article>
+
+# headline level 1
+
+{/* spellchecker: disable */}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris tincidunt eros sed pellentesque rhoncus. In est ante, dictum id turpis id, rutrum pellentesque nisi. Morbi euismod velit lacinia metus rutrum, non bibendum urna rutrum. Nunc ac mauris ut sem mollis lacinia. Suspendisse cursus augue est, eu eleifend leo venenatis sit amet. Nullam id arcu vel lacus accumsan efficitur. Pellentesque sodales commodo odio, at tempus magna cursus non. Curabitur ex diam, bibendum ac quam in, efficitur luctus ex. Donec ultricies feugiat semper. Sed nec posuere leo.
+
+Cras ultrices nisi enim, nec aliquet tellus fermentum in. Sed imperdiet lorem nec elit dictum elementum. In sit amet rhoncus lorem. Quisque gravida dictum pharetra. Phasellus lacinia, dui ut faucibus volutpat, nisi purus mattis nunc, eu elementum dolor elit eget lorem. Phasellus sagittis auctor tellus nec commodo. Mauris tristique fringilla ligula ut iaculis. Nullam id condimentum dolor, ac fringilla lorem.
+
+Cras faucibus magna nec orci feugiat, a accumsan velit posuere. Nam volutpat consequat ornare. Phasellus gravida aliquam nisl quis commodo. Nunc consectetur enim eu ipsum dapibus, a aliquet justo egestas. Curabitur id ultricies odio. Suspendisse eget vehicula mauris, non fermentum diam. Fusce laoreet ullamcorper dignissim.
+
+## headline level 2
+
+In hac habitasse platea dictumst. Morbi semper efficitur orci vitae vulputate. Duis mauris sapien, dignissim sed arcu sed, imperdiet finibus erat. Integer eget convallis tortor. In elementum eget urna vel congue. Donec sagittis ut justo nec maximus. Quisque vestibulum quam ut pellentesque vestibulum. Pellentesque sagittis lobortis libero, id laoreet odio mollis et. Etiam id nisl et magna pellentesque tincidunt quis id nulla.
+
+Nullam mattis mollis lacus id dapibus. Donec tincidunt magna ac eros pellentesque, eu elementum ipsum luctus. Vivamus tortor dui, varius ac accumsan id, ullamcorper facilisis felis. Etiam porttitor maximus semper. Integer sem ex, bibendum vel tempor sit amet, volutpat sollicitudin mauris. Interdum et malesuada fames ac ante ipsum primis in faucibus. Phasellus mattis lectus eget nisl porttitor, at ullamcorper neque hendrerit. Etiam posuere, purus sit amet mollis lacinia, lorem purus volutpat velit, a rutrum risus orci a orci. Vestibulum tincidunt massa id vulputate interdum. Cras tristique lacinia vestibulum. Sed nec tortor nibh. Duis rutrum, ligula at vulputate ullamcorper, neque urna lobortis enim, id scelerisque sapien ex non ipsum. Vivamus urna quam, volutpat vel urna at, elementum vulputate nibh. Nam ornare nunc nec lacus convallis fermentum. Pellentesque quam diam, lobortis vulputate ligula id, convallis sollicitudin mi.
+
+Fusce luctus mollis orci interdum venenatis. Cras volutpat nibh quis rhoncus porttitor. Fusce enim orci, ultricies ut dolor et, bibendum consequat sem. Quisque urna mi, congue ut tempus sed, bibendum id ante. Maecenas viverra risus in dolor faucibus, vel lacinia sapien viverra. Aenean porta dictum enim vel luctus. Suspendisse maximus consectetur enim a molestie. Etiam vehicula est eget porta molestie. Vestibulum augue turpis, aliquam eget suscipit nec, lacinia sit amet diam. Aenean rhoncus, enim sagittis fermentum pharetra, lectus urna tristique sapien, commodo efficitur arcu nibh non urna. Aenean tempor, leo a ultrices tincidunt, massa arcu facilisis purus, non fermentum quam nulla id nulla.
+
+### headline level 3
+
+In in euismod massa, ut vulputate urna. Aliquam molestie lacus est, non interdum urna aliquam ut. Sed vel sagittis eros, ut elementum dui. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nam nec tempus enim. Phasellus sollicitudin luctus justo, a imperdiet lectus commodo ut. Fusce facilisis justo nunc, in aliquet diam ornare nec.
+
+Donec tincidunt aliquam arcu in pharetra. Cras ut tincidunt est. Donec erat nulla, tempus et accumsan sit amet, malesuada nec mauris. Morbi ipsum dolor, auctor non sem sit amet, mattis mollis sapien. Nam at arcu venenatis, volutpat erat vitae, accumsan neque. Donec mattis, odio vel aliquam tincidunt, lorem ipsum cursus velit, ut porttitor sem urna non sapien. Curabitur interdum ligula odio, eu volutpat arcu aliquam a. Nulla a libero non mauris ornare tincidunt sed eget magna.
+
+Sed posuere eu elit vitae mollis. Nulla a leo finibus, faucibus justo id, pharetra nibh. Nunc ut blandit ligula. Fusce nibh risus, elementum a dictum sed, mattis vel turpis. Cras lectus sem, luctus at justo vel, hendrerit congue risus. Nullam suscipit ex quis ex laoreet rhoncus. Donec augue dui, sodales at lorem id, finibus dignissim libero. Suspendisse finibus mi id nibh rhoncus, ut accumsan velit sagittis.
+
+#### headline level 4
+
+Morbi et tortor accumsan dolor rutrum rhoncus. Quisque faucibus tincidunt nulla, non faucibus purus suscipit non. Aliquam sed dignissim nisl. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In tellus enim, tincidunt in ante at, commodo malesuada orci. Ut accumsan tempor sem, ut imperdiet nisi facilisis eu. Fusce eu mattis elit. Fusce a purus ac dolor venenatis tincidunt ut sed sem. Nam cursus eu leo et aliquet. In mattis sagittis felis, nec blandit justo eleifend at. Aenean consequat fringilla feugiat.
+
+Etiam lectus massa, aliquet congue eros at, dictum cursus lectus. Maecenas eu dapibus sapien, a dignissim lacus. Sed viverra et lacus porttitor porttitor. Suspendisse tincidunt augue ut cursus tempus. Nulla nec metus ultrices libero commodo faucibus et et nisi. Etiam ac vulputate neque, sit amet consequat tellus. Sed placerat urna a tristique placerat. Sed quis porta tellus, ac posuere augue. Sed tristique quam id dignissim euismod. Suspendisse posuere vel quam non euismod. In molestie varius fermentum. Aliquam ut efficitur ipsum. Cras eget nunc ut dolor aliquet porta nec in odio. Phasellus dapibus ligula eros, eleifend pulvinar metus vulputate et. In convallis ornare mollis. Morbi sit amet placerat dui.
+
+Duis cursus suscipit lorem consectetur imperdiet. Cras nec luctus odio. Pellentesque dapibus nunc et facilisis pellentesque. Donec augue massa, aliquam quis ornare placerat, facilisis in lacus. In at maximus turpis. Cras sed metus vel orci ultricies consequat ut vitae tortor. Morbi sed pretium eros, a rhoncus augue. Ut quis finibus massa. Suspendisse placerat nisl id congue molestie. Pellentesque in ipsum mi.
+{/* spellchecker: enable */}
+
+</article>
+%toc%
+
+```
+
+Line 20: we inserted the TOC placeholder
+
+Now, if you want to make a test, first make sure the dev server is running and then visit the toc playground page `http://localhost:3000/toc_playground` in your browser. Then make sure you scroll to top and you will see that the plugin has created a **table of contents** for us, it has included the first the 3 levels of headings but excluded the level 4 heading as this is what we specified in the configuration (where we set the **maximum depth** option to 3), if you inspect the HTML code you will notice that it also added the **id** attribute to `<aside>{:html}` container as well as the **aria label** to the inner `<nav>{:html}` element
+
+> [!MORE]  
+> ["remark table of contents" README](https://github.com/chrisweb/remark-table-of-contents)  
+
+## Styling the table of contents
+
+To make the table of contents a little bit better looking, we are going to add the following CSS to our `global.css` file:
+
+```css title="/app/global.css" showLineNumbers{209}
+#articleToc {
+    width: 100%;
+    max-width: 400px;
+}
+
+#articleToc>nav {
+    position: sticky;
+    top: calc(var(--spacing) + 60px);
+}
+
+#articleToc ul {
+    list-style: none;
+}
+
+#articleToc ul:first-child {
+    padding-inline: 0;
+}
+```
+
+Lines 209 to 212: for the `<aside>{:html}` container that has the id **articleToc**, we set a width of 100% but also set the maximum width to 200px
+
+Lines 214 to 217: for the `<nav>{:html}` element (that is a child of the `<aside>{:html}` element), we set the position to sticky to make sure it is always visible (even when you scroll down, it stays on top)
+
+Lines 219 to 212: as the toc consists of `<ul>{:html}` and `<li>{:html}` list elements but we don't want to see the default [list markers](https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type) so we set the [list style](https://developer.mozilla.org/en-US/docs/Web/CSS/list-style) to none
+
+Lines 223 to 225: we remove the default padding from the `<ul>{:html}` that the browser adds, but we use the [:first-child](https://developer.mozilla.org/en-US/docs/Web/CSS/:first-child) pseudo class, to make sure we only target the first `<ul>{:html}` element (the other child `<ul>{:html}` elements need to keep their padding as this is used to create the stairs effect for the heading links)
+
+> [!TIP]  
+> If you have trouble making the [position](https://developer.mozilla.org/en-US/docs/Web/CSS/position) **sticky** work, know that when using **position sticky** 3 things are essential to make sure it works:
+>  
+> the 1st one is that the **parent** element (of element that you want to be sticky) should NOT have an **overflow** set (like for example `overflow: auto`)
+>  
+> the 2nd one is that you need to make sure you also specify at least one of the 4 properties **top**, **left**, **right** or **bottom** (for the element you want to be sticky), for example in the example above if we remove the **top** property then the `<nav>{:html}` element wouldn't be sticky anymore
+>  
+> the third one that is important is that you don't set the height (of element that you want to be sticky) to 100%, you need to define a height, what works however is to use the vh [CSS unit](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units) (viewport height), so for example if you want the sticky aside to be as tall as the page minus the header (that for example is 50px tall), then you could use something like this:
+>  
+> `height: calc(100vh - 50px);{:css}`
+
+> [!MORE]  
+> [MDN "CSS list style" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/list-style)  
+> [MDN "CSS :first-child" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/:first-child)  
+> [MDN "CSS position" documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/position)  
+
+## Highlight the toc link to the current heading
+
+You have probably seen this feature on websites like the [Next.js documentation](https://nextjs.org/docs) or [React.dev](https://react.dev/learn) where one link in the toc is being highlighted, but how can we add this to our own TOC
+
+Our goal in this chapter is to detect which heading is visible inside of the viewport and then highlight the corresponding link in the toc
+
+### Heading intersection observer hook
+
+To achieve that goal, we are going to use the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), as you can see on [caniuse the Intersection Observer API](https://caniuse.com/mdn-api_intersectionobserver) is well supported (except for IE 11)
+
+An easy way to use the **Intersection Observer API** is by creating a React **hook**, so first, we create a new `/hooks` folder in the root of the project (or inside the /src folder if this is how you configured Next.js)
+
+Then, inside our `/hooks` folder, we create a new `useIntersectionObserver.ts` hook file and add the following content:
+
+```ts title="/hooks/useIntersectionObserver.ts" showLineNumbers
+import { useEffect, useState, useRef } from 'react'
+
+const useIntersectionObserver = (querySelector: string, rootMargin: string, threshold: number) => {
+
+    const [activeIdState, setActiveIdState] = useState('')
+    const observerRef = useRef<IntersectionObserver | null>(null)
+
+    useEffect(() => {
+
+        const handleObserver = (entries: IntersectionObserverEntry[]) => {
+
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    setActiveIdState(entry.target.id)
+                }
+            })
+
+        }
+
+        if (typeof observerRef !== 'undefined') {
+
+            observerRef.current = new IntersectionObserver(handleObserver, {
+                rootMargin: rootMargin,
+                threshold: threshold,
+            })
+
+            const elements = document.querySelectorAll(querySelector)
+
+            elements.forEach((elem) => {
+                if (observerRef.current === null) return
+                observerRef.current.observe(elem)
+            })
+        }
+
+        return () => {
+            observerRef.current?.disconnect()
+        }
+
+    }, [querySelector, rootMargin, threshold])
+
+    return { activeIdState }
+
+}
+
+export default useIntersectionObserver
+```
+
+Line 5: we initialize a state. That state will hold the ID of the current heading that is visible in the viewport. When the state changes, the component using our hook will re-render; it is a fairly naive approach I agree, this plugin does not cover all cases, for example in some rare cases we could have two headings inside of the visible viewport but we still only highlight one, adding such features is not covered in this tutorial
+
+Line 6: we create a [Ref](https://react.dev/learn/referencing-values-with-refs) to store an instance of the **IntersectionObserver**, later line 33 in the cleanup function (that will get called when our component gets removed from DOM) inside of which we call the **Intersection Observer** [disconnect](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/disconnect) method to tell it to stop observing the DOM for visibility changes
+
+Lines 10 to 18: we create a handler for the **Intersection Observer**. When the **Intersection Observer** detects a visibility change, it will call our handler, which will then put the ID of the headline that becomes visible in the **activeIdState** we created line 5
+
+Lines 20 to 30: we create a new instance of the Intersection Observer (if none exists yet), we pass it two variables to specify what [rootMargin](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin) and [threshold](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/thresholds) we want it to use; then we also have some code to query the DOM and find all headings, each time we find one we tell the Intersection Observer to **observe** it
+
+> [!NOTE]  
+> the [rootMargin](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin) and [threshold](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/thresholds) are two values used to modify the area that the **Intersection Observer** is watching, by default it watches an area that is equal to the viewport dimensions
+>  
+> Using the **rootMargin** you can for example tell it to extend the area it is watching to the top, meaning it will detect elements even before they enter the viewport
+>  
+> the **threshold** can be used to tell the Intersection Observer how much of the element needs to be visible before it triggers, for example a threshold of 0.5 means that it will trigger as soon as there are more than 50% of the element that are visible (inside of the area that we are observing), there is a good [article on smashingmag titled "Building A Dynamic Header With Intersection Observer"](https://www.smashingmagazine.com/2021/07/dynamic-header-intersection-observer/) which has a bunch of examples with a lot of images to better understand how the **rootMargin** and **threshold** of the **Intersection Observer** work
+
+Next, we will create a tiny CSS Module containing the `.active` CSS class, which will be set on the highlighted link in our TOC.
+
+In the `/components` folder, create a new `toc` folder, and then in that folder, we create a new `highlight.module.css` file:
+
+```css title="/components/toc/highlight.module.css"
+.active {
+    color: white;
+}
+```
+
+All our active class does is change the link color to white (of course, feel free to adjust the CSS to your needs)
+
+Now that we have the CSS Module, we can create the component that will use the **useIntersectionObserver** hook we just created
+
+### Toc headings highlighting component
+
+In the same folder, we just added our CSS module, we now create a new `Highlight.tsx` component file:
+
+```tsx title="/components/toc/Highlight.tsx" showLineNumbers
+'use client'
+
+import useIntersectionObserver from '@/hooks/useIntersectionObserver'
+import type { FC, JSX, PropsWithChildren, ReactNode } from 'react'
+import { Children, cloneElement, isValidElement } from 'react'
+import styles from './highlight.module.css'
+
+interface IntersectionObserverProps {
+    headingsToObserve?: string
+    rootMargin?: string
+    threshold?: number
+}
+
+export type TocHighlightProps = PropsWithChildren<IntersectionObserverProps>
+
+interface ChildProps extends PropsWithChildren {
+    className?: string
+    href: string
+    children: ReactNode
+}
+
+type ValidAnchorElement = ReactNode & ChildProps
+
+const TocHighlight: FC<TocHighlightProps> = (props): JSX.Element => {
+
+    const { headingsToObserve, rootMargin, threshold, ...rest } = props
+
+    const tocHeadingsToObserve = headingsToObserve ?? 'h1, h2, h3'
+    const tocRootMargin = rootMargin ?? '-10% 0px -40% 0px'
+    const tocThreshold = threshold ?? 1
+
+    const children = Children.toArray(props.children)
+
+    function recursiveChildren(children: ReactNode[], activeIdState: string): ReactNode {
+
+        const newChildren = Children.map(children, (child) => {
+
+            let clonedChild: ReactNode = child
+
+            if (isValidElement<ValidAnchorElement>(child)) {
+
+                const children = Children.toArray(child.props.children)
+
+                clonedChild = cloneElement(
+                    child,
+                    { children: recursiveChildren(children, activeIdState) }
+                )
+
+                if ('href' in child.props) {
+
+                    const childProps = child.props
+
+                    if (childProps.href.substring(1) === activeIdState) {
+
+                        clonedChild = cloneElement(
+                            child,
+                            { className: styles.active }
+                        )
+
+                    }
+                }
+
+            }
+
+            return clonedChild
+        })
+
+        return newChildren
+
+    }
+
+    const { activeIdState } = useIntersectionObserver(tocHeadingsToObserve, tocRootMargin, tocThreshold)
+
+    return (
+        <>
+            <aside {...rest}>
+                {recursiveChildren(children, activeIdState)}
+            </aside>
+        </>
+    )
+}
+
+export default TocHighlight
+```
+
+Lines 8 to 12: we create an interface to strongly type our incoming props, which are the list of headings we want to observe, as well as the [rootMargin](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin) and the [threshold](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/thresholds), all three values will get passed to the hook as the **IntersectionObserver ** needs them
+
+Lines 14 to 18: we create an interface to strongly type the children of our toc
+
+Lines 23 to 27: we extract the variables we will pass to our hook from the props object and set default values to make it a "no configuration" component (meaning you can set any of the 3 values, but they are all optional)
+
+Line 29: we use React [Children](https://react.dev/reference/react/Children) to transform the children prop into a flat array of elements. By using [toArray](https://react.dev/reference/react/Children#children-toarray), we also make sure the children will always be an array of ReactNodes
+
+Lines 31 to 65: we create a function that will handle the main logic of this component:
+
+* we use the **map()** method to iterate the **array of children**. **map()** will then return a new array containing the modified children
+* inside the **map()** function, we check for each child if it is a **valid element** (and if not, we return the child as is)
+* then we check if the current child has children. If it does, we pass those again to our function, which ensures we will do a **recursive traversing** of our elements tree. Because the child’s  **children** are immutable, we use the React [cloneElement](https://react.dev/reference/react/cloneElement) to create a new child
+* finally, we check if the current child is an anchor element by checking if it has an `href` prop. If the child is one of the links of our toc, we use the href that points to the heading and remove the hash (first `#` character) to turn the href into a heading ID. We then compare if the ID from the href equals the ID of the heading currently visible in the viewport. If they match, we add the `.active` CSS class (from the CSS Module we just created and imported into this component) to the anchor element that we want to highlight
+
+Line 71: we call the **Intersection Observer hook** we created earlier. The hook will return an `activeIdState` state, meaning that if it detects a new heading becoming visible, it will set a new state value. The state gets returned to our component, and because it has changed, it triggers a re-rendering of our component.
+
+Lines 75 to 77: we create a new aside and pass the props from the original aside. Inside of the aside, we call our recursive function that will create a new children array (in which the active class got moved from one line element to another) 
+
+Finally, we can now use our component inside of our `mdx-components.tsx` file to replace the aside element that the toc has created by a new aside that will get generated by our component:
+
+```ts title="mdx-components.tsx" showLineNumbers {6} {28-49}
+import type { MDXComponents } from 'mdx/types'
+import BaseLink from '@/components/base/Link'
+import type { Route } from 'next'
+import BaseImage from '@/components/base/Image'
+import type { ImageProps } from 'next/image'
+import TocHighlight from '@/components/toc/Highlight'
+
+// This file allows you to provide custom React components
+// to be used in MDX files. You can import and use any
+// React component you want, including components from
+// other libraries.
+
+// This file is required to use MDX in `app` directory.
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+    return {
+        // Allows customizing built-in components, e.g. to add styling.
+        ul: ({ children, ...props }) => (
+            <ul className="listContainer" {...props}>
+                {children}
+            </ul>
+        ),
+        a: ({ children, href, ...props }) => (
+            <BaseLink href={href as Route} {...props}>
+                {children}
+            </BaseLink>
+        ),
+        img: (props) => (<BaseImage {...props as ImageProps} />),
+        aside: ({ children, ...props }) => {
+            const tocHighlightProps = {
+                headingsToObserve: 'h1, h2, h3',
+                rootMargin: '-5% 0px -50% 0px',
+                threshold: 1,
+                ...props
+            }
+            return (
+                <>
+                    {props.id === 'articleToc' ? (
+                        <TocHighlight {...tocHighlightProps}>
+                            {children}
+                        </TocHighlight>
+                    ) : (
+                        <aside {...props}>
+                            {children}
+                        </aside>
+                    )}
+                </>
+            )
+        },
+        ...components,
+    }
+}
+```
+
+Lines 32 to 53: we add new code to our `mdx-components.tsx` file. We use [conditional JSX rendering](https://react.dev/learn/conditional-rendering) to make sure that we only use the **TocHighlight** component if the current `<aside>{:html}` element is the one that has the `articleToc` ID attribute (this is the ID attribute we set when configuring the TOC in the Next.js configuration), if it is a regular `<aside>{:html}` element that does not have the `articleToc` ID attribute, then we just create an `<aside>{:html}` element with the initial props
+
+> [!TIP]  
+> If the switch between currently highlighted links and the previous one does not behave as you expect, then you need to adjust the values of the **rootMargin** and adapt them based on the dimensions of your pages, your header, and eventually the article itself
+
+Now is a good time to check the result of all the code we just added. First, make sure the dev server is running, and then visit the toc playground page `http://localhost:3000/toc_playground` in your browser. If it works as expected, it is probably also a good time to make another commit.
+
+Congratulations 🎉 you should now see a TOC on the right side of the article that always stays on top even when you scroll down, and in the list of links, one of them should always be highlighted based on the headline that is currently in the viewport
+
+If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+
+> [!MORE]  
+> [MDN "Intersection Observer API" documentation](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)  
+> [react.dev "JSX conditional rendering" documentation](https://react.dev/learn/conditional-rendering)  
+> [react.dev "custom hooks" documentation](https://react.dev/learn/reusing-logic-with-custom-hooks)  
+
+<Pagination
+    previous={{ label: 'Rehype slug plugin to add IDs to headings', href: '/web_development/tutorials/next-js-static-mdx-blog/headings-id-plugin' }}
+    next={{ label: 'GitHub flavored markdown plugin(s)', href: '/web_development/tutorials/next-js-static-mdx-blog/github-flavored-markdown-plugin' }}
+/>
+
+</article>

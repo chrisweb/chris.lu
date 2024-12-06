@@ -1,0 +1,604 @@
+---
+title: GitHub flavored markdown plugin - Tutorial
+description: GitHub flavored markdown plugin - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['GitHub', 'flavored', 'plugin', 'gfm', 'markdown', 'mdx', 'remark-gfm', 'next/mdx', 'remark']
+published: 2024-08-24T11:22:33.444Z
+modified: 2024-08-26T12:22:33.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/github-flavored-markdown-plugin
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
+
+# GitHub flavored markdown
+
+There is more than just one plugin related to GitHub markdown:
+
+* [the "remark-gfm" plugin](https://www.npmjs.com/package/remark-gfm)  
+* ["rehype-github" plugins](https://github.com/rehypejs/rehype-github)  
+
+There is the **remark-gfm plugin** which transforms GitHub Flavored Markdown (GFM) into HTML, the remark-gfm plugin will add the same features to your MDX pages that GitHub has introduced in their own GitHub Flavored Markdown (GFM), for example, it has support for **autolink literals**, **footnotes**, **strikethrough**, **markdown tables**, **tasklists**, ...
+
+There is also the **rehype "GitHub" plugins repository**, which lists a lot of plugins you can use to match how GitHub transforms markdown to HTML. Some are remark plugins like [remark-github-yaml-metadata](https://github.com/rehypejs/rehype-github/tree/main/packages/yaml-metadata), which you can use to display the frontmatter of every MDX page as table, but most are rehype plugins, like [rehype-github-color](https://github.com/rehypejs/rehype-github/tree/main/packages/color), which will add a color preview rectangle to your hex color codes, check out the repository for a complete list of plugins it has to offer
+
+> [!NOTE]  
+> If you are curious to know what GitHub uses on its website, have a look at the GitHub [cmark-gfm](https://github.com/github/cmark-gfm) repository, which is a fork of the CommonMark reference implementation, this does not contain everything GitHub is doing
+>  
+> For example, they transform quotes that start with a special alert type section (`[!ALERT_TYPE]`) into alerts ([Docusaurus](https://docusaurus.io/docs/markdown-features/admonitions) and [Gatsby](https://www.gatsbyjs.com/plugins/gatsby-remark-admonitions/) call them **admonitions**, some remark plugins on [npmjs](https://www.npmjs.com/search?q=callouts) call them **callouts**) and those alerts are not something the **remark-gfm** plugin supports, for that reason I created a rehype plugin called [rehype-github-alerts](https://www.npmjs.com/package/rehype-github-alerts) and I will show you how to use it in a bit
+
+> [!MORE]  
+> [npmjs.com "remark-gfm plugin" page](https://www.npmjs.com/package/remark-gfm)  
+> ["rehype-github plugins list" repository](https://github.com/rehypejs/rehype-github)  
+
+## Next.js 15 remark-gfm Rust alternative
+
+This is a reminder that earlier in this tutorial when we did the initial MDX setup, we disabled the [Next.js 15 Rust compiler](/web_development/tutorials/next-js-static-first-mdx-starterkit/nextjs-mdx-setup#nextjs-15-rust-compiler) (experimental) to be able to use plugins, and then we also saw that for the same reason [We can NOT use Turbopack (with MDX (remark or rehype) plugins)](/web_development/tutorials/next-js-static-first-mdx-starterkit/nextjs-mdx-setup#which-means-also-no-turbo-with-plugins)
+
+If this is the only plugin you plan to use, then you could use the next.config **mdxRs** option and set the **mdxType** to **gfm** instead of setting up the **remark-gfm** (javascript) plugin. This would enable the Rust Compiler for MDX and also add gfm flavored markdown support. Then you could enable the turbopack flag in the dev server command (by changing the `npm run dev` script in the **package.json** back to: `"dev": "next dev --turbopack"`)
+
+## GitHub flavored markdown (gfm) plugin
+
+By adding the [remark "GitHub Flavored Markdown" (GFM) plugin](https://www.npmjs.com/package/remark-gfm), we extend the syntax features provided by the original markdown with extensions for autolink literals, footnotes, strikethrough, tables, tasklists and some more. You may already know most of them from writing markdown in GitHub READMEs, Issues and comments and might have thought they were part of the base markdown syntax
+
+Installing and setting up the plugin is easy, as we will see in a bit, but if you want to know more about this plugin, then I recommend checking out their [remark-gfm](https://github.com/remarkjs/remark-gfm#install) repository, it has a README that has a well-written chapter about "what it is" and "what it does" as well as some examples and there you can also have a look at the previous releases list
+
+We first need to install the **remark-gfm** package by using the following command:
+
+```shell
+npm i remark-gfm --save-exact
+```
+
+Next, we edit our `next.config.mjs` configuration file to add the plugin to the `next/mdx` setup, like so:
+
+```js title="next.config.mjs" showLineNumbers {9} {46-49} {55} /[remarkGfm, remarkGfmOptions]/#special
+import { withSentryConfig } from '@sentry/nextjs';
+//import type { NextConfig } from 'next'
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+import createMdx from '@next/mdx'
+import rehypeMDXImportMedia from 'rehype-mdx-import-media'
+import rehypePrettyCode from 'rehype-pretty-code'
+import { readFileSync } from 'fs'
+import rehypeSlug from 'rehype-slug'
+import { remarkTableOfContents } from 'remark-table-of-contents'
+import remarkGfm from 'remark-gfm'
+
+const nextConfig = (phase/*: string*/) => {
+
+    const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
+    const themeFileContent = readFileSync(themePath, 'utf-8')
+
+    /** @type {import('rehype-pretty-code').Options} */
+    const rehypePrettyCodeOptions = {
+        theme: JSON.parse(themeFileContent),
+        keepBackground: false,
+        defaultLang: {
+            block: 'js',
+            inline: 'js',
+        },
+        tokensMap: {
+            fn: 'entity.name.function',
+            cmt: 'comment',
+            str: 'string',
+            var: 'entity.name.variable',
+            obj: 'variable.other.object',
+            prop: 'meta.property.object',
+            int: 'constant.numeric',
+        },
+    }
+
+    /** @type {import('remark-table-of-contents').IRemarkTableOfContentsOptions} */
+    const remarkTableOfContentsOptions = {
+        containerAttributes: {
+            id: 'articleToc',
+        },
+        navAttributes: {
+            'aria-label': 'table of contents'
+        },
+        maxDepth: 3,
+    }
+
+    const withMDX = createMdx({
+        extension: /\.mdx$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [remarkGfm, [remarkTableOfContents, remarkTableOfContentsOptions]],
+            rehypePlugins: [rehypeSlug, [rehypePrettyCode, rehypePrettyCodeOptions], rehypeMDXImportMedia],
+        },
+    })
+```
+
+Line 9: we import the **remark-gfm** plugin
+
+Lines 46 to 49: we add a configuration object for the plugin, we first add the options type from the package to have strictly typed options, there are few things we can configure, I will add an option I personally like to disable, and that is the **singleTilde** which I set to false, the reason why it is true by default is well explained in their [README](https://github.com/remarkjs/remark-gfm?tab=readme-ov-file#options) so I will just quote the official explanation here:
+
+> whether to support strikethrough with a single tilde; single tildes work on github.com but are technically prohibited by GFM; you can always use 2 or more tildes for strikethrough
+
+I personally always use two, so I don't need this feature (but if you prefer using one then don't set this option)
+
+Line 55: we add an array containing the **remarkGfm** plugin as well as the **remarkGfmOptions** options object (we just created) to the **rehypePlugins** array
+
+## GFM playground page
+
+Now that the plugin is installed, let's create some "GitHub Flavored Markdown" (GFM) examples using a new playground page
+
+First, go into the `/app/(tutorial_examples)` folder and then create a new `gfm_playground` folder
+
+Inside the `gfm_playground` folder, create a new `page.mdx` MDX page and add the following content:
+
+```md title="/app/(tutorial_examples)/gfm_playground/page.mdx" showLineNumbers
+<article>
+
+~~strikethrough~~
+
+Table:
+| Left    | Right   |
+| -------- | ------- |
+| Foo       | Bar |
+| ~~strikethrough~~ | 😃 |
+| `code` | [external link](https://google.com) |
+
+Autolink: https://www.example.com
+
+Tasklist:
+* [x] foo  
+* [ ] bar  
+
+</article>
+
+```
+
+We added some examples of new features that are now available:
+
+* like ~~strikethrough~~ text
+* a table, where the 1st row has text in both cells, the 2nd row has a strikethrough text and an emoji, and the 3rd row has inline code and a link
+* A link that automatically gets converted to an anchor element (automatic here means you don't need to use the regular markdown **link** syntax, it is enough to add a URL, and it gets automatically transformed into a link)  
+* A tasklist consisting of 2 tasks, the 1st one is checked the 2nd is unchecked
+
+> [!WARN]  
+> The remark-gfm tasklist feature is called tasklist for a reason
+>
+> What I mean by that is that the following syntax `[ ]` and `[x]` is NOT going to generate a checkbox:
+>  
+> ```md
+> [ ] a checkbox
+> ```
+>  
+> What will get you a gfm tasklist, is if you use the exact syntax that remark-gfm expects, which is a **list** of tasks:
+>
+> ```md
+> * [ ] a task
+> ```
+
+If you open the playground in the browser and inspect the HTML source, you will notice that by default all checkboxes are marked as disabled (this is a remark-gfm feature, NOT a bug)
+
+### Making GFM tasklists interactive
+
+It is, however, possible to customize the **checkboxes** of a **tasklist** using the `mdx-components.tsx` file that is in the root of our project:
+
+```tsx title="mdx-components.tsx" showLineNumbers {50-53}
+import type { MDXComponents } from 'mdx/types'
+import BaseLink from '@/components/base/Link'
+import type { Route } from 'next'
+import BaseImage from '@/components/base/Image'
+import type { ImageProps } from 'next/image'
+import TocHighlight from '@/components/toc/Highlight'
+
+// This file allows you to provide custom React components
+// to be used in MDX files. You can import and use any
+// React component you want, including components from
+// other libraries.
+
+// This file is required to use MDX in `app` directory.
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+    return {
+        // Allows customizing built-in components, e.g. to add styling.
+        ul: ({ children, ...props }) => (
+            <ul className="listContainer" {...props}>
+                {children}
+            </ul>
+        ),
+        a: ({ children, href, ...props }) => (
+            <BaseLink href={href as Route} {...props}>
+                {children}
+            </BaseLink>
+        ),
+        img: (props) => (<BaseImage {...props as ImageProps} />),
+        aside: ({ children, ...props }) => {
+            const tocHighlightProps = {
+                headingsToObserve: 'h1, h2, h3',
+                rootMargin: '-5% 0px -50% 0px',
+                threshold: 1,
+                ...props
+            }
+            return (
+                <>
+                    {props.id === 'articleToc' ? (
+                        <TocHighlight {...tocHighlightProps}>
+                            {children}
+                        </TocHighlight>
+                    ) : (
+                        <aside {...props}>
+                            {children}
+                        </aside>
+                    )}
+                </>
+            )
+        },
+        input: (props) => {
+            console.log(props)
+            return (<input {...props} />)
+        },
+        ...components,
+    }
+}
+```
+
+Lines 50 to 53: for any input element, we do a `console.log` to get an idea of what the props of an input element are
+
+If we now have the dev server running and reload the `http://localhost:3000/gfm_playground` page in our browser, we will see that in the VSCode terminal our `console.log` will print the following few lines:
+
+```shell
+{ type: 'checkbox', checked: true, disabled: true }
+{ type: 'checkbox', disabled: true }
+```
+
+As you can see, all checkboxes are **disabled**, this is the default behavior for remark-gfm tasklists
+
+### Removing the tasklist checkbox disabled attribute
+
+You might want to remove the `disabled` attribute, we can do that easily by using a destructuring assignment to remove the `disabled` attribute and put the remaining props into a new object that we then pass to a custom input element, like so:
+
+```tsx title="mdx-components.tsx" showLineNumbers{50} {50-55}
+input: (props) => {
+    console.log(props)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { disabled, ...newProps } = props
+    return (<input {...newProps} />)
+},
+```
+
+Lines 50 to 55: we add a comment to disable the eslint `@typescript-eslint/no-unused-vars` for the next line, as we won't use the `disabled` variable; we then use a destructuring assignment to split the original props into the disabled attribute and the remaining props; then we create a new input element and pass the remaining props
+
+> [!TIP]  
+> When you make changes to the `mdx-components.tsx` file, Next.js will not always instantly detect those changes and reload the project, the easiest trick I have found to make sure Next.js notices the changes, is to also to open the `next.config.mjs` configuration file and make a small change like adding a line break at the end, then save the Next.js configuration file, this will cause a reload of the project, which ensures your mdx-components changes get taken into account too
+
+However, if we remove the `disabled` attribute and start our dev server, we see that we get an error in the browser console:
+
+> Warning: You provided a `checked` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultChecked`. Otherwise, set either `onChange` or `readOnly`.
+
+So this message tells us that by removing `disabled` we have changed this checkbox from **read only** to a **mutable** checkbox. It tells us that we have NO `onChange` handler (which you should have if your checkbox is mutable) and that it is recommended to use `defaultChecked` to tell the checkbox if it should be checked or not when it gets rendered for the first time.
+
+### Checkbox react component
+
+In this chapter we will fix the warnings, by creating a custom React **checkbox component**
+
+Go into the `/components/base` folder, and then create a new `Checkbox.tsx` file with the following content:
+
+```tsx title="/components/base/Checkbox.tsx" showLineNumbers
+'use client'
+
+import { useState } from 'react'
+
+const BaseCheckbox: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = (props) => {
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { disabled, checked, ...newProps } = props
+
+    const [isChecked, setIsChecked] = useState(checked ? true : false)
+
+    const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(event.target.value)
+        setIsChecked((previous) => {
+            return !previous
+        })
+    }
+
+    return (<input onChange={changeHandler} defaultChecked={isChecked} {...newProps} value="test" />)
+
+}
+
+export default BaseCheckbox
+```
+
+Line 1: we first add the `'use client'` as our component will have an **onChange** handler and also because we will use React **state**
+
+Line 5: we create a component and use the types for an Input Element to make it strictly typed
+
+Line 8: we do the same thing we did in the mdx-components file, but we also extract the **checked** prop as we will need it for the initial value of our state
+
+Line 10: we create our **is checked** state, which will turn the component into a controlled checkbox component
+
+Lines 12 to 17: we create a basic **onChange** handler that will log the current value in the console and will update the state, the new state value will be the opposite of the previous value (if was true its now false and vice versa)
+
+Line 19: we create an input element of type checkbox and add all our attributes
+
+### mdx-components custom tasklist checkbox
+
+Now that we have our custom **checkbox component**, we can start using it in the `mdx-components.tsx` file, like so:
+
+```tsx title="mdx-components.tsx" showLineNumbers {7} {51}
+import type { MDXComponents } from 'mdx/types'
+import BaseLink from '@/components/base/Link'
+import type { Route } from 'next'
+import BaseImage from '@/components/base/Image'
+import type { ImageProps } from 'next/image'
+import TocHighlight from '@/components/toc/Highlight'
+import BaseCheckbox from '@/components/base/Checkbox'
+
+// This file allows you to provide custom React components
+// to be used in MDX files. You can import and use any
+// React component you want, including components from
+// other libraries.
+
+// This file is required to use MDX in `app` directory.
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+    return {
+        // Allows customizing built-in components, e.g. to add styling.
+        ul: ({ children, ...props }) => (
+            <ul className="listContainer" {...props}>
+                {children}
+            </ul>
+        ),
+        a: ({ children, href, ...props }) => (
+            <BaseLink href={href as Route} {...props}>
+                {children}
+            </BaseLink>
+        ),
+        img: (props) => (<BaseImage {...props as ImageProps} />),
+        aside: ({ children, ...props }) => {
+            const tocHighlightProps = {
+                headingsToObserve: 'h1, h2, h3',
+                rootMargin: '-5% 0px -50% 0px',
+                threshold: 1,
+                ...props
+            }
+            return (
+                <>
+                    {props.id === 'articleToc' ? (
+                        <TocHighlight {...tocHighlightProps}>
+                            {children}
+                        </TocHighlight>
+                    ) : (
+                        <aside {...props}>
+                            {children}
+                        </aside>
+                    )
+                    }
+                </>
+            )
+        },
+        input: (props) => props?.type === 'checkbox' ? (<BaseCheckbox {...props} />) : (<input {...props} />),
+        ...components,
+    }
+}
+```
+
+Line 7: we import our checkbox component
+
+Line 51: we remove the previous code, then we add a function that checks if it the input field is of type checkbox, if it is we use our checkbox component and if it is NOT we just create a default input and pass the original props to it
+
+Of course, depending on your needs, what you would do now is update the **BaseCheckbox** onChange handler with some code to do something useful based on your needs, like for example, add code that uses a POST request to send some data to the server or add code that updates a value in the localstorage of the user's browser
+
+There is only problem though with this solution, the checkboxes have no **name** or **ID**, so you might want edit the HTML that gets rendered for a tasklist or switch to a completely different plugin that has more of the features you need. A very good read at this point is this ["HtmlExtension" chapter](https://github.com/micromark/micromark?tab=readme-ov-file#htmlextension) in the micromark readme
+
+> [!MORE]  
+> [GitHub "remark-gfm" repository](https://github.com/remarkjs/remark-gfm)  
+> [npmjs.com "remark-gfm" page](https://www.npmjs.com/package/remark-gfm)  
+> [GitHub "GFM markdown formatting" documentation](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)  
+
+## remark-gfm Footnotes
+
+The footnotes are a bit more complex to use than the other remark-gfm features, which is why I decided to create a separate chapter just for them
+
+I also recommend you have a look at the [footnotes issues list](https://github.com/micromark/micromark-extension-gfm-footnote?tab=readme-ov-file#bugs) that got added to the footnotes README, as those answer some of the questions you might have when you start using the footnotes
+
+First, let's go back into our playground file and add a simple notes example:
+
+```md title="/app/(tutorial_examples)/gfm_playground/page.mdx" showLineNumbers {18-19}
+<article>
+
+~~strikethrough~~
+
+Table:
+| Left    | Right   |
+| -------- | ------- |
+| Foo       | Bar |
+| ~~strikethrough~~ | 😃 |
+| `code` | [external link](https://google.com) |
+
+Autolink: https://www.example.com
+
+Tasklist:
+* [x] foo  
+* [ ] bar  
+
+Example text with a note.[^1]  
+[^1]: This is the text of the note, [it can be a link too](https://www.example.com)  
+
+</article>
+
+```
+
+Lines 18 to 19: we add an example for footnotes
+
+If you launch the dev server and then open the playground URL `http://localhost:3000/gfm_playground` in your browser, you will notice that there are a few things that are not great
+
+First, our footnotes appear on the right, which is because our **main** element (in our layout) uses `display: flex` and the default **flex direction** is **row**, which was great for our table of contents but NOT for the footnotes, which we want to have on the bottom and not the right side
+
+The footnotes don't use a placeholder as does the TOC to place them anywhere in the document, this is because they are supposed always to be placed at the end of the page, there is even a linting rule [remark-lint-final-definition](https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-final-definition) to make sure definitions are at the end
+
+So, to change the footnotes from being on the right side to being on the bottom, we need to add a bit of HTML and CSS to our project
+
+Let's start by adding a new HTML container element to our playground:
+
+```md title="/app/(tutorial_examples)/gfm_playground/page.mdx" showLineNumbers {1} {25}
+<div id="core">
+
+<article>
+
+~~strikethrough~~
+
+Table:
+| Left    | Right   |
+| -------- | ------- |
+| Foo       | Bar |
+| ~~strikethrough~~ | 😃 |
+| `code` | [external link](https://google.com) |
+
+Autolink: https://www.example.com
+
+Tasklist:
+* [x] foo  
+* [ ] bar  
+
+Example text with a note.[^1]  
+[^1]: This is the text of the note, [it can be a link too](https://www.example.com)  
+
+</article>
+
+</div>
+
+```
+
+Line 1: we add our **core** container div
+
+Line 25: we close the div
+
+Next, we edit our `global.css` stylesheet to add the [flex-direction](https://developer.mozilla.org/en-US/docs/Web/CSS/flex-direction) CSS property:
+
+```css title="/app/global.css" showLineNumbers{49} {3}
+main {
+    display: flex;
+    flex-direction: column;
+    max-width: var(--maxWidth);
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: calc(var(--spacing) * 4);
+}
+```
+
+Line 51: we add `flex-direction` and set it to `column`
+
+If you launch the dev server and then open the playground URL `http://localhost:3000/gfm_playground` in your browser, you will notice that the footnotes are now at the bottom where they should be
+
+> [!NOTE]  
+> Footnotes can be further customized, but the options to do that are not part of the [gfm options](https://github.com/remarkjs/remark-gfm?tab=readme-ov-file#options), instead you need to edit the [remark-rehype options](https://github.com/remarkjs/remark-rehype?tab=readme-ov-file#options), which is because **remark-rehype** is where the logic for the footnotes resides  
+
+### Footnotes label(s)
+
+In the following example, we are going to change the label that is being used in the footnotes at the bottom, and we will change the element used for the footnotes label
+
+```js title="next.config.mjs" showLineNumbers {57-60}
+import { withSentryConfig } from '@sentry/nextjs';
+//import type { NextConfig } from 'next'
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+import createMdx from '@next/mdx'
+import rehypeMDXImportMedia from 'rehype-mdx-import-media'
+import rehypePrettyCode from 'rehype-pretty-code'
+import { readFileSync } from 'fs'
+import rehypeSlug from 'rehype-slug'
+import { remarkTableOfContents } from 'remark-table-of-contents'
+import remarkGfm from 'remark-gfm'
+
+const nextConfig = (phase/*: string*/) => {
+
+    const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
+    const themeFileContent = readFileSync(themePath, 'utf-8')
+
+    /** @type {import('rehype-pretty-code').Options} */
+    const rehypePrettyCodeOptions = {
+        theme: JSON.parse(themeFileContent),
+        keepBackground: false,
+        defaultLang: {
+            block: 'js',
+            inline: 'js',
+        },
+        tokensMap: {
+            fn: 'entity.name.function',
+            cmt: 'comment',
+            str: 'string',
+            var: 'entity.name.variable',
+            obj: 'variable.other.object',
+            prop: 'meta.property.object',
+            int: 'constant.numeric',
+        },
+    }
+
+    /** @type {import('remark-table-of-contents').IRemarkTableOfContentsOptions} */
+    const remarkTableOfContentsOptions = {
+        containerAttributes: {
+            id: 'articleToc',
+        },
+        navAttributes: {
+            'aria-label': 'table of contents'
+        },
+        maxDepth: 3,
+    }
+
+    const withMDX = createMdx({
+        extension: /\.mdx$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [remarkGfm, [remarkTableOfContents, remarkTableOfContentsOptions]],
+            rehypePlugins: [rehypeSlug, [rehypePrettyCode, rehypePrettyCodeOptions], rehypeMDXImportMedia],
+            remarkRehypeOptions: {
+                footnoteLabel: 'Notes',
+                footnoteLabelTagName: 'span',
+            },
+        },
+    })
+```
+
+Lines 57 to 60: we add the options for the footnotes to the **remarkRehypeOptions** object and NOT (as one might assume) to the **remarkGfmOptions** object (which is at lines 47 to 49)
+
+If you launch the dev server then open the playground URL `http://localhost:3000/gfm_playground` in your browser, you will notice that the footnotes label changed from the default "Footnotes" to "Notes" (this can be useful if you have a website that has content in multiple languages and you want to translate the label), then we also changed the element of the label (which by default is a `<h2>{:html}`) to a `<span>{:html}`
+
+Congratulations 🎉 you just added GitHub-flavored markdown support to your project and learned how to use the mdx-components file to make tasklists dynamic using your custom checkbox component
+
+If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+
+> [!MORE]  
+> ["footnotes bug list" in the micromark-extension-gfm-footnote readme](https://github.com/micromark/micromark-extension-gfm-footnote?tab=readme-ov-file#bugs)  
+> ["remark-gfm options" in the remark-gfm readme](https://github.com/remarkjs/remark-gfm?tab=readme-ov-file#options)  
+> ["remark-rehype options" in the remark-rehype readme](https://github.com/remarkjs/remark-rehype?tab=readme-ov-file#options)  
+
+<Pagination
+    previous={{ label: 'Table of contents (TOC) plugin', href: '/web_development/tutorials/next-js-static-mdx-blog/table-of-contents-plugin' }}
+    next={{ label: 'GitHub-like alerts using the rehype-github-alerts plugin', href: '/web_development/tutorials/next-js-static-mdx-blog/github-like-alerts-plugin' }}
+/>
+
+</article>
