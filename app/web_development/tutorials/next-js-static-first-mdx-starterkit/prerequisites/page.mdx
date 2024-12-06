@@ -46,60 +46,46 @@ export const metadata = {
 
 # Prerequisites
 
-> [!NOTE]  
-> The Next.js static MDX website **Prerequisites** chapter is for beginners
->  
-> For example, if you already have a GitHub account, then you can skip that step, or if you prefer to install another IDE than the one I suggest, then feel free to do so
+This **Prerequisites** chapter is a **checklist** to make sure everyone has the development tools we will use to build our MDX static first starterkit
 
-First, we need a **GitHub account** to store our code in a GitHub repository (if you prefer to use another service like [GitLab](https://about.gitlab.com/) or [Bitbucket](https://bitbucket.org/), feel free to do so), having our code on GitHub will make it easy to access our code on multiple devices, it will serve as a backup in case something happens to our local copy and it will also allow us to share our code with others (in the future)
+Every tool I recommend can be replaced by an alternative, I will recommend some tools as I will use them in this tutorial, but each of these tools has alternatives, so if you prefer to install another IDE than the one I suggest, then feel free to do so, or if you already have a GitHub account, then you can of course skip that step
 
-Later on, we will use GitHub to sign in to services like Vercel.com, which we will use to set up an automatic CI/CD pipeline that will automatically deploy our code. To sign up for a Sentry.io account which we will use for error monitoring so that when a user encounters a bug, it gets listed with a stack trace in Sentry.io.
+## GitHub user and repository
 
-* [create a GitHub account](/web_development/posts/github)
+First, we need a **GitHub user account** to store our code in a GitHub repository (if you prefer to use another service like [GitLab](https://about.gitlab.com/) or [Bitbucket](https://bitbucket.org/), feel free to do so)
+
+Having our code on GitHub will make it easy to access our code on multiple devices, it will serve as a backup in case something happens to our local copy and it will also allow us to share our code with others (in the future)
+
+I have a separate GitHub post, it contains a guide about how to [create a GitHub account](/web_development/posts/github)
 
 After creating a GitHub account, we need to **create a repository** on GitHub for our Code:
 
 > [!NOTE]  
 > Use a name you like for the repository, how you name your repository has no impact on the project
 
-* [create a new GitHub repository](/web_development/posts/github#create-a-repository)
+[create a new GitHub repository](/web_development/posts/github#create-a-repository)
 
-Next, we need to **install git**, which is a version control tool that VSCode will use to synchronize our local code with our remote repository:
+## Local development tools
 
-* [install git](/web_development/posts/git)
+First, we will **install git**, which is a version control tool we will use to synchronize our local code with our remote repository, check out the git post chapter about how to [install git](/web_development/posts/git) if needed.
 
-Next, to be able to write code, we need an Integrated Development Environment (IDE)
+Next, to be able to write code, we need an Integrated Development Environment (IDE). My preferred IDE to write Javascript (Typescript) code is VSCode (Visual Studio Code), in a future chapter we will also install useful VSCode extensions. Have a look at the [install VSCode](/web_development/posts/vscode) guide in the VSCode post, and while you are in the VSCode post I recommend you also sign in to our GitHub account in VSCode, as described in the [Turn on settings sync (using your GitHub account)](/web_development/posts/vscode#turn-on-settings-sync-using-your-github-account) chapter, to sync our VSCode settings (in the GitHub cloud as a backup and so that you can use the same settings on different devices)
 
-My preferred IDE to write Javascript (Typescript) code is VSCode (Visual Studio Code):
-
-* [install VSCode](/web_development/posts/vscode)
-
-Now we need to sign in to our GitHub account in VSCode and use the VSCode source control tool to make a local clone of our GitHub repository:
-
-* [clone GitHub repository in VSCode](/web_development/posts/vscode#cloning-your-github-repository-in-vscode)
-
-To be able to create a Javascript backend and run our Javascript code locally, we need to install the Node.js runtime (which comes with npm which we will use to manage our node_modules packages):
-
-* [install Node.js (and npm)](/web_development/posts/node-js)
+Next to be able to create a Javascript backend and run our Javascript code locally, we need to install the Node.js runtime (which comes with npm which we will use to manage our node_modules packages), have a look at the [install Node.js (and npm)](/web_development/posts/node-js) chapter in the Node.js post, or if you prefer you can use a [Node.js alternative](/web_development/posts/node-js#nodejs-alternatives) as there are several good ones available today
 
 > [!NOTE]  
 > The **Next.js 14** "app directory features" require Node.js v18.17 or later, so if you skipped the Node.js installation document because you already have Node.js installed, then just make sure you have a version installed that is high enough
 >  
 > To check what version is currently installed, you can use following command: `node -v`
 
-## The road to React 19 and Next.js 15
+Node.js will also install npm for us, which is what I will use in this tutorial to install packages, but there are several [npm alternatives](/web_development/posts/npm#npm-alternatives) available if you prefer to use one of them (after all, all we will do is install packages, so all you need to do is adapting the command based on what tool you use)
 
-React and Next.js have evolved a lot lately 🚀
+## Local repository clone
 
-The most notable additions are **server components**, **(server / client) actions**, the **React compiler** and several new **hooks**. With those new features came a lot of changes for how we devs build Next.js apps/websites, which is why I did a separate blog post ["The road to React 19 and Next.js 15"](/web_development/posts/road-to-react-19-next-js-15) where I list what changed during the last +-3 years in the React and Next.js ecosystem
-
-If you have not built a project with Next.js 14/15 and React 19 yet, and want to catch up with all the new features that got added lately both in React and Next.js, then I recommend you check it out, but if you are already an expert, feel free to skip it 😉
-
-> [!MORE]  
-> [chris.lu "The road to React 19 and Next.js 15" post](/web_development/posts/road-to-react-19-next-js-15)  
+Now that our IDE is ready, we will use the VSCode source control features to make a local clone of the GitHub (GitLab, Bitbucket, ...) repository we just created, have a look at the [clone GitHub repository in VSCode](/web_development/posts/vscode#cloning-your-github-repository-in-vscode) chapter from the VSCode post for several options to do so using the [git command to clone a repository](/web_development/posts/git#cloning-a-repository) in the VSCode terminal or your preferred command line tool
 
 <Pagination
-    previous={{ label: 'Introduction', href: '/web_development/tutorials/next-js-static-mdx-blog/introduction' }}
+    previous={{ label: 'Introduction', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/introduction' }}
     next={{ label: 'Project setup and first commit', href: '/web_development/tutorials/next-js-static-mdx-blog/project-setup-using-CNA-and-first-commit' }}
 />
 
