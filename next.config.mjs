@@ -285,6 +285,13 @@ const securityHeadersConfig = (phase) => {
         // reporting uri (CSP v1)
         const reportCSPViolations = `report-uri ${reportingUrl};`
 
+        // I wanted to add the trusted-types directive to the defaultCSPDirectives:
+        // require-trusted-types-for 'script';
+        // unfortunately because of fontawesome this is not possible (yet)
+        // https://github.com/FortAwesome/Font-Awesome/issues/20001
+        // I think that even if fontawesome would support it
+        // it would not work with the current version of next.js
+
         // worker-src is for sentry replay
         // child-src is because safari <= 15.4 does not support worker-src
         const defaultCSPDirectives = `
@@ -299,11 +306,6 @@ const securityHeadersConfig = (phase) => {
             frame-ancestors 'none';
             ${upgradeInsecure}
         `
-
-        // I wanted to add:
-        // require-trusted-types-for 'script';
-        // unfortunately because of fontawesome this is not possible (yet)
-        // https://github.com/FortAwesome/Font-Awesome/issues/20001
 
         // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
         // and whitelist vercel's domains based on:
