@@ -130,9 +130,9 @@ Line 57: we add the **rehypeGithubAlerts** plugin to our rehype plugins configur
 
 ## Rehype github alerts in action
 
-The plugin is now ready to be used, so we can now add some examples to our playground:
+The plugin is now ready to be used, so we can now add some github alerts examples to our playground:
 
-```md title="/app/(tutorial_examples)/gfm_playground/page.mdx" showLineNumbers {23-36}
+```md title="/app/(tutorial_examples)/gfm_playground/page.mdx" showLineNumbers {23-36} {38}
 <div id="core">
 
 <article>
@@ -153,7 +153,6 @@ Tasklist:
 * [ ] bar  
 
 Example text with a note.[^1]  
-[^1]: This is the text of the note, [it can be a link too](https://www.example.com)  
 
 > [!NOTE]  
 > Highlights information that users should take into account, even when skimming.
@@ -170,11 +169,17 @@ Example text with a note.[^1]
 > [!CAUTION]  
 > Negative potential consequences of an action.
 
+[^1]: This is the text of the note, [it can be a link too](https://www.example.com)  
+
 </article>
 
 </div>
 
 ```
+
+Lines X to X: We added an example note, a tip, an important alert, a warning and a caution, those are the 5 types of alerts that GitHub supports
+
+Line X: We also moved the footnote definition the bottom as it is mandatory that the footnote definition is placed after the last content (you will also get a [remark-lint-final-definition](https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-final-definition) warning if you don't place the footnotes definitions last)
 
 > [!NOTE]  
 > If you get the following linting error for what is between the square brackets (`[]`):  
