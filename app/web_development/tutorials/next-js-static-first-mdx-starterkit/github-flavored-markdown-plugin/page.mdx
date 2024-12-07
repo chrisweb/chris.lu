@@ -151,6 +151,60 @@ I personally always use two, so I don't need this feature (but if you prefer usi
 
 Line 55: we add an array containing the **remarkGfm** plugin as well as the **remarkGfmOptions** options object (we just created) to the **rehypePlugins** array
 
+## GitHub flavored markdown (gfm) linting
+
+Now that we have added GitHub flavored markdown (gfm) support to our project we also want to make sure our **linting** supports gfm
+
+We will do this by adding the remark-gfm plugin to the remark-lint configuration:
+
+```js title=".remarkrc.mjs" showLineNumbers {14-15} {19-20}
+// presets imports
+import remarkPresetLintRecommended from 'remark-preset-lint-recommended'
+import remarkPresetLintConsistent from 'remark-preset-lint-consistent'
+import remarkPresetLintMarkdownStyleGuide from 'remark-preset-lint-markdown-style-guide'
+
+// rules imports
+import remarkLintMaximumHeadingLength from 'remark-lint-maximum-heading-length'
+import remarkLintUnorderedListMarkerStyle from 'remark-lint-unordered-list-marker-style'
+import remarkLintNoUndefinedReferences from 'remark-lint-no-undefined-references'
+import remarkLintLinkTitleStyle from 'remark-lint-link-title-style'
+import remarkLintMaximumLineLength from 'remark-lint-maximum-line-length'
+import remarkLintListItemSpacing from 'remark-lint-list-item-spacing'
+
+// remark plugins
+import remarkGfm from 'remark-gfm'
+
+const config = {
+    plugins: [
+        // first the plugins
+        remarkGfm,
+        // then the presets
+        remarkPresetLintRecommended,
+        remarkPresetLintConsistent,
+        remarkPresetLintMarkdownStyleGuide,
+        // and finally the rules customizations
+        // https://www.npmjs.com/package/remark-lint-maximum-heading-length
+        [remarkLintMaximumHeadingLength, [1, 100]],
+        // https://www.npmjs.com/package/remark-lint-unordered-list-marker-style
+        [remarkLintUnorderedListMarkerStyle, 'consistent'],
+        // https://www.npmjs.com/package/remark-lint-no-undefined-references
+        [remarkLintNoUndefinedReferences, { allow: ['!NOTE', '!TIP', '!IMPORTANT', '!WARNING', '!CAUTION', ' ', 'x'] }],
+        // https://www.npmjs.com/package/remark-lint-link-title-style
+        [remarkLintLinkTitleStyle, '\''],
+        // https://www.npmjs.com/package/remark-lint-maximum-line-length
+        [remarkLintMaximumLineLength, false],
+        // https://www.npmjs.com/package/remark-lint-list-item-spacing
+        [remarkLintListItemSpacing, false],
+    ]
+}
+
+export default config
+```
+
+This update will make sure that rules like [remark-lint-table-pipe-alignment](https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-table-pipe-alignment) (which checks if your table cell dividers are aligned) get applied
+
+Another example is footnotes, as adding the remark-gfm plugin makes sure that footnotes get linted correctly, without it you would get warnings from the [remark-lint-no-undefined-references](https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-undefined-references) rule
+
 ## GFM playground page
 
 Now that the plugin is installed, let's create some "GitHub Flavored Markdown" (GFM) examples using a new playground page
