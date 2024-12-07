@@ -107,7 +107,6 @@ const securityHeadersConfig = (phase: string) => {
             manifest-src 'self';
             base-uri 'none';
             form-action 'none';
-            require-trusted-types-for 'script';
             frame-ancestors 'none';
             ${upgradeInsecure}
         `
@@ -320,7 +319,6 @@ const securityHeadersConfig = (phase: string) => {
             manifest-src 'self';
             base-uri 'none';
             form-action 'none';
-            require-trusted-types-for 'script';
             frame-ancestors 'none';
             ${upgradeInsecure}
         `
@@ -412,6 +410,21 @@ Line 75 and 90: we add the **reportCSPViolations** variable, which contains a re
 > [!MORE]  
 > [Sentry.io "CSP violations logging" documentation](https://docs.sentry.io/product/security-policy-reporting/)  
 > [chris.lu "Sentry.io" post](/web_development/posts/sentry-io)  
+
+#### require-trusted-types-for
+
+The [require-trusted-types-for](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/require-trusted-types-for) directive is a very powerful directive:
+
+> The HTTP Content-Security-Policy (CSP) require-trusted-types-for Experimental directive instructs user agents to control the data passed to DOM XSS sink functions, like Element.innerHTML setter.
+
+However I have it almost always turned off (in my side projects) as a lot of packages are incompatible with this directive and your browser console will get flooded with errors:
+
+> 
+
+I recommend to give it a try and to turn the **require-trusted-types-for** directive **on**, maybe start with your preview environment and then if there are no violations add it to your production builds, hopefully with your stack you won't have to disable it
+
+> [!MORE]  
+> [MDN "require-trusted-types-for directive" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/require-trusted-types-for)  
 
 ## Adding security headers
 
