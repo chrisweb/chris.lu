@@ -214,6 +214,13 @@ This update will make sure that rules like [remark-lint-table-pipe-alignment](ht
 
 Another example is footnotes, as adding the remark-gfm plugin makes sure that footnotes get linted correctly, without it you would get warnings from the [remark-lint-no-undefined-references](https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-undefined-references) rule
 
+If can now run the linting process (`npm run lint`) and should not get any warnings related to gfm
+
+> [!TIP]  
+> you might want to [clear the ESLint cache](/web_development/tutorials/next-js-static-mdx-blog/linting-mdx-using-remark-lint#clearing-the-eslint-cache) to make sure the previous setup is not cached
+>  
+> you should also NOT have any warnings in VSCode (if you do have gfm related warnings then you might have to [restart the ESLint server](/web_development/tutorials/next-js-static-mdx-blog/linting-using-vscode-and-extensions#restarting-the-eslint-server-in-vscode) in VSCode to update the linting process)
+
 ## GFM playground page
 
 Now that the plugin is installed, let's create some "GitHub Flavored Markdown" (GFM) examples using a new playground page
