@@ -195,11 +195,20 @@ const config = {
         [remarkLintMaximumLineLength, false],
         // https://www.npmjs.com/package/remark-lint-list-item-spacing
         [remarkLintListItemSpacing, false],
+        // https://www.npmjs.com/package/remark-lint-no-literal-urls
+        // disable rule as we have gfm autolink support
+        [remarkLintNoLiteralUrls, false],
     ]
 }
 
 export default config
 ```
+
+Line X: we import the gfm plugin
+
+Line X: we add the gfm plugin to the linting config
+
+Line X: we disable the [remark-lint-list-item-spacing](https://www.npmjs.com/package/remark-lint-list-item-spacing) rule as we now have **gfm autolink** support enabled
 
 This update will make sure that rules like [remark-lint-table-pipe-alignment](https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-table-pipe-alignment) (which checks if your table cell dividers are aligned) get applied
 
@@ -489,11 +498,11 @@ First, let's go back into our playground file and add a simple notes example:
 ~~strikethrough~~
 
 Table:
-| Left    | Right   |
-| -------- | ------- |
-| Foo       | Bar |
-| ~~strikethrough~~ | 😃 |
-| `code` | [external link](https://google.com) |
+| Left              | Right                               |
+| --------          | -------                             |
+| Foo               | Bar                                 |
+| ~~strikethrough~~ | 😃                                  |
+| `code`            | [external link](https://google.com) |
 
 Autolink: https://www.example.com
 
