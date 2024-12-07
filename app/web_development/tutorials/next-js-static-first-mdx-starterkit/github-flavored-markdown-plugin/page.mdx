@@ -4,7 +4,7 @@ description: GitHub flavored markdown plugin - Next.js static MDX blog | www.chr
 keywords: ['GitHub', 'flavored', 'plugin', 'gfm', 'markdown', 'mdx', 'remark-gfm', 'next/mdx', 'remark']
 published: 2024-08-24T11:22:33.444Z
 modified: 2024-08-26T12:22:33.444Z
-permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/github-flavored-markdown-plugin
+permalink: https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit/github-flavored-markdown-plugin
 section: Web development
 ---
 
@@ -165,11 +165,11 @@ Inside the `gfm_playground` folder, create a new `page.mdx` MDX page and add the
 ~~strikethrough~~
 
 Table:
-| Left    | Right   |
-| -------- | ------- |
-| Foo       | Bar |
-| ~~strikethrough~~ | 😃 |
-| `code` | [external link](https://google.com) |
+| Left              | Right                               |
+| --------          | -------                             |
+| Foo               | Bar                                 |
+| ~~strikethrough~~ | 😃                                  |
+| `code`            | [external link](https://google.com) |
 
 Autolink: https://www.example.com
 
@@ -188,20 +188,21 @@ We added some examples of new features that are now available:
 * A link that automatically gets converted to an anchor element (automatic here means you don't need to use the regular markdown **link** syntax, it is enough to add a URL, and it gets automatically transformed into a link)  
 * A tasklist consisting of 2 tasks, the 1st one is checked the 2nd is unchecked
 
-> [!WARN]  
-> The remark-gfm tasklist feature is called tasklist for a reason
->
-> What I mean by that is that the following syntax `[ ]` and `[x]` is NOT going to generate a checkbox:
->  
-> ```md
-> [ ] a checkbox
-> ```
->  
-> What will get you a gfm tasklist, is if you use the exact syntax that remark-gfm expects, which is a **list** of tasks:
->
-> ```md
-> * [ ] a task
-> ```
+## remark-gfm tasklists
+
+The remark-gfm tasklist feature is called tasklist for a reason
+
+What I mean by that is that the following syntax `[ ]` and `[x]` is NOT going to generate a checkbox:
+
+```md
+[ ] a checkbox
+```
+
+What will get you a gfm tasklist, is if you use the exact syntax that remark-gfm expects, which is a **list** of tasks:
+
+```md
+* [ ] a task
+```
 
 If you open the playground in the browser and inspect the HTML source, you will notice that by default all checkboxes are marked as disabled (this is a remark-gfm feature, NOT a bug)
 
@@ -473,11 +474,11 @@ Let's start by adding a new HTML container element to our playground:
 ~~strikethrough~~
 
 Table:
-| Left    | Right   |
-| -------- | ------- |
-| Foo       | Bar |
-| ~~strikethrough~~ | 😃 |
-| `code` | [external link](https://google.com) |
+| Left              | Right                               |
+| --------          | -------                             |
+| Foo               | Bar                                 |
+| ~~strikethrough~~ | 😃                                  |
+| `code`            | [external link](https://google.com) |
 
 Autolink: https://www.example.com
 
