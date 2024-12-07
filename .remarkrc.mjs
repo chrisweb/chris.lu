@@ -10,15 +10,21 @@ import remarkLintNoUndefinedReferences from 'remark-lint-no-undefined-references
 import remarkLintLinkTitleStyle from 'remark-lint-link-title-style'
 import remarkLintMaximumLineLength from 'remark-lint-maximum-line-length'
 import remarkLintListItemSpacing from 'remark-lint-list-item-spacing'
+
+// remark plugins
+import remarkGfm from 'remark-gfm'
 import remarkFrontmatter from 'remark-frontmatter'
 
 const config = {
     plugins: [
-        // presets
+        // first the plugins
+        remarkGfm,
+        remarkFrontmatter,
+        // then the presets
         remarkPresetLintRecommended,
         remarkPresetLintConsistent,
         remarkPresetLintMarkdownStyleGuide,
-        // rules
+        // and finally the rules customizations
         // https://www.npmjs.com/package/remark-lint-maximum-heading-length
         [remarkLintMaximumHeadingLength, [1, 100]],
         // https://www.npmjs.com/package/remark-lint-unordered-list-marker-style
