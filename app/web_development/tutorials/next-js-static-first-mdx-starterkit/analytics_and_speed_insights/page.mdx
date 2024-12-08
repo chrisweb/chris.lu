@@ -242,17 +242,15 @@ To see your **Speed Insights** in action, login to your Vercel account, click on
 > [Vercel "Speed Insights" quickstart](https://vercel.com/docs/speed-insights/quickstart)  
 > [Vercel "Speed Insights Configuration" documentation](https://vercel.com/docs/speed-insights/package)  
 
-## CSP directives update
+## How to fix TrustedScript errors
 
-If you use either Vercel Analytics or Speed Insights and have added the CSP header as described in the [Adding CSP Headers in Next.js configuration](/web_development/tutorials/next-js-static-mdx-blog/content-security-policy#adding-csp-headers-in-nextjs-configuration) chapter, then you will have to make a few adjustments to your configuration
-
-Edit your `next.config.mjs` file, and then in the `defaultCSPDirectives` variable, remove the `require-trusted-types-for 'script'` directive out
-
-If this directive is enabled, you will get the following errors in your browser console:
+If the CSP **trusted-types** directive is in use, then you will get the following errors in your browser console:
 
 ```shell
 This document requires 'TrustedScriptURL' assignment.
 ```
+
+Which is why you need to remove the directive from your CSP header, to do so edit your `next.config.mjs` file and then search for `require-trusted-types-for` and delete that entry from your CSP directives list
 
 You might want to add a comment instead (above the defaultCSPDirectives) to let other developers that might wonder why this directive is missing, or why you haven't included it:
 
@@ -261,22 +259,9 @@ You might want to add a comment instead (above the defaultCSPDirectives) to let 
 // require-trusted-types-for 'script';
 // because of the following error in the browser console:
 // This document requires 'TrustedScript' assignment
-
-// worker-src is for sentry replay
-// child-src is because safari <= 15.4 does not support worker-src
-const defaultCSPDirectives = `
-    default-src 'none';
-    media-src 'self';
-    object-src 'none';
-    worker-src 'self' blob:;
-    child-src 'self' blob:;
-    manifest-src 'self';
-    base-uri 'none';
-    form-action 'none';
-    frame-ancestors 'none';
-    ${upgradeInsecure}
-`
 ```
+
+I have more details about this directive in the [require-trusted-types-for](/web_development/posts/csp#require-trusted-types-for-directive) chapter in the CSP post
 
 A second change you need to do (when using Vercel analytics), is to add the `https://va.vercel-scripts.com` domain for the **development** environment to the **script-src** directive:
 

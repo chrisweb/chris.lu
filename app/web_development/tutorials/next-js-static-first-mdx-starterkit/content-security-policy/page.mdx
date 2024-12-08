@@ -205,7 +205,17 @@ If you now start your development server (using `npm run dev`), open `http://loc
 > [Next.js "Configuring CSP" documentation](https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy)  
 > [Vercel "Using a Content Security Policy" documentation](https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy)  
 
-### Example of a CSS violation
+### require-trusted-types-for (script)
+
+I tried to add CSP **require-trusted-types-for** directive for this Next.js 15 tutorial, but I kept on getting errors in the console related to this rule, which is why I did not add in the above CSP configuration
+
+It is a powerful CSP directive (which is still experimental), to better understand what it does I will quote the [caniuse](https://caniuse.com/trusted-types) page:
+
+> An API that forces developers to be very explicit about their use of powerful DOM-injection APIs. Can greatly improve security against XSS attacks.
+
+If you are interested in using that directive then have a look at my [require-trusted-types-for](/web_development/posts/csp#require-trusted-types-for-directive) chapter in the CSP post
+
+## Example of a CSS violation
 
 > [!NOTE]  
 > To check for best practices, I used a tool by Google called [CSP Evaluator](https://csp-evaluator.withgoogle.com/), it showed a green checkmark for every directive except the **script-src** directive, where it mentioned that it would be better to remove **'unsafe-inline'**, however unsafe-inline is there because Next.js uses inline scripts a lot
@@ -307,6 +317,11 @@ const securityHeadersConfig = (phase: string) => {
 
         // reporting uri (CSP v1)
         const reportCSPViolations = `report-uri ${reportingUrl};`
+
+        // we commented out the trusted types directive:
+        // require-trusted-types-for 'script';
+        // because of the following error in the browser console:
+        // This document requires 'TrustedScript' assignment
 
         // worker-src is for sentry replay
         // child-src is because safari <= 15.4 does not support worker-src
@@ -410,23 +425,6 @@ Line 75 and 90: we add the **reportCSPViolations** variable, which contains a re
 > [!MORE]  
 > [Sentry.io "CSP violations logging" documentation](https://docs.sentry.io/product/security-policy-reporting/)  
 > [chris.lu "Sentry.io" post](/web_development/posts/sentry-io)  
-
-#### require-trusted-types-for (script)
-
-The [require-trusted-types-for](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/require-trusted-types-for) directive is a very powerful directive:
-
-> The HTTP Content-Security-Policy (CSP) require-trusted-types-for Experimental directive instructs user agents to control the data passed to DOM XSS sink functions, like Element.innerHTML setter.
-
-However I have it almost always turned off (in my side projects) as a lot of packages are incompatible with this directive and your browser console will get flooded with errors:
-
-```shell
-This document requires 'TrustedScript' assignment.
-```
-
-I recommend to give it a try and to turn the **require-trusted-types-for** directive **on**, maybe start with your preview environment and then if there are no violations add it to your production builds, if you are lucky your stack won't use packages that require you to disable it in production. It is unlikely that this directive will work in development mode, some packages have development tools that are eventually going to violate the directive, but if you add it to directives under the production mode check (`process.env.VERCEL_ENV === 'production'`) and see no violations in your browser console when in production (or preview / staging) then you can keep it enabled
-
-> [!MORE]  
-> [MDN "require-trusted-types-for directive" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/require-trusted-types-for)  
 
 ## Adding security headers
 
