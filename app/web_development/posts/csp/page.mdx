@@ -105,11 +105,29 @@ Content-Security-Policy: default-src 'none'; img-src 'self'; script-src 'self'; 
 
 Not all policy directives are fetch directives. Check out this [MDN "Content-Security-Policy Directives" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy#directives) for a complete list of directives
 
+### require-trusted-types-for directive
+
 For example, adding the [require-trusted-types-for](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/require-trusted-types-for) directive is recommended to reduce the DOM XSS attack surface. This ensures that if you have a script that attempts to put a string into, for example, Element.innerHTML, but the string has not been sanitized, then CSP will consider this a violation:
 
 ```shell
 Content-Security-Policy: default-src 'none'; img-src 'self'; script-src 'self'; style-src 'self'; connect-src https://api.example.com; require-trusted-types-for 'script'
 ```
+
+The directive is still **experimental** but [Chrome has supported since version 83](https://developer.chrome.com/blog/new-in-chrome-83) (released in May 2020)
+
+If you use a packages (or have written code yourself) that violate the directive then you will get errors (in browser console) like this one:
+
+```shell
+This document requires 'TrustedScript' assignment.
+```
+
+I recommend to give it a try and to enable the **require-trusted-types-for** directive, maybe start with your preview environment and then if there are no violations add it to your production builds, if you are lucky your stack won't use packages that require you to disable it in production.
+
+It is unlikely that this directive will work in development mode, some packages have development tools that are eventually going to violate the directive, but if you add it to directives under the production mode check (`process.env.VERCEL_ENV === 'production'`) and see no violations in your browser console when in production (or preview / staging) then you can keep it enabled
+
+> [!MORE]  
+> [MDN "require-trusted-types-for directive" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/require-trusted-types-for)  
+> [caniuse "trusted-types"](https://caniuse.com/trusted-types)  
 
 ### nonce, hash, and strict-dynamic
 
