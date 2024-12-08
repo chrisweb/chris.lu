@@ -40,7 +40,7 @@
         "@fortawesome/react-fontawesome": "0.2.2",
         "@mdx-js/loader": "3.1.0",
         "@next/mdx": "15.0.4-canary.46",
-        "@react-three/drei": "9.120.2",
+        "@react-three/drei": "9.120.3",
         "@react-three/fiber": "9.0.0-rc.1",
         "@react-three/postprocessing": "2.16.3",
         "@sentry/nextjs": "8.42.0",
@@ -101,6 +101,7 @@
         "typescript-eslint": "8.17.0"
     },
     "overrides": {
+        "next": "15.0.4-canary.46",
         "@react-three/fiber": "9.0.0-rc.1",
         "react": "19.0.0",
         "react-dom": "19.0.0",
