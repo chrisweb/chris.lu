@@ -212,7 +212,9 @@ There is one problem related to the [metadataBase](https://nextjs.org/docs/app/a
 
 You might see an error like this in the terminal:
  
-> ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+```shell
+⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+```
 
 If that is the case, the workaround I found to work well is to set the **metadataBase** in the **root layout** to a default value like this:
 
@@ -253,7 +255,9 @@ You could, of course, duplicate the opengraph script we just did and add one in 
 > [!WARN]
 > If like me, you are on the Vercel free plan (Hobby plan), be careful NOT to use images that are very heavy or use a lot of images (or other assets like fonts) in your og image script because Vercel functions have a limit of 1MB; so if your PNG background image is 1.5 MB you will get this error during the build process: 
 >  
+> ```shell
 > "Error: The Edge Function "web_development/opengraph-image" size is 1.68 MB, and your plan size limit is 1 MB. Learn More: https://vercel.link/edge-function-size"
+> ```
 >  
 > In case you wonder Hobby: 1 MB, Pro: 2 MB, Enterprise: 4 MB
 

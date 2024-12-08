@@ -67,7 +67,7 @@ Next, click on the **Enable** button
 
 Chose your plan, if you haven't already done so you may want to check out the [vercel analytics pricing page](https://vercel.com/docs/analytics/limits-and-pricing)
 
-Now we need to add Vercel Snalytics to our Next.js project, so we go back into VSCode and open our project
+Now we need to add Vercel analytics to our Next.js project, so we go back into VSCode and open our project
 
 Then we open the VSCode terminal and run the following command to install the Vercel Analytics package:
 
@@ -263,7 +263,7 @@ You might want to add a comment inside of your `next.config.mjs`, to let other d
 // because of vercel analytics and speed insights
 ```
 
-A second change you need to do (when using Vercel analytics), is to add the `https://va.vercel-scripts.com` domain for the **development** environment to the **srcipt-src** directive:
+A second change you need to do (when using Vercel analytics), is to add the `https://va.vercel-scripts.com` domain for the **development** environment to the **script-src** directive:
 
 ```shell
 script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com;
