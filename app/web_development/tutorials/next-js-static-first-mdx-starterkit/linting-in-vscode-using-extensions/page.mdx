@@ -177,9 +177,13 @@ If your ESLint setup is working as intended, you should now see that several lin
 
 For example, the 2nd level 1 heading will display a warning text like this:
 
-> Unexpected duplicate toplevel heading, exected a single heading with rank `1`eslint(remark-lint-no-multiple-toplevel-headings)
+{/* spellchecker: disable */}
+```shell
+Unexpected duplicate toplevel heading, exected a single heading with rank `1` eslint(remark-lint-no-multiple-toplevel-headings)
+```
 
 (In case you wonder, yes I'm aware that there is a **typo** (exected instead of expected) in the above message, but as the typo is in the original error I decided to leave it unfixed)
+{/* spellchecker: enable */}
 
 The first part is the warning message followed by the name of the extension that added the warning (in this case **eslint**) and then in parenthesis the name of the rule, in this case it is the rule [remark-lint-no-multiple-toplevel-headings](https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-multiple-toplevel-headings) that got added by **remark-lint**
 
@@ -267,8 +271,9 @@ npm run lint
 > [!TIP]  
 > Also remember that a lot of errors can be fixed automatically, using the `npm run lint-fix` command would automatically fix the **missing final newline character** problem
 
-This should display all the warnings and errors we found in the two previous chapters, similar to this (I removed the plugin names in the output below to ensure it fits inside of the code box):
+This should display all the warnings and errors we found in the two previous chapters, similar to this:
 
+{/* spellchecker: disable */}
 ```shell
 PATH_TO_MY_PROJECT\tests\eslint\components\Button.tsx
   13:11  error  'foo' is assigned a value but never used  @typescript-eslint/no-unused-vars
@@ -283,6 +288,7 @@ PATH_TO_MY_PROJECT\tests\eslint\content.mdx
 ✖ 6 problems (2 errors, 4 warnings)
   0 errors and 1 warning potentially fixable with the `--fix` option.
 ```
+{/* spellchecker: enable */}
 
 > [!TIP]  
 > In VSCode if you hover over the errors and warnings you should see them getting underlined, this because you can press Ctrl and then click on then, which will open the file at the line where the error (or warning) got triggered, so that you can quickly fix the problem and then save the file

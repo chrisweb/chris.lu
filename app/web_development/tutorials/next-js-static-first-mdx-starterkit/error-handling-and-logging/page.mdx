@@ -196,7 +196,7 @@ Now, Sentry will install the latest Sentry SDK for Next.js.
 **Do you want to enable React component annotations to make breadcrumbs and session replays more readable?** Next Sentry is asking if we want to use the feature called [React component annotations](https://docs.sentry.io/platforms/javascript/guides/react/features/component-names/) which attempts to use component names in reports instead of more cryptic selectors, I think this is a nice feature, so I selected **Yes**, if you already use Sentry.io and don't want to change how bug reports work, then leave it on **No**, you can always turn it on/off via the configuration later if you want
 
 > [!WARN]  
-> I turned **React component annotations** on and then noticed that my [react-three-fiber](https://github.com/pmndrs/react-three-fiber) animation had stopped working, this is because **React component annotations** adds data attrobites to components which React Three Fiber does not like, and which then creates bugs which print the following in your console:
+> I turned **React component annotations** on and then noticed that my [react-three-fiber](https://github.com/pmndrs/react-three-fiber) animation had stopped working, this is because **React component annotations** adds data attributes to components which React Three Fiber does not like, and which then creates bugs which print the following in your console:
 > 
 > > TypeError: Cannot read properties of undefined (reading 'sentry')
 >  

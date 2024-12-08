@@ -295,7 +295,7 @@ Next, we add the following CSS to our `global.css` file:
 
 Lines 135 to 139: we only reset the **margin** and **padding** on the `<figure>{:html}` element that is the container of a rehype-pretty-code code block; **rehype-pretty-code** use a `<figure>{:html}` element as container around code blocks, that `<figure>{:html}` element has a **data-rehype-pretty-code-figure** attribute, we use that attribute to target the element using a selector in our CSS, as well as the `<pre>{:html}` element that is inside of the `<figure>{:html}` element
 
-Lines 141 to 145: we set the **width** of the `<pre>{:html}` element to **100%** to make sure our code block is as wide as our articles, and then we set the **overflow** property to **auto**, meaning that if the code inside of the code block is too large, then the code block is allowed to add (and display) a vertical scrollbar. If the code fits the code block then the scrollbars will be hidden. Finally we use our spacing variable to add some padding all around our code. 
+Lines 141 to 145: we set the **width** of the `<pre>{:html}` element to **100%** to make sure our code block is as wide as our articles, and then we set the **overflow** property to **auto**, meaning that if the code inside of the code block is too large, then the code block is allowed to add (and display) a vertical scrollbar. If the code fits the code block then the scrollbar will be hidden. Finally we use our spacing variable to add some padding all around our code. 
 
 ### Customizing the code block background color
 

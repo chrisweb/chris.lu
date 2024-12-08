@@ -99,7 +99,7 @@ Finally, click on **Create Project**
 
 ## Allowed domains filter
 
-By default Sentry.io will accept reports from whatever domain they originate as long as the DSN is yours, you can however explicitly whitelist **domains** that are **allowed** to send in reports, in which case Sentry will check the [Origin](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin) and [Referer](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer) headers and exclude reports from domains that you did not whitelist
+By default Sentry.io will accept reports from whatever domain they originate as long as the DSN is yours, you can however explicitly add **domains** that are **allowed** to send in reports, in which case Sentry will check the [Origin](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin) and [Referer](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer) headers and exclude reports from domains that you did not add to your allowlist
 
 To specific domains instead of all, use the following steps:
 
@@ -112,7 +112,7 @@ To specific domains instead of all, use the following steps:
 * in that field enter all the domains you will use for your project
 
 > [!TIP]  
-> The field for allowed domains is a textarea, meaning you don't add a comma seperated list but instead you add one domain per row, let's assume you want to whitelist your `example.com` domain as well as two subdomains `foo.example.com` and `bar.excample.com`, then this would be what your whitelist looks like:
+> The field for allowed domains is a textarea, meaning you don't add a comma separated list but instead you add one domain per row, let's assume you want to add the `example.com` domain to your allowlist as well as two subdomains `foo.example.com` and `bar.example.com`, then this would be what your allowlist looks like:
 >  
 > ```txt
 > example.com  
@@ -156,9 +156,9 @@ If you had Sentry v7 already installed in your project and now want to upgrade t
 
 If you have a feeling that something is wrong, you either get 403 responses from Sentry (or your tunnel URL), or you trigger an error but it won't show up, I recommend starting with the following steps:
 
-* if you are using the sentry domain whitelist feature, meaning you don't just have an asterisk (`*`) set as default value, then you might want to have a look at the [Allowed domains filter](#allowed-domains-filter) chapter and make sure the domain making the request is on the whitelist, maybe you are using a regex and the submain you are on is not covered by the regex
+* if you are using the sentry domain allowlist feature, meaning you don't just have an asterisk (`*`) set as default value, then you might want to have a look at the [Allowed domains filter](#allowed-domains-filter) chapter and make sure the domain making the request is in the allowlist, maybe you are using a regex and the subdomain you are on is not covered by the regex
 * If you are on localhost, then maybe localhost request are blocked, in this case have a look at the [Disable the "reports from localhost" filter](#disable--enable-reports-from-localhost-filter) chapter, and make sure that localhost is set to **enabled**
-* Have a look at your [inbound filters](https://docs.sentry.io/concepts/data-management/filtering/), mayby one of those is excluding the Issues
+* Have a look at your [inbound filters](https://docs.sentry.io/concepts/data-management/filtering/), maybe one of those is excluding the Issues
 * Make sure the DSN you are using is correct, make sure the DSN (Sentry client key) that your project is using is correct, eventually it is wrong key from another project, or someone has disabled or even deleted a key that is still in use
 * Have a look at the following chapter [Using the Sentry.io API to debug issues](#using-the-sentryio-api-to-debug-issues) which will show you how to make quick requests to the Sentry.io API to help you narrow down the cause of the missing Issues
 

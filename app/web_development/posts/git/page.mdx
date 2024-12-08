@@ -37,7 +37,7 @@ export const metadata = {
 
 # git
 
-![two super heros pointing at each other, it represents two versions of a file getting compared in a git diff](../../../../public/assets/images/app/web_development/posts/git/banner.png 'when two files meet in git diff { banner }')
+![two super heroes pointing at each other, it represents two versions of a file getting compared in a git diff](../../../../public/assets/images/app/web_development/posts/git/banner.png 'when two files meet in git diff { banner }')
 
 **git** is an open-source version control system used for tracking changes in source code during software development. Git gives every developer a local copy of a project. After a developer has made his changes, they create a new commit and then push it to a central repository. Other developers can then pull that commit from the central repository into their local copy. Git makes branching (creating a separate line of development) and merging (combining changes from different branches) easy.
 
@@ -121,7 +121,7 @@ git remote add origin https://DEFAULT_GIT_USER_NAME@github.com/GITHUB_USER_NAME/
 
 There are a lot of different approaches when it comes to managing code using branches, some popular Git branching strategies are for example [Git Flow](https://nvie.com/posts/a-successful-git-branching-model/), [GitHub Flow](https://docs.github.com/en/get-started/using-github/github-flow), [GitLab Flow](https://about.gitlab.com/topics/version-control/what-is-gitlab-flow/), [Trunk-based development](https://www.atlassian.com/continuous-delivery/continuous-integration/trunk-based-development) and many more.
 
-There is no right or wrong when chosing a Git branching strategy, the goal is NOT to use the most popular Git flow, the goal is to find and use the one that best suits your workflow. I recommend checking out the above links and familiarizing yourself with the different workflows, then try the one out that you (your team) think is best suited, and if it does not fit perfectly you can still adjust the rules and make your own Git flow 😉.
+There is no right or wrong when choosing a Git branching strategy, the goal is NOT to use the most popular Git flow, the goal is to find and use the one that best suits your workflow. I recommend checking out the above links and familiarizing yourself with the different workflows, then try the one out that you (your team) think is best suited, and if it does not fit perfectly you can still adjust the rules and make your own Git flow 😉.
 
 Also don't overthink it, you can still switch to another git flow later. Why not just start with a rather simple Git flow with only two branches. The **main** branch a second branch that you could name **preview** (some prefer to call it **staging** or **testing**). When you develop locally you do in the preview branch and then commit your code updates into the remote preview (on GitHub, Gitlab). If you have a CI/CD pipeline in place should trigger an automatic deployment. After testing the preview deployment you are ready to make a pull request (PR) to merge the code into the main branch, the main branch will then get deployed in production.
 

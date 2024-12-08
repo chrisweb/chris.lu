@@ -122,7 +122,7 @@ Packages use semantic versioning (semver) for their version numbers, with semver
 * the major version indicates that existing features got modified in a way that potentially will introduce breaking changes, so when updating a package and there is a change in the major version, it is highly recommended that you check out the package's changelog. If you find breaking changes, you need to verify if those will impact your code that uses the package. If there is an impact, then you need to update your code accordingly after installing the update and before committing the update
 
 > [!NOTE]  
-> when you install a dependency, the verion will be prefixed with a **^** (carret), when using **caret ranges** npm will install the version you specified as long as there is no newer version available, if however a newer PATCH or even MINOR version is available then npm will install the newer version instead, if we take the example above where we have "^18.2.0", this means npm will install react 18.2.0 as long as there is no update, however if react releases a fix for an existing feature and increment their PATCH number then the newest version would be 18.2.1 and if you now use the npm install command then npm will install 18.2.1 (and not 18.2.0 anymore), this is also true if the react team adds a new feature and bumps their MINOR number to 18.3.0 then npm will install that version, however if the react team adds breaking changes and the new version is 19.0.0 then npm will not update your package because this version might introduce breaking changes, instead npm will use the latest 18.x.x available version
+> when you install a dependency, the version will be prefixed with a **^** (carret), when using **caret ranges** npm will install the version you specified as long as there is no newer version available, if however a newer PATCH or even MINOR version is available then npm will install the newer version instead, if we take the example above where we have "^18.2.0", this means npm will install react 18.2.0 as long as there is no update, however if react releases a fix for an existing feature and increment their PATCH number then the newest version would be 18.2.1 and if you now use the npm install command then npm will install 18.2.1 (and not 18.2.0 anymore), this is also true if the react team adds a new feature and bumps their MINOR number to 18.3.0 then npm will install that version, however if the react team adds breaking changes and the new version is 19.0.0 then npm will not update your package because this version might introduce breaking changes, instead npm will use the latest 18.x.x available version
 
 > [!MORE]  
 > [Semantic Versioning Specification](https://semver.org/)  
@@ -165,7 +165,7 @@ If a package/repository has not been published on npm, for example, one of your 
 },
 ```
 
-This will add the package located at https://github.com/USER_NAME/REPOSITORY_NAME as a dependency.
+This will add the package located at `https://github.com/USER_NAME/REPOSITORY_NAME` as a dependency.
 
 If you want to pin a more specific version of the repository, you can do so by adding a hash symbol at the end, followed by the commit ID or the tag (if the repository author has published a tag) or a release version.
 
