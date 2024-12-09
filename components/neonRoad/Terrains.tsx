@@ -10,7 +10,6 @@ const Terrains: React.FC = () => {
 
     const terrainsRefs = useRef<Mesh[]>([])
 
-    // new three fiber 9 useUpdate (replaces useFrame)
     useFrame((state, delta /*, xrFrame*/) => {
         moveFromAToBInLoop(delta, terrainsRefs.current, 1, 1)
     })
