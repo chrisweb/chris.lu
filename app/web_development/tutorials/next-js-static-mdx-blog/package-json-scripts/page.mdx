@@ -3,7 +3,7 @@ title: package.json (npm run) scripts - Tutorial
 description: package.json (npm run) scripts - Next.js static MDX blog | www.chris.lu Web development tutorials
 keywords: ['package.json', 'npm run', 'scripts', 'npm', 'package']
 published: 2024-08-14T22:35:33.444Z
-modified: 2024-08-14T22:35:33.444Z
+modified: 2024-10-18T18:18:18.444Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/package-json-scripts
 section: Web development
 ---
@@ -80,7 +80,7 @@ npm run
 This will show you the 4 commands added by create next app.
 
 > [!MORE]  
-> [NPM "run scripts" documentation](https://docs.npmjs.com/cli/v10/commands/npm-run-script)  
+> [NPM "run scripts" documentation](https://docs.npmjs.com/cli/v10/commands/npm-run-script/)  
 
 ## Edit / add run scripts
 
@@ -114,6 +114,22 @@ You will see that now Next.js uses the port you have told it to use because the 
 
 > [!NOTE]  
 > Now, I recommend you discard the changes we just made. It is preferred to let Next.js choose the port for you and use 3000 by default. Only set the port to a specific value if you have a use case for it.
+
+## Changing the Next.js start (production) server port
+
+To manually change the port used by the npm run start command you can do it in the package.json like so:
+
+```json title="package.json"
+    "scripts": {
+        "start": "next start --port 3001",
+    },
+```
+
+This would always set the port to 3001, but for production you may prefer to use the following command to let your deployment script use a specific value like so:
+
+```shell
+npm run start -- --port 3001
+```
 
 ## Next.js CLI commands and NPM npx
 
@@ -198,8 +214,8 @@ To add the info CLI command to your `package.json`, open the `package.json` and 
 As you can see, because the command is inside of the scripts of the `package.json`, we do NOT need to use **npx** anymore, as NPM does it (under the hood) for us.
 
 > [!MORE]  
-> [Next.js "cli" documentation](https://nextjs.org/docs/app/api-reference/next-cli)  
-> [NPM "npx" documentation](https://docs.npmjs.com/cli/v10/commands/npx)  
+> [Next.js "cli" documentation](https://nextjs.org/docs/app/api-reference/cli/next)  
+> [NPM "npx" documentation](https://docs.npmjs.com/cli/v10/commands/npx/)  
 
 ## Next.js development server HTTPS (localhost SSL certificate)
 
@@ -225,10 +241,10 @@ This will start your dev server using HTTPS, and you can see a recap of what Nex
 
 This message lists all the things Next.js just did for you, it created a self signed SSL certificate and added the folder containing the certificate to your `.gitignore` because the certificate is only for your local development and should NOT get commited (shared)
 
-You can now visit your localhost with SSL at [https://localhost:3000/](https://localhost:3000/)
+You can now visit your localhost with SSL at `https://localhost:3000/`
 
 > [!MORE]  
-> [Next.js "HTTPS for local development" documentation](https://nextjs.org/docs/app/api-reference/next-cli#https-for-local-development)  
+> [Next.js "HTTPS for local development" documentation](https://nextjs.org/docs/app/api-reference/cli/next#using-https-during-development)  
 
 <Pagination
     previous={{ label: 'First Typescript page', href: '/web_development/tutorials/next-js-static-mdx-blog/first-typescript-page' }}
