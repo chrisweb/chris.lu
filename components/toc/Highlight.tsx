@@ -1,6 +1,5 @@
 'use client'
 
-import { ErrorBoundary } from 'react-error-boundary'
 import useIntersectionObserver from '@/hooks/useIntersectionObserver'
 import type { FC, JSX, PropsWithChildren, ReactNode } from 'react'
 import { Children, cloneElement, isValidElement } from 'react'
@@ -75,13 +74,9 @@ const TocHighlight: FC<TocHighlightProps> = (props): JSX.Element => {
     const { activeIdState } = useIntersectionObserver(tocHeadingsToObserve, tocRootMargin, tocThreshold)
 
     return (
-        <>
-            <ErrorBoundary fallback={<div className="error">Toc error</div>}>
-                <div className={styles.tocContainer}>
-                    {recursiveChildren(children, activeIdState)}
-                </div>
-            </ErrorBoundary>
-        </>
+        <div className={styles.tocContainer}>
+            {recursiveChildren(children, activeIdState)}
+        </div>
     )
 }
 

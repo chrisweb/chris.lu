@@ -11,7 +11,6 @@ import LoadingScreen from './loading/Screen'
 import ButtonWithIcon from '@/components/base/button/WithIcon'
 import styles from './container.module.css'
 import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
-import { ErrorBoundary } from 'react-error-boundary'
 
 /**
  * By using a dynamic import for the Canvas we avoid loading
@@ -72,9 +71,7 @@ const Container: React.FC = () => {
                 )}
                 {animationState && (
                     <>
-                        <ErrorBoundary fallback={<div className="error">Error</div>}>
-                            <NeonRoadCanvas altText={altText} containerRef={containerRef} />
-                        </ErrorBoundary>
+                        <NeonRoadCanvas altText={altText} containerRef={containerRef} />
                         <ButtonWithIcon clickCallback={powerOffCallback} whichIcon={faPowerOff} ref={powerOffButtonRef} />
                     </>
                 )}
