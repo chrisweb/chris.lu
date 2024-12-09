@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useLayoutEffect, useRef, useState, Suspense, useCallback } from 'react'
 import { useFrame } from '@react-three/fiber'
 import PalmModel from './Palm'
 import { moveFromAToBInLoop } from './lib/helpers'
@@ -14,6 +14,8 @@ function randomDegrees() {
 
 const Trees: React.FC = () => {
 
+    const [treesElementsState, setTreesElementsState] = useState<React.ReactElement[]>([])
+
     // trees on the left side
     const leftSideTreesRefs = useRef<Group[]>([])
 
@@ -26,46 +28,56 @@ const Trees: React.FC = () => {
         moveFromAToBInLoop(delta, rightSideTreesRefs.current, 1, 0.2)
     })
 
-    const treesElements: React.ReactElement[] = []
+    const createTrees = useCallback(() => {
 
-    const sides = ['left', 'right']
-    const amountOfTreesPerSide = 12
+        const treesElements: React.ReactElement[] = []
 
-    sides.forEach((side) => {
+        const sides = ['left', 'right']
+        const amountOfTreesPerSide = 12
 
-        let positionChange = -1.5
+        sides.forEach((side) => {
 
-        for (let i = 0; i < amountOfTreesPerSide; i++) {
+            let positionChange = -1.5
 
-            const position = new Vector3(side === 'right' ? -0.21 : 0.21, 0, positionChange)
-            const scale = new Vector3(0.009, 0.009, 0.009)
-            const rotation = new Euler(0, randomDegrees(), 0)
+            for (let i = 0; i < amountOfTreesPerSide; i++) {
 
-            treesElements.push(
-                <PalmModel
-                    position={position}
-                    ref={(treeGroup) => {
-                        if (side === 'right') {
-                            rightSideTreesRefs.current[i] = treeGroup
-                        } else {
-                            leftSideTreesRefs.current[i] = treeGroup
-                        }
-                    }}
-                    scale={scale}
-                    castShadow={true} // default is false
-                    receiveShadow={false}
-                    key={side + '_' + i.toString()}
-                    rotation={rotation}
-                />
-            )
+                const position = new Vector3(side === 'right' ? -0.21 : 0.21, 0, positionChange)
+                const scale = new Vector3(0.009, 0.009, 0.009)
+                const rotation = new Euler(0, randomDegrees(), 0)
 
-            positionChange += 0.2
+                treesElements.push(
+                    <PalmModel
+                        position={position}
+                        ref={(treeGroup) => {
+                            if (side === 'right') {
+                                rightSideTreesRefs.current[i] = treeGroup
+                            } else {
+                                leftSideTreesRefs.current[i] = treeGroup
+                            }
+                        }}
+                        scale={scale}
+                        castShadow={true} // default is false
+                        receiveShadow={false}
+                        key={side + '_' + i.toString()}
+                        rotation={rotation}
+                    />
+                )
 
-        }
+                positionChange += 0.2
 
-    })
+            }
 
-    return (<>{treesElements}</>)
+        })
+
+        return treesElements
+
+    }, [])
+
+    useLayoutEffect(() => {
+        setTreesElementsState(createTrees())
+    }, [createTrees])
+
+    return (<Suspense>{treesElementsState}</Suspense>)
 
 }
 
