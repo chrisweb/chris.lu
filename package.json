@@ -17,7 +17,8 @@
         "lint-print-config": "eslint --print-config eslint.config.mjs",
         "lint-inspect-config": "eslint --inspect-config eslint.config.mjs",
         "lint-fix": "eslint --fix",
-        "info": "next info"
+        "info": "next info",
+        "check-urls": "remark --rc-path .no-dead-urls.remarkrc.mjs -e .mdx ./app"
     },
     "repository": {
         "type": "git",

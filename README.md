@@ -47,6 +47,7 @@ If you have feedback or want to discuss something, please use the [chris.lu gith
 `npm run lint-debug`: linting command but more verbose output  
 `npm run lint-fix`: linting command that also attempts to automatically fix problems  
 `npm run info`: the default next.js script to get some info about the project  
+`npm run check-urls`: check if URLs in documents are alive or not, this linting is separate from the main linting script so that it can be used sporadically, as it makes lots of calls to 3rd party URLs to check if they are alive, it does not run during the build process so that a unreachable URL of a third party won't break the build
 
 ## Node.js version
 
