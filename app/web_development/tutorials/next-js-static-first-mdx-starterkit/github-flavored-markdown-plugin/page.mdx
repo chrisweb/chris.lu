@@ -131,11 +131,16 @@ const nextConfig = (phase/*: string*/) => {
         maxDepth: 3,
     }
 
+    /** @type {import('remark-gfm').Options} */
+    const remarkGfmOptions = {
+        singleTilde: false,
+    }
+
     const withMDX = createMdx({
         extension: /\.mdx$/,
         options: {
             // optional remark and rehype plugins
-            remarkPlugins: [remarkGfm, [remarkTableOfContents, remarkTableOfContentsOptions]],
+            remarkPlugins: [[remarkGfm, remarkGfmOptions], [remarkTableOfContents, remarkTableOfContentsOptions]],
             rehypePlugins: [rehypeSlug, [rehypePrettyCode, rehypePrettyCodeOptions], rehypeMDXImportMedia],
         },
     })
@@ -143,7 +148,7 @@ const nextConfig = (phase/*: string*/) => {
 
 Line 9: we import the **remark-gfm** plugin
 
-Lines 46 to 49: we add a configuration object for the plugin, we first add the options type from the package to have strictly typed options, there are few things we can configure, I will add an option I personally like to disable, and that is the **singleTilde** which I set to false, the reason why it is true by default is well explained in their [README](https://github.com/remarkjs/remark-gfm?tab=readme-ov-file#options) so I will just quote the official explanation here:
+Lines 46 to 49: we add a configuration object for the plugin, we first add the options type information; then there are few things we can configure, as an example we will set the **singleTilde** option to false, what this option does is well explained in their [README](https://github.com/remarkjs/remark-gfm?tab=readme-ov-file#options):
 
 > whether to support strikethrough with a single tilde; single tildes work on github.com but are technically prohibited by GFM; you can always use 2 or more tildes for strikethrough
 
@@ -281,6 +286,7 @@ If you open the playground in the browser and inspect the HTML source, you will 
 It is, however, possible to customize the **checkboxes** of a **tasklist** using the `mdx-components.tsx` file that is in the root of our project:
 
 ```tsx title="mdx-components.tsx" showLineNumbers {50-53}
+import type { ComponentPropsWithoutRef } from 'react'
 import type { MDXComponents } from 'mdx/types'
 import BaseLink from '@/components/base/Link'
 import type { Route } from 'next'
@@ -293,22 +299,28 @@ import TocHighlight from '@/components/toc/Highlight'
 // React component you want, including components from
 // other libraries.
 
+type ListPropsType = ComponentPropsWithoutRef<'ul'>
+type AnchorPropsType = ComponentPropsWithoutRef<'a'>
+// Note: ImageProps get imported from 'next/image'
+type AsidePropsType = ComponentPropsWithoutRef<'aside'>
+type InputPropsType = ComponentPropsWithoutRef<'input'>
+
 // This file is required to use MDX in `app` directory.
 export function useMDXComponents(components: MDXComponents): MDXComponents {
     return {
         // Allows customizing built-in components, e.g. to add styling.
-        ul: ({ children, ...props }) => (
+        ul: ({ children, ...props }: ListPropsType) => (
             <ul className="listContainer" {...props}>
                 {children}
             </ul>
         ),
-        a: ({ children, href, ...props }) => (
+        a: ({ children, href, ...props }: AnchorPropsType) => (
             <BaseLink href={href as Route} {...props}>
                 {children}
             </BaseLink>
         ),
         img: (props) => (<BaseImage {...props as ImageProps} />),
-        aside: ({ children, ...props }) => {
+        aside: ({ children, ...props }: AsidePropsType) => {
             const tocHighlightProps = {
                 headingsToObserve: 'h1, h2, h3',
                 rootMargin: '-5% 0px -50% 0px',
@@ -329,7 +341,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                 </>
             )
         },
-        input: (props) => {
+        input: (props: InputPropsType) => {
             console.log(props)
             return (<input {...props} />)
         },
@@ -338,7 +350,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 }
 ```
 
-Lines 50 to 53: for any input element, we do a `console.log` to get an idea of what the props of an input element are
+Line X: we create a new **InputPropsType**
+
+Lines 50 to 53: we add type information to the input props, then we do a `console.log` to get an idea of what the props values are that we might get
 
 If we now have the dev server running and reload the `http://localhost:3000/gfm_playground` page in our browser, we will see that in the VSCode terminal our `console.log` will print the following few lines:
 
@@ -354,7 +368,7 @@ As you can see, all checkboxes are **disabled**, this is the default behavior fo
 You might want to remove the `disabled` attribute, we can do that easily by using a destructuring assignment to remove the `disabled` attribute and put the remaining props into a new object that we then pass to a custom input element, like so:
 
 ```tsx title="mdx-components.tsx" showLineNumbers{50} {50-55}
-input: (props) => {
+input: (props: InputPropsType) => {
     console.log(props)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { disabled, ...newProps } = props
@@ -422,6 +436,7 @@ Line 19: we create an input element of type checkbox and add all our attributes
 Now that we have our custom **checkbox component**, we can start using it in the `mdx-components.tsx` file, like so:
 
 ```tsx title="mdx-components.tsx" showLineNumbers {7} {51}
+import type { ComponentPropsWithoutRef } from 'react'
 import type { MDXComponents } from 'mdx/types'
 import BaseLink from '@/components/base/Link'
 import type { Route } from 'next'
@@ -435,22 +450,28 @@ import BaseCheckbox from '@/components/base/Checkbox'
 // React component you want, including components from
 // other libraries.
 
+type ListPropsType = ComponentPropsWithoutRef<'ul'>
+type AnchorPropsType = ComponentPropsWithoutRef<'a'>
+// Note: ImageProps get imported from 'next/image'
+type AsidePropsType = ComponentPropsWithoutRef<'aside'>
+type InputPropsType = ComponentPropsWithoutRef<'input'>
+
 // This file is required to use MDX in `app` directory.
 export function useMDXComponents(components: MDXComponents): MDXComponents {
     return {
         // Allows customizing built-in components, e.g. to add styling.
-        ul: ({ children, ...props }) => (
+        ul: ({ children, ...props }: ListPropsType) => (
             <ul className="listContainer" {...props}>
                 {children}
             </ul>
         ),
-        a: ({ children, href, ...props }) => (
+        a: ({ children, href, ...props }: AnchorPropsType) => (
             <BaseLink href={href as Route} {...props}>
                 {children}
             </BaseLink>
         ),
         img: (props) => (<BaseImage {...props as ImageProps} />),
-        aside: ({ children, ...props }) => {
+        aside: ({ children, ...props }: AsidePropsType) => {
             const tocHighlightProps = {
                 headingsToObserve: 'h1, h2, h3',
                 rootMargin: '-5% 0px -50% 0px',
@@ -472,7 +493,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                 </>
             )
         },
-        input: (props) => props?.type === 'checkbox' ? (<BaseCheckbox {...props} />) : (<input {...props} />),
+        input: (props: InputPropsType) => props?.type === 'checkbox' ? (<BaseCheckbox {...props} />) : (<input {...props} />),
         ...components,
     }
 }
