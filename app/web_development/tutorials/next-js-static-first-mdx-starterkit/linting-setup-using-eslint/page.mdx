@@ -275,13 +275,13 @@ Now that we have created a new command we can update our package.json (in the ro
 },
 ```
 
-There is one more problem left, the **next build** script uses **next lint** by default, as we just replaced **next lint** with the **eslint cli** we also need to replace the build script like so:
+There is one more problem left, the **next build** script uses **next lint** by default, which will check if we have a Javascript eslint.config, but as we switched to a Typescript eslint file (which next lint does NOT yet support), we need to add our custom linting command to build script (we use the nocache version of our linting command, feel free to use the one with cache if that works better for your use case):
 
 ```json title="package.json" {4}
 "scripts": {
     "dev": "next dev --turbopack",
     "dev-turbo": "next dev --turbopack",
-    "build": "npm run lint && next build",
+    "build": "npm run lint-nocache && next build",
     "start": "next start",
     "lint": "eslint --flag unstable_ts_config --cache --cache-location .next/cache/eslint/"
 },
@@ -310,7 +310,7 @@ First we update our `package.json` file (in the root) and add the following scri
 "scripts": {
     "dev": "next dev --turbopack",
     "dev-turbo": "next dev --turbopack",
-    "build": "npm run lint && next build",
+    "build": "npm run lint-nocache && next build",
     "start": "next start",
     "next-lint": "next lint",
     "lint": "eslint --flag unstable_ts_config --cache --cache-location .next/cache/eslint/",
