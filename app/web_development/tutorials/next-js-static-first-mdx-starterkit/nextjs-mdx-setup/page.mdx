@@ -93,7 +93,7 @@ npm i @next/mdx @types/mdx --save-exact
 First, we need to create a new file called `mdx-components.tsx` in the root of our project (or the `./src` folder if you have configured your project to use the `./src` folder)
 
 > [!WARN]  
-> Adding the file is very important, I see a lot of posts of developers struggling with the first steps of getting MDX support to work in their Next.js project, and 90% of the cases are because they have not added the `mdx-components.tsx` file, without `mdx-components.tsx` in Next.js 13 you will get an error that says **Module not found: Can't resolve 'next-mdx-import-source-file'** and in Next.js 14 you will get a bunch of **node_modules/@mdx-js/react/lib** related errors in your terminal, so it is mandatory to have that file at the root of the project, even if you don't use it (yet)
+> Adding the file is very important, I see a lot of posts of developers struggling with the first steps of getting MDX support to work in their Next.js project, and 90% of the cases are because they have not added the `mdx-components.tsx` file, without `mdx-components.tsx` in Next.js 13 you will get an error that says **Module not found: Can't resolve 'next-mdx-import-source-file'** and in Next.js you will get a bunch of **node_modules/@mdx-js/react/lib** related errors in your terminal, so it is mandatory to have that file at the root of the project, even if you don't use it (yet)
 
 Then add the following content:
 
