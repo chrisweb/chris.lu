@@ -93,7 +93,7 @@ export default function RootLayout({ children }: {
                     {children}
                 </main>
                 <footer className={styles.layoutFooter}>
-                    <hr className={styles.layoutFooterSeperator} />
+                    <hr className={styles.layoutFooterSeparator} />
                     <p className="fontDarker">
                         All content on this site is licensed under a
                         &nbsp;
