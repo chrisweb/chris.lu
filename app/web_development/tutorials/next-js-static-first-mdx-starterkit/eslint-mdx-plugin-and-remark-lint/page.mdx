@@ -1,0 +1,380 @@
+---
+title: ESLint MDX plugin and remark-lint - Tutorial
+description: ESLint MDX plugin and remark-lint - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['Linting', 'MDX', 'markdown', 'remark', 'remark-lint', 'plugin', 'rules', 'eslint', 'nextjs']
+published: 2024-08-19T20:20:20.444Z
+modified: 2024-08-19T20:20:20.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/eslint-mdx-plugin-and-remark-lint
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
+
+# ESLint MDX plugin and remark-lint
+
+We have added linting for our code next we will add linting for our MDX (markdown) content
+
+## Adding and configuring the MDX ESLint plugin
+
+First we install the [ESLint MDX plugin](https://www.npmjs.com/package/eslint-plugin-mdx):
+
+```shell
+npm i eslint-plugin-mdx@latest --save-dev --save-exact
+```
+
+Then we can update our ESLint configuration and to add the MDX plugin:
+
+```ts title="eslint.config.ts" showLineNumbers
+import eslintPlugin from '@eslint/js'
+import tseslint, { configs as tseslintConfigs } from 'typescript-eslint'
+import type { FlatConfig } from '@typescript-eslint/utils/ts-eslint'
+// @ts-expect-error this package has no types
+import importPlugin from 'eslint-plugin-import'
+import reactPlugin from 'eslint-plugin-react'
+// @ts-expect-error this package has no types
+import reactHooksPlugin from 'eslint-plugin-react-hooks'
+import jsxA11yPlugin from 'eslint-plugin-jsx-a11y'
+// @ts-expect-error this package has no types
+import nextPlugin from '@next/eslint-plugin-next'
+import * as mdxPlugin from 'eslint-plugin-mdx'
+
+const eslintConfig = [
+    {
+        name: 'custom/eslint/recommended',
+        files: ['**/*.ts?(x)'],
+        ...eslintPlugin.configs.recommended,
+    },
+]
+
+const ignoresConfig = [
+    {
+        name: 'custom/eslint/ignores',
+        // the ignores option needs to be in a separate configuration object
+        // replaces the .eslintignore file
+        ignores: [
+            '.next/',
+            '.vscode/',
+            'public/',
+        ]
+    },
+] as FlatConfig.Config[]
+
+const tseslintConfig = tseslint.config(
+    {
+        name: 'custom/typescript-eslint/recommended',
+        files: ['**/*.ts?(x)'],
+        extends: [
+            ...tseslintConfigs.recommended,
+            // OR more type checked rules
+            //...tseslintConfigs.recommendedTypeChecked,
+            // OR more strict rules
+            //...tseslintConfigs.strict,
+            // OR more strict and type checked rules
+            //...tseslintConfigs.strictTypeChecked,
+            // optional stylistic rules
+            ...tseslintConfigs.stylistic,
+            // OR the type checked version
+            //...tseslintConfigs.stylisticTypeChecked,
+        ] as FlatConfig.ConfigArray,
+        // only needed if you use TypeChecked rules
+        languageOptions: {
+            parserOptions: {
+                // https://typescript-eslint.io/getting-started/typed-linting
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+                // react recommended is already adding the ecmaFeatures
+                /*ecmaFeatures: {
+                    jsx: true,
+                },*/
+                // better keep it turned on, if needed uncomment
+                //warnOnUnsupportedTypeScriptVersion: false,
+            },
+        },
+    },
+    {
+        // disable type-aware linting on JS files
+        // only needed if you use TypeChecked rules
+        // (and you have javascript files in your project)
+        files: ['**/*.mjs'],
+        ...tseslintConfigs.disableTypeChecked,
+        name: 'custom/typescript-eslint/disable-type-checked',
+    },
+)
+
+const nextConfig = [
+    {
+        name: 'custom/next/config',
+        // no files for this config as we want to apply it to all files
+        plugins: {
+            'react': reactPlugin,
+            'jsx-a11y': jsxA11yPlugin,
+            /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+            'react-hooks': reactHooksPlugin,
+            '@next/next': nextPlugin,
+            'import': importPlugin,
+            /* eslint-enable @typescript-eslint/no-unsafe-assignment */
+        },
+        rules: {
+            ...reactPlugin.configs.recommended.rules,
+            ...reactPlugin.configs['jsx-runtime'].rules,
+            /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+            ...reactHooksPlugin.configs.recommended.rules,
+            ...nextPlugin.configs.recommended.rules,
+            // this is the nextjs strict mode
+            ...nextPlugin.configs['core-web-vitals'].rules,
+            ...importPlugin.configs.recommended.rules,
+            /* eslint-enable @typescript-eslint/no-unsafe-member-access */
+            //...jsxA11yPlugin.configs.recommended.rules,
+            // OR more strict a11y rules
+            ...jsxA11yPlugin.configs.strict.rules,
+            // rules from eslint-config-next
+            'import/no-anonymous-default-export': 'warn',
+            'react/no-unknown-property': 'off',
+            'react/react-in-jsx-scope': 'off',
+            'react/prop-types': 'off',
+            'react/jsx-no-target-blank': 'off',
+            'jsx-a11y/alt-text': ['warn', { elements: ['img'], img: ['Image'], },],
+            'jsx-a11y/aria-props': 'warn',
+            'jsx-a11y/aria-proptypes': 'warn',
+            'jsx-a11y/aria-unsupported-elements': 'warn',
+            'jsx-a11y/role-has-required-aria-props': 'warn',
+            'jsx-a11y/role-supports-aria-props': 'warn',
+        } as FlatConfig.Rules,
+        settings: {
+            'react': {
+                version: 'detect',
+            },
+            // only needed if you use (eslint-import-resolver-)typescript
+            'import/resolver': {
+                typescript: {
+                    alwaysTryTypes: true
+                }
+            }
+        },
+    }
+] as FlatConfig.Config[]
+
+const mdxConfig = [
+    // https://github.com/mdx-js/eslint-mdx/blob/d6fc093fb32ab58fb226e8cf42ac77399b8a4758/README.md#flat-config
+    {
+        name: 'custom/mdx/recommended',
+        files: ['**/*.mdx'],
+        ...mdxPlugin.flat,
+        processor: mdxPlugin.createRemarkProcessor({
+            // I disabled linting code blocks
+            // as I was having performance issues
+            lintCodeBlocks: false,
+            languageMapper: {},
+        }),
+    },
+    {
+        name: 'custom/mdx/code-blocks',
+        files: ['**/*.mdx'],
+        ...mdxPlugin.flatCodeBlocks,
+        rules: {
+            ...mdxPlugin.flatCodeBlocks.rules,
+            'no-var': 'error',
+            'prefer-const': 'error',
+        },
+    },
+]
+
+export default [
+    ...eslintConfig,
+    ...ignoresConfig,
+    ...tseslintConfig,
+    ...nextConfig,
+    ...mdxConfig,
+] satisfies FlatConfig.Config[]
+```
+
+Line X: we import the mdx eslint plugin
+
+Lines X to X: we create a mdxConfig (config array) with two configurations one for mdx content and a second config for the content of markdown codeblocks (which you might have in your mdx documents)
+
+Line X: Because off performance problems (linting process was very long) I decided to disable linting of codeblocks content by setting the **lintCodeBlocks** option in the mdx config to **false**. I left the second config MDX config (for codeblocks content) unchanged as we might use it in the future with a faster parser. If you want to lint the content of codeblocks, make sure to set the **lintCodeBlocks** option to **true**
+
+Line X we add the **mdxConfig** to the config export
+
+### Markdown linting using remark-lint
+
+Now that we have added MDX ESLint plugin to our project, we can easily add the [remark-lint](https://github.com/remarkjs/remark-lint/) plugin to our setup, all we need to do is create a configuration file and import a few recommend rule sets for markdown linting
+
+First we need to add few more **remark-lint** dependencies, these **remark-lint** presets will each add different rules (plugins) to our markdown linting setup:
+
+* [consistent](https://www.npmjs.com/package/remark-preset-lint-consistent)
+* [recommended](https://www.npmjs.com/package/remark-preset-lint-recommended)
+* [markdown style guide](https://www.npmjs.com/package/remark-preset-lint-markdown-style-guide)
+
+By installing them using the following command:
+
+```shell
+npm i remark-preset-lint-recommended@latest remark-preset-lint-consistent@latest remark-preset-lint-markdown-style-guide@latest --save-dev --save-exact
+```
+
+Then we create a remark linting configuration file, with the following content:
+
+```js title=".remarkrc.mjs"
+// presets imports
+import remarkPresetLintRecommended from 'remark-preset-lint-recommended'
+import remarkPresetLintConsistent from 'remark-preset-lint-consistent'
+import remarkPresetLintMarkdownStyleGuide from 'remark-preset-lint-markdown-style-guide'
+
+// rules imports
+import remarkLintMaximumHeadingLength from 'remark-lint-maximum-heading-length'
+import remarkLintUnorderedListMarkerStyle from 'remark-lint-unordered-list-marker-style'
+import remarkLintNoUndefinedReferences from 'remark-lint-no-undefined-references'
+import remarkLintLinkTitleStyle from 'remark-lint-link-title-style'
+import remarkLintMaximumLineLength from 'remark-lint-maximum-line-length'
+import remarkLintListItemSpacing from 'remark-lint-list-item-spacing'
+
+const config = {
+    plugins: [
+        // presets
+        remarkPresetLintRecommended,
+        remarkPresetLintConsistent,
+        remarkPresetLintMarkdownStyleGuide,
+        // rules
+        // https://www.npmjs.com/package/remark-lint-maximum-heading-length
+        [remarkLintMaximumHeadingLength, [1, 100]],
+        // https://www.npmjs.com/package/remark-lint-unordered-list-marker-style
+        [remarkLintUnorderedListMarkerStyle, 'consistent'],
+        // https://www.npmjs.com/package/remark-lint-no-undefined-references
+        [remarkLintNoUndefinedReferences, { allow: ['!NOTE', '!TIP', '!IMPORTANT', '!WARNING', '!CAUTION', ' ', 'x'] }],
+        // https://www.npmjs.com/package/remark-lint-link-title-style
+        [remarkLintLinkTitleStyle, '\''],
+        // https://www.npmjs.com/package/remark-lint-maximum-line-length
+        [remarkLintMaximumLineLength, false],
+        // https://www.npmjs.com/package/remark-lint-list-item-spacing
+        [remarkLintListItemSpacing, false],
+    ]
+}
+
+export default config
+```
+
+The first 3 imports are presets with recommended rules, we then use them in the **plugins** config
+
+The other imports are single rules we want to configure, we then use them in the **plugins** config, the configuration for each rule consists of an array where the first value is the rule and the second value is the configuration we want to apply, here is an explanation for the ones I suggest adding (but feel free to configure them differently, to match your use case):
+
+* for the **maximum headings length** rule, we use **1,100**, which tells remark-lint that headings should not have a length lower than 1 character and not greater than 100
+* for the **unordered lists marker style**, we set it to **consistent**, when set to **consistent**, the rule will check which marker is the most used and then enforce it everywhere, this is nice because it means it is flexible and will adapt to what you use, do you often define lists by using an asterisk (*), then this is what the rule will enforce or do you prefer using a hyphen-minus (-) then that is what will get enforced, consistent is nice setting to ensure that your styling is consistent based on what you use the most
+* the **no undefined references** will check if you are using [undefined references](https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-undefined-references), we add `!NOTE` and a few more to the allow list as those are exceptions to the rule (those get used by the plugin that we will add in the [rehype-github-alerts](/web_development/tutorials/next-js-static-first-mdx-starterkit/github-like-alerts-plugin) page, and the last two are for the [remark-gfm task lists](/web_development/tutorials/next-js-static-first-mdx-starterkit/github-flavored-markdown-plugin#remark-gfm-tasklists))
+* images and links can have a title, the title needs to be enclosed by two symbols, here we define that we want to use a single quote (') for titles, so an image with a title would look like this `![IMAGE_ALT_TEXT](IMAGE_PATH 'IMAGE_TITLE')`, if you prefer, you can enforce double quotes or even set it to `consistent` to let it choose the one you use most
+* the **maximum line length** rule I disabled it, some people like to stick to 80 characters, I try to keep my lines short, but if a line is bigger, that's ok (for me), too
+* finally, the **list item spacing** I disabled it because I had a lot of false positives when using that rule (I might re-enable it in the future and check if the problems I encountered got fixed)
+
+> [!NOTE]  
+> Each remark lint presets package we just installed has installed a bunch of rules (packages) for us; each preset has a readme that list the rules they support:
+>  
+> * ["recommended preset" readme](https://github.com/remarkjs/remark-lint/tree/main/packages/remark-preset-lint-recommended#plugins)  
+> * ["consistent preset" readme](https://github.com/remarkjs/remark-lint/tree/main/packages/remark-preset-lint-consistent#plugins)  
+> * ["markdown style guide preset" readme](https://github.com/remarkjs/remark-lint/tree/main/packages/remark-preset-lint-markdown-style-guide#plugins)  
+
+And then we are already done, because the MDX plugin in our ESLint setup will automatically detect that we have a remark-lint configuration file. The potential warnings and errors from remark-lint will now get displayed along other ESLint messages every time you use the linting command (`npm run lint`)
+
+> [!MORE]  
+> ["remark-lint" repository](https://github.com/remarkjs/remark-lint/)  
+> [list of official remark link rules and presets](https://github.com/remarkjs/remark-lint/tree/main/packages)  
+
+## Testing our new lint command
+
+After all the coding let's finally make a linting test, by using the following command in our terminal:
+
+```shell
+npm run lint
+```
+
+You probably notice that the linting command will output some errors and warnings in the terminal, those are files that got automatically created by the CNA or the sentry wizard (which we used earlier), but this is a good as it we can now also test our lint-fix command, that should automatically fix those errors for us
+
+To fix the linting errors, use the following command:
+
+```shell
+npm run lint-fix
+```
+
+And then run the lint command one more time and you should have no more warnings and errors as they got all fixed:
+
+```shell
+npm run lint
+```
+
+We had to do a lot of changes to get this new linting setup up and running, but I hope you agree with me that it was worth it, we have greatly improved our DX by automating both the linting of code and content, which will ensure we write cleaner code and ensure our markdown content is well formatted
+
+## remark-lint disable comments (in MDX)
+
+To **disable remark-lint rules** we added by using **MDX plugin** you do **NOT** specify the **rule name**:
+
+```mdx title="THIS EXAMPLE IS WRONG"
+{/* eslint-disable-next-line remark-lint-no-undefined-references) */}
+> [Info - 8:41:03 PM] ESLint server is running.
+```
+
+If you do, you will get an error like this:
+
+> Error: Definition for rule **remark-lint-no-undefined-references** was not found
+
+Instead, you need to use **mdx/remark** for **ANY** rule you want to disable
+
+In **MDX** files to add an **eslint-disable** comment, you need to use **JSX comments**
+
+So if we do both things, we get something like this:
+
+```mdx
+{/* eslint-disable-next-line mdx/remark */}
+> [Info - 8:41:03 PM] ESLint server is running.
+```
+
+## Clearing the ESLint cache
+
+Because by default, we use a cache to speed up the linting process when using the `npm run lint` command, we need to delete the cache manually after making changes to the `.eslintrc.js` ESLint configuration file or the `.remarkrc.mjs` remark-lint configuration file
+
+To delete the cache manually, open the `.next` folder in the root of your project, then go into the `cache` folder and finally delete the `eslint` file
+
+> [!TIP]  
+> If you do a lot of tests and don't want to delete the cache manually after every change, use the `npm run lint-nocache` instead, until you are done testing, then delete the cache once and use the regular `npm run lint command` one last time to do final test  
+
+Congratulations 🎉 you just added linting for all your MDX (markdown) content in your project's MDX pages
+
+If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+
+<Pagination
+    previous={{ label: 'Linting setup using ESLint', href: '/web_development/tutorials/next-js-static-mdx-blog/linting-setup-using-eslint' }}
+    next={{ label: 'Linting in VSCode using ESLint and MDX extensions', href: '/web_development/tutorials/next-js-static-mdx-blog/linting-in-vscode-using-extensions' }}
+/>
+
+</article>

@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useCallback } from 'react'
 import ImageDispatch from '@/components/base/image/Dispatch'
-import poster from '/public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/banner.png'
+import poster from '@/public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/banner.png'
 
 const VideoScroll: React.FC = () => {
 
@@ -12,10 +12,6 @@ const VideoScroll: React.FC = () => {
     const firstScrollRef = useRef(true)
 
     const isInViewCheck = (element: HTMLElement) => {
-
-        if (element === null) {
-            throw new Error('invalid element id')
-        }
 
         // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
         const rect = element.getBoundingClientRect()
@@ -49,10 +45,8 @@ const VideoScroll: React.FC = () => {
         }
 
         const currentTime = performance.now()
-
         // delta time in milliseconds
         const deltaTime = currentTime - (timeRef.current ? timeRef.current : 0)
-        
         const isInView = isInViewCheck(video)
 
         if (!isInView) {
@@ -73,14 +67,20 @@ const VideoScroll: React.FC = () => {
 
     const start = useCallback(() => {
 
-        videoElementRef.current!.pause()
+        videoElementRef.current?.pause()
 
-        chunkSizeRef.current = videoElementRef.current!.duration / window.innerHeight
+        let videoElementDuration = 0
+
+        if (videoElementRef.current) {
+            videoElementDuration = videoElementRef.current.duration
+        }
+
+        chunkSizeRef.current = videoElementDuration / window.innerHeight
 
         window.addEventListener('scroll', scrollPlay)
 
         return () => {
-            window?.removeEventListener('scroll', scrollPlay)
+            window.removeEventListener('scroll', scrollPlay)
         }
 
     }, [scrollPlay])

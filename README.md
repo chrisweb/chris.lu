@@ -18,7 +18,7 @@ On [chris.lu](https://chris.lu), you will find my tutorials and can learn more a
 
 ## Technologies used
 
-During the development of the blog, I wrote a ["Next.js static MDX blog" tutorial](https://chris.lu/web_development/tutorials/next-js-static-mdx-blog) that showcases most of the technologies that I used
+During the development of the blog, I wrote a ["Next.js static MDX blog" tutorial](https://chris.lu/web-development/tutorials/next-js-static-mdx-blog) that showcases most of the technologies that I used
 
 The framework I used is [Next.js 14](https://github.com/vercel/next.js) with [React 18](https://github.com/facebook/react) (I plan on upgrading to Next.js 15 and React 19 as soon as the first stable versions get released and will update my tutorial accordingly)
 
@@ -47,7 +47,10 @@ If you have feedback or want to discuss something, please use the [chris.lu gith
 `npm run lint-debug`: linting command but more verbose output  
 `npm run lint-fix`: linting command that also attempts to automatically fix problems  
 `npm run info`: the default next.js script to get some info about the project  
-`npm run check-urls`: check if URLs in documents are alive or not, this linting is seperate from the main linting script so that it can be used sporadically, as it makes lots of calls to 3rd party URLs to check if they are alive, it does not run during the build process so that a unreachable URL of a third party won't break the build
+
+## Node.js version
+
+Next.js [requires >=18.18.0](https://github.com/vercel/next.js/commit/ecd2be6d3b74d7af2513a8b355408a8f88ec6b25) (same as ESLint v9), Typescript ESLint [requires Node.js >=20.11.0](https://typescript-eslint.io/getting-started/typed-linting) (for import.meta.dirname in ESM files), this projects [package.json](./package.json) has the engines node set to 20.11.0, the latest Node.js LTS is 22.11.0 (Nov. 2024)
 
 ## License
 

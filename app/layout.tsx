@@ -4,7 +4,7 @@ import styles from './layout.module.css'
 import { Permanent_Marker, VT323, Architects_Daughter, Source_Code_Pro, Anta } from 'next/font/google'
 import HeaderNavigation from '@/components/header/Navigation'
 import BaseLink from '@/components/base/Link'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { sharedMetaData } from '@/shared/metadata'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -12,9 +12,9 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 export const metadata: Metadata = {
     // default next.js value
     // added this just to make the console message go away
-    metadataBase: process.env.VERCEL_URL
-        ? new URL(`https://${process.env.VERCEL_URL}`)
-        : new URL(`http://localhost:${process.env.PORT ?? 3000}`),
+    metadataBase: process.env.VERCEL_URL ?
+        new URL(`https://${process.env.VERCEL_URL}`) :
+        new URL(`http://localhost:${process.env.PORT ?? '3000'}`),
     title: {
         template: '%s | chris.lu',
         default: 'Home | chris.lu',
@@ -29,8 +29,6 @@ export const metadata: Metadata = {
         ...sharedMetaData.openGraph,
     },
 }
-
-import type { Viewport } from 'next'
 
 export const viewport: Viewport = {
     /* on older safari this is used as background color
@@ -95,8 +93,32 @@ export default function RootLayout({ children }: {
                     {children}
                 </main>
                 <footer className={styles.layoutFooter}>
-                    <hr className={styles.layoutFooterSeparator} />
-                    <p className="fontDarker">All content on this site is licensed under a <BaseLink href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</BaseLink> license. The source code of this project is licensed under <BaseLink href="https://github.com/chrisweb/chris.lu/blob/main/LICENSE">MIT</BaseLink> and a copy of the source code can be found in the <BaseLink href="https://github.com/chrisweb/chris.lu">chris.lu public GitHub repository</BaseLink>. A list of all open source packages used to build this project can be found in the <BaseLink href="https://github.com/chrisweb/chris.lu/blob/main/package.json">package.json</BaseLink> file. This website uses music licensed under different creative commons licenses, the music tracks <BaseLink href="https://github.com/chrisweb/chris.lu/blob/main/public/assets/music/CREDITS.txt">credits</BaseLink> file can be found in the repository of this project or by clicking on the &quot;eject&quot; button of the player on the top right of the screen. This website uses <BaseLink href="https://fontawesome.com/search?o=r&m=free">Free Icons by Font Awesome</BaseLink>.</p>
+                    <hr className={styles.layoutFooterSeperator} />
+                    <p className="fontDarker">
+                        All content on this site is licensed under a
+                        &nbsp;
+                        <BaseLink href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</BaseLink>
+                        &nbsp;
+                        license. The source code of this project is licensed under
+                        &nbsp;
+                        <BaseLink href="https://github.com/chrisweb/chris.lu/blob/main/LICENSE">MIT</BaseLink>
+                        &nbsp;
+                        and a copy of the source code can be found in the
+                        &nbsp;
+                        <BaseLink href="https://github.com/chrisweb/chris.lu">chris.lu public GitHub repository</BaseLink>
+                        .
+                        &nbsp;A list of all open source packages used to build this project can be found in the&nbsp;
+                        <BaseLink href="https://github.com/chrisweb/chris.lu/blob/main/package.json">package.json</BaseLink>
+                        &nbsp;
+                        file. This website uses music licensed under different creative commons licenses, the music tracks
+                        &nbsp;
+                        <BaseLink href="https://github.com/chrisweb/chris.lu/blob/main/public/assets/music/CREDITS.txt">credits</BaseLink>
+                        &nbsp;
+                        file can be found in the repository of this project or by clicking on the &quot;eject&quot; button of the player on the top right of the screen. This website uses
+                        &nbsp;
+                        <BaseLink href="https://fontawesome.com/search?o=r&m=free">Free Icons by Font Awesome</BaseLink>
+                        .
+                    </p>
                 </footer>
                 <Analytics />
                 <SpeedInsights />

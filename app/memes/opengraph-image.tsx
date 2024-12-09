@@ -30,11 +30,11 @@ export default async function OGImage(/*props: IImageProps*/) {
     // Font
     const permanentMarkerRegular = fetch(
         new URL('/public/assets/fonts/PermanentMarker-Regular.ttf', import.meta.url)
-    ).then((res) => res.arrayBuffer())
+    ).then(res => res.arrayBuffer())
 
     const imageData = await fetch(
         new URL('/public/assets/images/og_image_background_1200x630.jpg', import.meta.url)
-    ).then((res) => res.arrayBuffer())
+    ).then(res => res.arrayBuffer())
 
     return new ImageResponse(
         // ImageResponse JSX element
@@ -48,17 +48,15 @@ export default async function OGImage(/*props: IImageProps*/) {
                     justifyContent: 'center',
                 }}
             >
-                {
-                    // eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element 
-                    <img
-                        // @ts-ignore: this is fine 🔥
-                        src={imageData}
-                        style={{
-                            objectFit: 'cover',
-                            objectPosition: 'center',
-                        }}
-                    />
-                }
+                {/* eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element */}
+                <img
+                    // @ts-ignore: this is fine 🔥
+                    src={imageData}
+                    style={{
+                        objectFit: 'cover',
+                        objectPosition: 'center',
+                    }}
+                />
                 <span
                     style={{
                         position: 'absolute',
@@ -97,7 +95,7 @@ export default async function OGImage(/*props: IImageProps*/) {
                 >
                     {title}
                 </span>
-            </div >
+            </div>
         ),
         // ImageResponse options
         {

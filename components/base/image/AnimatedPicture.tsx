@@ -1,14 +1,13 @@
-import { getImageProps } from 'next/image'
+import Image, { getImageProps } from 'next/image'
 import type { StaticImageData, ImageProps } from 'next/image'
 import { rgbDataURL } from '@/lib/image'
-import Image from 'next/image'
 
 interface IAnimatedPictureProps extends Omit<ImageProps, 'src'> {
     avifPath: string
     webpStaticImport: StaticImageData
 }
 
-const ImageAnimatedPicture: React.FC<IAnimatedPictureProps> = (props): JSX.Element => {
+const ImageAnimatedPicture: React.FC<IAnimatedPictureProps> = (props): React.JSX.Element => {
 
     // Next.js displays this message in the terminal
     // The requested resource "/_next/static/media/wave_32.178d7408.webp" is an animated image so it will not be optimized. Consider adding the "unoptimized" property to the <Image>.
@@ -36,7 +35,7 @@ const ImageAnimatedPicture: React.FC<IAnimatedPictureProps> = (props): JSX.Eleme
 
     delete rest.srcSet
 
-    const webpSource = webpSourceSrc?.replace('w=96', 'w=48')
+    const webpSource = webpSourceSrc.replace('w=96', 'w=48')
     // animated avifs avif(s) can not be statically imported
     // also next/image reports "The requested resource isn't a valid image"
     // so just use a string for the path and we set a cache control header

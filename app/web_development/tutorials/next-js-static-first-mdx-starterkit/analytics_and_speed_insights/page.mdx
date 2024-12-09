@@ -1,0 +1,279 @@
+---
+title: Vercel Analytics and Speed Insights - Tutorial
+description: Vercel Analytics and Speed Insights - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['vercel', 'Analytics', 'Speed Insights', 'packages', 'gdpr']
+published: 2024-08-26T20:20:20.444Z
+modified: 2024-09-04T21:22:23.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/analytics_and_speed_insights
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
+
+# Vercel Analytics and Speed Insights
+
+We are now going to add Vercel **Analytics** and **Speed Insights** to our project using two packages by Vercel so that later, we can go to our Vercel Dashboard and check out how well our project performs
+
+The two chapters are quite similar because both packages work similarly. The real difference is only the name. This means that if you are done with the Analytics chapter, you just need to repeat the same steps for the Speed Insights package.
+
+## Add Vercel Analytics to your project
+
+> [!WARN]  
+> If you want to use this service, extra fees might apply, so make sure you check out the [vercel analytics pricing page](https://vercel.com/docs/analytics/limits-and-pricing) first; on a hobby plan the first 2500 events are free, and data will be kept for up to one month
+
+As we are about to release our project, now should be a good time to add [vercel analytics](https://vercel.com/docs/analytics/quickstart) so that we can have an overview of who visits our project
+
+First, go to [vercel.com](https://vercel.com/) and log in
+
+You should now be on the overview page, select the project for which you want to add analytics
+
+On the project page, in the top navigation click on **Analytics**
+
+Next, click on the **Enable** button
+
+Chose your plan, if you haven't already done so you may want to check out the [Vercel analytics pricing page](https://vercel.com/docs/analytics/limits-and-pricing)
+
+Now we need to add Vercel Analytics to our Next.js project, so we go back into VSCode and open our project
+
+Then we open the VSCode terminal and run the following command to install the Vercel Analytics package:
+
+```shell title="terminal" showLineNumbers
+npm i @vercel/analytics --save-exact
+```
+
+Now we open the **root layout** that is the `/app` folder, and add the following code:
+
+```tsx title="/app/layout.tsx" showLineNumbers {5} {43}
+import './global.css'
+import { Metadata } from 'next'
+import HeaderNavigation from '@/components/header/Navigation'
+import { Kablammo } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/react'
+
+export const metadata: Metadata = {
+    title: {
+        template: '%s | example.com',
+        default: 'Home | example.com',
+    },
+    description: 'My description',
+    openGraph: {
+        url: 'https://example.com/',
+        siteName: 'My website name',
+        locale: 'en_US',
+        type: 'website',
+    },
+}
+
+const kablammo = Kablammo({
+    subsets: ['latin'],
+    variable: '--font-kablammo',
+    weight: ['400'],
+    display: 'swap',
+})
+
+export default function RootLayout({
+    children,
+}: {
+    children: React.ReactNode
+}) {
+    return (
+        <html lang="en" className={kablammo.variable}>
+            <body>
+                <header>
+                    <HeaderNavigation />
+                </header>
+                <main>{children}</main>
+                <footer>
+                    <p>My Footer</p>
+                </footer>
+                <Analytics />
+            </body>
+        </html>
+    )
+}
+```
+
+Line 5: we import the react component from the Vercel [Analytics](https://www.npmjs.com/package/@vercel/analytics) package
+
+Line 43: we add the **Analytics react component** right before the body closing tag
+
+There are a few things you can configure, like for example, the debug mode is enabled by default and will print messages in your console when the environment is development, to disable it change the code to this:
+
+```tsx title="/app/layout.tsx" showLineNumbers{43}
+<Analytics debug={false} />
+```
+
+Line 43 set the **debug** prop of the analytics component to **false** to disable the debug mode
+
+There is also a **beforeSend** option that lets you modify the events before they get sent to Vercel, if you want to use this [advanced option](https://vercel.com/docs/analytics/package), I recommend you have a look at their [official example](https://vercel.com/docs/analytics/package) in the Vercel Analytics documentation
+
+To see your **Analytics** in action, log in to your Vercel account, click on your project name, and then click on **Analytics**
+
+> [!MORE]  
+> [Vercel "Web Analytics" quickstart](https://vercel.com/docs/analytics/quickstart)  
+> [Vercel "Advanced Web Analytics Configuration" documentation](https://vercel.com/docs/analytics/package)  
+
+## Add Vercel Speed Insights to your project
+
+> [!WARN]  
+> If you want to use this service, extra fees might apply, so make sure you check out the [Vercel Speed Insights pricing page](https://vercel.com/docs/speed-insights/limits-and-pricing) first; on a hobby plan, the first project is free, and you get up 10k free analytics events
+
+First, go to [vercel.com](https://vercel.com/) and log in
+
+You should now be on the overview page, select the project for which you want to add analytics
+
+On the project page, in the top navigation click on **Speed Insights**
+
+Next, click on the **Enable** button
+
+Now we need to add Vercel Speed Insights to our Next.js project, so we go back into VSCode and open our project
+
+Then we open the VSCode terminal and run the following command to install the vercel Speed Insights package:
+
+```shell title="terminal"
+npm i @vercel/speed-insights --save-exact
+```
+
+Now we open the root layout that is the `/app` folder, and add the following code:
+
+```tsx title="/app/layout.tsx" showLineNumbers {6} {45}
+import './global.css'
+import { Metadata } from 'next'
+import HeaderNavigation from '@/components/header/Navigation'
+import { Kablammo } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
+
+export const metadata: Metadata = {
+    title: {
+        template: '%s | example.com',
+        default: 'Home | example.com',
+    },
+    description: 'My description',
+    openGraph: {
+        url: 'https://example.com/',
+        siteName: 'My website name',
+        locale: 'en_US',
+        type: 'website',
+    },
+}
+
+const kablammo = Kablammo({
+    subsets: ['latin'],
+    variable: '--font-kablammo',
+    weight: ['400'],
+    display: 'swap',
+})
+
+export default function RootLayout({
+    children,
+}: {
+    children: React.ReactNode
+}) {
+    return (
+        <html lang="en" className={kablammo.variable}>
+            <body>
+                <header>
+                    <HeaderNavigation />
+                </header>
+                <main>{children}</main>
+                <footer>
+                    <p>My Footer</p>
+                </footer>
+                <Analytics />
+                <SpeedInsights />
+            </body>
+        </html>
+    )
+}
+```
+
+Line 6: we import the react component from the Vercel [Speed Insights](https://www.npmjs.com/package/@vercel/speed-insights) package
+
+Line 45: we add the **Speed Insights react component** right before the body closing tag
+
+There are a few things you can configure, like for example, the debug mode is enabled by default and will print messages in your console when the environment is development, if you want to disable you change the code to this:
+
+```tsx title="/app/layout.tsx" showLineNumbers{45}
+<SpeedInsights debug={false} />
+```
+
+Line 45: set the **debug** prop of the Speed Insights component to **false**
+
+There is also a **beforeSend** option that lets you modify the data before it gets sent to Vercel, if you want to use this [advanced option](https://vercel.com/docs/speed-insights/package), I recommend you have a look at their [official example](https://vercel.com/docs/speed-insights/package) in the Vercel **Speed Insights** documentation
+
+To see your **Speed Insights** in action, login to your Vercel account, click on your projects name and then click on **Speed Insights**
+
+> [!MORE]  
+> [Vercel "Speed Insights" quickstart](https://vercel.com/docs/speed-insights/quickstart)  
+> [Vercel "Speed Insights Configuration" documentation](https://vercel.com/docs/speed-insights/package)  
+
+## How to fix TrustedScript errors
+
+If the CSP **trusted-types** directive is in use, then you will get the following errors in your browser console:
+
+```shell
+This document requires 'TrustedScriptURL' assignment.
+```
+
+Which is why you need to remove the directive from your CSP header, to do so edit your `next.config.mjs` file and then search for `require-trusted-types-for` and delete that entry from your CSP directives list
+
+You might want to add a comment instead (above the defaultCSPDirectives) to let other developers that might wonder why this directive is missing, or why you haven't included it:
+
+```js
+// we commented out the trusted types directive:
+// require-trusted-types-for 'script';
+// because of the following error in the browser console:
+// This document requires 'TrustedScript' assignment
+```
+
+I have more details about this directive in the [require-trusted-types-for](/web_development/posts/csp#require-trusted-types-for-directive) chapter in the CSP post
+
+A second change you need to do (when using Vercel analytics), is to add the `https://va.vercel-scripts.com` domain for the **development** environment to the **script-src** directive:
+
+```shell
+script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com;
+```
+
+This is only needed in development, in development Vercel Analytics does NOT track visits, but it is still loading a script from that domain, which is why we add it to the script-src directive
+
+<Pagination
+    previous={{ label: 'Frontmatter plugin', href: '/web_development/tutorials/next-js-static-mdx-blog/frontmatter-plugin' }}
+    next={{ label: 'Production release (custom domain)', href: '/web_development/tutorials/next-js-static-mdx-blog/production_release' }}
+/>
+
+</article>

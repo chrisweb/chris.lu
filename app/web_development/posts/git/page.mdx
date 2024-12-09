@@ -2,7 +2,7 @@
 title: git
 keywords: ['git', 'commit', 'repository', 'branch']
 published: 2024-08-03T11:22:33.444Z
-modified: 2024-09-11T14:22:33.444Z
+modified: 2024-09-04T14:22:33.444Z
 permalink: https://chris.lu/web_development/posts/git
 section: Web development
 ---
@@ -37,7 +37,7 @@ export const metadata = {
 
 # git
 
-![two super heros pointing at each other, it represents two versions of a file getting compared in a git diff](../../../../public/assets/images/app/web_development/posts/git/banner.png 'when two files meet in git diff { banner }')
+![two super heroes pointing at each other, it represents two versions of a file getting compared in a git diff](../../../../public/assets/images/app/web_development/posts/git/banner.png 'when two files meet in git diff { banner }')
 
 **git** is an open-source version control system used for tracking changes in source code during software development. Git gives every developer a local copy of a project. After a developer has made his changes, they create a new commit and then push it to a central repository. Other developers can then pull that commit from the central repository into their local copy. Git makes branching (creating a separate line of development) and merging (combining changes from different branches) easy.
 
@@ -97,16 +97,11 @@ To initialize a git project locally, you first need to use the following command
 git init
 ```
 
-> [!MORE]  
-> [git documentation](https://git-scm.com/doc)  
+I will use GitHub as the origin, but you could use any other Git cloud service, like GitLab.
 
-## link the remote repository to your local project
+Next, go to GitHub and create a new repository by clicking on the "+" icon on the left of your user avatar (in the top right section of the page), then select "new repository".
 
-If you already have a GitHub repository (I will use GitHub, but you could use any other Git cloud service, like GitLab or Bitbucket if you prefer those services), and you have a local repository, but both are not linked, then this is what you need to do
-
-Go to [github.com](https://github.com) and create a new repository (if you haven't already created one), by clicking on the "+" icon on the left of your user avatar (in the top right section of the page), then select "new repository".
-
-Then use the following command to link the remote origin to your local git setup (if you have no local repository yet, check out the previous [initialze git](#initialize-git) chapter):
+Then use the following command to add the origin to your local git setup:
 
 ```shell
 git remote add origin https://github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
@@ -118,20 +113,29 @@ If you are using the git credential manager and have multiple users, then you ma
 git remote add origin https://DEFAULT_GIT_USER_NAME@github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
 ```
 
-Finally you can verify that your local copy and the remote origin are linked by using the following command:
+> [!MORE]  
+> [git documentation](https://git-scm.com/doc)  
+> [GitHub "Adding locally hosted code to GitHub" documentation](https://docs.github.com/github/importing-your-projects-to-github/adding-an-existing-project-to-github-using-the-command-line)  
 
-```shell
-git remote -v
-```
+## Choosing a Git Branching Strategy
 
-This should display two links to the origin, one for **fetch** and another one for **push** commands
+There are a lot of different approaches when it comes to managing code using branches, some popular Git branching strategies are for example [Git Flow](https://nvie.com/posts/a-successful-git-branching-model/), [GitHub Flow](https://docs.github.com/en/get-started/using-github/github-flow), [GitLab Flow](https://about.gitlab.com/topics/version-control/what-is-gitlab-flow/), [Trunk-based development](https://www.atlassian.com/continuous-delivery/continuous-integration/trunk-based-development) and many more.
+
+There is no right or wrong when choosing a Git branching strategy, the goal is NOT to use the most popular Git flow, the goal is to find and use the one that best suits your workflow. I recommend checking out the above links and familiarizing yourself with the different workflows, then try the one out that you (your team) think is best suited, and if it does not fit perfectly you can still adjust the rules and make your own Git flow 😉.
+
+Also don't overthink it, you can still switch to another git flow later. Why not just start with a rather simple Git flow with only two branches. The **main** branch a second branch that you could name **preview** (some prefer to call it **staging** or **testing**). When you develop locally you do in the preview branch and then commit your code updates into the remote preview (on GitHub, Gitlab). If you have a CI/CD pipeline in place should trigger an automatic deployment. After testing the preview deployment you are ready to make a pull request (PR) to merge the code into the main branch, the main branch will then get deployed in production.
+
+If you work with others on your blog project, to avoid having to deal with merge conflicts regularly, you might want to create a branch per feature (hence called feature branches) and use that branch for development, before merging your code into preview (and later into main)
 
 > [!MORE]  
-> [GitHub "Adding locally hosted code to GitHub" documentation](https://docs.github.com/github/importing-your-projects-to-github/adding-an-existing-project-to-github-using-the-command-line)  
+> [Git Flow](https://nvie.com/posts/a-successful-git-branching-model/)  
+> [GitHub Flow](https://docs.github.com/en/get-started/using-github/github-flow)  
+> [GitLab Flow](https://about.gitlab.com/topics/version-control/what-is-gitlab-flow/)  
+> [Trunk-based development](https://www.atlassian.com/continuous-delivery/continuous-integration/trunk-based-development)  
 
 ## Cloning a repository
 
-To clone one of your repositories (hosted by remote git service like GitHub), first get the HTTPS web URL of the repository, and then use the following command:
+To clone a repository first get the HTTPS web URL of the repository, and then use the following command:
 
 ```shell
 git clone https://github.com/GITHUB_USER_NAME/GITHUB_REPOSITORY_NAME.git
@@ -153,70 +157,6 @@ git remote set-url origin https://DEFAULT_GIT_USER_NAME@github.com/GITHUB_USER_N
 > [git-credential-manager "Multiple users" documentation](https://github.com/git-ecosystem/git-credential-manager/blob/main/docs/multiple-users.md)  
 > [GitHub "git-credential-manager" repository](https://github.com/git-ecosystem/git-credential-manager)  
 > [git-credential-manager documentation](https://github.com/git-ecosystem/git-credential-manager/blob/release/docs/README.md)  
-
-## git fetch vs pull
-
-A fetch will only **fetch** the changes from the remote repository into your local copy and then stops.
-
-A **pull** will also fetch the remote changes but then additionally (attempt) to merge, so **pull = fetch + merge** (a pull will abort if there are conflicts).
-
-So usually after a git fetch you would use the `git merge` command to also merge the changes. The advantage of NOT doing a pull but use a **fetch** instead, is that you can still save and commit your local changes before doing using the `git merge` command.
-
-A **pull** on the other hand is two commands in one and recommended for when you have no unsaved and uncommited changes in your local copy and just quickly want to fetch + merge the remote changes into your local files.
-
-## remote vs upstream
-
-When you create a repository on GitHub (or another git service), then this repository will be your **remote** repository (also called the **origin**)
-
-When you do a fork of a repository, then the original repository will be the **updtream** repository and your fork will be the **remote** repository
-
-If you have cloned your fork (remote repository) locally and use the following command:
-
-```shell
-git remote -v
-```
-
-Then will display two links from your local, the first origin is for **fetch** and the second one is for **push** commands
-
-So when you use the following command (or if you want to immediatly merge the remote changes with your uncommited changes use `git pull` instead):
-
-```shell
-git fetch
-```
-
-You will get the remote changes (if there any)
-
-If you now want to also create a link to the upstream repository (the original one you forked earlier), then use the following command:
-
-```shell
-git remote add upstream https://github.com/ORIGINAL_REPOSITORY_USER/ORIGINAL_REPOSITORY_NAME.git
-```
-
-If you now use the **remote** command again, you will see that there are now 4 entries:
-
-```shell
-git remote -v
-```
-
-You now also have a link to the repository you forked, for fetch and push commands
-
-If there are changes in the repository you forked and you want to fetch those to update your local repository, then you use the fetch command like this:
-
-```shell
-git fetch upstream
-```
-
-Finally to merge the fetched changes with the code in your local repository, use this command:
-
-```shell
-git merge upstream/master master
-```
-
-Or if you prefer to do both at once (which is preferred if you have no uncommited changes), use the pull command instead, like this:
-
-```shell
-git pull upstream
-```
 
 ## git status
 
@@ -408,6 +348,6 @@ Edit the git config in your repository, change **ignorecase** from true to false
 ```
 
 > [!MORE]  
-> [git "ignoreCase" documentation](https://git-scm.com/docs/git-config/2.14.6#Documentation/git-config.txt-coreignoreCase)
+> [git "ignoreCase" documentation](https://www.git-scm.com/docs/git-config/2.14.6#Documentation/git-config.txt-coreignoreCase)
 
 </article>

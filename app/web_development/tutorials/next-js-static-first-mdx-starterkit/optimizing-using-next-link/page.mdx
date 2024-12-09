@@ -1,0 +1,264 @@
+---
+title: Optimizing links in MDX using next/link - Tutorial
+description: Optimizing links in MDX using next/link - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['Optimizing', 'links', 'MDX', 'next/link', 'mdx-components', 'External Url']
+published: 2024-08-21T12:12:12.444Z
+modified: 2024-08-21T12:12:12.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/optimizing-using-next-link
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
+
+# Optimizing links in MDX using next/link
+
+When building our navigation earlier we saw why it is beneficial to use [next/link](https://nextjs.org/docs/app/api-reference/components/link) (for internal links) instead of regular HTML anchors, so now we want to do the same for all the markdown links that we will insert into our MDX pages, because without using the **mdx-components** the parser would just transform the markdown links into regular HTML anchors, we want markdown links to use next/link, which is what we will do next in our `mdx-components.tsx` file
+
+> [!MORE]  
+> [Next.js "next/link" API reference](https://nextjs.org/docs/app/api-reference/components/link)  
+> [Next.js "linking and navigation" documentation](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating)  
+
+## React component for external and internal links
+
+First, we are going to create a custom Link component that will use **next/link**, **next/link** extends the HTML `<a>{:html}` element to provide prefetching and client-side navigation between routes, and we are going to create a component that will use **next/link** for internal URLs and use a regular `<a>{:html}` element for external URLs, we will also add an icon to external URLs to give users a visible hint that if they click on that link, they will leave our app
+
+In the `/components` folder, add a new `base` folder
+
+Then, in the `base` folder, create a new `Link.tsx` file and add the following code:
+
+```tsx title="/components/base/Link.tsx" showLineNumbers /example.com/
+import type { PropsWithChildren } from 'react'
+import Link from 'next/link'
+import type { Route } from 'next'
+
+export interface IBaseLinkProps extends PropsWithChildren {
+    href: Route | URL
+    target?: string
+    rel?: string
+    className?: string
+}
+
+const isExternalUrl = (url: string, domain: string): boolean => {
+
+    const urlLowerCase = url.toLowerCase()
+
+    const firstCharacter = urlLowerCase.charAt(0)
+
+    if (firstCharacter === '#' || firstCharacter === '/') {
+        return false
+    }
+
+    if (urlLowerCase.startsWith('http://') || urlLowerCase.startsWith('https://')) {
+
+        const urlNoProtocol = urlLowerCase.replace('http://', '').replace('https://', '')
+
+        const potentialDomain = urlNoProtocol.split('/')[0]
+
+        if (potentialDomain !== domain) {
+            return true
+        }
+
+    }
+
+    return false
+
+}
+
+const BaseLink: React.FC<IBaseLinkProps> = (props) => {
+
+    const { href, children, ...linkProps } = props
+
+    const isExternal = isExternalUrl(href.toString(), 'example.com')
+
+    const newLinkProps = { ...linkProps }
+
+    if (isExternal) {
+        newLinkProps.rel = 'noopener noreferrer'
+        newLinkProps.target = '_blank'
+    }
+
+    return (
+        <>
+            {isExternal ? (
+                <>
+                    <a href={href.toString()} {...newLinkProps}>
+                        {children}
+                    </a>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="iconSmall" viewBox="0 0 16 16">
+                        <path fillRule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5" />
+                        <path fillRule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z" />
+                    </svg>
+                </>
+            ) : (
+                <Link href={href} {...newLinkProps}>
+                    {children}
+                </Link>
+            )}
+        </>
+    )
+}
+
+export default BaseLink
+```
+
+Line 1: we import the **PropsWithChildren** type from React, which we will use to strictly type our props interface
+
+Line 2: we import the Link component from the [next/link](https://nextjs.org/docs/app/api-reference/components/link) package
+
+Line 3: we import the **Route** type from Next.js to strictly type the **href** variable in our props interface
+
+Lines 5 to 10: we create an interface for the props of the component by extending the react type **PropsWithChildren** and using the Next.js **Route** type for the **href** property; we also add the types for some optional properties that might be useful when re-using the component 
+
+Lines 12 to 36: we create an **isExternalUrl** function that gets the URL for our link as input and then checks if the URL is internal or external; if the URL is external, it returns true; else, it returns false, I used a pretty naive approach to make the test, but that is because I didn't need more for my own URLs (if this is not complex enough for your own needs then feel free to improve that part, for example if you have more than one domain then you may want to use an array instead), for my use cases I just check if a URL starts with a slash (`/`) or a hashtag (`#`) which indicates it is an internal URL. I also check if a URL starts with http or https, in which case it is an external URL, except if the domain matches a value I have passed as a parameter to the function and which contains the domain name my website will use (in production)
+
+Line 38: we use the interface we just created to strictly type the props of our functional React component
+
+Lines 42: we use the **isExternalUrl** function to check if the URL is external or internal; the first parameter is the URL of the current link, and the second parameter is the domain of our project (replace example.com with the domain you intend to use in production)
+
+Lines 44 to 49: we create a new link props object that will contain any original props that got passed to the component; then for (external domains) we set the values for two attributes rel and target; for rel we use the 2 values, [noopener](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel/noopener) got introduced in HTML 5 to increase security and it is used to tell browsers if the link gets opened in a new window we don't want the website in that new window to be able to access our website by using the [window.opener](https://developer.mozilla.org/en-US/docs/Web/API/Window/opener) property, the second value [noreferrer](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel/noreferrer) increases the privacy of our visitors by telling the browser not to set a referrer header (referrer information does NOT get leaked), which means the website that gets visited will not know the exact source; the target attribute we set it to **_blank**, this will instruct the browser to open the link in a new tab, which makes it easier for users to come back to our website by closing the new tab instead of having to navigate back one or more pages
+
+Lines 53 to 67: in the return statement, we check if the link is external, in which case we use an HTML anchor element and add the **external icon** behind it, and if it is an internal link, then we use next/link
+
+The SVG icon that I used is from [icons.getbootstrap.com](https://icons.getbootstrap.com/), they are [MIT licensed](https://github.com/twbs/icons/blob/main/LICENSE), the icon I chose to use here is the [Box arrow up-right](https://icons.getbootstrap.com/icons/box-arrow-up-right/) icon
+
+> [!MORE]  
+> [MDN "rel attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel)  
+> [MDN "target attribute" documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#target)  
+
+## Using the BaseLink component for all markdown links
+
+Next, open the `mdx-components.tsx` (which is in the root of your project) again, and add a second mdx component to customize the anchor elements, like so:
+
+```tsx title="mdx-components.tsx" showLineNumbers {2-3} {19-23}
+import type { ComponentPropsWithoutRef } from 'react'
+import type { MDXComponents } from 'mdx/types'
+import BaseLink from '@/components/base/Link'
+import type { Route } from 'next'
+
+// This file allows you to provide custom React components
+// to be used in MDX files. You can import and use any
+// React component you want, including components from
+// other libraries.
+
+type ListPropsType = ComponentPropsWithoutRef<'ul'>
+type AnchorPropsType = ComponentPropsWithoutRef<'a'>
+
+// This file is required to use MDX in `app` directory.
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+    return {
+        // Allows customizing built-in components, e.g. to add styling.
+        ul: ({ children, ...props }: ListPropsType) => (
+            <ul className="listContainer" {...props}>
+                {children}
+            </ul>
+        ),
+        a: ({ children, href, ...props }: AnchorPropsType) => (
+            <BaseLink href={href as Route} {...props}>
+                {children}
+            </BaseLink>
+        ),
+        ...components,
+    }
+}
+```
+
+Lines 2 to 3: we import our custom **BaseLink** component and the **Route** type from Next to strictly type the link href
+
+Line X: we add a custom component type, this time we use the generic type to specify it is an anchor element (`'a'`)
+
+Lines 19 to 23: we first use our newly created type to add type information to the props, we use the mdx-components to replace each anchor component with our custom BaseLink component, this optimization will make sure all our links use the Next.js router and we will be able to further customize how links get displayed
+
+## External icon styling in the global.css
+
+Next, we edit the `global.css` file in the `app` folder to add the styles for the SVG icon(s), like so:
+
+```css title="/app/global.css" showLineNumbers{126} {1-8}
+.iconSmall {
+    margin-left: calc(var(--spacing) / 4);
+    display: inline-block;
+    fill: currentcolor;
+    font-size: 1em;
+    height: 1em;
+    vertical-align: -.125em;
+}
+```
+
+Lines 126 to 133: we add some CSS to style our icon:
+
+* we add some **margin** on the **left** of the icon to add some space between the icon and the preceding link
+* we set the **display** property to **inline-block** to make sure the icon and the link are placed one after the other
+* we set the **fill** property to tell the browser to use the **currentcolor** (which is the current color of our text) as filler color for our SVG icon
+* we set the **font-size** and element **height** to the same value that is being used for our text (default font-size is 1rem) so that the icon matches the height of the link text
+* finally, I manually adjusted the **vertical-align** value a little bit so that visually, the icon is centered vertically
+
+## Links examples using the MDX playground page
+
+Finally, we update our playground `page.mdx` file (that is in the `/app/(tutorial_examples)/mdx-components_playground` folder) with some links examples to showcase internal and external links, like so:
+
+```md title="/app/(tutorial_examples)/mdx-components_playground/page.mdx"
+<article>
+
+* foo
+* bar
+
+[internal link that has our production domain](https://example.com)
+
+[internal link starting with a slash](/internal)
+
+[internal link starting with a hash](#internal)
+
+[external link](https://google.com)
+
+</article>
+
+```
+
+Now launch the dev server (using the `npm run dev` command) and then open the `http://localhost:3000/mdx-components_playground` playground page URL in your browser to see the result
+
+Congratulations 🎉 you just created a link component that will now get used for all markdown links, which means they will now all benefit from the next/link features like prefetching and optimized client-side navigation between routes
+
+If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+
+> [!MORE]  
+> [VSCode "Markdown editing" documentation](https://code.visualstudio.com/docs/languages/markdown#_inserting-images-and-links-to-files)  
+
+<Pagination
+    previous={{ label: 'The mdx-components file', href: '/web_development/tutorials/next-js-static-mdx-blog/mdx-components-file' }}
+    next={{ label: 'Optimizing images in MDX using next/image', href: '/web_development/tutorials/next-js-static-mdx-blog/optimizing-using-next-image' }}
+/>
+
+</article>

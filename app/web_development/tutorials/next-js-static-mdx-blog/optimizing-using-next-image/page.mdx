@@ -180,7 +180,7 @@ In the previous chapter we saw that is mandatory to set the width and height of 
 
 **next/image** offers 3 ways to **avoid** having to set the width and height manually:
 
-* one option is to use the next/image [fill](https://nextjs.org/docs/app/api-reference/components/image#fill) property, in which case the image would fill the parent image container (which needs a CSS position set to either relative, fixed, or absolute), meaning that the space used by the image would be the size of the parent container (next/image will set width and height of the image to 100% and set the CSS position to absolute); this is an excellent solution for a header image, when you want it to fit inside of a header container by setting the [CSS object-fit property](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) on the image to either cover or contain, but in our case we don't wan't every image to be the size of the container, we want to display the image as is (using it's orginal width), unless the width of the image is larger then the width of the article, in which case the image width is the article width 
+* one option is to use the next/image [fill](https://nextjs.org/docs/app/api-reference/components/image#fill) property, in which case the image would fill the parent image container (which needs a CSS position set to either relative, fixed, or absolute), meaning that the space used by the image would be the size of the parent container (next/image will set width and height of the image to 100% and set the CSS position to absolute); this is an excellent solution for a header image, when you want it to fit inside of a header container by setting the [CSS object-fit property](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) on the image to either cover or contain, but in our case we don't wan't every image to be the size of the container, we want to display the image as is (using it's original width), unless the width of the image is larger then the width of the article, in which case the image width is the article width 
 * setting the width and height manually is another option we already saw in the previous chapter, but for the use case, this is also not the one we want to choose because we want a solution that automates most of the work so that we end up having a great DX and also because setting the width and height of an image when using markdown, would only work if we install an extra plugin that handles the new feature
 * finally, the third option is to statically import the images so that next/image can automatically determine the width and height at build time
 
@@ -266,7 +266,7 @@ So this means we need to keep looking for an even better solution that would all
 
 This chapter consists of 4 steps:
 
-* first, we will install the ackage, which will add the rehype pluginp to our project
+* first, we will install the package, which will add the rehype plugin to our project
 * then, we will update our Next.js configuration file to use the rehype plugin in our MDX setup
 * then, we will create a simple image component that will use next/image
 * finally, we will add our image component to the mdx-components file to make sure every markdown element uses our image plugin
@@ -536,7 +536,7 @@ When using markdown, the alt text goes into the brackets after the exclamation m
 > [!NOTE]  
 > It is always recommended to add an alt **attribute** to images, but the alt **text** itself is optional, meaning that for most images, it is considered a best practice for **accessibility** reasons as well as for **SEO** optimization to add a descriptive alt text
 >  
-> However, if the image is purely decorative, then you should still add an alt **attribute**, but the alt **text** should be an empty string; also if the image is purely decorative you can add the **aria-hidden** attribute and set it to true to tell the assertive technology (screen reader) to ignore it completly; MDN has a very in-depth article about [aria-hidden](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-hidden) you may want to check out
+> However, if the image is purely decorative, then you should still add an alt **attribute**, but the alt **text** should be an empty string; also if the image is purely decorative you can add the **aria-hidden** attribute and set it to true to tell the assertive technology (screen reader) to ignore it completely; MDN has a very in-depth article about [aria-hidden](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-hidden) you may want to check out
 > 
 > If you are unsure about how to write good alt texts I recommend having a look at this [blog post about how to write good alt texts](https://design102.blog.gov.uk/2022/01/14/whats-the-alternative-how-to-write-good-alt-text/); another quick read is the HTML specification chapter about [alt text for images](https://html.spec.whatwg.org/multipage/images.html#alt); the w3c also has an interesting document helping you to decide [when and what kind of alt text to use](https://www.w3.org/WAI/tutorials/images/decision-tree/), and finally the w3c has a page that lists useful [resources about alt texts](https://www.w3.org/WAI/alt/)
 
@@ -576,7 +576,7 @@ Next, if you look at the [Content-Disposition](https://developer.mozilla.org/en-
 
 If you do NOT define any formats for images in your Next.js configuration file then Next.js will use a [default image config](https://github.com/vercel/next.js/blob/292fd4eb3f7a774c17990e3349b91ae5630db821/packages/next/src/shared/lib/image-config.ts) value which (as of now 01.05.2024) is `['image/webp']`
 
-This means that even though our source file is a [JPEG (JPG)](https://web.dev/learn/images/jpeg) image, **next/image** has automatically converted it to a [WEBP](https://web.dev/learn/images/webp) image, this is already great as webp images are smaller than jpg files, but we want to use another **format** that creates even smaller files, and that format is [AVIF](https://web.dev/learn/images/avif). As we can see on the [avif caniuse page](https://caniuse.com/avif), **avif** is a format that is supported by most modern browsers but some older browsers don't, which is why we will also keep **webp** as a fallback
+This means that even though our source file is a [JPG](https://web.dev/learn/images/jpg) image, **next/image** has automatically converted it to a [WEBP](https://web.dev/learn/images/webp) image, this is already great as webp images are smaller than jpg files, but we want to use another **format** that creates even smaller files, and that format is [AVIF](https://web.dev/learn/images/avif). As we can see on the [avif caniuse page](https://caniuse.com/avif), **avif** is a format that is supported by most modern browsers but some older browsers don't, which is why we will also keep **webp** as a fallback
 
 To tell next/image to convert images to **avif** as well, we need to edit our **nextConfigOptions** in the `next.config.mjs` like this:
 
@@ -1076,7 +1076,7 @@ Line 51: we add the placeholder attribute and set the value to blur
 
 To see the placeholder image that next/image has generated, you can also open the **Network Tab** (in your browser’s developer tools) and click on the row of the placeholder image, then click on the preview tab, the URL of the placeholder is similar to the URL of the image itself, the only difference is that for the placeholder the size is set to 8px (`&w=8`)
 
-Something worth knowing about the placeholder is that next/image will only create a [blurDataURL](https://nextjs.org/docs/pages/api-reference/components/image#blurdataurl) (blurDataURL is an attribute that next/image sets for the image to know what blur image it should use) for images that you import statically. It will NOT create a placeholder for remote images. For example if the image source URL is a remote image hosting service or a CDN then next/image will not be able to create a placeholder. Also next/image does NOT (as of now) create placeholder images for animated images, like an animated gif, aimated webp or animated avif won't have a placeholder.
+Something worth knowing about the placeholder is that next/image will only create a [blurDataURL](https://nextjs.org/docs/pages/api-reference/components/image#blurdataurl) (blurDataURL is an attribute that next/image sets for the image to know what blur image it should use) for images that you import statically. It will NOT create a placeholder for remote images. For example if the image source URL is a remote image hosting service or a CDN then next/image will not be able to create a placeholder. Also next/image does NOT (as of now) create placeholder images for animated images, like an animated gif, animated webp or animated avif won't have a placeholder.
 
 In situations where next/image does not create the placeholder, you have several options to create your own placeholder:
 

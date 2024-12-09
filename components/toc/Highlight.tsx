@@ -2,24 +2,27 @@
 
 import { ErrorBoundary } from 'react-error-boundary'
 import useIntersectionObserver from '@/hooks/useIntersectionObserver'
-import type { PropsWithChildren, ReactElement, ReactNode } from 'react'
+import type { FC, JSX, PropsWithChildren, ReactNode } from 'react'
 import { Children, cloneElement, isValidElement } from 'react'
 import styles from './highlight.module.css'
 
-interface IProps extends PropsWithChildren {
+interface IIntersectionObserverProps {
     headingsToObserve?: string
     rootMargin?: string
     threshold?: number
 }
 
-interface IChildProps {
-    className: string
+export type TocHighlightProps = PropsWithChildren<IIntersectionObserverProps>
+
+interface IChildProps extends PropsWithChildren {
+    className?: string
     href: string
-    children: ReactElement<IChildProps>
+    children: ReactNode
 }
 
+type ValidAnchorElement = ReactNode & IChildProps
 
-const TocHighlight: React.FC<IProps> = (props): JSX.Element => {
+const TocHighlight: FC<TocHighlightProps> = (props): JSX.Element => {
 
     const { headingsToObserve, rootMargin, threshold } = props
 
@@ -31,28 +34,26 @@ const TocHighlight: React.FC<IProps> = (props): JSX.Element => {
 
     function recursiveChildren(children: ReactNode[], activeIdState: string): ReactNode {
 
-        const newChildren = Children.map(children, child => {
+        const newChildren = Children.map(children, (child) => {
 
-            if (isValidElement<IChildProps>(child)) {
+            let clonedChild: ReactNode = child
 
-                if (child.props.children) {
+            if (isValidElement<ValidAnchorElement>(child)) {
 
-                    const children = Children.toArray(child.props.children)
+                const children = Children.toArray(child.props.children)
 
-                    child = cloneElement(
-                        child,
-                        { children: recursiveChildren(children, activeIdState) as ReactElement<IChildProps> }
-                    )
-
-                }
+                clonedChild = cloneElement(
+                    child,
+                    { children: recursiveChildren(children, activeIdState) }
+                )
 
                 if ('href' in child.props) {
 
-                    const childProps = child.props as IChildProps
+                    const childProps = child.props
 
                     if (childProps.href.substring(1) === activeIdState) {
 
-                        child = cloneElement(
+                        clonedChild = cloneElement(
                             child,
                             { className: styles.active }
                         )
@@ -62,7 +63,7 @@ const TocHighlight: React.FC<IProps> = (props): JSX.Element => {
 
             }
 
-            return child
+            return clonedChild
         })
 
         return newChildren

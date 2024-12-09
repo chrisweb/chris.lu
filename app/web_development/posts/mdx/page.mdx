@@ -2,7 +2,7 @@
 title: MDX
 keywords: ['MDX', 'markdown', 'remark', 'rehype', 'MDAST', 'HAST']
 published: 2024-08-10T11:22:33.444Z
-modified: 2024-08-10T11:22:33.444Z
+modified: 2024-10-25T10:10:10.444Z
 permalink: https://chris.lu/web_development/posts/mdx
 section: Web development
 ---
@@ -55,15 +55,21 @@ All transformations happen thanks to utilities built on top of [unified](https:/
 
 > Unified is an interface for parsing, inspecting, transforming, and serializing content through syntax trees
 
-The specifications are all managed by the [syntax-tree organisation on github](https://github.com/syntax-tree) which is part of the **unified** collective, this is the home for several **syntax tree** specifications, the base syntax tree is called [unist](https://github.com/syntax-tree/unist), **unist** is a universal syntax tree specification, it is part of the family of syntax trees called **Abstract Syntax Trees**s hence the abbreviation **AST**s, on top of unist you have the other syntax trees that we are interested in, the first one is called [MDAST](https://github.com/syntax-tree/mdast) this is the specification that represents markdown in a syntax tree and the second one is called [HAST](https://github.com/syntax-tree/hast) which is the specification that represents HTML in a syntax tree
+The specifications are all managed by the [syntax-tree organization on github](https://github.com/syntax-tree) which is part of the **unified** collective, this is the home for several **syntax tree** specifications, the base syntax tree is called [unist](https://github.com/syntax-tree/unist), **unist** is a universal syntax tree specification, it is part of the family of syntax trees called **Abstract Syntax Trees**s hence the abbreviation **AST**s, on top of unist you have the other syntax trees that we are interested in, the first one is called [MDAST](https://github.com/syntax-tree/mdast) this is the specification that represents markdown in a syntax tree and the second one is called [HAST](https://github.com/syntax-tree/hast) which is the specification that represents HTML in a syntax tree, but because we use MDX and not pure markdown, the two syntax trees **MDAST** and **HAST** have supersets, the superset of **MDAST** is called [MDXAST](https://github.com/mdx-js/specification#mdxast) and the superset of **HAST** is called [MDXHAST](https://github.com/mdx-js/specification#mdxhast)
 
-**MDAST** and **HAST** are the syntax tree specifications, but the actual tools are [remnark](https://github.com/remarkjs/remark), which is a tool that transforms markdown with plugins, and [rehype](https://github.com/rehypejs/rehype) which is a tool that transforms HTML with plugins
+**MDAST** and **HAST** are the syntax tree specifications, but the actual tools are Remark and Rehype. 
+
+[remnark](https://github.com/remarkjs/remark) is a tool that transforms markdown with plugins, which they explain well in their README:
+
+> remark supports CommonMark by default. Non-standard markdown extensions can be enabled with plugins
+
+[rehype](https://github.com/rehypejs/rehype) is similar to remark but has another purpose, Rehype is a tool that transforms HTML with plugins
 
 MDX supports both **remark** and **rehype** plugins. More about plugins in the ["using plugins to extend MDX" chapter](#using-plugins-to-extend-mdx)
 
 Note: if you want to experiment with MDX content, there is a great tool called [MDX playground](https://mdxjs.com/playground/). You can experiment with MDX content, and it will help you visualize how MDX content gets transformed from MDAST (markdown AST) to HAST (HTML AST) to ESAST (javascript / JSX)
 
-## Collection of informative souces
+## Collection of informative sources
 
 * [markdown website by its author John Gruber (aka daringfireball)](https://daringfireball.net/projects/markdown/syntax)
 * [MDX website](https://mdxjs.com/)
@@ -72,11 +78,13 @@ Note: if you want to experiment with MDX content, there is a great tool called [
 * [GFM (GitHub Flavored Markdown) specification](https://github.github.com/gfm/)
 * [unified (js) website](https://unifiedjs.com/)
 * [unified github repository](https://github.com/unifiedjs/unified)
-* [syntax-tree organisation on github](https://github.com/syntax-tree)
+* [syntax-tree organization on github](https://github.com/syntax-tree)
 * [unist specification github repository](https://github.com/syntax-tree/unist)
 * [MDAST specification github repository](https://github.com/syntax-tree/mdast)
 * [HAST specification github repository](https://github.com/syntax-tree/hast)
-* [MDX (remark-mdx)](https://mdxjs.com/packages/remark-mdx/)
+* [MDX specification (mdx-js) github repository](https://github.com/mdx-js/specification)
+* [MDXAST chapter in the mdx-js specification](https://github.com/mdx-js/specification#mdxast)
+* [MDXHAST chapter in the mdx-js specification](https://github.com/mdx-js/specification#mdxhast)
 * [remnark github repository](https://github.com/remarkjs/remark)
 * [rehype github repository](https://github.com/rehypejs/rehype)
 * [MDX playground](https://mdxjs.com/playground/)

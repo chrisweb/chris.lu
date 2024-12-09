@@ -1,0 +1,372 @@
+---
+title: Linting in VSCode using ESLint and MDX extensions - Tutorial
+description: Linting in VSCode using ESLint and MDX extensions - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['CI/CD', 'Vercel', 'build', 'Production', 'preview']
+published: 2024-08-19T22:22:22.444Z
+modified: 2024-08-20T14:14:14.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/linting-in-vscode-using-extensions
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
+]} />
+
+# Linting in VSCode using ESLint and MDX extensions
+
+We now have [markdown as well as code linting](/web_development/tutorials/next-js-static-mdx-blog/linting-setup-using-eslint) set up 🎉, but we have no linting in VSCode itself (yet)
+
+For that reason we are now going to install 2 **VSCode extensions** (one for ESLint and one for MDX)
+
+The first one will add linting messages directly into our code, and the second one will add MDX language support to VSCode
+
+Having the ESLint extension is great because it allows us to see linting warnings and errors as we code, instead of having to wait for the linting command to run, meaning we can fix the problems one by one as they occur instead of waiting until the last moment and potentially having to fix a lot of issues all at once
+
+## ESLint extension
+
+The first extension I recommend installing is the [VSCode "ESLint" extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+
+### Adding the ESLint extension to VSCode
+
+If you need help installing the **ESLint** extension, have a look at my ["Installing extensions" chapter in the VSCode post](/web_development/posts/vscode#vscode-extensions-view)
+
+Open the extensions view, then search for an extension named **ESLint** (published my Microsoft) and then click on the install button
+
+### ESLint extension settings
+
+After installing the ESLint extension, you need to edit the settings of that extension to add things like the **.mdx** extension to the list of file extensions that it will use
+
+> [!WARN]  
+> As of now (nov. 2024) if you use typescript for you eslint.config file (so .ts and not .mjs), then the extension will return the following error:
+>  
+> > Error: Could not find config file.
+>  
+> To have the ESLint extension support typescript configuration files, you need to add the same flag we previously added to our linting command in the package.json (in the [Linting setup using ESLint](/web_development/tutorials/next-js-static-mdx-blog/linting-setup-using-eslint) page)
+>  
+> The ESLint extension which flag it should add to the ESLint command, we need to edit the extension settings, an easy way to do this is to edit the settings file (in the .vscode folder):
+>  
+> ```json title=".vscode/settings.json"
+> "eslint.options": {
+>     "flags": ["unstable_ts_config"]
+> }
+> ```
+
+You have several options when editing VSCode settings (spoiler alert: I will use option 2)
+
+Option 1: Open the extensions view (extensions list), if you don't know (yet) how to do this, then I recommend checking out my ["VSCode extensions view" chapter](/web_development/posts/vscode#vscode-extensions-view) in the VSCode post
+
+Then click on the gear icon (⚙️) of the ESLint extension, and then in the menu, select **Extension Settings**
+
+Option 2: If you have already set custom settings for your VSCode workspace, then you will have a `.vscode` folder in your project root, if not, create that folder, then inside of that folder, you will have a `settings.json` file, if that file is not there create it
+
+> [!NOTE]  
+> When you edit settings, you can do it on a **User** level or **Workspace** level
+>  
+> In this case, we will do it on a **Workspace** level by using the `settings.json` file inside of the `.vscode` folder (that is in the root of our project), to learn more about how to use the VSCode settings I recommend checking out the [VSCode settings](/web_development/posts/vscode#vscode-settings) in the VSCode post
+
+Now open the `.vscode/settings.json` file and add the following settings for our ESLint extension:
+
+```json title="/.vscode/settings.json" showLineNumbers {3-21} /,/1#special
+{
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "eslint.debug": true,
+    "eslint.options": {
+        "flags": ["unstable_ts_config"]
+    },
+    "eslint.validate": [
+        "markdown",
+        "mdx",
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ]
+}
+```
+
+Add a comma at the end of the `typescript.tsdk` line that is already in the settings.json file, then add our ESLint extension settings below
+
+If you are using typescript ESLint config file (eslint.config.ts) then it is very important that you also add the flags options to unable the (currently still experimental) typescript support for ESLint configuration files
+
+> [!MORE]  
+> [VSCode "ESLint" extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)  
+
+## MDX extension
+
+The second VSCode extension I recommend installing is the VSCode [MDX (Language support for MDX)](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx), when working with MDX content, as this extension will add IntelliSense support for MDX files to VSCode
+
+> [!Note]  
+> This extension is still experimental, but I had no problems when using it  
+
+Open the extensions view, then search for an extension named **MDX** (published my unified) and then click on the install button
+
+Unlike the ESLint extension, the **MDX extension** does not require any custom settings configuration, you are all set
+
+> [!MORE]  
+> [VSCode "MDX (Language support for MDX)" extension](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx)  
+
+## Restarting the ESLint server in VSCode
+
+Every time you make changes to your ESLint setup, for example, after editing either the `.eslintrc.js` ESLint configuration file or the `.remarkrc.mjs` remark-lint configuration file, I recommend restarting the ESLint server in VSCode to make sure the changes get applied immediately
+
+To restart the eslint server in VSCode, press `ctrl` + `shift` + `p` to open the command palette, then type `ESLint` and choose the command called **ESLint: Restart ESLint Server**
+
+Congratulations 🎉 you just completed the ESLint setup of your project, you now have a linting command for your code as well as your MDX content, you installed 2 extensions in VSCode so that you now also have full ESLint and MDX (markdown) linting inside of our VSCode IDE
+
+## Ensure linting in VSCode works as intended (optional)
+
+Now, the final question is: "But does it work?"
+
+To test if everything works as intended, we will create some errors in both the tsx and mdx files, and if we did the setup correctly, we should get linting errors both in VSCode as well as in the command line output
+
+> [!NOTE]  
+> The next few chapters are to verify our linting setup and give you and idea what kind of warning and errors to expect from the linting tools, if you prefer you can skip them and continue with the chapter [Disabling rules using comments](#disabling-rules-using-comments), but I recommend checking them out at some point (it would be sad to have put all that effort in setting up linting, but then because of a small issue it fails to run, and then later when you discover the problem you get flooded all at once with a long list of errors and warnings)
+
+### Testing the MDX file(s) linting process (in VSCode)
+
+We are going to create a test MDX file with some content to see if VSCode displays linting warnings for 3 problems we are going to add to our content
+
+First, let's create a `tests` folder in the root of our project, and inside that folder, add another folder called `eslint`, then in that folder, create a file called `content.mdx` with the following content:
+
+```md title="/tests/eslint/content.mdx"
+# title
+
+# Another level 1 headline (it should trigger a linting error)
+
+<img src="../../../public/assets/images/chris-octocat-1677036079874.png" />
+
+The linting errors that should be shown in this file:
+- On line 3: Unexpected duplicate toplevel heading (remark-lint-no-multiple-toplevel-headings)
+- On line 5: error no image element use next/image and a second error from jsx-a11y/alt-text because of the missing alt attribute (which you should always set but you can leave it empty if the image is decorative)
+- On line 10 (this line): should trigger: Unexpected missing final newline character, the last character of this line should have a wavy underline (remark-lint-final-newline)
+```
+
+If your ESLint setup is working as intended, you should now see that several lines are underlined with a green wave, if you hover over the part that is underlined, a modal box should show you details about the warning
+
+For example, the 2nd level 1 heading will display a warning text like this:
+
+{/* spellchecker: disable */}
+```shell
+Unexpected duplicate toplevel heading, exected a single heading with rank `1` eslint(remark-lint-no-multiple-toplevel-headings)
+```
+
+(In case you wonder, yes I'm aware that there is a **typo** (exected instead of expected) in the above message, but as the typo is in the original error I decided to leave it unfixed)
+{/* spellchecker: enable */}
+
+The first part is the warning message followed by the name of the extension that added the warning (in this case **eslint**) and then in parenthesis the name of the rule, in this case it is the rule [remark-lint-no-multiple-toplevel-headings](https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-no-multiple-toplevel-headings) that got added by **remark-lint**
+
+This warning alone shows us that **ESLint** and **remark-lint** are both working (together)
+
+You should be able to see 2 more warnings in that file:
+
+* one is for the image, which will show a modal containing two warnings
+  * the first one is from **eslint-plugin-next** (which we added in our custom next (flat) config), which triggered a warning for the [@next/next/no-img-element](https://nextjs.org/docs/messages/no-img-element), telling you to prefer **next/image** instead of the `<img>{:html}` element
+  * the second warning for the image is from a plugin called [eslint-plugin-jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y) (which we added in our custom next (flat) config) and which triggered a warning because of the rule [jsx-a11y/alt-text](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/0d5321a5457c5f0da0ca216053cc5b4f571b53ae/docs/rules/alt-text.md) which is a rule that warns you if your image has no **alt** attribute
+* the 3rd and last underline is on the last character of the text block at the very end of the file (it is just one character wide, so it is easy to miss it) and is another warning from the **remark-lint** for the [remark-lint-final-newline](https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-final-newline), which recommends adding a newline at the end of every file
+
+### Testing the React component(s) linting (in VSCode)
+
+Now we are going to test if VSCode displays error inside of typescript code by creating a Button component with 3 errors in it
+
+Next, inside the folder `/tests/eslint` that we created previously, add a new folder called `components`, and inside that folder, create a new file called `Button.tsx` with the following content:
+
+```tsx title="/tests/eslint/components/Button.tsx"
+'use client'
+
+import React from 'react'
+
+interface PropsInterface {
+    clickCallback?: () => void
+}
+
+const Button: React.FC<PropsInterface> = (props) => {
+
+    const { clickCallback, ...rest } = props
+
+    const foo = 'bar'
+
+    const buttonClickHandler = (/*event: React.MouseEvent<HTMLButtonElement>*/) => {
+
+        if (typeof clickCallback === 'function') {
+            clickCallback()
+        }
+
+    }
+
+    return (
+        <>
+            <button
+                onClick={buttonClickHandler}
+                {...rest}
+            >
+                I'm a test button
+            </button>
+        </>
+    )
+}
+
+export default Button
+
+/* linting errors I should see in this test component
+- line 13: 'foo' is assigned a value but never used. (@typescript-eslint/no-unused-vars)
+- line 29: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`. (react/no-unescaped-entities)
+*/
+```
+
+The first error ESLint will find is the foo constant we never used, the rule that spots this is [no-unused-vars](https://typescript-eslint.io/rules/no-unused-vars) rule from the **typescript-eslint** plugin that tells us we have assigned a value to a constant but then we never use it
+
+The second error is because of the [no-unescaped-entities](https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/no-unescaped-entities.md) rule from the **eslint-plugin-react** that tells us to escape entities
+
+> [!NOTE]  
+> side note, errors are usually underlined with a red wavy line and warnings have a green one, the same is true for file names, if there is an error the filename will be red and if there are warnings it will be green, in the file explorer on the right you will also see a number next to the file name (on the right) that indicates the amount of errors and warnings in that file
+
+Finally line 37, there is the following line: `TestButton.displayName = 'TestButton'` that you need to comment out to see the actual error, like this `//TestButton.displayName = 'TestButton'`
+
+If you comment out line 37 (I left it uncommented as the error adds an underline wave to add the code, making it hard to see the other errors), then there will be another error triggered by the [react/display-name](https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/display-name.md) rule from the **eslint-plugin-react**, telling you to set a displayName, because we used **forwardRef** and because by using a displayName debugging will be easier
+
+So, as you can see, the linting of typescript code is working, too, we got an error from the **@typescript-eslint** and two from the **eslint-plugin-react**
+
+## Testing the lint command
+
+There is only one final test left, which is testing if the linting command works, too
+
+To test the linting command, open the VSCode terminal and then use the following command:
+
+```shell
+npm run lint
+```
+
+> [!TIP]  
+> Also remember that a lot of errors can be fixed automatically, using the `npm run lint-fix` command would automatically fix the **missing final newline character** problem
+
+This should display all the warnings and errors we found in the two previous chapters, similar to this:
+
+{/* spellchecker: disable */}
+```shell
+PATH_TO_MY_PROJECT\tests\eslint\components\Button.tsx
+  13:11  error  'foo' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  29:18  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+PATH_TO_MY_PROJECT\tests\eslint\content.mdx
+   3:1    warning  Unexpected duplicate toplevel heading, exected a single heading with rank `1`  remark-lint-no-multiple-toplevel-headings
+   5:1    warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+   5:1    warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+  10:175  warning  Unexpected missing final newline character, expected line feed (`\n`) at end of file  remark-lint-final-newline
+
+✖ 6 problems (2 errors, 4 warnings)
+  0 errors and 1 warning potentially fixable with the `--fix` option.
+```
+{/* spellchecker: enable */}
+
+> [!TIP]  
+> In VSCode if you hover over the errors and warnings you should see them getting underlined, this because you can press Ctrl and then click on then, which will open the file at the line where the error (or warning) got triggered, so that you can quickly fix the problem and then save the file
+
+## Excluding our test files from linting
+
+Before you commit, there is one last thing we need to do, which is to exclude our tests folder from linting by adding it to the **ignoresConfig** in our `eslint.config.ts` file, like this:
+
+```js title="eslint.config.ts"
+const ignoresConfig = [
+    {
+        name: 'custom/eslint/ignores',
+        // the ignores option needs to be in a separate configuration object
+        // replaces the .eslintignore file
+        ignores: [
+            '.next/',
+            '.vscode/',
+            'public/',
+            // by default we always ignore our tests folder
+            // to ensure the tests do NOT trigger errors in
+            //staging/production deployments
+            // comment out the next line to have eslint check
+            // the test files (in development)
+            'tests/eslint/',
+        ]
+    },
+] as FlatConfig.Config[]
+```
+
+By adding 'tests/eslint/' to the **ignores** list, we ensure that the linting process will not lint those files when we do a deployment and hence prevent our build process from completing
+
+If later you want to run the tests (in development) again, you only need to comment this line out (and eventually [restart the ESLint server in VSCode](#restarting-the-eslint-server-in-vscode) for it to take effect)
+
+## Disabling rules using comments
+
+Now that the linting setup is done, you will start seeing a warning in your code, and at some point, you might wonder how you can **disable/ignore** certain **warnings** within files
+
+Sometimes, you might encounter warnings that you want to suppress because it is an exception to the rule (but you don't want to disable the rule entirely in your configuration), then you can use comments to disable the rule, for example, for an entire file or just the next line
+
+### ESLint "disable" comment
+
+Disabling an eslint rule for the **next line** (works for plugins too, except remark, see below):
+
+```ts
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const foo = 'bar'
+```
+
+To disable a rule for an entire file (and NOT just the next line), you can use:
+
+```ts
+/* eslint-disable no-console */
+console.log('foo')
+
+console.log('bar')
+```
+
+To disable more than one rule in a single comment, you need to separate the rule names with a comma
+
+For example, if you use an `<img>{:html}` element with no `alt` attribute, you will get two warnings
+
+To disable them both, you do it like this:
+
+```ts
+// eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element
+<img src="./foo.gif">
+```
+
+> [!MORE]  
+> [ESLint "disabling rules using comments" documentation](https://eslint.org/docs/latest/use/configure/rules#disabling-rules)  
+
+Congratulations 🎉 you just added linting to your VSCode IDE using extensions, meaning you will now get linting messages as you code (instead of having to manually run the command from time to time or even worse have all the linting errors and warnings show up the moment you create a build to deploy)
+
+If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+
+<Pagination
+    previous={{ label: 'ESLint MDX plugin and remark-lint', href: '/web_development/tutorials/next-js-static-mdx-blog/eslint-mdx-plugin-and-remark-lint' }}
+    next={{ label: 'Styling and CSS libraries', href: '/web_development/tutorials/next-js-static-mdx-blog/styling-and-css' }}
+/>
+
+</article>

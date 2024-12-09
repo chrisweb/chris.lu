@@ -3,7 +3,7 @@ title: Styling and CSS libraries - Tutorial
 description: Styling and CSS libraries - Next.js static MDX blog | www.chris.lu Web development tutorials
 keywords: ['styling', 'css', 'modules', 'next.js', 'css-in-js', 'library', 'UI']
 published: 2024-08-20T14:33:33.444Z
-modified: 2024-10-07T14:33:33.444Z
+modified: 2024-08-20T14:33:33.444Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/styling-and-css
 section: Web development
 ---
@@ -149,7 +149,7 @@ What I like about CSS Modules is that they are pretty simple, which means you wo
 In this chapter, we will have a look at some of them
 
 > [!TIP]  
-> For [naming](https://github.com/css-modules/css-modules/blob/master/docs/naming.md) classes, the CSS modules team recommends using camelcase
+> For [naming](https://github.com/css-modules/css-modules#naming) classes, the CSS modules team recommends using camelcase
 >  
 > A class name with a hyphen (kebab-case) is possible, but you will need to put the name into square brackets
 >  
@@ -165,9 +165,7 @@ Then right-click, choose **Inspect** or press `F12` to open the dev tools, then 
 
 ![chrome dev tools elements tab showing how CSS modules class names look after compilation](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_inspect_css_modules.png)
 
-If you want to add more than one class, either use a package like [clsx ](https://www.npmjs.com/package/clsx) or [classnames](https://www.npmjs.com/package/classnames)
-
-Another option to add multiple classes is to use native javascript [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) which is what I will use in this example:
+If you want to add more than one class, either use a package like [classnames](https://www.npmjs.com/package/classnames) or just use [native javascript template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) like so:
 
 ```tsx title="/components/tutorial_examples/UI/Button.tsx" showLineNumbers {6} "&#x60;${styles.reset} ${styles.core}&#x60;"
 import styles from './button.module.css'
@@ -233,8 +231,8 @@ Here are a few more things about CSS Modules worth knowing:
 
 > [!MORE]  
 > [Next.js "CSS Modules and Global Styles" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-modules)  
-> [CSS Modules "composition" documentation](https://github.com/css-modules/css-modules/blob/master/docs/composition.md)  
-> [CSS Modules "naming" documentation](https://github.com/css-modules/css-modules/blob/master/docs/naming.md)  
+> [CSS Modules "composition" documentation](https://github.com/css-modules/css-modules#composition)  
+> [CSS Modules "naming" documentation](https://github.com/css-modules/css-modules#naming)  
 
 ### Improved UI Button
 

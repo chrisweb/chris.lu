@@ -6,14 +6,7 @@
     },
     "eslint.debug": true,
     "eslint.options": {
-        "extensions": [
-            ".js",
-            ".jsx",
-            ".md",
-            ".mdx",
-            ".ts",
-            ".tsx"
-        ]
+        "flags": ["unstable_ts_config"]
     },
     "eslint.validate": [
         "markdown",

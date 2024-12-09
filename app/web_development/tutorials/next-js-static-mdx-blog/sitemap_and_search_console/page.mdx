@@ -1,9 +1,9 @@
 ---
-title: Sitemap (google search console and bing webmaster tools), robots.txt and manifest file in Next.js - Tutorial
-description: Sitemap (google search console and bing webmaster tools), robots.txt and manifest file - Next.js static MDX blog | www.chris.lu Web development tutorials
-keywords: ['Sitemap', 'robots.txt', 'manifest', 'seo', 'google search console', 'bing webmaster tools']
+title: Sitemap (google search console and bing webmaster tools) - Tutorial
+description: Sitemap (google search console and bing webmaster tools) - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['Sitemap', 'links', 'seo', 'google search console', 'bing webmaster tools']
 published: 2024-08-26T18:18:18.444Z
-modified: 2024-09-10T18:18:18.444Z
+modified: 2024-08-26T18:18:18.444Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/sitemap_and_search_console
 section: Web development
 ---
@@ -172,37 +172,8 @@ Line 28: we use the glob package to find all our MDX pages, I set the **maxDepth
 
 Lines 30 to 50: we loop through all the pages that the glob package found; for each page we use the two node modules (we imported earlier) to create a full path and then read the content of the page file; next we use the vfile package to turn the page content (which is a sting) into a valid vfile; then we use the vfile-matter package to extract the frontmatter from the page and turn it into a frontmatter object; then for pages that have no permalink we create a default page url (if all your pages have frontmatter then you can delete or comment this line out); finally we create a sitemap entry using all the values we have gathered
 
-If you want to have a look at your sitemap, make sure the dev server is running (`npm run dev`) and then open `http://localhost:3000/sitemap.xml` in your browser
-
 > [!MORE]  
 > [Vercel "Sitemap" documentation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap)
-
-## robots.txt
-
-Even if you don't plan on having a complex robots.txt, first it could be useful to help bots find your sitemap and second it will just avoid getting 404s every time a bot attempts to read your robots.txt
-
-You can of course create a static robots.txt and place it into your `/app` folder, or you can create a more complex and dynamic robots file using typescript:
-
-```ts title="/app/robots.ts" showLineNumbers
-import type { MetadataRoute } from 'next'
-
-export default function robots(): MetadataRoute.Robots {
-    return {
-        rules: {
-            userAgent: '*',
-            allow: '/',
-        },
-        sitemap: 'https://example.com/sitemap.xml',
-    }
-}
-```
-
-This is a basic robots.txt file, we define that all bots can crawl our website, no matter what URL. We also inform the bot about the location of sitemap.xml
-
-If you want to have a look at your robots.txt, make sure the dev server is running (`npm run dev`) and then open `http://localhost:3000/robots.txt` in your browser
-
-> [!MORE]  
-> [Vercel "robots.txt" documentation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/robots)  
 
 ## Google Search Console
 
@@ -236,7 +207,7 @@ Now click on add and you are done on vercel, so back to the Google Search Consol
 
 Now you can click on the **Verify** button, if it fails just wait one minute and try again, it might take a few minutes before google sees your new DNS entry
 
-Now in the left navigation click on **Sitemaps**, then enter your sitemap URL (https://example.com/sitemap.xml) and then click on **Submit**
+Now in the left navigation click on **Sitemaps**, then enter your sitemap URL (`https://example.com/sitemap.xml`) and then click on **Submit**
 
 The [Google Search Console documentation](https://support.google.com/webmasters/answer/34592?hl=en) says that after the verification, data should start appearing after a few days
 
@@ -273,7 +244,7 @@ The TTL value we use the default 60 seconds and Priority we leave empty, the com
 
 Now click on add and you are done on vercel, so back to the Bing Webmaster Tools page
 
-On the top right, click on the **Submit sitemap** button, then enter your sitemap URL (https://example.com/sitemap.xml) and then click on **Submit**
+On the top right, click on the **Submit sitemap** button, then enter your sitemap URL (`https://example.com/sitemap.xml`) and then click on **Submit**
 
 When this is done, next time you want to re-submit the sitemap, just click on the 3 dots on the right or the sitemap row and select **Re-submit**
 
@@ -281,65 +252,6 @@ If you want to learn more about the Bing Webmaster Tools then have a look at the
 
 > [!MORE]  
 > [Bing Webmaster Tools](https://www.bing.com/webmasters/about)  
-
-## Manifest
-
-You can create one more file besides the sitemap.xml and robots.txt, which is called a **manifest**.
-
-By using a manifest, you tell the browser how it should display your website when viewed as a progressive web app (PWA). Most browsers support the format, but they use it differently, I recommend having a look at the [caniuse manifest](https://caniuse.com/?search=manifest) pages for up-to-date information about manifest browser support
-
-If you add a manifest file to your project, some browsers will show an icon when someone visits your website. A click on the icon will add your website to their desktop or mobile device. Chrome for desktop for example displays a small icon (a screen with a down arrow) in the address bar next to the bookmark icon:
-
-![chrome for desktop install app icon](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_desktop_install_app_icon.png)
-
-You can put a static `manifest.webmanifest` file into the `/app` folder. To create a static manifest you could for example use an [online generator](https://manifest-gen.netlify.app/) or reuse the tool [realfavicongenerator.net](https://realfavicongenerator.net/) (we already saw when creating a favicon), as it does not only generate a favicon, the downloaded package will also contain a manifest
-
-If you prefer you can rename the manifest file to something else than `manifest.webmanifest`, the [specs](https://w3c.github.io/manifest/#using-a-link-element-to-link-to-a-manifest) specify that any name is valid and that the extension needs to be `.webmanifest`, there is one exception which the .json extension, you could use `manifest.json` as filename like for example, GitHub does: [https://github.com/manifest.json](https://github.com/manifest.json)
-
-Or you can create a dynamic `manifest.ts` file in the `/app` folder, which is not only useful when you need it to be dynamic to fetch data, but as the typescript uses the **MetadataRoute** types you will benefit from code autocomplete for the manifest options
-
-```ts title="/app/manifest.ts" showLineNumbers
-import { MetadataRoute } from 'next'
-
-export default function manifest(): MetadataRoute.Manifest {
-    return {
-        'name': 'example manifest | example.com',
-        'short_name': 'example',
-        'theme_color': '#ffffff',
-        'background_color': '#000000',
-        'start_url': '/',
-        'orientation': 'any',
-        'display': 'minimal-ui',
-        'dir': 'auto',
-        'lang': 'en-US',
-        'description': 'you could reuse the from your root layout metadata',
-    }
-}
-```
-
-Now, make sure the dev server is running (`npm run dev`) and then open `http://localhost:3000/` in your browser, then Press `F12` or right-click and then select **Inspect** to have a look at the elements inside of the `<head>`
-
-You will see that Next.js automatically created the metadata for you:
-
-```html
-<link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials">
-```
-
-If you want to have a look at your manifest, open `http://localhost:3000/manifest.webmanifest` in your browser
-
-> [!MORE]  
-> [Next.js "manifest" documentation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/manifest)  
-> [MDN "Web app manifests" documentation](https://developer.mozilla.org/en-US/docs/Web/Manifest)  
-> [web.dev "Add a web app manifest" article](https://web.dev/articles/add-manifest)
-> [W3C "Web Application Manifest" specification](https://w3c.github.io/manifest/#using-a-link-element-to-link-to-a-manifest)  
-
-### manifest debugging
-
-To debug your manifest file, open the developer tools of your browser and then open the **Application** tab, then there is a section called **Manifest**
-
-In Firefox, you will see a preview of your manifest. It is the same in Chrome, but Chrome will also list errors and warnings regarding your manifest file:
-
-![chrome developer tools, application tab, manifest view](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_application_manifest.png)
 
 ## Fin
 

@@ -24,7 +24,7 @@ const BaseButton: React.FC<IBaseButtonProps> = (props) => {
             <button
                 onClick={buttonClickHandler}
                 className={`${styles.reset} ${styles.base} ${styles.cursor}`}
-                type='button'
+                type="button"
                 {...rest}
             >
                 <div className={styles.border}>

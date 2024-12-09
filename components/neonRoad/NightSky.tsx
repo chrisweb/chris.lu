@@ -3,10 +3,11 @@
 import type { PropsWithChildren } from 'react'
 import type { Vector3 } from '@react-three/fiber'
 import { Sparkles } from '@react-three/drei'
+import type { Vector3 as THREEVector3 } from 'three'
 
 interface IProps extends PropsWithChildren {
     position: Vector3
-    scale: number | [number, number, number] | THREE.Vector3
+    scale: number | [number, number, number] | THREEVector3
 }
 
 const NightSky: React.FC<IProps> = (props) => {

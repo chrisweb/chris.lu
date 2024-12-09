@@ -2,7 +2,7 @@
 title: The road to React 19 and Next.js 15
 keywords: ['Next.js', 'nextjs', 'React', 'react 19', 'Next.js 15', 'Server Components', 'react compiler', 'Server Actions']
 published: 2024-08-12T11:22:33.444Z
-modified: 2024-10-10T10:10:10.444Z
+modified: 2024-12-03T03:12:12.333Z
 permalink: https://chris.lu/web_development/posts/road-to-react-19-next-js-15
 section: Web development
 ---
@@ -47,8 +47,8 @@ I will try to keep this document up to date as things evolve continuously. If yo
 
 React updates recap:
 
-* On December 21, 2020, the react team announced in a [blog post on react.org](https://legacy.reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html) that they had just published the [RFC: React Server Components](https://github.com/reactjs/rfcs/blob/main/text/0188-server-components.md) on GitHub, as well as an experimental demo [video of React Server Components (RSC) on YouTube](https://www.youtube.com/watch?v=TQQPAU21ZUw)
-* In March 2022, they released a blog post announcing the release of [React v18.0](https://react.dev/blog/2022/03/29/react-v18) and in that post they also mentioned that the **Server Components** were still in development and would get released in a future update, they also posted a new guide on React.dev to help developers [migrate to React 18](https://react.dev/blog/2022/03/08/react-18-upgrade-guide), the [React 18 changelog](https://github.com/facebook/react/releases/tag/v18.0.0) lists a lot improvements, the first one is the introduction of **Concurrent React**, some new hooks mostly useful for CSS-in-JS libraries and external data stores got added to make those libraries work well during concurrent rendering. The second big feature was [Suspense](https://react.dev/reference/react/Suspense), **Suspense** is a new feature related to concurrent rendering and the one that makes other new features like **Streaming Server Rendering** and **Selective Hydration** even possible (features that would get used mainly by frameworks in upcoming releases)
+* On December 21, 2020, the react team announced in a [blog post on react.org](https://reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html) that they had just published the [RFC: React Server Components](https://github.com/reactjs/rfcs/blob/main/text/0188-server-components.md) on GitHub, as well as an experimental demo [video of React Server Components (RSC) on YouTube](https://www.youtube.com/watch?v=TQQPAU21ZUw)
+* In March 2022, they released a blog post announcing the release of [React v18.0](https://reactjs.org/blog/2022/03/29/react-v18.html) and in that post they also mentioned that the **Server Components** were still in development and would get released in a future update, they also posted a new guide on React.dev to help developers [migrate to React 18](https://react.dev/blog/2022/03/08/react-18-upgrade-guide), the [React 18 changelog](https://github.com/facebook/react/releases/tag/v18.0.0) lists a lot improvements, the first one is the introduction of **Concurrent React**, some new hooks mostly useful for CSS-in-JS libraries and external data stores got added to make those libraries work well during concurrent rendering. The second big feature was [Suspense](https://react.dev/reference/react/Suspense), **Suspense** is a new feature related to concurrent rendering and the one that makes other new features like **Streaming Server Rendering** and **Selective Hydration** even possible (features that would get used mainly by frameworks in upcoming releases)
 * In April 2022, react released the first major update [React 18.1](https://github.com/facebook/react/releases/tag/v18.1.0), a maintenance version with many fixes. Most were for React DOM
 * That same year, in June 2022, the React team released [React 18.2](https://github.com/facebook/react/releases/tag/v18.2.0), another maintenance release with again lots of improvements for React DOM
 * One year after the first release of React 18 in March 2023, we got another update from the React Team in a blog post [What We've Been Working On](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023), one of the new features they mentioned to be working on was Server Actions (which then first appeared in Next.js 14 in October 2023)
@@ -65,6 +65,20 @@ React updates recap:
 * On April 25, 2024 the react team released the **first beta** 🚀 of **React 19** on [npmjs.com](https://www.npmjs.com/package/react/v/19.0.0-beta-94eed63c49-20240425), they announced the [release of React 19 (beta)](https://react.dev/blog/2024/04/25/react-19) in a blog post that same day, the post contains a recap of the most interesting features that are included in React 19, the new **client Actions** that are the counterpart to Server Actions but the client ones are just called Actions (not Client Actions), the new **use** API, **Server Components** and **Server Actions** that you might already be using as frameworks like Next.js and Remix (to just name those two) already had access to those features via the canary releases, support for document metadata and a lot more that I won't list here as I recommend you check out their [release of React 19 (beta)](https://react.dev/blog/2024/04/25/react-19) a blog post for a more complete list and details
 * In April 2024, the React team published the first React 19 migration guide, which lists the upcoming changes in React 19. There is also a valuable [chapter about codemods](https://react.dev/blog/2024/04/25/react-19-upgrade-guide#codemods); codemods are a great help, especially when you intend to migrate the types and already have a big codebase
 * During [React Conf 2024](https://react.dev/blog/2024/05/22/react-conf-2024-recap) in April 2024, the React team announced the release of the first [React 19 RC](https://react.dev/blog/2024/04/25/react-19) (release candidate), another big announcement was the experimental release of the [React Compiler](https://react.dev/learn/react-compiler)
+* In oct. 2024 the React team announced the release of the [first React Compiler beta](https://react.dev/blog/2024/10/21/react-compiler-beta-release)
+* After the announcement of the first RC, a feature that had been in the canary version for some time got "a lot of attention", I recommend reading through details of the comment in [issue #29898](https://github.com/facebook/react/issues/29898#issuecomment-2477449973) as it is a very good summary of the problem and how it got addressed, here is a small quote:
+
+> In React 19 RC0, we stopped rendering the siblings so that the fallback could be committed immediately. (...)
+> 
+> This change meant lazy requests initiated at render time would be forced to waterfall. (...)
+
+Meaning that prior to the release of the first RC for React 19, if you had several components making requests inside of one Suspense then those requests were running in parallel (asynchronously), after the change their were running one after the other (synchronously).
+
+* In nov. 2024 the React team announced the release of the second RC of React ([React RC1](https://www.npmjs.com/package/react/v/19.0.0-rc.1)), as they explain in the comment on GitHub regarding the fix for the **Suspense problem**, what changes is this:
+
+> This means we're able to get the benefits of committing the fallback immediately, without the downsides of creating waterfalls for lazy requests
+
+As of now (dec. 2024) there is no stable release for React 19 yet, but the team is actively working on it, they release updates to their canary channel on regular basis (if you want to get an overview of the latest version and channels that are available then I recommend checking out the [npmjs React versions page](https://www.npmjs.com/package/react/v/19.0.0-rc.1?activeTab=versions))
 
 > [!MORE]  
 > [react.dev "React 19 (beta)" post](https://react.dev/blog/2024/04/25/react-19)  
@@ -74,11 +88,11 @@ React updates recap:
 
 ## New features in Next.js before v13
 
-Since version v10.2.1 Next.js enabled [Incremental type checking](https://www.typescriptlang.org/tsconfig/#incremental), making builds much faster and then in version 12. Next.js typescript compilation got another speed boost, because Next.js started using ["SWC"](https://swc.rs/) a compiler written in Rust. For a bit of history and more in-depth information, check out their [Next.js "compiler using SWC" documentation](https://nextjs.org/docs/architecture/nextjs-compiler). Also in [version 12 Next.js](https://nextjs.org/blog/next-12#react-server-components) they started experimenting with React Server Components (alpha version). This version of Next.js did NOT include the app directory yet.
+Since version v10.2.1 Next.js enabled [Incremental type checking](https://www.typescriptlang.org/tsconfig#incremental), making builds much faster and then in version 12. Next.js typescript compilation got another speed boost, because Next.js started using ["SWC"](https://swc.rs/) a compiler written in Rust. For a bit of history and more in-depth information, check out their [Next.js "SWC compiler" documentation](https://nextjs.org/docs/advanced-features/compiler). Also in [version 12 Next.js](https://nextjs.org/blog/next-12#react-server-components) they started experimenting with React Server Components (alpha version). This version of Next.js did NOT include the app directory yet.
 
 > [!MORE]  
 > [Next.js "TypeScript" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript)  
-> [Next.js "compiler using SWC" documentation](https://nextjs.org/docs/architecture/nextjs-compiler)  
+> [Next.js "SWC compiler" documentation](https://nextjs.org/docs/advanced-features/compiler)  
 
 ## Next.js v13
 
@@ -86,7 +100,7 @@ In May 2022, the next.js team released the [Layouts RFC](https://nextjs.org/blog
 
 Next.js 13 releases:
 
-* In october 2022, the next.js team released [Next.js 13](https://nextjs.org/blog/next-13) which included the first beta version of the new `app` directory (**App Router**), with the new app router and thanks to React 18 Next.js another new feature they added were the **React Server Components** (beta version), in this release we also got the first alpha of [Turbopack](https://turbo.build/pack/docs) a new bundler written in Rust that someday should replace webpack in Next.js projects, next/image got a complete overhaul in that version and the previous version got renamed to [next/legacy/image](https://nextjs.org/docs/pages/api-reference/components/image-legacy) (if you migrate your code to a newer Next.js version but don't want to migrate your code related to images, then you can use the legacy image component but for new projects (using Next.js 13.x) it is highly recommended that you use the new version of next/image). Another new component they introduced in that version was next/font (in beta), a component which will optimize your font usage by making them self hosted (compared to fetching them from a remote CDN) which reduces layout shifts when using fonts that are not installed on the users device. Yet another new component they updated is next/link which now does NOT require you to add `<a>{:html}` element as child anymore
+* In october 2022, the next.js team released [Next.js 13](https://nextjs.org/blog/next-13) which included the first beta version of the new `app` directory (**App Router**), with the new app router and thanks to React 18 Next.js another new feature they added were the **React Server Components** (beta version), in this release we also got the first alpha of [Turbopack](https://turbo.build/pack) a new bundler written in Rust that someday should replace webpack in Next.js projects, next/image got a complete overhaul in that version and the previous version got renamed to [next/legacy/image](https://nextjs.org/docs/pages/api-reference/components/image-legacy) (if you migrate your code to a newer Next.js version but don't want to migrate your code related to images, then you can use the legacy image component but for new projects (using Next.js 13.x) it is highly recommended that you use the new version of next/image). Another new component they introduced in that version was next/font (in beta), a component which will optimize your font usage by making them self hosted (compared to fetching them from a remote CDN) which reduces layout shifts when using fonts that are not installed on the users device. Yet another new component they updated is next/link which now does NOT require you to add `<a>{:html}` element as child anymore
 * Two months later, in December 2022, [Next.js 13.1](https://nextjs.org/blog/next-13-1) got released, it contained a lot of improvements for the new app directory but also for middlewares, Turbopack as well as [SWC](https://swc.rs/) a tool written in Rust to replace babel
 * In february 2023, we got [Next.js 13.2](https://nextjs.org/blog/next-13-2) which introduced the new [Metadata Files API](https://nextjs.org/docs/app/api-reference/file-conventions/metadata) for built SEO support and [MDX](https://mdxjs.com/) for Server Components ([MDX app directory support](https://nextjs.org/docs/app/building-your-application/configuring/mdx))
 * In April 2023, we got [Next.js 13.3](https://nextjs.org/blog/next-13-3), which brought improvements for SEO tools like the [Metadata Files API](https://nextjs.org/docs/app/api-reference/file-conventions/metadata) and automatically generated [OpenGraph Images](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image), as well as a new routes feature that looks very promising called [Parallel Routes](https://nextjs.org/docs/app/building-your-application/routing/parallel-routes) which allows you to render the content of two (or more) routes in a single layout, which is probably going to be very helpful when building things like dashboards or complex admin panels
@@ -100,13 +114,27 @@ Next.js 13 releases:
 * In April 2024, the Next.js team released [Next.js 14.2](https://nextjs.org/blog/next-14-2) and added a new experimental option to called [staleTimes](https://nextjs.org/docs/app/api-reference/next-config-js/staleTimes) to let developers set custom revalidation times for the [Router Cache](https://nextjs.org/docs/app/building-your-application/caching#router-cache), this version also came with some changes intended to improve Tree-shaking and builds should now use less memory
 
 > [!MORE]  
-> [Next.js 13 to 14 upgrade guide](https://nextjs.org/docs/app/building-your-application/upgrading/version-14)  
+> [Next.js 13 to 14 upgrade guide](https://rc.nextjs.org/docs/app/building-your-application/upgrading/version-14)  
 > [Next.js "partial prerendering" documentation](https://nextjs.org/docs/app/api-reference/next-config-js/partial-prerendering)  
 > [Turbopack "are we turbo yet" (percentage of tests Turbopack passes)](https://areweturboyet.com/)  
 
 ## Next.js 15
 
 * In may 2024, the Next.js team released the first [Next.js 15 RC](https://nextjs.org/blog/next-15-rc) (release candidate) which included a big change for [caching](https://nextjs.org/blog/next-15-rc#caching-updates), the Next.js team decided that from now on all caching would be opt-in instead of being enabled by default. The problem with caching being enabled by default was that in development even though caching was enabled the content (fetch requests, routes, client navigation) would not get cached, caching would only happen during the build process, this made it hard to detect problems linked to caching before publishing the app. Another change is that Next.js now includes React 19 RC (see my [React 19 chapter](#react-19) for details about what's new in React 19), **Partial Prerendering (PPR)** which previously was only available when using the release candidates is now included in this release and there is a new **experimental_ppr** feature that allows you to enable PPR only on certain pages. Also included is a new feature called **next/after** (which is an experimental API to execute code after your content got streamed to the user), a new layout for **create-next-app** as well as new configuration options to opt out of bundling for certain packages
+* On Oct. 2024 the Next.js team released a new [blog post about the second RC for Next.js 15](https://nextjs.org/blog/next-15-rc2)
+* Still oct. 2024 (a few days later) Vercel announced the first stable version of [Next.js 15 on their blog](https://nextjs.org/blog/next-15), it included the features already mentioned for the first RC, but they also added support for **ESLint 9** (no flat config support yet) as well as the possibility to use Typescript for "next.config**.ts**" configuration files, and on the same day they announced (in a separate post) that [Turbopack Dev is Now Stable](https://nextjs.org/blog/turbopack-for-development-stable)
+
+Since the release of the first stable version the Next.js team has released several updates (they also ported fixes back and released new Next.js 14 versions), to get an overview I recommend checking out their [releases page](https://github.com/vercel/next.js/releases)
+
+Next.js also continues to get canary channel updates on a regular basis (if you want to get an overview of what channels are available and what the latest versions for each of them is, then I recommend checking out the [Next.js versions page on npmjs](https://www.npmjs.com/package/next?activeTab=versions))
+
+> [!TIP]  
+> When upgrading to Next.js 15 and React 19 it is recommended to first read the documentation, but it is also important that you have a look at the [Next.js codemods](https://nextjs.org/docs/canary/app/building-your-application/upgrading/codemods) as those could potentially save you a lot of time
+
+> [!MORE]  
+> [Next.js 15 upgrade documentation](https://rc.nextjs.org/docs/app/building-your-application/upgrading/version-15)  
+> [Next.js codemods](https://nextjs.org/docs/canary/app/building-your-application/upgrading/codemods)  
+> [Next.js 15 and React 19 upgrade guide (with optional types tips)](https://nextjs.org/docs/canary/app/building-your-application/upgrading/version-15#react-19)  
 
 ## do I need to migrate all my code today?
 

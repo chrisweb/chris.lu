@@ -73,7 +73,7 @@ npm install -g npm@latest
 **package-lock.json** is a file that gets created when you install packages using a package manager. It lists the exact version of each installed package and its dependencies (unlike the package.json itself, which often allows a range of versions to be installed). This file is important as it can be used to create reproducible builds. When you test your project on the staging server and then deploy it to production, you don't want the package versions to be different, as this could introduce bugs after you are done testing if a package uses a newer version in production than previously on the staging server.
 
 > [!MORE]  
-> [npmjs.com "package.json" documentation](https://docs.npmjs.com/cli/configuring-npm/package-json/)  
+> [npmjs.com "package.json" documentation](https://docs.npmjs.com/cli/configuring-npm/package-json)  
 > [nodejs.org "Modules: Packages" documentation](https://nodejs.org/api/packages.html)  
 
 ### creating a package.json
@@ -122,11 +122,11 @@ Packages use semantic versioning (semver) for their version numbers, with semver
 * the major version indicates that existing features got modified in a way that potentially will introduce breaking changes, so when updating a package and there is a change in the major version, it is highly recommended that you check out the package's changelog. If you find breaking changes, you need to verify if those will impact your code that uses the package. If there is an impact, then you need to update your code accordingly after installing the update and before committing the update
 
 > [!NOTE]  
-> when you install a dependency, the verion will be prefixed with a **^** (carret), when using **caret ranges** npm will install the version you specified as long as there is no newer version available, if however a newer PATCH or even MINOR version is available then npm will install the newer version instead, if we take the example above where we have "^18.2.0", this means npm will install react 18.2.0 as long as there is no update, however if react releases a fix for an existing feature and increment their PATCH number then the newest version would be 18.2.1 and if you now use the npm install command then npm will install 18.2.1 (and not 18.2.0 anymore), this is also true if the react team adds a new feature and bumps their MINOR number to 18.3.0 then npm will install that version, however if the react team adds breaking changes and the new version is 19.0.0 then npm will not update your package because this version might introduce breaking changes, instead npm will use the latest 18.x.x available version
+> when you install a dependency, the version will be prefixed with a **^** (carret), when using **caret ranges** npm will install the version you specified as long as there is no newer version available, if however a newer PATCH or even MINOR version is available then npm will install the newer version instead, if we take the example above where we have "^18.2.0", this means npm will install react 18.2.0 as long as there is no update, however if react releases a fix for an existing feature and increment their PATCH number then the newest version would be 18.2.1 and if you now use the npm install command then npm will install 18.2.1 (and not 18.2.0 anymore), this is also true if the react team adds a new feature and bumps their MINOR number to 18.3.0 then npm will install that version, however if the react team adds breaking changes and the new version is 19.0.0 then npm will not update your package because this version might introduce breaking changes, instead npm will use the latest 18.x.x available version
 
 > [!MORE]  
 > [Semantic Versioning Specification](https://semver.org/)  
-> [npmjs-com "About semantic versioning" documentation](https://docs.npmjs.com/about-semantic-versioning/)  
+> [npmjs-com "About semantic versioning" documentation](https://docs.npmjs.com/about-semantic-versioning)  
 
 #### dependency version pinning (optional)
 
@@ -165,7 +165,7 @@ If a package/repository has not been published on npm, for example, one of your 
 },
 ```
 
-This will add the package located at https://github.com/USER_NAME/REPOSITORY_NAME as a dependency.
+This will add the package located at `https://github.com/USER_NAME/REPOSITORY_NAME` as a dependency.
 
 If you want to pin a more specific version of the repository, you can do so by adding a hash symbol at the end, followed by the commit ID or the tag (if the repository author has published a tag) or a release version.
 
@@ -187,7 +187,7 @@ For example, if adding a repository with the latest commit ID being **d29f7d9**,
 
 I will list a few methods here and add some links to the relevant documentation, but I will not add a complete walkthrough as those differ quite a lot depending on what platform your code is hosted on and based on what tools are in your deployment pipeline (if, however, I see that there is interest in such a tutorial in the [GitHub discussions for chris.lu](https://github.com/chrisweb/chris.lu/discussions) then I might write one in the future)
 
-An alternative to using private GitHub repositories is to use npm to host [private packages](https://docs.npmjs.com/creating-and-publishing-private-packages/) but be aware that this is a paid service
+An alternative to using private GitHub repositories is to use npm to host [private packages](https://docs.npmjs.com/creating-and-publishing-private-packages) but be aware that this is a paid service
 
 ##### using a GitHub personal access token
 

@@ -1,21 +1,15 @@
-import type { MutableRefObject } from 'react'
 import type { Mesh, Group } from 'three'
 
-interface IProps {
-    delta: number
-    objectsRef: MutableRefObject<Mesh[] | Group[]>
-    cameraZPosition: number
-    distanceToNextObject: number
-}
+type MoveFromAToBInLoopType<Objects_Refs> = (delta: number, objectsRefs: Objects_Refs[], cameraZPosition: number, distanceToNextObject: number) => void
 
-const moveFromAToBInLoop = ({ delta, objectsRef, cameraZPosition, distanceToNextObject }: IProps) => {
+const moveFromAToBInLoop: MoveFromAToBInLoopType<Group | Mesh> = (delta, objectsRefs, cameraZPosition, distanceToNextObject) => {
 
     const objectsBehindCamera = []
     const speed = 0.05
     const newZPosition = delta * speed
 
     // move all the objects by newZPosition
-    for (const object of objectsRef.current) {
+    for (const object of objectsRefs) {
 
         object.position.z += newZPosition
 
@@ -37,18 +31,18 @@ const moveFromAToBInLoop = ({ delta, objectsRef, cameraZPosition, distanceToNext
 
         // order objecta by their z position
         // from highest z position to lowest
-        objectsRef.current.sort((a, b) => b.position.z - a.position.z)
+        objectsRefs.sort((a, b) => b.position.z - a.position.z)
 
         // get the last object (if there is one)
         // last object is the one closest to the sun
         // and hence furthest away from the camera
-        const lastObject = objectsRef.current[objectsRef.current.length - 1]
+        const lastObject = objectsRefs[objectsRefs.length - 1]
 
         // if there are no visible objects (if deltatime is very big
         // it might happen that all objects are out of the field of view)
         // we put the first objects, at where the camera - distance to
         // the objects center
-        if (objectsBehindCamera.length === objectsRef.current.length) {
+        if (objectsBehindCamera.length === objectsRefs.length) {
             nextObject.position.z = cameraZPosition - (distanceToNextObject / 2)
         } else {
             // if there at least one object in front of the camera

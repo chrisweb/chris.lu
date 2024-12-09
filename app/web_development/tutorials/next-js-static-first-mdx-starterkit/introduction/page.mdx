@@ -1,0 +1,129 @@
+---
+title: Introduction - Next.js static MDX blog Tutorial
+description: Introduction - Next.js static MDX blog | Web development tutorials | www.chris.lu
+keywords: ['Introduction', 'tsx', 'mdx', 'static', 'pages', 'developer', 'blog', 'nextjs', 'Next.js', 'developer profile', 'markdown']
+published: 2024-08-26T16:16:16.444Z
+modified: 2024-08-27T11:11:11.444Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit/introduction
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBug, faComments } from '@fortawesome/free-solid-svg-icons'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-static-mdx-blog/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit' },
+]} />
+
+# Introduction
+
+Static first means that we first create a static base, where we use static site generation (SSG) to generate our pages at **build time**, to hopefully minimize Server Side Rendering (SSR) at **run time**. If parts of your pages get prerendered at built time (when deploying), will lead to faster loading of your pages and decrease the load on your servers. Beyond this tutorial, when the static part is done you will be able to use Next.js 15 features like **PPR** (experimental) and **component streaming** (using React 19 suspend) to add in dynamic parts.
+
+Our secondary goal focuses on adding MDX support to a Next.js 15 project (as well as several related features) because MDX pages can be great to create a **developer portfolio**, a **documentation website**, a **blog** and a lot more.
+
+> [!NOTE]  
+> I tried to make this tutorial as **beginner-friendly** as possible, but also complete enough to be helpful for **senior developers**. This version of the tutorial uses Next.js 15, React 19, and ESLint 9, if you need a Next.js 14 version of this tutorial visit ["Next.js 14 static mdx blog" tutorial](/web_development/tutorials/next-js-static-mdx-blog).
+
+This tutorial is based on my experience building chris.lu (the source code can be found in my [chris.lu repository](https://github.com/chrisweb/chris.lu)). So hopefully after reading this tutorial you will be able to get a great lighthouse score, too:
+
+![lighthouse analysis results showing a 100% score for performance, accessibility, best practices, SEO](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-first-mdx-starterkit/lighthouse.png)
+
+> [!NOTE]  
+> Contributions are always welcome 🙂. So if you have a question feel free to ask on the <FontAwesomeIcon icon={faComments} size="1x" color='rgb(255, 0, 170)' /> [discussion](https://github.com/chrisweb/chris.lu/discussions) page and if you find a bug please report it using the <FontAwesomeIcon icon={faBug} size="1x" color='rgb(255, 0, 170)' /> [issues](https://github.com/chrisweb/chris.lu/issues).
+
+## Preview
+
+In this tutorial, we will:
+
+* create a "static first" project using the Next.js v15.x app directory
+* create several components using React v19.x (optimized using React compiler)
+* add support for MDX content formatting via the @next/mdx package
+* Add linting for both code and content (using ESLint MDX and ESLint v9 flat config)
+* add MDX plugins to generate a table of contents, code block syntax highlighting (using your favorite VSCode theme), as well as support for GitHub flavored markdown and GitHub like alerts
+* add a CI/CD pipeline using Vercel.com so that every time we commit code to our GitHub repository, it gets automatically deployed (staging/production)
+* add bugs monitoring and Content Security Policy (CSP) violations logging using Sentry.io
+* install useful extensions for VSCode and learn how to use them
+
+> [!NOTE]  
+> I made this tutorial with total beginners in mind. However, if you are already an experienced Next.js dev, then there are some chapters you may want to skip
+
+## Migrating to Next.js 15 and React 19
+
+After transitioning from the pages router to the app router in Next.js 14, yes we are now back at updating the core of our project, but hey look at all the goodies we get 😉.
+
+> [!TIP]  
+> If you plan on migrating from Next.js 14 (or even 12/13), then I suggest to split the work it into two steps, first step update your project dependencies as well as the Next.js packages to their latest versions and then fix the problems that arose due to breaking changes in some of these packages. Same for the transition of React 18 to React 19, it might also take some time. Like converting converting components using forwardRef to components using the ref that is now in component props, so don't forget to have a look at the [react-codemods repository on GitHub](https://github.com/reactjs/react-codemod) as those might save you a lot of time
+>  
+> Then in a second step you can start also adding support for new Next.js 15 (and React 19) features into your codebase. Like using Turbopack in dev, or convert the next.config to a typescript file or as we will do in an upcoming chapter transition your classic ESLInt configuration to a flat config
+
+Getting your project back to building without errors will already take some time. Depending on the size of your project the changes related to [new caching semantics](https://nextjs.org/blog/next-15#caching-semantics), or Cookies and SearchParams now being async functions (but there is a [Next.js codemod](https://nextjs.org/docs/app/building-your-application/upgrading/codemods) to help with that)
+
+I have a separate post with more details about what has changed on [The road to Next.js 15 and React 19](/web_development/posts/road-to-react-19-next-js-15).
+
+## Some Next.js 15 (Turbopack) features are NOT stable yet
+
+There are a few features that I could NOT use in this tutorial or had to disable and I wanted you to be aware of it before we start with the actual tutorial
+
+* Converting the next.config.js file to a next.config.ts file: as I describe in the upcoming "Next.js 15 config" page there is [NO support for ESM only packages](/web_development/tutorials/next-js-static-first-mdx-starterkit/next-config#nextconfigts-does-not-yet-support-esm) (but it is coming)
+* Use Turbopack in development: as we will see in a future chapter it does NOT work [if you also intend to enable typed routes](/web_development/tutorials/next-js-static-first-mdx-starterkit/typescript-plugin-and-typed-routes#turbopack-in-nextjs-15-does-not-yet-support-typed-routes) and related to MDX, Turbopack (as of now dec. 2024) has [NO support rehype or remark plugins](/web_development/tutorials/next-js-static-first-mdx-starterkit/nextjs-mdx-setup#no-support-for-mdx-plugins-yet) as we will see in an upcoming page (we will however use several by the end of this tutorial)
+* Use flat config files: yes in Next.js there is support for ESLint 9, but as we will see [Not everything is ESLint v9 (CNA for example still installs ESLint v8) and flat config ready (yet)](/web_development/tutorials/next-js-static-first-mdx-starterkit/linting-setup-using-eslint#not-everything-is-eslint-v9-and-flat-config-yet)
+* There are also features like **PPR** (which we will not use it in this tutorial) that work already well today but they are **NOT** marked as stable (yet).
+
+## Next.js 14 version of this tutorial
+
+If you don't plan on migrating just yet and still use Next.js 14 then know that I also have a [Next.js 14 version of this tutorial](/web_development/tutorials/next-js-static-mdx-blog) (covering the same topics but also some differences in the content due to the changes that happened between Next.js 14 and Next.js 15)
+
+## Next.js MDX starterkit technology stack
+
+The main packages used for this tutorial are:
+
+* Backend framework: **Next.js 15.x**
+* Frontend framework: **React 19.x** (with React compiler support)
+* Linting: **ESLint 9.x** (flat config)
+* MDX support: **@next/mdx 15.x**
+
+Of course we will use a lot more packages than this, you can find a full list in the package.json (as well as the whole source code of this tutorial) in the ["" GitHub repository]()
+
+TODO: sentence above add the final links to repo
+
+## Source code
+
+All the source code for this tutorial can be found in the [next-js-static-first-mdx-starterkit_tutorial_chris.lu](https://github.com/chrisweb/next-js-static-first-mdx-starterkit_tutorial_chris.lu) repository on GitHub, every chapter of this tutorial is a separate branch in the repository. To view the full code, have a look at the last branch ["32_sitemap"](https://github.com/chrisweb/next-js-static-first-mdx-starterkit_tutorial_chris.lu/tree/32_sitemap)
+
+<Pagination
+    previous={{ label: 'Table of Contents', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit' }}
+    next={{ label: 'Prerequisites', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/prerequisites' }}
+/>
+
+</article>

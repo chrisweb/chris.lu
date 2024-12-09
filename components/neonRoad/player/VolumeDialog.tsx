@@ -7,6 +7,7 @@ import styles from './volumeDialog.module.css'
 
 interface IProps extends PropsWithChildren {
     isOpen: boolean
+    withEscKeyListener: boolean
     onOpenCallback?: () => void
     onCloseCallback?: () => void
 }
@@ -34,11 +35,11 @@ const VolumeDialog: React.FC<IProps> = (props) => {
         setIsDialogOpenState(false)
     }, [onCloseCallback])
 
-    const onKeyDownHandler = (event: React.KeyboardEvent<HTMLDialogElement>) => {
+    const onKeyDownHandler = useCallback((event: KeyboardEvent) => {
         if (event.key === 'Escape') {
             closeModal()
         }
-    }
+    }, [closeModal])
 
     const animationEndHandler = (event: AnimationEvent<HTMLDialogElement>) => {
         if (event.animationName.startsWith('volumeDialog_close')) {
@@ -48,7 +49,18 @@ const VolumeDialog: React.FC<IProps> = (props) => {
     }
 
     useEffect(() => {
-        if (isOpen === true) {
+        if (props.withEscKeyListener) {
+            document.addEventListener('keydown', onKeyDownHandler, false)
+        }
+        return () => {
+            if (props.withEscKeyListener) {
+                document.removeEventListener('keydown', onKeyDownHandler, false)
+            }
+        }
+    }, [onKeyDownHandler, props.withEscKeyListener])
+
+    useEffect(() => {
+        if (isOpen) {
             openModal()
         } else {
             closeModal()
@@ -72,9 +84,8 @@ const VolumeDialog: React.FC<IProps> = (props) => {
     return createPortal(
         <dialog
             ref={dialogRef}
-            onKeyDown={onKeyDownHandler}
             onAnimationEnd={animationEndHandler}
-            className={`${styles.reset} ${styles.dialog} ${closeAnimationState === true ? styles.close : ''}`}
+            className={`${styles.reset} ${styles.dialog} ${closeAnimationState ? styles.close : ''}`}
         >
             {children}
         </dialog>,

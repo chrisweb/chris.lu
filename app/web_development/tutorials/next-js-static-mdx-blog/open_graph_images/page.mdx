@@ -3,7 +3,7 @@ title: Open Graph Image(s) - Tutorial | www.chris.lu
 description: Open Graph Image(s) - Next.js static MDX blog | www.chris.lu Web development tutorials
 keywords: ['Open Graph', 'opengraph', 'OG image', 'Satori', 'ercel/og', 'next/og', 'dynamic opengraph image']
 published: 2024-08-28T16:16:16.444Z
-modified: 2024-10-10T10:10:10.444Z
+modified: 2024-08-28T16:16:16.444Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/open_graph_images
 section: Web development
 ---
@@ -58,7 +58,7 @@ To get a better idea of what it can do, I recommend visiting the ["OG image" pla
 > [!MORE]  
 > [Next.js "opengraph-image" documentation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image)  
 > [Vercel "Open Graph (OG) Image Generation" documentation](https://vercel.com/docs/functions/og-image-generation)  
-> [Vercel "OG image examples" documentation](https://vercel.com/docs/functions/og-image-generation#examples)  
+> [Vercel "OG image examples" documentation](https://vercel.com/docs/functions/og-image-generation/og-image-examples)  
 > [Satori documentation](https://github.com/vercel/satori#documentation)  
 > [Vercel "OG image" playground](https://og-playground.vercel.app/)  
 
@@ -68,7 +68,7 @@ First, we will create a simple static opengraph image
 
 We need 2 static assets to compose our og image, a **font** and a **background image**, as font we will use the same font we used in our `layout.tsx` for the [next/font examples](/web_development/tutorials/next-js-static-mdx-blog/navigation-styling-and-next-font), which is **Kablammo** from google fonts
 
-To get the font visit [Kablammo (on fonts.google.com)](https://fonts.google.com/specimen/Kablammo), and then click on the **Get font** button. On the next page, click on the **Download all** button (if the button is not there, first click on the **shopping bag icon** in the top right of the screen). Next, go into the public folder of your project and create a new `/fonts` folder. Now go into your download folder and unzip the font package (which you just downloaded from google fonts). Open the `/static` folder, and then copy the `Kablammo-Regular.ttf` file into the `/public/fonts` folder.
+To get the font visit [https://fonts.google.com/specimen/Kablammo](Kablammo), and then click on the **Get font** button. On the next page, click on the **Download all** button (if the button is not there, first click on the **shopping bag icon** in the top right of the screen). Next, go into the public folder of your project and create a new `/fonts` folder. Now go into your download folder and unzip the font package (which you just downloaded from google fonts). Open the `/static` folder, and then copy the `Kablammo-Regular.ttf` file into the `/public/fonts` folder.
 
 Our font is pretty big, it is >500kb, which is quite heavy but still ok. Usually, fonts are smaller. Be careful, when choosing a font as some might be bigger than that. If you choose a font over 2MB, you will get the following error:
 
@@ -206,8 +206,10 @@ Make sure the dev server is running and then visit the `http://localhost:3000/bl
 There is one problem related to the [metadataBase](https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase), where the opengraph image will just return a **404**
 
 You might see an error like this in the terminal:
- 
-> ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+
+```shell
+⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+```
 
 If that is the case, the workaround I found to work well is to set the **metadataBase** in the **root layout** to a default value like this:
 
@@ -222,7 +224,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 export const metadata: Metadata = {
     metadataBase: process.env.VERCEL_URL
         ? new URL(`https://${process.env.VERCEL_URL}`)
-        : new URL(`http://localhost:${process.env.PORT ?? 3000}`),
+        : new URL(`http://localhost:${process.env.PORT ?? '3000'}`),
     title: {
         template: '%s | example.com',
         default: 'Home | example.com',
@@ -248,7 +250,9 @@ You could, of course, duplicate the opengraph script we just did and add one in 
 > [!WARN]
 > If like me, you are on the Vercel free plan (Hobby plan), be careful NOT to use images that are very heavy or use a lot of images (or other assets like fonts) in your og image script because Vercel functions have a limit of 1MB; so if your PNG background image is 1.5 MB you will get this error during the build process: 
 >  
+> ```shell
 > "Error: The Edge Function "web_development/opengraph-image" size is 1.68 MB, and your plan size limit is 1 MB. Learn More: https://vercel.link/edge-function-size"
+> ```
 >  
 > In case you wonder Hobby: 1 MB, Pro: 2 MB, Enterprise: 4 MB
 
@@ -421,10 +425,10 @@ export default function Blog({ params }: BlogPostsProps) {
 }
 ```
 
-Line 2: we import the `notFound{:.function}` function from the next/navigation package; what the `notFound{:.function}` function does is well explained in the typescript tooltip:
+Line 2: we import the notFound function from the next/navigation package; what the notFound function does is well explained in the typescript tooltip:
 
-> In a Server Component, this will insert a `<meta name="robots" content="noindex" />` meta tag and set the status code to **404**.
-> In a Route Handler or Server Action, it will serve a **404** to the caller.
+> In a Server Component, this will insert a <meta name="robots" content="noindex" /> meta tag and set the status code to 404.
+> In a Route Handler or Server Action, it will serve a 404 to the caller.
 
 Line 4: as we will deal with params, which are content the user can modify, we must make sure those values get sanitized before we use them as a file path or in a database query; another solution would be to use a whitelist to exclude any dynamic value that does not match the values we have whitelisted, which is what we will do in this example
 

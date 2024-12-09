@@ -287,13 +287,13 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
 
     const onClickTogglePlayPauseCallback = () => {
         if (isPlayingState) {
-            getPlayer()?.pause().catch((error): void => {
+            getPlayer()?.pause().catch((error: unknown): void => {
                 if (process.env.NODE_ENV === 'development') {
                     console.log('player pause() error: ', error)
                 }
             })
         } else {
-            getPlayer()?.play().catch((error): void => {
+            getPlayer()?.play().catch((error: unknown): void => {
                 if (process.env.NODE_ENV === 'development') {
                     console.log('player play() error: ', error)
                 }
@@ -302,7 +302,7 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
     }
 
     const onClickNextHandler = () => {
-        getPlayer()?.next().catch((error): void => {
+        getPlayer()?.next().catch((error: unknown): void => {
             if (process.env.NODE_ENV === 'development') {
                 console.log('player next() error: ', error)
             }
@@ -327,7 +327,7 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
 
     const onClickVolumeHandler = () => {
         if (!isVolumeModalOpenState) {
-            // if the casette is open, close it first
+            // if the cassette is open, close it first
             if (isEjectedState) {
                 setIsEjectedState(false)
             }
@@ -358,7 +358,7 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
     }
 
     const onWaveClickHandler = useCallback((clickHorizontalPositionInPercent: number) => {
-        getPlayer()?.setPosition(clickHorizontalPositionInPercent).catch((error): void => {
+        getPlayer()?.setPosition(clickHorizontalPositionInPercent).catch((error: unknown): void => {
             if (process.env.NODE_ENV === 'development') {
                 console.log('player setPosition() error: ', error)
             }
@@ -383,7 +383,7 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
 
         return () => {
             if (typeof playerRef !== 'function' && playerRef !== null) {
-                playerRef.current?.disconnect().catch((error): void => {
+                playerRef.current?.disconnect().catch((error: unknown): void => {
                     if (process.env.NODE_ENV === 'development') {
                         console.log('player disconnect() error: ', error)
                     }
@@ -399,23 +399,23 @@ const PlayerUI = forwardRef<PlayerCore, unknown>((_, playerRef) => {
                 <WaveformCanvas ref={waveformRef} onWaveClickHandler={onWaveClickHandler} waveData={creditsState.wave}></WaveformCanvas>
                 <div className={styles.playerButtons}>
                     <RippleButton clickCallback={onClickTogglePlayPauseCallback} name={isPlayingState ? 'Pause' : 'Play'}>
-                        <FontAwesomeIcon icon={isPlayingState ? faPause : faPlay} size="xl" color='white' />
+                        <FontAwesomeIcon icon={isPlayingState ? faPause : faPlay} size="xl" color="white" />
                     </RippleButton>
                     <RippleButton clickCallback={onClickNextHandler} name="Forward">
-                        <FontAwesomeIcon icon={faForwardStep} size="xl" color='white' />
+                        <FontAwesomeIcon icon={faForwardStep} size="xl" color="white" />
                     </RippleButton>
                     <RippleButton clickCallback={onClickVolumeHandler} className="volume" name="Open Volume Dialog">
-                        <FontAwesomeIcon icon={faVolumeHigh} size="xl" color='white' />
+                        <FontAwesomeIcon icon={faVolumeHigh} size="xl" color="white" />
                     </RippleButton>
                     <RippleButton clickCallback={onClickEjectHandler} name="Open Song Credits Dialog">
-                        <FontAwesomeIcon icon={faEject} size="xl" color='white' />
+                        <FontAwesomeIcon icon={faEject} size="xl" color="white" />
                     </RippleButton>
                 </div>
             </div>
-            <WalkmanDialog isOpen={isEjectedState} onCloseCallback={onWalkmanDialogCloseCallback}>
+            <WalkmanDialog isOpen={isEjectedState} withEscKeyListener={true} onCloseCallback={onWalkmanDialogCloseCallback}>
                 <Cassette credits={creditsState} />
             </WalkmanDialog>
-            <VolumeDialog isOpen={isVolumeModalOpenState} onCloseCallback={onVolumeDialogCloseCallback} onOpenCallback={onVolumeDialogOpenCallback}>
+            <VolumeDialog isOpen={isVolumeModalOpenState} withEscKeyListener={true} onCloseCallback={onVolumeDialogCloseCallback} onOpenCallback={onVolumeDialogOpenCallback}>
                 <VolumeSlider ref={volumeSliderRef} onInputVolumeHandler={onInputVolumeHandler} />
             </VolumeDialog>
         </>

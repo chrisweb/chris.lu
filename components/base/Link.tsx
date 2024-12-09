@@ -5,7 +5,7 @@ import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 import type { Route } from 'next'
 
 export interface IBaseLinkProps extends PropsWithChildren {
-    href: Route<string> | URL
+    href: Route | URL
     target?: string
     rel?: string
     className?: string
@@ -51,7 +51,7 @@ const isUrlMe = (url: string): boolean => {
 
 }
 
-const BaseLink: React.FC<IBaseLinkProps> = (props): JSX.Element => {
+const BaseLink: React.FC<IBaseLinkProps> = (props): React.JSX.Element => {
 
     const { href, children, ...linkProps } = props
 
@@ -71,18 +71,20 @@ const BaseLink: React.FC<IBaseLinkProps> = (props): JSX.Element => {
 
     return (
         <>
-            {isExternal ? (
-                <>
-                    <a href={href.toString()} {...newLinkProps}>
+            {isExternal ?
+                (
+                    <>
+                        <a href={href.toString()} {...newLinkProps}>
+                            {children}
+                        </a>
+                        <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="sm" className="externalLinkIcon" />
+                    </>
+                ) :
+                (
+                    <Link href={href} {...newLinkProps}>
                         {children}
-                    </a>
-                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="sm" className="externalLinkIcon" />
-                </>
-            ) : (
-                <Link href={href} {...newLinkProps}>
-                    {children}
-                </Link>
-            )}
+                    </Link>
+                )}
         </>
     )
 }
