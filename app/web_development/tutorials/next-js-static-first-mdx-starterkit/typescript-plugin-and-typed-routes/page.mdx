@@ -84,9 +84,6 @@ Finally, I recommend you commit/sync the new `.vscode/settings.json`.
 
 To ensure we benefit from **Statically Typed Links** we need to enable the feature in our Next.js configuration file
 
-> [!NOTE]  
-> There is a major change in Next.js 15, which is that the **next.config** file can now have a **.ts** extension (and by default has when creating a project using CNA and using the `--typescript` flag as we did in the previous [Project setup and first commit](/web_development/tutorials/next-js-static-first-mdx-starterkit/project-setup-and-first-commit) tutorial page), in Next.js 14 all **next.config** files were still a Javascript file with an **.mjs** extension (but if you prefer to keep using mjs files this is fine too)
-
 Open the `next.config.ts` and then add the **experimental** **typedRoutes** option to your Next.js configuration file like so:
 
 ```ts title="next.config.ts" showLineNumbers {4-8}
