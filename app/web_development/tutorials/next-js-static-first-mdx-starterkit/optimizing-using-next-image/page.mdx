@@ -345,6 +345,7 @@ Lines 11 to 13: we use Next.js **Image** component and pass the **imageProps** t
 Finally, we open the `mdx-components.tsx` file (which is in the root of your project) again to add a third mdx component that will use our new **BaseImage** component, like so:
 
 ```tsx title="mdx-components.tsx" showLineNumbers {4-5} {26}
+import type { ComponentPropsWithoutRef } from 'react'
 import type { MDXComponents } from 'mdx/types'
 import BaseLink from '@/components/base/Link'
 import type { Route } from 'next'
@@ -356,16 +357,20 @@ import type { ImageProps } from 'next/image'
 // React component you want, including components from
 // other libraries.
 
+type ListPropsType = ComponentPropsWithoutRef<'ul'>
+type AnchorPropsType = ComponentPropsWithoutRef<'a'>
+// Note: ImageProps get imported from 'next/image'
+
 // This file is required to use MDX in `app` directory.
 export function useMDXComponents(components: MDXComponents): MDXComponents {
     return {
         // Allows customizing built-in components, e.g. to add styling.
-        ul: ({ children, ...props }) => (
+        ul: ({ children, ...props }: ListPropsType) => (
             <ul className="listContainer" {...props}>
                 {children}
             </ul>
         ),
-        a: ({ children, href, ...props }) => (
+        a: ({ children, href, ...props }: AnchorPropsType) => (
             <BaseLink href={href as Route} {...props}>
                 {children}
             </BaseLink>
@@ -377,6 +382,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 ```
 
 Lines 4 to 5: we import our custom **BaseImage** component that we just created, and we import the **ImageProps** type from next/image
+
+Line X: we add a comment to future us know that unlike other mdx components, for the image component we will use the next/image type, which is why we did NOT have to create a custom one ourself
 
 Line 26: we specify that for each markdown image that got transformed into an HTML `<img>{:html}` element, we want to use our custom BaseImage component
 

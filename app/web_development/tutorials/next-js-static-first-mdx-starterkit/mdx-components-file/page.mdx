@@ -72,6 +72,7 @@ In the next chapter we will use the next/mdx `mdx-components.tsx` file to add a 
 First, open the `mdx-components.tsx` (which is in the root of your project) and add an entry for each headline (replace the commented out example), like so:
 
 ```tsx title="mdx-components.tsx" showLineNumbers {12-16}
+import type { ComponentPropsWithoutRef } from 'react'
 import type { MDXComponents } from 'mdx/types'
 
 // This file allows you to provide custom React components
@@ -79,11 +80,13 @@ import type { MDXComponents } from 'mdx/types'
 // React component you want, including components from
 // other libraries.
 
+type ListPropsType = ComponentPropsWithoutRef<'ul'>
+
 // This file is required to use MDX in `app` directory.
 export function useMDXComponents(components: MDXComponents): MDXComponents {
     return {
         // Allows customizing built-in components, e.g. to add styling.
-        ul: ({ children, ...props }) => (
+        ul: ({ children, ...props }: ListPropsType) => (
             <ul className="listContainer" {...props}>
                 {children}
             </ul>
@@ -93,7 +96,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 }
 ```
 
-Lines 12 to 16: we have created a simple custom component for **ul lists**, what happens is that first, the markdown parser turns the markdown list into HTML, and then mdx-components will be used to add a CSS class called `listContainer` to each `<ul>{:html}` element
+Line 1: we import the ComponentPropsWithoutRef type from React, this will allow us to add types for the props of each MDX component (which are React components with NO ref)
+
+Line X: we create a props type for components, we use the **ComponentPropsWithoutRef type** from react and as it is a **generic** type that we set to a list (`'ul'`) **element type**
+
+Lines 12 to 16: we have created a simple custom component for **ul lists** and we used the **ListPropsType** to add type information for the list component props
+
+When you use mdx-components, then the markdown parser will first turn the markdown list into a list (`<ul>`) component, we then use the mdx-components file to further transform the list component by adding a custom `listContainer` CSS class
 
 ## CSS class example using a MDX playground page
 
