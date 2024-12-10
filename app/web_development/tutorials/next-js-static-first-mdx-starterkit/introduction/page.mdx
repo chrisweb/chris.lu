@@ -48,9 +48,9 @@ export const metadata = {
 
 # Introduction
 
-Static first means that we first create a static base, where we use static site generation (SSG) to generate our pages at **build time**, to hopefully minimize Server Side Rendering (SSR) at **run time**. If (parts of) your pages get prerendered at built time (when deploying), will lead to faster loading of your pages and decrease the load on your servers. Beyond this tutorial, I recommend looking into Next.js 15 features like **Partial Pre-rendering (PPR)** (experimental) and **component streaming** (in Next.js 15 using React 19 suspend) to add in dynamic parts, but also **Incremental Static Regeneration (ISR)**.
+This "Next.js 15 static first MDX starterkit" tutorial is about adding MDX support to a Next.js 15 project because MDX pages can be great to create a **developer portfolio**, a **documentation website**, a **blog** and a lot more. The tutorial goes beyond adding MDX support, as it contains several chapters about improving security, developer experience (DX) and optimizations that will improve your web vital metrics. We will use Vercel for our deployment (CI/CD and hosting) needs, but feel to replace that part with a deployment on GitHub pages (setting Next.js output to export) or you could self host your project (Next.js 15 comes with some improvements for self hosting).
 
-Our secondary goal focuses on adding MDX support to a Next.js 15 project (as well as several related features) because MDX pages can be great to create a **developer portfolio**, a **documentation website**, a **blog** and a lot more. I will deploy this tutorial on Vercel but feel to replace that part with a deployment on GitHub pages (setting Next.js output to export).
+Static first means that we will focus on creating a static base, where we use static site generation (SSG) to generate our pages at **build time**, to avoid Server Side Rendering (SSR) at **run time** as much as possible. Pre-rendering (parts of) your pages at built time (when deploying), will minimize the amount of SSR and lead to decreased loading times as well as decreased load on your servers. Beyond this tutorial, I recommend looking into Next.js 15 features like **Partial Pre-rendering (PPR)** (experimental) and **component streaming** (in Next.js 15 using React 19 suspend) to add in dynamic parts, but also **Incremental Static Regeneration (ISR)**.
 
 > [!NOTE]  
 > I tried to make this tutorial as **beginner-friendly** as possible, but also complete enough to be helpful for **senior developers**
@@ -59,8 +59,9 @@ This tutorial is based on my experience building chris.lu (the source code can b
 
 ![lighthouse analysis results showing a 100% score for performance, accessibility, best practices, SEO](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-first-mdx-starterkit/lighthouse.png)
 
-> [!NOTE]  
-> Contributions are always welcome 🙂. So if you have a question feel free to ask on the <FontAwesomeIcon icon={faComments} size="1x" color='rgb(255, 0, 170)' /> [discussion](https://github.com/chrisweb/chris.lu/discussions) page and if you find a bug please report it using the <FontAwesomeIcon icon={faBug} size="1x" color='rgb(255, 0, 170)' /> [issues](https://github.com/chrisweb/chris.lu/issues).
+## Contributing
+
+Any contributions are always welcome 🙂. If you have a question feel free to ask on the <FontAwesomeIcon icon={faComments} size="1x" color='rgb(255, 0, 170)' /> [discussion](https://github.com/chrisweb/chris.lu/discussions) page and if you find a bug please report it using the <FontAwesomeIcon icon={faBug} size="1x" color='rgb(255, 0, 170)' /> [issues](https://github.com/chrisweb/chris.lu/issues) (PRs for any open Issue are welcome too, if unsure about your PR, ask in the ticket first).
 
 ## Source code
 
@@ -117,9 +118,7 @@ The main packages used for this tutorial are:
 * Linting: **ESLint 9.x** (flat config)
 * MDX support: **@next/mdx 15.x**
 
-Of course we will use a lot more packages than this, you can find a full list in the package.json (as well as the whole source code of this tutorial) in the ["" GitHub repository]()
-
-TODO: sentence above add the final links to repo
+Of course we will use a lot more packages than this, you can find a full list in the package.json (as well as the whole source code of this tutorial) in the ["Next.js 15 static first MDX starterkit" GitHub repository](https://github.com/chrisweb/next-js-static-first-mdx-starterkit_tutorial_chris.lu)
 
 <Pagination
     previous={{ label: 'Table of Contents', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit' }}
