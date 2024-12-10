@@ -192,13 +192,13 @@ npx next build --debug
 
 After the build is done, Next.js will print a lot of interesting information in your terminal, like what headers, rewrites, redirects, routes, … are in your app. It will also add information like: did this page get prerendered as static content, or is it dynamic and will get rendered at runtime.
 
-## Adding new commands to our package.json scripts
-
 Another command to get some information about your system is:
 
 ```shell
 npx next info
 ```
+
+## Adding new commands to our package.json scripts
 
 After experimenting with Next.js CLI in your terminal, you can of course, add those to your package.json, too.
 
@@ -206,14 +206,15 @@ Adding them to your package.json scripts has the advantage that you don't need t
 
 To add the info CLI command to your `package.json`, open the `package.json` and edit it like this:
 
-```json title="package.json" {3}#special
+```json title="package.json"
     "scripts": {
-        "dev": "next dev -p 4000",
+        "dev-4000": "next dev -p 4000",
         "info": "next info",
+        "build-debug": "next build --debug",
     },
 ```
 
-As you can see, because the command is inside of the scripts of the `package.json`, we do NOT need to use **npx** anymore, as NPM does it (under the hood) for us.
+Because we use the command as a script (in our `package.json`), we do NOT need to use **npx** anymore, as NPM does it (under the hood) for us.
 
 > [!MORE]  
 > [Next.js "cli" documentation](https://nextjs.org/docs/app/api-reference/next-cli)  
