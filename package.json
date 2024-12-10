@@ -18,7 +18,7 @@
         "lint-inspect-config": "eslint --inspect-config eslint.config.mjs",
         "lint-fix": "eslint --fix",
         "info": "next info",
-        "check-urls": "remark --rc-path .no-dead-urls.remarkrc.mjs -e .mdx ./app/web_development/tutorials/next-js-static-first-mdx-starterkit"
+        "check-urls": "remark --rc-path .no-dead-urls.remarkrc.mjs -e .mdx ./app"
     },
     "repository": {
         "type": "git",
