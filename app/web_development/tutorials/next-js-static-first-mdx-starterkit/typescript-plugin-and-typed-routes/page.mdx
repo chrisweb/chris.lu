@@ -86,7 +86,7 @@ To ensure we benefit from **Statically Typed Links** we need to enable the featu
 
 Open the `next.config.ts` and then add the **experimental** **typedRoutes** option to your Next.js configuration file like so:
 
-```ts title="next.config.ts" showLineNumbers {4-8}
+```ts title="next.config.ts" showLineNumbers {1} {4-8}
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -134,7 +134,7 @@ There is no workaround here, but you can make one of two choices:
 * If you decide that you want to continue using **Turbopack**, then you need to set the **typedRoutes** option to `false` (in your `next.config.ts`)
 * Else if you prefer to keep the **typed routes enabled**, then this means you can't use Turbopack, but as Turbopack will get updated some day to support typed routes I recommend keeping the command as backup (in your package.json) and creating a new **command without turbo** to use today like so:
 
-```json title="package.json"
+```json title="package.json" showLineNumbers {2-3}
     "scripts": {
         "dev": "next dev",
         "dev-turbo": "next dev --turbopack",
@@ -143,6 +143,10 @@ There is no workaround here, but you can make one of two choices:
         "lint": "next lint"
     },
 ```
+
+Line 2: we remove the `--turbopack` flag
+
+Line 3: we add a backup of the original script and name it "dev-turbo"
 
 An alternative way is to just have the dev command and when you want to run with turbo, you first use two hyphen (`--`) to indicate this is the end of the npm options, then you can add arguments that will get passed to the script, in this case we pass `--turbopack` flag to the `next lint` command, the result is the following command:
 
@@ -162,6 +166,8 @@ As we added a new script to our `package.json`, we are also going to quickly upd
 `npm run lint`: to run a linting script that will scan our code and help us find problems in our code  
 
 ```
+
+Line 6: we add a short description for the dev with turbopack script
 
 Then commit your `package.json` and `README.md` with a commit message that explains that we removed turbo from dev script but also created a new dev-turbo script as backup that uses the turbo flag, then sync your latest changes with your remote git provider
 
