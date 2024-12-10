@@ -155,7 +155,7 @@ If, for some reason, you don't want it to be enabled in your entire app or if yo
 
 We will, however, leave the strict mode enabled as this is recommended:
 
-```js title="next.config.ts" showLineNumbers {11}#special
+```js title="next.config.ts" showLineNumbers {11} /reactStrictMode/#special
 import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
 
@@ -209,7 +209,7 @@ So I agree that setting the poweredByHeader option in the Next.js configuration 
 
 So, if you also want to turn the `poweredByHeader` option off, open the Next.js configuration file and change it to this:
 
-```js title="next.config.ts" showLineNumbers {12} /typedRoutes/#special
+```js title="next.config.ts" showLineNumbers {12} /poweredByHeader/#special
 import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
 
