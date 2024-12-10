@@ -117,9 +117,9 @@ I will also install some test files to ensure everything is working. If you chos
 > [!TIP]  
 > Before using the wizard, I recommend committing your latest changes (if you haven't already) and doing a last sync before launching the sentry wizard, this way you will be able to see what stuff Sentry.io will add to your project, and you will see what got changed in existing files like the next.config.mjs file
 
-### Sentry wizard (Next.js 15.x)
+### Sentry wizard (Next.js 15.x) canary (optional)
 
-Currently the **latest** version of Sentry for Next.js has a peer dependency for Next.js that is set to be satisfied if Next.js is 14 or 15.0.0-rc.0, so if you use the wizard and have Next.js 15 installed than there is a high chance that you are going to encounter an error during the installation:
+If you don't use the latest stable version of Next.js 15.x but prefer to use a **canary** version, then attempting to add the **latest** version of Sentry for Next.js will likely result in a dependency error:
 
 ```shell
 npm error ERESOLVE unable to resolve dependency tree
@@ -142,18 +142,18 @@ You can bypass this error by using the overrides in your package.json, here is a
         "lint": "next lint"
     },
     "dependencies": {
-        "next": "15.0.3-canary.1",
-        "react": "19.0.0-rc-1631855f-20241023",
-        "react-dom": "19.0.0-rc-1631855f-20241023"
+        "next": "15.0.4-canary.49",
+        "react": "19.0.0",
+        "react-dom": "19.0.0"
     },
     "devDependencies": {
-        "@types/node": "^20",
-        "@types/react": "^18",
-        "@types/react-dom": "^18",
-        "typescript": "^5"
+        "@types/node": "22.10.1",
+        "@types/react": "19.0.1",
+        "@types/react-dom": "19.0.2",
+        "typescript-eslint": "8.18.0"
     },
     "overrides": {
-        "next": "15.0.3-canary.1"
+        "next": "15.0.4-canary.49"
     }
 }
 ```
@@ -161,7 +161,7 @@ You can bypass this error by using the overrides in your package.json, here is a
 Lines 22 to 24 we add an **overrides** that will tell npm that it should use this Next.js version instead of the one it finds in the peer dependencies for Sentry and potentially other packages as well
 
 > [!NOTE]  
-> The version (15.0.3-canary.1) that I used in my overrides is currently the latest canary, however by the time you read this I'm sure that newer versions will be available, so you should update that version manually, to know which versions are the latest (either for the stable or the canary branch) you can have a look at the [npm versions page for Next.js](https://www.npmjs.com/package/next?activeTab=versions)  
+> The version (15.0.4-canary.49) that I used in my overrides is currently the latest canary (10th dec. 2024), however by the time you read this I'm sure that newer versions will be available, so you should update that version manually, to know which versions are the latest (either for the stable or the canary branch) you can have a look at the [npm versions page for Next.js](https://www.npmjs.com/package/next?activeTab=versions)  
 >  
 > Make sure that update both Next.js versions, the one in your dependencies and the one you use in the overrides
 
@@ -221,7 +221,7 @@ After answering all questions, the Sentry SDK will edit your next.config.mjs to 
 > [!NOTE]  
 > If you use Vercel for your deployments, then you don't need to set the **SENTRY_AUTH_TOKEN** yourself; you can use the [Sentry integration for Vercel](https://vercel.com/integrations/sentry), which will set the Vercel environment variables for you, I recommend you do that now, as all you need to do is click on the **Add integration** button, and then continue with the tutorial  
 
-## Update sentry version (to use alpha or beta)
+## Update sentry version (to use alpha or beta) (optional)
 
 If you use the wizard it will always use the **latest** version of Sentry for Next.js
 
