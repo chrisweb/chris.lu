@@ -48,7 +48,7 @@ export const metadata = {
 
 The next step is to ensure **Typescript** is correctly set up, and we will also enable an interesting feature called **statically typed routes**
 
-## Next.js typescript plugin
+## Next.js 15 typescript plugin
 
 Since [Next.js 13.1](https://nextjs.org/blog/next-13-1), the Next.js team added a new Typescript plugin:
 
@@ -127,6 +127,8 @@ supported by Next.js with Turbopack:
 - Unsupported Next.js configuration option(s) (next.config.js)
   To use Turbopack, remove the following configuration options:
     - experimental.typedRoutes
+
+ ⚠ Learn more about Next.js and Turbopack: https://nextjs.link/with-turbopack
 ```
 
 There is no workaround here, but you can make one of two choices:
@@ -169,7 +171,7 @@ As we added a new script to our `package.json`, we are also going to quickly upd
 
 Line 6: we add a short description for the dev with turbopack script
 
-Then commit your `package.json` and `README.md` with a commit message that explains that we removed turbo from dev script but also created a new dev-turbo script as backup that uses the turbo flag, then sync your latest changes with your remote git provider
+Then we commit our `package.json` and `README.md` with a commit message that explains that we removed turbo from dev script but also created a new dev-turbo script as backup that uses the turbo flag, then sync your latest changes with your remote git provider
 
 Congratulations 🎉 you just made sure your typescript support is done correctly, which is a significant milestone before starting to code, and you now also have either turbopack or typed routes that will further improve your DX
 
