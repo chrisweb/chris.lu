@@ -318,12 +318,30 @@ Now save the updated `next.config.ts` and then is probably a good time to commit
 > [!NOTE]  
 > By default, the options that the wizard set for us are good enough. As soon as you have the time, I recommend checking out the [Extend your Next.js Configuration](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration) Sentry.io documentation, which explains what each option does
 
-> [!WARN]  
-> To enable **reactComponentAnnotation** is usually a good idea as it makes reports more readable by using component names instead of long selectors, but to make this feature happen Sentry needs to add a data attributes to components, this does usually not pose a problem except for [react-three-fiber](https://github.com/pmndrs/react-three-fiber) which does not like those extra attributes at all, which means that **React component annotations** are great unless you use **React Three Fiber**
->  
-> For now if you use **React three fiber** the only workaround is to turn the Sentry **React component annotations** option off, by setting the `reactComponentAnnotation` variable to false
->  
-> It is only after I had opened an [Issue #13413](https://github.com/getsentry/sentry-javascript/issues/13413) in the **sentry-javascript** repository that I found the [Issue #530](https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/530) in the **sentry-javascript-bundler-plugins** repository, which has a comment by one of the Sentry SDK maintainers, they mentioned that they consider adding more options in the future to let you exclude components, however as of now those options are not available yet, so for now we can NOT enable **React component annotations** and exclude **React three fiber**, we MUST completely disable the feature
+### Sentry React Component Annotation(s) can be problematic
+
+To enable Sentry **reactComponentAnnotation** configuration option is usually a good idea as it makes reports more readable by using component names instead of long selectors
+
+To make this feature happen Sentry needs to add a data attributes to components, this does usually not pose a problem except sometimes the Sentry Annotations on third party components will cause an error in those third party tools
+
+I have a more detailed explanation about annotations and the problems that can occur in my [Sentry Post](/web_development/posts/sentry-io)
+
+The solution to these problems is to disable the feature and wait for the Sentry team to fine tune the feature (which is quite young) and fix annotations bugs (I have linked to some tickets in my Sentry post, you may want to subscribe to them if you want to keep track of fixes)
+
+> [!MORE]  
+> [chris.lu "Sentry.io" post](/web_development/posts/sentry-io)  
+
+### Sentry does not (yet) support Turbopack
+
+If you try to use Turbopack with Sentry you will get the following error:
+
+```shell
+[@sentry/nextjs] WARNING: You are using the Sentry SDK with `next dev --turbo`. The Sentry SDK doesn't yet fully support Turbopack. The SDK will not be loaded in the browser, and serverside instrumentation will be inaccurate or incomplete. Production builds without `--turbo` will still fully work. If 
+you are just trying out Sentry or attempting to configure the SDK, we recommend temporarily removing the `--turbo` flag while you are developing locally. Follow this issue for progress on Sentry + Turbopack: https://github.com/getsentry/sentry-javascript/issues/8105. (You can suppress this warning by 
+setting SENTRY_SUPPRESS_TURBOPACK_WARNING=1 as environment variable)
+```
+
+As of now (dec. 2024) there is no workaround available for this, you need to make a choice and either not use Turbopack or use Turbopack but then Sentry will not get loaded in development (production builds are not impacted as Next.js does NOT (yet) use Turbopack for production builds)
 
 ## The instrumentation file
 

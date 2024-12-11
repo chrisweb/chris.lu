@@ -197,4 +197,37 @@ This will hopefully help you understand if your requests got filtered, were inva
 > [Sentry.io "Sentry API organization events" documentation](https://docs.sentry.io/api/organizations/retrieve-event-counts-for-an-organization-v2/)  
 > [Sentry.io "troubleshooting" documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/troubleshooting/)
 
+## Sentry React Component Annotation(s) can be problematic
+
+To enable Sentry **reactComponentAnnotation** configuration option is usually a good idea as it makes reports more readable by using component names instead of long selectors
+
+> [!MORE]  
+> [Sentry "React Component Names" option](https://docs.sentry.io/platforms/javascript/guides/react/features/component-names/)  
+
+### Issues with Sentry Component Annotations
+
+To make this feature happen Sentry needs to add a data attributes to components, this does usually not pose a problem except sometimes the Sentry Annotations on third party components will cause an error in those third party tools, like [react-three-fiber](https://github.com/pmndrs/react-three-fiber) which do NOT like those extra attributes at all
+
+This means that **React component annotations** are great unless you use a package like **React Three Fiber** or setup your project using **Vite**, then you need to disable the feature
+
+#### React three fiber (R3F) issue
+
+For now if you use **React three fiber (R3F)** the only workaround is to turn the Sentry **React component annotations** option off, by setting the `reactComponentAnnotation` variable to false
+
+It is only after I had opened an [Issue #13413](https://github.com/getsentry/sentry-javascript/issues/13413) in the **sentry-javascript** repository that I found the [Issue #530 (Cannot read properties of undefined (reading 'sentry') when using reactComponentAnnotation)](https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/530) in the **sentry-javascript-bundler-plugins** repository, which has a comment by one of the Sentry SDK maintainers, they mentioned that they consider adding more options in the future to let you exclude components
+
+However as of now those options are not available yet (we can NOT enable React component annotations and exclude React three fiber), meaning the only option left is to disable the reactComponentAnnotation feature (if you chose to continue using R3F)
+
+> [!MORE]  
+> [Sentry "Issue #530" (open as of dec. 2024)](https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/530)  
+
+#### Vite issue
+
+There is a similar issue when using Vite and the @sentry/vite-plugin as described in the [Issue #492](https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/492) which (as of dec. 2024) is also still open
+
+Same as R3F, the only solution here is to NOT enable the annotations feature until the problem is fixed
+
+> [!MORE]  
+> [Sentry "Issue #492" (open as of dec. 2024)](https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/530)  
+
 </article>
