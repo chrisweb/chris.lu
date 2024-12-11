@@ -99,27 +99,23 @@ As you can see, the Next.js documentation example uses a `useEffect(){:.function
 
 In this chapter, we will use [Sentry.io](https://sentry.io) (which has a free plan for side projects) to add error logging to the Next.js error file we just created
 
+We will use the Sentry.io **Wizard** tool to **install** the **Sentry.io SDK for Next.js** or you can follow their manual [setup tutorial](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/) (if you prefer a manual installation). 
+
+### Sentry.io account & first project
+
 First, you need to have or create an account on [Sentry.io](https://sentry.io) (if you need help with that step, check out my chapter [Create a Sentry account (sign up)](/web_development/posts/sentry-io#create-an-account-sign-up) in the Sentry.io post)
 
 Now we need to create a new project on Sentry.io (if you need help with that step, check out my chapter [Create a Sentry.io project](/web_development/posts/sentry-io#create-a-sentryio-project) in the Sentry.io post)
 
+> [!TIP]  
+> Before using the wizard, I recommend committing your latest changes (if you haven't already) and doing a last sync before launching the sentry wizard, as the Sentry Wizard will add and edit some existing files. This way you will be able to see (using a git diff after the wizard is done) which new files the Sentry Wizard has added, and also see what got changed in existing files like the next.config.(mjs|ts) file
+
 > [!MORE]  
 > [chris.lu "Sentry" post](/web_development/posts/sentry-io)
 
-### Sentry.io SDK for Next.js installation
+### Next.js 15.x canary (optional)
 
-Now that the project is created, we will use the Sentry.io Wizard tool to install the Sentry.io SDK for Next.js
-
-You can use the Sentry Wizard or follow their manual [setup tutorial](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/). I chose to use the Wizard as it guides you through setting up Sentry.
-
-I will also install some test files to ensure everything is working. If you chose manual, you may want to copy the **DSN** they give you at the end of the page (a Sentry DSN is an API key you will use when setting up your SDK)
-
-> [!TIP]  
-> Before using the wizard, I recommend committing your latest changes (if you haven't already) and doing a last sync before launching the sentry wizard, this way you will be able to see what stuff Sentry.io will add to your project, and you will see what got changed in existing files like the next.config.mjs file
-
-### Sentry wizard (Next.js 15.x) canary (optional)
-
-If you don't use the latest stable version of Next.js 15.x but prefer to use a **canary** version, then attempting to add the **latest** version of Sentry for Next.js will likely result in a dependency error:
+If you don't use the latest stable version of Next.js 15.x but prefer to use a **canary** version, then attempting to add the **latest** version of **Sentry for Next.js** will likely result in a dependency error:
 
 ```shell
 npm error ERESOLVE unable to resolve dependency tree
@@ -142,7 +138,7 @@ You can bypass this error by using the overrides in your package.json, here is a
         "lint": "next lint"
     },
     "dependencies": {
-        "next": "15.0.4-canary.49",
+        "next": "15.1.1-canary.0",
         "react": "19.0.0",
         "react-dom": "19.0.0"
     },
@@ -153,7 +149,7 @@ You can bypass this error by using the overrides in your package.json, here is a
         "typescript-eslint": "8.18.0"
     },
     "overrides": {
-        "next": "15.0.4-canary.49"
+        "next": "15.1.1-canary.0"
     }
 }
 ```
@@ -161,9 +157,11 @@ You can bypass this error by using the overrides in your package.json, here is a
 Lines 22 to 24 we add an **overrides** that will tell npm that it should use this Next.js version instead of the one it finds in the peer dependencies for Sentry and potentially other packages as well
 
 > [!NOTE]  
-> The version (15.0.4-canary.49) that I used in my overrides is currently the latest canary (10th dec. 2024), however by the time you read this I'm sure that newer versions will be available, so you should update that version manually, to know which versions are the latest (either for the stable or the canary branch) you can have a look at the [npm versions page for Next.js](https://www.npmjs.com/package/next?activeTab=versions)  
+> The version (15.1.1-canary.0) that I used in my overrides is currently the latest canary (10th dec. 2024), however by the time you read this I'm sure that newer versions will be available, so you should update that version manually, to know which versions are the latest (either for the stable or the canary branch) you can have a look at the [npm versions page for Next.js](https://www.npmjs.com/package/next?activeTab=versions)  
 >  
 > Make sure that update both Next.js versions, the one in your dependencies and the one you use in the overrides
+
+### Sentry Wizard Installation
 
 ```shell
 npx @sentry/wizard@latest -i nextjs
