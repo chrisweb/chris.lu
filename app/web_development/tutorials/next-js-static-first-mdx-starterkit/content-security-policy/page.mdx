@@ -112,7 +112,7 @@ const securityHeadersConfig = (phase: string) => {
         `
 
         // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
-        // and whitelist vercel's domains based on:
+        // and allow vercel's domains based on:
         // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
         // and white-list vitals.vercel-insights
         // based on: https://vercel.com/docs/speed-insights#content-security-policy
@@ -339,7 +339,7 @@ const securityHeadersConfig = (phase: string) => {
         `
 
         // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
-        // and whitelist vercel's domains based on:
+        // and allow vercel's domains based on:
         // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
         // and white-list vitals.vercel-insights
         // based on: https://vercel.com/docs/speed-insights#content-security-policy
@@ -420,7 +420,7 @@ Line 75 and 90: we add the **reportCSPViolations** variable, which contains a re
 > [!TIP]  
 > If you want to debug your code, you might want to also add the reporting for development. In that case, add the `${reportCSPViolations}` and `${reportingDomainWildcard}` variables to the development directives too (same as for preview and production) and then check out the chapter about [disabling the "reports from localhost" filter](/web_development/posts/sentry-io/#disable--enable-reports-from-localhost-filter) in my Sentry.io post as you will need to disable the filter for localhost reporting in your Sentry configuration on Sentry.io  
 >  
-> If you want to only allow certain domains to be able to send in reports, then you can whitelist those domains, meaning Sentry.io will filter out reports that come from other domains (and use your Sentry DSN), I have a chapter in my Sentry.io post that goes explains [how to set up an allowed domains list](/web_development/posts/sentry-io#allowed-domains-filter) using the Sentry UI
+> If you want to only allow certain domains to be able to send in reports, then you can add those domains to an allow list, meaning Sentry.io will filter out reports that come from other domains (and use your Sentry DSN), I have a chapter in my Sentry.io post that goes explains [how to set up an allowed domains list](/web_development/posts/sentry-io#allowed-domains-filter) using the Sentry UI
 
 > [!MORE]  
 > [Sentry.io "CSP violations logging" documentation](https://docs.sentry.io/product/security-policy-reporting/)  
