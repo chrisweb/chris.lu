@@ -343,6 +343,14 @@ setting SENTRY_SUPPRESS_TURBOPACK_WARNING=1 as environment variable)
 
 As of now (dec. 2024) there is no workaround available for this, you need to make a choice and either not use Turbopack or use Turbopack but then Sentry will not get loaded in development (production builds are not impacted as Next.js does NOT (yet) use Turbopack for production builds)
 
+In the meantime if you are interested in seeing how the Sentry JS SDK support for Turbopack progresses, then I recommend subscribing to their ["Turbopack Support" issue #8105](https://github.com/getsentry/sentry-javascript/issues/8105)
+
+> [!NOTE]  
+> I assume the first Sentry SDK release that will be fully compatible with Turbopack will be v9 (this is an assumption)!? But before that happens there is a quite long list of [Sentry javascript SDK v9 tasks](https://github.com/getsentry/sentry-javascript/issues/14225), the Turbopack changes are related to **withSentryConfig**  
+
+> [!MORE]  
+> [Sentry "javascript SDK v9 tasks" issue](https://github.com/getsentry/sentry-javascript/issues/14225)  
+
 ## The instrumentation file
 
 Next.js has added support for a new [instrumentation](https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation) which has the goal to improve the integration of monitoring and logging tools into Next.js
