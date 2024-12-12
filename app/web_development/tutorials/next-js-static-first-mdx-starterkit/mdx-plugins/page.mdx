@@ -46,20 +46,24 @@ export const metadata = {
 
 # MDX plugins
 
-This page contains mostly explanations about what remark and rehype plugins are, if you prefer you can skip to the next page about [installing and using a code highlight plugin](/web_development/tutorials/next-js-static-first-mdx-starterkit/code-highlighting-plugin) (for our MDX content)
+You might have heard the word "MDX plugins" before, these plugins are either Remark plugins or Rehype plugins and in in an upcoming chapter we will learn what the differences between the two are
+
+MDX plugins are a great way to add support for new features into your existing MDX setup, for example in this tutorial we add [](), 
+
+There is a little catch regarding plugins and Turbopack though, 
 
 > [!WARN]  
 > If you skipped the **Next.js 15 MDX support** page, know that Turbopack and the mdxRS option (in next.config) will NOT work if you use plugins, as we are about to install several of them I recommend you first check out the [mdxRs and Turbopack chapters of the "MDX setup" page](/web_development/tutorials/next-js-static-first-mdx-starterkit/nextjs-mdx-setup#nextjs-15-rust-compiler)
 
-## Difference between remark and rehype
+## Difference between remark and rehype (optional)
 
-You might have heard the word "MDX plugins" before, these plugins are either Remark plugins or Rehype plugins and in this chapter is an introduction to what the differences are
+This chapter contains mostly explanations about what remark and rehype plugins are, if you prefer you can skip to the next page about [installing and using a code highlight plugin](/web_development/tutorials/next-js-static-first-mdx-starterkit/code-highlighting-plugin) (for our MDX content)
 
-Quote from the remark readme:
+To answer what Remark is I will quote the (very informative) remark readme:
 
 > Remark is a tool that transforms markdown with plugins. These plugins can inspect and change your markup
 
-Quote from the rehype readme:
+Regarding what Rehype is, here is a quote from the rehype readme:
 
 > Rehype is a tool that transforms HTML with plugins. These plugins can inspect and change the HTML
 
@@ -76,6 +80,19 @@ In the previous chapter we already installed a **rehype-mdx-import-media** a Reh
 > [chris.lu "MDX" post](/web_development/posts/mdx)  
 > [remark "plugins" README](https://github.com/remarkjs/remark/blob/main/doc/plugins.md)  
 > [rehype "plugins" README](https://github.com/rehypejs/rehype/blob/main/doc/plugins.md)  
+
+## Turbopack support for MDX (remark / rehype) plugins
+
+Turbopack is a tool that does a similar job to what Webpack does, it takes your Javascript code and its dependencies and bundles them together, to do this work both use core tools but also heavily depend on plugins created by third parties
+
+A major difference between the two is that Webpack is written Javascript and Turbopack is written in Rust, the idea is to be able to speed up building process by using a memory safe programming language like Rust, the disadvantage is that you can't just use your previous webpack plugins written in Javascript and use them in Turbopack. This is also the reason why you can't use MDX plugins with Turbopack, as those too are written in Javascript too (unless you add a mew loader, which happened in Next.js v15.1, as we will see in more detail shortly)
+
+The state for the feature that enables us to use MDX plugins when creating development builds with Turbopack is still evolving a lot:
+
+* In Next.js v15.0 (and all prior version) Turbopack has **NO** support for plugins
+* Next.js v15.1 adds **experimental** support for MDX plugins (remark and rehype plugins written in Javascript) in Turbopack
+
+
 
 <Pagination
     previous={{ label: 'Optimizing images in MDX using next/image', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/optimizing-using-next-image' }}
