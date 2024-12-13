@@ -138,7 +138,7 @@ You can bypass this error by using the overrides in your package.json, here is a
         "lint": "next lint"
     },
     "dependencies": {
-        "next": "15.1.1-canary.1",
+        "next": "15.1.1-canary.2",
         "react": "19.0.0",
         "react-dom": "19.0.0"
     },
@@ -149,7 +149,7 @@ You can bypass this error by using the overrides in your package.json, here is a
         "typescript-eslint": "8.18.0"
     },
     "overrides": {
-        "next": "15.1.1-canary.1"
+        "next": "15.1.1-canary.2"
     }
 }
 ```
@@ -157,7 +157,7 @@ You can bypass this error by using the overrides in your package.json, here is a
 Lines 22 to 24 we add an **overrides** that will tell npm that it should use this Next.js version instead of the one it finds in the peer dependencies for Sentry and potentially other packages as well
 
 > [!NOTE]  
-> The version (15.1.1-canary.1) that I used in my overrides is currently the latest canary (10th dec. 2024), however by the time you read this I'm sure that newer versions will be available, so you should update that version manually, to know which versions are the latest (either for the stable or the canary branch) you can have a look at the [npm versions page for Next.js](https://www.npmjs.com/package/next?activeTab=versions)  
+> The version (15.1.1-canary.2) that I used in my overrides is currently the latest canary (10th dec. 2024), however by the time you read this I'm sure that newer versions will be available, so you should update that version manually, to know which versions are the latest (either for the stable or the canary branch) you can have a look at the [npm versions page for Next.js](https://www.npmjs.com/package/next?activeTab=versions)  
 >  
 > Make sure that update both Next.js versions, the one in your dependencies and the one you use in the overrides
 
