@@ -22,8 +22,6 @@ const ImageAnimatedPicture: React.FC<IAnimatedPictureProps> = (props): React.JSX
         className: props.className,
     }
 
-    //console.log(props)
-
     const {
         props: { src: webpSourceSrc, ...rest },
     } = getImageProps({

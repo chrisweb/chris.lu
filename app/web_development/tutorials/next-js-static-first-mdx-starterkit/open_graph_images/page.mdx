@@ -105,16 +105,12 @@ export const size = {
 export const contentType = 'image/png'
 export const alt = `Example.com ${title} banner`
 
-export default async function OGImage(/*props: IImageProps*/) {
+export default async function Image() {
 
-    //console.log(props)
-
-    // Font
     const kablammoFont = fetch(
         new URL('../../public/fonts/Kablammo-Regular.ttf', import.meta.url)
     ).then((res) => res.arrayBuffer())
 
-    // Background Image
     const backgroundImage = await fetch(
         new URL('../../public/images/og_background.jpg', import.meta.url)
     ).then((res) => res.arrayBuffer())
@@ -313,16 +309,14 @@ export function generateImageMetadata({ params }: OpenGraphImageProps) {
     ]
 }
 
-export default async function OGImage(props: OpenGraphImageProps) {
+export default async function Image(props: OpenGraphImageProps) {
 
     const { title } = props.params
 
-    // Font
     const kablammoFont = fetch(
         new URL('../../../../public/fonts/Kablammo-Regular.ttf', import.meta.url)
     ).then((res) => res.arrayBuffer())
 
-    // Background Image
     const backgroundImage = await fetch(
         new URL('../../../../public/images/og_background.jpg', import.meta.url)
     ).then((res) => res.arrayBuffer())
@@ -403,16 +397,23 @@ The last step is to create the posts page (to simplify the code of this example,
 
 ```tsx title="/app/blog/posts/[title]/page.tsx" showLineNumbers
 import { sharedMetadata } from '@/shared/metadata'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+
+interface BlogPostsProps {
+    params: Promise<{ title: string }>
+}
 
 const titlesAllowList = ['foo'] as string[]
 
-export function generateMetadata({ params }: BlogPostsProps) {
+export async function generateMetadata({ params }: BlogPostsProps): Promise<Metadata> {
 
     let title = '' as string
 
-    if (titlesAllowList.includes(params.title)) {
-        title = params.title
+    const pageParams = await params
+
+    if (titlesAllowList.includes(pageParams.title)) {
+        title = pageParams.title
     }
 
     return {
@@ -420,25 +421,22 @@ export function generateMetadata({ params }: BlogPostsProps) {
         openGraph: {
             ...sharedMetadata.openGraph,
             url: `https://example.com/blog/posts/${title}`,
-        }
+        },
     }
 
 }
 
-interface BlogPostsProps {
-    params: {
-        title: string
-    }
-}
-
-export default function Blog({ params }: BlogPostsProps) {
-
+export default async function Blog({
+    params,
+}: BlogPostsProps) {
     // as we are getting user data we need 
-    // to sanitize it or use an "allow list"
+    // to sanitize it or use an allow list
     let title = '' as string
 
-    if (titlesAllowList.includes(params.title)) {
-        title = params.title
+    const pageParams = await params
+
+    if (titlesAllowList.includes(pageParams.title)) {
+        title = pageParams.title
     } else {
         notFound()
     }
@@ -451,10 +449,14 @@ export default function Blog({ params }: BlogPostsProps) {
 }
 ```
 
-Line 2: we import the notFound function from the next/navigation package; what the notFound function does is well explained in the typescript tooltip:
+Line 2: we import the Metadata type to add type information to the return value of our customized generateMetadata function
+
+Line 3: we import the notFound function from the next/navigation package; what the notFound function does is well explained in the typescript tooltip:
 
 > In a Server Component, this will insert a <meta name="robots" content="noindex" /> meta tag and set the status code to 404.
 > In a Route Handler or Server Action, it will serve a 404 to the caller.
+
+TODO: did change the code so need to rewrite the explanation
 
 Line 4: as we will deal with params, which are content the user can modify, we must make sure those values get sanitized before we use them as a file path or in a database query; another solution would be to use an allow list to exclude any dynamic value that does not match the values we in our allow list, which is what we will do in this example
 

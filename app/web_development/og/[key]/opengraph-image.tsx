@@ -21,7 +21,7 @@ interface IImageProps {
 }
 
 // Image generation
-export default async function OGImage(props: IImageProps) {
+export default async function Image(props: IImageProps) {
 
     if (!props.params.key) {
         return
@@ -35,12 +35,16 @@ export default async function OGImage(props: IImageProps) {
         `http://localhost:${process.env.PORT ?? '3000'}`
 
     // Font
-    const permanentMarkerRegular = fetch(
+    const permanentMarkerRegular = await fetch(
         new URL('/public/assets/fonts/PermanentMarker-Regular.ttf', import.meta.url)
     ).then(res => res.arrayBuffer())
 
-    // using new URL(myPath, import.meta.url) did not work
     const imageData = await fetch(
+        // relative does NOT work (for me)
+        //new URL('../../../../public/assets/images/app/web_development/' + imagePath + '/opengraph.jpg', import.meta.url)
+        // this works for font but not images
+        //new URL('/public/assets/images/app/web_development/' + imagePath + '/opengraph.jpg', import.meta.url)
+        // using this instead
         baseUrl + '/assets/images/app/web_development/' + imagePath + '/opengraph.jpg'
     ).then(res => res.arrayBuffer())
 
@@ -95,7 +99,7 @@ export default async function OGImage(props: IImageProps) {
             fonts: [
                 {
                     name: 'PermanentMarkerRegular',
-                    data: await permanentMarkerRegular,
+                    data: permanentMarkerRegular,
                     style: 'normal',
                     weight: 400,
                 },

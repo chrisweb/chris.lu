@@ -13,19 +13,9 @@ export const contentType = 'image/png'
 
 export const alt = 'Chris.lu banner'
 
-/*interface IImageProps {
-    params: {
-        slug: string
-    }
-    id: number
-}*/
-
 // Image generation
-export default async function OGImage(/*props: IImageProps*/) {
+export default async function Image() {
 
-    //console.log(props)
-
-    // Font
     const permanentMarkerRegular = fetch(
         new URL('/public/assets/fonts/PermanentMarker-Regular.ttf', import.meta.url)
     ).then(res => res.arrayBuffer())

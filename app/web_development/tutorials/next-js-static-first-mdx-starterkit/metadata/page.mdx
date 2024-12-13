@@ -305,12 +305,12 @@ Route (app)                                          Size     First Load JS
 ○  (Static)  prerendered as static content
 ```
 
-The same code we added to the MDX page can be strictly typed if we add it to a typescript page, like so:
+The same code that we added to the MDX page, can be used in a typescript page and brings the advantage that we can add type information like so:
 
 ```tsx title="/app/blog/page.tsx" showLineNumbers
 import type { Metadata, ResolvingMetadata } from 'next'
 
-export async function generateMetadata(props: unknown, parent?: ResolvingMetadata):Promise<Metadata> {
+export async function generateMetadata(props: unknown, parent?: ResolvingMetadata): Promise<Metadata> {
     const parentOpenGraph = (await parent)?.openGraph
     return {
         title: 'Blog page',
