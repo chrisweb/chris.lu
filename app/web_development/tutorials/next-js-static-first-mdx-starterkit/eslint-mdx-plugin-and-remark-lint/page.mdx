@@ -50,7 +50,7 @@ We have added linting for our code next we will add linting for our MDX (markdow
 
 ## Adding and configuring the MDX ESLint plugin
 
-First we install the [ESLint MDX plugin](https://www.npmjs.com/package/eslint-plugin-mdx):
+First we install the [ESLint MDX plugin](https://github.com/mdx-js/eslint-mdx/tree/master/packages/eslint-plugin-mdx):
 
 ```shell
 npm i eslint-plugin-mdx@latest --save-dev --save-exact
@@ -222,7 +222,7 @@ export default [
 ] satisfies FlatConfig.Config[]
 ```
 
-Line X: we import the mdx eslint plugin
+Line X: we import the eslint plugin mdx
 
 Lines X to X: we create a mdxConfig (config array) with two configurations one for mdx content and a second config for the content of markdown codeblocks (which you might have in your mdx documents)
 
