@@ -114,7 +114,7 @@ const securityHeadersConfig = (phase: string) => {
         // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
         // and allow vercel's domains based on:
         // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
-        // and white-list vitals.vercel-insights
+        // and allow also vitals.vercel-insights
         // based on: https://vercel.com/docs/speed-insights#content-security-policy
         if (process.env.VERCEL_ENV === 'preview') {
             return `
@@ -128,7 +128,7 @@ const securityHeadersConfig = (phase: string) => {
             `
         }
 
-        // for production environment white-list vitals.vercel-insights
+        // for production environment allowing vitals.vercel-insights.com
         // based on: https://vercel.com/docs/speed-insights#content-security-policy
         if (process.env.VERCEL_ENV === 'production') {
             return `
@@ -179,7 +179,7 @@ Lines 35 to 97: we have added a relatively long `cspHeader(){:fn}` function, whi
 * The last set has the rules we use for our local development environment; for example, if you look at the `script-src` directive, you will see that we added `'unsafe-inline' 'unsafe-eval'`, now compare it with the `script-src` for the production rules, and you will see that those two values, this is because we need to be more permissive in development as Next.js uses tools like the Hot Reload package to do fast refreshes, which is a tool that is not being used in production, so in production we are more restrictive
 
 > [!TIP]  
-> I recommend you always start with the most restrictive rules possible. For example, if you look at the top of default CSP rules, I have set the **form-action** to none. This is because, in this tutorial, we will not have any forms, so there is no reason to allow them; however, if you add forms to your project in the future, then you will, of course, want to adjust the directive and for example, set it to 'self' instead of 'none'
+> I recommend you always start with the most restrictive rules possible. For example, if you look at the top of default CSP rules, I have set the **form-action** to none. This is because, in this tutorial, we will not have any forms, so there is no reason to allow them; however, if you add forms to your project in the future, then you will want to adjust the directive to 'self' instead of 'none'
 
 Line 37: we have added a `upgradeInsecure` variable that we will only contain the [CSP: upgrade-insecure-requests](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/upgrade-insecure-requests) directive if we are not in development mode and only if **cspReportOnly** is false, this is because most often dev servers use HTTP requests as they have no SSL certificate installed, but for preview and production mode we add the directive, the directive tells the browser that it should assume that every request is a secure HTTPS request, however if **cspReportOnly** is false, then this directive does not apply, if you still enable it while in "report only" mode than you will get these errors in the console: 
 
@@ -220,7 +220,7 @@ If you are interested in using that directive then have a look at my [require-tr
 > [!NOTE]  
 > To check for best practices, I used a tool by Google called [CSP Evaluator](https://csp-evaluator.withgoogle.com/), it showed a green checkmark for every directive except the **script-src** directive, where it mentioned that it would be better to remove **'unsafe-inline'**, however unsafe-inline is there because Next.js uses inline scripts a lot
 
-Let's edit the CSP rules we just added in our `next.config.mjs` file and make the **script-src** directive stricter by not using **unsafe-eval** as recommended by the CSP Evaluator service, like so:
+Let's edit the CSP rules in our `next.config.mjs` file and make the **script-src** directive stricter by not using **unsafe-eval** as recommended by the CSP Evaluator service, like so:
 
 ```js title="security.config.mjs" showLineNumbers{86} {6}#special
     // for dev environment enable unsafe-eval for hot-reload
@@ -245,7 +245,7 @@ Go back into the browser and check the [Console Tab](https://developer.chrome.co
 Those violations are there because Next.js uses the JavaScript [eval()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval) function, eval is required for development scripts like the Hot Module Reload (HMR) tool, which is a tool that reloads our page every time we save a file.
 
 > [!WARN]  
-> JavaScript [eval()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#never_use_direct_eval!) function can be dangerous when you display content that got through user inputs (like a textarea or an input field), as a malicious actor could inject Javascript as a sting and then your eval function would turn that string into executable Javascript that could do things like stealing user credentials to a server owned by the malicious actor
+> JavaScript [eval()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#never_use_direct_eval!) function can be dangerous when you display content that got through user inputs (like a textarea or an input field), as a malicious hacker could inject Javascript as a sting and then your eval function would turn that string into executable Javascript that could do things like stealing user credentials to a server owned by the malicious actor
 
 For HMR to work, we need to re-add the **'unsafe-eval** value to the **script-src** rule. Do that now, and then save the file to fix violations again.
 
@@ -341,7 +341,7 @@ const securityHeadersConfig = (phase: string) => {
         // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
         // and allow vercel's domains based on:
         // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
-        // and white-list vitals.vercel-insights
+        // and allow vitals.vercel-insights
         // based on: https://vercel.com/docs/speed-insights#content-security-policy
         if (process.env.VERCEL_ENV === 'preview') {
             return `
@@ -356,7 +356,7 @@ const securityHeadersConfig = (phase: string) => {
             `
         }
 
-        // for production environment white-list vitals.vercel-insights
+        // for production environment allow vitals.vercel-insights.com
         // based on: https://vercel.com/docs/speed-insights#content-security-policy
         if (process.env.VERCEL_ENV === 'production') {
             return `

@@ -81,13 +81,13 @@ Make sure your dev server is running, if it is not, start it using `npm run dev`
 
 Then visit your newly created MDX page in the browser at `http://localhost:3000/first_mdx_page`
 
-Congratulations 🎉 you just added MDX support to your Next.js project and learned how to create MDX pages
+Congratulations 🎉 you added MDX support to your Next.js project and learned how to create MDX pages
 
 ### Next.js route groups
 
-We just created our first route group by adding parenthesis (`()`) around the `tutorial_examples` folder name
+By adding parenthesis (`()`) around the `tutorial_examples` folder name we have created our first **route group**, the page in `/app/(tutorial_examples)/first_mdx_page/page.mdx` will be at the `http://localhost:3000/first_mdx_page` URL, as you can see **tutorial_examples** did NOT become a segment of the URL, that is because folders which use parenthesis (in their name) are called **route groups**
 
-The page in `/app/(tutorial_examples)/first_mdx_page/page.mdx` will produce the following URL `http://localhost:3000/first_mdx_page`, as you can see **tutorial_examples** did NOT become a segment of the URL, that is because folders which use parenthesis are called **route groups** and their purpose is to allow us to better organize our files without impacting the structure of the URL
+The purpose of route groups is to allow us to better organize our files without impacting the structure of the URL
 
 By putting files into different folders the amount of files per folder can become more manageable without impacting the resulting URL
 
@@ -100,7 +100,7 @@ Putting our content into the first MDX page instead of fetching it from a databa
 
 There are two ways to verify if our pages are static:
 
-The **first** option to check if a page is fully **static**, just got added in Next.js 15. If your page is static then a round toast (badge) will appear at the bottom right of your page and if you hover it, it says "Static route"
+The **first** option to check if a page is fully **static**, is a new feature that got added to Next.js 15. If your page is static then a round toast (badge) will appear at the bottom right of your page and if you hover it, it says "Static route"
 
 ![Next.js "Static route" toast](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-first-mdx-starterkit/nextjs_static_route_icon.png)
 
