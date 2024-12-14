@@ -101,6 +101,9 @@ In this chapter, we will use [Sentry.io](https://sentry.io) (which has a free pl
 
 We will use the Sentry.io **Wizard** tool to **install** the **Sentry.io SDK for Next.js** or you can follow their manual [setup tutorial](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/) (if you prefer a manual installation). 
 
+> [!MORE]  
+> [Sentry "Next.js" documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/)  
+
 ### Sentry.io account & first project
 
 First, you need to have or create an account on [Sentry.io](https://sentry.io) (if you need help with that step, check out my chapter [Create a Sentry account (sign up)](/web_development/posts/sentry-io#create-an-account-sign-up) in the Sentry.io post)
@@ -111,7 +114,7 @@ Now we need to create a new project on Sentry.io (if you need help with that ste
 > Before using the wizard, I recommend committing your latest changes (if you haven't already) and doing a last sync before launching the sentry wizard, as the Sentry Wizard will add and edit some existing files. This way you will be able to see (using a git diff after the wizard is done) which new files the Sentry Wizard has added, and also see what got changed in existing files like the next.config.(mjs|ts) file
 
 > [!MORE]  
-> [chris.lu "Sentry" post](/web_development/posts/sentry-io)
+> [chris.lu "Sentry" post](/web_development/posts/sentry-io)  
 
 ### Next.js 15.x canary (optional)
 
@@ -161,7 +164,7 @@ Lines 22 to 24 we add an **overrides** that will tell npm that it should use thi
 >  
 > Make sure that update both Next.js versions, the one in your dependencies and the one you use in the overrides
 
-### Sentry Wizard Installation
+### Sentry Installation Wizard 
 
 ```shell
 npx @sentry/wizard@latest -i nextjs
@@ -173,7 +176,7 @@ Or, if you prefer to use the wizard without sending telemetry data to sentry.io 
 npx @sentry/wizard@latest -i nextjs --disable-telemetry
 ```
 
-### wizard Q&A
+### Wizard Q&A
 
 First, you will get asked if you accept installing the sentry wizard npm package. Press `y` to accept and press `Enter` to move on
 
@@ -219,7 +222,7 @@ After answering all questions, the Sentry SDK will edit your next.config.mjs to 
 > [!NOTE]  
 > If you use Vercel for your deployments, then you don't need to set the **SENTRY_AUTH_TOKEN** yourself; you can use the [Sentry integration for Vercel](https://vercel.com/integrations/sentry), which will set the Vercel environment variables for you, I recommend you do that now, as all you need to do is click on the **Add integration** button, and then continue with the tutorial  
 
-## Update sentry version (to use alpha or beta) (optional)
+## Update Sentry SDK version (to use alpha or beta) (optional)
 
 If you use the wizard it will always use the **latest** version of Sentry for Next.js
 
