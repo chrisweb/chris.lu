@@ -67,7 +67,7 @@ You can still use **eslintrc** (classic) configuration files but it is recommend
 
 Most projects have added support for ESLint v9:
 
-* For example the plugin [eslint-plugin-react-hooks](https://github.com/facebook/react/releases/tag/eslint-plugin-react-hooks%405.0.0) introduced support for ESLint v9 on Oct. 11 2024 (in eslint-plugin-react-hooks v5.0.0); this is one of the plugins Next.js was waiting for
+* For example the eslint-plugin-react-hooks [announced on Oct. 2024](https://github.com/facebook/react/releases/tag/eslint-plugin-react-hooks%405.0.0) that released eslint-plugin-react-hooks v5.0.0 with support for ESLint v9 (this is one of the plugins Next.js was waiting for, before starting their own v9 migration)
 * Another plugin that you see in a lot of projects is typescript-eslint, in May 13 2024 they announced in their [typescript-eslint Issue #8211](https://github.com/typescript-eslint/typescript-eslint/issues/8211) that the first alpha of [typescript-eslint v8 (with ESLint v9 support)](https://github.com/typescript-eslint/typescript-eslint/pull/9002) got merged
 
 If you are interested in the progress of more packages and plugins, then have a look at the Issue in the ESLint repository that keeps track of the [flat config rollout](https://github.com/eslint/eslint/issues/18093)
@@ -346,7 +346,7 @@ npx eslint --print-config eslint.config.ts
 
 Another cli command that will print a json representation of what it found in your configuration file, which is a great tool to verify if everything you have set up is included
 
-The third tool is the one that helped me the most while writing this guide, this tool greatly improves the **(developer experience) DX** when working with the new flat config files by helping you visualize the structure and content of your eslint flat config:
+The third tool is the one that helped me the most while writing this guide, the [ESLint Config Inspector](https://github.com/eslint/config-inspector) greatly improves the **(developer experience) DX** when working with the new flat config files by helping you visualize the structure and content of your eslint flat config:
 
 ```shell
 npx eslint --inspect-config eslint.config.ts
@@ -378,7 +378,7 @@ Next update your README accordingly:
 `npm run lint-inspect-config`: will open `http://localhost:7777/` in your browser, which is a tool to help you visualize the content of our ESLint config
 ```
 
-Congratulations 🎉 you are now a master ESLint debugger (and it's a good time to commit the latest changes)
+Congratulations 🎉 you are now an ESLint debugger expert (and it's a good time to commit the latest changes)
 
 > [!MORE]  
 > [ESLint "Debug Your Configuration" documentation](https://eslint.org/docs/latest/use/configure/debug)  
