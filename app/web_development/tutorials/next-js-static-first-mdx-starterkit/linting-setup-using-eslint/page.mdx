@@ -668,7 +668,7 @@ Line X: first we specify that the name for custom flat config will be **tseslint
 
 Line F: We use the `files` option to tell ESLint which files (extensions) we want to include (for this tutorial we will enable linting for [ES Module (esm)](https://nodejs.org/api/esm.html#modules-ecmascript-modules) files (.mjs), for regular [Typescript](https://www.typescriptlang.org/) (.ts) and also for Typescript & [JSX](https://www.typescriptlang.org/docs/handbook/jsx.html) files (.tsx))
 
-Lines X to X: we use the extends option to add full sets of rules to our setup (you can still fine tune rules from those sets using the rules config option):
+Lines X to X: we use the **extends** option to add full sets of rules to our setup (you can still fine tune rules from those sets using the rules config option):
 
 For the [typescript-eslint rules](https://typescript-eslint.io/users/configs) you have different `tseslint.configs.*` you can chose from, the **recommended** is config contains a set of recommended rules (this is what Next.js uses), there is also **recommendedTypeChecked** which adds recommended rules that require type information; Next we have **strict** and **StrictTypeChecked**, which you could use instead of the recommended rules, these sets include rules are more opinionated (which is why some projects don't use them, however they can help catch bugs so I recommend giving it a try, you can still disable them later by switching back to **recommended** rules or you could disable some of the rules by setting them to off)
 
@@ -677,7 +677,7 @@ Then we have to chose between two more sets of rules, the **stylistic** set cont
 > [!TIP]  
 > To better understand what is in those sets I **highly** recommend checking out the typescript-eslint [rules overview](https://typescript-eslint.io/rules/) page
 
-Lines F to G: Then we add some parser options, those are needed if you use one of the **"type checked"** sets (if are NOT using any `TypeChecked` rules, then you can delete (or uncomment) the `languageOptions` block)
+Lines F to G: Then we add some parser options to configure the typescript-eslint parser; the [projectService](https://typescript-eslint.io/blog/announcing-typescript-eslint-v8-beta/#project-service) got introduced in typescript-eslint v8, as they explain in their [performance documentation](https://typescript-eslint.io/troubleshooting/typed-linting/performance/#traditional-project-issues) it is recommended to use the default **projectService** when ever possible, they also point out that adding the path to your tsconfig.json manually "cause more disk IO", which would [result in a slower linting process (issue #2611)](https://github.com/typescript-eslint/typescript-eslint/issues/2611); those options are only needed if you use typed linting, so when you use one of the **"type checked"** sets (if are NOT using any `TypeChecked` rules, then you can comment out or delete the `languageOptions` block)
 
 > [!NOTE]  
 > the **ecmaFeatures** parser option in the **languageOptions** is commented out because there are other configurations (that we will add to our setup in an upcoming chapter) that set these options for us  
@@ -698,6 +698,7 @@ Line D: we set the **Config** type from the **@typescript-eslint** utilities as 
 > [!MORE]  
 > [typescript-eslint "rules" overview](https://typescript-eslint.io/rules/)  
 > [typescript-eslint "type checked" documentation](https://typescript-eslint.io/getting-started/typed-linting/)  
+> [typescript-eslint "performance" documentation](https://typescript-eslint.io/troubleshooting/typed-linting/performance/)  
 
 ### Why we switched from ESLint to typescript-eslint types
 
