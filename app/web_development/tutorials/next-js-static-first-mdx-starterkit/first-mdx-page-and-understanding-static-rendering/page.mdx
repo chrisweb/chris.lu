@@ -96,19 +96,21 @@ By putting files into different folders the amount of files per folder can becom
 
 ## Static rendering
 
-Putting our content into the first MDX page instead of fetching it from a database means we just used [Static Rendering](https://nextjs.org/docs/app/building-your-application/rendering/server-components#static-rendering-default) for our first page with MDX support
+Putting our content into the first MDX page instead of fetching it from a database means we just used [Static Rendering](https://nextjs.org/docs/app/building-your-application/rendering/server-components#static-rendering-default) we made sure that our page can get generated at build time ([Static Site Generation (SSG)](https://nextjs.org/docs/pages/building-your-application/rendering/static-site-generation))
 
-One easy way to spot if a page is **static** or not, just got added in Next.js 15. If your page is static then a round toast (badge) will appear at the bottom right of your page and if you hover it, it says "Static route"
+There are two ways to verify if our pages are static:
+
+The **first** option to check if a page is fully **static**, just got added in Next.js 15. If your page is static then a round toast (badge) will appear at the bottom right of your page and if you hover it, it says "Static route"
 
 ![Next.js "Static route" toast](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-first-mdx-starterkit/nextjs_static_route_icon.png)
 
-Another option to check what pages (routes) are **static** is to make a (local) build, using the following command:
+The **second** option to check if a page is fully **static**, is to make a local build:
 
 ```shell
 npm run build
 ```
 
-After the build is done, look at the output in your terminal:
+After the build is done, you will see that Next.js has printed the following info in our terminal:
 
 ```shell
 Route (app)                              Size     First Load JS
@@ -121,7 +123,7 @@ Route (app)                              Size     First Load JS
 
 The empty circle (`○`) in front of our `/first_mdx_page` indicates that Next.js will statically generate routes (pages) at build time instead of on-demand at request time
 
-Because Next.js will automatically choose the [server rendering strategy](https://nextjs.org/docs/app/building-your-application/rendering/server-components#server-rendering-strategies) for each route based on the features you use, your page at some point might not be **static** anymore, for example when you use a **dynamic function** like [searchParams](https://nextjs.org/docs/app/api-reference/file-conventions/page#searchparams-optional) or when you fetch data and do NOT use [generateStaticParams](https://nextjs.org/docs/app/api-reference/functions/generate-static-params) then your page becomes **dynamic**, which is why it is recommended to launch the build locally from time to time and check if the pages you want to be static still are, if they are not static anymore you might want to find the cause and for example use **generateStaticParams** to make it fully static again.
+Because Next.js will automatically choose the [server rendering strategy](https://nextjs.org/docs/app/building-your-application/rendering/server-components#server-rendering-strategies) for each route based on the features you use, your page at some point might not be **static** anymore, for example when you use a what Next.js calls a [Dynamic API](https://nextjs.org/docs/app/building-your-application/rendering/server-components#dynamic-apis), like [searchParams](https://nextjs.org/docs/app/api-reference/file-conventions/page#searchparams-optional) or when you fetch data and do NOT use [generateStaticParams](https://nextjs.org/docs/app/api-reference/functions/generate-static-params) then your page becomes **dynamic**, which is why it is recommended to launch the build locally from time to time and check if the pages you want to be static still are, if they are not static anymore you might want to find the cause and for example use **generateStaticParams** to make it fully static again.
 
 If all of your pages are static, you can do a [static export](https://nextjs.org/docs/app/building-your-application/deploying/static-exports), meaning `npm run build` will produce an `out` folder and put all the HTML/CSS/JS static assets into it, then you can take that folder and for example deploy your app on [GitHub pages](https://pages.github.com/) or use a CDN to deliver your static content.
 
@@ -132,6 +134,7 @@ Congratulations 🎉 you now know how to check if pages are static or dynamic, w
 If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
 
 > [!MORE]  
+> [Next.js "Static Site Generation (SSG)" documentation](https://nextjs.org/docs/pages/building-your-application/rendering/static-site-generation)
 > [Next.js "Server Rendering Strategies" documentation](https://nextjs.org/docs/app/building-your-application/rendering/server-components#server-rendering-strategies)  
 > [Vercel.com "How to choose the best rendering strategy for your app" blog post](https://vercel.com/blog/how-to-choose-the-best-rendering-strategy-for-your-app)  
 > [Next.js "generateStaticParams" documentation](https://nextjs.org/docs/app/api-reference/functions/generate-static-params)  
