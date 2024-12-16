@@ -355,11 +355,9 @@ Start-Process -FilePath 'C:\Program Files (x86)\Google\Chrome\Application\chrome
 
 ### report-uri works in localhost, but report-to does NOT
 
-When using **report-uri**, reporting violations work locally (localhost) as well as in preview/production (secure context / https URL)
+When using **report-uri**, reporting violations work locally (localhost) as well as in preview/production (as those usually use a https URL and hence are considered being a secure context)
 
-When using **report-to**, reporting violations will NOT work on localhost (in Chrome) without a valid SSL certificate, which is surprising as localhost usually is considered a secure context (if you know why, please let me know using the [chris.lu github discussions](https://github.com/chrisweb/chris.lu/discussions))
-
-In staging (preview) / production environments, however, the **report-to** will work if those environments have an SSL certificate.
+When using **report-to**, reporting violations will **NOT work on localhost** (in Chrome) without a valid **SSL certificate**, which is surprising as localhost usually is considered a secure context (if you know why, please let me know using the [chris.lu github discussions](https://github.com/chrisweb/chris.lu/discussions))
 
 #### report-uri requests show up in the Network tab
 
