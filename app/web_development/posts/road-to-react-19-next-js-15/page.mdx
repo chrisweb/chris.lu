@@ -66,7 +66,7 @@ React updates recap:
 * In April 2024, the React team published the first React 19 migration guide, which lists the upcoming changes in React 19. There is also a valuable [chapter about codemods](https://react.dev/blog/2024/04/25/react-19-upgrade-guide#codemods); codemods are a great help, especially when you intend to migrate the types and already have a big codebase
 * During [React Conf 2024](https://react.dev/blog/2024/05/22/react-conf-2024-recap) in April 2024, the React team announced the release of the first [React 19 RC](https://react.dev/blog/2024/04/25/react-19) (release candidate), another big announcement was the experimental release of the [React Compiler](https://react.dev/learn/react-compiler)
 * In oct. 2024 the React team announced the release of the [first React Compiler beta](https://react.dev/blog/2024/10/21/react-compiler-beta-release)
-* After the announcement of the first RC, a feature that had been in the canary version for some time got "a lot of attention", I recommend reading through details of the comment in [issue #29898](https://github.com/facebook/react/issues/29898#issuecomment-2477449973) as it is a very good summary of the problem and how it got addressed, here is a small quote:
+* After the announcement of the first RC, a React Suspense (fallback rendering) optimization (that had been in the canary version for some time) started to get "a lot of attention". If you like to know more details, then I recommend reading through this comment in [issue #29898](https://github.com/facebook/react/issues/29898#issuecomment-2477449973) as it is a very good summary of the problem and how it got addressed, here is a small quote:
 
 > In React 19 RC0, we stopped rendering the siblings so that the fallback could be committed immediately. (...)
 > 
@@ -78,12 +78,13 @@ Meaning that prior to the release of the first RC for React 19, if you had sever
 
 > This means we're able to get the benefits of committing the fallback immediately, without the downsides of creating waterfalls for lazy requests
 
-As of now (dec. 2024) there is no stable release for React 19 yet, but the team is actively working on it, they release updates to their canary channel on regular basis (if you want to get an overview of the latest version and channels that are available then I recommend checking out the [npmjs React versions page](https://www.npmjs.com/package/react/v/19.0.0-rc.1?activeTab=versions))
+* In early december 2024 the react team announced the release of [React 19 stable](https://react.dev/blog/2024/12/05/react-19), the release included the Suspense fix from the previous RC as well as all the features I highlighted in the previous announcements. If you want to try out React 19 you could use the Next.js 15 framework, which already used some of the React 19 features (under the hood) for some time, but now you too can set React to v19 in your package.json (React 19 with Next.js 15 works in both the pages and the app router). Or if you prefer you could use new [vite v6](https://github.com/vitejs/vite) to quickly spin up a dev server and try out the new React 19 client features like actions
 
 > [!MORE]  
 > [react.dev "React 19 (beta)" post](https://react.dev/blog/2024/04/25/react-19)  
 > [react.dev "React 19 migration" guide](https://react.dev/blog/2024/04/25/react-19-upgrade-guide)  
 > [react.dev "React 19 RC" post](https://react.dev/blog/2024/04/25/react-19)  
+> [react.dev "React 19 stable" post](https://react.dev/blog/2024/12/05/react-19)
 > [react.dev "React Compiler" documentation](https://react.dev/learn/react-compiler)  
 
 ## New features in Next.js before v13
