@@ -133,11 +133,17 @@ Next.js also continues to get canary channel updates on a regular basis (if you 
 
 > [!TIP]  
 > When upgrading to Next.js 15 and React 19 it is recommended to first read the documentation, but it is also important that you have a look at the [Next.js codemods](https://nextjs.org/docs/canary/app/building-your-application/upgrading/codemods) as those could potentially save you a lot of time
+>  
+> To get started I recommend you create a new branch (or at least make sure you have no uncommitted changes) and then use the following command to let the Next.js update your dependencies for you:
+>  
+> ```shell
+> npx @next/codemod@canary upgrade latest
+> ```
 
 > [!MORE]  
-> [Next.js 15 upgrade documentation](https://rc.nextjs.org/docs/app/building-your-application/upgrading/version-15)  
+> [Next.js 15 "upgrading" documentation](https://nextjs.org/docs/app/building-your-application/upgrading/version-15)  
 > [Next.js codemods](https://nextjs.org/docs/canary/app/building-your-application/upgrading/codemods)  
-> [Next.js 15 and React 19 upgrade guide (with optional types tips)](https://nextjs.org/docs/canary/app/building-your-application/upgrading/version-15#react-19)  
+> [Next.js 15 and React 19 upgrade guide (with optional types tips)](https://nextjs.org/docs/app/building-your-application/upgrading/version-15#react-19)  
 
 ## do I need to migrate all my code today?
 
