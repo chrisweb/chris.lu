@@ -127,7 +127,7 @@ Because Next.js will automatically choose the [server rendering strategy](https:
 
 If all of your pages are static, you can do a [static export](https://nextjs.org/docs/app/building-your-application/deploying/static-exports), meaning `npm run build` will produce an `out` folder and put all the HTML/CSS/JS static assets into it, then you can take that folder and for example deploy your app on [GitHub pages](https://pages.github.com/) or use a CDN to deliver your static content.
 
-Another feature you might be interested in is called [assetPrefix](https://nextjs.org/docs/app/api-reference/next-config-js/assetPrefix), the **assetPrefix** is a `next.config.mjs` configuration option that is useful when the images are NOT stored on the same domain (sub-domain) as the content itself, for example if your static project is at `www.example.com` but the images are at `cdn.example.com`.
+Another feature you might be interested in is called [assetPrefix](https://nextjs.org/docs/app/api-reference/config/next-config-js/assetPrefix), the **assetPrefix** is a `next.config.mjs` configuration option that is useful when the images are NOT stored on the same domain (sub-domain) as the content itself, for example if your static project is at `www.example.com` but the images are at `cdn.example.com`.
 
 Congratulations 🎉 you now know how to check if pages are static or dynamic, which is essential because the more static content you have, the less work the server will need to do during runtime, and this will result in pages that load blazingly fast
 
