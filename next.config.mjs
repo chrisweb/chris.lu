@@ -20,7 +20,7 @@ const nextConfig = (phase) => {
     // to use the bundle analyzer uncomment the following lines
     // then uncomment the return to use withBundleAnalyzer
     /*const withBundleAnalyzer = WithBundleAnalyzer({
-        enabled: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        enabled: phase === PHASE_DEVELOPMENT_SERVER,
         openAnalyzer: false,
     })*/
 
@@ -197,9 +197,7 @@ const nextConfig = (phase) => {
             ppr: true,
             // experimental typescript "statically typed links"
             // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
-            // currently false in prod until Issue #62335 is fixed
-            // https://github.com/vercel/next.js/issues/62335
-            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+            typedRoutes: true,
         },
         // hit or skip data cache logging (dev server)
         // https://nextjs.org/docs/app/api-reference/next-config-js/logging
@@ -266,14 +264,13 @@ const nextConfig = (phase) => {
 const securityHeadersConfig = (phase) => {
 
     const cspReportOnly = false
-
     const reportingUrl = 'https://o4504017992482816.ingest.us.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
-
     const reportingDomainWildcard = 'https://*.ingest.us.sentry.io'
+    const isDev = phase === PHASE_DEVELOPMENT_SERVER
 
     const cspHeader = () => {
 
-        const upgradeInsecure = (phase !== PHASE_DEVELOPMENT_SERVER && !cspReportOnly) ? 'upgrade-insecure-requests;' : ''
+        const upgradeInsecure = (!isDev && !cspReportOnly) ? 'upgrade-insecure-requests;' : ''
 
         // report directive to be added at the end
         // with Reporting API fallback
@@ -356,7 +353,7 @@ const securityHeadersConfig = (phase) => {
     // security headers for preview & production
     const extraSecurityHeaders = []
 
-    if (phase !== PHASE_DEVELOPMENT_SERVER) {
+    if (!isDev) {
         extraSecurityHeaders.push(
             {
                 key: 'Strict-Transport-Security',
