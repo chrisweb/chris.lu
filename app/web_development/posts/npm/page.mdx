@@ -70,7 +70,7 @@ npm install -g npm@latest
 
 **package.json** is a file you will find in most Javascript (Typescript) projects. Package.json is a JSON file that contains metadata about the project, like the project name, a description and the current version, a list of dependencies as well as devDependencies, scripts (custom scripts that can be run from the command line using `npm run SCRIPT_NAME`), ...
 
-**package-lock.json** is a file that gets created when you install packages using a package manager. It lists the exact version of each installed package and its dependencies (unlike the package.json itself, which often allows a range of versions to be installed). This file is important as it can be used to create reproducible builds. When you test your project on the staging server and then deploy it to production, you don't want the package versions to be different, as this could introduce bugs after you are done testing if a package uses a newer version in production than previously on the staging server.
+**package-lock.json** is a file that gets created when you install packages using a package manager. It lists the exact version of each installed package and its dependencies (unlike the package.json itself, which often allows a range of versions to be installed). This file is important as it can be used to create reproducible builds. When you test your project on the staging (pre-production) server and then deploy it to production, you don't want the package versions to be different, as this could introduce bugs after you are done testing if a package uses a newer version in production than previously on the staging server.
 
 > [!MORE]  
 > [npmjs.com "package.json" documentation](https://docs.npmjs.com/cli/configuring-npm/package-json)  
