@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -154,7 +155,7 @@ Line 58: we add both to our remark plugins list
 
 ## Frontmatter for metadata (and more)
 
-Now it is time to create an example where we define some frontmatter. Then we let both plugins do their magic, and finally we can use the frontmatter variable to populate the Next.js metadata object
+Now it is time to create an example where we define some frontmatter on top of our MDX pages. Then we let both plugins do their magic, and finally we can use the frontmatter variable to fill our Next.js 15 metadata object
 
 Let's reuse our **gfm playground** page one more time
 
@@ -300,7 +301,7 @@ If you now run the linting process again the errors should be gone (if they are 
 
 Congratulations 🎉 you just learned how to set metadata for MDX pages and how to add frontmatter to MDX documents
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 <Pagination
     previous={{ label: 'Open Graph Image(s)', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/open_graph_images' }}

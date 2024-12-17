@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -46,7 +47,7 @@ export const metadata = {
 
 # The mdx-components file
 
-Before we experiment with plugins in one of the next parts, I wanted to first come back to the `mdx-components.tsx` file, which we briefly saw when setting up MDX support (at the very beginning), as the file is required to make MDX work
+Before we experiment with plugins in one of the next pages, I wanted to first come back to the `mdx-components.tsx` file, which we briefly saw when setting up MDX support (at the very beginning of our Next.js 15 setup), as the file is required to make MDX work, but we did not add any components yet
 
 Using this file you can do some of the things a plugin would do, but without having to install an additional package, for example, `mdx-components.tsx` is great if we want to quickly and easily replace an HTML Element with a React component
 
@@ -129,7 +130,7 @@ Now ensure the dev server is running (or launch it using the `npm run dev` comma
 
 Congratulations 🎉 you just learned how to use the **mdx-components** file, in other parts of this tutorial, we will edit this file again and add several more features to it
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 <Pagination
     previous={{ label: 'Styling the navigation and using next/font', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/navigation-styling-and-next-font' }}

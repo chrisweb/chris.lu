@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -63,7 +64,7 @@ There are a few aliases for scripts that will make your commands even shorter, `
 
 All `npm run SCRIPT_NAME` commands work because they have been added to the package.json scripts block. In our case, the `npm run dev` we used earlier works because **create next app** has added it to the package.json for us:
 
-Here is the full scripts section Next.js added to our package.json:
+Here is the full scripts section Next.js 15 added to our package.json:
 
 ```json title="package.json"
 "scripts": {
@@ -190,7 +191,7 @@ Besides starting the dev server, there are other interesting CLI commands you ma
 npx next build --debug
 ```
 
-After the build is done, Next.js will print a lot of interesting information in your terminal, like what headers, rewrites, redirects, routes, … are in your app. It will also add information like: did this page get prerendered as static content, or is it dynamic and will get rendered at runtime.
+After the build is done, Next.js 15 will print a lot of interesting information in your terminal, like what headers, rewrites, redirects, routes, … are in your app. It will also add information like: did this page get prerendered as static content, or is it dynamic and will get rendered at runtime.
 
 Another command to get some information about your system is:
 

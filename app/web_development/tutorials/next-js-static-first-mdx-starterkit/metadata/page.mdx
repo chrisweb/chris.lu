@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -126,7 +127,7 @@ export default function Home() {
 As we saw when inspecting the `<head>{:html}` element of our page had meta tags, but our `page.tsx` file does not have any code related to the **metadata** object, this is because every page will inherit the metadata we have set in the layout, you only add a metadata object in the pages for which you want to override the default values from the layout or if you want to add a new metadata property that you didn't set in the layout
 
 > [!MORE]  
-> [Next.js "" documentation](https://nextjs.org/docs/app/api-reference/functions/generate-viewport)
+> [Next.js "generate-viewport" documentation](https://nextjs.org/docs/app/api-reference/functions/generate-viewport)
 
 ## Metadata in typescript pages
 
@@ -359,7 +360,7 @@ export const metadata: Metadata = {
 
 Congratulations 🎉 you now also have support for open graph metadata in your project
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [Next.js "metadata merging" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/metadata#merging)  

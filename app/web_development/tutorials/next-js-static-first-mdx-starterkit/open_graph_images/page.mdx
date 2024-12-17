@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -47,13 +48,15 @@ export const metadata = {
 
 # Open Graph Image(s)
 
-In the previous part, we saw how to use the Open Graph protocol in our metadata object, but an important part is still missing, which is why in this part, we are going to focus on creating open graph images
+In the previous part, we saw how to use the Open Graph protocol in our metadata object, but an important part is still missing, which is why in this part, we are going to focus on creating open graph images for our Next.js 15 project
 
 Next.js comes with a great feature called [next/og](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image) which under the hood uses [@vercel/og](https://vercel.com/docs/functions/og-image-generation)
 
 To get a better idea of what it can do, I recommend visiting the ["OG image" playground](https://og-playground.vercel.app/), which has some good examples of what can be achieved
 
 **Next OG images** can do more than just use a static image as opengraph image. You can import custom fonts and images and even use CSS and HTML to build your opengraph scene, then **@vercel/og** will convert your code into an image using [Satori](https://github.com/vercel/satori) (and Satori is based on [resvg-js](https://github.com/yisibl/resvg-js))
+
+Compared to the Next.js 14 this version of the opengraph images tutorial has some changes due to the "dynamic APIs" breaking change introduced in Next.js 15, which means we now await the params as they are now an asynchronous function
 
 > [!MORE]  
 > [Next.js "opengraph-image" documentation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image)  
@@ -470,7 +473,7 @@ Now that you know how to create dynamic versions, you could even go further, if 
 
 Congratulations 🎉 you now know how to create static and dynamic opengraph images
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [Next.js "generateImageMetadata" documentation](https://nextjs.org/docs/app/api-reference/functions/generate-image-metadata)  

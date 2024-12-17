@@ -11,6 +11,8 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -44,6 +46,8 @@ export const metadata = {
     { label: 'Web development tutorials', href: '/web_development' },
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
+
+<ArchivedMessage case="next-js-14-static-tutorial" />
 
 # Open Graph Image(s)
 
@@ -258,7 +262,7 @@ You could, of course, duplicate the opengraph script we just did and add one in 
 
 ### Dynamic OG Image for dynamic route segment
 
-If you use [dynamic route](https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes) and both the page(.tsx/.jsx) file and the opengraph-image(.tsx) file are in the same folder, then you can use a dynamic route segment for the post title (or a post id if you prefer)
+If you use [dynamic route](https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes) and both the page(.tsx|.jsx) file and the opengraph-image(.tsx) file are in the same folder, then you can use a dynamic route segment for the post title (or a post id if you prefer)
 
 Let's create a new folder `/posts` in our `/app/blog` folder, and then inside of it another `/[title]` folder that will act as a dynamic segment for our route
 
@@ -440,9 +444,9 @@ Make sure the dev server is running, and then you can visit the `http://localhos
 
 Now that you know how to create dynamic versions, you could even go further, if for example you use similar code to the what we used to make our [sitemap dynamic](/web_development/tutorials/next-js-static-mdx-blog/sitemap_and_search_console#dynamic-sitemap). You could read the content of MDX files, extract the frontmatter and then use the frontmatter values for your dynamic opengraph images
 
-Congratulations 🎉 you now know how to create static and dynamic opengrapgh images
+Congratulations 🎉 you now know how to create static and dynamic opengraph images
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [Next.js "generateImageMetadata" documentation](https://nextjs.org/docs/app/api-reference/functions/generate-image-metadata)  

@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -46,7 +47,7 @@ export const metadata = {
 
 # Error handling and logging
 
-As we saw earlier, each route segment is a directory into we can put different files. We already created the page(.tsx/.jsx/.mdx) file, then Next.js created a default layout file for us, the third file we will now create is an error page
+As we saw earlier, each route segment is a directory into we can put different files. We already created the page(.tsx|.jsx|.mdx) file, then Next.js 15 created a default layout file for us, the third file we will now create is an error page
 
 How this works is that Next.js will automatically wrap the children of your page with a **React Error Boundary**, meaning that when an error gets thrown in a page, then the error boundary will contain it and then use the error file that is the closest (either an error file that is in the same directory as the page itself or a parent directory), that error page can do different things with the error, obviously it can display an error message to the user but you can also use it to do other things like save the error in your database or send a request to your logging service
 
@@ -575,7 +576,7 @@ Time to save, commit, and sync
 
 Congratulations 🎉 you now have error handling and logging for pages as well as global error handling in your project
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [Next.js "handling errors in root layouts" documentation](https://nextjs.org/docs/app/building-your-application/routing/error-handling#handling-errors-in-root-layouts)  

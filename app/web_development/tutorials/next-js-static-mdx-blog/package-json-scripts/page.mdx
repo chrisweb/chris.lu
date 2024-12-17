@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -43,6 +44,8 @@ export const metadata = {
     { label: 'Web development tutorials', href: '/web_development' },
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
+
+<ArchivedMessage case="next-js-14-static-tutorial" />
 
 # package.json (npm run) scripts
 
@@ -239,7 +242,7 @@ This will start your dev server using HTTPS, and you can see a recap of what Nex
 > Certificates created in C:\Users\xxxx\grepos\test\certificates
 > Adding certificates to .gitignore
 
-This message lists all the things Next.js just did for you, it created a self signed SSL certificate and added the folder containing the certificate to your `.gitignore` because the certificate is only for your local development and should NOT get commited (shared)
+This message lists all the things Next.js just did for you, it created a self signed SSL certificate and added the folder containing the certificate to your `.gitignore` because the certificate is only for your local development and should NOT get committed (shared)
 
 You can now visit your localhost with SSL at `https://localhost:3000/`
 

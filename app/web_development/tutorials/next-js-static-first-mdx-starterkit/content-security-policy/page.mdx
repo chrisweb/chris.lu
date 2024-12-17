@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -46,7 +47,7 @@ export const metadata = {
 
 # Content Security Policy (CSP)
 
-Using [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) headers is not required to make an app work, but it is highly recommended as it will make your project more secure
+Using [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) headers is not required to make an app work, but it is highly recommended as it will make your Next.js 15 project more secure
 
 > [!TIP]  
 > I like to set up the CSP headers as early as possible because if you wait until the last moment before going into production and then decide to add them, then you will probably have a bunch of **violations** that get reported, and it might take some time to adjust your CSP rules, this why I recommend starting as early as possible and fix the violations one by one as soon as they occur
@@ -484,7 +485,7 @@ Lines 125 to 136: we add 3 more security headers to the list of headers:
 
 Congratulations 🎉 you just made your project a lot more secure by setting up CSP headers and reporting potential violations
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [MDN "Strict-Transport-Security" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)  

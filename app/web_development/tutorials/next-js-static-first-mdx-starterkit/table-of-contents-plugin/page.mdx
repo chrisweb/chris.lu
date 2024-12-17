@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -77,7 +78,7 @@ First we need to add the Table of Contents plugin to our project, by using the f
 npm i remark-table-of-contents --save-exact
 ```
 
-Now that **remark-table-of-contents** package is installed, we need to edit our Next.js configuration file and add it to our MDX setup:
+Now that **remark-table-of-contents** package is installed, we need to edit our Next.js 15 configuration file and add it to our MDX setup:
 
 ```js title="next.config.mjs" showLineNumbers {8} {34-43} {49} /[remarkTableOfContents, remarkTableOfContentsOptions]/#special
 import { withSentryConfig } from '@sentry/nextjs';
@@ -514,7 +515,7 @@ Now is a good time to check the result of all the code we just added. First, mak
 
 Congratulations 🎉 you should now see a TOC on the right side of the article that always stays on top even when you scroll down, and in the list of links, one of them should always be highlighted based on the headline that is currently in the viewport
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [MDN "Intersection Observer API" documentation](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)  

@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -46,7 +47,7 @@ export const metadata = {
 
 # Linting in VSCode using ESLint and MDX extensions
 
-We now have [markdown as well as code linting](/web_development/tutorials/next-js-static-first-mdx-starterkit/linting-setup-using-eslint) set up 🎉, but we have no linting in VSCode itself (yet)
+We now have a command to [lint our markdown content as well as the code](/web_development/tutorials/next-js-static-first-mdx-starterkit/linting-setup-using-eslint) of our Next.js 15 project, but we have no linting in VSCode itself (yet)
 
 For that reason we are now going to install 2 **VSCode extensions** (one for ESLint and one for MDX)
 
@@ -362,7 +363,7 @@ To disable them both, you do it like this:
 
 Congratulations 🎉 you just added linting to your VSCode IDE using extensions, meaning you will now get linting messages as you code (instead of having to manually run the command from time to time or even worse have all the linting errors and warnings show up the moment you create a build to deploy)
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 <Pagination
     previous={{ label: 'ESLint MDX plugin and remark-lint', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/eslint-mdx-plugin-and-remark-lint' }}

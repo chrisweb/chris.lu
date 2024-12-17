@@ -11,6 +11,8 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -44,9 +46,11 @@ export const metadata = {
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
 
+<ArchivedMessage case="next-js-14-static-tutorial" />
+
 # Error handling and logging
 
-As we saw earlier, each route segment is a directory, and each directory contains a page(.tsx/.jsx/.mdx) file, but unlike the page router, when using the app router, we can add more than just pages, for example, one of those files we are about to add is an error page
+As we saw earlier, each route segment is a directory, and each directory contains a page(.tsx|.jsx|.mdx) file, but unlike the page router, when using the app router, we can add more than just pages, for example, one of those files we are about to add is an error page
 
 How this works is that Next.js will automatically wrap the children of your page with a **React Error Boundary**, meaning that when an error gets thrown in a page, then the error boundary will contain it and then use the error file that is the closest (either an error file that is in the same directory as the page itself or a parent directory)
 
@@ -433,7 +437,7 @@ Time to save, commit, and sync
 
 Congratulations 🎉 you now have error handling and logging for pages as well as global error handling in your project
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [Next.js "handling errors in root layouts" documentation](https://nextjs.org/docs/app/building-your-application/routing/error-handling#handling-errors-in-root-layouts)  

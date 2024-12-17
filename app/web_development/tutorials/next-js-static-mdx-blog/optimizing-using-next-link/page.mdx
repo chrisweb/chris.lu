@@ -11,6 +11,8 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -43,6 +45,8 @@ export const metadata = {
     { label: 'Web development tutorials', href: '/web_development' },
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
+
+<ArchivedMessage case="next-js-14-static-tutorial" />
 
 # Optimizing links in MDX using next/link
 
@@ -245,7 +249,7 @@ Now launch the dev server (using the `npm run dev` command) and then open the `h
 
 Congratulations 🎉 you just created a link component that will now get used for all markdown links, which means they will now all benefit from the next/link features like prefetching and optimized client-side navigation between routes
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [VSCode "Markdown editing" documentation](https://code.visualstudio.com/docs/languages/markdown#_inserting-images-and-links-to-files)  

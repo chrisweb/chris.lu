@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -72,7 +73,7 @@ If this is the only plugin you plan to use, then you could use the next.config *
 
 ## GitHub flavored markdown (gfm) plugin
 
-By adding the [remark "GitHub Flavored Markdown" (GFM) plugin](https://www.npmjs.com/package/remark-gfm), we extend the syntax features provided by the original markdown with extensions for autolink literals, footnotes, strikethrough, tables, tasklists and some more. You may already know most of them from writing markdown in GitHub READMEs, Issues and comments and might have thought they were part of the base markdown syntax
+By adding the [remark "GitHub Flavored Markdown" (GFM) plugin](https://www.npmjs.com/package/remark-gfm) to our Next.js 15 project, we extend the syntax features provided by the original markdown with extensions for autolink literals, footnotes, strikethrough, tables, tasklists and some more. You may already know most of them from writing markdown in GitHub READMEs, Issues and comments and might have thought they were part of the base markdown syntax
 
 Installing and setting up the plugin is easy, as we will see in a bit, but if you want to know more about this plugin, then I recommend checking out their [remark-gfm](https://github.com/remarkjs/remark-gfm#install) repository, it has a README that has a well-written chapter about "what it is" and "what it does" as well as some examples and there you can also have a look at the previous releases list
 
@@ -681,7 +682,7 @@ If you launch the dev server then open the playground URL `http://localhost:3000
 
 Congratulations 🎉 you just added GitHub-flavored markdown support to your project and learned how to use the mdx-components file to make tasklists dynamic using your custom checkbox component
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > ["footnotes bug list" in the micromark-extension-gfm-footnote readme](https://github.com/micromark/micromark-extension-gfm-footnote?tab=readme-ov-file#bugs)  

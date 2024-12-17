@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -143,7 +144,7 @@ On top of that page, you will have a link to the live preview on the vercel.app 
 
 Congratulations 🎉 you are now viewing a preview version of your project hosted on Vercel
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 <Pagination
     previous={{ label: 'package.json (npm run) scripts', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/package-json-scripts' }}

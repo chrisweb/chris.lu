@@ -13,6 +13,7 @@ import { faBug, faComments } from '@fortawesome/free-solid-svg-icons'
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -48,7 +49,9 @@ export const metadata = {
 
 # Optimizing images in MDX using next/image
 
-For the third time we also the mdx-components.tsx file, but we also use our first MDX (remark) plugin. This part is all about [next/image](https://nextjs.org/docs/app/api-reference/components/image), an image component that was created by the [Aurora team at Google](https://developer.chrome.com/docs/aurora/image-component) in cooperation with the Next.js team. By using **next/image** we will make sure that all images we put into our MDX pages get optimized, which means that:
+This page is all about using [next/image](https://nextjs.org/docs/app/api-reference/components/image) in Next.js 15 project to automatically optimize images that we place into our MDX documents. 
+
+By using **next/image** we will make sure that all images we put into our MDX pages get optimized, which means that:
 
 * we will update the configuration to make sure our [PNG](https://web.dev/learn/images/png) or [JPG](https://web.dev/learn/images/jpeg) images get converted automatically into formats like [WEBP](https://web.dev/learn/images/webp) and [AVIF](https://web.dev/learn/images/avif); this will reduce the file sizes of images without them losing in quality, which means our images will consume less bandwidth and load faster
 * we will use **next/image**, which will help us make our images [responsive](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images) by creating a srcset to define multiple versions of an image that have different dimensions, so that on small screens we small images that are NOT heavier than necessary and on big screens we load bigger images to make sure the browser does not fetch a small image and then upscale it, which would make it look blurry
@@ -57,7 +60,7 @@ For the third time we also the mdx-components.tsx file, but we also use our firs
 We will also keep the drag and drop images feature that improves the **developer experience (DX)** in VSCode intact by making sure that adding images to a document is easy and quick when using VSCode. What is great is that after you **drag and drop** an image into a document VSCode will create the markdown element with the correct path to the image
 
 > [!NOTE]  
-> Since Next.js 13, there is a new next/image package, and the previous package got renamed to [next/legacy/image](https://nextjs.org/docs/pages/api-reference/components/image-legacy), the Next.js documentation has an informative chapter about ["next/image changed in version 13"](https://nextjs.org/docs/messages/next-image-upgrade-to-13), which explains what has changed and also provides links to codemods to update your codebase automatically  
+> Since Next.js 13, there is a new next/image package, and the previous package got renamed to [next/legacy/image](https://nextjs.org/docs/pages/api-reference/components/image-legacy). The new image component is the result of cooperation between the [Aurora team at Google](https://developer.chrome.com/docs/aurora/image-component) and the Next.js team. The documentation has an informative chapter about ["next/image changed in version 13"](https://nextjs.org/docs/messages/next-image-upgrade-to-13), which explains what has changed and also provides links to codemods to update your codebase automatically  
 
 > [!MORE]  
 > [Next.js "next/image" API reference](https://nextjs.org/docs/app/api-reference/components/image)  
@@ -1095,7 +1098,7 @@ In situations where next/image does not create the placeholder, you have several
 
 Congratulations 🎉 you now know almost everything there is to know about next/image and its many features and will now be able to create a project that has optimized images, giving you a good web metrics score and make it will contribute to making your users happy because your pages load super fast
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [Next.js "next/image placeholder" documentation](https://nextjs.org/docs/app/api-reference/components/image#placeholder)  

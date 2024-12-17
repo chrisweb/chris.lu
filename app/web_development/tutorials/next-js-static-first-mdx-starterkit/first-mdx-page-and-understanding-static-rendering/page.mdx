@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -131,7 +132,7 @@ Another feature you might be interested in is called [assetPrefix](https://nextj
 
 Congratulations 🎉 you now know how to check if pages are static or dynamic, which is essential because the more static content you have, the less work the server will need to do during runtime, and this will result in pages that load blazingly fast
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [Next.js "Static Site Generation (SSG)" documentation](https://nextjs.org/docs/pages/building-your-application/rendering/static-site-generation)

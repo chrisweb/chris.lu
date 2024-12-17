@@ -13,6 +13,8 @@ import { faBug, faComments } from '@fortawesome/free-solid-svg-icons'
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -45,6 +47,8 @@ export const metadata = {
     { label: 'Web development tutorials', href: '/web_development' },
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
+
+<ArchivedMessage case="next-js-14-static-tutorial" />
 
 # Optimizing images in MDX using next/image
 
@@ -1086,7 +1090,7 @@ In situations where next/image does not create the placeholder, you have several
 
 Congratulations 🎉 you now know almost everything there is to know about next/image and its many features and will now be able to create a project that has optimized images, giving you a good web metrics score and make it will contribute to making your users happy because your pages load super fast
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [Next.js "next/image placeholder" documentation](https://nextjs.org/docs/app/api-reference/components/image#placeholder)  

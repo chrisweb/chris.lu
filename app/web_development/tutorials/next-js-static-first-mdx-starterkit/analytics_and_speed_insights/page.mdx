@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -46,9 +47,9 @@ export const metadata = {
 
 # Vercel Analytics and Speed Insights
 
-We are now going to add Vercel **Analytics** and **Speed Insights** to our project using two packages by Vercel so that later, we can go to our Vercel Dashboard and check out how well our project performs
+We are now going to add Vercel **Analytics** and **Speed Insights** to our Next.js 15 project using 2 packages by Vercel so that later we can go to our Vercel Dashboard and check out how well our project performs
 
-The two chapters are quite similar because both packages work similarly. The real difference is only the name. This means that if you are done with the Analytics chapter, you just need to repeat the same steps for the Speed Insights package.
+The 2 chapters are quite similar because both packages work similarly. The real difference is only the name. This means that if you are done with the Analytics chapter, you just need to repeat the same steps for the Speed Insights package.
 
 ## Add Vercel Analytics to your project
 
@@ -270,6 +271,8 @@ script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com;
 ```
 
 This is only needed in development, in development Vercel Analytics does NOT track visits, but it is still loading a script from that domain, which is why we add it to the script-src directive
+
+<DonationsMessage />
 
 <Pagination
     previous={{ label: 'Frontmatter plugin', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/frontmatter-plugin' }}

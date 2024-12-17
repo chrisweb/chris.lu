@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -93,6 +94,8 @@ The state for the feature that enables us to use MDX plugins when creating devel
 * Next.js v15.1 adds **experimental** support for MDX plugins (remark and rehype plugins written in Javascript) in Turbopack
 
 TODO: finish this chapter
+
+<DonationsMessage />
 
 <Pagination
     previous={{ label: 'Optimizing images in MDX using next/image', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/optimizing-using-next-image' }}

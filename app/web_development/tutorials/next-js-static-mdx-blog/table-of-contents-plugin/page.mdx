@@ -11,6 +11,8 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -43,6 +45,8 @@ export const metadata = {
     { label: 'Web development tutorials', href: '/web_development' },
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
+
+<ArchivedMessage case="next-js-14-static-tutorial" />
 
 # Table of contents (TOC) plugin and React Observer Hook
 
@@ -513,7 +517,7 @@ Now is a good time to check the result of all the code we just added. First, mak
 
 Congratulations 🎉 you should now see a TOC on the right side of the article that always stays on top even when you scroll down, and in the list of links, one of them should always be highlighted based on the headline that is currently in the viewport
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [MDN "Intersection Observer API" documentation](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)  

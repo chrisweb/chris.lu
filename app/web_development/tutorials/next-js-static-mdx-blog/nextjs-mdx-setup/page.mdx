@@ -11,6 +11,8 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -43,6 +45,8 @@ export const metadata = {
     { label: 'Web development tutorials', href: '/web_development' },
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
+
+<ArchivedMessage case="next-js-14-static-tutorial" />
 
 # Next.js MDX support
 
@@ -343,7 +347,7 @@ Now that our MDX setup is done, you might be interested in a few tips that make 
 
 Congratulations 🎉 you now have MDX support added to your project using next/mdx, in other parts of this tutorial, we will further extend that setup by adding several valuable plugins and learning how to use custom react components to fully benefit from what MDX has to offer
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [chris.lu "MDX and markdown in VSCode tips"](/web_development/posts/vscode#vscode-markdown-and-mdx-related-tips)  

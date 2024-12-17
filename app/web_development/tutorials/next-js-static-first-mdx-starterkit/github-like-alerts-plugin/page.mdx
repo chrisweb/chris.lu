@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -60,7 +61,7 @@ To add the **rehype github alerts** plugin, we first need to install the package
 npm i rehype-github-alerts --save-exact
 ```
 
-Next, we need to edit our Next.js configuration file to add the plugin to our MDX setup:
+Next, we need to edit our Next.js 15 configuration file to add the plugin to our MDX setup:
 
 ```js title="next.config.mjs" showLineNumbers {10} {57} /rehypeGithubAlerts/2#special
 import { withSentryConfig } from '@sentry/nextjs';
@@ -275,7 +276,7 @@ The alerts should now use similar colors than those used by github (github has d
 
 Congratulations 🎉 you have now added support for markdown alerts that are compatible with GitHub (flavored markdown)
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [GitHub "rehype-github-alerts" repository](https://github.com/chrisweb/rehype-github-alerts)  

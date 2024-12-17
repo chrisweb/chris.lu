@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -44,9 +45,9 @@ export const metadata = {
     { label: 'Next.js 15 static first MDX starterkit', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit' },
 ]} />
 
-# Project setup and first commit
+# Next.js 15 setup and first commit
 
-If you have closed VSCode since last time, launch VSCode and open the project directory we created in the **Prerequisites** chapter (if you need help to open a directory in VSCode, check out my chapter [open a project folder in VSCODE](/web_development/posts/vscode#open-a-folder-in-vscode) from the VSCode post).
+On this page we will quickly create a new branch for our project so that we are not working on the main branch and then we will finally use **create next app** (CNA) to set up our Next.js 15 project
 
 ## Branching Strategy choice
 
@@ -56,7 +57,9 @@ Depending on the amount of people that will work on your project, you might want
 
 ### Add a "preview" (git) branch (using VSCode git tools)
 
-Open VSCode and then create a new branch **from the main branch** and call it **preview**
+If you have closed VSCode since last time, launch VSCode and open the project directory we created in the **Prerequisites** chapter (if you need help to open a directory in VSCode, check out my chapter [open a project folder in VSCODE](/web_development/posts/vscode#open-a-folder-in-vscode) from the VSCode post).
+
+Then create a new branch **from the main branch** and call it **preview**
 
 If you are new to VSCode or Git, to learn how to create a new branch from another branch (and then publish it), I recommend you check the chapter ["Creating a new branch" from the VSCode post](/web_development/posts/vscode#create-a-new-branch-from-based-on-another-branch) in my VSCode post
 
@@ -79,7 +82,7 @@ Of course, once published, it is a bit more work if you want to delete a publish
 
 ## Create Next App (CNA)
 
-To create a new Next.js project, we are going to use [Create Next App](https://www.npmjs.com/package/create-next-app) (CNA)
+To create a new Next.js 15 project, we are going to use [Create Next App](https://www.npmjs.com/package/create-next-app) (CNA)
 
 **CNA** is a **CLI tool** created by Next.js to get you started quickly
 
@@ -211,7 +214,7 @@ Finally, commit the changes and then synchronize them
 
 Congratulations 🎉 you just created a solid foundation for your project using create next app and did your first commit
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 <Pagination
     previous={{ label: 'Prerequisites', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/prerequisites' }}

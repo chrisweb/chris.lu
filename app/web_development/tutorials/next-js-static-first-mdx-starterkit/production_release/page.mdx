@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -47,6 +48,23 @@ export const metadata = {
 # Production release
 
 This part of the tutorial covers three important things when going into production with a new project. First, we will do a production build and deploy it using Vercel. Next, we will use Vercel's nice feature, Open Graph previews, to check if our Open Graph metadata produces the expected result. Finally, we will add a custom domain name to our project.
+
+## Vercel alternatives
+
+In this tutorial, we deploy to Vercel, but there are a lot of alternatives to chose from. 
+
+> [!TIP]  
+> Next.js 15 comes with [improvements to self hosting](https://nextjs.org/blog/next-15#improvements-for-self-hosting) make it easier for you to chose and alternative to Vercel
+
+For example one alternative to Vercel is [Deno Deploy](https://deno.com/blog/nextjs-on-deno-deploy) which has support for Next.js (both static and SSR)
+
+Or as this is a static project you could also deploy your project to [GitHub pages](https://pages.github.com/) (using the Next.js [export configuration option](https://nextjs.org/docs/app/building-your-application/deploying/static-exports)) or you could deploy your static assets using the CDN of your favorite cloud provider.
+
+If you want to mimic Vercel and build your own serverless infrastructure, then you should look into services like [AWS Lambda](https://aws.amazon.com/lambda) or [Cloudflare Workers](https://workers.cloudflare.com/)
+
+> [!MORE]  
+> [Next.js 15 self-hosting improvements](https://nextjs.org/blog/next-15#improvements-for-self-hosting)  
+> [Next.js 14.1 self-hosting improvements](https://nextjs.org/blog/next-14-1#improved-self-hosting)  
 
 ## Production deployment
 

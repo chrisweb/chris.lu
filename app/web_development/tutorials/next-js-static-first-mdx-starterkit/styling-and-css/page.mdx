@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -46,7 +47,7 @@ export const metadata = {
 
 # Styling and CSS libraries
 
-Spoiler alert! I will use [CSS Modules](https://github.com/css-modules/css-modules) in this tutorial for the simple reason that a lot of CSS libraries had problems with **Server components** when some time ago I started to experiment with Next.js 13 and Server components. I did NOT want to add an experimental library to my project, so I started searching for an alternative
+Spoiler alert! I will use [CSS Modules](https://github.com/css-modules/css-modules) in this tutorial. Originally the reason was that a lot of CSS libraries had problems with **Server components** when Next.js 13 got first released. Today we use Next.js 15 and a lot of libraries now work well with server components but it is still fun to use CSS Modules, so as this tutorial is based on the previous iteration for Next.js 14 I will keep using CSS Modules. 
 
 ## Why CSS Modules?
 
@@ -585,7 +586,7 @@ Now (make sure your dev server is running) visit the homepage or (the previous e
 
 Congratulations 🎉 you now know how to use CSS modules and global.css to add styling to your project
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [Next.js "global styles" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-modules#global-styles)  

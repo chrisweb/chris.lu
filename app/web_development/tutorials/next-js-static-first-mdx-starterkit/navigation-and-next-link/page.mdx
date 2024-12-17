@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -46,9 +47,13 @@ export const metadata = {
 
 # Navigation and next/link
 
-In this chapter, we will build a basic navigation to navigate between two pages: the home(page) and a second page
+We will build a basic navigation to navigate between two pages, the home(page) and a blog page
 
-So first, let's create that second page
+We will also compare regular anchors with next/link in case you didn't already know the difference
+
+## Blog page
+
+We already have a home page,  that second page
 
 In the `app` folder, create a new `blog` folder
 
@@ -64,6 +69,8 @@ export default function Blog() {
     )
 }
 ```
+
+## Navigation component
 
 Next, we are going to create a component for the main Navigation bar of our app
 
@@ -114,6 +121,8 @@ The important part here is to use the `Route` type (that we imported on top) for
 
 ![Next.js Typescript Type error: Type string is not assignable to type UrlObject | RouteImpl](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-first-mdx-starterkit/nextjs_typescript_type_error_string_is_not_a_route.png 'Type error: Type string is not assignable to type UrlObject | RouteImpl')
 
+## Adding the navigation to the layout
+
 Finally, we open the `layout.tsx` that is in the `app` folder to import/use the navigation component, like so:
 
 ```tsx title="/app/layout.tsx" showLineNumbers {3} {19} {20}#special
@@ -154,7 +163,7 @@ Line 19: we replace the "my header" placeholder paragraph we had earlier with ou
 
 Line 20: we display the current date & time, which we will use for a test in a bit
 
-## Understanding why using regular anchors is NOT recommended
+## Understanding why using regular anchors is NOT recommended (optional)
 
 For now our links use a regular HTML anchor element, this is to demonstrate the difference between anchor elements and using next/link (which we will use in the next chapter)
 
@@ -340,7 +349,7 @@ Have a look at the the two links inside of the `<nav>{:html}` element (inside of
 
 Congratulations 🎉 you created your navigation component using next/link and next/navigation
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [Next.js "Linking and Navigating" documentation](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating)  

@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -569,7 +570,7 @@ Line Z: we add the custom **eslintConfig** to the default export
 
 Congratulations 🎉 you just transitioned from classic (RC) configuration files to flat config and we converted our Next.js configuration file into a typescript file (next.config.ts), on the next page we will extend our setup by adding linting for Typescript files and also 
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 <Pagination
     previous={{ label: 'React in MDX and MDX in react', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/react-in-mdx-and-mdx-in-react' }}

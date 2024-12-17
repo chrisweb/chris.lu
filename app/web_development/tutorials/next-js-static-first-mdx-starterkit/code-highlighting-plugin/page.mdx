@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -52,7 +53,7 @@ For me, the best about **rehype pretty code** is that it uses [shiki](https://sh
 
 ## No next.config.ts
 
-If you use Typescript for your Next.js config file and import this plugin, then you will get a node.js error telling you that it can NOT import the "vscode-textmate" package (which is a shiki dependency, shiki is used by this plugin).
+If you use Typescript for your Next.js 15 config file and import this plugin, then you will get a node.js error telling you that it can NOT import the "vscode-textmate" package (which is a shiki dependency, shiki is used by this plugin).
 
 As described on a previous page, the reason for this is that next.config.ts files have [NO support for ESM only packages](/web_development/tutorials/next-js-static-first-mdx-starterkit/next-config#nextconfigts-does-not-yet-support-esm) (yet)
 
@@ -929,7 +930,7 @@ If we used the correct tokens to create our aliases map, the colors in the list 
 
 Congratulations 🎉 you finished learning about how to highlight code using a remark plugin and learned how to use most of its features (including using VSCode themes)
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 <Pagination
     previous={{ label: 'MDX plugins', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/mdx-plugins' }}

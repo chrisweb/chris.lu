@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -60,7 +61,7 @@ To install the **rehype-slug** plugin package, use the following command:
 npm i rehype-slug --save-exact
 ```
 
-Now that the plugin is installed, we need to edit our Next.js configuration file and add it to our MDX setup:
+Now that the plugin is installed, we need to edit our Next.js 15 configuration file and add it to our MDX setup:
 
 ```js title="next.config.mjs" showLineNumbers {7} {38} /rehypeSlug/2#special
 import { withSentryConfig } from '@sentry/nextjs';
@@ -167,7 +168,7 @@ Now launch the dev server, then open the `http://localhost:3000/toc_playground` 
 
 Congratulations 🎉 all of your headings now automatically get a unique ID
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [npmjs.com "rehype-slug" page](https://www.npmjs.com/package/rehype-slug)  

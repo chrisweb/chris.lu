@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
@@ -46,7 +47,7 @@ export const metadata = {
 
 # Styling the navigation and using next/font
 
-Now that our Navigation is working, we will add a few touches of color and use [next/font](https://nextjs.org/docs/app/api-reference/components/font) to add a custom web font to our project
+Now that our Navigation is working, we will add a few touches of color and use [next/font](https://nextjs.org/docs/app/api-reference/components/font) (which is built in Next.js 15, so NO additional package is needed) to add a custom web font to our project
 
 ## next/font to use an open source font
 
@@ -229,7 +230,7 @@ Now launch the dev server if it isn't already running (using the `npm run dev` c
 
 Congratulations 🎉 you now have a much better-looking navigation component and learned how to use next/font
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [Next.js "Font Optimization" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/fonts)  
