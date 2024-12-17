@@ -252,7 +252,7 @@ Line X: we use the [satisfies operator](https://www.typescriptlang.org/docs/hand
 
 #### Replacing next lint with eslint
 
-The typescript eslint configuration files are not supported by the Next.js 15.x lint cli (as of now), the file gets mentioned in the [Next.js **runLintCheck** code](https://github.com/vercel/next.js/blob/c3bc7d05983d3c5604d4532ceb706d5973aef642/packages/next/src/lib/eslint/runLintCheck.ts#L366) but there is no implementation (yet)
+The typescript eslint configuration files are not supported by the Next.js 15.x lint cli (as of now), the file gets mentioned in the code as can be seen in the [**runLintCheck** git blame](https://github.com/vercel/next.js/blame/canary/packages/next/src/lib/eslint/runLintCheck.ts#L363) but there is no implementation (yet)
 
 If you have converted your ESLint configuration to an `eslint.config.ts` file and use the linting command `npm run lint` then `next lint` will not find our configuration file, and instead starts the wizard (which is supposed to guide us through setting up a new ESLint classic configuration)
 
