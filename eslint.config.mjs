@@ -112,6 +112,7 @@ const nextConfig = [
             'react/no-unknown-property': 'off',
             'react/react-in-jsx-scope': 'off',
             'react/prop-types': 'off',
+            'react/jsx-no-target-blank': 'off',
             'jsx-a11y/alt-text': ['warn', { elements: ['img'], img: ['Image'], },],
             'jsx-a11y/media-has-caption': 'warn',
             'jsx-a11y/aria-props': 'warn',
@@ -119,7 +120,7 @@ const nextConfig = [
             'jsx-a11y/aria-unsupported-elements': 'warn',
             'jsx-a11y/role-has-required-aria-props': 'warn',
             'jsx-a11y/role-supports-aria-props': 'warn',
-            'react/jsx-no-target-blank': 'off',
+
         },
         settings: {
             'react': {
@@ -164,7 +165,8 @@ const stylisticConfig = [
             '@stylistic/comma-dangle': ['warn', 'only-multiline'],
             '@stylistic/padded-blocks': 'off',
             '@stylistic/spaced-comment': 'off',
-            '@stylistic/jsx-one-expression-per-line': ['warn', { allow: 'non-jsx' }],
+            //'@stylistic/jsx-one-expression-per-line': ['warn', { allow: 'single-line' }],
+            '@stylistic/jsx-one-expression-per-line': 'off',
             '@stylistic/jsx-indent-props': ['warn', 4],
             '@stylistic/multiline-ternary': ['warn', 'always-multiline', { ignoreJSX: false }],
             '@stylistic/arrow-parens': ['warn', 'as-needed', { "requireForBlockBody": true }],
