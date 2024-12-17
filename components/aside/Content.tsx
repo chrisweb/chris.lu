@@ -6,7 +6,7 @@ import { faHeart, faBug, faComments } from '@fortawesome/free-solid-svg-icons'
 import Image from 'next/image'
 import buyMeACoffeeImport from '@/public/assets/images/buy_me_a_coffee_button.png'
 
-const AsideContent: React.FC = (): React.JSX.Element => {
+const AsideContent: React.FC = () => {
 
     return (
         <div className={styles.content}>
@@ -19,9 +19,13 @@ const AsideContent: React.FC = (): React.JSX.Element => {
             <p className="fontSmall fontDarker alignLeft">
                 <FontAwesomeIcon icon={faHeart} size="1x" color="rgb(255, 0, 170)" />
                 &nbsp;
-                <BaseLink href="https://buymeacoffee.com/chriswwweb">Donations</BaseLink>
+                <BaseLink href="https://buymeacoffee.com/chriswwweb">Buying me a coffee</BaseLink>
                 &nbsp;
-                are not mandatory but greatly appreciated, as they allow me to work on more content and keep the project free for everyone
+                or
+                &nbsp;
+                <BaseLink href="https://github.com/sponsors/chrisweb">sponsoring me</BaseLink>
+                &nbsp;
+                on GitHub, are not mandatory but greatly appreciated, as it allows me to work on more content and keep the project free for everyone
             </p>
             <p className="fontSmall fontDarker alignLeft">
                 <FontAwesomeIcon icon={faBug} size="1x" color="rgb(255, 0, 170)" />
