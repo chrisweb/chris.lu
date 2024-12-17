@@ -49,7 +49,7 @@
     --tertiary-light-color: rgb(var(--tertiary-light-value));
     --quaternary-light-value: 215 110 255;
     --quaternary-light-color: rgb(var(--quaternary-light-value));
-    --codebloc-font-family: var(--font-sourceCodePro), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --codeblock-font-family: var(--font-sourceCodePro), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     --header-navbar-height: 50px;
     --cursor-default: url(/assets/cursors/secondary_mouse_default.cur), default;
     --cursor-pointer: url(/assets/cursors/secondary_mouse_pointer.cur), pointer;
@@ -575,7 +575,7 @@ progress {
 }
 
 code {
-    font-family: var(--codebloc-font-family);
+    font-family: var(--codeblock-font-family);
     font-size: var(--main-fontSize-small);
     counter-reset: line;
 }
