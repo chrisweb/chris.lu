@@ -9,11 +9,11 @@ export interface IListItem {
     href: Route | URL
 }
 
-export interface IPaginationProps {
+export interface IBreadcrumbsProps {
     list: IListItem[]
 }
 
-const Breadcrumbs: React.FC<IPaginationProps> = (props): React.JSX.Element => {
+const Breadcrumbs: React.FC<IBreadcrumbsProps> = (props) => {
 
     const { list } = props
 

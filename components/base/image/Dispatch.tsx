@@ -29,7 +29,7 @@ function extractImageType(imageProps: ImageProps) {
 
 }
 
-const ImageDispatch: React.FC<ImageProps> = (props): React.JSX.Element => {
+const ImageDispatch: React.FC<ImageProps> = (props) => {
 
     const newImageProps = { ...props }
 

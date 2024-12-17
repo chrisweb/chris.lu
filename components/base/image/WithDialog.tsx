@@ -15,7 +15,7 @@ export interface IImageWithDialog extends Omit<ImageProps, 'src'> {
     src: StaticImageData
 }
 
-const ImageWithDialog: React.FC<IImageWithDialog> = (props): React.JSX.Element => {
+const ImageWithDialog: React.FC<IImageWithDialog> = (props) => {
 
     const [imageDialogIsOpenState, setImageDialogIsOpenState] = useState(false)
 
