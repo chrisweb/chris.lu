@@ -128,11 +128,11 @@ Line 7: we use a console.log as example, when the phase is development we show a
 > [!MORE]  
 > [Node.js "environment variables" documentation](https://nodejs.org/en/learn/command-line/how-to-read-environment-variables-from-nodejs)  
 > [Vercel "system environment variables" documentation](https://vercel.com/docs/projects/environment-variables/system-environment-variables)  
-> [Next.js "next.config.js phase" documentation](https://nextjs.org/docs/app/api-reference/next-config-js)  
+> [Next.js "next.config.js phase" documentation](https://nextjs.org/docs/app/api-reference/config/next-config-js)  
 
 ## React strict mode configuration
 
-[React strict mode](https://react.dev/reference/react/StrictMode) and [powered by header(s)](https://nextjs.org/docs/app/api-reference/next-config-js/poweredByHeader) are two configuration options that often lead to controversial discussions among developers
+[React strict mode](https://react.dev/reference/react/StrictMode) and [powered by header(s)](https://nextjs.org/docs/app/api-reference/config/next-config-js/poweredByHeader) are two configuration options that often lead to controversial discussions among developers
 
 **React strict mode** is **enabled by default** since **Next.js v13.4** for the **app router** (not the pages router), you can disable the React strict mode in the `next.config.mjs` file by setting the option to **false**
 
@@ -184,7 +184,7 @@ export default nextConfig
 
 > [!MORE]  
 > [React "Strict Mode" documentation](https://react.dev/reference/react/StrictMode)  
-> [Next.js "Strict Mode" API reference](https://nextjs.org/docs/app/api-reference/next-config-js/reactStrictMode)  
+> [Next.js "Strict Mode" API reference](https://nextjs.org/docs/app/api-reference/config/next-config-js/reactStrictMode)  
 
 ## Next.js powered by header configuration
 
@@ -240,7 +240,7 @@ export default nextConfig
 If you did any of the two changes I mentioned above, then save your `next.config.mjs` and commit/sync your latest changes to your git repository with a commit message like, for example: "turning off powered by the header as I see no reason to have it enabled"
 
 > [!MORE]  
-> [Next.js "Powered By Header" API reference](https://nextjs.org/docs/app/api-reference/next-config-js/poweredByHeader)  
+> [Next.js "Powered By Header" API reference](https://nextjs.org/docs/app/api-reference/config/next-config-js/poweredByHeader)  
 
 ## Redirects
 
@@ -324,14 +324,14 @@ export default nextConfig
 
 Lines 21 to 22: we changed the **source** and **destination** to routes with a `:slug` as we want to do redirects for dynamic routes, the **destination** slug will get the value of the **source** slug during a redirect
 
-A lot more is possible, if you want to know more about wildcards, regex support, and even redirects based on data in headers or cookies, then I recommend checking out the official [redirects](https://nextjs.org/docs/pages/api-reference/next-config-js/redirects) documentation, which has lots of examples
+A lot more is possible, if you want to know more about wildcards, regex support, and even redirects based on data in headers or cookies, then I recommend checking out the official [redirects](https://nextjs.org/docs/pages/api-reference/config/next-config-js/redirects) documentation, which has lots of examples
 
 Congratulations 🎉 you now know how to use phases and make adjustments to the Next.js configuration
 
 <DonationsMessage />
 
 > [!MORE]  
-> [Next.js "redirects" documentation](https://nextjs.org/docs/pages/api-reference/next-config-js/redirects)  
+> [Next.js "redirects" documentation](https://nextjs.org/docs/pages/api-reference/config/next-config-js/redirects)  
 
 <Pagination
     previous={{ label: 'Typescript plugin and typed routes', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/typescript-plugin-and-typed-routes' }}
