@@ -1,5 +1,5 @@
 ---
-title: Optimizing links in MDX using next/link - Tutorial
+title: Optimizing links in MDX using next/link - Next.js 15 Tutorial
 description: Optimizing links in MDX using next/link - Next.js 15 static first MDX starterkit | Web development tutorials | www.chris.lu
 keywords: ['Optimizing', 'links', 'MDX', 'next/link', 'mdx-components', 'External Url']
 published: 2024-12-10T21:22:23.444Z
@@ -61,6 +61,7 @@ In the `/components` folder, add a new `base` folder
 
 Then, in the `base` folder, create a new `Link.tsx` file and add the following code:
 
+{/* spellchecker:disable */}
 ```tsx title="/components/base/Link.tsx" showLineNumbers /example.com/
 import type { PropsWithChildren } from 'react'
 import Link from 'next/link'
@@ -135,6 +136,7 @@ const BaseLink: React.FC<IBaseLinkProps> = (props) => {
 
 export default BaseLink
 ```
+{/* spellchecker:enable */}
 
 Line 1: we import the **PropsWithChildren** type from React, which we will use to strictly type our props interface
 
