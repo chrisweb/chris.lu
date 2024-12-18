@@ -185,11 +185,11 @@ After the installation, the wizard will automatically get launched, and it will 
 
 **Are you using Sentry SaaS or self-hosted Sentry?** You probably want to choose **Sentry SaaS (sentry.io)** like I did (but if you are a company and need a custom solution, then you might want to look at the hosted version), then press `Enter`.
 
-**Do you already have an account?** chose **Yes** (if you did follow the previous chapter or already had an account before), then press `Enter` (or choose **No** if you have no account yet and follow the [account creation](#create-an-account-sign-up) process)
+**Do you already have an account?** chose **Yes** (if you did follow the previous chapter or already had an account before), then press `Enter` (or choose **No** if you have no account yet and follow the [account creation](/web_development/posts/sentry-io#create-an-account-sign-up) process)
 
 Then, the sentry wizard will ask you to log in, which will open the sentry login page in your default browser. Log into your account, then go back to your terminal.
 
-**Select your Sentry project**, choose your Sentry Project from the list (when using the wizard, Sentry will have automatically created a project for the SDK you chose earlier for you; if, however, you don't see a Project listed here, you can check out the [Create a Sentry.io project](#create-a-sentryio-project) chapter to create a project first)
+**Select your Sentry project**, choose your Sentry Project from the list (when using the wizard, Sentry will have automatically created a project for the SDK you chose earlier for you; if, however, you don't see a Project listed here, you can check out the [Create a Sentry.io project](/web_development/posts/sentry-io#create-a-sentryio-project) chapter to create a project first)
 
 Now, Sentry will install the latest Sentry SDK for Next.js.
 
@@ -202,7 +202,7 @@ Now, Sentry will install the latest Sentry SDK for Next.js.
 > 
 > > TypeError: Cannot read properties of undefined (reading 'sentry')
 >  
-> So if you plan on using **React Three Fiber** then you should answer to this question with **NO**, to learn more about this problem and how to disable **React component annotations** manually in the configuration have a look at my warning box in the [Sentry.io for Next.js configuration chapter](#sentryio-for-nextjs-configuration)
+> So if you plan on using **React Three Fiber** then you should answer to this question with **NO**, to learn more about this problem and how to disable **React component annotations** manually in the configuration have a look at the [Sentry React Component Annotation(s) can be problematic](#sentry-react-component-annotations-can-be-problematic) chapter
 
 **Do you want to create an example page** chose **YES** (we will later use it to test the Sentry setup, and then we will delete it)
 
@@ -240,7 +240,7 @@ This will replace the current version of Sentry for Next.js with a more up to da
 > [!WARN]  
 > be careful when you chose what version you install as there is not always an alpha or beta available, sometimes the newest beta or alpha that is tagged with **next** (on npmjs) will actually be older than the version tagged as **latest**  
 
-## Next.js typescript configuration for Sentry
+## Sentry configuration
 
 Sentry.io can be customized a lot and has several places to change the default configuration.
 
@@ -579,7 +579,7 @@ Congratulations 🎉 you now have error handling and logging for pages as well a
 <DonationsMessage />
 
 > [!MORE]  
-> [Next.js "handling errors in root layouts" documentation](https://nextjs.org/docs/app/building-your-application/routing/error-handling#handling-errors-in-root-layouts)  
+> [Next.js "handling global errors (in root layouts)" documentation](https://nextjs.org/docs/app/building-your-application/routing/error-handling#handling-global-errors)  
 
 <Pagination
     previous={{ label: 'CI/CD pipeline for automatic deployments', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/ci-cd-pipeline-setup' }}
