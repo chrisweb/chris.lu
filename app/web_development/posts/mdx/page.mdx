@@ -91,11 +91,18 @@ Note: if you want to experiment with MDX content, there is a great tool called [
 
 ## VSCode extensions
 
-There are a lot of VSCode extensions available for both MDX and markdown, [open your extensions view](/web_development/posts/vscode#vscode-extensions-view) in VSCode and search for MDX or markdown, or visit the online [marketplace](https://marketplace.visualstudio.com/)
+There are a lot of VSCode extensions available for both MDX and markdown, open your [extensions view](/web_development/posts/vscode#vscode-extensions-view) in VSCode and search for MDX or markdown, or visit the online [marketplace](https://marketplace.visualstudio.com/)
 
 In the following chapters I will introduce two extensions, one for MDX and one for markdown
 
-### MDX extension
+### Markdownlint extension for VSCode
+
+[Markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint) is another popular extension, that is great when you quickly want to lint pure markdown files, like your projects README.md
+
+> [!WARN]  
+> it is not recommend to install the plugin if working with MDX as it will for example use markdown linting rules like the [no-inline-html](https://github.com/DavidAnson/markdownlint/blob/v0.36.1/doc/md033.md) rule, but that rule is invalid when linting MDX (which allows using HTML elements inside of MDX content)  
+
+### MDX extension for VSCode
 
 There is a very useful [MDX extension for VSCode](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx) that I recommend you install (if you work with MDX in VSCode)
 
@@ -103,7 +110,18 @@ The extension will read your .remarkrc(.js|.mjs) file (if you have one in the ro
 
 The extension will also add MDX language support to VSCode. The support is experimental and there is a problem when setting the .mdx file association to be MDX instead of markdown, which is that VSCode will remove features like the markdown preview, I like to have the preview (even if it does NOT understand MDX and is only useful to get an idea of how the markdown parts will get rendered), the second disadvantage is that some themes have no support for MDX code highlighting colors, meaning when using some themes the MDX content will get displayed as simple text with no colors (or only a few)
 
-To change the file association, first open an MDX file, then in the bottom right corner of VSCode you will either have "Markdown" or "MDX" set as default, if it is set to MDX then I recommend setting it to "Markdown"
+#### install MDX for VSCode
+
+Open the [extensions view](/web_development/posts/vscode#vscode-extensions-view), then search for an extension named **MDX** (published my unified) and then click on the **install** button
+
+> [!Note]  
+> This extensions MDX language support is still experimental, but I had no major problems when using it
+
+Unlike other extension, the **MDX extension** does not require any custom settings configuration, install it and you are done
+
+#### file associations
+
+To change the file association (matching a **file extension** with a **language mode**), first open an MDX file, then in the bottom right corner of VSCode you will either have "Markdown" or "MDX" set as default, if it is set to MDX then I recommend setting it to "Markdown"
 
 Another option, if you have a `.vscode/settings.json` file in your workspace, is to edit that file and add the file association for MDX manually:
 
@@ -115,13 +133,6 @@ Another option, if you have a `.vscode/settings.json` file in your workspace, is
 
 > [!NOTE]  
 > by changing the file association to markdown, you are NOT disabling the MDX extension, it will continue to work and read your remark-link configuration file (if you have one in your workspace)
-
-### Markdownlint extension for VSCode
-
-[Markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint) is another popular extension, that is great when you quickly want to lint pure markdown files, like your projects README.md
-
-> [!WARN]  
-> it is not recommend to install the plugin if working with MDX as it will for example use markdown linting rules like the [no-inline-html](https://github.com/DavidAnson/markdownlint/blob/v0.36.1/doc/md033.md) rule, but that rule is invalid when linting MDX (which allows using HTML elements inside of MDX content)
 
 ## Frameworks with MDX support
 
