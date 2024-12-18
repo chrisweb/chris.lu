@@ -29,6 +29,8 @@ const remarkLintNoDeadUrlsOptions = {
         // next.js however uses a cached version /_next/image?url=
         // for now I exclude them all, future we need something to convert URLs
         '/*/public/assets/images*/',
+        // discord always returns 403 (forbidden)
+        '/*discord.com*/',
     ],
     deadOrAliveOptions: {
         // I will wait 60 seconds for the request to complete
