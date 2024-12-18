@@ -89,6 +89,40 @@ Note: if you want to experiment with MDX content, there is a great tool called [
 * [rehype github repository](https://github.com/rehypejs/rehype)
 * [MDX playground](https://mdxjs.com/playground/)
 
+## VSCode extensions
+
+There are a lot of VSCode extensions available for both MDX and markdown, [open your extensions view](/web_development/posts/vscode#vscode-extensions-view) in VSCode and search for MDX or markdown, or visit the online [marketplace](https://marketplace.visualstudio.com/)
+
+In the following chapters I will introduce two extensions, one for MDX and one for markdown
+
+### MDX extension
+
+There is a very useful [MDX extension for VSCode](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx) that I recommend you install (if you work with MDX in VSCode)
+
+The extension will read your .remarkrc(.js|.mjs) file (if you have one in the root of your workspace (project)) and apply the same rules you use on the command line inside of VSCode, meaning when there is a violation (based on your rules) it will underline the code that is responsible for the violation (green for warnings and red for errors)
+
+The extension will also add MDX language support to VSCode. The support is experimental and there is a problem when setting the .mdx file association to be MDX instead of markdown, which is that VSCode will remove features like the markdown preview, I like to have the preview (even if it does NOT understand MDX and is only useful to get an idea of how the markdown parts will get rendered), the second disadvantage is that some themes have no support for MDX code highlighting colors, meaning when using some themes the MDX content will get displayed as simple text with no colors (or only a few)
+
+To change the file association, first open an MDX file, then in the bottom right corner of VSCode you will either have "Markdown" or "MDX" set as default, if it is set to MDX then I recommend setting it to "Markdown"
+
+Another option, if you have a `.vscode/settings.json` file in your workspace, is to edit that file and add the file association for MDX manually:
+
+```json title=".vscode/settings.json"
+    "files.associations": {
+        "*.mdx": "markdown"
+    },
+```
+
+> [!NOTE]  
+> by changing the file association to markdown, you are NOT disabling the MDX extension, it will continue to work and read your remark-link configuration file (if you have one in your workspace)
+
+### Markdownlint extension for VSCode
+
+[Markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint) is another popular extension, that is great when you quickly want to lint pure markdown files, like your projects README.md
+
+> [!WARN]  
+> it is not recommend to install the plugin if working with MDX as it will for example use markdown linting rules like the [no-inline-html](https://github.com/DavidAnson/markdownlint/blob/v0.36.1/doc/md033.md) rule, but that rule is invalid when linting MDX (which allows using HTML elements inside of MDX content)
+
 ## Frameworks with MDX support
 
 All major frameworks support MDX either out of the box or via packages that you can install separately, Next.js has [@next/mdx](https://www.npmjs.com/package/@next/mdx), but there are alternatives that I listed in the [@next/mdx alternatives](#nextmdx-alternatives) chapter, Astro has [@astrojs/mdx](https://github.com/withastro/astro/tree/main/packages/integrations/mdx/), Remix devs often use [mdx-bundler](https://www.npmjs.com/package/mdx-bundler), and Gatsby has [gatsby-plugin-mdx](https://www.npmjs.com/package/gatsby-plugin-mdx), there is also a popular project called [Docusaurus](https://docusaurus.io/) which uses MDX, but it is more opinionated than the other frameworks as it focuses on building a documentation website
