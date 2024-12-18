@@ -54,14 +54,14 @@ Next.js comes with a great feature called [next/og](https://nextjs.org/docs/app/
 
 To get a better idea of what it can do, I recommend visiting the ["OG image" playground](https://og-playground.vercel.app/), which has some good examples of what can be achieved
 
-**Next OG images** can do more than just use a static image as opengraph image. You can import custom fonts and images and even use CSS and HTML to build your opengraph scene, then **@vercel/og** will convert your code into an image using [Satori](https://github.com/vercel/satori) (and Satori is based on [resvg-js](https://github.com/yisibl/resvg-js))
+**Next OG images** can do more than just use a static image as opengraph image. You can import custom fonts and images and even use CSS and HTML to build your opengraph scene, then **@vercel/og** will convert your code into an image using [Satori](https://github.com/vercel/satori) (and Satori is based on [resvg-js](https://github.com/thx/resvg-js))
 
 Compared to the Next.js 14 this version of the opengraph images tutorial has some changes due to the "dynamic APIs" breaking change introduced in Next.js 15, which means we now await the params as they are now an asynchronous function
 
 > [!MORE]  
 > [Next.js "opengraph-image" documentation](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image)  
 > [Vercel "Open Graph (OG) Image Generation" documentation](https://vercel.com/docs/functions/og-image-generation)  
-> [Vercel "OG image examples" documentation](https://vercel.com/docs/functions/og-image-generation/og-image-examples)  
+> [Vercel "OG image examples" documentation](https://vercel.com/docs/functions/og-image-generation#examples)  
 > [Satori documentation](https://github.com/vercel/satori#documentation)  
 > [Vercel "OG image" playground](https://og-playground.vercel.app/)  
 
@@ -71,7 +71,7 @@ First, we will create a simple static opengraph image
 
 We need 2 static assets to compose our og image, a **font** and a **background image**, as font we will use the same font we used in our `layout.tsx` for the [next/font examples](/web_development/tutorials/next-js-static-first-mdx-starterkit/navigation-styling-and-next-font), which is **Kablammo** from google fonts
 
-To get the font visit [https://fonts.google.com/specimen/Kablammo](Kablammo), and then click on the **Get font** button. On the next page, click on the **Download all** button (if the button is not there, first click on the **shopping bag icon** in the top right of the screen). Next, go into the public folder of your project and create a new `/fonts` folder. Now go into your download folder and unzip the font package (which you just downloaded from google fonts). Open the `/static` folder, and then copy the `Kablammo-Regular.ttf` file into the `/public/fonts` folder.
+To get the font visit the google fonts [Kablammo](https://fonts.google.com/specimen/Kablammo) page, and then click on the **Get font** button. On the next page, click on the **Download all** button (if the button is not there, first click on the **shopping bag icon** in the top right of the screen). Next, go into the public folder of your project and create a new `/fonts` folder. Now go into your download folder and unzip the font package (which you just downloaded from google fonts). Open the `/static` folder, and then copy the `Kablammo-Regular.ttf` file into the `/public/fonts` folder.
 
 Our font is pretty big, it is >500kb, which is quite heavy but still ok. Usually, fonts are smaller. Be careful, when choosing a font as some might be bigger than that. If you choose a font over 2MB, you will get the following error:
 

@@ -1,5 +1,5 @@
 ---
-title: Linting setup using ESLint - Tutorial
+title: Linting setup using ESLint 9 flat config - Tutorial
 description: Linting setup using ESLint - Next.js 15 static first MDX starterkit | Web development tutorials | www.chris.lu
 keywords: ['Linting', 'ESLint', 'flat config', 'nextjs', 'mdx', 'plugin', 'parser']
 published: 2024-12-10T21:22:23.444Z
@@ -45,7 +45,7 @@ export const metadata = {
     { label: 'Next.js 15 static first MDX starterkit', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit' },
 ]} />
 
-# Next.js 15 and ESLint v9 linting setup 
+# Next.js 15 and ESLint v9 linting setup
 
 Adding linting to a project is something I recommend doing as early as possible, similar to adding CSP to a project
 
@@ -124,10 +124,10 @@ Package 1: **eslint-config-next** (ESLint Config) intends to make it easier to g
 
 Package 2: **eslint-plugin-next** is the actual ESLint plugin for Nextjs (called **@next/eslint-plugin-next** on npmjs), it aims to catch common problems in a Next.js application
 
-For a complete list of rules that the Next.js ESLint plugin adds check out the [Nextjs "ESLint rules" documentation](https://nextjs.org/docs/app/building-your-application/configuring/eslint#eslint-plugin) or have a look at the [eslint-plugin-next rules directory on GitHub](https://github.com/vercel/next.js/tree/canary/packages/eslint-plugin-next/src/rules)
+For a complete list of rules that the Next.js ESLint plugin adds check out the [Nextjs "ESLint rules" documentation](https://nextjs.org/docs/app/api-reference/config/eslint#rules) or have a look at the [eslint-plugin-next rules directory on GitHub](https://github.com/vercel/next.js/tree/canary/packages/eslint-plugin-next/src/rules)
 
 > [!MORE]  
-> [Next.js "ESLint" documentation](https://nextjs.org/docs/app/building-your-application/configuring/eslint)  
+> [Next.js "ESLint" documentation](https://nextjs.org/docs/app/api-reference/config/eslint)  
 
 ## ESLint 9 flat config for Next.js 15
 
@@ -201,7 +201,7 @@ npm run lint
 
 ### Typescript ESLint configuration files
 
-As we converted our **next.config** file to a (`next.config.ts`) typescript file, to be consistent we will also convert our **eslint.config** to an `eslint.config.ts` file (but if you prefer not to and want to keep the eslint.config.mjs as is, then feel free to skip to the [ignores and linter options](#ignore-folders-and-setting-linter-options) chapter)
+As we converted our **next.config** file to a (`next.config.ts`) typescript file, to be consistent we will also convert our **eslint.config** to an `eslint.config.ts` file (but if you prefer to keep the eslint.config.mjs as is, then feel free to skip to the [ESLint debugging tools](#eslint-debugging-tools) chapter)
 
 First we rename our ESlint configuration file to `eslint.config.ts` (you can also use `eslint.config.mts` or `eslint.config.cts` if you prefer), in this tutorial I will use **eslint.config.ts** (to match how we named the **next.config.ts** file)
 
@@ -302,7 +302,7 @@ eslint: {
 ```
 
 > [!MORE]  
-> [Next.js "ignoreDuringBuilds" documentation](https://nextjs.org/docs/app/api-reference/next-config-js/eslint)  
+> [Next.js "ignoreDuringBuilds" documentation](https://nextjs.org/docs/app/api-reference/config/next-config-js/eslint)  
 
 ### Adding even more scripts
 

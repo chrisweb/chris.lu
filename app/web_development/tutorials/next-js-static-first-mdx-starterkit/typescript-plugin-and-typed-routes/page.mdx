@@ -77,12 +77,12 @@ As soon as you switch to the **workspace version**, VSCode will create a new `.v
 There is nothing wrong in sharing the `.vscode/settings.json` file as it will ensure that everyone that works on your project (or if you use multiple devices yourself) will use the same workspace settings, like the typescript workspace version but also other settings, for example in one of the following chapters we will add helpful VSCode extension and VSCode will be listing in settings file, so that if someone works on your project but does not have the extension installed VSCode will show a modal that suggests installing it.
 
 > [!TIP]  
-> The Next.js typescript plugin comes with some useful features. It will for example, warn you if something is wrong in how you use the **use client** directive in your components and some more. I recommend keeping an eye on the [Next.js "typescript" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript) as the Next.js team adds more features over time
+> The Next.js typescript plugin comes with some useful features. It will for example, warn you if something is wrong in how you use the **use client** directive in your components and some more. I recommend keeping an eye on the [Next.js "typescript" documentation](https://nextjs.org/docs/app/api-reference/config/typescript) as the Next.js team adds more features over time
 
 Finally, I recommend you commit/sync the new `.vscode/settings.json`.
 
 > [!MORE]  
-> [Next.js "TypeScript" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript)  
+> [Next.js "TypeScript" documentation](https://nextjs.org/docs/app/api-reference/config/typescript)  
 
 ## Enabling statically Typed Links (Typed Routes)
 
@@ -111,10 +111,10 @@ Lines 4-8: we use the typedRoutes (experimental) option and enabled it, which me
 Then save your `next.config.ts` and add a commit message to explain that we enabled typed routes, and finally sync your latest changes into your remote repository
 
 > [!MORE]  
-> [Next.js "configuration options" reference](https://nextjs.org/docs/app/api-reference/next-config-js)  
+> [Next.js "configuration options" reference](https://nextjs.org/docs/app/api-reference/config/next-config-js)  
 > [Typescript "JSDoc" reference](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html)  
-> [Next.js "Statically Typed Links" documentation](https://nextjs.org/docs/app/building-your-application/configuring/typescript#statically-typed-links)  
-> [Next.js "typedRoutes (experimental)" reference](https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes)  
+> [Next.js "Statically Typed Links" documentation](https://nextjs.org/docs/app/api-reference/config/typescript#statically-typed-links)  
+> [Next.js "typedRoutes (experimental)" reference](https://nextjs.org/docs/app/api-reference/config/next-config-js/typedRoutes)  
 
 ### Turbopack (in Next.js 15) does not yet support Typed Routes
 

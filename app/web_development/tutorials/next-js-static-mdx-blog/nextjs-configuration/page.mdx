@@ -212,7 +212,7 @@ If you did any of the two changes I mentioned above, then save your `next.config
 
 ## Redirects
 
-If the project you are building is going to replace an existing project, then you might want to add some [redirects](https://nextjs.org/docs/pages/api-reference/next-config-js/redirects). When using Next.js, adding **redirects** is really easy, so I won't do a deep dive, but I just wanted to mention that this can be done in the `next.config.mjs`:
+If the project you are building is going to replace an existing project, then you might want to add some [redirects](https://nextjs.org/docs/app/api-reference/config/next-config-js/redirects). When using Next.js, adding **redirects** is really easy, so I won't do a deep dive, but I just wanted to mention that this can be done in the `next.config.mjs`:
 
 ```js title="static redirect example" {12-20}
 const nextConfig = (phase) => {
@@ -272,14 +272,14 @@ const nextConfig = (phase) => {
 }
 ```
 
-A lot more is possible, if you want to know more about wildcards, regex support, and even redirects based on data in headers or cookies, then I recommend checking out the official [redirects](https://nextjs.org/docs/pages/api-reference/next-config-js/redirects) documentation, which has lots of examples
+A lot more is possible, if you want to know more about wildcards, regex support, and even redirects based on data in headers or cookies, then I recommend checking out the official [redirects](https://nextjs.org/docs/app/api-reference/config/next-config-js/redirects) documentation, which has lots of examples
 
 Congratulations 🎉 you now know how to use phases and make adjustments to the Next.js configuration
 
 <DonationsMessage />
 
 > [!MORE]  
-> [Next.js "redirects" documentation](https://nextjs.org/docs/pages/api-reference/next-config-js/redirects)  
+> [Next.js "redirects" documentation](https://nextjs.org/docs/app/api-reference/config/next-config-js/redirects)  
 
 <Pagination
     previous={{ label: 'Typescript plugin and typed routes', href: '/web_development/tutorials/next-js-static-mdx-blog/typescript-plugin-and-typed-routes' }}
