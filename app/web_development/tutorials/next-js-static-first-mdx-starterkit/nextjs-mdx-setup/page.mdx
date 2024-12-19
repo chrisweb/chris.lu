@@ -89,12 +89,22 @@ npm i @next/mdx @types/mdx --save-exact
 > [Next.js "@next/mdx package" README](https://github.com/vercel/next.js/tree/canary/packages/next-mdx)  
 > [MDX.com "@mdx-js/loader package" README](https://www.npmjs.com/package/@mdx-js/loader)  
 
-### MDX support setup
-
-First, we need to create a new file called `mdx-components.tsx` in the root of our project (or the `./src` folder if you have configured your project to use the `./src` folder)
+### Missing mdx-components file
 
 > [!WARN]  
-> Adding the file is very important, I see a lot of posts of developers struggling with the first steps of getting MDX support to work in their Next.js project, and 90% of the cases are because they have not added the `mdx-components.tsx` file, without `mdx-components.tsx` in Next.js 13 you will get an error that says **Module not found: Can't resolve 'next-mdx-import-source-file'** and in Next.js you will get a bunch of **node_modules/@mdx-js/react/lib** related errors in your terminal, so it is mandatory to have that file at the root of the project, even if you don't use it (yet)
+> Adding the file is very important, I see a lot of posts of developers struggling with the first steps of getting MDX support to work in their Next.js project, and 90% of the cases are because they have not added the `mdx-components.tsx` file
+>  
+> If you start the development server without `mdx-components.tsx` in your project root, you will likely get this kind of error in your terminal (and in the browser if you open localhost:3000):
+>  
+> ```shell
+> ⨯ ./app/page.mdx
+> Module not found: Can't resolve 'next-mdx-import-source-file'
+> https://nextjs.org/docs/messages/module-not-found
+> ```
+> 
+> This error is because it is mandatory to have that file at the root of the project, even if you don't use it (yet)
+
+To get rid of the error we need to create a file called `mdx-components.tsx` in the root of our project (or the `./src` folder if you have configured your project to use the `./src` folder)
 
 Then add the following content:
 
@@ -274,9 +284,9 @@ experimental: {
 },
 ```
 
-It is now possible to specify which flavor of markdown is supported, it is not listed in the [Next.js configuration page about the Rust compiler for MDX](https://nextjs.org/docs/app/api-reference/config/next-config-js/mdxRs) page but I did some tests and it worked well
+You can also specify which flavor of markdown that you want to use, as they mention in the [Next.js configuration page about the Rust compiler for MDX](https://nextjs.org/docs/app/api-reference/config/next-config-js/mdxRs) documentation, there are currently 2 markdown flavors you can chose fromm **commonmark** and **gfm**
 
-You have to markdown flavor options as of now, you can chose between **commonmark** and **gfm**, and looks like this:
+To enable mdxRS with github flavored markdown this is the configuration you would use:
 
 ```js
 experimental: {
@@ -286,54 +296,24 @@ experimental: {
 },
 ```
 
-This works well if your documents contain raw commonmark or github flavored markdown, but there is no support for plugins yet (more about that in the next chapter)
-
 > [!MORE]  
 > [commonmark.org](https://commonmark.org/)  
 > [GitHub Flavored Markdown Spec](https://github.github.com/gfm/)  
 
-### No support for MDX plugins (yet)
+## No support for MDX plugins < Next.js 15.1
 
-When Next.js mentions the Rust compiler then they are talking about [SWC](https://swc.rs/), mdxRs the Rust compiler for MDX is the [mdxjs-rs](https://github.com/wooorm/mdxjs-rs) package, it uses the [markdown-rs](https://github.com/wooorm/markdown-rs) package to parse markdown and **SWC** for everything that is javascript
+In Next.js 15 if you try to use MDX (remark / rehype) plugins and have mdxRs enabled then they will silently fail to load. This is because the MDX Rust compiler can NOT read plugins written in Javascript.
 
-It is the **mdxjs-rs** [README](https://github.com/wooorm/mdxjs-rs#when-should-i-use-this) that has the information that plugins are not supported yet, their readme states that:
+This means you must chose between having faster builds (mdxRs: true) or if you prefer having support for plugins (mdxRs: false)
 
-> This project does not yet support plugins
+Next.js 15.1 adds support for MDX plugins, but only if those plugins have serializable options, we will see how to use and when not to use this new plugins loader in the upcoming [page about MDX plugins](/web_development/tutorials/next-js-static-first-mdx-starterkit/mdx-plugins)
 
-There is a support ticket you may want to subscribe to if you are interested in getting notifications about the progress for plugin support in markdown-rs: [Enable custom plugins #32](https://github.com/wooorm/markdown-rs/issues/32)
+> [!MORE]  
+> [chris.lu "MDX (rehype / remark) plugins" page](https://nextjs.org/docs/app/api-reference/config/next-config-js/mdxRs)  
 
-So (as of now Oct 2024), if you need plugins you will have to turn mdxRs off:
+## @mdx-js/loader instead of mdxRs
 
-```js
-experimental: {
-    mdxRs: false,
-},
-```
-
-#### Which means also no Turbo (with plugins)
-
-Turbopack depends on SWC to compile content like MDX and as we saw in the previous chapter SWC has no support for (remark and rehype) plugins yet, which means Turbo will exit with an error if you attempt to use it and have configured either remark or rehype plugins:
-
-> Error: loader PATH_TO_PROJECT\node_modules\@mdx-js\loader\index.cjs for match "*.mdx" does not have serializable options. Ensure that options passed are plain JavaScript objects and values.
-
-If you get an error like this it is likely that you have the following command in your package.json scripts:
-
-```json
-"dev": "next dev --turbopack",
-```
-
-I recommend you change your scripts to this:
-
-```json
-"dev": "next dev",
-"dev-turbo": "next dev --turbopack",
-```
-
-Now your default run dev command will not use Turbopack anymore, but you still have a backup so that you can change again later (when Turbopack and SWC start supporting MDX plugins)
-
-## Disabling mdxRs and installing @mdx-js/loader instead
-
-Later in this tutorial, we will add several plugins, which is why we are going to turn mdxRs off for now by setting the experimental **mdxRs** configuration option to **false**, but also add a comment as to why, so that in the future as soon as support for plugins gets shipped, we just need to turn it on:
+If you do NOT use the MDX rust compiler (mdxRs) because the option is set to false, or because it is commented out, like in the following configuration:
 
 ```js title="next.config.mjs" showLineNumbers{20} /mdxRs: false/#special
 experimental: {
@@ -341,16 +321,16 @@ experimental: {
     // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
     typedRoutes: true,
     // use experimental rust compiler for MDX
-    // as of now (Oct 2024) there is no support for rehype & remark plugins
-    // this is why it is currently commented out
+    // in Next.js 15 we disable it to be able to use plugins
+    // in Next.js 15.1 we can enable it and use plugins (if some conditions are met)
     //mdxRs: true,
 },
 ```
 
 > [!NOTE]  
-> Of course, if you don't plan on using any plugins like [remark-table-of-contents](https://github.com/chrisweb/remark-table-of-contents) or [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts), then you can turn mdxRs on by setting the option to true
+> Of course, if you don't plan on using any plugins like [remark-table-of-contents](https://github.com/chrisweb/remark-table-of-contents) or [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts), then you can turn mdxRs **ON** by setting the option to true
 
-Now that we have disabled mdxRs, we also need to install the MDX webpack plugin manually using the following command:
+As we are NOT using the Rust compiler we now need to install the MDX webpack plugin using the following command:
 
 ```shell
 npm i @mdx-js/loader --save-exact
