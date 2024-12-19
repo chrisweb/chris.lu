@@ -65,10 +65,10 @@ If you use CNA like we did on one of the previous page, then you will get a **ne
 > [!MORE]  
 > [Next.js "next.config.ts" documentation](https://nextjs.org/docs/app/api-reference/config/typescript#type-checking-nextconfigts)  
 
-### next.config.ts does NOT support ESM only packages
+### next.config.ts does NOT support "ESM only" packages
 
 > [!WARN]  
-> tldr: There are several tickets related to problems when using next.config.ts but the good news is that there is also a PR in the works [(PR #68365)](https://github.com/vercel/next.js/pull/68365), which you should subscribe to if you want to get notified of updates
+> tldr: NOT having for **ESM only** packages is not the only problem (like [issue #67765](https://github.com/vercel/next.js/issues/67765) which mentions issues when using top level **awaits** in **next.config.ts**), but the good news is that there is also a PR in the works [(PR #68365)](https://github.com/vercel/next.js/pull/68365), which you should subscribe to if you want to get notified of updates, oh and if you wonder if .mts is supported as extension, as per this [commit](https://github.com/vercel/next.js/commit/ac9a51465badb4f7ddb75bb7075f1493b32dccd7) it currently is NOT possible to use mts as extension for next.config
 
 The Next.js team explains the problem well in the documentation, here is a quote from it:
 
