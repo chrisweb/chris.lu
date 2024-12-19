@@ -57,28 +57,28 @@ Finally we will tweak the **react strict mode**, adjust the **powered by** heade
 
 The [Next.js "next.config.ts" issue #5318](https://github.com/vercel/next.js/issues/5318) is from **2018**, so a bit more than 6 years later the Next.js team announced in the Next.js 15 blog post that they added ["Support for next.config.ts"](https://nextjs.org/blog/next-15#support-for-nextconfigts) 🤩
 
-If you use CNA like we did on one of the previous page, then you will get a next.config.ts out of the box, but if you already have an existing project then you can rename your next.config.js or next.config.mjs to next.config.ts and it will just work (NO other steps required)
+If you use CNA like we did on one of the previous page, then you will get a **next.config.ts**, but if you already have an existing project then you can rename your next.config**.js** or next.config**.mjs** to next.config**.ts** and it will just work (NO other steps required)
 
 > [!NOTE]  
-> If the next.config file was the last remaining Javascript file in your project, then you could now have a look at extension lists, like the extensions list for pages in the next.config.ts or the files options in your ESLint configuration and remove the .js or .mjs from those lists
+> If the next.config file was the last remaining Javascript file in your project, then you could now have a look in extensions lists, like the extensions list for pages in the next.config.ts or the files options in your ESLint configuration and remove the .js or .mjs from those lists (to drop support for Javascript files)
 
 > [!MORE]  
 > [Next.js "next.config.ts" documentation](https://nextjs.org/docs/app/api-reference/config/typescript#type-checking-nextconfigts)  
 
-### next.config.ts does NOT (yet) support ESM
+### next.config.ts does NOT support ESM only packages
 
 > [!WARN]  
-> The Next.js team explains the problem well in the documentation, here is a quote from it:
->  
-> > Module resolution in next.config.ts is currently limited to CommonJS. This may cause incompatibilities with ESM only packages being loaded in next.config.ts
->  
-> That means that in some cases, if you use such packages (and start the development server), then you will see the following error in your terminal (command line tool):
->  
-> > Error: No "exports" main defined in SOME_PACKAGE
+> tldr: There are several tickets related to problems when using next.config.ts but the good news is that there is also a PR in the works [(PR #68365)](https://github.com/vercel/next.js/pull/68365), which you should subscribe to if you want to get notified of updates
 
-So before you start to remove your JSDoc @type comments, to replace them with typescript types imports, I recommend converting the config file to typescript, then fix the bare minimum and then check if one of the packages you import into your config are ESM only, if you can't do NOT get an errors you can go ahead and finalize the transition, if there is an incompatible package then maybe they have a ticket you can subscribe to (to get notified of updates, like a fix)
+The Next.js team explains the problem well in the documentation, here is a quote from it:
 
-There are several tickets related to this and the good news is that there is also a PR in the works [(PR #68365)](https://github.com/vercel/next.js/pull/68365), which you should subscribe to if you want to get notified of updates
+> Module resolution in next.config.ts is currently limited to CommonJS. This may cause incompatibilities with ESM only packages being loaded in next.config.ts
+
+That means that in some cases, if you use such packages (and start the development server), then you will see the following error in your terminal (command line tool):
+
+> Error: No "exports" main defined in SOME_PACKAGE
+
+Before you start to remove your **JSDoc @type comments** from your configuration file (as we did in the [Next.js 14 version of this tutorial](/web_development/tutorials/next-js-static-mdx-blog/nextjs-configuration)), to replace them with typescript types imports, I recommend converting the config file to typescript, then fix the bare minimum and then check if there is any problem when importing packages into the config, if do NOT get any errors you can go ahead and finalize the transition. If you find a package that is NOT compatible, then for now you will need to keep using the next.config.mjs file
 
 ## 3 ways to know what the current environment is
 
