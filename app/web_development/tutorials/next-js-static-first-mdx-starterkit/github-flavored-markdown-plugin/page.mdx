@@ -67,9 +67,9 @@ There is also the **rehype "GitHub" plugins repository**, which lists a lot of p
 
 ## Next.js 15 remark-gfm Rust alternative
 
-This is a reminder that earlier in this tutorial when we did the initial MDX setup, we disabled the [Next.js 15 Rust compiler](/web_development/tutorials/next-js-static-first-mdx-starterkit/nextjs-mdx-setup#nextjs-15-rust-compiler) (experimental) to be able to use plugins, and then we also saw that for the same reason [We can NOT use Turbopack (with MDX (remark or rehype) plugins)](/web_development/tutorials/next-js-static-first-mdx-starterkit/nextjs-mdx-setup#which-means-also-no-turbo-with-plugins)
+This is a reminder that earlier in this tutorial when we did the initial MDX setup, we saw that instead of using the default MDX compiler written in Javascript, we can use the [Next.js 15 MDX Rust compiler](/web_development/tutorials/next-js-static-first-mdx-starterkit/nextjs-mdx-setup#nextjs-15-mdx-rust-compiler) (experimental)
 
-If this is the only plugin you plan to use, then you could use the next.config **mdxRs** option and set the **mdxType** to **gfm** instead of setting up the **remark-gfm** (javascript) plugin. This would enable the Rust Compiler for MDX and also add gfm flavored markdown support. Then you could enable the turbopack flag in the dev server command (by changing the `npm run dev` script in the **package.json** back to: `"dev": "next dev --turbopack"`)
+If this is the only plugin you plan to use, then you could use the next.config **mdxRs** option and set the **mdxType** to **gfm** instead of installing and adding the **remark-gfm** (javascript) plugin to your configuration. This would enable the Rust Compiler for MDX and also add gfm flavored markdown support. Then you could enable the turbopack flag in the dev server command (by changing the `npm run dev` script in the **package.json** back to: `"dev": "next dev --turbopack"`)
 
 ## GitHub flavored markdown (gfm) plugin
 
