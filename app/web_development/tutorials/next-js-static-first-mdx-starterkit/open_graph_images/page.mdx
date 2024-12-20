@@ -386,6 +386,8 @@ export default async function Image(props: OpenGraphImageProps) {
 }
 ```
 
+TODO: params are async in next 15.1
+
 The code is very similar to the code we used for the "static" version. One difference is that we removed the static `title` variable, and we also don't export the `sizes` variable anymore (those static exports get replaced by the usage of the **generateImageMetadata** function lines 17 to 27)
 
 Lines 11 to 15: we added an interface to strictly type the Image function props
