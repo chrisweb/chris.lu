@@ -49,13 +49,13 @@ export const metadata = {
 
 You might have heard the word "MDX plugins" before, these **MDX plugins are either remark, rehype or recma plugins** and in in the next chapter we will see why there are 3 flavors of plugins
 
-MDX plugins are a great way to add support for new features into your existing MDX setup, for example in this tutorial we will use one MDX (remark) plugin in the [Optimizing images](/web_development/tutorials/next-js-static-first-mdx-starterkit/optimizing-using-next-image) chapter to turn the path of our images into imports, we will add a [Code highlighting plugin](/web_development/tutorials/next-js-static-first-mdx-starterkit/code-highlighting-plugin) (with VSCode themes support), a [Table of Contents](/web_development/tutorials/next-js-static-first-mdx-starterkit/table-of-contents-plugin) plugin, a [github like alerts () plugin](/web_development/tutorials/next-js-static-first-mdx-starterkit/github-like-alerts-plugin) and several more
+MDX plugins are a great way to add support for new features into your existing MDX setup, for example in this tutorial we will use one MDX (remark) plugin in the [Optimizing images](/web_development/tutorials/next-js-static-first-mdx-starterkit/optimizing-using-next-image) chapter to turn the path of our images into imports, we will add a [Code highlighting plugin](/web_development/tutorials/next-js-static-first-mdx-starterkit/code-highlighting-plugin) (with VSCode themes support), a [Table of Contents](/web_development/tutorials/next-js-static-first-mdx-starterkit/table-of-contents-plugin) plugin, a [github like alerts](/web_development/tutorials/next-js-static-first-mdx-starterkit/github-like-alerts-plugin) plugin and several more
 
-In Next.js 15 and before you could NOT use plugins at all if you wanted to use Turbopack rust bundler and / or the experimental mdxRs rust compiler.
+In Next.js 15 and before you could NOT use plugins at all if you wanted to use Turbopack Rust bundler and / or the experimental mdxRs Rust compiler.
 
 In Next.js 15.1 the Next.js team added a plugins loader written in Javascript, to add support for MDX plugins when using mdxRs and Turbopack. There is a catch though, for it to work the plugin options need to be serializable
 
-## Difference between remark, rehype and recma (optional)
+## Difference between remark, rehype and recma plugins (optional)
 
 This chapter contains mostly explanations about what remark and rehype plugins are. I won't mention [Recma plugins](https://github.com/mdx-js/recma/blob/main/doc/plugins.md#list-of-plugins) as of today only a few exist, if someone mentions MDX plugins they probably either mean Rehype or Remark plugins and only very rarely [Recma](https://github.com/mdx-js/recma).
 
@@ -81,32 +81,237 @@ In the previous chapter we already installed a **rehype-mdx-import-media** a Reh
 > [remark "plugins" README](https://github.com/remarkjs/remark/blob/main/doc/plugins.md)  
 > [rehype "plugins" README](https://github.com/rehypejs/rehype/blob/main/doc/plugins.md)  
 
+## Turbopack (optional)
+
+**Turbopack** is a bundler, other bundlers you may know are [Webpack](https://webpack.js.org/) and [Rolldown](https://rolldown.rs/about) (the bundler from the vite team). A major difference between Webpack (which is the standard bundler in Next.js) and Turbopack (a bundler that is now the default for development but is NOT getting used in production), is that Webpack is written Javascript and Turbopack is written in Rust. The goal is to speed up the building process by using a memory safe programming language like Rust. One problem is that you can't just use your previous Webpack plugins written in Javascript and use them in Turbopack. 
+
+The same day the Next.js team announced the release of Next.js 15 they also announced that [Turbopack is now stable **for dev**](https://nextjs.org/blog/turbopack-for-development-stable)
+
+> [!MORE]  
+> [Turbopack documentation](https://turbo.build/pack/docs)  
+> [Next.js "turbopack" api-reference](https://nextjs.org/docs/app/api-reference/turbopack)  
+> [Next.js "next.config turbo option" api-reference](https://nextjs.org/docs/app/api-reference/config/next-config-js/turbo)  
+
+## SWC (optional)
+
+**SWC** is a Javascript compiler, it is a tool similar to [Babel](https://babeljs.io/). A big difference is that Babel is written in Javascript and Babel is written in Rust. The reasons behind switching programming languages are the same as for Turbopack, using a memory safe programming language like Rust that can do the work faster than a Javascript. The disadvantages are the same, you can't just take Babel plugins written in Javascript (like for example the React compiler, which is a babel plugin won't work when using SWC)
+
+> [!MORE]  
+> [SWC documentation](https://swc.rs/docs/getting-started)  
+> [Next.js "Next.js compiler / SWC" documentation](https://nextjs.org/docs/architecture/nextjs-compiler)  
+> [Next.js "next.config turbo option" api-reference](https://nextjs.org/docs/app/api-reference/config/next-config-js/turbo)  
+
+## mdxjs-rs (optional)
+
+**mdxjs-rs** is written in Rust (like SWC and Turbopack) and can replace [@mdx-js/mdx](https://www.npmjs.com/package/@mdx-js/mdx) written in Javascript (as we saw in the [Next.js 15 MDX Rust compiler](/web_development/tutorials/next-js-static-first-mdx-starterkit/nextjs-mdx-setup#nextjs-15-mdx-rust-compiler) (experimental) page earlier in this tutorial)
+
+**mdxjs-rs** compiles your MDX content (markdown with JSX, JavaScript expressions, and ESM import/exports) into JavaScript. mdxjs-rs uses [markdown-rs](https://github.com/wooorm/markdown-rs) to compile markdown to javascript and it uses [SWC](https://github.com/swc-project/swc) to compile the Javascript code that us in your MDX content.
+
+> [!MORE]  
+> [mdxjs-rs repository](https://github.com/wooorm/mdxjs-rs)  
+> [markdown-rs repository](https://github.com/wooorm/markdown-rs)  
+
+## Enabling the MDX Rust compiler in Next.js 15
+
+[Next.js v13.2](https://nextjs.org/blog/next-13-2#rust-mdx-parser) was the first version to add support for the MDX Rust compiler (mdxjs-rs) by introducing the [mdxRs (experimental) configuration option](https://nextjs.org/docs/app/api-reference/config/next-config-js/mdxRs)
+
+A basic Next.js 15 config that enables mdxRs would look like this:
+
+```ts title="next.config.ts"
+import type { NextConfig } from 'next'
+import createMdx from '@next/mdx'
+
+const nextConfig = (/*phase: string*/): NextConfig => {
+
+    const withMDX = createMdx({
+        options: {
+            remarkPlugins: [],
+            rehypePlugins: [],
+        },
+    })
+
+    const nextConfigOptions = {
+        experimental: {
+            mdxRs: true
+        },
+        pageExtensions: ['ts', 'tsx', 'mdx'],
+    }
+
+    return withMDX(nextConfigOptions)
 
 
+}
 
-
-
-
-
-
-
-
-
-When Next.js mentions the Rust compiler then they are talking about [SWC](https://swc.rs/), mdxRs the Rust compiler for MDX is the [mdxjs-rs](https://github.com/wooorm/mdxjs-rs) package, it uses the [markdown-rs](https://github.com/wooorm/markdown-rs) package to parse markdown and **SWC** for everything that is javascript
-
-It is the **mdxjs-rs** [README](https://github.com/wooorm/mdxjs-rs#when-should-i-use-this) that has the information that plugins are not supported yet, their readme states that:
-
-> This project does not yet support plugins
-
-There is a support ticket you may want to subscribe to if you are interested in getting notifications about the progress for plugin support in markdown-rs: [Enable custom plugins #32](https://github.com/wooorm/markdown-rs/issues/32)
-
-So (as of now Oct 2024), if you need plugins you will have to turn mdxRs off:
-
-```js
-experimental: {
-    mdxRs: false,
-},
+export default nextConfig
 ```
+
+## Does mdxRs support MDX (remark / rehype) plugins?
+
+If we now add 2 MDX (one remark and one rehype) plugins to our configuration:
+
+
+
+As they mention in their **mdxjs-rs** [README](https://github.com/wooorm/mdxjs-rs#when-should-i-use-this):
+
+> This project does not yet support plugins.
+
+> [!NOTE]  
+> markdown-rs has an Issue that tracks the [Enable custom plugins #32](https://github.com/wooorm/markdown-rs/issues/32) feature, which you may want to subscribe to if you are interested in getting notifications about the progress
+
+## 
+
+Next we add 2 MDX (one remark and one rehype) plugins to our configuration:
+
+```ts title="next.config.ts"
+import type { NextConfig } from 'next'
+import createMdx from '@next/mdx'
+import remarkGfm from 'remark-gfm'
+import { rehypeGithubAlerts } from 'rehype-github-alerts'
+
+const nextConfig = (/*phase: string*/): NextConfig => {
+
+    const withMDX = createMdx({
+        options: {
+            remarkPlugins: [remarkGfm],
+            rehypePlugins: [rehypeGithubAlerts],
+        },
+    })
+
+    const nextConfigOptions = {
+        experimental: {
+            mdxRs: true
+        },
+        pageExtensions: ['ts', 'tsx', 'mdx'],
+    }
+
+    return withMDX(nextConfigOptions)
+
+
+}
+
+export default nextConfig
+```
+
+In Next 15 if we enable mdxRs and add plugins using the same configuration we had in our Next.js 14 project, then we will get the following error: 
+
+```shell
+@next\mdx\mdx-rs-loader.js for match "*.mdx" does not have serializable options. Ensure that options passed are plain JavaScript objects and values.
+```
+
+To fix this we have to pass the plugins as names and the options need to be serializable:
+
+```ts title="next.config.ts"
+import type { NextConfig } from 'next'
+import createMdx from '@next/mdx'
+
+const nextConfig = (/*phase: string*/): NextConfig => {
+
+    const remarkGfmOptions = {
+        singleTilde: false,
+    }
+
+    const rehypeGithubAlertsOptions = {
+        supportLegacy: false,
+    }
+
+    const withMDX = createMdx({
+        options: {
+            remarkPlugins: [['remark-gfm', remarkGfmOptions]],
+            rehypePlugins: [['rehype-github-alerts', rehypeGithubAlertsOptions]],
+        },
+    })
+
+    const nextConfigOptions = {
+        experimental: {
+            mdxRs: true
+        },
+        pageExtensions: ['ts', 'tsx', 'mdx'],
+    }
+
+    return withMDX(nextConfigOptions)
+
+
+}
+
+export default nextConfig
+```
+
+In Next.js 15 this was the end of the road
+
+[MDX plugins with Turbopack](https://nextjs.org/docs/app/building-your-application/configuring/mdx#using-plugins-with-turbopack) documentation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Next.js 13.2.0 to 15.0.0 (included)
+
+We reuse our previous configuration example and add two example plugins (while keeping mdxRs enabled):
+
+```js title="next.config.mjs"
+import createMdx from '@next/mdx'
+import remarkGfm from 'remark-gfm'
+import { rehypeGithubAlerts } from 'rehype-github-alerts'
+
+const nextConfig = (/*phase: string*/)/*: NextConfig*/ => {
+
+    const withMDX = createMdx({
+        options: {
+            remarkPlugins: [remarkGfm],
+            rehypePlugins: [rehypeGithubAlerts],
+        },
+    })
+
+    const nextConfigOptions = {
+        experimental: {
+            mdxRs: true
+        },
+        pageExtensions: ['ts', 'tsx', 'mdx'],
+    }
+
+    return withMDX(nextConfigOptions)
+
+
+}
+
+export default nextConfig
+```
+
+
+
+
+
+
+
+To use plugins you first need to disable the MDX Rust compiler in your configuration
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #### Which means also no Turbo (with plugins)
 
@@ -138,48 +343,6 @@ Now your default run dev command will not use Turbopack anymore, but you still h
 
 
 
-
-
-
-## Turbopack support for MDX (remark / rehype) plugins
-
-**Turbopack** is a bundler, other bundler you may know are [Webpack](https://webpack.js.org/) and [Rolldown](https://rolldown.rs/about) (the bundler by the vite team). A major difference between Webpack (which is the standard bundler in Next.js) and Turbopack (a bundler that is now the default for development but is NOT getting used in production), is that Webpack is written Javascript and Turbopack is written in Rust. 
-
-The goal is to speed up the building process by using a memory safe programming language like Rust, one problem is that you can't just use your previous webpack plugins written in Javascript and use them in Turbopack. This is also the reason why you can't use MDX plugins with Turbopack, as those too are written in Javascript too (unless you add a mew loader, which happened in Next.js v15.1, as we will see in more detail shortly)
-
-The same day the Next.js team announced the release of Next.js 15 they also announced that [Turbopack is now stable **for dev**](https://nextjs.org/blog/turbopack-for-development-stable)
-
-> [!MORE]  
-> [Turbopack documentation](https://turbo.build/pack/docs)  
-> [Next.js "turbopack" api-reference](https://nextjs.org/docs/app/api-reference/turbopack)  
-> [Next.js "next.config turbo option" api-reference](https://nextjs.org/docs/app/api-reference/config/next-config-js/turbo)  
-
-### Does Turbopack support MDX (remark / rehype) plugins?
-
-* In Next.js v15.0 (and all prior version) Turbopack has **NO** support for MDX (remark / rehype) plugins
-* Next.js v15.1 adds **experimental** support for MDX plugins (remark and rehype plugins written in Javascript) 
-
-### MDX plugins and Turbopack since Next.js 15.1
-
-With previous versions of Next.js (before the [release of Next.js 15.1](https://github.com/vercel/next.js/releases/tag/v15.1.0)) we would import an MDX (rehype / remark) plugin into our Next.js configuration and then pass it to the **remarkPlugins** or **rehypePlugins** options (of the createMdx function) like this:
-
-```mjs title="next.config.mjs"
-
-```
-
-That config will have no problems when using Next.js 15 but if you upgrade to Next.js 15.1 you will likely get this error:
-
-```shell
-[Error: loader \node_modules\@next\mdx\mdx-js-loader.js for match "*.mdx" does not have serializable options. Ensure that options passed are plain JavaScript objects and values.]
-```
-
-There are several changes you need to make for it to work again:
-
-```ts title="next.config.ts"
-
-```
-
-Line x: 
 
 
 
