@@ -111,6 +111,65 @@ The same day the Next.js team announced the release of Next.js 15 they also anno
 > [mdxjs-rs repository](https://github.com/wooorm/mdxjs-rs)  
 > [markdown-rs repository](https://github.com/wooorm/markdown-rs)  
 
+
+
+
+
+
+
+TODO: is this really a windows only bug??
+
+When using the following config ([taken from the docs](https://nextjs.org/docs/pages/building-your-application/configuring/mdx#using-plugins-with-turbopack)), where mdxRs is false:
+
+```ts title="next.config.ts"
+import createMDX from '@next/mdx'
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+    experimental: {
+        mdxRs: false,
+    },
+}
+
+const withMDX = createMDX({
+    options: {
+        remarkPlugins: [],
+        rehypePlugins: [['rehype-katex', { strict: true, throwOnError: true }]],
+    },
+})
+
+export default withMDX(nextConfig)
+```
+
+when enabling turbopack `next dev --turbo` I get this error:
+
+```shell
+Error: Only URLs with a scheme in: file, data, and node are supported by the default ESM loader. On Windows, absolute paths must be valid file:// URLs. Received protocol 'c:'
+```
+
+when mdxRs is false: and you use at least Next.js v15.1.0, then @next/mdx will use it's new webpack **mdx js loader** (@next/mdx/mdx-js-loader)
+when mdxRs is true: @next/mdx will use it's own webpack **mdx rs loader** (@next/mdx/mdx-rs-loader) which will configure pass options to mdx-rs
+
+previously (in Next.js 15.0.0 and before) @next/mdx would directly use @mdx-js/loader, which allowed us to import plugins in the next config and then use them in the createMDX options
+
+in Next.js 15.1 @next/mdx got a new webpack loader which requires you to pass the plugin name to the createMDX options (instead of the imported plugin itself), the second condition is that plugin options need to be serializable
+when both conditions are met, you end up with a config that now looks like this:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Enabling the MDX Rust compiler in Next.js 15
 
 [Next.js v13.2](https://nextjs.org/blog/next-13-2#rust-mdx-parser) was the first version to add support for the MDX Rust compiler (mdxjs-rs) by introducing the [mdxRs (experimental) configuration option](https://nextjs.org/docs/app/api-reference/config/next-config-js/mdxRs)
@@ -149,7 +208,35 @@ export default nextConfig
 
 If we now add 2 MDX (one remark and one rehype) plugins to our configuration:
 
+```ts title="next.config.ts"
+import type { NextConfig } from 'next'
+import createMdx from '@next/mdx'
+import remarkGfm from 'remark-gfm'
+import { rehypeGithubAlerts } from 'rehype-github-alerts'
 
+const nextConfig = (/*phase: string*/): NextConfig => {
+
+    const withMDX = createMdx({
+        options: {
+            remarkPlugins: [remarkGfm],
+            rehypePlugins: [rehypeGithubAlerts],
+        },
+    })
+
+    const nextConfigOptions = {
+        experimental: {
+            mdxRs: true
+        },
+        pageExtensions: ['ts', 'tsx', 'mdx'],
+    }
+
+    return withMDX(nextConfigOptions)
+
+
+}
+
+export default nextConfig
+```
 
 As they mention in their **mdxjs-rs** [README](https://github.com/wooorm/mdxjs-rs#when-should-i-use-this):
 
