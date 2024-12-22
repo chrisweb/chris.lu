@@ -113,12 +113,9 @@ The same day the Next.js team announced the release of Next.js 15 they also anno
 > [mdxjs-rs repository](https://github.com/wooorm/mdxjs-rs)  
 > [markdown-rs repository](https://github.com/wooorm/markdown-rs)  
 
-
-
-
 ## TODO: ???
 
-1) we have **both** mdxRs and Turbopack **disabled**
+1. we have **both** mdxRs and Turbopack **disabled**
 
 **mdxRs OFF** and **Turbopack OFF** and **plugins get imported** in next.config
 
@@ -127,7 +124,7 @@ next.js 15.1: plugins work
 
 Both work, you use a compile and build pipeline that is fully written in Javascript, it is NOT fast but it works
 
-2) for some time the Next.js MDX documentation has a chapter to encourage you to try out the experimental **mdxRs** option
+1. for some time the Next.js MDX documentation has a chapter to encourage you to try out the experimental **mdxRs** option
 
 **mdxRs ON** and **Turbopack OFF** and **plugins get imported** in next.config
 
@@ -147,7 +144,7 @@ Even if mdxjs-rs (markdown-rs) had support for plugins, then I assume that you w
 > [!NOTE]  
 > markdown-rs has an Issue that tracks the [Enable custom plugins #32](https://github.com/wooorm/markdown-rs/issues/32) feature, which you may want to subscribe to if you are interested in getting notifications about the progress
 
-3) now we also enable **Turbopack**
+1. now we also enable **Turbopack**
 
 **mdxRs ON** and **Turbopack ON** and **plugins get imported** in next.config
 
@@ -158,7 +155,7 @@ This time we get an Error from SWC (which has detected that we use Turbopack). I
 
 Everything in the plugin options needs to be serializable, as you can only pass a string to Turbopack as it is written in Rust
 
-4) we convert the plugin import to using the plugin name (a string)
+1. we convert the plugin import to using the plugin name (a string)
 
 **mdxRs ON** and **Turbopack ON** and **plugin name as string** in next.config
 
@@ -175,7 +172,7 @@ But wait, isn't that exactly what we just did? Yes it is... The plugins silently
 
 After digging a bit in the @next/mdx code I noticed that the **new loader they added in Next.js 15.1, only gets used when mdxRs is disabled**
 
-5) we disable mdxRs
+1. we disable mdxRs
 
 **mdxRs OFF** and **Turbopack ON** and **plugin name as string** in next.config
 
@@ -184,13 +181,13 @@ next.js 15.1: TypeError: Expected usable value, not `rehype-slug`
 
 @mdx-js/loader is NOT happy with the string we passed him
 
-TODO: I expected this error from the v15 but not the v15.1 which has the new loader, did the loader fail on my plugin ???
-
 I digged in the code of the @next/mdx/mdx-js-loader and noticed that this new loader expect plugins to be an array (prior versions allowed us to not use an array if we did not have plugin options)
 
 And then I bumped into something I assume is a bug on windows:
 
 Error: Only URLs with a scheme in: file, data, and node are supported by the default ESM loader. On Windows, absolute paths must be valid file:// URLs. Received protocol 'c:'
+
+
 
 
 ### tldr
@@ -205,7 +202,7 @@ if you use Turbopack, then make sure your MDX plugins have serializable options 
 
 
 
-TODO: is this really a windows only bug??
+TODO: is this really a windows only bug?? I tested it on mac, on mac plugins rehype-slug, remark-frontmatter and remark-mdx-frontmatter are confirmed to work
 
 When using the following config ([taken from the docs](https://nextjs.org/docs/pages/building-your-application/configuring/mdx#using-plugins-with-turbopack)), where mdxRs is false:
 
