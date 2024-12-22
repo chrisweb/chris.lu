@@ -184,15 +184,13 @@ next.js 15.1: TypeError: Expected usable value, not `rehype-slug`
 
 @mdx-js/loader is NOT happy with the string we passed him
 
+TODO: I expected this error from the v15 but not the v15.1 which has the new loader, did the loader fail on my plugin ???
+
 I digged in the code of the @next/mdx/mdx-js-loader and noticed that this new loader expect plugins to be an array (prior versions allowed us to not use an array if we did not have plugin options)
 
 And then I bumped into something I assume is a bug on windows:
 
 Error: Only URLs with a scheme in: file, data, and node are supported by the default ESM loader. On Windows, absolute paths must be valid file:// URLs. Received protocol 'c:'
-
-
-
-TODO: I expected this error from the v15 but not the v15.1 which has the new loader, did the loader fail on my plugin ???
 
 
 ### tldr
