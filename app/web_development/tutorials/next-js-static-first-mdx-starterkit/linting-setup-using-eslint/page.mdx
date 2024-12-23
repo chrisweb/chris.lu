@@ -54,11 +54,32 @@ Those are things that, if you postpone them, then you will have a lot more work 
 > [!NOTE]
 > the 5 upcoming chapters only contain background information, if you prefer you can also go straight to coding part in the ["ESLint 9 flat config for Next.js 15" chapter](#eslint-9-flat-config-for-nextjs-15)
 
-## Linting library choice
+## Linting library choice (optional)
 
 If you would prefer an alternative linting solution, I recommend checking out [Biome](https://biomejs.dev/), they have an interesting [playground](https://biomejs.dev/playground/) to learn more about biome (compared to Prettier), they also have a very good documentation, for example I like that their [Getting Started](https://biomejs.dev/guides/getting-started/) page will show you the commands for npm, yarn, pnpm, bun and deno
 
-## The state of ESLint v9 and flat config
+## Why does Next.js have two packages related to ESLINT? (optional)
+
+Next.js has **2 packages** that are related to ESLint, one is called eslint-**config**-next (ESLint Config), and the other one is called eslint-**plugin**-next (ESLint Plugin)
+
+* [eslint-config-next](https://www.npmjs.com/package/eslint-config-next)
+* [eslint-plugin-next](https://www.npmjs.com/package/@next/eslint-plugin-next)
+
+Package 1: **eslint-config-next** (ESLint Config) intends to make it easier to get started with ESLint by installing and configuring several plugins for us, some of these plugins are:
+
+* [eslint-plugin-react](https://www.npmjs.com/package/eslint-plugin-react)
+* [eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks)
+* [eslint-plugin-next](https://www.npmjs.com/package/@next/eslint-plugin-next)
+* and some more, if you want the full list of plugins that eslint-config-next installs, check out the [eslint-config-next package.json dependencies](https://github.com/vercel/next.js/blob/b2625477c002343e7fe083204c45af1fdd7cd407/packages/eslint-config-next/package.json)
+
+Package 2: **eslint-plugin-next** is the actual ESLint plugin for Nextjs (called **@next/eslint-plugin-next** on npmjs), it aims to catch common problems in a Next.js application
+
+For a complete list of rules that the Next.js ESLint plugin adds check out the [Nextjs "ESLint rules" documentation](https://nextjs.org/docs/app/api-reference/config/eslint#rules) or have a look at the [eslint-plugin-next rules directory on GitHub](https://github.com/vercel/next.js/tree/canary/packages/eslint-plugin-next/src/rules)
+
+> [!MORE]  
+> [Next.js "ESLint" documentation](https://nextjs.org/docs/app/api-reference/config/eslint)  
+
+## The state of ESLint v9 and flat config (optional)
 
 ESLint mentions in their documentation:
 
@@ -80,7 +101,7 @@ If you are interested in the progress of more packages and plugins, then have a 
 > [ESLint "flag config part 3" blog post](https://eslint.org/blog/2022/08/new-config-system-part-3/)  
 > [ESLint "flat config files" RFC](https://github.com/eslint/rfcs/tree/main/designs/2019-config-simplification)  
 
-## Next.js 15 ESLint v9 update
+## Next.js 15 ESLint v9 update (optional)
 
 In ESLint v9 the eslintrc files are **deprecated**, support for [**eslintrc** (classic) configuration files will be removed in ESLint version 10.0.0](https://eslint.org/blog/2023/10/flat-config-rollout-plans/#eslintrc-removed-in-eslint-v10.0.0)
 
@@ -94,40 +115,13 @@ Most of that work happened in the [PR #71218](https://github.com/vercel/next.js/
 > [!MORE]  
 > [ESLint "migrate to v9.x" documentation](https://eslint.org/docs/latest/use/migrate-to-9.0.0)
 
-### Not everything is ESLint v9 and flat config (yet)
+### Not everything is ESLint v9 and flat config (optional)
 
-If you use the latest **create-next-app** (CNA) it will NOT install ESLint v9, instead CNA sets ESLint to ^8 (in the package.json) which means npm will attempt to install v8.57.1 and doing so will trigger a npm warn deprecated message:
+If you use the latest **create-next-app** (CNA) it and chose to use ESLint then it will install ESLint v9 for you, or if you use npm run lint (next lint cli) and have no eslint configuration file, then next lint will also install ESLint v9 for you
 
-```shell
-eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
-```
-
-If you use npm run lint (next lint cli) and have no eslint configuration file, then next lint will install ESLint v9
-
-No matter if you have used the CNA or next lint, both still create eslintrc files and NOT flat config files, so yes Next.js has updated their packages to support ESLint v9 but they have NOT yet updated their packages to support [shareable flat config](https://eslint.org/docs/latest/extend/shareable-configs) files
+But no matter which one you (CNA or next lint), both still create eslintrc files and NOT flat config files, so yes Next.js has updated their packages to support ESLint v9 but (as of Next.js v15.0) both won't create flat config files and Next.js ESLint plugin as well as the Next.js ESLint config packages have not migrated to [shareable flat config](https://eslint.org/docs/latest/extend/shareable-configs) files
 
 Both CNA and next lint installed the latest [eslint-config-next](https://github.com/vercel/next.js/tree/canary/packages/eslint-config-next), however the latest **eslint-config-next** is not compatible with flat config files, as we will see in one of the upcoming chapters, which does NOT mean you can NOT use eslint-config-next with flat configs, but it means that if you do you will need to add a compatibility layer for it wo work (which is what we will do in one of the upcoming chapters)
-
-## Why does Next.js have two packages related to ESLINT?
-
-Next.js has **2 packages** that are related to ESLint, one is called eslint-**config**-next (ESLint Config), and the other one is called eslint-**plugin**-next (ESLint Plugin)
-
-* [eslint-config-next](https://www.npmjs.com/package/eslint-config-next)
-* [eslint-plugin-next](https://www.npmjs.com/package/@next/eslint-plugin-next)
-
-Package 1: **eslint-config-next** (ESLint Config) intends to make it easier to get started with ESLint by installing and configuring several plugins for us, some of these plugins are:
-
-* [eslint-plugin-react](https://www.npmjs.com/package/eslint-plugin-react)
-* [eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks)
-* [eslint-plugin-next](https://www.npmjs.com/package/@next/eslint-plugin-next)
-* and some more, if you want the full list of plugins that eslint-config-next installs, check out the [eslint-config-next package.json dependencies](https://github.com/vercel/next.js/blob/b2625477c002343e7fe083204c45af1fdd7cd407/packages/eslint-config-next/package.json)
-
-Package 2: **eslint-plugin-next** is the actual ESLint plugin for Nextjs (called **@next/eslint-plugin-next** on npmjs), it aims to catch common problems in a Next.js application
-
-For a complete list of rules that the Next.js ESLint plugin adds check out the [Nextjs "ESLint rules" documentation](https://nextjs.org/docs/app/api-reference/config/eslint#rules) or have a look at the [eslint-plugin-next rules directory on GitHub](https://github.com/vercel/next.js/tree/canary/packages/eslint-plugin-next/src/rules)
-
-> [!MORE]  
-> [Next.js "ESLint" documentation](https://nextjs.org/docs/app/api-reference/config/eslint)  
 
 ## ESLint 9 flat config for Next.js 15
 
