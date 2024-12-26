@@ -67,9 +67,6 @@ If you use CNA like we did on one of the previous page, then you will get a **ne
 
 ### next.config.ts does NOT support "ESM only" packages
 
-> [!WARN]  
-> tldr: NOT having for **ESM only** packages is not the only problem (like [issue #67765](https://github.com/vercel/next.js/issues/67765) which mentions issues when using top level **awaits** in **next.config.ts**), but the good news is that there is also a PR in the works [(PR #68365)](https://github.com/vercel/next.js/pull/68365), which you should subscribe to if you want to get notified of updates, oh and if you wonder if .mts is supported as extension, as per this [commit](https://github.com/vercel/next.js/commit/ac9a51465badb4f7ddb75bb7075f1493b32dccd7) it currently is NOT possible to use mts as extension for next.config
-
 The Next.js team explains the problem well in the documentation, here is a quote from it:
 
 > Module resolution in next.config.ts is currently limited to CommonJS. This may cause incompatibilities with ESM only packages being loaded in next.config.ts
@@ -78,7 +75,15 @@ That means that in some cases, if you use such packages (and start the developme
 
 > Error: No "exports" main defined in SOME_PACKAGE
 
-Before you start to remove your **JSDoc @type comments** from your configuration file (as we did in the [Next.js 14 version of this tutorial](/web_development/tutorials/next-js-static-mdx-blog/nextjs-configuration)), to replace them with typescript types imports, I recommend converting the config file to typescript, then fix the bare minimum and then check if there is any problem when importing packages into the config, if do NOT get any errors you can go ahead and finalize the transition. If you find a package that is NOT compatible, then for now you will need to keep using the next.config.mjs file
+> [!WARN]  
+> NO support for **ESM only** packages is not the only problem you might encounter, like [issue #67765](https://github.com/vercel/next.js/issues/67765) which mentions issues when using top level **awaits** in **next.config.ts**
+
+The **good news** is that there is also a PR in the works [(PR #68365)](https://github.com/vercel/next.js/pull/68365), which you should subscribe to if you want to get notified of updates
+
+> [!NOTE]  
+> oh and if you wonder if .mts is supported as extension, as per this [commit](https://github.com/vercel/next.js/commit/ac9a51465badb4f7ddb75bb7075f1493b32dccd7) it currently is NOT possible to use mts as extension for next.config
+
+So before you start to remove your **JSDoc @type comments** from your configuration file (as we did in the [Next.js 14 version of this tutorial](/web_development/tutorials/next-js-static-mdx-blog/nextjs-configuration)), to replace them with typescript types imports, I recommend converting the config file to typescript, then fix the bare minimum and then check if there is any problem when importing packages into the config, if do NOT get any errors you can go ahead and finalize the transition. If you find a package that is NOT compatible, then for now you will need to keep using the next.config.mjs file
 
 ## 3 ways to know what the current environment is
 
@@ -94,7 +99,7 @@ The third option to know the current context is to use the Next.js config proper
 
 We open our `next.config.ts` file again and this time we change the code to this:
 
-```js title="next.config.ts" showLineNumbers {2} {4} {7}#special
+```js title="next.config.ts" showLineNumbers {2} {4} {6-8} /phase/#special
 import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
 
@@ -123,7 +128,7 @@ Line 2: we import the **PHASE_DEVELOPMENT_SERVER** constant from the [next/const
 
 Line 4: we have converted our next config object into a function, which means we now have access to the **phase** parameter, it will allow us to check what the current context of our Next.js app is
 
-Line 7: we use a console.log as example, when the phase is development we show a message in our terminal
+Lines 6 to 8: we use a console.log as example, when the phase is development we show a message in our terminal
 
 > [!MORE]  
 > [Node.js "environment variables" documentation](https://nodejs.org/en/learn/command-line/how-to-read-environment-variables-from-nodejs)  
@@ -246,7 +251,7 @@ If you did any of the two changes I mentioned above, then save your `next.config
 
 If the project you are building is going to replace an existing project, then you might want to add some [redirects](https://nextjs.org/docs/app/api-reference/config/next-config-js/redirects). When using Next.js, adding **redirects** is really easy, so I won't do a deep dive, but I just wanted to mention that this can be done in the `next.config.mjs`:
 
-```js title="static route redirect example" {18-26}
+```js title="static route redirect example" showLineNumbers {18-26}
 import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
 
@@ -286,7 +291,7 @@ Lines 18 to 26: we added our first redirect, by passing an array of redirect obj
 
 It is usually best to change URLs as few as possible because search engines have indexed those pages and some users might have bookmarked them. But especially when switching from the pages router to the app router, you might want to do some redirects for pages you have migrated to a new URL. For those cases, Next.js has a very powerful feature that allows you to redirect old dynamic routes to new dynamic routes:
 
-```js title="dynamic route redirect example" {18-26}
+```js title="dynamic route redirect example" showLineNumbers {21-22}
 import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
 
