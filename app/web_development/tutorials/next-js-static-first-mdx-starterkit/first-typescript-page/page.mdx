@@ -65,10 +65,17 @@ The advantage of using a folder as the last segment and having a convention that
 A feature you will already know if you used the **pages router** is [dynamic routes](https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes). To create a dynamic route segment, you wrap the folder's name in square brackets, for example, with a folder structure like this `/app/articles/[slug]`, the **slug** could be anything, so if the URL is `www.example.com/articles/foo` then the slug have "foo" as value and for another URL `www.example.com/articles/bar` the slug would be a "bar", to retrieve the slug value you would create a page with the following code:
 
 ```tsx title="/app/articles/[slug]/page.tsx"
-export default function Page({ params }: { params: { slug: string } }) {
-    return <div>My article slug is: {params.slug}</div>
+export default async function Page({
+    params,
+}: {
+    params: Promise<{ slug: string }>
+}) {
+    const slug = (await params).slug
+    return <div>My article slug is: {slug}</div>
 }
 ```
+
+Side note: dynamic pages now need to be async functions, due to params being promises starting with Next.js 15 ([Async Request APIs, Next.js 15 breaking change](https://nextjs.org/blog/next-15#async-request-apis-breaking-change))
 
 Other useful features were introduced with the new router, like [route groups](https://nextjs.org/docs/app/building-your-application/routing/route-groups) which we will see in a future part of this tutorial. Another new feature are [parallel routes](https://nextjs.org/docs/app/building-your-application/routing/parallel-routes) but those I will not cover them in this tutorial, but it is good to know they exist as they might become useful sooner or later as your project grows
 
@@ -178,7 +185,7 @@ As you might have noticed, I added a question mark in the **Hello World?** headi
 
 Let's replace the question mark with an exclamation mark and then save the file:
 
-```tsx title="/app/page.tsx" showLineNumbers
+```tsx title="/app/page.tsx" showLineNumbers /!/#special
 export default function Home() {
 
     return (
