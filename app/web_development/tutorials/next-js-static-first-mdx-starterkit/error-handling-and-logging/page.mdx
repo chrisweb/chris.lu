@@ -53,26 +53,28 @@ How this works is that Next.js will automatically wrap the children of your page
 
 Let's create our first error file inside of our `/app` directory, and let's use the example from the Next.js documentation like so:
 
-```tsx title="app/error.tsx" showLineNumbers {10} {13-16} {21-26}
+```tsx title="app/error.tsx" showLineNumbers {5-8} {10-13} {23-28}
 'use client' // Error components must be Client Components
 
 import { useEffect } from 'react'
 
+interface ErrorBoundaryProps {
+    error: Error & { digest?: string }
+    reset: () => void
+}
+
 export default function Error({
     error,
     reset,
-}: {
-    error: Error & { digest?: string }
-    reset: () => void
-}) {
+}: ErrorBoundaryProps) {
 
     useEffect(() => {
-        // Log the error to an error reporting service
+        // simulate logging the error
         console.error(error)
     }, [error])
 
     return (
-        <div>
+        <>
             <h1>Sorry, something went wrong 😞</h1>
             <button
                 onClick={() => {
@@ -82,14 +84,16 @@ export default function Error({
             >
                 Try again
             </button>
-        </div>
+        </>
     )
 }
 ```
 
-Lines 13 to 16 every time the component receives an error, it will use `console.log` to print the error in the console
+Lines 5 to 8: we create a Typescript interface for the props our error boundary
 
-Lines 21 to 26 there is the second feature of this component, a `button` which will trigger the `reset` function we got from the component props (line 10), this function provided by Next.js will attempt to rerender the segment that triggered an error, this is helpful if the error was caused by something that occurs sporadically and might allow the user to continue
+Lines 10 to 13: a Next.js error boundary will give you two useful things, the error itself and a function that can rerender the segment in which the error occurred
+
+Lines 23 to 28 there is the second feature of this component, a `button` which will trigger the `reset` function we got from the component props (line 10), this function provided by Next.js will attempt to rerender the segment that triggered an error, this is helpful if the error was caused by something that occurs sporadically and might allow the user to continue
 
 As you can see, the Next.js documentation example uses a `useEffect(){:.function}` function (lines 13 to 16) and inside of it we use a `console.log` to print an error in the console of the browser, but what happens if the error is getting triggered on a user's computer, then we won't know about it. This is why in the next chapter, we will use a third-party service called [Sentry.io](https://sentry.io) to do the logging for us (of course if you prefer you can also develop and run your logging service instead)
 
@@ -244,11 +248,9 @@ This will replace the current version of Sentry for Next.js with a more up to da
 
 Sentry.io can be customized a lot and has several places to change the default configuration.
 
-The main part of the Sentry for Next.js configuration is in your `next.config.ts` file (which is in the root of your project)
+The main part of the Sentry for Next.js configuration is in your `next.config.ts` file (which is in the root of your project):
 
-Sentry has updated your `next.config.ts` based on the answers you gave to the wizard questions, I formatted mine (in VSCode, you can right click and then select **Format Document**) to look like this:
-
-```ts title="next.config.ts"
+```ts title="next.config.ts" showLineNumbers {25-66}
 import { withSentryConfig } from '@sentry/nextjs'
 import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
@@ -317,7 +319,9 @@ export default withSentryConfig(
 )
 ```
 
-Now save the updated `next.config.ts` and then is probably a good time to commit
+Lines 25 to 66: the Sentry wizard has updated your `next.config.ts` based on the answers you gave to the wizard questions (I formatted mine (in VSCode, you can right click and then select **Format Document**)
+
+Now is a good time to commit the updated `next.config.ts` (and other changes the wizard did)
 
 > [!NOTE]  
 > By default, the options that the wizard set for us are good enough. As soon as you have the time, I recommend checking out the [Extend your Next.js Configuration](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#extend-your-nextjs-configuration) Sentry.io documentation, which explains what each option does
@@ -469,19 +473,21 @@ Before we commit/sync all the changes Sentry.io did in our project, **delete** t
 
 Now that Sentry.io is set up, we can modify the error file we created earlier, like so:
 
-```tsx title="app/error.tsx" showLineNumbers {3} {15-16}
+```tsx title="app/error.tsx" showLineNumbers {3} {17-18}
 'use client' // Error components must be Client Components
 
 import * as Sentry from '@sentry/nextjs'
 import { useEffect } from 'react'
 
+interface ErrorBoundaryProps {
+    error: Error & { digest?: string }
+    reset: () => void
+}
+
 export default function Error({
     error,
     reset,
-}: {
-    error: Error & { digest?: string }
-    reset: () => void
-}) {
+}: ErrorBoundaryProps) {
 
     useEffect(() => {
         // log the error to Sentry.io
@@ -506,7 +512,7 @@ export default function Error({
 
 Line 3: we import the Sentry SDK
 
-Lines 15 to 16: we replace our **console.error** (inside of the `useEffect(){:.function}`) with the Sentry.io **captureException** logging function
+Lines 17 to 18: we replace our **console.error** (inside of the `useEffect(){:.function}`) with the Sentry.io **captureException** logging function
 
 > [!MORE]  
 > [Sentry.io "Next.js SDK" documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/)  
@@ -528,19 +534,21 @@ The Next.js documentation explains well why this file is essential:
 
 We will update the global-error file Sentry just created, and add a slightly different UI using the same reset button we added to the regular error page instead of using the Next.js built in **NextError** component, the final version looks like this:
 
-```ts title="app/global-error.tsx" showLineNumbers {3} {15-16}
+```ts title="app/global-error.tsx" showLineNumbers {3} {17-18}
 'use client' // Error components must be Client Components
 
 import * as Sentry from '@sentry/nextjs'
 import { useEffect } from 'react'
 
+interface GlobalErrorProps {
+    error: Error & { digest?: string }
+    reset: () => void
+}
+
 export default function GlobalError({
     error,
     reset,
-}: {
-    error: Error & { digest?: string }
-    reset: () => void
-}) {
+}: GlobalErrorProps) {
 
     useEffect(() => {
         // log the error to Sentry.io
@@ -567,7 +575,7 @@ export default function GlobalError({
 
 Line 3: we import the Sentry SDK
 
-Lines 15 to 16: we replace our **console.error** (inside of the `useEffect(){:.function}`) with the Sentry.io **captureException** logging function
+Lines 17 to 18: we replace our **console.error** (inside of the `useEffect(){:.function}`) with the Sentry.io **captureException** logging function
 
 > [!TIP]  
 > The global error handling file will handle root layout errors and act as a catch-all for app errors
