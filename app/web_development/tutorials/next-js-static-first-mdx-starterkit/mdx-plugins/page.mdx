@@ -129,7 +129,7 @@ Result: plugins work, you use a compile and build pipeline that is fully written
 
 Result: plugin(s) loading silently fails
 
-When you enable the [mdxRs (experimental) configuration option](https://nextjs.org/docs/app/api-reference/config/next-config-js/mdxRs) you are telling **@next/mdx** to use [mdxjs-rs](https://github.com/wooorm/mdxjs-rs), @next/mdx will use its custom mdx-rs-loader loader to configure mdxjs-rs (the MDX rust compiler)
+When you enable the [mdxRs (experimental) configuration option](https://nextjs.org/docs/app/api-reference/config/next-config-js/mdxRs),**@next/mdx** will use its custom **mdx-rs-loader loader** to configure **mdxjs-rs (the MDX rust compiler)**
 
 As they mention in their **mdxjs-rs** [README](https://github.com/wooorm/mdxjs-rs#when-should-i-use-this):
 
@@ -137,7 +137,7 @@ As they mention in their **mdxjs-rs** [README](https://github.com/wooorm/mdxjs-r
 
 This is why our plugins silently fail, the mdxjs-rs (MDX compiler written in rust) does compile our markdown using markdown-rs, but as markdown-rs has no support for plugins it just ignores them.
 
-Even if mdxjs-rs (markdown-rs) had support for plugins, I assume that you would have to use plugins written in Rust and not the plugins we currently use which are written in Javascript.
+Even if mdxjs-rs (markdown-rs) had support for plugins, I assume that you would have to use plugins written in Rust and not the plugins we currently use which are written in Javascript. (For example the markdown-it rust compiler has a few [plugins written in rust](https://github.com/markdown-it-rust/markdown-it-plugins.rs))
 
 > [!NOTE]  
 > markdown-rs has an Issue that tracks the [Enable custom plugins #32](https://github.com/wooorm/markdown-rs/issues/32) feature, which you may want to subscribe to if you are interested in getting notifications about the progress
@@ -154,15 +154,18 @@ When using [MDX plugins with Turbopack](https://nextjs.org/docs/app/building-you
 
 Result: again plugin(s) loading silently fails
 
-What happens here is that **@next/mdx** will check if we use mdxRs and as we do **@next/mdx** will use its **mdx-rs-loader**
+What happens here is that **@next/mdx** will check if we use mdxRs and as we do @next/mdx will use its **mdx-rs-loader**
 
-In the Next.js 15.1 release notes, there is the following entry:
+But wait, isn't that exactly what we just did? Yes it is... The plugins silently failing is the same result we have in the second experiment, the difference is that this time we have enabled Turbopack and are using a the plugin name instead of an import (as this is a Turbopack requirement), but in the end we still use mdxRs which as we saw will silently fail as it does NOT support plugins
 
-> \[Improvement\] Support providing MDX plugins as strings for Turbopack compatibility (PR)
-
-But wait, isn't that exactly what we just did? Yes it is... The plugins silently failing is the same result we have in the second experiment, the difference is that this time we have enabled Turbopack and are using a the plugin name instead of an import as this is a Turbopack requirement, but in the end we still use mdxRs which as we saw will silently fail as it does NOT support plugins
-
-After digging a bit in the @next/mdx code I noticed that the **new loader they added in Next.js 15.1, only gets used when mdxRs is disabled**
+> [!NOTE]  
+> In the Next.js 15.1 release notes, there is the following entry:
+>  
+> > \[Improvement\] Support providing MDX plugins as strings for Turbopack compatibility (PR)
+>  
+> However after digging a bit in the [@next/mdx code](https://github.com/vercel/next.js/blob/canary/packages/next-mdx) I noticed that the **new loader they added in Next.js 15.1, only gets used when mdxRs is disabled**
+>  
+> In Next.js < 15.1, @next/mdx will not have the new loader and instead it will use the [@mdx-js/loader](https://mdxjs.com/packages/loader/) directly
 
 **Experiment 5:** we disable mdxRs, this time we have **mdxRs OFF** and **Turbopack ON** and **plugin name as string** in next.config
 
@@ -170,7 +173,7 @@ Result: TypeError: Expected usable value, not `rehype-slug`
 
 @mdx-js/loader is NOT happy with the string we passed him
 
-I digged in the code of the @next/mdx/mdx-js-loader and noticed that this new loader expect plugins to be an array (prior versions allowed us to NOT use an array if we did NOT have plugin options)
+I digged in the code of the [@next/mdx/mdx-js-loader.js](https://github.com/vercel/next.js/blob/canary/packages/next-mdx/mdx-js-loader.js) and noticed that this new loader expects plugins to be an array (prior versions of @next/mdx allowed us to NOT use an array if we only had the plugin itself without plugin options)
 
 meaning that the following example will lead to the TypeError above:
 
@@ -215,7 +218,7 @@ Confirmed, on Mac the code works 🎉 but this also confirms there is a windows 
 If you use Turbopack, then make sure your MDX plugins have serializable options and use the plugin name instead of an import. Also make sure mdxRs is disabled, because when Next.js 15.1 added support for Turbopack it also removed support for mdxRs
 
 > [!NOTE]  
-> this only works with > Next.js 15.1 (Next.js 15 and before will not have the @next/mdx/mdx-js-loader that got added in v15.1)
+> this only works with > Next.js 15.1 (Next.js 15 and before will not have the @next/mdx/mdx-js-loader which is part of the [Support providing MDX plugins as strings for Turbopack compatibility PR #72802](https://github.com/vercel/next.js/pull/72802) that got released in [Next.js v15.1](https://nextjs.org/blog/next-15-1)), instead versions prior
 
 > [!WARN]  
 > this version has a bug on windows, the path resolve in windows returns an absolute path but node.js expects a URL:
@@ -253,7 +256,7 @@ const withMDX = createMDX({
 export default withMDX(nextConfig)
 ```
 
-Incompatible types: if you use the typescript config, know that you will likely have a types error:
+**Incompatible types problem:** if you use the typescript config, know that you will likely have a types error:
 
 ```shell
 Type 'string' is not assignable to type 'Plugin<any[], any, any>'.ts(2322)
