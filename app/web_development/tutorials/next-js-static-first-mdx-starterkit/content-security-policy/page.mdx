@@ -56,7 +56,7 @@ Using [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/W
 
 In this chapter, we are to add CSP rules to our `next.config.ts` configuration file (which is in the root of the project) like so:
 
-```js title="next.config.ts" showLineNumbers {17-24} {33} /cspReportOnly/#special /upgradeInsecure/#special {35-97} {99-104}
+```js title="next.config.ts" showLineNumbers {19-26} {33} /cspReportOnly/#special /upgradeInsecure/#special {35-98} {100-105}
 import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
 import { withSentryConfig } from '@sentry/nextjs'
@@ -168,7 +168,7 @@ const securityHeadersConfig = (phase: string) => {
 }
 ```
 
-Lines 17 to 24: we add a `headers` configuration where we use the `source` property to tell Next.js that it should add those headers to every page, then we set a second `headers` property, and as the value, we make a call to our `securityHeadersConfig` function
+Lines 19 to 26: we add a `headers` configuration where we use the `source` property to tell Next.js that it should add those headers to every page, then we set a second `headers` property, and as the value, we make a call to our `securityHeadersConfig` function
 
 Line 33: we have added a `cspReportOnly` variable and have set it to **true**; we will use this variable to decide if we want to **only report** CSP violations or **enforce** CSP rules and report them; we start with true so that violations get reported but not enforced and later when we are sure that we have set out rules correctly and fixed potential violations then we will set this to false to start not only reporting but also enforcing CSP rules
 
@@ -223,7 +223,7 @@ If you are interested in using that directive then have a look at my [require-tr
 
 Let's edit the CSP rules in our `next.config.mjs` file and make the **script-src** directive stricter by not using **unsafe-eval** as recommended by the CSP Evaluator service, like so:
 
-```js title="security.config.mjs" showLineNumbers{86} {6}#special
+```js title="security.config.mjs" showLineNumbers{87} {6}#special
     // for dev environment enable unsafe-eval for hot-reload
     return `
         ${defaultCSPDirectives}
@@ -302,7 +302,7 @@ First, you need to visit Sentry.io and copy the CSP reporting URL of your projec
 
 Next, we need to ensure violations get sent to Sentry.io (logged like any other error), to do that we will edit our CSP setup in the `next.config.mjs` file, like so:
 
-```js title="next.config.mjs" showLineNumbers{31} {5-6} {12-13} {42} {45} {57} {60} /${reportingDomainWildcard}/#special /${reportCSPViolations}/#special
+```js title="next.config.mjs" showLineNumbers{31} {5-6} {14-15} {48} {51} {63} {66} /${reportingDomainWildcard}/#special /${reportCSPViolations}/#special
 const securityHeadersConfig = (phase: string) => {
 
     const cspReportOnly = true
@@ -409,11 +409,11 @@ Lines 35 to 36: we add two new variables to store the Sentry.io CSP logging URL 
 >  
 > If using a wildcard does not work for you, you could also just put the full URL into the **reportingDomainWildcard** variable, that works too, the wildcard is just more flexible in case you generate a new DSN it will still be valid
 
-Lines 42 to 43: we use a template literal to create the reporting uri directive; this directive will tell the browser what URL it should use when sending the CSP reports
+Lines 44 to 45: we use a template literal to create the reporting uri directive; this directive will tell the browser what URL it should use when sending the CSP reports
 
-Line 72 and 87: we add the **reportingDomainWildcard** to the connect-src directive
+Lines 78 and 93: we add the **reportingDomainWildcard** to the connect-src directive
 
-Line 75 and 90: we add the **reportCSPViolations** variable, which contains a reporting directive, meaning we only report violations to sentry for preview and production deployments but NOT local development
+Lines 81 and 96: we add the **reportCSPViolations** variable, which contains a reporting directive, meaning we only report violations to sentry for preview and production deployments but NOT local development
 
 > [!NOTE]  
 > It is essential to add the **reportingDomainWildcard** to the connect-src directive, or CSP will block the reporting URL and not send reports to Sentry. We only add the **reportingDomainWildcard** to the connect-src for preview and production, but NOT development, as Sentry.io will filter out reports from localhost anyway.  
@@ -435,7 +435,7 @@ There are also some useful security headers besides CSP headers. Let's add 3 of 
 
 For now we only added the CSP setup to every page header by altering the Next.js configuration file, next we are going to add 4 more security headers:
 
-```js title="next.config.ts" showLineNumbers{107} {1-11} {14} {19-30}
+```js title="next.config.ts" showLineNumbers{113} {1-11} {14} {19-30}
     // security headers for preview & production
     const extraSecurityHeaders = []
 
@@ -471,13 +471,13 @@ For now we only added the CSP setup to every page header by altering the Next.js
     return headers
 ```
 
-Lines 107 to 117: we edit the content of our **securityHeadersConfig** function and add a new `extraSecurityHeaders` variable to store the HSTS header, but as we want to exclude it in development where we don't have an SSL certificate, we check if the phase is NOT **development**
+Lines 113 to 123: we edit the content of our **securityHeadersConfig** function and add a new `extraSecurityHeaders` variable to store the HSTS header, but as we want to exclude it in development where we don't have an SSL certificate, we check if the phase is NOT **development**
 
 The HSTS header (`Strict-Transport-Security`) tells the browser that this app only supports HTTPS. We want the browser to always use HTTPS for every request the code of the page will make, even if the URL scheme of the content it needs to fetch is HTTP.
 
-Line 120: we use the `extraSecurityHeaders` variable to add the `Strict-Transport-Security` header to the list of headers
+Line 126: we use the `extraSecurityHeaders` variable to add the `Strict-Transport-Security` header to the list of headers
 
-Lines 125 to 136: we add 3 more security headers to the list of headers:
+Lines 131 to 142: we add 3 more security headers to the list of headers:
 
 * the first one is a `Referrer-Policy` header, which tells the browser when and when NOT to include information about the origin in referrer header, the [MDN "Referrer-Policy" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy) does a very good job at explaining the different values, I like to only set the referrer for internal pages but not for external pages, that's why I set the value **same-origin**
 * The second **X-Content-Type-Options** header tells the browser NOT to attempt to guess the MIME type of resource by itself (which is a technique called MIME type sniffing) and instead take the value that we (our CDN) puts into the header, the problem with MIME type sniffing is that a malicious actor could hide code in the MIME type string of a file to then perform an attack on the tool doing the MIME type sniffing 
