@@ -17,32 +17,22 @@ const AsideContent: React.FC = () => {
             <br />
             <span className="fontDarker">* Please 😉</span>
             <p className="fontSmall fontDarker alignLeft">
-                <FontAwesomeIcon icon={faHeart} size="1x" color="rgb(255, 0, 170)" />
-                &nbsp;
+                <FontAwesomeIcon icon={faHeart} size="1x" className="startInlineIcon" />
                 <BaseLink href="https://buymeacoffee.com/chriswwweb">Buying me a coffee</BaseLink>
-                &nbsp;
-                or
-                &nbsp;
+                or&nbsp;
                 <BaseLink href="https://github.com/sponsors/chrisweb">sponsoring me</BaseLink>
-                &nbsp;
                 on GitHub, are not mandatory but greatly appreciated, as it allows me to work on more content and keep the project free for everyone
             </p>
             <p className="fontSmall fontDarker alignLeft">
-                <FontAwesomeIcon icon={faBug} size="1x" color="rgb(255, 0, 170)" />
-                &nbsp;
-                If you find a bug / typo or you want to suggest a new feature, then please open an
-                &nbsp;
+                <FontAwesomeIcon icon={faBug} size="1x" className="startInlineIcon" />
+                If you find a bug / typo or you want to suggest a new feature, then please open an&nbsp;
                 <BaseLink href="https://github.com/chrisweb/chris.lu/issues">Issue</BaseLink>
-                &nbsp;
                 on GitHub.
             </p>
             <p className="fontSmall fontDarker alignLeft">
-                <FontAwesomeIcon icon={faComments} size="1x" color="rgb(255, 0, 170)" />
-                &nbsp;
-                Suggestions and Ideas are appreciated, please use the
-                &nbsp;
+                <FontAwesomeIcon icon={faComments} className="startInlineIcon" />
+                Suggestions and Ideas are appreciated, please use the&nbsp;
                 <BaseLink href="https://github.com/chrisweb/chris.lu/discussions">discussion board</BaseLink>
-                &nbsp;
                 to leave feedback or ask a question.
             </p>
         </div>

@@ -795,10 +795,15 @@ aside {
     text-decoration: none;
 }
 
-/* "external link" icon styling */
-.externalLinkIcon {
+/* svg icons (font awesome) */
+.inlineIcon {
     color: var(--primary-light-color);
-    margin-left: calc(var(--main-spacing) / 5);
+    margin: 0 calc(var(--main-spacing) / 5);
+}
+
+.startInlineIcon {
+    color: var(--primary-light-color);
+    margin-right: calc(var(--main-spacing) / 5);
 }
 
 /* github like heading anchor */
