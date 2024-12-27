@@ -131,7 +131,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
 Now we need to update the content of our `next.config.mjs` file (in the root of our project) to this:
 
-```js title="next.config.mjs" showLineNumbers {3} {7-13} {34-35} {38}
+```js title="next.config.mjs" showLineNumbers {4} {8-15} {37-38} {41}
 import { withSentryConfig } from '@sentry/nextjs'
 import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
@@ -182,13 +182,13 @@ const nextConfig = (phase: string) => {
 >  
 > I have omitted what we added in the CSP chapter and the Sentry setup so as not to have to display a huge file, but the structure is still the same, so you should be able only to copy the relevant parts (the ones that are highlighted using a different background color)
 
-Line 3: we import the `@next/mdx` package (that we installed in the previous chapter)
+Line 4: we import the `@next/mdx` package (that we installed in the previous chapter)
 
-Lines 7 to 13: we configure **@next/mdx** by passing an object to **createMdx**; via the options, we add support for **remark plugins** and **rehype plugins** (we will add a bunch of those plugins later)
+Lines 8 to 15: we configure **@next/mdx** by passing an object to **createMdx**; via the options, we add support for **remark plugins** and **rehype plugins** (we will add a bunch of those plugins later)
 
-Lines 34 and 35: we tell Next.js what extensions are valid page extensions, the pages we created so far had a `.tsx` extension, but the new MDX pages we will now add will have the `.mdx` extension, as you can see we add a bunch more here to cover all use cases. If for example, you are sure you won't use `.js` as an extension, then you can remove it from the list.
+Lines 37 and 38: we tell Next.js what extensions are valid page extensions, the pages we created so far had a `.tsx` extension, but the new MDX pages we will now add will have the `.mdx` extension, as you can see we add a bunch more here to cover all use cases. If for example, you are sure you won't use `.js` (and `.jsx`) as an extension for your pages, then you can remove them from the list.
 
-Line 38: we use the **withMDX** function we just created and pass our **nextConfigOptions** to it, which will return a configuration with MDX support
+Line 41: we use the **withMDX** function we just created and pass our **nextConfigOptions** to it, which will return a configuration with MDX support
 
 > [!MORE]  
 > [Next.js "Markdown and MDX" documentation](https://nextjs.org/docs/app/building-your-application/configuring/mdx)  
@@ -197,7 +197,7 @@ Line 38: we use the **withMDX** function we just created and pass our **nextConf
 
 The configuration we just did adds support for MDX in pages that have the extension `*.mdx`, if you want also to add support for markdown pages with the `*.md` extension, then add the extension in **2 places** like so:
 
-```js title="next.config.mjs" showLineNumbers {9} {37} /?/#special /'md'/#special
+```js title="next.config.mjs" showLineNumbers {9} {38} /?/#special /'md'/#special
 import { withSentryConfig } from '@sentry/nextjs'
 import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
@@ -243,9 +243,9 @@ const nextConfig = (phase: string) => {
 }
 ```
 
-Line 8: we add the extension to the MDX configuration, the regex we use works because we added a question mark behind the **x** of **mdx** meaning the **x** is optional, so **md** and **mdx** both are valid extension
+Line 9: we add the extension to the MDX configuration, the regex we use works because we added a question mark behind the **x** of **mdx** meaning the **x** is optional, so **md** and **mdx** both are valid extension
 
-Line 35: we add `md` to the `pageExtensions` list
+Line 38: we add `md` to the `pageExtensions` list
 
 > [!NOTE]  
 > It is important to add your new extension to both the MDX configuration and the Next.js pageExtensions
@@ -260,13 +260,13 @@ You can use another extension for your markdown pages if you prefer, for example
 
 In that case, make sure you make **2 changes** in the `next.config.ts`, for example to allow **.md** and **.markdown** as **extensions** but NOT mdx anymore, you would change the extension option to this:
 
-```js title="next.config.ts" showLineNumbers{8} /markdown/#special
+```js title="next.config.ts" showLineNumbers{9} /markdown/#special
 extension: /\.(md|markdown)$/,
 ```
 
 And then the **pageExtensions** option to this:
 
-```js title="next.config.ts" showLineNumbers{36} /'markdown'/#special
+```js title="next.config.ts" showLineNumbers{37} /'markdown'/#special
 pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'markdown'],
 ```
 
@@ -300,20 +300,22 @@ experimental: {
 > [commonmark.org](https://commonmark.org/)  
 > [GitHub Flavored Markdown Spec](https://github.github.com/gfm/)  
 
-## No support for MDX plugins < Next.js 15.1
+### No support for MDX plugins < Next.js 15.1
 
-In Next.js 15 if you try to use MDX (remark / rehype) plugins and have mdxRs enabled then they will silently fail to load. This is because the MDX Rust compiler can NOT read plugins written in Javascript.
+In Next.js 15 (and all versions before) if you try to use MDX (remark / rehype) plugins and have mdxRs enabled then they will silently fail to load. This is because the MDX Rust compiler can NOT read plugins written in Javascript.
 
-This means you must chose between having faster builds (mdxRs: true) or if you prefer having support for plugins (mdxRs: false)
+In Next.js 15.1 you can still NOT use plugins (written in Javascript) if mdxRs is enabled (mdxRs is the next.config option that controls if the MDX compiler written in rust gets enabled), however @next/mdx added a new loader which will get used if you disable mdxRs. If you use the new loader you can even enable Turbopack (and have plugins still work).
 
-Next.js 15.1 adds support for MDX plugins, but only if those plugins have serializable options, we will see how to use and when not to use this new plugins loader in the upcoming [page about MDX plugins](/web_development/tutorials/next-js-static-first-mdx-starterkit/mdx-plugins)
+This was just a short introduction to the state of plugins in combination with mdxRs, we will have a more in depth look at how to use plugins in the upcoming page about [MDX plugins](/web_development/tutorials/next-js-static-first-mdx-starterkit/mdx-plugins).
 
 > [!MORE]  
 > [chris.lu "MDX (rehype / remark) plugins" page](https://nextjs.org/docs/app/api-reference/config/next-config-js/mdxRs)  
 
-## @mdx-js/loader instead of mdxRs
+## Installing the @mdx-js/loader package (when mdxRs is disabled)
 
-If you do NOT use the MDX rust compiler (mdxRs) because the option is set to false, or because it is commented out, like in the following configuration:
+This loader we are about to install, is only useful if are also using MDX plugins. If you don't plan on using any plugins like [remark-table-of-contents](https://github.com/chrisweb/remark-table-of-contents) or [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts), then you don't need this package and instead have to enable mdxRs by setting the option (in your next config) to true
+
+To disable the MDX rust compiler (mdxjs-rs) we must set the next.config option to false, or you can comment it out (as by default it is set to false) like in this example:
 
 ```js title="next.config.mjs" showLineNumbers{20} /mdxRs: false/#special
 experimental: {
@@ -327,16 +329,11 @@ experimental: {
 },
 ```
 
-> [!NOTE]  
-> Of course, if you don't plan on using any plugins like [remark-table-of-contents](https://github.com/chrisweb/remark-table-of-contents) or [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts), then you can turn mdxRs **ON** by setting the option to true
-
-As we are NOT using the Rust compiler we now need to install the MDX webpack plugin using the following command:
+If your mdxRs is disabled, you must install the optional ([@mdx-js/loader](https://www.npmjs.com/package/@mdx-js/loader)) package:
 
 ```shell
 npm i @mdx-js/loader --save-exact
 ```
-
-This webpack plugin will handle parsing MDX and is a replacement for the MDX rust compiler we just disabled
 
 > [!NOTE]  
 > In Next.js 13, the @mdx-js/loader webpack plugin was a dependency of @next/mdx and would get installed when you install @next/mdx
