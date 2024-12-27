@@ -52,7 +52,7 @@ Adding linting to a project is something I recommend doing as early as possible,
 Those are things that, if you postpone them, then you will have a lot more work later, which is why it is best to add linting as early as possible and then fix linting-related problems one by one as soon as they come up
 
 > [!NOTE]
-> the 5 upcoming chapters only contain background information, if you prefer you can also go straight to coding part in the ["ESLint 9 flat config for Next.js 15" chapter](#eslint-9-flat-config-for-nextjs-15)
+> the 5 upcoming chapters only contain background information, if you prefer you can also go straight to coding part in the ["Custom ESLint 9 flat config for Next.js 15" chapter](#custom-eslint-9-flat-config-for-nextjs-15)
 
 ## Linting library choice (optional)
 
@@ -115,15 +115,15 @@ Most of that work happened in the [PR #71218](https://github.com/vercel/next.js/
 > [!MORE]  
 > [ESLint "migrate to v9.x" documentation](https://eslint.org/docs/latest/use/migrate-to-9.0.0)
 
-### Not everything is ESLint v9 and flat config (optional)
+### Next.js 15 needs ESLint compatibility mode (optional)
 
-If you use the latest **create-next-app** (CNA) it and chose to use ESLint then it will install ESLint v9 for you, or if you use npm run lint (next lint cli) and have no eslint configuration file, then next lint will also install ESLint v9 for you
+If you use the latest **create-next-app** (CNA) it and chose to use ESLint then it will install ESLint v9 for you (in Next.js > 15.1, prior CNA versions did still install ESLint v8), or if you use npm run lint (next lint cli) and have no eslint configuration file, then next lint will also install ESLint v9 for you
 
-But no matter which one you (CNA or next lint), both still create eslintrc files and NOT flat config files, so yes Next.js has updated their packages to support ESLint v9 but (as of Next.js v15.0) both won't create flat config files and Next.js ESLint plugin as well as the Next.js ESLint config packages have not migrated to [shareable flat config](https://eslint.org/docs/latest/extend/shareable-configs) files
+But no matter which one you used (CNA or next lint), both still create **eslintrc** files and NOT flat config files, so yes Next.js has updated their packages to support ESLint v9 but (as of Next.js v15.0) both won't create flat config files and Next.js ESLint plugin as well as the Next.js ESLint config packages have not migrated to [shareable flat config](https://eslint.org/docs/latest/extend/shareable-configs) files
 
 Both CNA and next lint installed the latest [eslint-config-next](https://github.com/vercel/next.js/tree/canary/packages/eslint-config-next), however the latest **eslint-config-next** is not compatible with flat config files, as we will see in one of the upcoming chapters, which does NOT mean you can NOT use eslint-config-next with flat configs, but it means that if you do you will need to add a compatibility layer for it wo work (which is what we will do in one of the upcoming chapters)
 
-## ESLint 9 flat config for Next.js 15
+## Custom ESLint 9 flat config for Next.js 15
 
 First we are going to make sure we have the latest ESLint v9.x version installed by using the following command:
 
