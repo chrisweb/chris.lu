@@ -218,7 +218,7 @@ npm i jiti@latest --save-dev --save-exact
 
 We edit the `eslint.config.ts` file and make the following few changes:
 
-```ts title="eslint.config.ts" showLineNumbers {5}
+```ts title="eslint.config.ts" showLineNumbers {5} {17}
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import js from '@eslint/js'
@@ -240,7 +240,7 @@ export default [
 
 Line 5: we import the ESLint **Linter** type
 
-Line X: we use the [satisfies operator](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html#the-satisfies-operator) (that got introduced in TypeScript 4.9) to tell Typescript that our default export will be an array of **Linter.Config**, each **ESLint Linter Config** contains information about which files should get included or ignored, custom rules configurations, you can give it a name and some more which we will see more in detail in the upcoming chapters
+Line 17: we use the [satisfies operator](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html#the-satisfies-operator) (that got introduced in TypeScript 4.9) to tell Typescript that our default export will be an array of **Linter.Config**, each **ESLint Linter Config** contains information about which files should get included or ignored, custom rules configurations, you can give it a name and some more which we will see more in detail in the upcoming chapters
 
 > [!NOTE]  
 > Because we added the types for `@eslint/eslintrc` package in the previous chapter we now have a typed FlatCompat (in case you want to check out what other options are available)  
@@ -279,7 +279,7 @@ There is one more problem left, the **next build** script uses **next lint** by 
 "scripts": {
     "dev": "next dev --turbopack",
     "dev-turbo": "next dev --turbopack",
-    "build": "npm run lint-nocache && next build",
+    "build": "npm run lint && next build",
     "start": "next start",
     "lint": "eslint --flag unstable_ts_config --cache --cache-location .next/cache/eslint/"
 },
@@ -300,15 +300,15 @@ eslint: {
 
 ### Adding even more scripts
 
-We could add more scripts related to linting, for example here we add a backup of the command that Next.js used, we also add a command without the use of a cache, the last two use different flags (to debug ESLint configurations and fix problems automatically)
+We are going to add two more scripts to our package.json and then document them in the readme
 
-First we update our `package.json` file (in the root) and add the following scripts:
+We update our `package.json` file (in the root) and add the following scripts:
 
-```json title="package.json" {4-8}
+```json title="package.json" showLineNumbers {6} {8-9}
 "scripts": {
     "dev": "next dev --turbopack",
     "dev-turbo": "next dev --turbopack",
-    "build": "npm run lint-nocache && next build",
+    "build": "npm run lint && next build",
     "start": "next start",
     "next-lint": "next lint",
     "lint": "eslint --flag unstable_ts_config --cache --cache-location .next/cache/eslint/",
@@ -316,6 +316,10 @@ First we update our `package.json` file (in the root) and add the following scri
     "lint-fix": "eslint --flag unstable_ts_config --fix"
 },
 ```
+
+Line 6: we add a backup of the command that Next.js used
+
+Lines 8 and 9: we  add a command for linting but without using the cache and a second command which will attempt to apply fixes automatically
 
 Then if you want you could update the README with these explanations:
 
@@ -360,8 +364,16 @@ Each configuration (row) is a disclosure widget, expand it and it will show you 
 
 If you want you can add those commands to your package json scripts:
 
-```json title="package.json"
+```json title="package.json" showLineNumbers {10-12}
 "scripts": {
+    "dev": "next dev --turbopack",
+    "dev-turbo": "next dev --turbopack",
+    "build": "npm run lint && next build",
+    "start": "next start",
+    "next-lint": "next lint",
+    "lint": "eslint --flag unstable_ts_config --cache --cache-location .next/cache/eslint/",
+    "lint-nocache": "eslint --flag unstable_ts_config",
+    "lint-fix": "eslint --flag unstable_ts_config --fix",
     "lint-debug-config": "eslint --flag unstable_ts_config --debug eslint.config.ts",
     "lint-print-config": "eslint --flag unstable_ts_config --print-config eslint.config.ts",
     "lint-inspect-config": "eslint --flag unstable_ts_config --inspect-config eslint.config.ts"
@@ -408,13 +420,14 @@ A failsafe way to spot those unused comments is by activating the ESLint Linter 
 },
 ```
 
-Line X: we add a new configuration object to our flat config to enable the **reportUnusedDisableDirectives** option
+> [!MORE]  
+> [ESLint "unused eslint-disable comments" documentation](https://eslint.org/docs/latest/use/configure/rules#report-unused-eslint-disable-comments)
 
 ## Ignore folders
 
 In this chapter we will add an **ignores** config to exclude some folders from linting, so that we end up with a file that looks like this:
 
-```ts title="eslint.config.ts" showLineNumbers {16-21}
+```ts title="eslint.config.ts" showLineNumbers {15-26} {30}
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import js from '@eslint/js'
@@ -448,13 +461,13 @@ export default [
 ] satisfies Linter.Config[]
 ```
 
-Line X: we create a new **ignoresConfig** flat config
+Line 15: we create a new **ignoresConfig** flat config
 
-Line X: we give our config a name (we lousily follow the [ESLint Configuration Naming Conventions](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-naming-conventions)), having a name will make it easier to find the config when using debugging tools (as we saw in the [ESLint debugging tools](#eslint-debugging-tools) chapter), feel free to for example replace "custom" in the name with the name of your project, that works well too
+Line 17: we give our config a name (we lousily follow the [ESLint Configuration Naming Conventions](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-naming-conventions)), having a name will make it easier to find the config when using debugging tools (as we saw in the [ESLint debugging tools](#eslint-debugging-tools) chapter), feel free to for example replace "custom" in the name with the name of your project, that works well too
 
-Lines X to Y: we use the **ignores** option to tell ESLint which folders it should exclude from linting
+Lines 20 to 24: we use the **ignores** option to tell ESLint which folders it should exclude from linting
 
-Line Z: we add the custom **ignoresConfig** to the default export
+Line 30: we add the custom **ignoresConfig** to the default export
 
 > [!TIP]  
 > when the **ignores** option gets used in its own configuration block, then it acts as global ignores, meaning it tells ESLint to always exclude those files from linting
@@ -478,7 +491,7 @@ npm i @eslint/compat@latest --save-dev --save-exact
 
 Then we change the code of our `eslint.config.ts` to this:
 
-```ts title="eslint.config.ts" showLineNumbers
+```ts title="eslint.config.ts" showLineNumbers {6} {15} {19}
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import js from '@eslint/js'
@@ -501,18 +514,20 @@ export default [
 ] satisfies Linter.Config[]
 ```
 
-Line X: we import the **includeIgnoreFile** function from ESLint compat package
+Line 6: we import the **includeIgnoreFile** function from ESLint compat package
 
-Line Y: we set the path to our gitignore file, which is at root of our project
+Line 15: we set the path to our gitignore file, which is at root of our project
 
-Line Z: we use the **includeIgnoreFile** function, which will scan the gitignore file content and turn it into a list of files and folders ESLint will **ignore**
+Line 19: we use the **includeIgnoreFile** function, which will scan the gitignore file content and turn it into a list of files and folders ESLint will **ignore**
 
 ## ESLint recommended
 
 The second custom config that we are going to add is an ESLint custom config, which help us get rid of some FlatCompat options:
 
-```ts title="eslint.config.ts" showLineNumbers {16-21}
-import eslintPlugin from '@eslint/js'
+```diff title="eslint.config.ts"
+-import path from 'node:path'
+-import { fileURLToPath } from 'node:url'
++import eslintPlugin from '@eslint/js'
 import { FlatCompat } from '@eslint/eslintrc'
 import type { Linter } from 'eslint'
 
@@ -546,9 +561,9 @@ export default [
 ] satisfies Linter.Config[]
 ```
 
-Lines A to B: first we remove two Node.js module imports as we will NOT need them anymore
+(Previously) lines 1 and 2: first we remove two Node.js module imports as we will NOT need them anymore
 
-Line X: we renamed the **@eslint/js** import from **js** to **eslintPlugin** for consistency (with the next plugin imports we will add soon)
+Line 1: we renamed the **@eslint/js** import from **js** to **eslintPlugin** for consistency (with the next plugin imports we will add soon)
 
 Lines C to D: we remove the **FlatCompat** options as the eslint config (that we are adding next) will take care of adding the recommended ESLint rules for Javascript (and Typescript) files
 
