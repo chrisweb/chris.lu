@@ -606,6 +606,16 @@ code[data-line-numbers-max-digits="3"]>[data-line]::before {
     border-left-color: transparent;
 }
 
+[data-line].remove {
+    background-color: #34151b;
+    border-left-color: #ff0035;
+}
+
+[data-line].add {
+    background-color: #2a4827;
+    border-left-color: #28ff00;
+}
+
 [data-highlighted-line] {
     background-color: #3f2046;
     border-left-color: var(--primary-light-color);
@@ -682,7 +692,7 @@ article,
     padding-left: var(--main-spacing);
     padding-right: var(--main-spacing);
     margin-bottom: calc(var(--main-spacing) * 2);
-    /* for mobile when a chain of characters is extremly long */
+    /* for mobile, when a chain of characters is extremely long */
     overflow-x: clip;
 }
 
