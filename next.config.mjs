@@ -3,7 +3,6 @@ import { withSentryConfig } from '@sentry/nextjs'
 //import WithBundleAnalyzer from '@next/bundle-analyzer'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 import createMdx from '@next/mdx'
-import { rehypePrettyCode } from 'rehype-pretty-code'
 import { remarkTableOfContents } from 'remark-table-of-contents'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
@@ -14,9 +13,11 @@ import { rehypeGithubAlerts } from 'rehype-github-alerts'
 import rehypeMDXImportMedia from 'rehype-mdx-import-media'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
+import { rehypePrettyCode } from 'rehype-pretty-code'
+import { transformerNotationDiff } from '@shikijs/transformers'
 
 const nextConfig = (phase) => {
-    
+
     // to use the bundle analyzer uncomment the following lines
     // then uncomment the return to use withBundleAnalyzer
     /*const withBundleAnalyzer = WithBundleAnalyzer({
@@ -39,6 +40,7 @@ const nextConfig = (phase) => {
             block: 'tsx',
             inline: 'shell',
         },
+        transformers: [transformerNotationDiff()],
     }
 
     // https://github.com/chrisweb/remark-table-of-contents#options
@@ -93,7 +95,7 @@ const nextConfig = (phase) => {
                     tagName: 'div',
                     properties: {
                         className: [
-                            'makrdown-alert-fake-border',
+                            'markdown-alert-fake-border',
                         ],
                     },
                     children: [
