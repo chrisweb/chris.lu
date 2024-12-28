@@ -524,10 +524,8 @@ Line 19: we use the **includeIgnoreFile** function, which will scan the gitignor
 
 The second custom config that we are going to add is an ESLint custom config, which help us get rid of some FlatCompat options:
 
-```diff title="eslint.config.ts"
--import path from 'node:path'
--import { fileURLToPath } from 'node:url'
-+import eslintPlugin from '@eslint/js'
+```ts title="eslint.config.ts" showLineNumbers {1} {5} {7-13} {30}
+import eslintPlugin from '@eslint/js'
 import { FlatCompat } from '@eslint/eslintrc'
 import type { Linter } from 'eslint'
 
@@ -561,21 +559,21 @@ export default [
 ] satisfies Linter.Config[]
 ```
 
-(Previously) lines 1 and 2: first we remove two Node.js module imports as we will NOT need them anymore
+Line 1: we renamed the **@eslint/js** import from **js** to **eslintPlugin** for consistency (with the next plugin imports we will add soon), we also removed the two Node.js modules (path & url) as we will NOT need them anymore
 
-Line 1: we renamed the **@eslint/js** import from **js** to **eslintPlugin** for consistency (with the next plugin imports we will add soon)
+Line 5: we remove the **FlatCompat** options as the custom eslint config (that we are adding next) will take care of adding the recommended ESLint rules for Javascript (and Typescript) files
 
-Lines C to D: we remove the **FlatCompat** options as the eslint config (that we are adding next) will take care of adding the recommended ESLint rules for Javascript (and Typescript) files
-
-Lines X to Y: we create a custom ESLint configuration to apply a recommended set of linting rules to our Javascript (and Typescript files):
+Lines 7 to 13: we create a custom ESLint configuration to apply a recommended set of linting rules to our Javascript (and Typescript files):
 
 * we add a name to our config
-* we set the files option to `'**/*.ts?(x)'` because now that converted the last 2 .mjs files (eslint.config.mjs and next.config.mjs) to typescript we don't need to include the .mts extension anymore (if your project still uses .mts files then change the files option to `'**/*.ts?(x)', '**/*.mjs'`), good to know (as mentioned in the comment) is that a **global** ignores needs to be in a config on it's own, a global ignores tells ESLint which files and folders should get excluded from linting 
+* we set the files option to `'**/*.ts?(x)'` because now that converted the last 2 .mjs files (eslint.config.mjs and next.config.mjs) to typescript we don't need to include the .mjs extension anymore (if your project still uses .mjs files then change the files option to `'**/*.ts?(x)', '**/*.mjs'`)
 
-Line Z: we add the custom **eslintConfig** to the default export
+Line 30: we add the custom **eslintConfig** to the default export
 
 > [!NOTE]  
-> the changes we did here, moved the usage of ESLint recommended from the **FlatCompat** options to a custom flat config as this is more future proof (as you will see in an upcoming chapter it is possible to get rid of the compat mode completely), but mainly because it ensures that the rules only get applied to Javascript (and Typescript) files, which matters as (in a future chapter) we will lint files (like .mdx) for which we do NOT want to apply these rules
+> we moved the usage of ESLint recommended from the **FlatCompat** options and moved it to a custom **flat config** (custom/eslint/recommended), because it allows us to use the flat config **files option**, to make sure that these rules will only get applied to Javascript (and Typescript) files and NOT to other files, like the MDX files we are about to create
+>  
+> it is also more future proof, as in an upcoming chapter we will get rid of the compat mode completely
 
 Congratulations 🎉 you just transitioned from classic (RC) configuration files to flat config and we converted our Next.js configuration file into a typescript file (next.config.ts), on the next page we will extend our setup by adding linting for Typescript files and also 
 
