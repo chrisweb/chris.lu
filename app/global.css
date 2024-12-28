@@ -944,7 +944,7 @@ make the text color a bit darker */
             0 100%);
 }
 
-.makrdown-alert-fake-border {
+.markdown-alert-fake-border {
     width: 100%;
     height: 100%;
     position: relative;
