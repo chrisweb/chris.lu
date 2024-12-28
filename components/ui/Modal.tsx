@@ -81,16 +81,18 @@ const UIModal: React.FC<IUIModalProps> = (props) => {
                 role="button"
                 tabIndex={0}
                 onClick={closeHandler}
-                onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
+                onKeyDown={(event) => {
+                    event.preventDefault()
+                    if (event.key === 'Enter' || event.key === 'Escape' || event.key === ' ') {
                         closeHandler()
                     }
                 }}
-            />
-            {withCloseButton && (
-                <ButtonWithIcon clickCallback={closeHandler} whichIcon={faClose} />
-            )}
-            {children}
+            >
+                {withCloseButton && (
+                    <ButtonWithIcon clickCallback={closeHandler} whichIcon={faClose} />
+                )}
+                {children}
+            </div>
         </dialog>,
         document.body
     )
