@@ -122,9 +122,12 @@ declare module 'vfile' {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const defaultDate = 'August 12, 2024'
+    const productionUrl = 'https://example.com'
+    const developmentUrl = 'http://localhost:' + (process.env.PORT || 3000)
+    const currentUrl = process.env.NODE_ENV === 'development' ? developmentUrl : productionUrl
 
     const siteMap: MetadataRoute.Sitemap = [{
-        url: 'https://example.com',
+        url: currentUrl,
         lastModified: new Date(defaultDate),
         changeFrequency: 'weekly',
         priority: 1,
@@ -144,7 +147,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
         const frontmatter = vfile.data.matter
 
-        const pageUrl = 'https://example.com' + page.replace('app', '').replaceAll('\\', '/').replace('/page.mdx', '')
+        const pageUrl = currentUrl + page.replace('app', '').replaceAll('\\', '/').replace('(tutorial_examples)/', '').replace('/page.mdx', '')
 
         siteMap.push({
             url: frontmatter?.permalink ? frontmatter.permalink : pageUrl,
