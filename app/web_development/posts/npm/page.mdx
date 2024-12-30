@@ -2,7 +2,7 @@
 title: npm & package.json
 keywords: ['npm', 'package.json', 'publishing', 'package']
 published: 2024-08-08T11:22:33.444Z
-modified: 2024-08-08T11:22:33.444Z
+modified: 2025-01-01T01:01:01.001Z
 permalink: https://chris.lu/web_development/posts/npm
 section: Web development
 ---
@@ -150,10 +150,43 @@ This will add the dependencies to your package.json as before, but the differenc
 
 #### VSCode extension for manual version updates
 
-To make manual updates of my dependencies easier, I use a VSCode extension called [versionlens](https://marketplace.visualstudio.com/items?itemName=pflannery.vscode-versionlens). I like this extension because when I open my package.json, it will fetch all the versions of the packages I have installed and tell me if a new version is available. If there is a new version and I want to use it, all I need to do is click on **↑ latest x.x.x** (where x.x.x stands for the new version number), and the version lens will insert the new version for me. When I'm done with updating the versions, I save the package.json and then install the new versions with the command `npm i`
+To make manual updates of my dependencies easier, I use a VSCode extension called [versionlens](https://marketplace.visualstudio.com/items?itemName=pflannery.vscode-versionlens). I like this extension because when I open my package.json, it will fetch all the versions of the packages I have installed and tell me if a new version is available. If there is a new version and I want to use it, all I need to do is click on **↑ latest x.x.x** (where x.x.x stands for the new version number), and the version lens will insert the new version for me. When I'm done with updating the versions, I save the package.json and then update everything using the `npm update` command
 
 > [!MORE]  
 > [VSCode "versionlens" extension](https://marketplace.visualstudio.com/items?itemName=pflannery.vscode-versionlens)  
+
+#### Npm cli to automatically update semver versions
+
+To not just update your dependencies but also their semver version in the package.json file, use the update command with the --save flag, like this: `npm update --save`. Without the save flag npm would only update versions in your package-lock.json
+
+> [!WARN]  
+> if you are using tags in your package.json instead of fixed versions, using the npm update with the save flag will replace the tags in your package.json with fixed versions, so if you use tags use the update command without the flag to only update the package-lock.json (according to the tags you have set in the package.json)
+
+> [!MORE]  
+> [npmjs.com "npm update" documentation](https://docs.npmjs.com/cli/v11/commands/npm-update)  
+
+#### missing binaries due to corrupted lock file
+
+I encountered a problem I wanted to highlight as it took me some time to figure out what was wrong (thank you vercel support for helping me out) where installing my dependencies in my CI/CD kept failing with weird error messages about packages failing to install:
+
+> unhandledRejection Error: binary for this platform/architecture not found!
+
+Usually if there is an integrity problem, you get a clear message like this one:
+
+> npm error code EINTEGRITY
+
+What caused the problem was a replace all I had done to change the version of a package. Instead of just replacing the version in the package.json I had also replaced matching versions in the package-lock.json. This meant that I now had a lock file where some packages had an updated version that was not matching the integrity hash anymore. This led to the unhandled rejection.
+
+So this is a reminder to myself, to make sure you never manually edit a package-lock.json. Instead if something is not right, you should delete the lock file (keep the package.json) and then use `npm i` to create a fresh package-lock.json.
+
+The package-lock.json file contains a list of all packages that got installed in your node_modules. Each module can have an integrity value:
+
+> integrity: A sha512 or sha1 Standard [Subresource Integrity](https://w3c.github.io/webappsec-subresource-integrity/) string for the artifact that was unpacked in this location. For git dependencies, this is the commit sha.
+
+The hash value gets used to verify that between the time it got added in your package-lock.json and the time you install the package in production (using the package-lock.json), the package has not been changed. Every change to content of the package would result in the verification hash to be different, which means the hash in your lock file would not match the current hash of the package and hence the suspicious package would not get installed
+
+> [!MORE]  
+> [npmjs.com "package-lock.json" documentation](https://docs.npmjs.com/cli/v11/configuring-npm/package-lock-json)  
 
 ### Git(Hub) URLs as Dependencies
 
