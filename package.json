@@ -52,7 +52,7 @@
         "glob": "11.0.0",
         "hast-util-from-html-isomorphic": "2.0.0",
         "next": "canary",
-        "postprocessing": "6.36.4",
+        "postprocessing": "6.36.5",
         "react": "canary",
         "react-dom": "canary",
         "react-swipeable": "7.0.2",
