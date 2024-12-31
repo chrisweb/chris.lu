@@ -86,7 +86,7 @@ npm i remark-gfm --save-exact
 
 Next, we edit our `next.config.mjs` configuration file to add the plugin to the `next/mdx` setup, like so:
 
-```js title="next.config.mjs" showLineNumbers {9} {46-49} {55} /[remarkGfm, remarkGfmOptions]/#special
+```js title="next.config.mjs" showLineNumbers {10} {47-50} {56} /[remarkGfm, remarkGfmOptions]/#special
 import { withSentryConfig } from '@sentry/nextjs';
 //import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
@@ -164,7 +164,7 @@ Now that we have added GitHub flavored markdown (gfm) support to our project we 
 
 We will do this by adding the remark-gfm plugin to the remark-lint configuration:
 
-```js title=".remarkrc.mjs" showLineNumbers {14-15} {19-20}
+```js title=".remarkrc.mjs" showLineNumbers {13} {16} {21} {41}
 // presets imports
 import remarkPresetLintRecommended from 'remark-preset-lint-recommended'
 import remarkPresetLintConsistent from 'remark-preset-lint-consistent'
@@ -177,6 +177,7 @@ import remarkLintNoUndefinedReferences from 'remark-lint-no-undefined-references
 import remarkLintLinkTitleStyle from 'remark-lint-link-title-style'
 import remarkLintMaximumLineLength from 'remark-lint-maximum-line-length'
 import remarkLintListItemSpacing from 'remark-lint-list-item-spacing'
+import remarkLintNoLiteralUrls from 'remark-lint-no-literal-urls'
 
 // remark plugins
 import remarkGfm from 'remark-gfm'
@@ -211,11 +212,13 @@ const config = {
 export default config
 ```
 
-Line X: we import the gfm plugin
+Line 13: we import a rule which we will disable on line 41
 
-Line X: we add the gfm plugin to the linting config
+Line 16: we import the gfm plugin
 
-Line X: we disable the [remark-lint-list-item-spacing](https://www.npmjs.com/package/remark-lint-list-item-spacing) rule as we now have **gfm autolink** support enabled
+Line 21: we add the gfm plugin to the linting config
+
+Line 41: we disable the [remark-lint-no-literal-urls](https://www.npmjs.com/package/remark-lint-no-literal-urls) rule as we now have **gfm autolink** support enabled
 
 This update will make sure that rules like [remark-lint-table-pipe-alignment](https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-table-pipe-alignment) (which checks if your table cell dividers are aligned) get applied
 
@@ -287,7 +290,7 @@ If you open the playground in the browser and inspect the HTML source, you will 
 
 It is, however, possible to customize the **checkboxes** of a **tasklist** using the `mdx-components.tsx` file that is in the root of our project:
 
-```tsx title="mdx-components.tsx" showLineNumbers {50-53}
+```tsx title="mdx-components.tsx" showLineNumbers {18} {56-59} /InputPropsType/#special
 import type { ComponentPropsWithoutRef } from 'react'
 import type { MDXComponents } from 'mdx/types'
 import BaseLink from '@/components/base/Link'
@@ -352,9 +355,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 }
 ```
 
-Line X: we create a new **InputPropsType**
+Line 18: we create a new **InputPropsType**
 
-Lines 50 to 53: we add type information to the input props, then we do a `console.log` to get an idea of what the props values are that we might get
+Lines 56 to 59: we add type information to the input props, then we do a `console.log` to get an idea of what the props values are that we might get
 
 If we now have the dev server running and reload the `http://localhost:3000/gfm_playground` page in our browser, we will see that in the VSCode terminal our `console.log` will print the following few lines:
 
@@ -437,7 +440,7 @@ Line 19: we create an input element of type checkbox and add all our attributes
 
 Now that we have our custom **checkbox component**, we can start using it in the `mdx-components.tsx` file, like so:
 
-```tsx title="mdx-components.tsx" showLineNumbers {7} {51}
+```tsx title="mdx-components.tsx" showLineNumbers {8} {58}
 import type { ComponentPropsWithoutRef } from 'react'
 import type { MDXComponents } from 'mdx/types'
 import BaseLink from '@/components/base/Link'
@@ -501,9 +504,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 }
 ```
 
-Line 7: we import our checkbox component
+Line 8: we import our checkbox component
 
-Line 51: we remove the previous code, then we add a function that checks if it the input field is of type checkbox, if it is we use our checkbox component and if it is NOT we just create a default input and pass the original props to it
+Line 58: we remove the previous code, then we add a function that checks if it the input field is of type checkbox, if it is we use our checkbox component and if it is NOT we just create a default input and pass the original props to it
 
 Of course, depending on your needs, what you would do now is update the **BaseCheckbox** onChange handler with some code to do something useful based on your needs, like for example, add code that uses a POST request to send some data to the server or add code that updates a value in the localstorage of the user's browser
 
@@ -616,7 +619,7 @@ If you launch the dev server and then open the playground URL `http://localhost:
 
 In the following example, we are going to change the label that is being used in the footnotes at the bottom, and we will change the element used for the footnotes label
 
-```js title="next.config.mjs" showLineNumbers {57-60}
+```js title="next.config.mjs" showLineNumbers {58-61} /remarkRehypeOptions/#special
 import { withSentryConfig } from '@sentry/nextjs';
 //import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
@@ -663,6 +666,11 @@ const nextConfig = (phase/*: string*/) => {
         maxDepth: 3,
     }
 
+    /** @type {import('remark-gfm').Options} */
+    const remarkGfmOptions = {
+        singleTilde: false,
+    }
+
     const withMDX = createMdx({
         extension: /\.mdx$/,
         options: {
@@ -677,7 +685,7 @@ const nextConfig = (phase/*: string*/) => {
     })
 ```
 
-Lines 57 to 60: we add the options for the footnotes to the **remarkRehypeOptions** object and NOT (as one might assume) to the **remarkGfmOptions** object (which is at lines 47 to 49)
+Lines 58 to 61: we add the options for the footnotes to the **remarkRehypeOptions** object and NOT (as one might assume) to the **remarkGfmOptions** object (which is at lines 48 to 50)
 
 If you launch the dev server then open the playground URL `http://localhost:3000/gfm_playground` in your browser, you will notice that the footnotes label changed from the default "Footnotes" to "Notes" (this can be useful if you have a website that has content in multiple languages and you want to translate the label), then we also changed the element of the label (which by default is a `<h2>{:html}`) to a `<span>{:html}`
 

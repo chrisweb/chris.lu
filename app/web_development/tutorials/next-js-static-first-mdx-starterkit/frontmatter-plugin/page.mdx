@@ -76,7 +76,7 @@ npm i remark-frontmatter remark-mdx-frontmatter --save-exact
 
 Next, we add the frontmatter plugins to our next/mdx configuration:
 
-```js title="next.config.mjs" showLineNumbers {11-12} {58} /remarkFrontmatter, remarkMdxFrontmatter/#special
+```js title="next.config.mjs" showLineNumbers {12-13} {54} /remarkFrontmatter, remarkMdxFrontmatter/#special
 import { withSentryConfig } from '@sentry/nextjs';
 //import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
@@ -140,9 +140,9 @@ const nextConfig = (phase/*: string*/) => {
     })
 ```
 
-Lines 11 to 12: we import the 2 frontmatter plugins
+Lines 12 to 13: we import the 2 frontmatter plugins
 
-Line 58: we add both to our remark plugins list
+Line 54: we add both to our remark plugins list
 
 > [!NOTE]  
 > Something I will not cover here, but if you want to go a step further and are interested in adding linting for the frontmatter part, then have a look at [remark-lint-frontmatter-schema](https://github.com/JulianCataldo/remark-lint-frontmatter-schema)  
@@ -244,7 +244,7 @@ If you launch use the `npm run lint` linting command you will see even more:
 
 To solve this problem need to add frontmatter as a plugin to our **remark lint configuration** file (that is in root of the project):
 
-```js title=".remarkrc.mjs" showLineNumbers {13} {34} 
+```js title=".remarkrc.mjs" showLineNumbers {16} {22} 
 // presets imports
 import remarkPresetLintRecommended from 'remark-preset-lint-consistent'
 import remarkPresetLintConsistent from 'remark-preset-lint-recommended'
@@ -293,9 +293,9 @@ const config = {
 export default config
 ```
 
-Line 13: we import the frontmatter plugin
+Line 16: we import the frontmatter plugin
 
-Line 34: we add the frontmatter plugin to the remark lint configuration
+Line 22: we add the frontmatter plugin to the remark lint configuration
 
 If you now run the linting process again the errors should be gone (if they are not gone yet, then you might want to [clear the ESLint cache](/web_development/tutorials/next-js-static-first-mdx-starterkit/eslint-mdx-plugin-and-remark-lint#clearing-the-eslint-cache)) and they should also disappear in VSCode (you might have to [restart the ESLint server](/web_development/tutorials/next-js-static-first-mdx-starterkit/linting-in-vscode-using-extensions#restarting-the-eslint-server-in-vscode) in VSCode to update the linting process)
 

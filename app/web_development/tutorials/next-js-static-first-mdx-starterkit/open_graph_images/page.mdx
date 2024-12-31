@@ -186,9 +186,9 @@ Line 3: we set a static title for all our opengraph images, this variable will b
 
 Lines 5 to 14: we export some variables that will tell Next.js metadata what values to use for the opengraph tags (the og:image tags which are related to the image)
 
-Lines 21 to 28: we use fetch to get both the font file and the background image
+Lines 18 to 24: we use fetch to get both the font file and the background image
 
-Lines 33 to 72: we use basic HTML and CSS to create the content of our opengraph image; we created a div that covers the whole width and height and used the background image to fill it; then we put a smaller div inside, using **position: absolute** to position it over the background; that div will also display the title; we finally made the background of the title div a bit darker using a black color with the opacity set 0.5 to make it semi transparent
+Lines 26 to 85: we use basic HTML and CSS to create the content of our opengraph image; we created a div that covers the whole width and height and used the background image to fill it; then we put a smaller div inside, using **position: absolute** to position it over the background; that div will also display the title; we finally made the background of the title div a bit darker using a black color with the opacity set 0.5 to make it semi transparent
 
 > [!NOTE]  
 > Btw did you notice how line 45 I turned a meme into a typescript comment? 😉
@@ -388,7 +388,7 @@ export default async function OGImage(props: OpenGraphImageProps) {
 
 The code is very similar to the code we used for the "static" version. One difference is that we removed the static `title` variable, and we also don't export the `sizes` variable anymore (those static exports get replaced by the usage of the **generateImageMetadata** function lines 17 to 27)
 
-Lines 11 to 15: we added an interface to strictly type the Image function props
+Lines 11 to 15: we added an interface for the Image function props
 
 Lines 17 to 27: we use the [generateImageMetadata](https://nextjs.org/docs/app/api-reference/functions/generate-image-metadata) function to create dynamic opengraph image metadata. The alt value will be dynamic because we use the `title` param (that contains the **title** value from our dynamic route segment)
 
@@ -459,11 +459,11 @@ Line 3: we import the notFound function from the next/navigation package; what t
 > In a Server Component, this will insert a <meta name="robots" content="noindex" /> meta tag and set the status code to 404.
 > In a Route Handler or Server Action, it will serve a 404 to the caller.
 
-Line 4: as we will deal with params, which are content the user can modify, we must make sure those values get sanitized before we use them as a file path or in a database query; another solution would be to use an allow list to exclude any dynamic value that does not match the values we in our allow list, which is what we will do in this example
+Line 9: as we will deal with params, which are content the user can modify, we must make sure those values get sanitized before we use them as a file path or in a database query; another solution would be to use an allow list to exclude any dynamic value that does not match the values we in our allow list, which is what we will do in this example
 
-Lines 6 to 20: we use the Next.js [generateMetadata](https://nextjs.org/docs/app/api-reference/functions/generate-metadata) function to get the title from the params; we then check if it is in our allow list and if it is valid we create the metadata
+Lines 11 to 29: we use the Next.js [generateMetadata](https://nextjs.org/docs/app/api-reference/functions/generate-metadata) function to get the title from the params; we then check if it is in our allow list and if it is valid we create the metadata
 
-Lines 28 to 41: we do the same "is in allow list" check again; if valid we use the title variable in our JSX; if invalid we use the notFound function from next/navigation to create a 404 response
+Lines 40 to 44: we do the same "is in allow list" check again; if valid we use the title variable in our JSX; if invalid we use the notFound function from next/navigation to create a 404 response
 
 Make sure the dev server is running, and then you can visit the `http://localhost:3000/blog/posts/foo` page and look at the dynamic opengraph image meta tags inside of `<head>{:html}` element, and to see the image itself visit `http://localhost:3000/blog/posts/foo/opengraph-image/blog_opengraph`
 

@@ -63,7 +63,7 @@ npm i rehype-slug --save-exact
 
 Now that the plugin is installed, we need to edit our Next.js 15 configuration file and add it to our MDX setup:
 
-```js title="next.config.mjs" showLineNumbers {7} {38} /rehypeSlug/2#special
+```js title="next.config.mjs" showLineNumbers {8} {39} /rehypeSlug/2#special
 import { withSentryConfig } from '@sentry/nextjs';
 //import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
@@ -107,9 +107,9 @@ const nextConfig = (phase/*: string*/) => {
     })
 ```
 
-Line 7: we import the **rehypeSlug** plugin
+Line 8: we import the **rehypeSlug** plugin
 
-Line 38: we add the plugin to our array of rehype plugins (in our MDX configuration)
+Line 39: we add the plugin to our array of rehype plugins (in our MDX configuration)
 
 And that's already it, the plugin is now operational
 

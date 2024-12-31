@@ -104,7 +104,7 @@ npm i rehype-pretty-code shiki --save-exact
 
 Next, we edit our `next.config.mjs` file (in the root of our project) to add the plugin configuration like so:
 
-```js title="next.config.mjs" showLineNumbers {5} {14} /rehypePrettyCode/2
+```js title="next.config.mjs" showLineNumbers {2} {6} {15} /rehypePrettyCode/
 import { withSentryConfig } from '@sentry/nextjs';
 //import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
@@ -126,7 +126,15 @@ const nextConfig = (phase/*: string*/) => {
 
 Line 2: as we went back to using Javascript for our next.config file, we need to comment out type imports (we keep them as we will transition back to Typescript as soon as the [next.config.ts has no support for ESM only packages](#no-nextconfigts) problem we discussed earlier is fixed)
 
-Line 3: As this is not Typescript code anymore, and we are importing a file (have a look at the Node.js documentation explaining why [file extensions are mandatory](https://nodejs.org/api/esm.html#mandatory-file-extensions) for more details), which is why we added the extension to the constants file path (`next/constants.js`)
+Line 3: As this is not Typescript code anymore, and we are importing a file (have a look at the Node.js documentation explaining why [file extensions are mandatory](https://nodejs.org/api/esm.html#mandatory-file-extensions) for more details), which is why we added the extension to the constants file path (to become `next/constants.js`)
+
+Without the file extension you would get this error in your terminal as soon as you try to launch the development server:
+
+```shell
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'next\constants' imported from next.config.mjs
+
+Did you mean to import "next/constants.js"
+```
 
 Line 6: we import our new **rehypePrettyCode** plugin
 
@@ -151,7 +159,7 @@ Next, we will configure the rehype plugin to use a VSCode theme.
 
 To add a theme that **shiki** supports, all we need to do is edit the **rehype-pretty-code** plugin configuration in our `next.config.mjs` file, like so:
 
-```js title="next.config.mjs" showLineNumbers {9}#special {10-12} {19} /[rehypePrettyCode, rehypePrettyCodeOptions]/#special
+```js title="next.config.mjs" showLineNumbers {10}#special {11-13} {20} /rehypePrettyCodeOptions/#special
 import { withSentryConfig } from '@sentry/nextjs';
 //import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
@@ -222,7 +230,7 @@ The repository gets added to your node_modules like any other package, and the p
 
 Then you go into your Next.js configuration file and change the code to this:
 
-```js title="next.config.mjs" showLineNumbers {6} {10-11} {15} /JSON.parse(themeFileContent)/
+```js title="next.config.mjs" showLineNumbers {7} {11-12} {16} /JSON.parse(themeFileContent)/
 import { withSentryConfig } from '@sentry/nextjs';
 //import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
@@ -251,13 +259,13 @@ const nextConfig = (phase/*: string*/) => {
     })
 ```
 
-Line 6: we import the **readFileSync** function from the Node.js [file system module (fs)](https://nodejs.org/api/fs.html)
+Line 7: we import the **readFileSync** function from the Node.js [file system module (fs)](https://nodejs.org/api/fs.html)
 
-Line 10: we create a URL using the path to the location of our theme in the node_modules folder
+Line 11: we create a URL using the path to the location of our theme in the node_modules folder
 
-Line 11: we use the **readFileSync** to read the content of the theme file
+Line 12: we use the **readFileSync** to read the content of the theme file
 
-Line 15: we parse the themes json file content using the javascript **JSON parser** before passing it to the plugin theme configuration option
+Line 16: we parse the themes json file content using the javascript **JSON parser** before passing it to the plugin theme configuration option
 
 Now have another look at the playground, and you will notice that this time, the code is highlighted using the colors of the One Dark Pro theme:
 
@@ -615,7 +623,7 @@ There is a second option to specify the programming language. This option is hel
 
 In this case, you can use the rehype pretty code configuration to set a default language:
 
-```js title="next.config.mjs" showLineNumbers {17-19}
+```js title="next.config.mjs" showLineNumbers {18-20}
 import { withSentryConfig } from '@sentry/nextjs';
 //import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
@@ -639,7 +647,7 @@ const nextConfig = (phase/*: string*/) => {
     }
 ```
 
-Lines 17 to 19: we set the rehype pretty code `defaultLang` configuration option for a code `block` to `js`
+Lines 18 to 20: we set the rehype pretty code `defaultLang` configuration option for a code `block` to `js`
 
 Now that we have a default language set, we can remove the language flag we had after the 3 backticks of our fenced code block, like so:
 
@@ -766,7 +774,7 @@ Some text `variable` some more text `helloWorld()` even more text
 
 Instead, we are going to use the **2nd option** which consists of setting a **default language** in our Next.js **configuration** file:
 
-```js title="next.config.mjs" showLineNumbers {19}
+```js title="next.config.mjs" showLineNumbers {20}
 import { withSentryConfig } from '@sentry/nextjs';
 //import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
@@ -791,7 +799,7 @@ const nextConfig = (phase/*: string*/) => {
     }
 ```
 
-Line 19: we add the `inline` option inside of the `defaultLang` configuration for rehype pretty code and set its value to `js`
+Line 20: we add the `inline` option inside of the `defaultLang` configuration for rehype pretty code and set its value to `js`
 
 If we look at our playground in the browser, we see that the 2nd option works well, too.
 
@@ -838,7 +846,7 @@ There is one last feature I want to bring up, which is **token aliases**, if you
 
 To add those aliases to our setup, we need to edit our `rehypePrettyCodeOptions` configuration like so:
 
-```js title="next.config.mjs" showLineNumbers{13} {20-28}
+```js title="next.config.mjs" showLineNumbers{13} {9-17}
 /** @type {import('rehype-pretty-code').Options} */
 const rehypePrettyCodeOptions = {
     theme: JSON.parse(themeFileContent),
