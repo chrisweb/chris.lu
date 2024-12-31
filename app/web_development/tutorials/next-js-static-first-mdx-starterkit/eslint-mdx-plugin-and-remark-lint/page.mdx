@@ -59,7 +59,7 @@ npm i eslint-plugin-mdx@latest --save-dev --save-exact
 
 Then we can update our ESLint configuration and to add the MDX plugin:
 
-```ts title="eslint.config.ts" showLineNumbers
+```ts title="eslint.config.ts" showLineNumbers {12} {130-153} /lintCodeBlocks/#special {160}
 import eslintPlugin from '@eslint/js'
 import tseslint, { configs as tseslintConfigs } from 'typescript-eslint'
 import type { FlatConfig } from '@typescript-eslint/utils/ts-eslint'
@@ -223,13 +223,13 @@ export default [
 ] satisfies FlatConfig.Config[]
 ```
 
-Line X: we import the eslint plugin mdx
+Line 12: we import the eslint plugin mdx
 
-Lines X to X: we create a mdxConfig (config array) with two configurations one for mdx content and a second config for the content of markdown codeblocks (which you might have in your mdx documents)
+Lines 130 to 153: we create a mdxConfig (config array) with two configurations one for mdx content and a second config for the content of markdown codeblocks (which you might have in your mdx documents)
 
-Line X: Because off performance problems (linting process was very long) I decided to disable linting of codeblocks content by setting the **lintCodeBlocks** option in the mdx config to **false**. I left the second config MDX config (for codeblocks content) unchanged as we might use it in the future with a faster parser. If you want to lint the content of codeblocks, make sure to set the **lintCodeBlocks** option to **true**
+Line 139: Because off performance problems (linting process was very long) I decided to disable linting of codeblocks content by setting the **lintCodeBlocks** option in the mdx config to **false**. I left the second config MDX config (for codeblocks content) unchanged as we might use it in the future with a faster parser. If you want to lint the content of codeblocks, make sure to set the **lintCodeBlocks** option to **true**
 
-Line X we add the **mdxConfig** to the config export
+Line 160 we add the **mdxConfig** to the config export
 
 Side note: eslint-mdx already had a [support flat config PR #468](https://github.com/mdx-js/eslint-mdx/pull/468) merged in Aug. 2023 😮
 
@@ -342,7 +342,7 @@ We had to do a lot of changes to get this new linting setup up and running, but 
 
 To **disable remark-lint rules** we added by using **MDX plugin** you do **NOT** specify the **rule name**:
 
-```mdx title="THIS EXAMPLE IS WRONG"
+```mdx title="this comment won't work:"
 {/* eslint-disable-next-line remark-lint-no-undefined-references) */}
 > [Info - 8:41:03 PM] ESLint server is running.
 ```
@@ -357,7 +357,7 @@ In **MDX** files to add an **eslint-disable** comment, you need to use **JSX com
 
 So if we do both things, we get something like this:
 
-```mdx
+```mdx title="eslint disable for remark lint rules:"
 {/* eslint-disable-next-line mdx/remark */}
 > [Info - 8:41:03 PM] ESLint server is running.
 ```
