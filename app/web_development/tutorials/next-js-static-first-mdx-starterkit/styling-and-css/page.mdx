@@ -98,7 +98,7 @@ Next, in the `UI` folder, we create a new `button.module.css` file and add the f
 
 And then we create a second `Button.tsx` file (also in the `UI` folder) with the following content:
 
-```tsx title="/components/tutorial_examples/UI/Button.tsx" showLineNumbers
+```tsx title="/components/tutorial_examples/UI/Button.tsx" showLineNumbers /.reset/#special
 import styles from './button.module.css'
 
 const UIButton: React.FC = () => {
@@ -121,7 +121,7 @@ Then we go into the `/app/(tutorial_examples)` folder and create a new `styling`
 
 Then, in the `styling` folder, we create a new `page.tsx` file and paste the following content into it:
 
-```tsx title="/app/(tutorial_examples)/styling/page.tsx" showLineNumbers
+```tsx title="/app/(tutorial_examples)/styling/page.tsx" showLineNumbers /UIButton/#special
 import UIButton from '@/components/tutorial_examples/UI/Button'
 
 export default function StylingExamplePage() {
@@ -204,7 +204,7 @@ Then we add the second class to our CSS Module:
 
 If you want to use the element **id** instead of a **class** to style an element, you can do it like this:
 
-```tsx title="/components/tutorial_examples/UI/Button.tsx"  showLineNumbers{6} /styles.myIdStyle/#special
+```tsx title="/components/tutorial_examples/UI/Button.tsx" showLineNumbers{6} /styles.myIdStyle/#special
 <button id={styles.myIdStyle} className={`${styles.reset} ${styles.core}`}>
 ```
 
@@ -239,7 +239,7 @@ Here are a few more things about CSS Modules worth knowing:
 
 The UI button we just created is an oversimplified version of a button component, in a real project, we would probably write something a little more useful like this:
 
-```tsx title="/components/tutorial_examples/UI/Button.tsx" showLineNumbers
+```tsx title="/components/tutorial_examples/UI/Button.tsx" showLineNumbers /'use client'/
 'use client'
 
 import type { PropsWithChildren } from 'react'
@@ -334,9 +334,9 @@ CSS Modules are perfect for styling components and even for styling the content 
 
 As we saw in the previous chapter, you can add classes and use the id in CSS Modules, but there is one thing you can't use in CSS Modules, and that's the [Element type selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/Type_selectors)
 
-Let's (re-)open the CSS Module (that we created for our button) and add some styling for the button by using the **`button` type selector**, like so:
+Let's (re-)open the CSS Module (that we created for our button):
 
-```css title="/components/tutorial_examples/UI/button.module.css" {14-16}
+```css title="/components/tutorial_examples/UI/button.module.css" showLineNumbers {14-16}
 .reset {
     background: none;
     border: none;
@@ -354,6 +354,8 @@ button {
     color: blue;
 }
 ```
+
+Lines 14 to 16: we add some styling for the button by using the **`button` type selector**
 
 Then make sure your dev server is running (using the `npm run dev` command), and you will see that you get an error in your terminal:
 
@@ -539,7 +541,7 @@ Lines 112 to 122: we set the margin for the headings, same as for the paragraph(
  
 Now, to apply the global styles to our content, we are going to import the `global.css` inside of our **root layout** (located in the `/app` folder) like so:
 
-```tsx title="/app/layout.tsx" showLineNumbers {1}
+```tsx title="/app/layout.tsx" showLineNumbers {1} {2} {17-23}
 import './global.css'
 import { Metadata } from 'next'
 
