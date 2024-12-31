@@ -121,11 +121,11 @@ The MDX Rust compiler ([mdxjs-rs](https://github.com/wooorm/mdxjs-rs)) is writte
 
 I you are NOT interested in the details you can jump to the [tldr](#tldr) summary else read on:
 
-**Experiment 1:** **mdxRs OFF** and **Turbopack OFF** and **plugins get imported** in next.config
+<span className="neonBlueHighlightedText">Experiment 1:</span> **mdxRs OFF** and **Turbopack OFF** and **plugins get imported** in next.config
 
 Result: plugins work, you use a compile and build pipeline that is fully written in Javascript, it is NOT fast but it works
 
-**Experiment 2:** for some time the Next.js MDX documentation has a chapter to encourage you to try out the experimental **mdxRs** option, this time **mdxRs ON** and **Turbopack OFF** and **plugins get imported** in next.config
+<span className="neonBlueHighlightedText">Experiment 2:</span> for some time the Next.js MDX documentation has a chapter to encourage you to try out the experimental **mdxRs** option, this time **mdxRs ON** and **Turbopack OFF** and **plugins get imported** in next.config
 
 Result: plugin(s) loading silently fails
 
@@ -142,7 +142,7 @@ Even if mdxjs-rs (markdown-rs) had support for plugins, I assume that you would 
 > [!NOTE]  
 > markdown-rs has an Issue that tracks the [Enable custom plugins #32](https://github.com/wooorm/markdown-rs/issues/32) feature, which you may want to subscribe to if you are interested in getting notifications about the progress
 
-**Experiment 3:** now we also enable **Turbopack**, which gives us **mdxRs ON** and **Turbopack ON** and **plugins get imported** in next.config
+<span className="neonBlueHighlightedText">Experiment 3:</span> now we also enable **Turbopack**, which gives us **mdxRs ON** and **Turbopack ON** and **plugins get imported** in next.config
 
 Result: Error: loader @next\mdx\mdx-rs-loader.js for match "*.mdx" does not have serializable options. Ensure that options passed are plain JavaScript objects and values.
 
@@ -150,7 +150,7 @@ We get an Error from SWC (which has detected that we use Turbopack). It did an a
 
 When using [MDX plugins with Turbopack](https://nextjs.org/docs/app/building-your-application/configuring/mdx#using-plugins-with-turbopack), the plugin options MUST be serializable. As Turbopack is written in Rust, you can't pass Javascript functions to it, but you can pass it a text string (even if it does NOT know that this string is a serialized Javascript object).
 
-**Experiment 4:** we convert the plugin import to using the plugin name (a string), so **mdxRs ON** and **Turbopack ON** and **plugin name as string** in next.config
+<span className="neonBlueHighlightedText">Experiment 4:</span> we convert the plugin import to using the plugin name (a string), so **mdxRs ON** and **Turbopack ON** and **plugin name as string** in next.config
 
 Result: again plugin(s) loading silently fails
 
@@ -167,7 +167,7 @@ But wait, isn't that exactly what we just did? Yes it is... The plugins silently
 >  
 > In Next.js < 15.1, @next/mdx will not have the new loader and instead it will use the [@mdx-js/loader](https://mdxjs.com/packages/loader/) directly
 
-**Experiment 5:** we disable mdxRs, this time we have **mdxRs OFF** and **Turbopack ON** and **plugin name as string** in next.config
+<span className="neonBlueHighlightedText">Experiment 5:</span> we disable mdxRs, this time we have **mdxRs OFF** and **Turbopack ON** and **plugin name as string** in next.config
 
 Result: TypeError: Expected usable value, not `rehype-slug`
 
@@ -197,7 +197,7 @@ const withMDX = createMDX({
 })
 ```
 
-**Experiment 6:** same setup but this we put the plugin name (string) into an array (even though it has no options)
+<span className="neonBlueHighlightedText">Experiment 6:</span> same setup but this we put the plugin name (string) into an array (even though it has no options)
 
 This is when I bumped into something I assume is a bug on windows:
 
