@@ -99,7 +99,7 @@ Option 2: If you have already set custom settings for your VSCode workspace, the
 
 Now open the `.vscode/settings.json` file and add the following settings for our ESLint extension:
 
-```json title="/.vscode/settings.json" showLineNumbers {3-21} /,/1#special
+```json title="/.vscode/settings.json" showLineNumbers {3-14} /,/1#special
 {
     "typescript.tsdk": "node_modules\\typescript\\lib",
     "eslint.debug": true,
@@ -294,7 +294,7 @@ PATH_TO_MY_PROJECT\tests\eslint\content.mdx
 
 Before you commit, there is one last thing we need to do, which is to exclude our tests folder from linting by adding it to the **ignoresConfig** in our `eslint.config.ts` file, like this:
 
-```js title="eslint.config.ts"
+```js title="eslint.config.ts" showLineNumbers {10-15}
 const ignoresConfig = [
     {
         name: 'custom/eslint/ignores',
@@ -315,7 +315,7 @@ const ignoresConfig = [
 ] as FlatConfig.Config[]
 ```
 
-By adding 'tests/eslint/' to the **ignores** list, we ensure that the linting process will not lint those files when we do a deployment and hence prevent our build process from completing
+Lines 10 to 15: by adding 'tests/eslint/' to the **ignores** list, we ensure that the linting process will not lint those files when we do a deployment and hence prevent our build process from completing
 
 If later you want to run the tests (in development) again, you only need to comment this line out (and eventually [restart the ESLint server in VSCode](#restarting-the-eslint-server-in-vscode) for it to take effect)
 
