@@ -72,7 +72,7 @@ In the next chapter we will use the next/mdx `mdx-components.tsx` file to add a 
 
 First, open the `mdx-components.tsx` (which is in the root of your project) and add an entry for each headline (replace the commented out example), like so:
 
-```tsx title="mdx-components.tsx" showLineNumbers {12-16}
+```tsx title="mdx-components.tsx" showLineNumbers {1} {9} {15-19}
 import type { ComponentPropsWithoutRef } from 'react'
 import type { MDXComponents } from 'mdx/types'
 
@@ -99,9 +99,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
 Line 1: we import the ComponentPropsWithoutRef type from React, this will allow us to add types for the props of each MDX component (which are React components with NO ref)
 
-Line X: we create a props type for components, we use the **ComponentPropsWithoutRef type** from react and as it is a **generic** type that we set to a list (`'ul'`) **element type**
+Line 9: we create a props type for components, we use the **ComponentPropsWithoutRef type** from react and as it is a **generic** type that we set to a list (`'ul'`) **element type**
 
-Lines 12 to 16: we have created a simple custom component for **ul lists** and we used the **ListPropsType** to add type information for the list component props
+Lines 15 to 19: we create a simple custom component for **ul lists** and we used the **ListPropsType** to add type information for the list component props
 
 When you use mdx-components, then the markdown parser will first turn the markdown list into a list (`<ul>`) component, we then use the mdx-components file to further transform the list component by adding a custom `listContainer` CSS class
 

@@ -166,7 +166,7 @@ The SVG icon that I used is from [icons.getbootstrap.com](https://icons.getboots
 
 Next, open the `mdx-components.tsx` (which is in the root of your project) again, and add a second mdx component to customize the anchor elements, like so:
 
-```tsx title="mdx-components.tsx" showLineNumbers {2-3} {19-23}
+```tsx title="mdx-components.tsx" showLineNumbers {2-3} {12} {23-27}
 import type { ComponentPropsWithoutRef } from 'react'
 import type { MDXComponents } from 'mdx/types'
 import BaseLink from '@/components/base/Link'
@@ -201,9 +201,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
 Lines 2 to 3: we import our custom **BaseLink** component and the **Route** type from Next to strictly type the link href
 
-Line X: we add a custom component type, this time we use the generic type to specify it is an anchor element (`'a'`)
+Line 12: we add a custom component type, this time we use the generic type to specify it is an anchor element (`'a'`)
 
-Lines 19 to 23: we first use our newly created type to add type information to the props, we use the mdx-components to replace each anchor component with our custom BaseLink component, this optimization will make sure all our links use the Next.js router and we will be able to further customize how links get displayed
+Lines 23 to 27: we first use our newly created type to add type information to the props, we use the mdx-components to replace each anchor component with our custom BaseLink component, this optimization will make sure all our links use the Next.js router and we will be able to further customize how links get displayed
 
 ## External icon styling in the global.css
 

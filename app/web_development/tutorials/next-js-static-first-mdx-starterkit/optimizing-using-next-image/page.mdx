@@ -120,7 +120,7 @@ This is the eslint **jsx-a11y** plugin telling us that it is recommended always 
 
 So let's first do that by adding an alt text like this:
 
-```mdx title="/app/app/(tutorial_examples)/mdx-components_playground/page.tsx" showLineNumbers{16} /alt=/#special
+```mdx title="/app/app/(tutorial_examples)/mdx-components_playground/page.tsx" showLineNumbers{16} /alt/#special
 <Image src="/images/playground_test.jpg" alt="Street at night, the wet floor has reflections of the bright lights from multiple billboards and neon signs, one prominent billboard features an advertisement for the TV series Stranger Things 2" />
 ```
 
@@ -138,7 +138,7 @@ As the documentation for next/image tells us:
 
 If we fix this error, we will get another one that tells us that the height is required, too, so let's set the width and height values manually like so:
 
-```mdx title="/app/(tutorial_examples)/mdx-components_playground/page.tsx" showLineNumbers{16} /width="200" height="200"/#special
+```mdx title="/app/(tutorial_examples)/mdx-components_playground/page.tsx" showLineNumbers{16} /width="1200" height="750"/#special
 <Image src="/images/playground_test.jpg" width="1200" height="750" alt="Street at night, the wet floor has reflections of the bright lights from multiple billboards and neon signs, one prominent billboard features an advertisement for the TV series Stranger Things 2" />
 ```
 
@@ -195,7 +195,7 @@ The problem we are not solving, is the second problem of having to do something 
 
 Let's edit our playground page once more and add the image import like this:
 
-```md title="/app/(tutorial_examples)/mdx-components_playground/page.mdx" showLineNumbers {2} /{PlaygroundTestImage}/#special
+```md title="/app/(tutorial_examples)/mdx-components_playground/page.mdx" showLineNumbers {2} {17} /{PlaygroundTestImage}/#special
 import Image from 'next/image'
 import PlaygroundTestImage from '@/public/images/playground_test.jpg'
 
@@ -220,14 +220,14 @@ import PlaygroundTestImage from '@/public/images/playground_test.jpg'
 
 Line 2: we import the image (using a the same syntax we use to import code)
 
+Line 17: we replace the image path with the variable we used in the import, and we remove the width and height we set manually in the previous example, but we keep the alt attribute
+
 > [!NOTE]  
 > In the previous example, when we added the path for the image, it was possible to omit the **public** folder and just write `/images/playground_test.jpg`
 >  
 > This is because we actually set the src prop of the Next Image component, which will assume your static files are in the **public** folder
 >  
 > However, when using **imports**, you need to use the **full path**, including public like so `/public/images/playground_test.jpg`
-
-Line 17: we replace the image path with the variable we used in the import, and we remove the width and height we set manually in the previous example, but we keep the alt attribute
 
 ### Improved cache control
 
@@ -287,7 +287,7 @@ npm i rehype-mdx-import-media --save-exact
 
 Now that the plugin is installed, we need to update the Next.js configuration `next.config.ts` file (which is at the root of the project) file to add it to the MDX plugins list
 
-```js title="next.config.ts" showLineNumbers {4} /rehypeMDXImportMedia/#special
+```js title="next.config.ts" showLineNumbers {5} {14} /rehypeMDXImportMedia/#special
 import { withSentryConfig } from '@sentry/nextjs';
 import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
@@ -306,15 +306,15 @@ const nextConfig = (phase: string) => {
     })
 ```
 
-Line 4: we import the **rehype-mdx-import-media** plugin
+Line 5: we import the **rehype-mdx-import-media** plugin
 
-Line 12: we add the **rehypeMDXImportMedia** plugin to the **rehypePlugins** list of our MDX configuration
+Line 14: we add the **rehypeMDXImportMedia** plugin to the **rehypePlugins** list of our MDX configuration
 
 Next, we are going to create a simple **BaseImage** component, similar to what we did earlier for the links
 
 Go into the `/components/base` folder we created earlier, then create a new `Image.tsx` file and add the following code:
 
-```tsx title="/components/base/Image.tsx" showLineNumbers {1} {2} {4} {11} {11-13}
+```tsx title="/components/base/Image.tsx" showLineNumbers {1} {2} {4} {10}#special {11} {11-13}
 import Image from 'next/image'
 import type { ImageProps } from 'next/image'
 
@@ -347,7 +347,7 @@ Lines 11 to 13: we use Next.js **Image** component and pass the **imageProps** t
 
 Finally, we open the `mdx-components.tsx` file (which is in the root of your project) again to add a third mdx component that will use our new **BaseImage** component, like so:
 
-```tsx title="mdx-components.tsx" showLineNumbers {4-5} {26}
+```tsx title="mdx-components.tsx" showLineNumbers {5-6} {15} {31}
 import type { ComponentPropsWithoutRef } from 'react'
 import type { MDXComponents } from 'mdx/types'
 import BaseLink from '@/components/base/Link'
@@ -384,15 +384,15 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 }
 ```
 
-Lines 4 to 5: we import our custom **BaseImage** component that we just created, and we import the **ImageProps** type from next/image
+Lines 5 to 6: we import our custom **BaseImage** component that we just created, and we import the **ImageProps** type from next/image
 
-Line X: we add a comment to future us know that unlike other mdx components, for the image component we will use the next/image type, which is why we did NOT have to create a custom one ourself
+Line 15: we add a comment to future us know that unlike other mdx components, for the image component we will use the next/image type, which is why we did NOT have to create a custom one ourself
 
-Line 26: we specify that for each markdown image that got transformed into an HTML `<img>{:html}` element, we want to use our custom BaseImage component
+Line 31: we specify that for each markdown image that got transformed into an HTML `<img>{:html}` element, we want to use our custom **BaseImage** component instead
 
 Phew, that was a lot of code, but trust me, it will be worth it, we just have one more thing to do, and that is to update our playground, like so:
 
-```md title="/app/(tutorial_examples)/mdx-components_playground/page.mdx" showLineNumbers {2} /{PlaygroundTestImage}/#special
+```md title="/app/(tutorial_examples)/mdx-components_playground/page.mdx" showLineNumbers {14} /{PlaygroundTestImage}/#special
 <article>
 
 * foo
@@ -412,7 +412,7 @@ Phew, that was a lot of code, but trust me, it will be worth it, we just have on
 
 ```
 
-On top we have removed the import of **next/image** from the playground MDX document as it is now gets used inside of our `mdx-components.tsx` file, this is great because it means we will NOT have to import next/image into every MDX document in which we have images
+We have removed the import of **next/image** from the playground MDX document as it is now gets used inside of our `mdx-components.tsx` file, this is great because it means we will NOT have to import next/image into every MDX document in which we have images
 
 We have also removed the image static import we had created manually earlier as we have now installed and configured the new **rehype-mdx-import-media** plugin, which will parse our MDX documents, find image (media) paths, and convert them to static imports, which it will insert into the document
 
@@ -474,7 +474,7 @@ We know by now that MDX is markdown + JSX, but VSCode (as of now, sees things a 
 
 I recommend you open the `.vscode/settings.json` VSCode workspace settings file (that we already used in one of the first steps of this tutorial to tell VSCode to use the typescript version that is in our workspace) and add the following entry to it:
 
-```json title=".vscode/settings.json" showLineNumbers /,/14#special {22-24}
+```json title=".vscode/settings.json" showLineNumbers /,/9#special {15-17}
 {
     "typescript.tsdk": "node_modules\\typescript\\lib",
     "eslint.debug": true,
@@ -495,7 +495,9 @@ I recommend you open the `.vscode/settings.json` VSCode workspace settings file 
 }
 ```
 
-Line 21 we add a comma and then lines 22 to 24 we specify that we want VSCode to treat MDX files as if they were markdown (this will not change how Next.js renders your content or disable JSX, your content will still be MDX, it just tells VSCode to activate its markdown features when editing an MDX file)
+Line 14 we add a comma
+
+Lines 15 to 17: we specify that we want VSCode to treat MDX files as if they were markdown (this will not change how Next.js renders your content or disable JSX, your content will still be MDX, it just tells VSCode to activate its markdown features when editing an MDX file)
 
 Now save the `.vscode/settings.json` file, and then to make sure that VSCode takes the changes into account, I recommend closing the `page.mdx` file and reopening it.
 
@@ -586,7 +588,7 @@ This means that even though our source file is a [JPEG](https://web.dev/learn/im
 
 To tell next/image to convert images to **avif** as well, we need to edit our **nextConfigOptions** in the `next.config.mjs` like this:
 
-```js title="next.config.mjs" showLineNumbers {45-48}
+```js title="next.config.mjs" showLineNumbers {49-52}
 import { withSentryConfig } from '@sentry/nextjs';
 import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
@@ -646,7 +648,7 @@ const nextConfig = (phase: string) => {
 }
 ```
 
-Lines 45 to 48: we add a new entry for images to our configuration and set the `format` option value to `['image/avif', 'image/webp']`
+Lines 49 to 52: we add a new entry for images to our configuration and set the `format` option value to `['image/avif', 'image/webp']`
 
 Now open the playground page in your browser (a browser that has support for avif files), and look at the response headers of the image. You will notice that the **Content-Disposition** has a filename with the .avif extension, and the **Content-Type** is now **image/avif**:
 
@@ -745,7 +747,7 @@ Lines 4 to 31: we add a **extractImageType** function that will extract the imag
 
 Line 37: we call our new **extractImageType** function to get the image type
 
-Lines 40 to 49 (and 56 to 57): we check if the type equals **banner**, and if it does, we set the **priority** property on the image
+Lines 40 to 49 (and 56 to 57): we check if the type equals **banner**, and if it does, we set the **priority** property on the image, if it does not match any specific type we just create a default Next image (you can later customize the default image to your liking)
 
 > [!NOTE]  
 > We can later extend this feature to check for other types; by adding more checks for new keywords
@@ -774,7 +776,7 @@ Now, all we need to do is update the title of our markdown image element and use
 
 ```
 
-Line 14: we added the `{ banner }` keyword (surrounded by curly brackets) to our image so that our **BaseImage** component knows that it should add the **priority** property.
+Line 14 (at the very end): we added the `{ banner }` keyword (surrounded by curly brackets) to our image so that our **BaseImage** component knows that it should add the **priority** property.
 
 If you go back into the browser and hover over the image, you should see the title appear, but it won't include the `{ banner }` keyword, as it got stripped from the title.
 
