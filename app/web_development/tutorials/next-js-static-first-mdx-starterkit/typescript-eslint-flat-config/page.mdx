@@ -64,7 +64,7 @@ npm i typescript-eslint@latest --save-dev --save-exact
 
 Next we will fine tune our typescript linting by adding a **custom/typescript-eslint/recommended** config:
 
-```ts title="eslint.config.ts" showLineNumbers {4-5}
+```ts title="eslint.config.ts" showLineNumbers {3} {4} /FlatConfig/#special {29} {31} {32} {33-45} {47-59} {65-67} /warnOnUnsupportedTypeScriptVersion/#special /disableTypeChecked/#special {72} {76} 
 import eslintPlugin from '@eslint/js'
 import { FlatCompat } from '@eslint/eslintrc'
 import tseslint, { configs as tseslintConfigs } from 'typescript-eslint'
@@ -91,7 +91,7 @@ const ignoresConfig = [
             'public/',
         ]
     },
-] as Linter.Config[]
+] as FlatConfig.Config[]
 
 const tseslintConfig = tseslint.config(
     {
@@ -143,17 +143,17 @@ export default [
 ] satisfies FlatConfig.Config[]
 ```
 
-Line X: we import typescript-eslint (which we installed in the previous step)
+Line 3: we import typescript-eslint (which we installed in the previous step)
 
-Line Y: we import the **Config** type from the **@typescript-eslint** utilities (which we will use to replace the [type from the ESLint package](https://eslint.org/docs/latest/use/configure/configuration-files#typescript-configuration-files))
+Line 4: we import the **FlatConfig** type from the **@typescript-eslint** utilities (which we are going to use instead of the [type from the ESLint package](https://eslint.org/docs/latest/use/configure/configuration-files#typescript-configuration-files))
 
-Line A: we use the `config()` function from the typescript-eslint package to create a typescript eslint config
+Line 29: we use the `config()` function from the typescript-eslint package to create a typescript eslint config
 
-Line X: first we specify that the name for custom flat config will be **tseslintConfig**
+Line 31: first we specify that the name for custom flat config will be **tseslintConfig**
 
-Line F: We use the `files` option to tell ESLint which files (extensions) we want to include (for this tutorial we will enable linting for [ES Module (esm)](https://nodejs.org/api/esm.html#modules-ecmascript-modules) files (.mjs), for regular [Typescript](https://www.typescriptlang.org/) (.ts) and also for Typescript & [JSX](https://www.typescriptlang.org/docs/handbook/jsx.html) files (.tsx))
+Line 32: We use the `files` option to tell ESLint which files (extensions) we want to include (for this tutorial we will enable linting for [ES Module (esm)](https://nodejs.org/api/esm.html#modules-ecmascript-modules) files (.mjs), for regular [Typescript](https://www.typescriptlang.org/) (.ts) and also for Typescript & [JSX](https://www.typescriptlang.org/docs/handbook/jsx.html) files (.tsx))
 
-Lines X to X: we use the **extends** option to add full sets of rules to our setup (you can still fine tune rules from those sets using the rules config option):
+Lines 33 to 45: we use the **extends** option to add full sets of rules to our setup (you can still fine tune rules from those sets using the rules config option):
 
 When using [typescript-eslint](https://typescript-eslint.io/users/configs/) you get several different `tseslint.configs.*` you can chose from, the **recommended** is config contains a set of recommended rules (this is what Next.js uses), there is also **recommendedTypeChecked** which adds recommended rules that require type information; Next we have **strict** and **StrictTypeChecked**, which you could use instead of the recommended rules, these sets include rules are more opinionated (which is why some projects don't use them, however they can help catch bugs so I recommend giving it a try, you can still disable them later by switching back to **recommended** rules or you could disable some of the rules by setting them to off)
 
@@ -162,23 +162,23 @@ Then we have to chose between two more sets of rules, the **stylistic** set cont
 > [!TIP]  
 > To better understand what is in those sets I **highly** recommend checking out the typescript-eslint [rules overview](https://typescript-eslint.io/rules/) page
 
-Lines F to G: Then we add some parser options to configure the typescript-eslint parser; the [projectService](https://typescript-eslint.io/blog/announcing-typescript-eslint-v8-beta/#project-service) got introduced in typescript-eslint v8, as they explain in their [performance documentation](https://typescript-eslint.io/troubleshooting/typed-linting/performance/#traditional-project-issues) it is recommended to use the default **projectService** when ever possible, they also point out that adding the path to your tsconfig.json manually "cause more disk IO", which would [result in a slower linting process (issue #2611)](https://github.com/typescript-eslint/typescript-eslint/issues/2611); those options are only needed if you use typed linting, so when you use one of the **"type checked"** sets (if are NOT using any `TypeChecked` rules, then you can comment out or delete the `languageOptions` block)
+Lines 47 to 59: Then we add some parser options to configure the typescript-eslint parser; the [projectService](https://typescript-eslint.io/blog/announcing-typescript-eslint-v8-beta/#project-service) got introduced in typescript-eslint v8, as they explain in their [performance documentation](https://typescript-eslint.io/troubleshooting/typed-linting/performance/#traditional-project-issues) it is recommended to use the default **projectService** when ever possible, they also point out that adding the path to your tsconfig.json manually "cause more disk IO", which would [result in a slower linting process (issue #2611)](https://github.com/typescript-eslint/typescript-eslint/issues/2611); those options are only needed if you use typed linting, so when you use one of the **"type checked"** sets (if are NOT using any `TypeChecked` rules, then you can comment out or delete the `languageOptions` block)
 
 > [!NOTE]  
 > the **ecmaFeatures** parser option in the **languageOptions** is commented out because there are other configurations (that we will add to our setup in an upcoming chapter) that set these options for us  
 >  
 > I keep the comment for now as reminder, but will delete it when we add the eslint-plugin-react package, as this package will already set the option  
 
-Line X: It is recommended to keep the typescript-eslint [warnOnUnsupportedTypeScriptVersion](https://typescript-eslint.io/packages/parser/#warnonunsupportedtypescriptversion) option enabled (which is why I explicitly added it to the config), if the Typescript version that you have installed is higher than the version typescript-eslint supports then it will show a warning message (when launching the linting process)
+Line 58: It is recommended to keep the typescript-eslint [warnOnUnsupportedTypeScriptVersion](https://typescript-eslint.io/packages/parser/#warnonunsupportedtypescriptversion) option enabled (which is why I explicitly added it to the config), if the Typescript version that you have installed is higher than the version typescript-eslint supports then it will show a warning message (when launching the linting process)
 
-Lines X to X: we create yet another config to tell typescript eslint to apply the **disableTypeChecked** option when parsing [ES Module (esm)](https://nodejs.org/api/esm.html#modules-ecmascript-modules) files (.mjs)
+Lines 65 to 67: we create yet another config to tell typescript eslint to apply the **disableTypeChecked** option when parsing [ES Module (esm)](https://nodejs.org/api/esm.html#modules-ecmascript-modules) files (.mjs)
 
 > [!NOTE]  
 > For this config we add the custom/typescript-eslint/disable-type-checked **name** at the end, this is because the order matters; if we would have set the name first and then added the **disableTypeChecked** config, then our name would get replaced by the name that the config sets; but because we add our name last it will replace the name that got set by the disableTypeChecked config
 
-Line C: we can now remove `next/typescript` from the compatibility mode (compat.extends), as it gets replaced by our custom typescript-eslint config
+Line 72: we can now remove `next/typescript` from the compatibility mode (compat.extends), as it gets replaced by our custom typescript-eslint config
 
-Line D: we set the **Config** type from the **@typescript-eslint** utilities as type for our default export (to replace the [type from the ESLint package](https://eslint.org/docs/latest/use/configure/configuration-files#typescript-configuration-files) which is what we were using previously), the reason to switch for the **Config** type from ESLint to the one from **@typescript-eslint** utilities is because of issues related with the type of the default export, you can read more about those issues in the next chapter
+Line 76: we set the **FlatConfig** type from the **@typescript-eslint** utilities as type for our default export (to replace the [type from the ESLint package](https://eslint.org/docs/latest/use/configure/configuration-files#typescript-configuration-files) which is what we were using previously), the reason to switch for the **Config** type from ESLint to the one from **@typescript-eslint** utilities is because of issues related with the type of the default export, you can read more about those issues in the next chapter
 
 > [!MORE]  
 > [typescript-eslint "rules" overview](https://typescript-eslint.io/rules/)  
@@ -250,7 +250,7 @@ npm i @types/eslint-plugin-jsx-a11y@latest --save-dev --save-exact
 
 Now that we have our packages installed we can finally start updating our eslint.config.ts again:
 
-```ts title="eslint.config.ts" showLineNumbers {4-5}
+```ts title="eslint.config.ts" showLineNumbers {4-11} {72} {74} {76-84} {85-110} {111-121} /alwaysTryTypes/#special
 import eslintPlugin from '@eslint/js'
 import tseslint, { configs as tseslintConfigs } from 'typescript-eslint'
 import type { FlatConfig } from '@typescript-eslint/utils/ts-eslint'
@@ -300,7 +300,7 @@ const tseslintConfig = tseslint.config(
             ...tseslintConfigs.stylistic,
             // OR the type checked version
             //...tseslintConfigs.stylisticTypeChecked,
-        ] as FlatConfig.ConfigArray,
+        ],
         // only needed if you use TypeChecked rules
         languageOptions: {
             parserOptions: {
@@ -360,7 +360,7 @@ const nextConfig = [
             'jsx-a11y/aria-unsupported-elements': 'warn',
             'jsx-a11y/role-has-required-aria-props': 'warn',
             'jsx-a11y/role-supports-aria-props': 'warn',
-        } as FlatConfig.Rules,
+        },
         settings: {
             'react': {
                 version: 'detect',
@@ -383,18 +383,18 @@ export default [
 ] satisfies FlatConfig.Config[]
 ```
 
-Lines A to B: we import the 5 plugins
+Lines 4 to 11: we import the 5 plugins, but most importantly we get rid of the FlatCompat import (from '@eslint/eslintrc') as we will NOT need it anymore 🎉 (more details bout this change are in the next chapter ["Removing ESLintRC support"](#removing-eslintrc-support))
 
 > [!NOTE]  
-> If our configuration is a typescript file, then you have to use a typescript comment to inform typescript that it will not find the types for some of the packages
+> If our configuration is a typescript file, then you have to use a typescript comment to inform typescript that it will not find the types for some of the packages, as NOT all packages have types (yet?)
 
-Line X: we create a custom config to replace configuration from eslint-config-next package
+Line 72: we create a custom config to replace configuration from eslint-config-next package
 
-Line X: we set the name of our config to **custom/next/config**
+Line 74: we set the name of our config to **custom/next/config**
 
-Lines X to X: we add the 5 plugins to the config (we use an eslint disable comment for the 3 plugins that don't have types)
+Lines 76 to 84: we add the 5 plugins to the config (we use an eslint disable comment for the 3 plugins that don't have types)
 
-Lines X to X: we use rules option to add entire sets of rules to our config but then also to fine tune some of the rules (from those sets): 
+Lines 85 to 110: we use rules option to add entire sets of rules to our config but then also to fine tune some of the rules (from those sets): 
 
 * we first add the **react** (eslint plugin) **recommended** rules set
   * more details about each rules can be found in their [eslint-plugin-react readme](https://github.com/jsx-eslint/eslint-plugin-react?tab=readme-ov-file#list-of-supported-rules))
@@ -406,8 +406,9 @@ Lines X to X: we use rules option to add entire sets of rules to our config but 
   * more details about each rules can be found in their [eslint-plugin-import readme](https://github.com/import-js/eslint-plugin-import?tab=readme-ov-file#rules)
 * next we add the recommend **eslint-plugin-jsx-a11y** rules, this plugin offers two sets of [rules](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y?tab=readme-ov-file#shareable-configs) the **recommended** and the **strict**, we will use the strict version (feel free to use recommended instead if you prefer less strict rules or disable some of the more strict rules manually)
   * more details about each rules can be found in their [eslint-plugin-jsx-a11y readme](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y?tab=readme-ov-file#supported-rules)
+* typescript users, note that we also use the **FlatConfig.Rules** type to 
 
-Lines X to X: next we have the use the settings option to pass some options to the plugins we are using, the first setting is for react plugin and tells the plugin to automatically detect what react version we are using (this often works well and avoids having to update a version manually), then we set the **alwaysTryTypes** setting from our import resolver to true (there are [more options](https://github.com/import-js/eslint-import-resolver-typescript/blob/master/README.md#configuration) you could set, if for example you use a monorepo), to explain what this does I will quote the explanation from their readme:
+Lines 111 to 121: next we have the use the settings option to pass some options to the plugins we are using, the first setting is for react plugin and tells the plugin to automatically detect what react version we are using (this often works well and avoids having to update a version manually), then we set the **alwaysTryTypes** setting from our import resolver to true (there are [more options](https://github.com/import-js/eslint-import-resolver-typescript/blob/master/README.md#configuration) you could set, if for example you use a monorepo), to explain what this does I will quote the explanation from their readme:
 
 > always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
 
