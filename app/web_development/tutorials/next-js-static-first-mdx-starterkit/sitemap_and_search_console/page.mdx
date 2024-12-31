@@ -123,7 +123,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const defaultDate = 'August 12, 2024'
     const productionUrl = 'https://example.com'
-    const developmentUrl = 'http://localhost:' + (process.env.PORT || 3000)
+    const developmentUrl = 'http://localhost:' + (process.env.PORT ?? 3000)
     const currentUrl = process.env.NODE_ENV === 'development' ? developmentUrl : productionUrl
 
     const siteMap: MetadataRoute.Sitemap = [{
