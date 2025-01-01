@@ -34,9 +34,8 @@ export default async function Image(props: IImageProps) {
         `https://${process.env.VERCEL_URL}` :
         `http://localhost:${process.env.PORT ?? '3000'}`
 
-    // Font
-    const permanentMarkerRegular = await fetch(
-        new URL('/public/assets/fonts/PermanentMarker-Regular.ttf', import.meta.url)
+    const antaRegular = await fetch(
+        new URL('/public/assets/fonts/Anta-Regular.ttf', import.meta.url)
     ).then(res => res.arrayBuffer())
 
     const imageData = await fetch(
@@ -77,8 +76,8 @@ export default async function Image(props: IImageProps) {
                         left: '0px',
                         bottom: '0px',
                         margin: 0,
-                        padding: '0px 27px 27px 27px',
-                        fontFamily: 'PermanentMarkerRegular',
+                        padding: '30px 60px',
+                        fontFamily: 'AntaRegular',
                         fontWeight: 400,
                         fontStyle: 'normal',
                         fontSize: '50',
@@ -98,8 +97,8 @@ export default async function Image(props: IImageProps) {
             ...size,
             fonts: [
                 {
-                    name: 'PermanentMarkerRegular',
-                    data: permanentMarkerRegular,
+                    name: 'AntaRegular',
+                    data: antaRegular,
                     style: 'normal',
                     weight: 400,
                 },
