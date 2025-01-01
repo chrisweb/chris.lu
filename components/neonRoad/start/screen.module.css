@@ -9,6 +9,14 @@
     z-index: 30;
 }
 
+@media all and (max-width: 1300px) {
+
+    .playContainer {
+        top: calc(var(--header-navbar-height) + (var(--main-spacing) / 4));
+    }
+
+}
+
 @media all and (max-width: 1120px) {
 
     .playContainer {

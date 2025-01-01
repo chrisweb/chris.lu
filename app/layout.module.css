@@ -8,7 +8,7 @@
     overflow: hidden;
 }
 
-@media all and (max-width: 1120px) {
+@media all and (max-width: 1300px) {
 
     .layoutHeader {
         padding-top: var(--header-navbar-height);
