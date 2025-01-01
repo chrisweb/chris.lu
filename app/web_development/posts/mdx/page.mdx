@@ -2,7 +2,7 @@
 title: MDX
 keywords: ['MDX', 'markdown', 'remark', 'rehype', 'MDAST', 'HAST']
 published: 2024-08-10T11:22:33.444Z
-modified: 2024-08-10T11:22:33.444Z
+modified: 2024-10-25T10:10:10.444Z
 permalink: https://chris.lu/web_development/posts/mdx
 section: Web development
 ---
@@ -41,7 +41,7 @@ export const metadata = {
 
 [MDX](https://mdxjs.com/) is an extension of **markdown**, MDX means [markdown](https://en.wikipedia.org/wiki/Markdown) + [JSX](https://en.wikipedia.org/wiki/JSX_(JavaScript)), [markdown](https://daringfireball.net/projects/markdown/syntax) is a markup language that can be used to format raw text, it was developed in 2004 by John Gruber in collaboration with Aaron Swartz and [JSX](https://react.dev/learn/writing-markup-with-jsx) is a syntax extension for JavaScript that lets you write HTML-like markup inside a JavaScript file
 
-For an in-depth tutorial about how to use MDX with Next.js, check out my [Tutorial: Next.js static MDX blog](/web_development/tutorials/next-js-static-mdx-blog)
+For an in-depth tutorial about how to use MDX with Next.js 15, check out my [Tutorial: Next.js 15 MDX starterkit](/web_development/tutorials/next-js-static-first-mdx-starterkit)
 
 ## What is MDX (behind the scenes)
 
@@ -55,15 +55,21 @@ All transformations happen thanks to utilities built on top of [unified](https:/
 
 > Unified is an interface for parsing, inspecting, transforming, and serializing content through syntax trees
 
-The specifications are all managed by the [syntax-tree organisation on github](https://github.com/syntax-tree) which is part of the **unified** collective, this is the home for several **syntax tree** specifications, the base syntax tree is called [unist](https://github.com/syntax-tree/unist), **unist** is a universal syntax tree specification, it is part of the family of syntax trees called **Abstract Syntax Trees**s hence the abbreviation **AST**s, on top of unist you have the other syntax trees that we are interested in, the first one is called [MDAST](https://github.com/syntax-tree/mdast) this is the specification that represents markdown in a syntax tree and the second one is called [HAST](https://github.com/syntax-tree/hast) which is the specification that represents HTML in a syntax tree
+The specifications are all managed by the [syntax-tree organization on github](https://github.com/syntax-tree) which is part of the **unified** collective, this is the home for several **syntax tree** specifications, the base syntax tree is called [unist](https://github.com/syntax-tree/unist), **unist** is a universal syntax tree specification, it is part of the family of syntax trees called **Abstract Syntax Trees**s hence the abbreviation **AST**s, on top of unist you have the other syntax trees that we are interested in, the first one is called [MDAST](https://github.com/syntax-tree/mdast) this is the specification that represents markdown in a syntax tree and the second one is called [HAST](https://github.com/syntax-tree/hast) which is the specification that represents HTML in a syntax tree, but because we use MDX and not pure markdown, the two syntax trees **MDAST** and **HAST** have supersets, the superset of **MDAST** is called [MDXAST](https://github.com/mdx-js/specification#mdxast) and the superset of **HAST** is called [MDXHAST](https://github.com/mdx-js/specification#mdxhast)
 
-**MDAST** and **HAST** are the syntax tree specifications, but the actual tools are [remnark](https://github.com/remarkjs/remark), which is a tool that transforms markdown with plugins, and [rehype](https://github.com/rehypejs/rehype) which is a tool that transforms HTML with plugins
+**MDAST** and **HAST** are the syntax tree specifications, but the actual tools are Remark and Rehype. 
+
+[remnark](https://github.com/remarkjs/remark) is a tool that transforms markdown with plugins, which they explain well in their README:
+
+> remark supports CommonMark by default. Non-standard markdown extensions can be enabled with plugins
+
+[rehype](https://github.com/rehypejs/rehype) is similar to remark but has another purpose, Rehype is a tool that transforms HTML with plugins
 
 MDX supports both **remark** and **rehype** plugins. More about plugins in the ["using plugins to extend MDX" chapter](#using-plugins-to-extend-mdx)
 
 Note: if you want to experiment with MDX content, there is a great tool called [MDX playground](https://mdxjs.com/playground/). You can experiment with MDX content, and it will help you visualize how MDX content gets transformed from MDAST (markdown AST) to HAST (HTML AST) to ESAST (javascript / JSX)
 
-## Collection of informative souces
+## Collection of informative sources
 
 * [markdown website by its author John Gruber (aka daringfireball)](https://daringfireball.net/projects/markdown/syntax)
 * [MDX website](https://mdxjs.com/)
@@ -72,14 +78,61 @@ Note: if you want to experiment with MDX content, there is a great tool called [
 * [GFM (GitHub Flavored Markdown) specification](https://github.github.com/gfm/)
 * [unified (js) website](https://unifiedjs.com/)
 * [unified github repository](https://github.com/unifiedjs/unified)
-* [syntax-tree organisation on github](https://github.com/syntax-tree)
+* [syntax-tree organization on github](https://github.com/syntax-tree)
 * [unist specification github repository](https://github.com/syntax-tree/unist)
 * [MDAST specification github repository](https://github.com/syntax-tree/mdast)
 * [HAST specification github repository](https://github.com/syntax-tree/hast)
-* [MDX (remark-mdx)](https://mdxjs.com/packages/remark-mdx/)
+* [MDX specification (mdx-js) github repository](https://github.com/mdx-js/specification)
+* [MDXAST chapter in the mdx-js specification](https://github.com/mdx-js/specification#mdxast)
+* [MDXHAST chapter in the mdx-js specification](https://github.com/mdx-js/specification#mdxhast)
 * [remnark github repository](https://github.com/remarkjs/remark)
 * [rehype github repository](https://github.com/rehypejs/rehype)
 * [MDX playground](https://mdxjs.com/playground/)
+
+## VSCode extensions
+
+There are a lot of VSCode extensions available for both MDX and markdown, open your [extensions view](/web_development/posts/vscode#vscode-extensions-view) in VSCode and search for MDX or markdown, or visit the online [marketplace](https://marketplace.visualstudio.com/)
+
+In the following chapters I will introduce two extensions, one for MDX and one for markdown
+
+### Markdownlint extension for VSCode
+
+[Markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint) is another popular extension, that is great when you quickly want to lint pure markdown files, like your projects README.md
+
+> [!WARN]  
+> it is not recommend to install the plugin if working with MDX as it will for example use markdown linting rules like the [no-inline-html](https://github.com/DavidAnson/markdownlint/blob/v0.36.1/doc/md033.md) rule, but that rule is invalid when linting MDX (which allows using HTML elements inside of MDX content)  
+
+### MDX extension for VSCode
+
+There is a very useful [MDX extension for VSCode](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx) that I recommend you install (if you work with MDX in VSCode)
+
+The extension will read your .remarkrc(.js|.mjs) file (if you have one in the root of your workspace (project)) and apply the same rules you use on the command line inside of VSCode, meaning when there is a violation (based on your rules) it will underline the code that is responsible for the violation (green for warnings and red for errors)
+
+The extension will also add MDX language support to VSCode. The support is experimental and there is a problem when setting the .mdx file association to be MDX instead of markdown, which is that VSCode will remove features like the markdown preview, I like to have the preview (even if it does NOT understand MDX and is only useful to get an idea of how the markdown parts will get rendered), the second disadvantage is that some themes have no support for MDX code highlighting colors, meaning when using some themes the MDX content will get displayed as simple text with no colors (or only a few)
+
+#### install MDX for VSCode
+
+Open the [extensions view](/web_development/posts/vscode#vscode-extensions-view), then search for an extension named **MDX** (published my unified) and then click on the **install** button
+
+> [!Note]  
+> This extensions MDX language support is still experimental, but I had no major problems when using it
+
+Unlike other extension, the **MDX extension** does not require any custom settings configuration, install it and you are done
+
+#### file associations
+
+To change the file association (matching a **file extension** with a **language mode**), first open an MDX file, then in the bottom right corner of VSCode you will either have "Markdown" or "MDX" set as default, if it is set to MDX then I recommend setting it to "Markdown"
+
+Another option, if you have a `.vscode/settings.json` file in your workspace, is to edit that file and add the file association for MDX manually:
+
+```json title=".vscode/settings.json"
+    "files.associations": {
+        "*.mdx": "markdown"
+    },
+```
+
+> [!NOTE]  
+> by changing the file association to markdown, you are NOT disabling the MDX extension, it will continue to work and read your remark-link configuration file (if you have one in your workspace)
 
 ## Frameworks with MDX support
 

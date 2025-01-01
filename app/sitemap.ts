@@ -1,4 +1,4 @@
-import { MetadataRoute } from 'next'
+import type { MetadataRoute } from 'next'
 import path from 'node:path'
 import fs from 'node:fs'
 import { glob } from 'glob'

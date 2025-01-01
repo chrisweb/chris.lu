@@ -1,0 +1,311 @@
+---
+title: Frontmatter plugin - Next.js 15 Tutorial
+description: Frontmatter plugin - Next.js 15 static first MDX starterkit | Web development tutorials | www.chris.lu
+keywords: ['Frontmatter', 'YAML', 'plugin', 'remark', 'mdx', 'nextjs frontmatter', 'next/mdx', 'nextjs']
+published: 2024-12-31T23:00:00.000Z
+modified: 2024-12-31T23:00:00.000Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit/frontmatter-plugin
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js 15 static first MDX starterkit', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit' },
+]} />
+
+# Frontmatter introduction
+
+As stated in the [GitHub frontmatter documentation](https://docs.github.com/en/contributing/writing-for-github-docs/using-yaml-frontmatter), the [Jekyll](https://jekyllrb.com/docs/front-matter/) static site generator was the first to popularize frontmatter, but today a lot of frameworks and libraries add support for frontmatter. So maybe your markdown files already have frontmatter and you want to be able to use that data, or you are like me and just learned about frontmatter now and think it is a good way to store metadata in your MDX files
+
+You might have noticed that frontmatter is sometimes called "yaml frontmatter" or "frontmatter yaml", this is because frontmatter uses the [YAML data language](https://yaml.org/spec/1.2.2/)
+
+To add frontmatter to a document, you start by adding 3 dashes (`---`), then add your frontmatter yaml, and finally close the frontmatter block with another 3 dashes (`---`)
+
+I already mentioned the GitHub and Jekyll documentation about frontmatter, they both specify predefined frontmatter variables, but because we will add our own frontmatter support, we are free to use whatever variables we think are useful for our project. One convention that I follow, is to always put the frontmatter part on top of the MDX page (or top of the markdown document)
+
+> [!MORE]  
+> ["YAML data language" specification](https://yaml.org/spec/1.2.2/)  
+> [GitHub "About YAML frontmatter" documentation](https://docs.github.com/en/contributing/writing-for-github-docs/using-yaml-frontmatter)  
+> [Jekyll "Front Matter" documentation](https://jekyllrb.com/docs/front-matter/)  
+
+## Frontmatter plugins installation
+
+What we will do in this chapter is **add 2 plugins** to our next/mdx setup that will read the frontmatter part of our MDX pages and then automatically populate the Next.js metadata object (using the frontmatter metadata) for us
+
+Use the following command to install the 2 remark frontmatter plugins:
+
+```shell
+npm i remark-frontmatter remark-mdx-frontmatter --save-exact
+```
+
+[remark-frontmatter](https://github.com/remarkjs/remark-frontmatter) is a plugin that will **parse the frontmatter**, without this plugin, an MDX page with frontmatter would just display the frontmatter as text (when getting rendered), after enabling this plugin, the frontmatter part will not show up in your MDX pages anymore but will get parsed as frontmatter yaml
+
+[remark-mdx-frontmatter](https://github.com/remcohaszing/remark-mdx-frontmatter) is a plugin that is important as it will put the parsed frontmatter values into a **variable** inside of our MDX documents, the variable is called `frontmatter` by default but you can change the name using the options of the plugin
+
+Next, we add the frontmatter plugins to our next/mdx configuration:
+
+```js title="next.config.mjs" showLineNumbers {12-13} {54} /remarkFrontmatter, remarkMdxFrontmatter/#special
+import { withSentryConfig } from '@sentry/nextjs';
+//import type { NextConfig } from 'next'
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+import createMdx from '@next/mdx'
+import rehypeMDXImportMedia from 'rehype-mdx-import-media'
+import rehypePrettyCode from 'rehype-pretty-code'
+import { readFileSync } from 'fs'
+import rehypeSlug from 'rehype-slug'
+import { remarkTableOfContents } from 'remark-table-of-contents'
+import remarkGfm from 'remark-gfm'
+import { rehypeGithubAlerts } from 'rehype-github-alerts'
+import remarkFrontmatter from 'remark-frontmatter'
+import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
+
+const nextConfig = (phase/*: string*/) => {
+
+    const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
+    const themeFileContent = readFileSync(themePath, 'utf-8')
+
+    /** @type {import('rehype-pretty-code').Options} */
+    const rehypePrettyCodeOptions = {
+        theme: JSON.parse(themeFileContent),
+        keepBackground: false,
+        defaultLang: {
+            block: 'js',
+            inline: 'js',
+        },
+        tokensMap: {
+            fn: 'entity.name.function',
+            cmt: 'comment',
+            str: 'string',
+            var: 'entity.name.variable',
+            obj: 'variable.other.object',
+            prop: 'meta.property.object',
+            int: 'constant.numeric',
+        },
+    }
+
+    /** @type {import('remark-table-of-contents').IRemarkTableOfContentsOptions} */
+    const remarkTableOfContentsOptions = {
+        containerAttributes: {
+            id: 'articleToc',
+        },
+        navAttributes: {
+            'aria-label': 'table of contents'
+        },
+        maxDepth: 3,
+    }
+
+    const withMDX = createMdx({
+        extension: /\.mdx$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter, remarkGfm, [remarkTableOfContents, remarkTableOfContentsOptions]],
+            rehypePlugins: [rehypeGithubAlerts, rehypeSlug, [rehypePrettyCode, rehypePrettyCodeOptions], rehypeMDXImportMedia],
+            remarkRehypeOptions: {
+                footnoteLabel: 'Notes',
+                footnoteLabelTagName: 'span',
+            },
+        },
+    })
+```
+
+Lines 12 to 13: we import the 2 frontmatter plugins
+
+Line 54: we add both to our remark plugins list
+
+> [!NOTE]  
+> Something I will not cover here, but if you want to go a step further and are interested in adding linting for the frontmatter part, then have a look at [remark-lint-frontmatter-schema](https://github.com/JulianCataldo/remark-lint-frontmatter-schema)  
+
+> [!MORE]  
+> [mdx.js "Frontmatter" documentation](https://mdxjs.com/guides/frontmatter/)  
+> [Next.js "Frontmatter" documentation](https://nextjs.org/docs/app/building-your-application/configuring/mdx#frontmatter)  
+> [npmjs.com "remark-frontmatter" page](https://www.npmjs.com/package/remark-frontmatter)  
+> [npmjs.com "remark-mdx-frontmatter" page](https://www.npmjs.com/package/remark-mdx-frontmatter)  
+
+## Frontmatter for metadata (and more)
+
+Now it is time to create an example where we define some frontmatter on top of our MDX pages. Then we let both plugins do their magic, and finally we can use the frontmatter variable to fill our Next.js 15 metadata object
+
+Let's reuse our **gfm playground** page one more time
+
+First, remove the current metadata and then add this instead:
+
+```md title="/app/(tutorial_examples)/gfm_playground/page.mdx" showLineNumbers
+---
+title: GFM playground page
+keywords: ['gfm', 'playground', 'frontmatter', 'mdx']
+published: 2024-05-24T19:14:23.792Z
+modified: 2024-05-24T19:14:23.792Z
+permalink: http://localhost:3000/gfm_playground
+siteName: My website name
+---
+
+export const metadata = {
+    title: frontmatter.title,
+    keywords: frontmatter.keywords,
+    openGraph: {
+        url: frontmatter.permalink,
+        siteName: frontmatter.siteName,
+        type: 'article',
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    }
+}
+```
+
+Lines 1 to 8: we first added our frontmatter block on top of the page with some custom variables that suit our needs
+
+Lines 10 to 21: we created a Next.js metadata object and used the frontmatter object (that holds all the key/value pairs from our frontmatter above) to populate the metadata object
+
+Finally, make sure the dev server is running, then open the playground page `http://localhost:3000/gfm_playground` in your browser and then right-click in the page to have a look at the meta tags inside of the `<head>{:html}` element
+
+You should be getting the following result:
+
+```html showLineNumbers
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<title>GFM playground page | example.com</title>
+<meta name="description" content="My description">
+<meta name="keywords" content="gfm,playground,frontmatter,mdx">
+<meta property="og:title" content="GFM playground page | example.com">
+<meta property="og:description" content="My description">
+<meta property="og:url" content="http://localhost:3000/gfm_playground">
+<meta property="og:site_name" content="My website name">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2024-05-24T19:14:23.792Z">
+<meta property="article:modified_time" content="2024-05-24T19:14:23.792Z">
+<meta property="article:tag" content="gfm">
+<meta property="article:tag" content="playground">
+<meta property="article:tag" content="frontmatter">
+<meta property="article:tag" content="mdx">
+```
+
+Lines 1 to 2: are the viewport and charset Next.js adds by default
+
+Line 3: is the default [HTML title element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/title) that has the `frontmatter.title` as value and uses the template we have set in the layout file
+
+Line 4: we have the **description** meta tag
+
+Line 5: we have a **keywords** meta tag, which contains some keywords we added to our frontmatter, it is an example of how an array gets transformed into a string, but search engines like [google apparently don't use it](https://developers.google.com/search/docs/crawling-indexing/special-tags)
+
+Lines 6 and 7: we have **open graph title and description**, which Next.js sets based on the default title and description
+
+Lines 8 and 9: we have the **open graph URL and sitename**, which are two values we have set in our frontmatter
+
+Line 10: we have the **open graph type** to **article**, just to demonstrate the following two meta tags at lines 11 and 12
+
+Line 11 and 12: we have two new meta tags, which have a property that is NOT prefixed with `og:`, opengraph has a documentation page for the [https://ogp.me/#type_article](https://ogp.me/#type_article) about the open graph **article namespace**, it needs to have the **open graph type** set to **article** and then you get tags that are **prefixed** with `article:`, if however the type is for example set to website, then those two meta tags will disappear from the head element (even if you define them in your page source)
+
+Lines 13 to 16: we have the keywords that get used as tags for our open graph article, unlike the **keywords** meta tag, the **tags** get split into multiple tags
+
+## Frontmatter linting errors
+
+If you followed the remark lint tutorial part, you might have noticed that as soon as you add the frontmatter block to your MDX documents, remark-lint will start complaining about non valid content, if you hover with your mouse over the part that is underlined with a green wave, it will open a modal that shows you one of those linting problems:
+
+> Unexpected setext heading, expected ATX (remark-lint-heading-style)  
+
+If you launch use the `npm run lint` linting command you will see even more:
+
+> Unexpected setext heading, expected ATX (remark-lint-heading-style)  
+> Unexpected `xxx` characters in heading, expected at most `100` characters (remark-lint-maximum-heading-length)  
+> Unexpected reference to undefined definition, expected corresponding definition (`'foo'`) for a link or escaped opening bracket (`\[`) for regular text (remark-lint-no-undefined-references)  
+
+To solve this problem need to add frontmatter as a plugin to our **remark lint configuration** file (that is in root of the project):
+
+```js title=".remarkrc.mjs" showLineNumbers {16} {22} 
+// presets imports
+import remarkPresetLintRecommended from 'remark-preset-lint-consistent'
+import remarkPresetLintConsistent from 'remark-preset-lint-recommended'
+import remarkPresetLintMarkdownStyleGuide from 'remark-preset-lint-markdown-style-guide'
+
+// rules imports
+import remarkLintMaximumHeadingLength from 'remark-lint-maximum-heading-length'
+import remarkLintUnorderedListMarkerStyle from 'remark-lint-unordered-list-marker-style'
+import remarkLintNoUndefinedReferences from 'remark-lint-no-undefined-references'
+import remarkLintLinkTitleStyle from 'remark-lint-link-title-style'
+import remarkLintMaximumLineLength from 'remark-lint-maximum-line-length'
+import remarkLintListItemSpacing from 'remark-lint-list-item-spacing'
+
+// remark plugins
+import remarkGfm from 'remark-gfm'
+import remarkFrontmatter from 'remark-frontmatter'
+
+const config = {
+    plugins: [
+        // first the plugins
+        remarkGfm,
+        remarkFrontmatter,
+        // then the presets
+        remarkPresetLintRecommended,
+        remarkPresetLintConsistent,
+        remarkPresetLintMarkdownStyleGuide,
+        // and finally the rules customizations
+        // https://www.npmjs.com/package/remark-lint-maximum-heading-length
+        [remarkLintMaximumHeadingLength, [1, 100]],
+        // https://www.npmjs.com/package/remark-lint-unordered-list-marker-style
+        [remarkLintUnorderedListMarkerStyle, 'consistent'],
+        // https://www.npmjs.com/package/remark-lint-no-undefined-references
+        [remarkLintNoUndefinedReferences, { allow: ['!NOTE', '!TIP', '!IMPORTANT', '!WARNING', '!CAUTION', ' ', 'x'] }],
+        // https://www.npmjs.com/package/remark-lint-link-title-style
+        [remarkLintLinkTitleStyle, '\''],
+        // https://www.npmjs.com/package/remark-lint-maximum-line-length
+        [remarkLintMaximumLineLength, false],
+        // https://www.npmjs.com/package/remark-lint-list-item-spacing
+        [remarkLintListItemSpacing, false],
+        // https://www.npmjs.com/package/remark-lint-no-literal-urls
+        // disable rule as we have gfm autolink support
+        [remarkLintNoLiteralUrls, false],
+    ]
+}
+
+export default config
+```
+
+Line 16: we import the frontmatter plugin
+
+Line 22: we add the frontmatter plugin to the remark lint configuration
+
+If you now run the linting process again the errors should be gone (if they are not gone yet, then you might want to [clear the ESLint cache](/web_development/tutorials/next-js-static-first-mdx-starterkit/eslint-mdx-plugin-and-remark-lint#clearing-the-eslint-cache)) and they should also disappear in VSCode (you might have to [restart the ESLint server](/web_development/tutorials/next-js-static-first-mdx-starterkit/linting-in-vscode-using-extensions#restarting-the-eslint-server-in-vscode) in VSCode to update the linting process)
+
+Congratulations 🎉 you just learned how to set metadata for MDX pages and how to add frontmatter to MDX documents
+
+<DonationsMessage />
+
+<Pagination
+    previous={{ label: 'Open Graph Image(s)', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/open_graph_images' }}
+    next={{ label: 'Vercel Analytics and Speed Insights', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/analytics_and_speed_insights' }}
+/>
+
+</article>

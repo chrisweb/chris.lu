@@ -2,7 +2,7 @@
 title: npm & package.json
 keywords: ['npm', 'package.json', 'publishing', 'package']
 published: 2024-08-08T11:22:33.444Z
-modified: 2024-08-08T11:22:33.444Z
+modified: 2025-01-01T01:01:01.001Z
 permalink: https://chris.lu/web_development/posts/npm
 section: Web development
 ---
@@ -70,10 +70,10 @@ npm install -g npm@latest
 
 **package.json** is a file you will find in most Javascript (Typescript) projects. Package.json is a JSON file that contains metadata about the project, like the project name, a description and the current version, a list of dependencies as well as devDependencies, scripts (custom scripts that can be run from the command line using `npm run SCRIPT_NAME`), ...
 
-**package-lock.json** is a file that gets created when you install packages using a package manager. It lists the exact version of each installed package and its dependencies (unlike the package.json itself, which often allows a range of versions to be installed). This file is important as it can be used to create reproducible builds. When you test your project on the staging server and then deploy it to production, you don't want the package versions to be different, as this could introduce bugs after you are done testing if a package uses a newer version in production than previously on the staging server.
+**package-lock.json** is a file that gets created when you install packages using a package manager. It lists the exact version of each installed package and its dependencies (unlike the package.json itself, which often allows a range of versions to be installed). This file is important as it can be used to create reproducible builds. When you test your project on the staging (pre-production) server and then deploy it to production, you don't want the package versions to be different, as this could introduce bugs after you are done testing if a package uses a newer version in production than previously on the staging server.
 
 > [!MORE]  
-> [npmjs.com "package.json" documentation](https://docs.npmjs.com/cli/configuring-npm/package-json/)  
+> [npmjs.com "package.json" documentation](https://docs.npmjs.com/cli/configuring-npm/package-json)  
 > [nodejs.org "Modules: Packages" documentation](https://nodejs.org/api/packages.html)  
 
 ### creating a package.json
@@ -122,11 +122,11 @@ Packages use semantic versioning (semver) for their version numbers, with semver
 * the major version indicates that existing features got modified in a way that potentially will introduce breaking changes, so when updating a package and there is a change in the major version, it is highly recommended that you check out the package's changelog. If you find breaking changes, you need to verify if those will impact your code that uses the package. If there is an impact, then you need to update your code accordingly after installing the update and before committing the update
 
 > [!NOTE]  
-> when you install a dependency, the verion will be prefixed with a **^** (carret), when using **caret ranges** npm will install the version you specified as long as there is no newer version available, if however a newer PATCH or even MINOR version is available then npm will install the newer version instead, if we take the example above where we have "^18.2.0", this means npm will install react 18.2.0 as long as there is no update, however if react releases a fix for an existing feature and increment their PATCH number then the newest version would be 18.2.1 and if you now use the npm install command then npm will install 18.2.1 (and not 18.2.0 anymore), this is also true if the react team adds a new feature and bumps their MINOR number to 18.3.0 then npm will install that version, however if the react team adds breaking changes and the new version is 19.0.0 then npm will not update your package because this version might introduce breaking changes, instead npm will use the latest 18.x.x available version
+> when you install a dependency, the version will be prefixed with a **^** (carret), when using **caret ranges** npm will install the version you specified as long as there is no newer version available, if however a newer PATCH or even MINOR version is available then npm will install the newer version instead, if we take the example above where we have "^18.2.0", this means npm will install react 18.2.0 as long as there is no update, however if react releases a fix for an existing feature and increment their PATCH number then the newest version would be 18.2.1 and if you now use the npm install command then npm will install 18.2.1 (and not 18.2.0 anymore), this is also true if the react team adds a new feature and bumps their MINOR number to 18.3.0 then npm will install that version, however if the react team adds breaking changes and the new version is 19.0.0 then npm will not update your package because this version might introduce breaking changes, instead npm will use the latest 18.x.x available version
 
 > [!MORE]  
 > [Semantic Versioning Specification](https://semver.org/)  
-> [npmjs-com "About semantic versioning" documentation](https://docs.npmjs.com/about-semantic-versioning/)  
+> [npmjs-com "About semantic versioning" documentation](https://docs.npmjs.com/about-semantic-versioning)  
 
 #### dependency version pinning (optional)
 
@@ -150,10 +150,43 @@ This will add the dependencies to your package.json as before, but the differenc
 
 #### VSCode extension for manual version updates
 
-To make manual updates of my dependencies easier, I use a VSCode extension called [versionlens](https://marketplace.visualstudio.com/items?itemName=pflannery.vscode-versionlens). I like this extension because when I open my package.json, it will fetch all the versions of the packages I have installed and tell me if a new version is available. If there is a new version and I want to use it, all I need to do is click on **↑ latest x.x.x** (where x.x.x stands for the new version number), and the version lens will insert the new version for me. When I'm done with updating the versions, I save the package.json and then install the new versions with the command `npm i`
+To make manual updates of my dependencies easier, I use a VSCode extension called [versionlens](https://marketplace.visualstudio.com/items?itemName=pflannery.vscode-versionlens). I like this extension because when I open my package.json, it will fetch all the versions of the packages I have installed and tell me if a new version is available. If there is a new version and I want to use it, all I need to do is click on **↑ latest x.x.x** (where x.x.x stands for the new version number), and the version lens will insert the new version for me. When I'm done with updating the versions, I save the package.json and then update everything using the `npm update` command
 
 > [!MORE]  
 > [VSCode "versionlens" extension](https://marketplace.visualstudio.com/items?itemName=pflannery.vscode-versionlens)  
+
+#### Npm cli to automatically update semver versions
+
+To not just update your dependencies but also their semver version in the package.json file, use the update command with the --save flag, like this: `npm update --save`. Without the save flag npm would only update versions in your package-lock.json
+
+> [!WARN]  
+> if you are using tags in your package.json instead of fixed versions, using the npm update with the save flag will replace the tags in your package.json with fixed versions, so if you use tags use the update command without the flag to only update the package-lock.json (according to the tags you have set in the package.json)
+
+> [!MORE]  
+> [npmjs.com "npm update" documentation](https://docs.npmjs.com/cli/v11/commands/npm-update)  
+
+#### missing binaries due to corrupted lock file
+
+I encountered a problem I wanted to highlight as it took me some time to figure out what was wrong (thank you vercel support for helping me out) where installing my dependencies in my CI/CD kept failing with weird error messages about packages failing to install:
+
+> unhandledRejection Error: binary for this platform/architecture not found!
+
+Usually if there is an integrity problem, you get a clear message like this one:
+
+> npm error code EINTEGRITY
+
+What caused the problem was a replace all I had done to change the version of a package. Instead of just replacing the version in the package.json I had also replaced matching versions in the package-lock.json. This meant that I now had a lock file where some packages had an updated version that was not matching the integrity hash anymore. This led to the unhandled rejection.
+
+So this is a reminder to myself, to make sure you never manually edit a package-lock.json. Instead if something is not right, you should delete the lock file (keep the package.json) and then use `npm i` to create a fresh package-lock.json.
+
+The package-lock.json file contains a list of all packages that got installed in your node_modules. Each module can have an integrity value:
+
+> integrity: A sha512 or sha1 Standard [Subresource Integrity](https://w3c.github.io/webappsec-subresource-integrity/) string for the artifact that was unpacked in this location. For git dependencies, this is the commit sha.
+
+The hash value gets used to verify that between the time it got added in your package-lock.json and the time you install the package in production (using the package-lock.json), the package has not been changed. Every change to content of the package would result in the verification hash to be different, which means the hash in your lock file would not match the current hash of the package and hence the suspicious package would not get installed
+
+> [!MORE]  
+> [npmjs.com "package-lock.json" documentation](https://docs.npmjs.com/cli/v11/configuring-npm/package-lock-json)  
 
 ### Git(Hub) URLs as Dependencies
 
@@ -165,7 +198,7 @@ If a package/repository has not been published on npm, for example, one of your 
 },
 ```
 
-This will add the package located at https://github.com/USER_NAME/REPOSITORY_NAME as a dependency.
+This will add the package located at `https://github.com/USER_NAME/REPOSITORY_NAME` as a dependency.
 
 If you want to pin a more specific version of the repository, you can do so by adding a hash symbol at the end, followed by the commit ID or the tag (if the repository author has published a tag) or a release version.
 
@@ -187,7 +220,7 @@ For example, if adding a repository with the latest commit ID being **d29f7d9**,
 
 I will list a few methods here and add some links to the relevant documentation, but I will not add a complete walkthrough as those differ quite a lot depending on what platform your code is hosted on and based on what tools are in your deployment pipeline (if, however, I see that there is interest in such a tutorial in the [GitHub discussions for chris.lu](https://github.com/chrisweb/chris.lu/discussions) then I might write one in the future)
 
-An alternative to using private GitHub repositories is to use npm to host [private packages](https://docs.npmjs.com/creating-and-publishing-private-packages/) but be aware that this is a paid service
+An alternative to using private GitHub repositories is to use npm to host [private packages](https://docs.npmjs.com/creating-and-publishing-private-packages) but be aware that this is a paid service
 
 ##### using a GitHub personal access token
 

@@ -64,10 +64,14 @@ const StartScreen: React.FC<IProps> = (props) => {
                         playButtonCallback={playButtonCallback}
                         playButtonStyles={styles.playButton}
                     >
-                        <span className={`${styles.pressStart} ${styles.blink}`}><span className={styles.press}>press</span> <span className={styles.start}>start</span></span>
+                        <span className={`${styles.pressStart} ${styles.blink}`}>
+                            <span className={styles.press}>press</span>
+                            &nbsp;
+                            <span className={styles.start}>start</span>
+                        </span>
                     </PlayButton>
                 </div>
-            </div >
+            </div>
         </>
     )
 }

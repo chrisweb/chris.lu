@@ -1,0 +1,396 @@
+---
+title: MDX (remark/rehype) plugins - Next.js 15 Tutorial
+description: MDX (remark/rehype) plugins - Next.js 15 static first MDX starterkit | Web development tutorials | www.chris.lu
+keywords: ['MDX', 'remark', 'rehype', 'plugin', 'markdown', 'nextjs']
+published: 2024-12-31T23:00:00.000Z
+modified: 2024-12-31T23:00:00.000Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit/mdx-plugins
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js 15 static first MDX starterkit', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit' },
+]} />
+
+# MDX plugins
+
+You might have heard the word "MDX plugins" before, these **MDX plugins are either remark, rehype or recma plugins** and in in the next chapter we will see why there are 3 flavors of plugins
+
+MDX plugins are a great way to add support for new features into your existing MDX setup, for example in this tutorial we will use one MDX (remark) plugin in the [Optimizing images](/web_development/tutorials/next-js-static-first-mdx-starterkit/optimizing-using-next-image) chapter to turn the path of our images into imports, we will add a [Code highlighting plugin](/web_development/tutorials/next-js-static-first-mdx-starterkit/code-highlighting-plugin) (with VSCode themes support), a [Table of Contents](/web_development/tutorials/next-js-static-first-mdx-starterkit/table-of-contents-plugin) plugin, a [github like alerts](/web_development/tutorials/next-js-static-first-mdx-starterkit/github-like-alerts-plugin) plugin and several more
+
+In Next.js 15 and before you could NOT use plugins at all if you wanted to use Turbopack Rust bundler and / or the experimental mdxRs Rust compiler.
+
+In Next.js 15.1 the Next.js team added a plugins loader written in Javascript, to add support for MDX plugins when using mdxRs and Turbopack. There is a catch though, for it to work the plugin options need to be serializable
+
+## Difference between Remark, Rehype and Recma plugins (optional)
+
+This chapter contains mostly explanations about what Remark and Rehype plugins are. I won't mention Recma plugins as of today only a few exist, if someone mentions MDX plugins they probably either mean Rehype or Remark plugins and only very rarely Recma.
+
+To answer what Remark is I will quote the (very informative) Remark readme:
+
+> Remark is a tool that transforms markdown with plugins. These plugins can inspect and change your markup
+
+Regarding what Rehype is, here is a quote from the Rehype readme:
+
+> Rehype is a tool that transforms HTML with plugins. These plugins can inspect and change the HTML
+
+This means that **Remark** plugins do their work by processing your markdown before it gets transformed into HTML, while **Rehype** plugins will process HTML and do their work. Then the HTML gets transformed into JSX, and then other JSX, like a React component you imported into your MDX page gets added. There is an online tool that let's you experiment with this workflow, it is called [MDX playground](https://mdxjs.com/playground/), you can modify the input and then use the select field to switch between different modes, to see the corresponding output on the right
+
+You will sometimes find a plugin for **Remark** and then another plugin for **Rehype**, but both do the same thing, for example, a plugin that would make a table of contents by listing all headings in your content, if it is a **remark** plugin it would search for headings like `# foo{:md}`, `## bar{:md}`, `### baz{:md}` in your markdown, while a similar **Rehype** plugin would look for headings `<h1>foo</h1>{:html}`, `<h2>bar</h2>{:html}`, `<h3>baz</h3>{:html}` in the HTML (after markdown got converted to HTML). In such a case it is up to you to decide which one you want to use, there is no right or wrong here, just take the one that has the features you need, the one with more detailed documentation, the most stars on GitHub or the one with the least open Issues (it is up to you to define what criteria you want to use to judge which one is better)
+
+> [!NOTE]  
+> If you are interested in learning the difference between Remark and Rehype, I recommend checking out my [MDX post](/web_development/posts/mdx)  
+
+In the previous chapter we already installed a **rehype-mdx-import-media** a Rehype plugin to convert all image paths to static imports and in the following parts of the tutorial, we will install and configure several [remark plugins](https://github.com/remarkjs/remark/blob/main/doc/plugins.md) and [rehype plugins](https://github.com/rehypejs/rehype/blob/main/doc/plugins.md) to add some interesting features to our MDX setup
+
+> [!MORE]  
+> [chris.lu "MDX" post](/web_development/posts/mdx)  
+> [remark "plugins" README](https://github.com/remarkjs/remark/blob/main/doc/plugins.md)  
+> [rehype "plugins" README](https://github.com/rehypejs/rehype/blob/main/doc/plugins.md)  
+> [recma "plugins" README](https://github.com/mdx-js/recma/blob/main/doc/plugins.md#list-of-plugins)  
+> [mdxjs.com "MDX playground"](https://mdxjs.com/playground/)
+
+## Turbopack (optional)
+
+[Turbopack](https://turbo.build/pack/docs) is a bundler, other bundlers you may know are [Webpack](https://webpack.js.org/) and [Rolldown](https://rolldown.rs/about) (the bundler from the vite team). A major difference between Webpack (which is the standard bundler in Next.js) and **Turbopack** (which is now the default bundler in development but is NOT getting used in production), is that Webpack is written Javascript and Turbopack is written in Rust.
+
+The goal when using Turbopack, is to speed up the building process by using a memory safe programming language like Rust. One problem is that you can't just use your previous Webpack plugins written in Javascript and use them in Turbopack. 
+
+The same day the Next.js team announced the release of Next.js 15 they also announced that [Turbopack is now stable **for dev**](https://nextjs.org/blog/turbopack-for-development-stable)
+
+> [!MORE]  
+> [Turbopack documentation](https://turbo.build/pack/docs)  
+> [Next.js "turbopack" api-reference](https://nextjs.org/docs/app/api-reference/turbopack)  
+> [Next.js "next.config turbo option" api-reference](https://nextjs.org/docs/app/api-reference/config/next-config-js/turbo)  
+
+## SWC (optional)
+
+[SWC](https://swc.rs) is a Javascript compiler, similar to [Babel](https://babeljs.io/). A big difference is that Babel is written in Javascript and **SWC** is written in Rust. The reasons behind switching programming languages are the same as for Turbopack, using a memory safe programming language like Rust that can do the work faster than a Javascript. The disadvantages are the same, you can't just take Babel plugins written in Javascript (like for example the React compiler, which is a babel plugin won't work when using SWC)
+
+> [!MORE]  
+> [SWC documentation](https://swc.rs/docs/getting-started)  
+> [Next.js "Next.js compiler / SWC" documentation](https://nextjs.org/docs/architecture/nextjs-compiler)  
+> [Next.js "next.config turbo option" api-reference](https://nextjs.org/docs/app/api-reference/config/next-config-js/turbo)  
+
+## mdxjs-rs (optional)
+
+[Next.js v13.2](https://nextjs.org/blog/next-13-2#rust-mdx-parser) was the first version to add support for the MDX Rust compiler (**mdxjs-rs**) by introducing the [**mdxRs** (experimental) configuration option](https://nextjs.org/docs/app/api-reference/config/next-config-js/mdxRs)
+
+The MDX Rust compiler ([mdxjs-rs](https://github.com/wooorm/mdxjs-rs)) is written in Rust (like SWC and Turbopack) and can replace [@mdx-js/mdx](https://www.npmjs.com/package/@mdx-js/mdx) the MDX compiler written in Javascript (as we saw in the [Next.js 15 MDX Rust compiler](/web_development/tutorials/next-js-static-first-mdx-starterkit/nextjs-mdx-setup#nextjs-15-mdx-rust-compiler) (experimental) page earlier in this tutorial)
+
+**mdxjs-rs** compiles your MDX content (markdown with JSX, JavaScript expressions, and ESM import/exports) into JavaScript. It uses [markdown-rs](https://github.com/wooorm/markdown-rs) to compile markdown to javascript and it uses [SWC](https://github.com/swc-project/swc) to compile the Javascript code that us in your MDX content.
+
+> [!MORE]  
+> [mdxjs-rs repository](https://github.com/wooorm/mdxjs-rs)  
+> [markdown-rs repository](https://github.com/wooorm/markdown-rs)  
+
+## Do mdxRs, Turbopack, MDX plugin(s) imports work???
+
+I you are NOT interested in the details you can jump to the [tldr](#tldr) summary else read on:
+
+<span className="neonBlueHighlightedText">Experiment 1:</span> **mdxRs OFF** and **Turbopack OFF** and **plugins get imported** in next.config
+
+Result: plugins work, you use a compile and build pipeline that is fully written in Javascript, it is NOT fast but it works
+
+<span className="neonBlueHighlightedText">Experiment 2:</span> for some time the Next.js MDX documentation has a chapter to encourage you to try out the experimental **mdxRs** option, this time **mdxRs ON** and **Turbopack OFF** and **plugins get imported** in next.config
+
+Result: plugin(s) loading silently fails
+
+When you enable the [mdxRs (experimental) configuration option](https://nextjs.org/docs/app/api-reference/config/next-config-js/mdxRs),**@next/mdx** will use its custom **mdx-rs-loader loader** to configure **mdxjs-rs (the MDX rust compiler)**
+
+As they mention in their **mdxjs-rs** [README](https://github.com/wooorm/mdxjs-rs#when-should-i-use-this):
+
+> This project does not yet support plugins.
+
+This is why our plugins silently fail, the mdxjs-rs (MDX compiler written in rust) does compile our markdown using markdown-rs, but as markdown-rs has no support for plugins it just ignores them.
+
+Even if mdxjs-rs (markdown-rs) had support for plugins, I assume that you would have to use plugins written in Rust and not the plugins we currently use which are written in Javascript. (For example the markdown-it rust compiler has a few [plugins written in rust](https://github.com/markdown-it-rust/markdown-it-plugins.rs))
+
+> [!NOTE]  
+> markdown-rs has an Issue that tracks the [Enable custom plugins #32](https://github.com/wooorm/markdown-rs/issues/32) feature, which you may want to subscribe to if you are interested in getting notifications about the progress
+
+<span className="neonBlueHighlightedText">Experiment 3:</span> now we also enable **Turbopack**, which gives us **mdxRs ON** and **Turbopack ON** and **plugins get imported** in next.config
+
+Result: Error: loader @next\mdx\mdx-rs-loader.js for match "*.mdx" does not have serializable options. Ensure that options passed are plain JavaScript objects and values.
+
+We get an Error from SWC (which has detected that we use Turbopack). It did an additional check to see if our plugin options are serializable and the **plugin name is a sting** and **NOT an import**
+
+When using [MDX plugins with Turbopack](https://nextjs.org/docs/app/building-your-application/configuring/mdx#using-plugins-with-turbopack), the plugin options MUST be serializable. As Turbopack is written in Rust, you can't pass Javascript functions to it, but you can pass it a text string (even if it does NOT know that this string is a serialized Javascript object).
+
+<span className="neonBlueHighlightedText">Experiment 4:</span> we convert the plugin import to using the plugin name (a string), so **mdxRs ON** and **Turbopack ON** and **plugin name as string** in next.config
+
+Result: again plugin(s) loading silently fails
+
+What happens here is that **@next/mdx** will check if we use mdxRs and as we do @next/mdx will use its **mdx-rs-loader**
+
+But wait, isn't that exactly what we just did? Yes it is... The plugins silently failing is the same result we have in the second experiment, the difference is that this time we have enabled Turbopack and are using a the plugin name instead of an import (as this is a Turbopack requirement), but in the end we still use mdxRs which as we saw will silently fail as it does NOT support plugins
+
+> [!NOTE]  
+> In the Next.js 15.1 release notes, there is the following entry:
+>  
+> > \[Improvement\] Support providing MDX plugins as strings for Turbopack compatibility (PR)
+>  
+> However after digging a bit in the [@next/mdx code](https://github.com/vercel/next.js/blob/canary/packages/next-mdx) I noticed that the **new loader they added in Next.js 15.1, only gets used when mdxRs is disabled**
+>  
+> In Next.js < 15.1, @next/mdx will not have the new loader and instead it will use the [@mdx-js/loader](https://mdxjs.com/packages/loader/) directly
+
+<span className="neonBlueHighlightedText">Experiment 5:</span> we disable mdxRs, this time we have **mdxRs OFF** and **Turbopack ON** and **plugin name as string** in next.config
+
+Result: TypeError: Expected usable value, not `rehype-slug`
+
+@mdx-js/loader is NOT happy with the string we passed him
+
+I digged in the code of the [@next/mdx/mdx-js-loader.js](https://github.com/vercel/next.js/blob/canary/packages/next-mdx/mdx-js-loader.js) and noticed that this new loader expects plugins to be an array (prior versions of @next/mdx allowed us to NOT use an array if we only had the plugin itself without plugin options)
+
+meaning that the following example will lead to the TypeError above:
+
+```shell
+const withMDX = createMDX({
+    options: {
+        remarkPlugins: [],
+        rehypePlugins: ['rehype-slug'],
+    },
+})
+```
+
+To fix the configuration you need to use:
+
+```shell
+const withMDX = createMDX({
+    options: {
+        remarkPlugins: [],
+        rehypePlugins: [['rehype-slug']],
+    },
+})
+```
+
+<span className="neonBlueHighlightedText">Experiment 6:</span> same setup but this we put the plugin name (string) into an array (even though it has no options)
+
+This is when I bumped into something I assume is a bug on windows:
+
+```shell
+Error: Only URLs with a scheme in: file, data, and node are supported by the default ESM loader. On Windows, absolute paths must be valid file:// URLs. Received protocol 'c:'
+```
+
+Confirmed, on Mac the code works 🎉 but this also confirms there is a windows bug 😭 (TODO: I did not find a ticket for this bug, so I will finish and publish the tutorial, then check again if a ticket exists, if not create one, I found a similar PR but in an other area of Next.js, the solution is probably similar: [use pathToFileUrl to make esm import()s work with absolute windows paths](https://github.com/vercel/next.js/pull/64386/files))
+
+### tldr
+
+| I need plugins (plugin options are serializable)                    | I need plugins (plugin options are NOT serializable)                               | I do NOT need plugins (lucky you 😉)                                              |
+| -----                                                               | -----                                                                              | -----                                                                             |
+| [solution 1](#solution-1-nextconfigmjs-with-turbopack-but-no-mdxrs) | [solution 2](#solution-2-nextconfigmjs-with-plugins-but-no-turbopack-and-no-mdxrs) | [solution 3](#solution-3-nextconfigts-with-mdxrs-but-no-turbopack-and-no-plugins) |
+
+#### Solution 1 (next.config.mjs with Turbopack, but NO mdxRs)
+
+If you use Turbopack, then make sure your MDX plugins have serializable options and use the plugin name instead of an import. Also make sure mdxRs is disabled, because when Next.js 15.1 added support for Turbopack it also removed support for mdxRs
+
+> [!NOTE]  
+> this only works with > Next.js 15.1 (Next.js 15 and before will not have the @next/mdx/mdx-js-loader which is part of the [Support providing MDX plugins as strings for Turbopack compatibility PR #72802](https://github.com/vercel/next.js/pull/72802) that got released in [Next.js v15.1](https://nextjs.org/blog/next-15-1)), instead versions prior
+
+> [!WARN]  
+> this version has a bug on windows, the path resolve in windows returns an absolute path but node.js expects a URL:
+>  
+> ```shell
+> Error: Only URLs with a scheme in: file, data, and node are supported by the default ESM loader. On Windows, absolute paths must be valid file:// URLs. Received protocol 'c:' (ERR_UNSUPPORTED_ESM_URL_SCHEME)
+> ```
+>  
+> this version uses the new @next/mdx/mdx-js-loader, which fails to get imports right on windows
+
+```js title="next.config.mjs"
+import createMDX from '@next/mdx'
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+    experimental: {
+        mdxRs: false,
+    },
+}
+
+/** @type {import('remark-gfm').Options} */
+const remarkGFMOptions = {
+    singleTilde: false,
+}
+
+const withMDX = createMDX({
+    options: {
+        // @ts-ignore wrong types
+        remarkPlugins: [['remark-gfm', remarkGFMOptions]],
+        rehypePlugins: [],
+    },
+})
+
+export default withMDX(nextConfig)
+```
+
+**Incompatible types problem:** if you use the typescript config, know that you will likely have a types error:
+
+```shell
+Type 'string' is not assignable to type 'Plugin<any[], any, any>'.ts(2322)
+```
+
+This is because createMDX (as of now Next.js 15.1.2) still uses the Option type from the @mdx-js/loader.
+
+We tell typescript to ignore this error by using a @ts-ignore comment:
+
+```ts
+const withMDX = createMDX({
+   options: {
+        // @ts-ignore wrong types
+        remarkPlugins: [[remarkGfm, remarkGFMOptions]],
+        rehypePlugins: [],
+    },
+})
+```
+
+With this configuration you can use turbopack:
+
+```json title="package.json"
+{
+    "name": "nextjs_turbo_mdx-rs_no_plugins",
+    "version": "0.0.1",
+    "scripts": {
+        "dev": "next dev --turbopack",
+    },
+}
+```
+
+#### Solution 2 (next.config.mjs with plugins but NO Turbopack and NO mdxRs)
+
+If you use plugins, but NOT all your plugin options are serializable, then your only option is to disable Turbopack (as it needs serializable options). You can also NOT use Javascript plugins with mdxjs-rs (it will compile your MDX but ignore your plugins) which is why mdxRs is disabled too
+
+As Turbopack is disabled you can import MDX plugins, unless you use a next.config.ts, then you will likely NOT be able to import the plugin(s) because most MDX (remark, rehype and recma) plugins are ESM plugins (for more details check out: [next.config.ts does NOT support ESM only imports](/web_development/tutorials/next-js-static-first-mdx-starterkit/next-config#nextconfigts-does-not-support-esm-only-packages))
+
+```js title="next.config.mjs"
+import createMDX from '@next/mdx'
+import remarkGfm from 'remark-gfm'
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+    experimental: {
+        mdxRs: false,
+    },
+}
+
+/** @type {import('remark-gfm').Options} */
+const remarkGFMOptions = {
+    singleTilde: false,
+}
+
+const withMDX = createMDX({
+    options: {
+        // @ts-ignore wrong types
+        remarkPlugins: [[remarkGfm, remarkGFMOptions]],
+        rehypePlugins: [],
+    },
+})
+
+export default withMDX(nextConfig)
+```
+
+> [!NOTE]  
+> as [next.config.ts does NOT support ESM only imports](/web_development/tutorials/next-js-static-first-mdx-starterkit/next-config#nextconfigts-does-not-support-esm-only-packages) we use a **.mjs** config (instead of a typescript config)
+
+With this configuration you can NOT use turbopack:
+
+```json title="package.json"
+{
+    "name": "nextjs_turbo_mdx-rs_no_plugins",
+    "version": "0.0.1",
+    "scripts": {
+        "dev": "next dev",
+    },
+}
+```
+
+#### Solution 3 (next.config.ts with mdxRs, but NO Turbopack and NO plugins)
+
+If you do NOT use plugins, then I recommend you enable mdxRs and if you want the github flavored markdown (gfm) extensions (like tables, footnotes, strikethrough, ...) then I recommend setting the configuration option to gfm
+
+```ts title="next.config.ts"
+import type { NextConfig } from 'next'
+import createMDX from '@next/mdx'
+
+const nextConfig: NextConfig = {
+    pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+    experimental: {
+        mdxRs: {
+            // 'gfm' | 'commonmark'
+            mdxType: 'gfm',
+        },
+    },
+}
+
+const withMDX = createMDX({
+    options: {
+        remarkPlugins: [],
+        rehypePlugins: [],
+    },
+})
+
+export default withMDX(nextConfig)
+```
+
+With this configuration you can use turbopack (without turbopack works too):
+
+```json title="package.json"
+{
+    "name": "nextjs_turbo_mdx-rs_no_plugins",
+    "version": "0.0.1",
+    "scripts": {
+        "dev": "next dev --turbopack",
+    },
+}
+```
+
+I had NO major problems using the MDX rust compiler, but encountered a problem when using tables, for which there is an open [markdown-rs issue #111](https://github.com/wooorm/markdown-rs/issues/111) but no fix yet
+
+```shell
+In HTML, whitespace text nodes cannot be a child of <table>. Make sure you don't have any extra whitespace between tags on each line of your source code.
+This will cause a hydration error.
+```
+
+One workaround would be to go back to using the Javascript compiler (by setting mdxRs to false), another workaround is to create tables using JSX (as recommend in this similar [mdx-js issue #2000](https://github.com/mdx-js/mdx/issues/2000#issuecomment-1280603924) a React UI component to render tables (its MDX after all)
+
+<DonationsMessage />
+
+<Pagination
+    previous={{ label: 'Optimizing images in MDX using next/image', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/optimizing-using-next-image' }}
+    next={{ label: 'Code highlighting plugin', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/code-highlighting-plugin' }}
+/>
+
+</article>

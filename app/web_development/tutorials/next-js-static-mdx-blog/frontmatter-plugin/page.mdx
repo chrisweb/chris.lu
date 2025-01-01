@@ -11,6 +11,8 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -43,6 +45,8 @@ export const metadata = {
     { label: 'Web development tutorials', href: '/web_development' },
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
+
+<ArchivedMessage case="next-js-14-static-tutorial" />
 
 # Frontmatter introduction
 
@@ -160,7 +164,7 @@ Line 58: we add both to our remark plugins list
 
 Now it is time to create an example where we define some frontmatter. Then we let both plugins do their magic, and finally we can use the frontmatter variable to populate the Next.js metadata object
 
-Let's reuse our **gfm plaground** page one more time
+Let's reuse our **gfm playground** page one more time
 
 First, remove the current metadata and then add this instead:
 
@@ -229,13 +233,13 @@ Lines 8 and 9: we have the **open graph URL and sitename**, which are two values
 
 Line 10: we have the **open graph type** to **article**, just to demonstrate the following two meta tags at lines 11 and 12
 
-Line 11 and 12: we have two new meta tags, which have a property that is NOT prefixed with `og:`, opengraph has a documentation page for the [https://ogp.me/#type_article](https://ogp.me/#type_article) about the open graph **article namespace**, it needs to have the **open graph type** set to **article** and then you get tags that are **prefixed** with `article:`, if however the type is for example set to website, then those two metatags will disappear from the head element (even if you define them in your page source)
+Line 11 and 12: we have two new meta tags, which have a property that is NOT prefixed with `og:`, opengraph has a documentation page for the [https://ogp.me/#type_article](https://ogp.me/#type_article) about the open graph **article namespace**, it needs to have the **open graph type** set to **article** and then you get tags that are **prefixed** with `article:`, if however the type is for example set to website, then those two meta tags will disappear from the head element (even if you define them in your page source)
 
 Lines 13 to 16: we have the keywords that get used as tags for our open graph article, unlike the **keywords** meta tag, the **tags** get split into multiple tags
 
 ## Frontmatter linting errors
 
-If you followed the remark lint tuturial part, you might have noticed that as soon as you add the frontmatter block to your MDX documents, remark-lint will start complaining about non valid content, if you hover with your mouse over the part that is underlined with a green wave, it will open a modal that shows you one of those linting problems:
+If you followed the remark lint tutorial part, you might have noticed that as soon as you add the frontmatter block to your MDX documents, remark-lint will start complaining about non valid content, if you hover with your mouse over the part that is underlined with a green wave, it will open a modal that shows you one of those linting problems:
 
 > Unexpected setext heading, expected ATX (remark-lint-heading-style)  
 
@@ -260,15 +264,21 @@ import remarkLintNoUndefinedReferences from 'remark-lint-no-undefined-references
 import remarkLintLinkTitleStyle from 'remark-lint-link-title-style'
 import remarkLintMaximumLineLength from 'remark-lint-maximum-line-length'
 import remarkLintListItemSpacing from 'remark-lint-list-item-spacing'
+
+// remark plugins
+import remarkGfm from 'remark-gfm'
 import remarkFrontmatter from 'remark-frontmatter'
 
 const config = {
     plugins: [
-        // presets
+        // first the plugins
+        remarkGfm,
+        remarkFrontmatter,
+        // then the presets
         remarkPresetLintRecommended,
         remarkPresetLintConsistent,
         remarkPresetLintMarkdownStyleGuide,
-        // rules
+        // and finally the rules customizations
         // https://www.npmjs.com/package/remark-lint-maximum-heading-length
         [remarkLintMaximumHeadingLength, [1, 100]],
         // https://www.npmjs.com/package/remark-lint-unordered-list-marker-style
@@ -296,7 +306,7 @@ If you now run the linting process again the errors should be gone (if they are 
 
 Congratulations 🎉 you just learned how to set metadata for MDX pages and how to add frontmatter to MDX documents
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 <Pagination
     previous={{ label: 'Open Graph Image(s)', href: '/web_development/tutorials/next-js-static-mdx-blog/open_graph_images' }}

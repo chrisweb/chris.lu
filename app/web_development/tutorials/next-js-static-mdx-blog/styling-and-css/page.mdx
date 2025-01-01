@@ -3,7 +3,7 @@ title: Styling and CSS libraries - Tutorial
 description: Styling and CSS libraries - Next.js static MDX blog | www.chris.lu Web development tutorials
 keywords: ['styling', 'css', 'modules', 'next.js', 'css-in-js', 'library', 'UI']
 published: 2024-08-20T14:33:33.444Z
-modified: 2024-10-07T14:33:33.444Z
+modified: 2024-08-20T14:33:33.444Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/styling-and-css
 section: Web development
 ---
@@ -11,6 +11,8 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -43,6 +45,8 @@ export const metadata = {
     { label: 'Web development tutorials', href: '/web_development' },
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
+
+<ArchivedMessage case="next-js-14-static-tutorial" />
 
 # Styling and CSS libraries
 
@@ -149,7 +153,7 @@ What I like about CSS Modules is that they are pretty simple, which means you wo
 In this chapter, we will have a look at some of them
 
 > [!TIP]  
-> For [naming](https://github.com/css-modules/css-modules/blob/master/docs/naming.md) classes, the CSS modules team recommends using camelcase
+> For [naming](https://github.com/css-modules/css-modules#naming) classes, the CSS modules team recommends using camelcase
 >  
 > A class name with a hyphen (kebab-case) is possible, but you will need to put the name into square brackets
 >  
@@ -165,9 +169,7 @@ Then right-click, choose **Inspect** or press `F12` to open the dev tools, then 
 
 ![chrome dev tools elements tab showing how CSS modules class names look after compilation](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/chrome_dev_tools_inspect_css_modules.png)
 
-If you want to add more than one class, either use a package like [clsx ](https://www.npmjs.com/package/clsx) or [classnames](https://www.npmjs.com/package/classnames)
-
-Another option to add multiple classes is to use native javascript [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) which is what I will use in this example:
+If you want to add more than one class, either use a package like [classnames](https://www.npmjs.com/package/classnames) or just use [native javascript template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) like so:
 
 ```tsx title="/components/tutorial_examples/UI/Button.tsx" showLineNumbers {6} "&#x60;${styles.reset} ${styles.core}&#x60;"
 import styles from './button.module.css'
@@ -233,8 +235,8 @@ Here are a few more things about CSS Modules worth knowing:
 
 > [!MORE]  
 > [Next.js "CSS Modules and Global Styles" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-modules)  
-> [CSS Modules "composition" documentation](https://github.com/css-modules/css-modules/blob/master/docs/composition.md)  
-> [CSS Modules "naming" documentation](https://github.com/css-modules/css-modules/blob/master/docs/naming.md)  
+> [CSS Modules "composition" documentation](https://github.com/css-modules/css-modules#composition)  
+> [CSS Modules "naming" documentation](https://github.com/css-modules/css-modules#naming)  
 
 ### Improved UI Button
 
@@ -587,7 +589,7 @@ Now (make sure your dev server is running) visit the previous example page we di
 
 Congratulations 🎉 you now know how to use CSS modules and global.css to add styling to your project
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [Next.js "global styles" documentation](https://nextjs.org/docs/app/building-your-application/styling/css-modules#global-styles)  

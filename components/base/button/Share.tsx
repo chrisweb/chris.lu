@@ -34,7 +34,7 @@ const ShareButton = forwardRef<ButtonWithIconRefType, IProps>((props, buttonRef)
                     if (process.env.NODE_ENV === 'development') {
                         console.log('shared')
                     }
-                }).catch((error) => {
+                }).catch((error: unknown) => {
                     if (process.env.NODE_ENV === 'development') {
                         console.log(error)
                     }
@@ -64,12 +64,12 @@ const ShareButton = forwardRef<ButtonWithIconRefType, IProps>((props, buttonRef)
 
     return (
         <>
-            {(shareDataState !== null) &&
+            {(shareDataState !== null) && (
                 <button
                     onClick={buttonClickHandler}
                     className={`${styles.reset} ${styles.base} ${styles.cursor}`}
                     ref={buttonRef}
-                    type='button'
+                    type="button"
                     {...rest}
                 >
                     <div className={styles.border}>
@@ -78,7 +78,7 @@ const ShareButton = forwardRef<ButtonWithIconRefType, IProps>((props, buttonRef)
                         </div>
                     </div>
                 </button>
-            }
+            )}
         </>
     )
 })

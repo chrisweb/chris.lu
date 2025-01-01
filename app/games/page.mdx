@@ -6,7 +6,7 @@ export const metadata = {
         canonical: 'https://chris.lu/games',
     },
     openGraph: {
-        ...sharedMetaData,
+        ...sharedMetaData.openGraph,
         url: 'https://chris.lu/games',
     },
 }
@@ -128,7 +128,7 @@ My first PC ever had an [Intel 486DX2-66](https://en.wikipedia.org/wiki/I486) pr
     </div>
     <div>
         ![MS-DOS The Clou! game](../../public/assets/images/app/games/msdos_the_clou.png '{ screenshot }')
-        [The Clue!](https://en.wikipedia.org/wiki/The_Clue!) (German: Der Clou!) The mix of genres in this game was what I liked most. The first part was like a classical adventure game in which you were wandering through the city of London trying to recruit members for your crew, but there was also a second part that was a top-down view of the interior of the buildings, in which you had to execute the actual burglaries
+        [The Clou!](https://en.wikipedia.org/wiki/The_Clou!) (German: Der Clou!) The mix of genres in this game was what I liked most. The first part was like a classical adventure game in which you were wandering through the city of London trying to recruit members for your crew, but there was also a second part that was a top-down view of the interior of the buildings, in which you had to execute the actual burglaries
     </div>
     <div>
         ![MS-DOS The Settlers II: Veni, Vidi, Vici game](../../public/assets/images/app/games/msdos_the_settlers_ii.png '{ screenshot }')
@@ -147,9 +147,10 @@ My first PC ever had an [Intel 486DX2-66](https://en.wikipedia.org/wiki/I486) pr
 Video (with sound) of the intro of X-COM: UFO Defense:
 
 <video controls preload="none" title="X-COM: UFO Defense Intro" poster="/assets/images/app/games/x-com_ufo_defense_intro_poster.jpg">
-  <source src="/assets/video/app/games/x-com_ufo_defense_intro_vp9.webm" type="video/webm" />
-  <source src="/assets/video/app/games/x-com_ufo_defense_intro_h264.mp4" type="video/mp4" />
-  <p>Your browser doesn&apos;t support HTML5 video.</p>
+    <track kind="captions" />
+    <source src="/assets/video/app/games/x-com_ufo_defense_intro_vp9.webm" type="video/webm" />
+    <source src="/assets/video/app/games/x-com_ufo_defense_intro_h264.mp4" type="video/mp4" />
+    <p>Your browser doesn&apos;t support HTML5 video.</p>
 </video>
 
 ## Nintendo 64

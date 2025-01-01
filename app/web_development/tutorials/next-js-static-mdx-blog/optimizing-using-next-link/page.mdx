@@ -11,6 +11,8 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -44,6 +46,8 @@ export const metadata = {
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
 
+<ArchivedMessage case="next-js-14-static-tutorial" />
+
 # Optimizing links in MDX using next/link
 
 When building our navigation earlier we saw why it is beneficial to use [next/link](https://nextjs.org/docs/app/api-reference/components/link) (for internal links) instead of regular HTML anchors, so now we want to do the same for all the markdown links that we will insert into our MDX pages, because without using the **mdx-components** the parser would just transform the markdown links into regular HTML anchors, we want markdown links to use next/link, which is what we will do next in our `mdx-components.tsx` file
@@ -66,7 +70,7 @@ import Link from 'next/link'
 import type { Route } from 'next'
 
 export interface IBaseLinkProps extends PropsWithChildren {
-    href: Route<string> | URL
+    href: Route | URL
     target?: string
     rel?: string
     className?: string
@@ -245,7 +249,7 @@ Now launch the dev server (using the `npm run dev` command) and then open the `h
 
 Congratulations 🎉 you just created a link component that will now get used for all markdown links, which means they will now all benefit from the next/link features like prefetching and optimized client-side navigation between routes
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [VSCode "Markdown editing" documentation](https://code.visualstudio.com/docs/languages/markdown#_inserting-images-and-links-to-files)  

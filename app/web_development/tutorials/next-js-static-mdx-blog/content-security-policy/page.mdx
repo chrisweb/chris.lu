@@ -11,6 +11,8 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -43,6 +45,8 @@ export const metadata = {
     { label: 'Web development tutorials', href: '/web_development' },
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
+
+<ArchivedMessage case="next-js-14-static-tutorial" />
 
 # Content Security Policy (CSP)
 
@@ -202,7 +206,7 @@ If you now start your development server (using `npm run dev`), open `http://loc
 > [MDN "Content Security Policy (CSP)" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)  
 > [MDN "CSP Headers" reference](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy)  
 > [Next.js "Configuring CSP" documentation](https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy)  
-> [Vercel "Using a Content Security Policy" documentation](https://vercel.com/docs/workflow-collaboration/vercel-toolbar/managing-toolbar#using-a-content-security-policy)  
+> [Vercel "Using a Content Security Policy" documentation](https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy)  
 
 ### Example of a CSS violation
 
@@ -401,12 +405,12 @@ Line 75 and 90: we add the **reportCSPViolations** variable, which contains a re
 > It is essential to add the **reportingDomainWildcard** to the connect-src directive, or CSP will block the reporting URL and not send reports to Sentry. We only add the **reportingDomainWildcard** to the connect-src for preview and production, but NOT development, as Sentry.io will filter out reports from localhost anyway.  
 
 > [!TIP]  
-> If you want to debug your code, you might want to also add the reporting for development. In that case, add the `${reportCSPViolations}` and `${reportingDomainWildcard}` variables to the development directives too (same as for preview and production) and then check out the chapter about [disableng the "reports from localhost" filter](/web_development/posts/sentry-io#disable--enable-reports-from-localhost-filter) in my Sentry.io post as you will need to disable the filter for localhost reporting in your Sentry configuration on Sentry.io  
+> If you want to debug your code, you might want to also add the reporting for development. In that case, add the `${reportCSPViolations}` and `${reportingDomainWildcard}` variables to the development directives too (same as for preview and production) and then check out the chapter about [disabling the "reports from localhost"](/web_development/posts/sentry-io/#disable--enable-reports-from-localhost-filter) filter in my Sentry.io post as you will need to disable the filter for localhost reporting in your Sentry configuration on Sentry.io  
 >  
 > If you want to only allow certain domains to be able to send in reports, then you can whitelist those domains, meaning Sentry.io will filter out reports that come from other domains (and use your Sentry DSN), I have a chapter in my Sentry.io post that goes explains [how to set up an allowed domains list](/web_development/posts/sentry-io#allowed-domains-filter) using the Sentry UI
 
 > [!MORE]  
-> [Sentry.io "Security Policy Reporting" documentation](https://docs.sentry.io/security-legal-pii/security/security-policy-reporting/)  
+> [Sentry.io "CSP violations logging" documentation](https://docs.sentry.io/product/security-policy-reporting/)  
 > [chris.lu "Sentry.io" post](/web_development/posts/sentry-io)  
 
 ## Adding security headers
@@ -467,7 +471,7 @@ Lines 125 to 136: we add 3 more security headers to the list of headers:
 
 Congratulations 🎉 you just made your project a lot more secure by setting up CSP headers and reporting potential violations
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [MDN "Strict-Transport-Security" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)  

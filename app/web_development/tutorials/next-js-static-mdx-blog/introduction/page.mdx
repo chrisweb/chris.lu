@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBug, faComments } from '@fortawesome/free-solid-svg-icons'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -46,6 +47,8 @@ export const metadata = {
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
 
+<ArchivedMessage case="next-js-14-static-tutorial" />
+
 # Introduction
 
 I tried to make this tutorial as beginner-friendly as possible. If, however you have a question feel free to ask on the <FontAwesomeIcon icon={faComments} size="1x" color='rgb(255, 0, 170)' /> [discussion](https://github.com/chrisweb/chris.lu/discussions) page and if you find a bug please report it using the <FontAwesomeIcon icon={faBug} size="1x" color='rgb(255, 0, 170)' /> [issues](https://github.com/chrisweb/chris.lu/issues)
@@ -76,7 +79,7 @@ In this tutorial, we will:
 
 ## Source code
 
-All the source code for this tutorial can be found in the [next-js-static-mdx-blog_tutorial_chris.lu](https://github.com/chrisweb/next-js-static-mdx-blog_tutorial_chris.lu) repository on GitHub, every chapter of this tutorial is a seperate branch in the repository. To view the full code, have a look at the last branch ["32_sitemap"](https://github.com/chrisweb/next-js-static-mdx-blog_tutorial_chris.lu/tree/32_sitemap)
+All the source code for this tutorial can be found in the [next-js-static-mdx-blog_tutorial_chris.lu](https://github.com/chrisweb/next-js-static-mdx-blog_tutorial_chris.lu) repository on GitHub, every chapter of this tutorial is a separate branch in the repository. To view the full code, have a look at the last branch ["32_sitemap"](https://github.com/chrisweb/next-js-static-mdx-blog_tutorial_chris.lu/tree/32_sitemap)
 
 <Pagination
     previous={{ label: 'Table of Contents', href: '/web_development/tutorials/next-js-static-mdx-blog' }}

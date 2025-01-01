@@ -11,6 +11,8 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -43,6 +45,8 @@ export const metadata = {
     { label: 'Web development tutorials', href: '/web_development' },
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
+
+<ArchivedMessage case="next-js-14-static-tutorial" />
 
 # Code highlighting plugin
 
@@ -629,9 +633,9 @@ Now that we have a default language set, we can remove the language flag we had 
 
 ```
 function helloWorld() {
-    // this is a comment
-    let greeting = 'Hello World!'
-    console.log(greeting)
+ // this is a comment
+ let greeting = 'Hello World!'
+ console.log(greeting)
 }
 ```
 
@@ -647,10 +651,7 @@ If you did follow the "ESLint with remark lint setup" we did earlier in this tut
 
 We see this Remark lint [remark-lint-fenced-code-flag](https://github.com/remarkjs/remark-lint/blob/main/packages/remark-lint-fenced-code-flag/readme.md) warning because remark-lint is not aware of the default language we just added
 
-If you want to remove the linting warning, you have 2 options:
-
-* you could use a [comment to disable the remark-link rule](/web_development/tutorials/next-js-static-mdx-blog/linting-using-vscode-and-extensions#remark-lint-disable-comments-in-mdx) for that code block
-* or you could disable the rule completly; in which case you need to edit your `.remarkrc.mjs` file and set the **remark-lint-fenced-code-flag** rule to false, as we previously did in the [configuring remark-lint](/web_development/tutorials/next-js-static-mdx-blog/linting-mdx-using-remark-lint#adding-and-configuring-remark-lint) chapter; after editing the remark-lint configuration you might want to [clear the ESLint cache](/web_development/tutorials/next-js-static-mdx-blog/linting-mdx-using-remark-lint#clearing-the-eslint-cache) and then [restart the ESLint server in VSCode](/web_development/tutorials/next-js-static-mdx-blog/linting-using-vscode-and-extensions#restarting-the-eslint-server-in-vscode) to make sure ESLint will use your latest changes
+If you want to remove the linting warning, use a [comment to disable the remark-link rule](/web_development/tutorials/next-js-static-mdx-blog/linting-using-vscode-and-extensions#remark-lint-disable-comments-in-mdx) for that code block or if you want to disable that remark-link rule altogether, then you need to edit your `.remarkrc.mjs` file and set the rule to false, as we previously did in the [configuring remark-lint](/web_development/tutorials/next-js-static-mdx-blog/linting-mdx-using-remark-lint#adding-and-configuring-remark-lint) chapter, after editing the remark-lint configuration you might want to [restart the ESLint server in VSCode](/web_development/tutorials/next-js-static-mdx-blog/linting-using-vscode-and-extensions#restarting-the-eslint-server-in-vscode) and [clear the ESLint cache](/web_development/tutorials/next-js-static-mdx-blog/linting-mdx-using-remark-lint#clearing-the-eslint-cache)
 
 > [!NOTE]  
 > If you don't set a default language and also don't set a language flag on a code block, then rehype pretty code will **NOT** get activated for that code block, as it needs to know the programming language to be able to choose the correct colors when highlighting  
@@ -884,7 +885,7 @@ If we used the correct tokens to create our aliases map, the colors in the list 
 
 Congratulations 🎉 you finished learning about how to highlight code using a remark plugin and learned how to use most of its features (including using VSCode themes)
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [VSCode "Semantic Highlight" guide](https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers)  

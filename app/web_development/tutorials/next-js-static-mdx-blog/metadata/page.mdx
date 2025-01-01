@@ -11,6 +11,8 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -43,6 +45,8 @@ export const metadata = {
     { label: 'Web development tutorials', href: '/web_development' },
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
+
+<ArchivedMessage case="next-js-14-static-tutorial" />
 
 # Metadata (for tsx and mdx pages)
 
@@ -234,7 +238,7 @@ export const metadata: Metadata = {
 }
 ```
 
-Lines 12 to 17: we add an **Open Graph** object and set a few properties, like the permalink **url** of the page, the projects (blog, wesite, ...) **site name**, the locale of the content and the **type** of content that it is 
+Lines 12 to 17: we add an **Open Graph** object and set a few properties, like the permalink **url** of the page, the projects (blog, website, ...) **site name**, the locale of the content and the **type** of content that it is 
 
 > [!TIP]  
 > As we already have a **title** and **description** in the regular metadata, we do NOT need to repeat those in the open graph data, Next.js will handle this automatically for us
@@ -260,7 +264,7 @@ Now inspect the source of the playground page `http://localhost:3000/gfm_playgro
 <meta property="og:url" content="https://example.com/tutorial_examples/gfm_playground">
 ```
 
-I expected to see 6 meta tags, but there are only 3, which means the **openGraph** object from the page did not get merged with the **openGraph** object of the layout. At first, I thought this was a bug, so I did a search in the Next.js issues in the Next.js GitHub repository and found an Issue [Next.js issue "openGraph metadata not merging across layouts" #47540](https://github.com/vercel/next.js/issues/47540) and then 2 more [Next.js issue "All properties of nested metadata objects like openGraph get overwritten even if only one was a duplicate" #46899](https://github.com/vercel/next.js/issues/46899), [Next.js issue "Nested Open Graph metadata overwrites root metadata" #46434](https://github.com/vercel/next.js/issues/46434) about problems when merging **openGraph** of a page with the one of the layout. The issues all have comments which seem to indicate that this by design and it is not something they plan to change, as explained in this [comment by a member of the Nextj.js team](https://github.com/vercel/next.js/issues/47540#issuecomment-1533106646).
+I expected to see 6 meta tags, but there are only 3, which means the **openGraph** object from the page did not get merged with the **openGraph** object of the layout. At first, I thought this was a bug, so I did a search in the Next.js issues in the Next.js GitHub repository and found an Issue [Next.js issue "openGraph metadata not merging across layouts" #47540](https://github.com/vercel/next.js/issues/47540) and then 2 more [Next.js issue "All properties of nested metadata objects like openGraph get overwritten even if only one was a duplicate" #46899](https://github.com/vercel/next.js/issues/46899), [Next.js issue "Nested Open Graph metadata overwrites root metadata" #46434](https://github.com/vercel/next.js/issues/46434) about problems when merging **openGraph** of a page with the one of the layout. The issues all have comments which seem to indicate that this by design and it is not something they plan to change, as explained in this [comment by a member of the Next.js team](https://github.com/vercel/next.js/issues/47540#issuecomment-1533106646).
 
 ### 3 ways to merge Open Graph metadata
 
@@ -359,7 +363,7 @@ export const metadata: Metadata = {
 
 Congratulations 🎉 you now also have support for open graph metadata in your project
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [Next.js "metadata merging" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/metadata#merging)  

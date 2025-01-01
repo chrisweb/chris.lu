@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import fallback from '/public/assets/images/neonroad/fallback.png'
+import fallback from '@/public/assets/images/neonroad/fallback.png'
 
 interface IProps {
     altText: string
@@ -20,7 +20,7 @@ const StaticImage: React.FC<IProps> = (props) => {
             }}
             sizes="100vw"
             priority
-            placeholder='blur'
+            placeholder="blur"
         />
     )
 }

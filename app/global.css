@@ -49,7 +49,7 @@
     --tertiary-light-color: rgb(var(--tertiary-light-value));
     --quaternary-light-value: 215 110 255;
     --quaternary-light-color: rgb(var(--quaternary-light-value));
-    --codebloc-font-family: var(--font-sourceCodePro), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --codeblock-font-family: var(--font-sourceCodePro), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     --header-navbar-height: 50px;
     --cursor-default: url(/assets/cursors/secondary_mouse_default.cur), default;
     --cursor-pointer: url(/assets/cursors/secondary_mouse_pointer.cur), pointer;
@@ -91,7 +91,7 @@ html {
     scroll-behavior: smooth;
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth */
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale; /* only macos */
+    -moz-osx-font-smoothing: grayscale;
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-rendering */
     /*text-rendering: optimizeLegibility;*/
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-size-adjust */
@@ -575,7 +575,7 @@ progress {
 }
 
 code {
-    font-family: var(--codebloc-font-family);
+    font-family: var(--codeblock-font-family);
     font-size: var(--main-fontSize-small);
     counter-reset: line;
 }
@@ -604,6 +604,16 @@ code[data-line-numbers-max-digits="3"]>[data-line]::before {
     border-left-width: 2px;
     border-left-style: solid;
     border-left-color: transparent;
+}
+
+[data-line].remove {
+    background-color: #34151b;
+    border-left-color: #ff0035;
+}
+
+[data-line].add {
+    background-color: #2a4827;
+    border-left-color: #28ff00;
 }
 
 [data-highlighted-line] {
@@ -682,7 +692,7 @@ article,
     padding-left: var(--main-spacing);
     padding-right: var(--main-spacing);
     margin-bottom: calc(var(--main-spacing) * 2);
-    /* for mobile when a chain of characters is extremly long */
+    /* for mobile, when a chain of characters is extremely long */
     overflow-x: clip;
 }
 
@@ -795,10 +805,15 @@ aside {
     text-decoration: none;
 }
 
-/* "external link" icon styling */
-.externalLinkIcon {
+/* svg icons (font awesome) */
+.inlineIcon {
     color: var(--primary-light-color);
-    margin-left: calc(var(--main-spacing) / 5);
+    margin: 0 calc(var(--main-spacing) / 5);
+}
+
+.startInlineIcon {
+    color: var(--primary-light-color);
+    margin-right: calc(var(--main-spacing) / 5);
 }
 
 /* github like heading anchor */
@@ -939,7 +954,7 @@ make the text color a bit darker */
             0 100%);
 }
 
-.makrdown-alert-fake-border {
+.markdown-alert-fake-border {
     width: 100%;
     height: 100%;
     position: relative;
@@ -1040,4 +1055,22 @@ make the text color a bit darker */
     color: var(--primary-light-color);
     height: 30px;
     padding-left: calc(var(--main-spacing) / 2);
+}
+
+.neonGreenHighlightedText {
+    font-weight: var(--main-fontWeight-bolder);
+    color: rgb(57, 255, 20);
+    text-shadow: 0 0 5px rgba(57, 255, 20, 0.5);
+}
+
+.neonRedHighlightedText {
+    font-weight: var(--main-fontWeight-bolder);
+    color: rgb(255, 0, 0);
+    text-shadow: 0 0 5px rgba(255, 20, 20, 0.5);
+}
+
+.neonBlueHighlightedText {
+    font-weight: var(--main-fontWeight-bolder);
+    color: rgb(0, 157, 255);
+    text-shadow: 0 0 5px rgba(20, 149, 255, 0.5);
 }

@@ -6,26 +6,26 @@ import styles from './breadcrumbs.module.css'
 
 export interface IListItem {
     label: string
-    href: Route<string> | URL
+    href: Route | URL
 }
 
-export interface IPaginationProps {
+export interface IBreadcrumbsProps {
     list: IListItem[]
 }
 
-const Breadcrumbs: React.FC<IPaginationProps> = (props): JSX.Element => {
+const Breadcrumbs: React.FC<IBreadcrumbsProps> = (props) => {
 
     const { list } = props
 
     return (
         <>
             <nav className={styles.nav} aria-label="Breadcrumbs">
-                    {list.map(listItem =>
-                        <div key={crypto.randomUUID()} className={`fontSmall ${styles.inline}`}>
-                            <Link href={listItem.href}>{listItem.label}</Link>
-                            <FontAwesomeIcon icon={faChevronRight} size="sm" className={styles.icon} />
-                        </div>
-                    )}
+                {list.map(listItem => (
+                    <div key={crypto.randomUUID()} className={`fontSmall ${styles.inline}`}>
+                        <Link href={listItem.href}>{listItem.label}</Link>
+                        <FontAwesomeIcon icon={faChevronRight} size="sm" className={styles.icon} />
+                    </div>
+                ))}
             </nav>
         </>
     )

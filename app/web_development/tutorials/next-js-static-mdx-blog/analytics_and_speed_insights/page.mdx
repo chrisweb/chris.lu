@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -44,6 +45,8 @@ export const metadata = {
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
 
+<ArchivedMessage case="next-js-14-static-tutorial" />
+
 # Vercel Analytics and Speed Insights
 
 We are now going to add Vercel **Analytics** and **Speed Insights** to our project using two packages by Vercel so that later, we can go to our Vercel Dashboard and check out how well our project performs
@@ -67,7 +70,7 @@ Next, click on the **Enable** button
 
 Chose your plan, if you haven't already done so you may want to check out the [vercel analytics pricing page](https://vercel.com/docs/analytics/limits-and-pricing)
 
-Now we need to add Vercel Snalytics to our Next.js project, so we go back into VSCode and open our project
+Now we need to add Vercel analytics to our Next.js project, so we go back into VSCode and open our project
 
 Then we open the VSCode terminal and run the following command to install the Vercel Analytics package:
 
@@ -263,7 +266,7 @@ You might want to add a comment inside of your `next.config.mjs`, to let other d
 // because of vercel analytics and speed insights
 ```
 
-A second change you need to do (when using Vercel analytics), is to add the `https://va.vercel-scripts.com` domain for the **development** environment to the **srcipt-src** directive:
+A second change you need to do (when using Vercel analytics), is to add the `https://va.vercel-scripts.com` domain for the **development** environment to the **script-src** directive:
 
 ```shell
 script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com;

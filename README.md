@@ -18,17 +18,15 @@ On [chris.lu](https://chris.lu), you will find my tutorials and can learn more a
 
 ## Technologies used
 
-During the development of the blog, I wrote a ["Next.js static MDX blog" tutorial](https://chris.lu/web_development/tutorials/next-js-static-mdx-blog) that showcases most of the technologies that I used
+During the development of the blog, I wrote a ["Next.js static MDX blog" tutorial](https://chris.lu/web-development/tutorials/next-js-static-mdx-blog) that showcases most of the technologies that I used
 
-The framework I used is [Next.js 14](https://github.com/vercel/next.js) with [React 18](https://github.com/facebook/react) (I plan on upgrading to Next.js 15 and React 19 as soon as the first stable versions get released and will update my tutorial accordingly)
+The framework I used is [Next.js 15.x](https://github.com/vercel/next.js) with [React 19.x](https://github.com/facebook/react)
 
-I added [MDX](https://mdxjs.com/) support to be able to create content using next/mdx. I then also used several remark and rehype plugins and even built two myself, [rehype-github-alerts
-](https://github.com/chrisweb/rehype-github-alerts) and [remark-table-of-contents
-](https://github.com/chrisweb/remark-table-of-contents)
+I added [MDX](https://mdxjs.com/) support to be able to create content using **@next/mdx**. I then also used several MDX (remark and rehype) plugins and even built two myself, [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts) and [remark-table-of-contents](https://github.com/chrisweb/remark-table-of-contents)
 
 I had a lot of fun doing my [WebGL](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API) header animation using [react-three-fiber](https://github.com/pmndrs/react-three-fiber) (a React renderer for [three.js](https://github.com/mrdoob/three.js))
 
-I also added a jukebox on top using my [web-audio-api-player](https://github.com/chrisweb/web-audio-api-player) and added a dynamic waveform using my [waveform-visualizer](https://github.com/chrisweb/waveform-visualizer) and [waveform-data-generator](https://github.com/chrisweb/waveform-data-generator) packages
+I also added a jukebox like music player (on the top right) using my [web-audio-api-player](https://github.com/chrisweb/web-audio-api-player) and added a dynamic waveform using my [waveform-visualizer](https://github.com/chrisweb/waveform-visualizer) and [waveform-data-generator](https://github.com/chrisweb/waveform-data-generator) packages
 
 ## Feedback & bug reports
 
@@ -47,7 +45,11 @@ If you have feedback or want to discuss something, please use the [chris.lu gith
 `npm run lint-debug`: linting command but more verbose output  
 `npm run lint-fix`: linting command that also attempts to automatically fix problems  
 `npm run info`: the default next.js script to get some info about the project  
-`npm run check-urls`: check if URLs in documents are alive or not, this linting is seperate from the main linting script so that it can be used sporadically, as it makes lots of calls to 3rd party URLs to check if they are alive, it does not run during the build process so that a unreachable URL of a third party won't break the build
+`npm run check-urls`: check if URLs in documents are alive or not, this linting is separate from the main linting script so that it can be used sporadically, as it makes lots of calls to 3rd party URLs to check if they are alive, it does not run during the build process so that a unreachable URL of a third party won't break the build, it is separate from eslint process and uses remark-cli
+
+## Node.js version
+
+Next.js [requires >=18.18.0](https://github.com/vercel/next.js/commit/ecd2be6d3b74d7af2513a8b355408a8f88ec6b25) (same as ESLint v9), Typescript ESLint [requires Node.js >=20.11.0](https://typescript-eslint.io/getting-started/typed-linting) (for import.meta.dirname in ESM files), this projects [package.json](./package.json) has the engines node set to 20.11.0, the latest Node.js LTS is 22.11.0 (Nov. 2024)
 
 ## License
 

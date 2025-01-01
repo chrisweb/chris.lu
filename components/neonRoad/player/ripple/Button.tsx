@@ -33,13 +33,13 @@ const RippleButton: React.FC<React.PropsWithChildren<IProps>> = (props) => {
     if (props.name && props.name !== '') {
         attributes['aria-label'] = props.name
     }
-    
+
     return (
         <button
-        onAnimationEnd={handleOnAnimationEndHandler}
-        onClick={onClickHandler}
-        className={`${styles.button}${typeof props.className !== 'undefined' ? ' ' + styles[props.className] : ''}${rippleState ? ' ripple' : ''}`}
-        {...attributes}
+            onAnimationEnd={handleOnAnimationEndHandler}
+            onClick={onClickHandler}
+            className={`${styles.button}${typeof props.className !== 'undefined' ? ' ' + styles[props.className] : ''}${rippleState ? ' ripple' : ''}`}
+            {...attributes}
         >
             {props.children}
         </button>

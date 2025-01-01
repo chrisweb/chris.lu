@@ -11,6 +11,8 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -44,6 +46,8 @@ export const metadata = {
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
 
+<ArchivedMessage case="next-js-14-static-tutorial" />
+
 # Next.js MDX support
 
 In this part of the tutorial, we are finally going to add [MDX](https://mdxjs.com/) (version 3) support to our project by using [next/mdx](https://www.npmjs.com/package/@next/mdx)
@@ -61,7 +65,7 @@ This is why I chose to use MDX (markdown + JSX) for this "static Next.js blog" p
 
 ## Adding MDX support to our Next.js project
 
-To add MDX support to the Next.js blog, I will use [@next/mdx](https://www.npmjs.com/package/@next/mdx), which is an MDX package by the same team that is behind Next.js, but other alternatives work well too, I listed some of them in the [@next/mdx alternatives chapter](/web_development/posts/mdx#nextjs-mdx--markdown-packages) in my **MDX post**
+To add MDX support to the Next.js blog, I will use [@next/mdx](https://www.npmjs.com/package/@next/mdx), which is an MDX package by the same team that is behind Next.js, but other alternatives work well too, I listed some of them in the [@next/mdx alternatives chapter](/web_development/posts/mdx#nextmdx-alternatives) in my **MDX post**
 
 You can also create your own package, in which case I recommend you start by reading the **Deep Dive: How do you transform markdown into HTML?** section of the [Next.js "Markdown and MDX" documentation](https://nextjs.org/docs/app/building-your-application/configuring/mdx#deep-dive-how-do-you-transform-markdown-into-html)
 
@@ -294,7 +298,7 @@ experimental: {
 ```
 
 > [!NOTE]  
-> Of course, if you don't plan on using any plugins like [remark-gfm](https://github.com/remarkjs/remark-gfm) or [rehype-pretty-code](https://github.com/rehype-pretty/rehype-pretty-code), then you can turn mdxRs on by setting the option to true
+> Of course, if you don't plan on using any plugins like [remark-table-of-contents](https://github.com/chrisweb/remark-table-of-contents) or [rehype-pretty-code](https://github.com/rehype-pretty/rehype-pretty-code), then you can turn mdxRs **on** by setting the option to **true**
 
 Now that we have disabled mdxRs, we also need to install the MDX webpack plugin manually using the following command:
 
@@ -343,7 +347,7 @@ Now that our MDX setup is done, you might be interested in a few tips that make 
 
 Congratulations 🎉 you now have MDX support added to your project using next/mdx, in other parts of this tutorial, we will further extend that setup by adding several valuable plugins and learning how to use custom react components to fully benefit from what MDX has to offer
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [chris.lu "MDX and markdown in VSCode tips"](/web_development/posts/vscode#vscode-markdown-and-mdx-related-tips)  

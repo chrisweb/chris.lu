@@ -11,6 +11,8 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -43,6 +45,8 @@ export const metadata = {
     { label: 'Web development tutorials', href: '/web_development' },
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
+
+<ArchivedMessage case="next-js-14-static-tutorial" />
 
 # Table of contents (TOC) plugin and React Observer Hook
 
@@ -156,6 +160,7 @@ Now that the plugin is ready to be used, the last thing we need to do is insert 
 
 # headline level 1
 
+{/* spellchecker: disable */}
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris tincidunt eros sed pellentesque rhoncus. In est ante, dictum id turpis id, rutrum pellentesque nisi. Morbi euismod velit lacinia metus rutrum, non bibendum urna rutrum. Nunc ac mauris ut sem mollis lacinia. Suspendisse cursus augue est, eu eleifend leo venenatis sit amet. Nullam id arcu vel lacus accumsan efficitur. Pellentesque sodales commodo odio, at tempus magna cursus non. Curabitur ex diam, bibendum ac quam in, efficitur luctus ex. Donec ultricies feugiat semper. Sed nec posuere leo.
 
 Cras ultrices nisi enim, nec aliquet tellus fermentum in. Sed imperdiet lorem nec elit dictum elementum. In sit amet rhoncus lorem. Quisque gravida dictum pharetra. Phasellus lacinia, dui ut faucibus volutpat, nisi purus mattis nunc, eu elementum dolor elit eget lorem. Phasellus sagittis auctor tellus nec commodo. Mauris tristique fringilla ligula ut iaculis. Nullam id condimentum dolor, ac fringilla lorem.
@@ -185,6 +190,7 @@ Morbi et tortor accumsan dolor rutrum rhoncus. Quisque faucibus tincidunt nulla,
 Etiam lectus massa, aliquet congue eros at, dictum cursus lectus. Maecenas eu dapibus sapien, a dignissim lacus. Sed viverra et lacus porttitor porttitor. Suspendisse tincidunt augue ut cursus tempus. Nulla nec metus ultrices libero commodo faucibus et et nisi. Etiam ac vulputate neque, sit amet consequat tellus. Sed placerat urna a tristique placerat. Sed quis porta tellus, ac posuere augue. Sed tristique quam id dignissim euismod. Suspendisse posuere vel quam non euismod. In molestie varius fermentum. Aliquam ut efficitur ipsum. Cras eget nunc ut dolor aliquet porta nec in odio. Phasellus dapibus ligula eros, eleifend pulvinar metus vulputate et. In convallis ornare mollis. Morbi sit amet placerat dui.
 
 Duis cursus suscipit lorem consectetur imperdiet. Cras nec luctus odio. Pellentesque dapibus nunc et facilisis pellentesque. Donec augue massa, aliquam quis ornare placerat, facilisis in lacus. In at maximus turpis. Cras sed metus vel orci ultricies consequat ut vitae tortor. Morbi sed pretium eros, a rhoncus augue. Ut quis finibus massa. Suspendisse placerat nisl id congue molestie. Pellentesque in ipsum mi.
+{/* spellchecker: enable */}
 
 </article>
 %toc%
@@ -270,26 +276,29 @@ const useIntersectionObserver = (querySelector: string, rootMargin: string, thre
 
     useEffect(() => {
 
-        const handleObsever = (entries: IntersectionObserverEntry[]) => {
+        const handleObserver = (entries: IntersectionObserverEntry[]) => {
 
             entries.forEach((entry) => {
-                if (entry?.isIntersecting) {
+                if (entry.isIntersecting) {
                     setActiveIdState(entry.target.id)
                 }
             })
 
         }
 
-        if (observerRef !== undefined) {
+        if (typeof observerRef !== 'undefined') {
 
-            observerRef.current = new IntersectionObserver(handleObsever, {
+            observerRef.current = new IntersectionObserver(handleObserver, {
                 rootMargin: rootMargin,
                 threshold: threshold,
             })
 
             const elements = document.querySelectorAll(querySelector)
 
-            elements.forEach((elem) => observerRef.current !== null ? observerRef.current.observe(elem) : null)
+            elements.forEach((elem) => {
+                if (observerRef.current === null) return
+                observerRef.current.observe(elem)
+            })
         }
 
         return () => {
@@ -423,7 +432,7 @@ const TocHighlight: React.FC<IProps> = (props): JSX.Element => {
 export default TocHighlight
 ```
 
-Lines 8 to 12: we create an interface to strongly type our incoming props, which are the list of headings we want to observe, as well as the [rootMargin](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin) and the [treshold](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/thresholds), all three values will get passed to the hook as the **IntersectionObserver ** needs them
+Lines 8 to 12: we create an interface to strongly type our incoming props, which are the list of headings we want to observe, as well as the [rootMargin](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin) and the [threshold](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/thresholds), all three values will get passed to the hook as the **IntersectionObserver ** needs them
 
 Lines 14 to 18: we create an interface to strongly type the children of our toc
 
@@ -508,16 +517,16 @@ Now is a good time to check the result of all the code we just added. First, mak
 
 Congratulations 🎉 you should now see a TOC on the right side of the article that always stays on top even when you scroll down, and in the list of links, one of them should always be highlighted based on the headline that is currently in the viewport
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [MDN "Intersection Observer API" documentation](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)  
-> [react.dev "JSX conditanal rendering" documentation](https://react.dev/learn/conditional-rendering)  
+> [react.dev "JSX conditional rendering" documentation](https://react.dev/learn/conditional-rendering)  
 > [react.dev "custom hooks" documentation](https://react.dev/learn/reusing-logic-with-custom-hooks)  
 
 <Pagination
     previous={{ label: 'Rehype slug plugin to add IDs to headings', href: '/web_development/tutorials/next-js-static-mdx-blog/headings-id-plugin' }}
-    next={{ label: 'GitHub flawored markdown plugin(s)', href: '/web_development/tutorials/next-js-static-mdx-blog/github-flawored-markdown-plugin' }}
+    next={{ label: 'GitHub flavored markdown plugin(s)', href: '/web_development/tutorials/next-js-static-mdx-blog/github-flavored-markdown-plugin' }}
 />
 
 </article>

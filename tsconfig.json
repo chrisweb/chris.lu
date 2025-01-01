@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "esnext",
+        "target": "ES2017",
         "lib": [
             "dom",
             "dom.iterable",
@@ -26,7 +26,10 @@
             "@/*": [
                 "./*"
             ]
-        }
+        },
+        "types": [
+            "react/canary"
+        ],
     },
     "include": [
         "next-env.d.ts",

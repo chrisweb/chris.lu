@@ -11,6 +11,8 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -43,6 +45,8 @@ export const metadata = {
     { label: 'Web development tutorials', href: '/web_development' },
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
+
+<ArchivedMessage case="next-js-14-static-tutorial" />
 
 # Rehype slug plugin to add IDs to headings
 
@@ -117,6 +121,7 @@ First, go into the `/app/(tutorial_examples)` folder and then create a new `toc_
 
 Inside the `toc_playground` folder, create a new `page.mdx` MDX page and add the following content:
 
+{/* spellchecker: disable */}
 ```md title="/app/(tutorial_examples)/toc_playground/page.mdx"
 <article>
 
@@ -155,6 +160,7 @@ Duis cursus suscipit lorem consectetur imperdiet. Cras nec luctus odio. Pellente
 </article>
 
 ```
+{/* spellchecker: enable */}
 
 We have added some markdown headings of different levels to our MDX page as well as some fake text using an online [lorem ipsum generator](https://www.lipsum.com/), the content is wrapped inside of an `<article>{:html}` element (which is optional but I like to use semantic elements whenever it makes sense)
 
@@ -162,7 +168,7 @@ Now launch the dev server, then open the `http://localhost:3000/toc_playground` 
 
 Congratulations 🎉 all of your headings now automatically get a unique ID
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [npmjs.com "rehype-slug" page](https://www.npmjs.com/package/rehype-slug)  

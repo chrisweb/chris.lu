@@ -1,0 +1,189 @@
+---
+title: Typescript plugin and typed routes - Next.js 15 Tutorial
+description: Typescript plugin and typed routes - Next.js 15 static first MDX starterkit | Web development tutorials | www.chris.lu
+keywords: ['Typescript', 'plugin', 'typed', 'routes', 'Tutorial']
+published: 2024-12-31T23:00:00.000Z
+modified: 2024-12-31T23:00:00.000Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit/typescript-plugin-and-typed-routes
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js 15 static first MDX starterkit', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit' },
+]} />
+
+# Typescript plugin and typed routes
+
+The next step is to ensure **Typescript** is correctly set up, and we will also enable an interesting feature called **statically typed routes**
+
+## Next.js 15 typescript plugin
+
+Since [Next.js 13.1](https://nextjs.org/blog/next-13-1), the Next.js team added a new Typescript plugin:
+
+> We've built a new TypeScript plugin that provides suggestions for page and layout configuration options and provides helpful usage hints around Server and Client Components
+
+[Delba de Oliveira](https://github.com/delbaoliveira), which is part of the Next.js developer experience team, posted a [short "Next.js Typescript plugin" introduction video](https://www.youtube.com/watch?v=pqMqn9fKEf8) on Youtube that you may want to watch
+
+> [!MORE]  
+> [Next.js "typescript config" api-reference](https://nextjs.org/docs/app/api-reference/config/typescript)  
+
+### Switching from VSCode Typescript to the workspace version
+
+To make the Next.js 15 typescript plugin work, you need to make sure that the **Typescript** version that VSCode is using is the **workspace version** (the version that Next.js create app just installed) because, by default, VSCode will use a built-in Typescript version.
+
+If you don't know yet how to change the typescript version to **workspace version** (in VSCode), check out the [VSCode typescript version](/web_development/posts/vscode#vscode-typescript-version) chapter in the VSCode post
+
+As soon as you switch to the **workspace version**, VSCode will create a new `.vscode/settings.json` file (or if you already have a VSCode settings.json, it will extend it):
+
+```json title=".vscode/settings.json"
+{
+    "typescript.tsdk": "node_modules\\typescript\\lib"
+}
+```
+
+There is nothing wrong in sharing the `.vscode/settings.json` file as it will ensure that everyone that works on your project (or if you use multiple devices yourself) will use the same workspace settings, like the typescript workspace version but also other settings, for example in one of the following chapters we will add helpful VSCode extension and VSCode will be listing in settings file, so that if someone works on your project but does not have the extension installed VSCode will show a modal that suggests installing it.
+
+> [!TIP]  
+> The Next.js typescript plugin comes with some useful features. It will for example, warn you if something is wrong in how you use the **use client** directive in your components and some more. I recommend keeping an eye on the [Next.js "typescript" documentation](https://nextjs.org/docs/app/api-reference/config/typescript) as the Next.js team adds more features over time
+
+Finally, I recommend you commit/sync the new `.vscode/settings.json`.
+
+> [!MORE]  
+> [Next.js "TypeScript" documentation](https://nextjs.org/docs/app/api-reference/config/typescript)  
+
+## Enabling statically Typed Links (Typed Routes)
+
+To ensure we benefit from **Statically Typed Links** we need to enable the feature in our Next.js configuration file
+
+Open the `next.config.ts` and then add the **experimental** **typedRoutes** option to your Next.js configuration file like so:
+
+```ts title="next.config.ts" showLineNumbers {1} {4-8}
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
+    experimental: {
+        // experimental typescript "statically typed links"
+        // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
+        typedRoutes: true,
+    }
+};
+
+export default nextConfig
+```
+
+Line 1: we import the NextConfig type, which means that when you start typing inside of the nextConfig object you will benefit from code autocompletion for the Next.js configuration options
+
+Lines 4-8: we use the typedRoutes (experimental) option and enabled it, which means that when using `npm run dev` or `npm run build` when building for production, Next.js will generate a `.next/types/link.d.ts` file that contains information about all existing routes in our application, the advantage of this is that if we now use [next/link](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#link-component) but set the href to a route that doesn't exist we will see an error in VSCode getting displayed and builds will fail until we fix the typo in our URL
+
+Then save your `next.config.ts` and add a commit message to explain that we enabled typed routes, and finally sync your latest changes into your remote repository
+
+> [!MORE]  
+> [Next.js "configuration options" reference](https://nextjs.org/docs/app/api-reference/config/next-config-js)  
+> [Typescript "JSDoc" reference](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html)  
+> [Next.js "Statically Typed Links" documentation](https://nextjs.org/docs/app/api-reference/config/typescript#statically-typed-links)  
+> [Next.js "typedRoutes (experimental)" reference](https://nextjs.org/docs/app/api-reference/config/next-config-js/typedRoutes)  
+
+### Turbopack (in Next.js 15) does not yet support Typed Routes
+
+We can now finally start the development server to verify that everything works as intended, using the following command:
+
+`npm run dev`
+
+In Next.js 14 that would be it, in Next.js 15 there is unfortunately more, as indicates the message we get in our terminal:
+
+```shell
+ ⨯ You are using configuration and/or tools that are not yet
+supported by Next.js with Turbopack:
+
+- Unsupported Next.js configuration option(s) (next.config.js)
+  To use Turbopack, remove the following configuration options:
+    - experimental.typedRoutes
+
+ ⚠ Learn more about Next.js and Turbopack: https://nextjs.link/with-turbopack
+```
+
+There is no workaround here, but you can make one of two choices:
+
+* If you decide that you want to continue using **Turbopack**, then you need to set the **typedRoutes** option to `false` (in your `next.config.ts`)
+* Else if you prefer to keep the **typed routes enabled**, then this means you can't use Turbopack, but as Turbopack will get updated some day to support typed routes I recommend keeping the command as backup (in your package.json) and creating a new **command without turbo** to use today like so:
+
+```json title="package.json" showLineNumbers {2-3}
+    "scripts": {
+        "dev": "next dev",
+        "dev-turbo": "next dev --turbopack",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
+    },
+```
+
+Line 2: we remove the `--turbopack` flag
+
+Line 3: we add a backup of the original script and name it "dev-turbo"
+
+An alternative way is to just have the dev command and when you want to run with turbo, you first use two hyphen (`--`) to indicate this is the end of the npm options, then you can add arguments that will get passed to the script, in this case we pass `--turbopack` flag to the `next lint` command, the result is the following command:
+
+`npm run dev -- --turbopack`
+
+As we added a new script to our `package.json`, we are also going to quickly update our `README.md` to keep it up to date:
+
+```md title="README.md" showLineNumbers {6}
+# MY_PROJECT
+
+## npm commands (package.json scripts)
+
+`npm run dev`: to start the development server (NOT using turbopack)  
+`npm run dev-turbo`: to start the development server (using turbopack)  
+`npm run build`: to make a production build  
+`npm run start`: to start the server on a production server using the build we made with the previous command  
+`npm run lint`: to run a linting script that will scan our code and help us find problems in our code  
+
+```
+
+Line 6: we add a short description for the dev with turbopack script
+
+Then we commit our `package.json` and `README.md` with a commit message that explains that we removed turbo from dev script but also created a new dev-turbo script as backup that uses the turbo flag, then sync your latest changes with your remote git provider
+
+Congratulations 🎉 you just made sure your typescript support is done correctly, which is a significant milestone before starting to code, and you now also have either turbopack or typed routes that will further improve your DX
+
+<DonationsMessage />
+
+<Pagination
+    previous={{ label: 'Project setup and first commit', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/project-setup-using-CNA-and-first-commit' }}
+    next={{ label: 'Next.js configuration', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/next-config' }}
+/>
+
+</article>

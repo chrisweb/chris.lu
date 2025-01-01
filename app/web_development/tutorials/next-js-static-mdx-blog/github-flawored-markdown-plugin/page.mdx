@@ -1,7 +1,7 @@
 ---
-title: GitHub flawored markdown plugin - Tutorial
-description: GitHub flawored markdown plugin - Next.js static MDX blog | www.chris.lu Web development tutorials
-keywords: ['GitHub', 'flawored', 'plugin', 'gfm', 'markdown', 'mdx', 'remark-gfm', 'next/mdx', 'remark']
+title: GitHub flavored markdown plugin - Tutorial
+description: GitHub flavored markdown plugin - Next.js static MDX blog | www.chris.lu Web development tutorials
+keywords: ['GitHub', 'flavored', 'plugin', 'gfm', 'markdown', 'mdx', 'remark-gfm', 'next/mdx', 'remark']
 published: 2024-08-24T11:22:33.444Z
 modified: 2024-08-26T12:22:33.444Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-mdx-blog/github-flawored-markdown-plugin
@@ -11,6 +11,8 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -43,6 +45,8 @@ export const metadata = {
     { label: 'Web development tutorials', href: '/web_development' },
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
+
+<ArchivedMessage case="next-js-14-static-tutorial" />
 
 # GitHub flawored markdown plugin(s)
 
@@ -592,7 +596,7 @@ If you launch the dev server then open the playground URL `http://localhost:3000
 
 Congratulations 🎉 you just added GitHub-flavored markdown support to your project and learned how to use the mdx-components file to make tasklists dynamic using your custom checkbox component
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > ["footnotes bug list" in the micromark-extension-gfm-footnote readme](https://github.com/micromark/micromark-extension-gfm-footnote?tab=readme-ov-file#bugs)  

@@ -11,6 +11,8 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -44,6 +46,8 @@ export const metadata = {
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
 
+<ArchivedMessage case="next-js-14-static-tutorial" />
+
 # CI/CD pipeline for automatic deployments
 
 In this part of the tutorial, we will set up a CI/CD pipeline that will automatically deploy our code using [Vercel](https://vercel.com)
@@ -69,7 +73,7 @@ I'm not sponsored and don't endorse any of the providers listed here, I just wan
 
 First, you need to have or create a hobby (free) account on [Vercel](https://vercel.com) (if you need help with that step, check out my chapter [Create a Vercel account (sign up)](/web_development/posts/vercel#create-an-account-sign-up) in the Vercel post)
 
-Now we need to create a new project on Vercel and allow them to access our repository (if you need help with that step, check out my chapter [Add a new project (repository)](/web_development/posts/vercel#add-a-new-project) in the Vercel post)
+Now we need to create a new project on Vercel and allow them to access our repository (if you need help with that step, check out my chapter [Add a new project (repository)](/web_development/posts/vercel#add-a-new-project-repository) in the Vercel post)
 
 Now that we have added our GitHub repository to Vercel, every commit (or pull request) we make to the main branch will trigger a production deployment, and every commit we make to the preview branch will trigger a preview (staging) deployment.
 
@@ -142,7 +146,7 @@ On top of that page, you will have a link to the live preview on the vercel.app 
 
 Congratulations 🎉 you are now viewing a preview version of your project hosted on Vercel
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 <Pagination
     previous={{ label: 'package.json (npm run) scripts', href: '/web_development/tutorials/next-js-static-mdx-blog/package-json-scripts' }}

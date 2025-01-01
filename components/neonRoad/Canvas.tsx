@@ -1,35 +1,28 @@
 'use client'
 
-import { useRef/*, Suspense, useState*/ } from 'react'
-import type { PerspectiveCamera as PerspectiveCameraType } from 'three'
+import { Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { PerspectiveCamera, SoftShadows/*, OrbitControls, PerformanceMonitor, PerformanceMonitorApi, StatsGl, Hud, useDetectGPU, useProgress*/} from '@react-three/drei'
+import { PerspectiveCamera, SoftShadows, AdaptiveDpr/*, OrbitControls*//*, PerformanceMonitor, PerformanceMonitorApi/*, Hud, useDetectGPU, useProgress, StatsGl*/ } from '@react-three/drei'
 import NightSky from './NightSky'
 import Sun from './Sun'
 import SunLight from './SunLight'
 import City from './City'
 import Trees from './Trees'
 import Terrains from './Terrains'
-//import Loop from './Loop'
-import { EffectComposer, Bloom } from '@react-three/postprocessing'
+//import { EffectComposer, Bloom } from '@react-three/postprocessing'
 
 interface IProps extends React.PropsWithChildren {
     altText: string
-    containerRef?: React.MutableRefObject<HTMLDivElement | null>
+    containerRef?: React.RefObject<HTMLDivElement | null>
 }
 
 const NeonRoadCanvas: React.FC<IProps> = (props) => {
-
-    //const [canPlayState, setCanPlayState] = useState(false)
 
     // uncomment if you want to see what useDetectGPU returns
     //const gpuInfo = useDetectGPU()
     //if (process.env.NODE_ENV === 'development') {
     //console.log('useDetectGPU: ', gpuInfo)
     //}
-
-    //const canvasRef = useRef<HTMLCanvasElement>(null)
-    const cameraRef = useRef<PerspectiveCameraType>(null)
 
     // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#expanded-gl-prop
     // https://threejs.org/docs/#api/en/renderers/WebGLRenderer
@@ -65,10 +58,10 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
     }*/
 
     const Fallback = () => {
-        return (<>3D Canvas not supported on this device</>)
+        return (<>Sorry, this 3D animation can not be displayed on your device</>)
     }
 
-    const aspect = (props.containerRef?.current !== null && props.containerRef?.current.clientWidth) ? props.containerRef?.current.clientWidth / props.containerRef?.current.clientHeight : 2
+    const aspect = (props.containerRef?.current?.clientWidth) ? props.containerRef.current.clientWidth / props.containerRef.current.clientHeight : 2
 
     // https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/unpackColorSpace
     const rendererProps = {
@@ -78,25 +71,23 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
     }
 
     return (
-        <>
-            <Canvas
-                // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#new-pixel-ratio-default
-                //dpr={Math.min(window.devicePixelRatio, 2)} // pixel ratio, should be 1 or 2
-                // https://docs.pmnd.rs/react-three-fiber/api/canvas#render-defaults
-                shadows={'soft'} // PCFsoft
-                fallback={<Fallback />}
-                aria-label={props.altText}
-                role="img"
-                gl={rendererProps}
-                //frameloop="never"
-                //onCreated={onCanvasCreatedHandler}
-                //ref={canvasRef}
-                camera={cameraRef.current ?? {}}
-            >
-                {/*<Suspense fallback={<Loader />}>*/}
+        <Canvas
+            // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#new-pixel-ratio-default
+            //dpr={Math.min(window.devicePixelRatio, 2)} // pixel ratio, should be 1 or 2
+            // https://docs.pmnd.rs/react-three-fiber/api/canvas#render-defaults
+            shadows="soft" // PCFsoft
+            fallback={<Fallback />}
+            aria-label={props.altText}
+            role="img"
+            gl={rendererProps}
+        //frameloop="never"
+        //onCreated={onCanvasCreatedHandler}
+        >
+            <Suspense fallback={<Fallback />}>
+                <AdaptiveDpr pixelated />
+                {/*<Loader />*/}
                 <PerspectiveCamera
                     makeDefault={true}
-                    ref={cameraRef}
                     fov={75}
                     near={0.01}
                     far={3}
@@ -105,7 +96,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 />
                 {/*<PerformanceMonitor onChange={onPerformanceChangeHandler} />*/}
                 <color attach="background" args={['#2f0f30']} />
-                <ambientLight color={'#ecd7e2'} intensity={15} />
+                <ambientLight color="#ecd7e2" intensity={15} />
                 <SoftShadows />
                 <NightSky
                     position={[0, 1, -2.1]}
@@ -125,22 +116,20 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 />
                 <Trees />
                 <Terrains />
-                {/*<Loop />*/}
-                <EffectComposer>
-                    <Bloom
-                        luminanceThreshold={0.08}
-                        intensity={0.7}
-                        luminanceSmoothing={0.01}
-                    />
-                </EffectComposer>
-                {/*<axesHelper />*/}{/*enable for development*/}
-                {/*<OrbitControls camera={cameraRef.current} />*/}{/*enable for development*/}
-                {/*<StatsGl />*/}{/*enable for development*/}
-                {/*GUI: https://github.com/pmndrs/leva*/}
-                {/*</Suspense>*/}
-            </Canvas>
-        </>
-
+                {/* <EffectComposer>
+                        <Bloom
+                            luminanceThreshold={0.08}
+                            intensity={0.7}
+                            luminanceSmoothing={0.01}
+                        />
+                    </EffectComposer> */}
+                {/* the following components can be useful in development */}
+                {/*<axesHelper />*/}
+                {/*<OrbitControls camera={cameraRef.current} />*/}
+                {/*<StatsGl />*/}
+                {/* GUI: https://github.com/pmndrs/leva */}
+            </Suspense>
+        </Canvas>
     )
 }
 

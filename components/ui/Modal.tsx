@@ -1,9 +1,9 @@
 'use client'
 
 import { useRef, useEffect, useState } from 'react'
-import type { AnimationEvent } from 'react'
+import type { AnimationEvent, PropsWithChildren } from 'react'
 import { createPortal } from 'react-dom'
-import type { PropsWithChildren } from 'react'
+
 import ButtonWithIcon from '../base/button/WithIcon'
 import { faClose } from '@fortawesome/free-solid-svg-icons'
 import styles from './modal.module.css'
@@ -17,7 +17,7 @@ export interface IUIModalProps extends PropsWithChildren {
     className?: string
 }
 
-const UIModal: React.FC<IUIModalProps> = (props): JSX.Element => {
+const UIModal: React.FC<IUIModalProps> = (props) => {
 
     const { isOpen, hasCloseButton, onCloseCallback, children, ...rest } = props
 
@@ -73,14 +73,26 @@ const UIModal: React.FC<IUIModalProps> = (props): JSX.Element => {
             ref={modalRef}
             onCancel={closeHandler}
             onAnimationEnd={animationEndHandler}
-            className={`${styles.reset} ${styles.modal} disablePageScroll ${closeAnimationState === true ? styles.hide : ''}`}
-            onClick={closeHandler}
+            className={`${styles.reset} ${styles.modal} disablePageScroll ${closeAnimationState ? styles.hide : ''}`}
+            aria-modal="true"
             {...rest}
         >
-            {withCloseButton && (
-                <ButtonWithIcon clickCallback={closeHandler} whichIcon={faClose} />
-            )}
-            {children}
+            <div
+                role="button"
+                tabIndex={0}
+                onClick={closeHandler}
+                onKeyDown={(event) => {
+                    event.preventDefault()
+                    if (event.key === 'Enter' || event.key === 'Escape' || event.key === ' ') {
+                        closeHandler()
+                    }
+                }}
+            >
+                {withCloseButton && (
+                    <ButtonWithIcon clickCallback={closeHandler} whichIcon={faClose} />
+                )}
+                {children}
+            </div>
         </dialog>,
         document.body
     )

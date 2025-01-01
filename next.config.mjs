@@ -2,35 +2,30 @@ import { withSentryConfig } from '@sentry/nextjs'
 // uncomment the following lines if you want to use the bundle analyzer
 //import WithBundleAnalyzer from '@next/bundle-analyzer'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
-
-/**
- * @typedef {import('rehype-github-alerts').IOptions} IOptions
- * @typedef {import('rehype-github-alerts').DefaultBuildType} DefaultBuildType
- */
-
 import createMdx from '@next/mdx'
-import rehypePrettyCode from 'rehype-pretty-code'
 import { remarkTableOfContents } from 'remark-table-of-contents'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
+import { toString as hastToString } from 'mdast-util-to-string'
 import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
 import { rehypeGithubAlerts } from 'rehype-github-alerts'
 import rehypeMDXImportMedia from 'rehype-mdx-import-media'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
+import { rehypePrettyCode } from 'rehype-pretty-code'
+import { transformerNotationDiff } from '@shikijs/transformers'
 
 const nextConfig = (phase) => {
 
     // to use the bundle analyzer uncomment the following lines
     // then uncomment the return to use withBundleAnalyzer
     /*const withBundleAnalyzer = WithBundleAnalyzer({
-        enabled: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+        enabled: phase === PHASE_DEVELOPMENT_SERVER,
         openAnalyzer: false,
     })*/
 
     // https://rehype-pretty-code.netlify.app/
-    /** @type {import('rehype-pretty-code').Options} */
     const rehypePrettyCodeOptions = {
         // VSCode "SynthWave '84" theme
         theme: 'synthwave-84',
@@ -45,10 +40,10 @@ const nextConfig = (phase) => {
             block: 'tsx',
             inline: 'shell',
         },
+        transformers: [transformerNotationDiff()],
     }
 
     // https://github.com/chrisweb/remark-table-of-contents#options
-    /** @type {import('remark-table-of-contents').IRemarkTableOfContentsOptions} */
     const remarkTableOfContentsOptions = {
         containerAttributes: {
             id: 'articleToc',
@@ -64,10 +59,11 @@ const nextConfig = (phase) => {
         behavior: 'append',
         properties: (node) => {
             //console.log(node)
+            const headingText = hastToString(node.children[0])
             return {
                 class: 'headingAnchor',
-                'aria-label': 'Heading permalink for: ' + node.children[0].value,
-                title: 'Heading permalink for: ' + node.children[0].value,
+                'aria-label': 'Heading permalink for: ' + headingText,
+                title: 'Heading permalink for: ' + headingText,
             }
         },
         content: fromHtmlIsomorphic(
@@ -77,13 +73,11 @@ const nextConfig = (phase) => {
     }
 
     // https://github.com/remarkjs/remark-gfm
-    /** @type {import('remark-gfm').Options} */
     const remarkGfmOptions = {
         singleTilde: false,
     }
 
     // https://github.com/chrisweb/rehype-github-alerts
-    /** @type { DefaultBuildType } */
     const myGithubAlertBuild = (alertOptions, originalChildren) => {
 
         const alert = {
@@ -101,7 +95,7 @@ const nextConfig = (phase) => {
                     tagName: 'div',
                     properties: {
                         className: [
-                            'makrdown-alert-fake-border',
+                            'markdown-alert-fake-border',
                         ],
                     },
                     children: [
@@ -141,7 +135,6 @@ const nextConfig = (phase) => {
 
     }
 
-    /** @type { IOptions } */
     const rehypeGithubAlertsOptions = {
         supportLegacy: false,
         build: myGithubAlertBuild,
@@ -149,25 +142,21 @@ const nextConfig = (phase) => {
             {
                 keyword: 'NOTE',
                 icon: '',
-                color: '',
                 title: 'Note',
             },
             {
                 keyword: 'TIP',
                 icon: '',
-                color: '',
                 title: 'Tip',
             },
             {
                 keyword: 'MORE',
                 icon: '',
-                color: '',
                 title: 'Read more',
             },
             {
                 keyword: 'WARN',
                 icon: '',
-                color: '',
                 title: 'Warning',
             },
         ],
@@ -180,7 +169,6 @@ const nextConfig = (phase) => {
         },
     })
 
-    /** @type {import('next').NextConfig} */
     const nextConfigOptions = {
         reactStrictMode: true,
         poweredByHeader: false,
@@ -189,16 +177,29 @@ const nextConfig = (phase) => {
             // as of now (07.10.2023) there is no support for rehype plugins
             // this is why it is currently disabled
             // https://nextjs.org/docs/app/api-reference/next-config-js/mdxRs
+            /*mdxRs: {
+                mdxType: 'gfm',
+            },*/
             mdxRs: false,
+            turbo: {
+                resolveExtensions: [
+                    '.mdx',
+                    '.tsx',
+                    '.ts',
+                    '.jsx',
+                    '.js',
+                    '.mjs',
+                    '.json',
+                ],
+            },
+            // React compiler
+            reactCompiler: true,
             // experimental partial prerendering
-            // (as of now) need a canary next.js for this to work
             // https://nextjs.org/docs/messages/ppr-preview
-            ppr: false,
+            ppr: true,
             // experimental typescript "statically typed links"
             // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
-            // currently false in prod until Issue #62335 is fixed
-            // https://github.com/vercel/next.js/issues/62335
-            typedRoutes: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+            typedRoutes: true,
         },
         // hit or skip data cache logging (dev server)
         // https://nextjs.org/docs/app/api-reference/next-config-js/logging
@@ -244,17 +245,12 @@ const nextConfig = (phase) => {
                         },
                     ],
                 },
-            ];
+            ]
         },
         redirects: async () => {
             return [
                 {
                     source: '/myprojects',
-                    destination: '/web_development',
-                    permanent: true,
-                },
-                {
-                    source: '/posts',
                     destination: '/web_development',
                     permanent: true,
                 },
@@ -269,15 +265,14 @@ const nextConfig = (phase) => {
 
 const securityHeadersConfig = (phase) => {
 
-    const cspReportOnly = false;
-
+    const cspReportOnly = false
     const reportingUrl = 'https://o4504017992482816.ingest.us.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
-
     const reportingDomainWildcard = 'https://*.ingest.us.sentry.io'
+    const isDev = phase === PHASE_DEVELOPMENT_SERVER
 
     const cspHeader = () => {
 
-        const upgradeInsecure = (phase !== PHASE_DEVELOPMENT_SERVER && !cspReportOnly) ? 'upgrade-insecure-requests;' : ''
+        const upgradeInsecure = (!isDev && !cspReportOnly) ? 'upgrade-insecure-requests;' : ''
 
         // report directive to be added at the end
         // with Reporting API fallback
@@ -288,6 +283,13 @@ const securityHeadersConfig = (phase) => {
 
         // reporting uri (CSP v1)
         const reportCSPViolations = `report-uri ${reportingUrl};`
+
+        // I wanted to add the trusted-types directive to the defaultCSPDirectives:
+        // require-trusted-types-for 'script';
+        // unfortunately because of fontawesome this is not possible (yet)
+        // https://github.com/FortAwesome/Font-Awesome/issues/20001
+        // I think that even if fontawesome would support it
+        // it would not work with the current version of next.js
 
         // worker-src is for sentry replay
         // child-src is because safari <= 15.4 does not support worker-src
@@ -303,11 +305,6 @@ const securityHeadersConfig = (phase) => {
             frame-ancestors 'none';
             ${upgradeInsecure}
         `
-
-        // I wanted to add:
-        // require-trusted-types-for 'script';
-        // unfortunatly because of fontawesome this is not possible (yet)
-        // https://github.com/FortAwesome/Font-Awesome/issues/20001
 
         // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
         // and whitelist vercel's domains based on:
@@ -358,7 +355,7 @@ const securityHeadersConfig = (phase) => {
     // security headers for preview & production
     const extraSecurityHeaders = []
 
-    if (phase !== PHASE_DEVELOPMENT_SERVER) {
+    if (!isDev) {
         extraSecurityHeaders.push(
             {
                 key: 'Strict-Transport-Security',
@@ -409,8 +406,8 @@ export default withSentryConfig(
 
         telemetry: false,
 
-        org: "chrisweb",
-        project: "javascript-nextjs",
+        org: 'chrisweb',
+        project: 'javascript-nextjs',
 
         // Only print logs for uploading source maps in CI
         silent: !process.env.CI,
@@ -430,7 +427,7 @@ export default withSentryConfig(
         // This can increase your server load as well as your hosting bill.
         // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
         // side errors will fail.
-        tunnelRoute: "/monitoring",
+        tunnelRoute: '/monitoring',
 
         // Hides source maps from generated client bundles
         hideSourceMaps: true,

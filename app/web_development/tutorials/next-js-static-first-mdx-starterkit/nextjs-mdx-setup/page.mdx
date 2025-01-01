@@ -1,0 +1,387 @@
+---
+title: Next.js MDX support - Next.js 15 Tutorial
+description: Next.js MDX support - Next.js 15 static first MDX starterkit | Web development tutorials | www.chris.lu
+keywords: ['nextjs', 'Next.js', 'MDX', 'support', 'next/mdx']
+published: 2024-12-31T23:00:00.000Z
+modified: 2024-12-31T23:00:00.000Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit/nextjs-mdx-setup
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js 15 static first MDX starterkit', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit' },
+]} />
+
+# Next.js 15 MDX support
+
+In this part of the tutorial, we are finally going to add [MDX](https://mdxjs.com/) (version 3) support to our Next.js 15 project by using [@next/mdx](https://www.npmjs.com/package/@next/mdx)
+
+## Why use markdown (MDX)?
+
+As a developer, using Markdown to format content makes sense, as most of us probably already know Markdown because we have been using it when formatting our project READMEs, or when opening Issues or participating in Discussions on GitHub, or when formatting questions and answers on [Stack Overflow](https://stackoverflow.com/editing-help), or even in messages on a [Discord](https://support.discord.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline) server
+
+This is why I chose to use MDX (markdown + JSX) for this "static Next.js blog" project
+
+> [!MORE]  
+> [GitHub "markdown" formatting](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)  
+> [Stack Overflow "markdown" help](https://stackoverflow.com/editing-help)  
+> [Discord "markdown" formatting](https://support.discord.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline)  
+
+## Adding MDX support to our Next.js project
+
+To add MDX support to the Next.js blog, I will use [@next/mdx](https://www.npmjs.com/package/@next/mdx), which is an MDX package by the same team that is behind Next.js, but other alternatives work well too, I listed some of them in the [Next.js MDX & markdown packages](/web_development/posts/mdx#nextjs-mdx--markdown-packages) chapter in my **MDX post**
+
+You can also create your own package, in which case I recommend you start by reading the **Deep Dive: How do you transform markdown into HTML?** section of the [Next.js "Markdown and MDX" documentation](https://nextjs.org/docs/app/building-your-application/configuring/mdx#deep-dive-how-do-you-transform-markdown-into-html)
+
+> [!NOTE]  
+> If you want to get more background information about MDX, I recommend checking out my [MDX post](/web_development/posts/mdx)
+
+**@next/mdx** is stable, and I had no significant problems using it for this project, there are however a series of open Issues on GitHub, I recommend having a brief look at the [@next/mdx issues search on GitHub](https://github.com/vercel/next.js/labels/Markdown%20%28MDX%29) to have an idea of what might not work or just have a look at the list when you have the feeling something is not working as it should
+
+> [!MORE]  
+> [mdxjs.com "getting started" documentation](https://mdxjs.com/docs/getting-started/)  
+> [mdxjs.com "MDX 3" announcement](https://mdxjs.com/blog/v3/)  
+> [npm.js "@next/mdx" page](https://www.npmjs.com/package/@next/mdx)  
+> [chris.lu "MDX" post](/web_development/posts/mdx)  
+
+### @next/mdx installation
+
+First, we will add the `@next/mdx` package and the MDX types to our Next.js project, the **@next/mdx** package will add support for MDX files to our Next.js project, to install the package execute the following command in your VSCode terminal:
+
+```shell
+npm i @next/mdx @types/mdx --save-exact
+```
+
+> [!MORE]  
+> [Next.js "@next/mdx package" README](https://github.com/vercel/next.js/tree/canary/packages/next-mdx)  
+> [MDX.com "@mdx-js/loader package" README](https://www.npmjs.com/package/@mdx-js/loader)  
+
+### Missing mdx-components file
+
+> [!WARN]  
+> Adding the file is very important, I see a lot of posts of developers struggling with the first steps of getting MDX support to work in their Next.js project, and 90% of the cases are because they have not added the `mdx-components.tsx` file
+>  
+> If you start the development server without `mdx-components.tsx` in your project root, you will likely get this kind of error in your terminal (and in the browser if you open localhost:3000):
+>  
+> ```shell
+> ⨯ ./app/page.mdx
+> Module not found: Can't resolve 'next-mdx-import-source-file'
+> https://nextjs.org/docs/messages/module-not-found
+> ```
+> 
+> This error is because it is mandatory to have that file at the root of the project, even if you don't use it (yet)
+
+To get rid of the error we need to create a file called `mdx-components.tsx` in the root of our project (or the `./src` folder if you have configured your project to use the `./src` folder)
+
+Then add the following content:
+
+```tsx title="mdx-components.tsx" showLineNumbers
+import type { MDXComponents } from 'mdx/types'
+
+// This file allows you to provide custom React components
+// to be used in MDX files. You can import and use any
+// React component you want, including components from
+// other libraries.
+
+// This file is required to use MDX in `app` directory.
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+    return {
+        // Allows customizing built-in components, e.g. to add styling.
+        // h1: ({ children }) => <h1 style={{ fontSize: "100px" }}>{children}</h1>,
+        ...components,
+    }
+}
+```
+
+> [!NOTE]  
+> If you chose to put all your files into an `./src` folder, then you need to put the `mdx-components.tsx` file into the `./src` folder and not the root of the project
+
+Now we need to update the content of our `next.config.mjs` file (in the root of our project) to this:
+
+```js title="next.config.mjs" showLineNumbers {4} {8-15} {37-38} {41}
+import { withSentryConfig } from '@sentry/nextjs'
+import type { NextConfig } from 'next'
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
+import createMdx from '@next/mdx'
+
+const nextConfig = (phase: string) => {
+
+    const withMDX = createMdx({
+        extension: /\.mdx$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [],
+            rehypePlugins: [],
+        },
+    })
+
+    if (phase === PHASE_DEVELOPMENT_SERVER) {
+        console.log('happy development session ;)')
+    }
+
+    const nextConfigOptions: NextConfig = {
+        reactStrictMode: true,
+        poweredByHeader: false,
+        experimental: {
+            // experimental typescript "statically typed links"
+            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
+            typedRoutes: true,
+        },
+        headers: async () => {
+            return [
+                {
+                    source: '/(.*)',
+                    headers: securityHeadersConfig(phase)
+                },
+            ]
+        },
+        // configure `pageExtensions` to include MDX files
+        pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx'],
+    }
+
+    return withMDX(nextConfigOptions)
+
+}
+```
+
+> [!NOTE]  
+> This configuration file is probably much shorter than the one you have in your project (if you followed my previous chapters)
+>  
+> I have omitted what we added in the CSP chapter and the Sentry setup so as not to have to display a huge file, but the structure is still the same, so you should be able only to copy the relevant parts (the ones that are highlighted using a different background color)
+
+Line 4: we import the `@next/mdx` package (that we installed in the previous chapter)
+
+Lines 8 to 15: we configure **@next/mdx** by passing an object to **createMdx**; via the options, we add support for **remark plugins** and **rehype plugins** (we will add a bunch of those plugins later)
+
+Lines 37 and 38: we tell Next.js what extensions are valid page extensions, the pages we created so far had a `.tsx` extension, but the new MDX pages we will now add will have the `.mdx` extension, as you can see we add a bunch more here to cover all use cases. If for example, you are sure you won't use `.js` (and `.jsx`) as an extension for your pages, then you can remove them from the list.
+
+Line 41: we use the **withMDX** function we just created and pass our **nextConfigOptions** to it, which will return a configuration with MDX support
+
+> [!MORE]  
+> [Next.js "Markdown and MDX" documentation](https://nextjs.org/docs/app/building-your-application/configuring/mdx)  
+
+### Adding markdown support (optional)
+
+The configuration we just did adds support for MDX in pages that have the extension `*.mdx`, if you want also to add support for markdown pages with the `*.md` extension, then add the extension in **2 places** like so:
+
+```js title="next.config.mjs" showLineNumbers {9} {38} /?/#special /'md'/#special
+import { withSentryConfig } from '@sentry/nextjs'
+import type { NextConfig } from 'next'
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
+import createMdx from '@next/mdx'
+
+const nextConfig = (phase: string) => {
+
+    const withMDX = createMdx({
+        extension: /\.mdx?$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [],
+            rehypePlugins: [],
+        },
+    })
+
+    if (phase === PHASE_DEVELOPMENT_SERVER) {
+        console.log('happy development session ;)')
+    }
+
+    const nextConfigOptions: NextConfig = {
+        reactStrictMode: true,
+        poweredByHeader: false,
+        experimental: {
+            // experimental typescript "statically typed links"
+            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
+            typedRoutes: true,
+        },
+        headers: async () => {
+            return [
+                {
+                    source: '/(.*)',
+                    headers: securityHeadersConfig(phase)
+                },
+            ]
+        },
+        // configure `pageExtensions` to include MDX files
+        pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx', 'md'],
+    }
+
+    return withMDX(nextConfigOptions)
+
+}
+```
+
+Line 9: we add the extension to the MDX configuration, the regex we use works because we added a question mark behind the **x** of **mdx** meaning the **x** is optional, so **md** and **mdx** both are valid extension
+
+Line 38: we add `md` to the `pageExtensions` list
+
+> [!NOTE]  
+> It is important to add your new extension to both the MDX configuration and the Next.js pageExtensions
+>  
+> If you don't also add the extension to the **createMDX extension option**, then @next/mdx won't be able to parse the content of your file
+>  
+> If you don't add your markdown extension to the **pageExtensions**, then the Next.js app router will not be able to find your file, and it will show a 404
+
+### Valid markdown extensions
+
+You can use another extension for your markdown pages if you prefer, for example you might prefer using *.markdown, *.mdown, *.mkd, ... they are all valid
+
+In that case, make sure you make **2 changes** in the `next.config.ts`, for example to allow **.md** and **.markdown** as **extensions** but NOT mdx anymore, you would change the extension option to this:
+
+```js title="next.config.ts" showLineNumbers{9} /markdown/#special
+extension: /\.(md|markdown)$/,
+```
+
+And then the **pageExtensions** option to this:
+
+```js title="next.config.ts" showLineNumbers{37} /'markdown'/#special
+pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'markdown'],
+```
+
+## Next.js 15 MDX Rust compiler
+
+There is a brief chapter in the [Next.js MDX documentation](https://nextjs.org/docs/app/building-your-application/configuring/mdx#using-the-rust-based-mdx-compiler-experimental) about enabling the experimental rust compiler when using MDX pages:
+
+> Next.js supports a new MDX compiler written in Rust. This compiler is still experimental and is not recommended for production use. To use the new compiler, you need to configure next.config.js when you pass it to withMDX
+
+The most basic setup would look like this:
+
+```js
+experimental: {
+    mdxRs: true,
+},
+```
+
+You can also specify which flavor of markdown that you want to use, as they mention in the [Next.js configuration page about the Rust compiler for MDX](https://nextjs.org/docs/app/api-reference/config/next-config-js/mdxRs) documentation, there are currently 2 markdown flavors you can chose fromm **commonmark** and **gfm**
+
+To enable mdxRS with github flavored markdown this is the configuration you would use:
+
+```js
+experimental: {
+    mdxRs: {
+        mdxType: 'gfm' // or 'commonmark', to configure what kind of mdx syntax will be used to parse & transform
+    },
+},
+```
+
+> [!MORE]  
+> [commonmark.org](https://commonmark.org/)  
+> [GitHub Flavored Markdown Spec](https://github.github.com/gfm/)  
+
+### No support for MDX plugins < Next.js 15.1
+
+In Next.js 15 (and all versions before) if you try to use MDX (remark / rehype) plugins and have mdxRs enabled then they will silently fail to load. This is because the MDX Rust compiler can NOT read plugins written in Javascript.
+
+In Next.js 15.1 you can still NOT use plugins (written in Javascript) if mdxRs is enabled (mdxRs is the next.config option that controls if the MDX compiler written in rust gets enabled), however @next/mdx added a new loader which will get used if you disable mdxRs. If you use the new loader you can even enable Turbopack (and have plugins still work).
+
+This was just a short introduction to the state of plugins in combination with mdxRs, we will have a more in depth look at how to use plugins in the upcoming page about [MDX plugins](/web_development/tutorials/next-js-static-first-mdx-starterkit/mdx-plugins).
+
+> [!MORE]  
+> [chris.lu "MDX (rehype / remark) plugins" page](https://nextjs.org/docs/app/api-reference/config/next-config-js/mdxRs)  
+
+## Installing the @mdx-js/loader package (when mdxRs is disabled)
+
+This loader we are about to install, is only useful if are also using MDX plugins. If you don't plan on using any plugins like [remark-table-of-contents](https://github.com/chrisweb/remark-table-of-contents) or [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts), then you don't need this package and instead have to enable mdxRs by setting the option (in your next config) to true
+
+To disable the MDX rust compiler (mdxjs-rs) we must set the next.config option to false, or you can comment it out (as by default it is set to false) like in this example:
+
+```js title="next.config.mjs" showLineNumbers{20} /mdxRs: false/#special
+experimental: {
+    // experimental typescript "statically typed links"
+    // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
+    typedRoutes: true,
+    // use experimental rust compiler for MDX
+    // in Next.js 15 we disable it to be able to use plugins
+    // in Next.js 15.1 we can enable it and use plugins (if some conditions are met)
+    //mdxRs: true,
+},
+```
+
+If your mdxRs is disabled, you must install the optional ([@mdx-js/loader](https://www.npmjs.com/package/@mdx-js/loader)) package:
+
+```shell
+npm i @mdx-js/loader --save-exact
+```
+
+> [!NOTE]  
+> In Next.js 13, the @mdx-js/loader webpack plugin was a dependency of @next/mdx and would get installed when you install @next/mdx
+>  
+> However, since version 14, you need to install the plugin manually as the dependency is now marked as optional
+
+> [!MORE]  
+> [Next.js "mdxRs configuration option" documentation](https://nextjs.org/docs/app/api-reference/config/next-config-js/mdxRs)  
+
+## MDX page type (optional)
+
+The following file is not mandatory, but it doesn't hurt to add the right type for MDX pages (I found this in the Next.js ["app-dir-mdx"](https://github.com/vercel/next.js/tree/5e2ac0986f78c8e15756ec403666d20a99d3247e/examples/app-dir-mdx) example on GitHub), so (if it doesn't exist already) I recommend creating a `types` folder in the root of your project and adding a `mdx.d.ts` file with the following content:
+
+```ts title="types/mdx.d.ts"
+declare module '*.mdx' {
+    let MDXComponent: (props) => JSX.Element
+    export default MDXComponent
+}
+```
+
+Because we used **create next app** in our tsconfig.json, we **already** have the following **include** in our `tsconfig.json` (if it isn't in your tsconfig.json, then you need to add it), which means that `*.d.ts` files will get included when typescript does the compilation:
+
+```json title="tsconfig.json" showLineNumbers
+"include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+],
+```
+
+> [!MORE]  
+> [mdxjs.com "Types" documentation](https://mdxjs.com/docs/getting-started/#types)  
+
+## Tips when using MDX
+
+Now that our MDX setup is done, you might be interested in a few tips that make life easier when writing MDX / markdown in VSCode, if you do check out the ["VSCode markdown (and MDX) related tips" chapter](/web_development/posts/vscode#vscode-mdx-and-markdown-extensions) in the VSCode post
+
+Congratulations 🎉 you now have MDX support added to your project using next/mdx, in other parts of this tutorial, we will further extend that setup by adding several valuable plugins and learning how to use custom react components to fully benefit from what MDX has to offer
+
+<DonationsMessage />
+
+> [!MORE]  
+> [chris.lu "MDX and markdown in VSCode tips"](/web_development/posts/vscode#vscode-mdx-and-markdown-extensions)  
+
+<Pagination
+    previous={{ label: 'Content Security Policy (CSP)', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/content-security-policy' }}
+    next={{ label: 'First MDX page and understanding of static rendering', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/first-mdx-page-and-understanding-static-rendering' }}
+/>
+
+</article>

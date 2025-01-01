@@ -11,6 +11,8 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -43,6 +45,8 @@ export const metadata = {
     { label: 'Web development tutorials', href: '/web_development' },
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
+
+<ArchivedMessage case="next-js-14-static-tutorial" />
 
 # First MDX page and understanding static rendering
 
@@ -89,7 +93,7 @@ We just created our first route group by adding parenthesis (`()`) around the `t
 
 The page in `/app/(tutorial_examples)/first_mdx_page/page.mdx` will produce the following URL `http://localhost:3000/first_mdx_page`, as you can see **tutorial_examples** did NOT become a segment of the URL, that is because folders which use parenthesis are called **route groups** and their purpose is to allow us to better organize our files without impacting the structure of the URL
 
-By putting files into different folders the amount of files per folder can become more managable without impacting the resulting URL
+By putting files into different folders the amount of files per folder can become more manageable without impacting the resulting URL
 
 > [!MORE]  
 > [Next.js "route groups" documentation](https://nextjs.org/docs/app/building-your-application/routing/route-groups)  
@@ -121,11 +125,11 @@ Because Next.js will automatically choose the [server rendering strategy](https:
 
 If all of your pages are static, you can do a [static export](https://nextjs.org/docs/app/building-your-application/deploying/static-exports), meaning `npm run build` will produce an `out` folder and put all the HTML/CSS/JS static assets into it, then you can take that folder and for example deploy your app on [GitHub pages](https://pages.github.com/) or use a CDN to deliver your static content.
 
-Another feature you might be interested in is called [assetPrefix](https://nextjs.org/docs/app/api-reference/next-config-js/assetPrefix), the **assetPrefix** is a `next.config.mjs` configuration option that is useful when the images are NOT stored on the same domain (sub-domain) as the content itself, for example if your static project is at `www.example.com` but the images are at `cdn.example.com`.
+Another feature you might be interested in is called [assetPrefix](https://nextjs.org/docs/app/api-reference/config/next-config-js/assetPrefix), the **assetPrefix** is a `next.config.mjs` configuration option that is useful when the images are NOT stored on the same domain (sub-domain) as the content itself, for example if your static project is at `www.example.com` but the images are at `cdn.example.com`.
 
 Congratulations 🎉 you now know how to check if pages are static or dynamic, which is essential because the more static content you have, the less work the server will need to do during runtime, and this will result in pages that load blazingly fast
 
-If you liked this post, please consider making a [donation](https://buymeacoffee.com/chriswwweb) ❤️ as it will help me create more content and keep it free for everyone
+<DonationsMessage />
 
 > [!MORE]  
 > [Next.js "Server Rendering Strategies" documentation](https://nextjs.org/docs/app/building-your-application/rendering/server-components#server-rendering-strategies)  

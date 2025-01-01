@@ -1,15 +1,10 @@
 'use client'
 
-import { useRef/*, useMemo*/ } from 'react'
-import type { Group } from 'three'
+import { useLayoutEffect, useRef, useState, Suspense, useCallback } from 'react'
 import { useFrame } from '@react-three/fiber'
 import PalmModel from './Palm'
 import { moveFromAToBInLoop } from './lib/helpers'
-
-interface ITreeModel {
-    xPosition: number
-    zPosition: number
-}
+import { Vector3, Euler, type Group } from 'three'
 
 function randomDegrees() {
     const min = 0
@@ -19,6 +14,8 @@ function randomDegrees() {
 
 const Trees: React.FC = () => {
 
+    const [treesElementsState, setTreesElementsState] = useState<React.ReactElement[]>([])
+
     // trees on the left side
     const leftSideTreesRefs = useRef<Group[]>([])
 
@@ -27,61 +24,60 @@ const Trees: React.FC = () => {
 
     // the three fiber render() will trigger useFrame()
     useFrame((state, delta /*, xrFrame*/) => {
-
-        moveFromAToBInLoop({
-            delta,
-            objectsRef: leftSideTreesRefs,
-            cameraZPosition: 1,
-            distanceToNextObject: 0.2
-        })
-
-        moveFromAToBInLoop({
-            delta,
-            objectsRef: rightSideTreesRefs,
-            cameraZPosition: 1,
-            distanceToNextObject: 0.2
-        })
-
+        moveFromAToBInLoop(delta, leftSideTreesRefs.current, 1, 0.2)
+        moveFromAToBInLoop(delta, rightSideTreesRefs.current, 1, 0.2)
     })
 
-    const treesElements: React.ReactElement[] = []
+    const createTrees = useCallback(() => {
 
-    const sides = ['left', 'right']
-    const amountOfTreesPerSide = 12
+        const treesElements: React.ReactElement[] = []
 
-    sides.forEach((side) => {
+        const sides = ['left', 'right']
+        const amountOfTreesPerSide = 12
 
-        let positionChange = -1.5
+        sides.forEach((side) => {
 
-        for (let i = 0; i < amountOfTreesPerSide; i++) {
+            let positionChange = -1.5
 
-            const treeModelSetup: ITreeModel = {
-                xPosition: side === 'right' ? -0.21 : 0.21,
-                zPosition: positionChange,
+            for (let i = 0; i < amountOfTreesPerSide; i++) {
+
+                const position = new Vector3(side === 'right' ? -0.21 : 0.21, 0, positionChange)
+                const scale = new Vector3(0.009, 0.009, 0.009)
+                const rotation = new Euler(0, randomDegrees(), 0)
+
+                treesElements.push(
+                    <PalmModel
+                        position={position}
+                        ref={(treeGroup) => {
+                            if (side === 'right') {
+                                rightSideTreesRefs.current[i] = treeGroup
+                            } else {
+                                leftSideTreesRefs.current[i] = treeGroup
+                            }
+                        }}
+                        scale={scale}
+                        castShadow={true} // default is false
+                        receiveShadow={false}
+                        key={side + '_' + i.toString()}
+                        rotation={rotation}
+                    />
+                )
+
+                positionChange += 0.2
+
             }
 
-            treesElements.push(
-                <PalmModel
-                    position={[treeModelSetup.xPosition, 0, treeModelSetup.zPosition]}
-                    ref={ref => {
-                        if (ref === null) return
-                        side === 'right' ? rightSideTreesRefs.current[i] = ref : leftSideTreesRefs.current[i] = ref
-                    }}
-                    scale={[0.009, 0.009, 0.009]}
-                    castShadow={true} // default is false
-                    receiveShadow={false}
-                    key={side + i}
-                    rotation={[0, randomDegrees(), 0]}
-                />
-            )
+        })
 
-            positionChange += 0.2
+        return treesElements
 
-        }
+    }, [])
 
-    })
+    useLayoutEffect(() => {
+        setTreesElementsState(createTrees())
+    }, [createTrees])
 
-    return (<>{treesElements}</>)
+    return (<Suspense>{treesElementsState}</Suspense>)
 
 }
 

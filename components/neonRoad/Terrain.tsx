@@ -1,21 +1,23 @@
 'use client'
 
-import { forwardRef, useRef, useEffect, useCallback } from 'react'
+import { useRef, useLayoutEffect, useMemo, useCallback } from 'react'
 import type { Mesh, CanvasTexture } from 'three'
-import type { MeshProps } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
-import { createNoise2D } from 'simplex-noise'
+import { createNoise2D, type NoiseFunction2D } from 'simplex-noise'
 
-export interface IProps extends MeshProps {
+type refType = (ref: Mesh) => void
+
+export interface ITerrainProps extends Partial<Mesh> {
     zPosition: number
+    ref: refType
 }
 
-const Terrain = forwardRef<Mesh, IProps>((props, terrainRef) => {
+const Terrain: React.FC<ITerrainProps> = (props) => {
 
     const FLOOR_TEXTURE_PATH = '/assets/images/neonroad/grid_4096x8192-min.png'
     const EMISSIVE_MAP_PATH = '/assets/images/neonroad/emissive_map_4096x8192-min.png'
 
-    const [floorTexture, displacementMap, emissiveMap] = useTexture([
+    const [floorTexture, emissiveMap] = useTexture([
         FLOOR_TEXTURE_PATH,
         EMISSIVE_MAP_PATH,
     ])
@@ -25,35 +27,44 @@ const Terrain = forwardRef<Mesh, IProps>((props, terrainRef) => {
     //const { gl } = useThree()
     //console.log(gl.capabilities.getMaxAnisotropy())
 
-    floorTexture.anisotropy = 2
+    // I assume react compiler will add a useMemo if needed
+    const floorTextureClone = floorTexture.clone()
+
+    // when using 1 the image is very blurry, 2 is good, 4 is great
+    // default is 1
+    floorTextureClone.anisotropy = 4
 
     // https://threejs.org/examples/#webgl_materials_texture_filters
     // https://threejs.org/docs/#api/en/textures/Texture.magFilter
     // https://threejs.org/docs/index.html#api/en/constants/Textures
     //import { NearestFilter , NearestMipmapNearestFilter } from 'three'
-    //floorTexture.magFilter = NearestFilter
-    //floorTexture.minFilter = NearestMipmapNearestFilter
+    //floorTextureClone.magFilter = NearestFilter
+    //floorTextureClone.minFilter = NearestMipmapNearestFilter
 
     const displacementScale = 0.5
+    const width = 32
+    const height = 64
 
-    const canvasRef = useRef<HTMLCanvasElement>(document.createElement('canvas'))
+    const offscreenCanvas = useMemo(() => {
+        return new OffscreenCanvas(width, height)
+    }, [width, height])
+
     const displacementMapRef = useRef<CanvasTexture>(null)
 
     const inRange = (value: number, range: [number, number]) => value >= range[0] && value <= range[1]
 
+    const noise2D = useMemo<NoiseFunction2D>(() => {
+        return createNoise2D()
+    }, [])
+
     const procedurallyGenerateDisplacementMap = useCallback(() => {
 
-        const width = 32
-        const height = 64
+        if (!displacementMapRef.current) return
 
-        const noise2D = createNoise2D()
+        const ctx = offscreenCanvas.getContext('2d')
 
-        //const canvas = canvasRef.current
-        const canvas = canvasRef.current
-        const ctx = canvas.getContext('2d')
-
-        canvas.width = width
-        canvas.height = height
+        offscreenCanvas.width = width
+        offscreenCanvas.height = height
 
         for (let x = 0; x < width; x++) {
 
@@ -143,28 +154,43 @@ const Terrain = forwardRef<Mesh, IProps>((props, terrainRef) => {
 
         }
 
-        displacementMapRef.current!.needsUpdate = true
+        displacementMapRef.current.needsUpdate = true
 
-    }, [])
+    }, [noise2D, offscreenCanvas])
 
-    useEffect(() => {
+    // fixes a problem where using useEffect would create
+    // displacement maps after the texture update so that
+    // the result was a flat surface with no displacement
+    useLayoutEffect(() => {
+        const displacementMap = displacementMapRef.current
         procedurallyGenerateDisplacementMap()
+        return () => {
+            // I don't know if this is necessary, but it's better to be safe than sorry
+            // cleanup: dispose of the canvas texture and remove the canvas element from dom
+            if (displacementMap !== null) {
+                displacementMap.dispose()
+            }
+            //canvas?.remove()
+        }
     }, [procedurallyGenerateDisplacementMap])
+
+    /*useFrame(() => {
+        procedurallyGenerateDisplacementMap()
+    })*/
 
     return (
         <mesh
             rotation={[-Math.PI * 0.5, 0, 0]}
             position={[0, 0, props.zPosition]}
-            ref={terrainRef}
             receiveShadow={true} // default is false
+            ref={props.ref}
         >
             <planeGeometry args={[1, 1, 32, 64]} />
             <meshStandardMaterial
-                map={floorTexture}
-                displacementMap={displacementMap}
+                map={floorTextureClone}
                 displacementScale={displacementScale}
                 emissiveMap={emissiveMap}
-                emissive={'#11166c'}
+                emissive="#11166c"
                 emissiveIntensity={0.02}
                 toneMapped={false} // default true
                 roughness={0.75}
@@ -173,13 +199,13 @@ const Terrain = forwardRef<Mesh, IProps>((props, terrainRef) => {
                 <canvasTexture
                     ref={displacementMapRef}
                     attach="displacementMap"
-                    image={canvasRef.current}
+                    args={[offscreenCanvas]}
                 />
             </meshStandardMaterial>
         </mesh>
     )
 
-})
+}
 
 Terrain.displayName = 'TerrainMeshComponent'
 

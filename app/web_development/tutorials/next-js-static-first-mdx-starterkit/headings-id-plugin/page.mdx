@@ -1,0 +1,181 @@
+---
+title: Rehype slug plugin to add IDs to headings - Next.js 15 Tutorial
+description: Rehype slug plugin to add IDs to headings - Next.js 15 static first MDX starterkit | Web development tutorials | www.chris.lu
+keywords: ['CI/CD', 'Vercel', 'build', 'Production', 'preview']
+published: 2024-12-31T23:00:00.000Z
+modified: 2024-12-31T23:00:00.000Z
+permalink: https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit/headings-id-plugin
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
+import Pagination from '@/components/tutorial/Pagination'
+import DonationsMessage from '@/shared/donations-message.mdx'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+          type: "image/png",
+          width: 1200,
+          height: 630,
+          url: '/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+%toc%
+
+<article>
+
+<Breadcrumbs list={[
+    { label: 'Web development tutorials', href: '/web_development' },
+    { label: 'Next.js 15 static first MDX starterkit', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit' },
+]} />
+
+# Rehype slug plugin to add IDs to headings
+
+The [rehype-slug](https://github.com/rehypejs/rehype-slug) plugin does not do much on its own, but it does something very useful needed by other plugins, by automatically transforming the text of headings into heading IDs. It will ensure IDs are unique, if detects that two (or more) headings have the same text, then the plugin will add a number to the ID.
+
+It uses [github-slugger](https://github.com/Flet/github-slugger) under the hood, meaning the slugs will be similar to those GitHub produces. 
+
+The heading IDs can then be used by plugins like [rehype-autolink-headings](https://github.com/rehypejs/rehype-autolink-headings) or a table of contents (TOC) plugin like [remark-table-of-contents](https://github.com/chrisweb/remark-table-of-contents)
+
+## rehype-slug installation
+
+To install the **rehype-slug** plugin package, use the following command:
+
+```shell
+npm i rehype-slug --save-exact
+```
+
+Now that the plugin is installed, we need to edit our Next.js 15 configuration file and add it to our MDX setup:
+
+```js title="next.config.mjs" showLineNumbers {8} {39} /rehypeSlug/2#special
+import { withSentryConfig } from '@sentry/nextjs';
+//import type { NextConfig } from 'next'
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+import createMdx from '@next/mdx'
+import rehypeMDXImportMedia from 'rehype-mdx-import-media'
+import rehypePrettyCode from 'rehype-pretty-code'
+import { readFileSync } from 'fs'
+import rehypeSlug from 'rehype-slug'
+
+const nextConfig = (phase/*: string*/) => {
+
+    const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
+    const themeFileContent = readFileSync(themePath, 'utf-8')
+
+    /** @type {import('rehype-pretty-code').Options} */
+    const rehypePrettyCodeOptions = {
+        theme: JSON.parse(themeFileContent),
+        keepBackground: false,
+        defaultLang: {
+            block: 'js',
+            inline: 'js',
+        },
+        tokensMap: {
+            fn: 'entity.name.function',
+            cmt: 'comment',
+            str: 'string',
+            var: 'entity.name.variable',
+            obj: 'variable.other.object',
+            prop: 'meta.property.object',
+            int: 'constant.numeric',
+        },
+    }
+
+    const withMDX = createMdx({
+        extension: /\.mdx$/,
+        options: {
+            // optional remark and rehype plugins
+            remarkPlugins: [],
+            rehypePlugins: [rehypeSlug, [rehypePrettyCode, rehypePrettyCodeOptions], rehypeMDXImportMedia],
+        },
+    })
+```
+
+Line 8: we import the **rehypeSlug** plugin
+
+Line 39: we add the plugin to our array of rehype plugins (in our MDX configuration)
+
+And that's already it, the plugin is now operational
+
+## Playground page to experiment with markdown headings
+
+To see this plugin in action and also in preparation for the table of contents (TOC) plugin experiments we will do in the next chapter, we are going to create a new playground
+
+First, go into the `/app/(tutorial_examples)` folder and then create a new `toc_playground` folder
+
+Inside the `toc_playground` folder, create a new `page.mdx` MDX page and add the following content:
+
+{/* spellchecker: disable */}
+```md title="/app/(tutorial_examples)/toc_playground/page.mdx"
+<article>
+
+# headline level 1
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris tincidunt eros sed pellentesque rhoncus. In est ante, dictum id turpis id, rutrum pellentesque nisi. Morbi euismod velit lacinia metus rutrum, non bibendum urna rutrum. Nunc ac mauris ut sem mollis lacinia. Suspendisse cursus augue est, eu eleifend leo venenatis sit amet. Nullam id arcu vel lacus accumsan efficitur. Pellentesque sodales commodo odio, at tempus magna cursus non. Curabitur ex diam, bibendum ac quam in, efficitur luctus ex. Donec ultricies feugiat semper. Sed nec posuere leo.
+
+Cras ultrices nisi enim, nec aliquet tellus fermentum in. Sed imperdiet lorem nec elit dictum elementum. In sit amet rhoncus lorem. Quisque gravida dictum pharetra. Phasellus lacinia, dui ut faucibus volutpat, nisi purus mattis nunc, eu elementum dolor elit eget lorem. Phasellus sagittis auctor tellus nec commodo. Mauris tristique fringilla ligula ut iaculis. Nullam id condimentum dolor, ac fringilla lorem.
+
+Cras faucibus magna nec orci feugiat, a accumsan velit posuere. Nam volutpat consequat ornare. Phasellus gravida aliquam nisl quis commodo. Nunc consectetur enim eu ipsum dapibus, a aliquet justo egestas. Curabitur id ultricies odio. Suspendisse eget vehicula mauris, non fermentum diam. Fusce laoreet ullamcorper dignissim.
+
+## headline level 2
+
+In hac habitasse platea dictumst. Morbi semper efficitur orci vitae vulputate. Duis mauris sapien, dignissim sed arcu sed, imperdiet finibus erat. Integer eget convallis tortor. In elementum eget urna vel congue. Donec sagittis ut justo nec maximus. Quisque vestibulum quam ut pellentesque vestibulum. Pellentesque sagittis lobortis libero, id laoreet odio mollis et. Etiam id nisl et magna pellentesque tincidunt quis id nulla.
+
+Nullam mattis mollis lacus id dapibus. Donec tincidunt magna ac eros pellentesque, eu elementum ipsum luctus. Vivamus tortor dui, varius ac accumsan id, ullamcorper facilisis felis. Etiam porttitor maximus semper. Integer sem ex, bibendum vel tempor sit amet, volutpat sollicitudin mauris. Interdum et malesuada fames ac ante ipsum primis in faucibus. Phasellus mattis lectus eget nisl porttitor, at ullamcorper neque hendrerit. Etiam posuere, purus sit amet mollis lacinia, lorem purus volutpat velit, a rutrum risus orci a orci. Vestibulum tincidunt massa id vulputate interdum. Cras tristique lacinia vestibulum. Sed nec tortor nibh. Duis rutrum, ligula at vulputate ullamcorper, neque urna lobortis enim, id scelerisque sapien ex non ipsum. Vivamus urna quam, volutpat vel urna at, elementum vulputate nibh. Nam ornare nunc nec lacus convallis fermentum. Pellentesque quam diam, lobortis vulputate ligula id, convallis sollicitudin mi.
+
+Fusce luctus mollis orci interdum venenatis. Cras volutpat nibh quis rhoncus porttitor. Fusce enim orci, ultricies ut dolor et, bibendum consequat sem. Quisque urna mi, congue ut tempus sed, bibendum id ante. Maecenas viverra risus in dolor faucibus, vel lacinia sapien viverra. Aenean porta dictum enim vel luctus. Suspendisse maximus consectetur enim a molestie. Etiam vehicula est eget porta molestie. Vestibulum augue turpis, aliquam eget suscipit nec, lacinia sit amet diam. Aenean rhoncus, enim sagittis fermentum pharetra, lectus urna tristique sapien, commodo efficitur arcu nibh non urna. Aenean tempor, leo a ultrices tincidunt, massa arcu facilisis purus, non fermentum quam nulla id nulla.
+
+### headline level 3
+
+In in euismod massa, ut vulputate urna. Aliquam molestie lacus est, non interdum urna aliquam ut. Sed vel sagittis eros, ut elementum dui. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nam nec tempus enim. Phasellus sollicitudin luctus justo, a imperdiet lectus commodo ut. Fusce facilisis justo nunc, in aliquet diam ornare nec.
+
+Donec tincidunt aliquam arcu in pharetra. Cras ut tincidunt est. Donec erat nulla, tempus et accumsan sit amet, malesuada nec mauris. Morbi ipsum dolor, auctor non sem sit amet, mattis mollis sapien. Nam at arcu venenatis, volutpat erat vitae, accumsan neque. Donec mattis, odio vel aliquam tincidunt, lorem ipsum cursus velit, ut porttitor sem urna non sapien. Curabitur interdum ligula odio, eu volutpat arcu aliquam a. Nulla a libero non mauris ornare tincidunt sed eget magna.
+
+Sed posuere eu elit vitae mollis. Nulla a leo finibus, faucibus justo id, pharetra nibh. Nunc ut blandit ligula. Fusce nibh risus, elementum a dictum sed, mattis vel turpis. Cras lectus sem, luctus at justo vel, hendrerit congue risus. Nullam suscipit ex quis ex laoreet rhoncus. Donec augue dui, sodales at lorem id, finibus dignissim libero. Suspendisse finibus mi id nibh rhoncus, ut accumsan velit sagittis.
+
+#### headline level 4
+
+Morbi et tortor accumsan dolor rutrum rhoncus. Quisque faucibus tincidunt nulla, non faucibus purus suscipit non. Aliquam sed dignissim nisl. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In tellus enim, tincidunt in ante at, commodo malesuada orci. Ut accumsan tempor sem, ut imperdiet nisi facilisis eu. Fusce eu mattis elit. Fusce a purus ac dolor venenatis tincidunt ut sed sem. Nam cursus eu leo et aliquet. In mattis sagittis felis, nec blandit justo eleifend at. Aenean consequat fringilla feugiat.
+
+Etiam lectus massa, aliquet congue eros at, dictum cursus lectus. Maecenas eu dapibus sapien, a dignissim lacus. Sed viverra et lacus porttitor porttitor. Suspendisse tincidunt augue ut cursus tempus. Nulla nec metus ultrices libero commodo faucibus et et nisi. Etiam ac vulputate neque, sit amet consequat tellus. Sed placerat urna a tristique placerat. Sed quis porta tellus, ac posuere augue. Sed tristique quam id dignissim euismod. Suspendisse posuere vel quam non euismod. In molestie varius fermentum. Aliquam ut efficitur ipsum. Cras eget nunc ut dolor aliquet porta nec in odio. Phasellus dapibus ligula eros, eleifend pulvinar metus vulputate et. In convallis ornare mollis. Morbi sit amet placerat dui.
+
+Duis cursus suscipit lorem consectetur imperdiet. Cras nec luctus odio. Pellentesque dapibus nunc et facilisis pellentesque. Donec augue massa, aliquam quis ornare placerat, facilisis in lacus. In at maximus turpis. Cras sed metus vel orci ultricies consequat ut vitae tortor. Morbi sed pretium eros, a rhoncus augue. Ut quis finibus massa. Suspendisse placerat nisl id congue molestie. Pellentesque in ipsum mi.
+
+</article>
+
+```
+{/* spellchecker: enable */}
+
+We have added some markdown headings of different levels to our MDX page as well as some fake text using an online [lorem ipsum generator](https://www.lipsum.com/), the content is wrapped inside of an `<article>{:html}` element (which is optional but I like to use semantic elements whenever it makes sense)
+
+Now launch the dev server, then open the `http://localhost:3000/toc_playground` TOC playground URL and then right-click on a heading and select **Inspect**, if you now look at the HTML code of the heading you will notice that **rehype slug** has added an ID
+
+Congratulations 🎉 all of your headings now automatically get a unique ID
+
+<DonationsMessage />
+
+> [!MORE]  
+> [npmjs.com "rehype-slug" page](https://www.npmjs.com/package/rehype-slug)  
+
+<Pagination
+    previous={{ label: 'Code highlighting plugin', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/code-highlighting-plugin' }}
+    next={{ label: 'Table of contents (TOC) plugin and React Observer Hook', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/table-of-contents-plugin' }}
+/>
+
+</article>

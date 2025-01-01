@@ -11,6 +11,7 @@ section: Web development
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -44,6 +45,8 @@ export const metadata = {
     { label: 'Next.js static MDX blog', href: '/web_development/tutorials/next-js-static-mdx-blog' },
 ]} />
 
+<ArchivedMessage case="next-js-14-static-tutorial" />
+
 # First Typescript page
 
 I hope you are still there because it is finally time to start coding (a bit) 🙂, but first a bit of theory about routing 😉 (feel free to skip the first chapter if you know it already), and then we create our very first page
@@ -58,11 +61,11 @@ With the **app router** if you want a page at that same `www.example.com/foo` pa
 
 Let's assume the path is now `www.example.com/foo/bar`, when using the **pages router** `foo` would be a folder inside of `pages`, but `bar` would be a file, however, when using the **app router**, every segment is a folder
 
-The other difference are the page files, with the **pages router**, the name of the file gets used as the last segment of a URL, in the **app router**, every page is always named **page**(.jsx/.tsx) and all directories will be a segment of the URL
+The other difference are the page files, with the **pages router**, the name of the file gets used as the last segment of a URL, in the **app router**, every page is always named **page**(.jsx|.tsx) and all directories will be a segment of the URL
 
-The advantage of using a folder as the last segment and having a convention that says that every page needs to be named page(.jsx/.tsx) is that with the introduction of the **app router** Next.js added a bunch of other [file conventions](https://nextjs.org/docs/app/building-your-application/routing#file-conventions), for example you can have a layout in every segment folder, you can have a not-found file in every folder and so on, meaning you can create different layouts for different parts of the website easily, or even create different error, loading, not-found, ... pages for various parts of your project (without having to add logic inside those files to check what the current path is and then show a different layout, UI or content based on what the path is)
+The advantage of using a folder as the last segment and having a convention that says that every page needs to be named page(.jsx|.tsx) is that with the introduction of the **app router** Next.js added a bunch of other [file conventions](https://nextjs.org/docs/app/building-your-application/routing#file-conventions), for example you can have a layout in every segment folder, you can have a not-found file in every folder and so on, meaning you can create different layouts for different parts of the website easily, or even create different error, loading, not-found, ... pages for various parts of your project (without having to add logic inside those files to check what the current path is and then show a different layout, UI or content based on what the path is)
 
-A feature you will already know if you used the **pages router** is [dynamic routes](https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes). To create a dynamic route segment, you wrap the folder's name in square brackets, for example, with a folder structure like this `/app/articles/[slug]`, the **slug** could be anything, so if the URL is `www.example.com/articlers/foo` then the slug have "foo" as value and for another URL `www.example.com/articlers/bar` the slug would be a "bar", to retrieve the slug value you would create a page with the following code:
+A feature you will already know if you used the **pages router** is [dynamic routes](https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes). To create a dynamic route segment, you wrap the folder's name in square brackets, for example, with a folder structure like this `/app/articles/[slug]`, the **slug** could be anything, so if the URL is `www.example.com/articles/foo` then the slug have "foo" as value and for another URL `www.example.com/articles/bar` the slug would be a "bar", to retrieve the slug value you would create a page with the following code:
 
 ```tsx title="/app/articles/[slug]/page.tsx"
 export default function Page({ params }: { params: { slug: string } }) {
@@ -70,7 +73,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 }
 ```
 
-Other useful features were introduced with the new router, like [route groups](https://nextjs.org/docs/app/building-your-application/routing/route-groups) which we will see in a future part of this tutorial. Another new feature are [parallel routes](https://nextjs.org/docs/app/building-your-application/routing/parallel-routes), which I will not cover them in this tutorial, but it is good to know they exist as they might become useful sooner or later as your project grows
+Other useful features were introduced with the new folder-based routing, like [route groups](https://nextjs.org/docs/app/building-your-application/routing/route-groups) or [parallel routes](https://nextjs.org/docs/app/building-your-application/routing/parallel-routes) but those I will not cover them in this tutorial, but it is good to know they exist as they might become useful sooner or later as your project grows
 
 If you haven't read my [The road to React 19 and Next.js 15](/web_development/posts/road-to-react-19-next-js-15) post yet but want to know more about the Next.js pages VS app router, then you might want to check out the ["pages VS app router"](/web_development/posts/road-to-react-19-next-js-15#pages-vs-app-router) chapter
 
@@ -152,7 +155,7 @@ export default function RootLayout({
 This layout is still very basic, it only contains the bare minimum of HTML elements to create a valid HTML document, but in future chapters we will add more code to make this layout file more useful
 
 > [!MORE]  
-> [Next.js "layouts" documentation](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts#layouts)  
+> [Next.js "layouts" documentation](https://nextjs.org/docs/app/building-your-application/routing/layouts-and-templates)  
 
 ## Edit the first page
 
@@ -175,7 +178,7 @@ export default function Home() {
 > [!NOTE]  
 > As soon as you save the file, you will see in the terminal that Next.js prints a message **Compiled in Xms (Y modules)**, which shows you that Next.js detected changes in your code base and did a new build for you
 
-Now go back into your browser to have another look at the rendered page at `https://localhost:3000/`
+Now go back into your browser to have another look at the rendered page using the ([https://localhost:3000/](https://localhost:3000/)) URL
 
 Even though you haven't reloaded the page manually, you will notice that your changes have been applied, which is because Next.js has a feature called fast refresh, this feature will watch your code base and each time a page gets rebuilt it will also refresh the page in the browser
 
