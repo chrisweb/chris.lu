@@ -30,7 +30,7 @@
     height: var(--header-navbar-height);
 }
 
-@media all and (max-width: 1120px) {
+@media all and (max-width: 1300px) {
 
     .layoutNavbarContainer {
         height: 85vh;
@@ -80,7 +80,7 @@
 }
 
 /* experimental: p3 colors */
-@media all and (max-width: 1120px) and (color-gamut: p3) {
+@media all and (max-width: 1300px) and (color-gamut: p3) {
 
     @keyframes moveDown {
         from {
@@ -183,7 +183,7 @@
     width: 48px;
 }
 
-@media all and (max-width: 1120px) {
+@media all and (max-width: 1300px) {
 
     .hamburger {
         display: flex;

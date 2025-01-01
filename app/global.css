@@ -418,7 +418,7 @@ h6 {
     height: auto;
 }
 
-@media all and (max-width: 768px) {
+@media all and (max-width: 1120px) {
     .animatedEmoji {
         width: 24px;
     }
