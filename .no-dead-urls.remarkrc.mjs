@@ -14,8 +14,9 @@ const remarkLintNoDeadUrlsOptions = {
         // produce the error that the hash can not be found as anchor element
         // I do NOT want to disable all of github.com
         // disabling all the urls with a line number hash would be ideal but not sure how to do that
-        // for now I search for /blob/ in the URL and exclude those
+        // for now I search for /blob/ or /blame/ in the URL and exclude those
         '/*/blob/*/',
+        '/*/blame/*/',
         // this page wants to redirect to a url with the language set
         // I prefer to use the URL with no language
         // so that it adapts to the user's language that will visit
