@@ -55,7 +55,7 @@ For me, the best about **rehype pretty code** is that it uses [shiki](https://sh
 
 If you use Typescript for your Next.js 15 config file and import this plugin, then you will get a node.js error telling you that it can NOT import the "vscode-textmate" package (which is a shiki dependency, shiki is used by this plugin).
 
-As described on a previous page, the reason for this is that next.config.ts files have [NO support for ESM only packages](/web_development/tutorials/next-js-static-first-mdx-starterkit/next-config#nextconfigts-does-not-yet-support-esm) (yet)
+As described on a previous page, the reason for this is that next.config.ts files have [NO support for ESM only packages](/web_development/tutorials/next-js-static-first-mdx-starterkit/next-config#nextconfigts-does-not-support-esm-only-packages) (yet)
 
 As of now the only workaround for this problem (besides not using this plugin, as there are many alternatives like [rehype-starry-night](https://github.com/rehypejs/rehype-starry-night) and [rehype-highlight)](https://github.com/rehypejs/rehype-highlight)), is to go back to using a **next.config.mjs** file. You could rename your current next.config.ts to _next.config.ts (with an underscore) to have a backup and then make a copy that you name it next.config.mjs. Then you need to edit the next.config.mjs to comment out type imports and comment out code that creates or uses types. After that all you can do is keep using a Javascript file until the Typescript configuration files get support for ESM only packages
 

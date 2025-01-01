@@ -241,7 +241,7 @@ Lines 223 to 225: we remove the default padding from the `<ul>{:html}` that the 
 >  
 > the 2nd one is that you need to make sure you also specify at least one of the 4 properties **top**, **left**, **right** or **bottom** (for the element you want to be sticky), for example in the example above if we remove the **top** property then the `<nav>{:html}` element wouldn't be sticky anymore
 >  
-> the third one that is important is that you don't set the height (of element that you want to be sticky) to 100%, you need to define a height, what works however is to use the vh [CSS unit](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units) (viewport height), so for example if you want the sticky aside to be as tall as the page minus the header (that for example is 50px tall), then you could use something like this:
+> the third one that is important is that you don't set the height (of element that you want to be sticky) to 100%, you need to define a height, what works however is to use the vh [CSS unit](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Values_and_units) (viewport height), so for example if you want the sticky aside to be as tall as the page minus the header (that for example is 50px tall), then you could use something like this:
 >  
 > `height: calc(100vh - 50px);{:css}`
 

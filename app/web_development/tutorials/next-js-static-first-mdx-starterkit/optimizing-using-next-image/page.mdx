@@ -54,7 +54,7 @@ This page is all about using [next/image](https://nextjs.org/docs/app/api-refere
 By using **next/image** we will make sure that all images we put into our MDX pages get optimized, which means that:
 
 * we will update the configuration to make sure our [PNG](https://web.dev/learn/images/png) or [JPG](https://web.dev/learn/images/jpeg) images get converted automatically into formats like [WEBP](https://web.dev/learn/images/webp) and [AVIF](https://web.dev/learn/images/avif); this will reduce the file sizes of images without them losing in quality, which means our images will consume less bandwidth and load faster
-* we will use **next/image**, which will help us make our images [responsive](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images) by creating a srcset to define multiple versions of an image that have different dimensions, so that on small screens we small images that are NOT heavier than necessary and on big screens we load bigger images to make sure the browser does not fetch a small image and then upscale it, which would make it look blurry
+* we will use **next/image**, which will help us make our images [responsive](https://developer.mozilla.org/en-US/docs/Web/HTML/Responsive_images) by creating a srcset to define multiple versions of an image that have different dimensions, so that on small screens we small images that are NOT heavier than necessary and on big screens we load bigger images to make sure the browser does not fetch a small image and then upscale it, which would make it look blurry
 * we will also use a remark plugin to make sure the path of each image gets turned into an import, which will allow **next/image** to determine the width and height of our images automatically
 
 We will also keep the drag and drop images feature that improves the **developer experience (DX)** in VSCode intact by making sure that adding images to a document is easy and quick when using VSCode. What is great is that after you **drag and drop** an image into a document VSCode will create the markdown element with the correct path to the image
@@ -65,7 +65,7 @@ We will also keep the drag and drop images feature that improves the **developer
 > [!MORE]  
 > [Next.js "next/image" API reference](https://nextjs.org/docs/app/api-reference/components/image)  
 > [Next.js "Image Optimization" documentation](https://nextjs.org/docs/app/building-your-application/optimizing/images)  
-> [MDN "Responsive images" documentation](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images)  
+> [MDN "Responsive images" documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Responsive_images)  
 > [Aurora team "Building an effective Image Component" article](https://developer.chrome.com/docs/aurora/image-component)  
 
 ## How to **NOT** add images to an MDX document
