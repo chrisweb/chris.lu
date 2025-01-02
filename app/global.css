@@ -926,13 +926,13 @@ make the text color a bit darker */
     margin-right: calc(var(--main-spacing) / 2);
 }
 
+.socialIcon {
+    margin-right: calc(var(--main-spacing) / 2);
+    color: var(--primary-light-color);
+}
+
 /* not on mobile */
 @media (hover: hover) {
-
-    .socialIcon {
-        margin-right: calc(var(--main-spacing) / 2);
-        color: var(--primary-light-color);
-    }
 
     .socialIcon:hover {
         color: var(--secondary-light-color);
