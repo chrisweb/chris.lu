@@ -177,7 +177,7 @@ I digged in the code of the [@next/mdx/mdx-js-loader.js](https://github.com/verc
 
 meaning that the following example will lead to the TypeError above:
 
-```shell
+```js
 const withMDX = createMDX({
     options: {
         remarkPlugins: [],
@@ -188,7 +188,7 @@ const withMDX = createMDX({
 
 To fix the configuration you need to use:
 
-```shell
+```js
 const withMDX = createMDX({
     options: {
         remarkPlugins: [],

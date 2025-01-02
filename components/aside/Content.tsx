@@ -3,6 +3,7 @@ import BaseLink from '@/components/base/Link'
 import ShareButton from '@/components/base/button/Share'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faBug, faComments } from '@fortawesome/free-solid-svg-icons'
+import { faGithub, faMastodon, faDiscord } from '@fortawesome/free-brands-svg-icons'
 import Image from 'next/image'
 import buyMeACoffeeImport from '@/public/assets/images/buy_me_a_coffee_button.png'
 
@@ -14,7 +15,6 @@ const AsideContent: React.FC = () => {
             <a href="https://www.buymeacoffee.com/chriswwweb" className={`${styles.coffeeButton} shake`} rel="noopener noreferrer" target="_blank">
                 <Image src={buyMeACoffeeImport} priority fill alt="buy me a coffee, please" />
             </a>
-            <br />
             <span className="fontDarker">* Please 😉</span>
             <p className="fontSmall fontDarker alignLeft">
                 <FontAwesomeIcon icon={faHeart} size="1x" className="startInlineIcon" />
@@ -32,8 +32,21 @@ const AsideContent: React.FC = () => {
             <p className="fontSmall fontDarker alignLeft">
                 <FontAwesomeIcon icon={faComments} className="startInlineIcon" />
                 Suggestions and Ideas are appreciated, please use the&nbsp;
+                <BaseLink href="https://discord.gg/4p59CCTUAJ">chris.lu Discord server</BaseLink>
+                or the&nbsp;
                 <BaseLink href="https://github.com/chrisweb/chris.lu/discussions">discussion board</BaseLink>
                 to leave feedback or ask a question.
+            </p>
+            <p>
+                <BaseLink href="https://discord.gg/4p59CCTUAJ" noExternalIcon={true}>
+                    <FontAwesomeIcon icon={faDiscord} color="white" size="2x" className="socialIcon" />
+                </BaseLink>
+                <BaseLink href="https://mastodon.social/@chriswwweb" noExternalIcon={true}>
+                    <FontAwesomeIcon icon={faMastodon} color="white" size="2x" className="socialIcon" />
+                </BaseLink>
+                <BaseLink href="https://github.com/chrisweb" noExternalIcon={true}>
+                    <FontAwesomeIcon icon={faGithub} color="white" size="2x" className="socialIcon" />
+                </BaseLink>
             </p>
         </div>
     )

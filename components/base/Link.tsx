@@ -9,6 +9,7 @@ export interface IBaseLinkProps extends PropsWithChildren {
     target?: string
     rel?: string
     className?: string
+    noExternalIcon?: boolean
 }
 
 const isExternalUrl = (url: string, domain: string): boolean => {
@@ -53,12 +54,12 @@ const isUrlMe = (url: string): boolean => {
 
 const BaseLink: React.FC<IBaseLinkProps> = (props) => {
 
-    const { href, children, ...linkProps } = props
+    const { href, children, noExternalIcon, ...linkProps } = props
+    const newLinkProps = { ...linkProps }
 
     const isExternal = isExternalUrl(href.toString(), 'chris.lu')
     const isMe = isUrlMe(href.toString())
-
-    const newLinkProps = { ...linkProps }
+    const withExternalIcon = isExternal && !noExternalIcon
 
     if (isExternal) {
         newLinkProps.rel = 'noopener noreferrer'
@@ -71,7 +72,7 @@ const BaseLink: React.FC<IBaseLinkProps> = (props) => {
 
     return (
         <>
-            {isExternal ?
+            {(withExternalIcon) ?
                 (
                     <>
                         <a href={href.toString()} {...newLinkProps}>
