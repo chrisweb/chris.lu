@@ -926,6 +926,19 @@ make the text color a bit darker */
     margin-right: calc(var(--main-spacing) / 2);
 }
 
+/* not on mobile */
+@media (hover: hover) {
+
+    .socialIcon {
+        margin-right: calc(var(--main-spacing) / 2);
+        color: var(--primary-light-color);
+    }
+
+    .socialIcon:hover {
+        color: var(--secondary-light-color);
+    }
+}
+
 @keyframes rippleAnimation {
     0% {
         box-shadow: 0 0 0 0 rgba(255, 255, 255, 1);
