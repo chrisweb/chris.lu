@@ -2,7 +2,7 @@
 title: The road to React 19 and Next.js 15
 keywords: ['Next.js', 'nextjs', 'React', 'react 19', 'Next.js 15', 'Server Components', 'react compiler', 'Server Actions', 'server functions', 'upgrade', 'update', 'migrate', 'codemods']
 published: 2024-08-12T11:22:33.444Z
-modified: 2024-12-17T03:12:12.333Z
+modified: 2025-01-03T03:12:12.333Z
 permalink: https://chris.lu/web_development/posts/road-to-react-19-next-js-15
 section: Web development
 ---
@@ -80,13 +80,18 @@ Meaning that prior to the release of the first RC for React 19, if you had sever
 
 * In early december 2024 the react team announced the release of [React 19 stable](https://react.dev/blog/2024/12/05/react-19) 🎉, the release included the Suspense fix from the previous RC as well as all the features I highlighted in the previous announcements. If you want to try out React 19 you could use the [Next.js 15](https://nextjs.org/) framework, which already used some of the React 19 features (under the hood) for some time, but now you too can set React to v19 in your package.json (React 19 with Next.js 15 works in both the pages and the app router). Or if you prefer you could use new [vite v6](https://github.com/vitejs/vite) to quickly spin up a dev server and try out the new React 19 client features like actions
 
-I really liked that the React maintainers paused their release to address the concerns around Suspense and come up with a good solution. I can wait to experiment more with React 19 actions in combination with the 2 new hooks useActionState and useOptimistic to see for myself if I want to start using them in "real" projects
+> [!NOTE]  
+> now that version 19 is stable, you can still use canary version, Next.js for example uses a canary for frameworks. To get an idea of what canary is currently available you can check out the [npm (react) versions page](https://www.npmjs.com/package/react?activeTab=versions) or in your package.json set react (and react-dom) to `"react": "canary"{:json}` and then run `npm update{:shell}` to tell npm to install the latest canary it can find
+
+I really liked that the React maintainers paused their release to address the concerns regarding the **Suspense problem** and come up with a good solution.
+
+It will be interesting to see how in 2025 projects start using the new React 19 features, like for example actions in combination with the 2 new hooks useActionState and useOptimistic
 
 > [!MORE]  
 > [react.dev "React 19 (beta)" post](https://react.dev/blog/2024/04/25/react-19)  
 > [react.dev "React 19 migration" guide](https://react.dev/blog/2024/04/25/react-19-upgrade-guide)  
 > [react.dev "React 19 RC" post](https://react.dev/blog/2024/04/25/react-19)  
-> [react.dev "React 19 stable" post](https://react.dev/blog/2024/12/05/react-19)
+> [react.dev "React 19 stable" post](https://react.dev/blog/2024/12/05/react-19)  
 > [react.dev "React Compiler" documentation](https://react.dev/learn/react-compiler)  
 
 ## New features in Next.js before v13
