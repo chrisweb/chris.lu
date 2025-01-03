@@ -42,11 +42,13 @@
     height: 100%;
 }
 
+/* spellchecker: disable */
 .cyberPortalInnerGlow {
     filter: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='inner-glow'%3E%3CfeMorphology operator='erode' radius='1' /%3E%3CfeGaussianBlur stdDeviation='6' result='blurFilterPrimitive' /%3E%3CfeComposite operator='in' in='SourceGraphic' in2='blurFilterPrimitive' /%3E%3C/filter%3E%3C/svg%3E#inner-glow");
     width: calc(100% - 4px);
     height: calc(100% - 4px);
 }
+/* spellchecker: enable */
 
 .cyberPortalCore {
     --innerCornerSize: 39px;
