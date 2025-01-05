@@ -169,6 +169,7 @@ const nextConfig = (phase) => {
         },
     })
 
+    /** @type {import('next').NextConfig} */
     const nextConfigOptions = {
         reactStrictMode: true,
         poweredByHeader: false,
