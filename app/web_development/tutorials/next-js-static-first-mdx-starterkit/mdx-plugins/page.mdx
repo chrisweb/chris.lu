@@ -205,7 +205,9 @@ This is when I bumped into something I assume is a bug on windows:
 Error: Only URLs with a scheme in: file, data, and node are supported by the default ESM loader. On Windows, absolute paths must be valid file:// URLs. Received protocol 'c:'
 ```
 
-Confirmed, on Mac the code works 🎉 but this also confirms there is a windows bug 😭 (TODO: I did not find a ticket for this bug, so I will finish and publish the tutorial, then check again if a ticket exists, if not create one, I found a similar PR but in an other area of Next.js, the solution is probably similar: [use pathToFileUrl to make esm import()s work with absolute windows paths](https://github.com/vercel/next.js/pull/64386/files))
+Confirmed, on Mac the code works 🎉 but this also confirms there is a windows bug 😭
+
+I have opened an [Issue (#74564)](https://github.com/vercel/next.js/issues/74564) on GitHub regarding this problem and I suggested a fix in this [PR #74565](https://github.com/vercel/next.js/pull/74565)
 
 ### tldr
 
