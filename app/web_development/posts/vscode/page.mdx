@@ -177,13 +177,28 @@ The easiest way to save a file in VSCode is to use the keyboard shortcut `Ctrl+S
 > [!MORE]  
 > [VSCode "Editing basics" documentation](https://code.visualstudio.com/docs/editor/codebasics)  
 
+## Comment out / uncomment code
+
+One of the must used shortcuts is probably the **comment out / uncomment toggle shortcut**
+
+* first select the code you want to comment out or uncomment
+* then either use the shortcut `Ctrl+#` (macOS: `⌘#`, Linux: `Ctrl+#`)
+* or if you prefer using the command, [open the commend palette](#vscode-command-palette), start typing `Toggle Line Comment` until the command appears in the list and then select it.
+
+VSCode will **comment out** out the select lines of code if they are NOT commented out yet, if they are commented out VSCode will uncomment them
+
+VSCode will try to use language specific comments, meaning it will for example use `<!-- HTML comments -->` in HTML and `// single-line comments` in javascript (typescript). 
+
+> [!NOTE]  
+> If you prefer using a multi-line comment, then use the related **toggle block comment** command shortcut `Ctrl+Shift+A` (macOS: `⇧⌘A`, Linux: `Ctrl+Shift+A`).
+
 ## Open a VSCode terminal
 
 VSCode has a terminal (command line tool) that, by default, is closed. To open the terminal, click on **View** in the top navigation bar and then **Terminal**
 
 Or use the keyboard shortcut `` Ctrl+` `` (macOS: `` ⌃` ``, Linux: `` Ctrl+` ``)
 
-The third option is to use the command palette by pressing using the keyboard shortcut `Ctrl+Shift+p` (macOS: `⇧⌘P`, Linux: `Ctrl+Shift+P`) and then typing `view: toggle terminal`.
+The third option is to use the command palette, [open the commend palette](#vscode-command-palette), start typing `view toggle terminal` until the command appears in the list and then select it.
 
 > [!MORE]  
 > [VSCode "terminal" documentation](https://code.visualstudio.com/docs/terminal/basics)  
