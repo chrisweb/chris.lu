@@ -26,6 +26,7 @@ const nextConfig = (phase) => {
     })*/
 
     // https://rehype-pretty-code.netlify.app/
+    /** @type {import('rehype-pretty-code').Options} */
     const rehypePrettyCodeOptions = {
         // VSCode "SynthWave '84" theme
         theme: 'synthwave-84',
@@ -44,6 +45,7 @@ const nextConfig = (phase) => {
     }
 
     // https://github.com/chrisweb/remark-table-of-contents#options
+    /** @type {import('remark-table-of-contents').IRemarkTableOfContentsOptions} */
     const remarkTableOfContentsOptions = {
         containerAttributes: {
             id: 'articleToc',
@@ -73,11 +75,13 @@ const nextConfig = (phase) => {
     }
 
     // https://github.com/remarkjs/remark-gfm
+    /** @type {import('remark-gfm').Options} */
     const remarkGfmOptions = {
         singleTilde: false,
     }
 
     // https://github.com/chrisweb/rehype-github-alerts
+    /** @type {import('rehype-github-alerts').DefaultBuildType} */
     const myGithubAlertBuild = (alertOptions, originalChildren) => {
 
         const alert = {
@@ -135,6 +139,7 @@ const nextConfig = (phase) => {
 
     }
 
+    /** @type {import('rehype-github-alerts').IOptions} */
     const rehypeGithubAlertsOptions = {
         supportLegacy: false,
         build: myGithubAlertBuild,
