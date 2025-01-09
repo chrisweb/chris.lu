@@ -27,9 +27,6 @@
                 "./*"
             ]
         },
-        "types": [
-            "react/canary"
-        ],
     },
     "include": [
         "next-env.d.ts",
