@@ -28,7 +28,31 @@ const Trees: React.FC = () => {
         moveFromAToBInLoop(delta, rightSideTreesRefs.current, 1, 0.2)
     })
 
-    const createTrees = useCallback(() => {
+    const createPalm = useCallback((i: number, side: string, positionChange: number) => {
+
+        const position = new Vector3(side === 'left' ? 0.21 : -0.21, 0, positionChange)
+        const scale = new Vector3(0.009, 0.009, 0.009)
+        const rotation = new Euler(0, randomDegrees(), 0)
+
+        return (
+            <PalmModel
+                key={i.toString() + side}
+                position={position}
+                scale={scale}
+                rotation={rotation}
+                ref={(palmMesh) => {
+                    if (side === 'left') {
+                        leftSideTreesRefs.current[i] = palmMesh
+                    } else {
+                        rightSideTreesRefs.current[i] = palmMesh
+                    }
+                }}
+            />
+        )
+
+    }, [])
+
+    useLayoutEffect(() => {
 
         const treesElements: React.ReactElement[] = []
 
@@ -40,42 +64,15 @@ const Trees: React.FC = () => {
             let positionChange = -1.5
 
             for (let i = 0; i < amountOfTreesPerSide; i++) {
-
-                const position = new Vector3(side === 'right' ? -0.21 : 0.21, 0, positionChange)
-                const scale = new Vector3(0.009, 0.009, 0.009)
-                const rotation = new Euler(0, randomDegrees(), 0)
-
-                treesElements.push(
-                    <PalmModel
-                        position={position}
-                        ref={(treeGroup) => {
-                            if (side === 'right') {
-                                rightSideTreesRefs.current[i] = treeGroup
-                            } else {
-                                leftSideTreesRefs.current[i] = treeGroup
-                            }
-                        }}
-                        scale={scale}
-                        castShadow={true} // default is false
-                        receiveShadow={false}
-                        key={side + '_' + i.toString()}
-                        rotation={rotation}
-                    />
-                )
-
+                treesElements.push(createPalm(i, side, positionChange))
                 positionChange += 0.2
-
             }
 
         })
 
-        return treesElements
+        setTreesElementsState(treesElements)
 
-    }, [])
-
-    useLayoutEffect(() => {
-        setTreesElementsState(createTrees())
-    }, [createTrees])
+    }, [createPalm])
 
     return (<Suspense>{treesElementsState}</Suspense>)
 
