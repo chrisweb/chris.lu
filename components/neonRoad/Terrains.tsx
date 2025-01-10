@@ -17,7 +17,19 @@ const Terrains: React.FC = () => {
         moveFromAToBInLoop(delta, terrains, 1, 1)
     })
 
-    const createTerrains = useCallback(() => {
+    const createTerrain = useCallback((i: number, zPosition: number) => {
+        return (
+            <Terrain
+                zPosition={zPosition}
+                key={i}
+                ref={(terrainMesh) => {
+                    terrainsRefs.current[i] = terrainMesh
+                }}
+            />
+        )
+    }, [])
+
+    useLayoutEffect(() => {
 
         const terrainElements: React.ReactElement[] = []
 
@@ -33,24 +45,12 @@ const Terrains: React.FC = () => {
 
             const zPosition = terrainsZStartPositions[i]
 
-            terrainElements.push(
-                <Terrain
-                    zPosition={zPosition}
-                    key={i}
-                    ref={(terrainMesh) => {
-                        terrainsRefs.current[i] = terrainMesh
-                    }}
-                />
-            )
+            terrainElements.push(createTerrain(i, zPosition))
         }
 
-        return terrainElements
+        setTerrainElementsState(terrainElements)
 
-    }, [])
-
-    useLayoutEffect(() => {
-        setTerrainElementsState(createTerrains())
-    }, [createTerrains])
+    }, [createTerrain])
 
     return (<Suspense>{terrainElementsState}</Suspense>)
 }
