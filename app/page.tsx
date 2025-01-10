@@ -17,8 +17,7 @@ export default function Homepage() {
                 </h1>
                 <p>Welcome to my blog, my name is Chris Weber (aka chrisweb)</p>
                 <p className={`fontBigger ${styles.specialMargin}`}>
-                    I like
-                    &nbsp;
+                    I like&nbsp;
                     <Typing>Web development, Lego bricks, Music, Games, Cooking, Movies & TV shows, Memes</Typing>
                 </p>
                 <div className={styles.portalsGrid}>
