@@ -9,6 +9,9 @@ import stylisticPlugin from '@stylistic/eslint-plugin'
 import * as mdxPlugin from 'eslint-plugin-mdx'
 import reactCompilerPlugin from 'eslint-plugin-react-compiler'
 
+// currently an mts file until I find types
+// for all imported packages
+
 const eslintConfig = [
     {
         name: 'custom/eslint/recommended',
