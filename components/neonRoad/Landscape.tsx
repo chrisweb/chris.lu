@@ -8,8 +8,6 @@ import { moveFromAToBInLoop } from './lib/helpers'
 import PalmModel from './Palm'
 import { Vector3, Euler, type Group } from 'three'
 
-
-
 const Terrains: React.FC = () => {
 
     const [terrainElementsState, setTerrainElementsState] = useState<React.ReactElement[]>([])
