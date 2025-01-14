@@ -85,7 +85,7 @@ const Button: React.FC<IProps> = ({ children, colorChange, randomize }) => {
 
     const type = useCallback(() => {
         const part = parts[partIndexRef.current]
-        const charactersArray = [...part]
+        const charactersArray = part.split('')
         const character = charactersArray[characterIndexRef.current]
         // set a new color
         if (withColorChange && characterIndexRef.current === 0) {
