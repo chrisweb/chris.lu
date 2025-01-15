@@ -69,21 +69,6 @@ Open the extensions view, then search for an extension named **ESLint** (publish
 
 After installing the ESLint extension, you need to edit the settings of that extension to add things like the **.mdx** extension to the list of file extensions that it will use
 
-> [!WARN]  
-> As of now (nov. 2024) if you use typescript for you eslint.config file (so .ts and not .mjs), then the extension will return the following error:
->  
-> > Error: Could not find config file.
->  
-> To have the ESLint extension support typescript configuration files, you need to add the same flag we previously added to our linting command in the package.json (in the [Linting setup using ESLint](/web_development/tutorials/next-js-static-first-mdx-starterkit/linting-setup-using-eslint) page)
->  
-> The ESLint extension which flag it should add to the ESLint command, we need to edit the extension settings, an easy way to do this is to edit the settings file (in the .vscode folder):
->  
-> ```json title=".vscode/settings.json"
-> "eslint.options": {
->     "flags": ["unstable_ts_config"]
-> }
-> ```
-
 You have several options when editing VSCode settings (spoiler alert: I will use option 2)
 
 Option 1: Open the extensions view (extensions list), if you don't know (yet) how to do this, then I recommend checking out my ["VSCode extensions view" chapter](/web_development/posts/vscode#vscode-extensions-view) in the VSCode post
@@ -99,13 +84,10 @@ Option 2: If you have already set custom settings for your VSCode workspace, the
 
 Now open the `.vscode/settings.json` file and add the following settings for our ESLint extension:
 
-```json title="/.vscode/settings.json" showLineNumbers {3-14} /,/1#special
+```json title="/.vscode/settings.json" showLineNumbers {3-11} /,/1#special
 {
     "typescript.tsdk": "node_modules\\typescript\\lib",
     "eslint.debug": true,
-    "eslint.options": {
-        "flags": ["unstable_ts_config"]
-    },
     "eslint.validate": [
         "markdown",
         "mdx",
@@ -119,7 +101,22 @@ Now open the `.vscode/settings.json` file and add the following settings for our
 
 Add a comma at the end of the `typescript.tsdk` line that is already in the settings.json file, then add our ESLint extension settings below
 
-If you are using typescript ESLint config file (eslint.config.ts) then it is very important that you also add the flags options to unable the (currently still experimental) typescript support for ESLint configuration files
+> [!NOTE]  
+> **A special note if you are using ESLint < v9.18.0:**
+> 
+> If you use typescript for you eslint.config file (so a .ts extension and not .mjs), then the ESLint extension will return the following error:
+>  
+> > Error: Could not find config file.
+>  
+> To have the ESLint extension support typescript configuration files, you need to add the same flag you use in your package.json linting script (for more about linting commands in the package.json file, check out the [Linting setup using ESLint](/web_development/tutorials/next-js-static-first-mdx-starterkit/linting-setup-using-eslint) page)
+>  
+> To tell the ESLint extension which flag it should add to the ESLint command, we need to edit the extension settings, an easy way to do this is to edit the settings file (which is in the .vscode folder, if you don't already have such a file, just create one manually):
+>  
+> ```json title=".vscode/settings.json"
+> "eslint.options": {
+>     "flags": ["unstable_ts_config"]
+> }
+> ```
 
 > [!MORE]  
 > [VSCode "ESLint" extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)  

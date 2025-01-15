@@ -199,6 +199,17 @@ As we converted our **next.config** file to a (`next.config.ts`) typescript file
 
 First we rename our ESlint configuration file to `eslint.config.ts` (you can also use `eslint.config.mts` or `eslint.config.cts` if you prefer), in this tutorial I will use **eslint.config.ts** (to match how we named the **next.config.ts** file)
 
+> [!NOTE]  
+> **A special note if you are using ESLint < v9.18.0:**
+> 
+> Being able to use [typescript for ESLint Flat Config files](https://eslint.org/docs/latest/use/configure/configuration-files#typescript-configuration-files) is a feature that got added in [ESLint v9.9.0](https://eslint.org/blog/2024/08/eslint-v9.9.0-released/#experimental-typescript-configuration-files), and at first it was marked as experimental, meaning the ESLint cli command needed an extra flag (until ESLint version 9.18.0 which removed the need for the flag)
+>  
+> If you use typescript for your eslint.config file (so a .ts extension and not .mjs), without the flag will result in the following error:
+>  
+> > Error: Could not find config file.
+>  
+> To have the ESLint CLI support typescript configuration files, you need to add the `--flag unstable_ts_config` to your commands
+
 Next we need to install additional [@types/eslint__eslintrc](https://www.npmjs.com/package/@types/eslint__eslintrc) types for the [@eslint/eslintrc](https://www.npmjs.com/package/@eslint/eslintrc) package:
 
 ```shell
@@ -254,11 +265,10 @@ If you have converted your ESLint configuration to an `eslint.config.ts` file an
 As we can't use next lint we need to create our own linting command:
 
 * as we can NOT use **next lint**, we will use the **eslint cli** instead
-* we will also enable the [(experimental) typescript support](https://eslint.org/docs/latest/use/configure/configuration-files#typescript-configuration-files) for ESLint Flat Config files by adding an extra flag to our command (typescript support for configuration files is a feature that got added in [ESLint v9.9.0](https://eslint.org/blog/2024/08/eslint-v9.9.0-released/#experimental-typescript-configuration-files))
 * finally we will enable caching (as would next lint do) and we set the cache folder path to the same folder that Next.js uses
 
 ```shell
-npx eslint --flag unstable_ts_config --cache --cache-location .next/cache/eslint/
+npx eslint --cache --cache-location .next/cache/eslint/
 ```
 
 Now that we have created a new command we can update our package.json (in the root of the project) to update our linting script(s):
@@ -269,7 +279,7 @@ Now that we have created a new command we can update our package.json (in the ro
     "dev-turbo": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint --flag unstable_ts_config --cache --cache-location .next/cache/eslint/"
+    "lint": "eslint --cache --cache-location .next/cache/eslint/"
 },
 ```
 
@@ -281,7 +291,7 @@ There is one more problem left, the **next build** script uses **next lint** by 
     "dev-turbo": "next dev --turbopack",
     "build": "npm run lint && next build",
     "start": "next start",
-    "lint": "eslint --flag unstable_ts_config --cache --cache-location .next/cache/eslint/"
+    "lint": "eslint --cache --cache-location .next/cache/eslint/"
 },
 ```
 
@@ -311,9 +321,9 @@ We update our `package.json` file (in the root) and add the following scripts:
     "build": "npm run lint && next build",
     "start": "next start",
     "next-lint": "next lint",
-    "lint": "eslint --flag unstable_ts_config --cache --cache-location .next/cache/eslint/",
-    "lint-nocache": "eslint --flag unstable_ts_config",
-    "lint-fix": "eslint --flag unstable_ts_config --fix"
+    "lint": "eslint --cache --cache-location .next/cache/eslint/",
+    "lint-nocache": "eslint",
+    "lint-fix": "eslint --fix"
 },
 ```
 
@@ -371,12 +381,12 @@ If you want you can add those commands to your package json scripts:
     "build": "npm run lint && next build",
     "start": "next start",
     "next-lint": "next lint",
-    "lint": "eslint --flag unstable_ts_config --cache --cache-location .next/cache/eslint/",
-    "lint-nocache": "eslint --flag unstable_ts_config",
-    "lint-fix": "eslint --flag unstable_ts_config --fix",
-    "lint-debug-config": "eslint --flag unstable_ts_config --debug eslint.config.ts",
-    "lint-print-config": "eslint --flag unstable_ts_config --print-config eslint.config.ts",
-    "lint-inspect-config": "eslint --flag unstable_ts_config --inspect-config eslint.config.ts"
+    "lint": "eslint --cache --cache-location .next/cache/eslint/",
+    "lint-nocache": "eslint",
+    "lint-fix": "eslint --fix",
+    "lint-debug-config": "eslint --debug eslint.config.ts",
+    "lint-print-config": "eslint --print-config eslint.config.ts",
+    "lint-inspect-config": "eslint --inspect-config eslint.config.ts"
 },
 ```
 
