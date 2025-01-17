@@ -16,7 +16,6 @@ import remarkFrontmatter from 'remark-frontmatter'
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
 import { rehypePrettyCode, type Options as rehypePrettyCodeOptionsType } from 'rehype-pretty-code'
 import { transformerNotationDiff } from '@shikijs/transformers'
-import type { ShikiTransformer } from 'shiki'
 import { NextConfig } from 'next'
 
 const nextConfig = (phase: string) => {
@@ -43,7 +42,7 @@ const nextConfig = (phase: string) => {
             block: 'tsx',
             inline: 'shell',
         },
-        transformers: [transformerNotationDiff() as ShikiTransformer],
+        transformers: [transformerNotationDiff()],
     }
 
     // https://github.com/chrisweb/remark-table-of-contents#options
