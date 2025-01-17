@@ -474,13 +474,10 @@ We know by now that MDX is markdown + JSX, but VSCode (as of now, sees things a 
 
 I recommend you open the `.vscode/settings.json` VSCode workspace settings file (that we already used in one of the first steps of this tutorial to tell VSCode to use the typescript version that is in our workspace) and add the following entry to it:
 
-```json title=".vscode/settings.json" showLineNumbers /,/9#special {15-17}
+```json title=".vscode/settings.json" showLineNumbers /,/9#special {12-14}
 {
     "typescript.tsdk": "node_modules\\typescript\\lib",
     "eslint.debug": true,
-    "eslint.options": {
-        "flags": ["unstable_ts_config"]
-    },
     "eslint.validate": [
         "markdown",
         "mdx",

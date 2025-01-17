@@ -5,9 +5,6 @@
         "source.fixAll.eslint": "never"
     },
     "eslint.debug": true,
-    "eslint.options": {
-        "flags": ["unstable_ts_config"]
-    },
     "eslint.validate": [
         "markdown",
         "mdx",

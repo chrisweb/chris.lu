@@ -3,20 +3,22 @@ import { withSentryConfig } from '@sentry/nextjs'
 //import WithBundleAnalyzer from '@next/bundle-analyzer'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 import createMdx from '@next/mdx'
-import { remarkTableOfContents } from 'remark-table-of-contents'
-import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import { remarkTableOfContents, type IRemarkTableOfContentsOptions as remarkTableOfContentsOptionsType } from 'remark-table-of-contents'
+import rehypeAutolinkHeadings, { type Options as rehypeAutolinkHeadingsOptionsType } from 'rehype-autolink-headings'
+import { type ElementContent } from 'hast'
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
 import { toString as hastToString } from 'mdast-util-to-string'
 import rehypeSlug from 'rehype-slug'
-import remarkGfm from 'remark-gfm'
-import { rehypeGithubAlerts } from 'rehype-github-alerts'
+import remarkGfm, { type Options as remarkGfmOptionsType } from 'remark-gfm'
+import { rehypeGithubAlerts, type DefaultBuildType as rehypeGithubAlertsDefaultBuildType, type IOptions as rehypeGithubAlertsOptionsType } from 'rehype-github-alerts'
 import rehypeMDXImportMedia from 'rehype-mdx-import-media'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
-import { rehypePrettyCode } from 'rehype-pretty-code'
+import { rehypePrettyCode, type Options as rehypePrettyCodeOptionsType } from 'rehype-pretty-code'
 import { transformerNotationDiff } from '@shikijs/transformers'
+import { NextConfig } from 'next'
 
-const nextConfig = (phase) => {
+const nextConfig = (phase: string) => {
 
     // to use the bundle analyzer uncomment the following lines
     // then uncomment the return to use withBundleAnalyzer
@@ -26,16 +28,15 @@ const nextConfig = (phase) => {
     })*/
 
     // https://rehype-pretty-code.netlify.app/
-    /** @type {import('rehype-pretty-code').Options} */
-    const rehypePrettyCodeOptions = {
+    const rehypePrettyCodeOptions: rehypePrettyCodeOptionsType = {
         // VSCode "SynthWave '84" theme
         theme: 'synthwave-84',
         // Keep the background or use a custom background color?
         keepBackground: true,
         tokensMap: {
-            'function': 'entity.name.function',
-            'string': 'string',
-            'key': '.meta.object-literal.key',
+            function: 'entity.name.function',
+            string: 'string',
+            key: '.meta.object-literal.key',
         },
         defaultLang: {
             block: 'tsx',
@@ -45,8 +46,7 @@ const nextConfig = (phase) => {
     }
 
     // https://github.com/chrisweb/remark-table-of-contents#options
-    /** @type {import('remark-table-of-contents').IRemarkTableOfContentsOptions} */
-    const remarkTableOfContentsOptions = {
+    const remarkTableOfContentsOptions: remarkTableOfContentsOptionsType = {
         containerAttributes: {
             id: 'articleToc',
         },
@@ -57,32 +57,30 @@ const nextConfig = (phase) => {
     }
 
     // https://github.com/rehypejs/rehype-autolink-headings#api
-    const rehypeAutolinkHeadingsOptions = {
+    const rehypeAutolinkHeadingsOptions: rehypeAutolinkHeadingsOptionsType = {
         behavior: 'append',
         properties: (node) => {
             //console.log(node)
             const headingText = hastToString(node.children[0])
             return {
-                class: 'headingAnchor',
+                'class': 'headingAnchor',
                 'aria-label': 'Heading permalink for: ' + headingText,
-                title: 'Heading permalink for: ' + headingText,
+                'title': 'Heading permalink for: ' + headingText,
             }
         },
         content: fromHtmlIsomorphic(
             '<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" class="icon iconLink" aria-hidden="true"><path d="M11 17H7q-2.075 0-3.537-1.463Q2 14.075 2 12t1.463-3.538Q4.925 7 7 7h4v2H7q-1.25 0-2.125.875T4 12q0 1.25.875 2.125T7 15h4Zm-3-4v-2h8v2Zm5 4v-2h4q1.25 0 2.125-.875T20 12q0-1.25-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.462Q22 9.925 22 12q0 2.075-1.462 3.537Q19.075 17 17 17Z"/></svg>',
             { fragment: true }
-        ).children,
+        ).children as ElementContent[],
     }
 
     // https://github.com/remarkjs/remark-gfm
-    /** @type {import('remark-gfm').Options} */
-    const remarkGfmOptions = {
+    const remarkGfmOptions: remarkGfmOptionsType = {
         singleTilde: false,
     }
 
     // https://github.com/chrisweb/rehype-github-alerts
-    /** @type {import('rehype-github-alerts').DefaultBuildType} */
-    const myGithubAlertBuild = (alertOptions, originalChildren) => {
+    const myGithubAlertBuild: rehypeGithubAlertsDefaultBuildType = (alertOptions, originalChildren) => {
 
         const alert = {
             type: 'element',
@@ -135,12 +133,12 @@ const nextConfig = (phase) => {
             ],
         }
 
-        return alert
+        return alert as ElementContent
 
     }
 
-    /** @type {import('rehype-github-alerts').IOptions} */
-    const rehypeGithubAlertsOptions = {
+    // https://github.com/chrisweb/rehype-github-alerts#options
+    const rehypeGithubAlertsOptions: rehypeGithubAlertsOptionsType = {
         supportLegacy: false,
         build: myGithubAlertBuild,
         alerts: [
@@ -174,8 +172,7 @@ const nextConfig = (phase) => {
         },
     })
 
-    /** @type {import('next').NextConfig} */
-    const nextConfigOptions = {
+    const nextConfigOptions: NextConfig = {
         reactStrictMode: true,
         poweredByHeader: false,
         experimental: {
@@ -202,7 +199,7 @@ const nextConfig = (phase) => {
             reactCompiler: true,
             // experimental partial prerendering
             // https://nextjs.org/docs/messages/ppr-preview
-            ppr: true,
+            ppr: false,
             // experimental typescript "statically typed links"
             // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
             typedRoutes: true,
@@ -227,6 +224,7 @@ const nextConfig = (phase) => {
         eslint: {
             ignoreDuringBuilds: true,
         },
+        // eslint-disable-next-line @typescript-eslint/require-await
         headers: async () => {
             return [
                 {
@@ -253,6 +251,7 @@ const nextConfig = (phase) => {
                 },
             ]
         },
+        // eslint-disable-next-line @typescript-eslint/require-await
         redirects: async () => {
             return [
                 {
@@ -269,7 +268,7 @@ const nextConfig = (phase) => {
 
 }
 
-const securityHeadersConfig = (phase) => {
+const securityHeadersConfig = (phase: string) => {
 
     const cspReportOnly = false
     const reportingUrl = 'https://o4504017992482816.ingest.us.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
@@ -278,6 +277,7 @@ const securityHeadersConfig = (phase) => {
 
     const cspHeader = () => {
 
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         const upgradeInsecure = (!isDev && !cspReportOnly) ? 'upgrade-insecure-requests;' : ''
 
         // report directive to be added at the end
@@ -373,6 +373,7 @@ const securityHeadersConfig = (phase) => {
     const headers = [
         ...extraSecurityHeaders,
         {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             key: cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy',
             value: cspHeader().replace(/\n/g, ''),
         },
