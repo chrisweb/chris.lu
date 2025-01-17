@@ -51,13 +51,16 @@ export const metadata = {
 
 For me, the best about **rehype pretty code** is that it uses [shiki](https://shiki.matsu.io/) under the hood, **shiki** is fantastic at highlighting code, but it also comes with an impressive feature, which is that you can use your favorite VSCode theme to make your code blocks look the same as your code in VSCode
 
-## No next.config.ts
-
-If you use Typescript for your Next.js 15 config file and import this plugin, then you will get a node.js error telling you that it can NOT import the "vscode-textmate" package (which is a shiki dependency, shiki is used by this plugin).
-
-As described on a previous page, the reason for this is that next.config.ts files have [NO support for ESM only packages](/web_development/tutorials/next-js-static-first-mdx-starterkit/next-config#nextconfigts-does-not-support-esm-only-packages) (yet)
-
-As of now the only workaround for this problem (besides not using this plugin, as there are many alternatives like [rehype-starry-night](https://github.com/rehypejs/rehype-starry-night) and [rehype-highlight)](https://github.com/rehypejs/rehype-highlight)), is to go back to using a **next.config.mjs** file. You could rename your current next.config.ts to _next.config.ts (with an underscore) to have a backup and then make a copy that you name it next.config.mjs. Then you need to edit the next.config.mjs to comment out type imports and comment out code that creates or uses types. After that all you can do is keep using a Javascript file until the Typescript configuration files get support for ESM only packages
+> [!WARN]  
+> If you use Typescript for your Next.js configuration file (next.config.ts) you need shiki >= 1.24.2
+>  
+> If you import the rehype-pretty-code plugin in your next.config.ts, then you will get a node.js error telling you that it can NOT import the "vscode-textmate" package (which is a shiki dependency, shiki is used by this plugin):
+>  
+> ```shell
+> Error [ERR_PACKAGE_PATH_NOT_EXPORTED]: No "exports" main defined in @shikijs/vscode-textmate/package.json
+> ```
+>  
+> The fix is to **update shiki to at least 1.24.3**, this will update vscode-textmate (fork by shikijs) to version 9.3.1, which contains the [vscode-textmate package.json fix (PR #2)](https://github.com/shikijs/vscode-textmate/pull/2)
 
 ## Adding a new playground page
 
