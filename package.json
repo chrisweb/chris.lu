@@ -1,7 +1,6 @@
 {
     "name": "chris.lu",
     "description": "source code for my blog (chris.lu)",
-    "main": "index.js",
     "scripts": {
         "dev": "next dev",
         "dev-turbo": "next dev --turbopack",
