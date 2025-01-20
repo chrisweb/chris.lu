@@ -3,7 +3,7 @@ title: Code highlighting plugin - Next.js 15 Tutorial - Next.js 15 Tutorial
 description: Code highlighting plugin - Next.js 15 static first MDX starterkit | Web development tutorials | www.chris.lu
 keywords: ['highlighting', 'rehype', 'plugin', 'pretty', 'code', 'shiki']
 published: 2024-12-31T23:00:00.000Z
-modified: 2025-01-17T23:00:00.000Z
+modified: 2025-01-20T23:00:00.000Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit/code-highlighting-plugin
 section: Web development
 ---
@@ -700,6 +700,87 @@ function helloWorld() {
 ````
 
 With this language you can use the **+** and **-** signs to tell the code highlighter to display the rows starting with a plus sign as if they had been added and the rows starting with a minus sign as if they had been removed
+
+## Diff using a shiki transformer
+
+You can also use shiki transformers in your rehype-pretty-code setup, as we just saw in the previous chapter, to create diffs one way is to use a language flag, the second way is to use the [shiki diff notation transformer](https://shiki.style/guide/transformers)
+
+First we install the shiki transformers package:
+
+```shell
+npm i @shikijs/transformers --save-exact
+```
+
+Next we add a diff notation transformer to our Next.js configuration:
+
+```js title="next.config.mjs" showLineNumbers {8} {22-24}
+import { withSentryConfig } from '@sentry/nextjs';
+//import type { NextConfig } from 'next'
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
+import createMdx from '@next/mdx'
+import rehypeMDXImportMedia from 'rehype-mdx-import-media'
+import rehypePrettyCode from 'rehype-pretty-code'
+import { readFileSync } from 'fs'
+import { transformerNotationDiff } from '@shikijs/transformers'
+
+const nextConfig = (phase/*: string*/) => {
+
+    const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
+    const themeFileContent = readFileSync(themePath, 'utf-8')
+
+    /** @type {import('rehype-pretty-code').Options} */
+    const rehypePrettyCodeOptions = {
+        theme: JSON.parse(themeFileContent),
+        keepBackground: false,
+        defaultLang: {
+            block: 'js',
+        },
+        transformers: [transformerNotationDiff({
+            matchAlgorithm: 'v3',
+        })],
+    }
+```
+
+Line 8: we import the shiki "diff notation" transformer
+
+Lines 22 to 24: add out shiki transformer to the rehype-pretty-code **transformers option**
+
+> [!NOTE]  
+> we did set the "transformer matching algorithm" option () to v3 (as recommended in the transformers chapter of the [shiki v2 migration guide](https://shiki.style/blog/v2#transformers-matching-algorithm)) to get rid of the shiki deprecation notice:
+>  
+> > [SHIKI DEPRECATE]: The default `matchAlgorithm: "v1"` is deprecated and will be removed in the future. Please explicitly set `matchAlgorithm: "v3"` in the transformer options.
+
+Next we edit our global.css to add styling for added and removed rows:
+
+```css title="/app/global.css"
+[data-line].remove {
+    background-color: #852424;
+    border-left-color: #ff0000;
+}
+
+[data-line].add {
+    background-color: #248531;
+    border-left-color: #18c218;
+}
+```
+
+How the [transformer diff notation](https://shiki.style/packages/transformers#transformernotationdiff) works, is that at the end of every line you use a comment to tell the transformer if code got added (`// [!code ++]`) or removed (`// [!code --]`):
+
+````md title="/app/(tutorial_examples)/code-highlighting_playground/page.mdx" showLineNumbers {11}
+<article>
+
+```js
+function helloWorld() {
+    // this is a comment
+    let greeting = 'Hello World!' // [!code ++]
+    console.log(greeting) // [!code --]
+}
+```
+
+> [!MORE]  
+> [shiki v2 migration guide](https://shiki.style/blog/v2)  
+> [shiki "transformers" guide](https://shiki.style/guide/transformers)  
+> [shiki "diff notation transformer" documentation](https://shiki.style/packages/transformers#transformernotationdiff)
 
 ## Highlighting inline code
 
