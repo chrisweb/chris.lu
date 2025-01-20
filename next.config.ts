@@ -42,7 +42,9 @@ const nextConfig = (phase: string) => {
             block: 'tsx',
             inline: 'shell',
         },
-        transformers: [transformerNotationDiff()],
+        transformers: [transformerNotationDiff({
+            matchAlgorithm: 'v3',
+        })],
     }
 
     // https://github.com/chrisweb/remark-table-of-contents#options
