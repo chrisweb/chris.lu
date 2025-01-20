@@ -42,9 +42,9 @@
         "@next/mdx": "canary",
         "@react-three/drei": "9.121.2",
         "@react-three/fiber": "9.0.0-rc.4",
-        "@react-three/postprocessing": "2.16.7",
+        "@react-three/postprocessing": "2.19.0",
         "@sentry/nextjs": "8.50.0",
-        "@shikijs/transformers": "1.27.2",
+        "@shikijs/transformers": "2.0.3",
         "@vercel/analytics": "1.4.1",
         "@vercel/speed-insights": "1.1.0",
         "glob": "11.0.1",
@@ -63,7 +63,7 @@
         "remark-gfm": "4.0.0",
         "remark-mdx-frontmatter": "5.0.0",
         "remark-table-of-contents": "2.1.0",
-        "shiki": "1.27.2",
+        "shiki": "2.0.3",
         "simplex-noise": "4.0.3",
         "three": "0.172.0",
         "vfile-matter": "5.0.0",
@@ -105,7 +105,8 @@
         "@react-three/fiber": "9.0.0-rc.4",
         "react": "canary",
         "react-dom": "canary",
-        "three": "0.172.0"
+        "three": "0.172.0",
+        "shiki": "2.0.3"
     },
     "browserslist": [
         ">0.1%, not dead, not Opera < 100, not op_mini all, not and_uc < 15, not samsung < 21, not android > 0, not and_ff < 117, not and_qq < 13, not ie <= 11"
