@@ -185,7 +185,6 @@ body {
     font-family: var(--main-frontFamily-default);
     font-size: var(--main-fontSize-default);
     line-height: var(--main-lineHeight-default);
-    text-rendering: optimizeLegibility;
 }
 
 /* prevent any scrolling when dialog is open */
