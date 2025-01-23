@@ -10,7 +10,7 @@ import City from './City'
 //import Trees from './Trees'
 //import Terrains from './Terrains'
 import Landscape from './Landscape'
-//import { EffectComposer, Bloom } from '@react-three/postprocessing'
+import { EffectComposer, Bloom } from '@react-three/postprocessing'
 
 interface IProps extends React.PropsWithChildren {
     altText: string
@@ -119,13 +119,13 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                     {/* <Terrains /> */}
                     {/* <Trees /> */}
                     <Landscape />
-                    {/* <EffectComposer>
+                    <EffectComposer>
                         <Bloom
                             luminanceThreshold={0.08}
                             intensity={0.7}
                             luminanceSmoothing={0.01}
                         />
-                    </EffectComposer> */}
+                    </EffectComposer>
                     {/* the following components can be useful in development */}
                     {/*<axesHelper />*/}
                     {/*<OrbitControls camera={cameraRef.current} />*/}
