@@ -42,7 +42,7 @@
         "@next/mdx": "canary",
         "@react-three/drei": "10.0.0-rc.1",
         "@react-three/fiber": "9.0.0-rc.5",
-        "@react-three/postprocessing": "3.0.0-rc.1",
+        "@react-three/postprocessing": "3.0.0-rc.2",
         "@sentry/nextjs": "8.51.0",
         "@shikijs/transformers": "2.1.0",
         "@vercel/analytics": "1.4.1",
