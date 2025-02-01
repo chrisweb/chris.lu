@@ -7,8 +7,6 @@ import NightSky from './NightSky'
 import Sun from './Sun'
 import SunLight from './SunLight'
 import City from './City'
-//import Trees from './Trees'
-//import Terrains from './Terrains'
 import Landscape from './Landscape'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 
@@ -116,8 +114,6 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                         position={[0, 0.12, -1]}
                         scale={[0.8, 0.3, 0]}
                     />
-                    {/* <Terrains /> */}
-                    {/* <Trees /> */}
                     <Landscape />
                     <EffectComposer>
                         <Bloom
