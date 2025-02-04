@@ -763,10 +763,12 @@ Line 8: we import the shiki "diff notation" transformer
 
 Lines 22 to 24: add out shiki transformer to the rehype-pretty-code **transformers option**
 
+{/* eslint-disable mdx/remark */}
 > [!NOTE]  
 > we did set the "transformer matching algorithm" option () to v3 (as recommended in the transformers chapter of the [shiki v2 migration guide](https://shiki.style/blog/v2#transformers-matching-algorithm)) to get rid of the shiki deprecation notice:
 >  
 > > [SHIKI DEPRECATE]: The default `matchAlgorithm: "v1"` is deprecated and will be removed in the future. Please explicitly set `matchAlgorithm: "v3"` in the transformer options.
+{/* eslint-enable mdx/remark */}
 
 Next we edit our global.css to add styling for added and removed rows:
 
