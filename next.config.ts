@@ -429,15 +429,11 @@ export default withSentryConfig(
 
         // Automatically annotate React components to show their full name in breadcrumbs and session replay
         reactComponentAnnotation: {
-            enabled: false,
+            enabled: true,
+            // ignore the "Canvas" component to avoid Sentry annotations
+            // conflicts with react-three-fiber
+            ignoredComponents: ['Canvas'],
         },
-
-        // TODO: enable as soon as @sentry/nextjs supports it
-        // (and set the above reactComponentAnnotation to true)
-        // https://github.com/getsentry/sentry-javascript/releases
-        // ignore the "Canvas" component to avoid Sentry annotations
-        // conflicts with react-three-fiber
-        //ignoredComponents: ['Canvas'],
 
         // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
         // This can increase your server load as well as your hosting bill.
