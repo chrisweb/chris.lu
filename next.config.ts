@@ -432,7 +432,7 @@ export default withSentryConfig(
             enabled: true,
             // ignore the "Canvas" component to avoid Sentry annotations
             // conflicts with react-three-fiber
-            ignoredComponents: ['Canvas'],
+            ignoredComponents: ['@react-three/fiber'],
         },
 
         // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
