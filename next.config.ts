@@ -432,7 +432,7 @@ export default withSentryConfig(
             enabled: true,
             // ignore the "Canvas" component to avoid Sentry annotations
             // conflicts with react-three-fiber
-            ignoredComponents: ['@react-three/fiber'],
+            ignoredComponents: ['NeonRoadCanvas'],
         },
 
         // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
@@ -456,6 +456,6 @@ export default withSentryConfig(
         // See the following for more information:
         // https://docs.sentry.io/product/crons/
         // https://vercel.com/docs/cron-jobs
-        automaticVercelMonitors: true,
+        //automaticVercelMonitors: true,
     }
 )
