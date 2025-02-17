@@ -314,6 +314,21 @@ const securityHeadersConfig = (phase: string) => {
             ${upgradeInsecure}
         `
 
+        // for production environment white-list vitals.vercel-insights
+        // based on: https://vercel.com/docs/speed-insights#content-security-policy
+        if (process.env.VERCEL_ENV === 'production') {
+            return `
+                ${defaultCSPDirectives}
+                font-src 'self';
+                style-src 'self' 'unsafe-inline';
+                script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval';
+                connect-src 'self' https://vitals.vercel-insights.com ${reportingDomainWildcard};
+                img-src 'self' data:;
+                frame-src 'none';
+                ${reportCSPViolations}
+            `
+        }
+
         // when environment is preview enable unsafe-inline scripts for vercel preview feedback/comments feature
         // and whitelist vercel's domains based on:
         // https://vercel.com/docs/workflow-collaboration/comments/specialized-usage#using-a-content-security-policy
@@ -332,26 +347,11 @@ const securityHeadersConfig = (phase: string) => {
             `
         }
 
-        // for production environment white-list vitals.vercel-insights
-        // based on: https://vercel.com/docs/speed-insights#content-security-policy
-        if (process.env.VERCEL_ENV === 'production') {
-            return `
-                ${defaultCSPDirectives}
-                font-src 'self';
-                style-src 'self' 'unsafe-inline';
-                script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval';
-                connect-src 'self' https://vitals.vercel-insights.com ${reportingDomainWildcard};
-                img-src 'self' data:;
-                frame-src 'none';
-                ${reportCSPViolations}
-            `
-        }
-
         // for dev environment enable unsafe-eval for hot-reload
         return `
             ${defaultCSPDirectives}
-            font-src 'self';
-            style-src 'self' 'unsafe-inline';
+            font-src 'self' https://fonts.gstatic.com;
+            style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
             script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com;
             connect-src 'self';
             img-src 'self' data:;
@@ -432,6 +432,13 @@ export default withSentryConfig(
             enabled: false,
         },
 
+        // TODO: enable as soon as @sentry/nextjs supports it
+        // (and set the above reactComponentAnnotation to true)
+        // https://github.com/getsentry/sentry-javascript/releases
+        // ignore the "Canvas" component to avoid Sentry annotations
+        // conflicts with react-three-fiber
+        //ignoredComponents: ['Canvas'],
+
         // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
         // This can increase your server load as well as your hosting bill.
         // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
@@ -439,7 +446,12 @@ export default withSentryConfig(
         tunnelRoute: '/monitoring',
 
         // Hides source maps from generated client bundles
-        hideSourceMaps: true,
+        sourcemaps: {
+            //disable: false;
+            //assets: string | string[];
+            //ignore?: string | string[];
+            //deleteSourcemapsAfterUpload: boolean;
+        },
 
         // Automatically tree-shake Sentry logger statements to reduce bundle size
         disableLogger: true,
