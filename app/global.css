@@ -328,27 +328,27 @@ p {
     margin-block: 1.8em;
 }
 
-h1 {
+h1, .h1 {
     font-size: var(--main-fontSize-big1);
 }
 
-h2 {
+h2, .h2 {
     font-size: var(--main-fontSize-big2);
 }
 
-h3 {
+h3, .h3 {
     font-size: var(--main-fontSize-big3);
 }
 
-h4 {
+h4, .h4 {
     font-size: var(--main-fontSize-big4);
 }
 
-h5 {
+h5, .h5 {
     font-size: var(--main-fontSize-big5);
 }
 
-h6 {
+h6, .h6 {
     font-size: var(--main-fontSize-big6);
 }
 
