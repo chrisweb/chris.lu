@@ -80,8 +80,8 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 aria-label={props.altText}
                 role="img"
                 gl={rendererProps}
-            //frameloop="never"
-            //onCreated={onCanvasCreatedHandler}
+                //frameloop="never"
+                //onCreated={onCanvasCreatedHandler}
             >
                 <Suspense fallback={<Fallback />}>
                     <AdaptiveDpr pixelated />
@@ -133,5 +133,7 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
         </>
     )
 }
+
+NeonRoadCanvas.displayName = 'NeonRoadCanvas'
 
 export default NeonRoadCanvas

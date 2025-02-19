@@ -22,7 +22,7 @@ export default function GlobalError({
             <body>
                 <main>
                     <section className="core">
-                        <h1 className="h1">
+                        <h1 className="h3">
                             Sorry, something went wrong
                             &nbsp;
                             <span className="emoji">😞</span>
