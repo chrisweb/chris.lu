@@ -75,7 +75,7 @@
         "@next/bundle-analyzer": "canary",
         "@next/eslint-plugin-next": "canary",
         "@react-three/eslint-plugin": "0.1.2",
-        "@stylistic/eslint-plugin": "4.0.0",
+        "@stylistic/eslint-plugin": "4.0.1",
         "@types/eslint-plugin-jsx-a11y": "6.10.0",
         "@types/node": "22.13.4",
         "@types/react": "19.0.10",
