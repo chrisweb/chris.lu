@@ -218,7 +218,6 @@ const nextConfig = (phase: string) => {
             formats: ['image/avif', 'image/webp'],
             deviceSizes: [240, 336, 480, 704, 1080, 1408, 1920, 2112, 3840],
         },
-        // TODO: is this needed for app directory
         // Configure pageExtensions to include md and mdx
         pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'mdx'],
         // disable linting during builds using "next lint"
@@ -429,10 +428,11 @@ export default withSentryConfig(
 
         // Automatically annotate React components to show their full name in breadcrumbs and session replay
         reactComponentAnnotation: {
-            enabled: true,
-            // ignore the "Canvas" component to avoid Sentry annotations
-            // conflicts with react-three-fiber
-            ignoredComponents: ['NeonRoadCanvas'],
+            enabled: false,
+            // not sure what to do with this yet
+            // none of my attempts seem to work
+            // https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/530
+            ignoredComponents: ['@react-three/fiber', '__r3f', 'r3f', 'PlaneGeometry', 'BufferGeometry', 'Canvas', 'ambientLight', 'DirectionalLight', 'AdaptiveDpr', 'EffectComposer', 'Bloom', 'OrthographicCamera', 'PerspectiveCamera', 'SoftShadows', 'mesh'],
         },
 
         // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
