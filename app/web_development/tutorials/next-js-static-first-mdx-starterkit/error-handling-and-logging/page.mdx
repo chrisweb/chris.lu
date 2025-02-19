@@ -3,7 +3,7 @@ title: Error handling and logging - Next.js 15 Tutorial
 description: Error handling and logging - Next.js 15 static first MDX starterkit | Web development tutorials | www.chris.lu
 keywords: ['error', 'handling', 'logging', 'Boundary', 'react', 'sentry.io', 'nextjs']
 published: 2024-12-31T23:00:00.000Z
-modified: 2024-12-31T23:00:00.000Z
+modified: 2025-06-02T23:00:00.000Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit/error-handling-and-logging
 section: Web development
 ---
@@ -202,11 +202,7 @@ Now, Sentry will install the latest Sentry SDK for Next.js.
 **Do you want to enable React component annotations to make breadcrumbs and session replays more readable?** Next Sentry is asking if we want to use the feature called [React component annotations](https://docs.sentry.io/platforms/javascript/guides/react/features/component-names/) which attempts to use component names in reports instead of more cryptic selectors, I think this is a nice feature, so I selected **Yes**, if you already use Sentry.io and don't want to change how bug reports work, then leave it on **No**, you can always turn it on/off via the configuration later if you want
 
 > [!WARN]  
-> I turned **React component annotations** on and then noticed that my [react-three-fiber](https://github.com/pmndrs/react-three-fiber) animation had stopped working, this is because **React component annotations** adds data attributes to components which React Three Fiber does not like, and which then creates bugs which print the following in your console:
-> 
-> > TypeError: Cannot read properties of undefined (reading 'sentry')
->  
-> So if you plan on using **React Three Fiber** then you should answer to this question with **NO**, to learn more about this problem and how to disable **React component annotations** manually in the configuration have a look at the [Sentry React Component Annotation(s) can be problematic](#sentry-react-component-annotations-can-be-problematic) chapter
+> be aware that some packages might have a problem with the extra attributes that Sentry adds to the DOM of a component, to make the Annotations feature work. If you want to learn more about this problem, then I recommend reading the ["Issues with Sentry Component Annotations" chapter of the "Sentry" post](/web_development/posts/sentry-io#issues-with-sentry-component-annotations)  
 
 **Do you want to create an example page** chose **YES** (we will later use it to test the Sentry setup, and then we will delete it)
 
@@ -328,13 +324,11 @@ Now is a good time to commit the updated `next.config.ts` (and other changes the
 
 ### Sentry React Component Annotation(s) can be problematic
 
-To enable Sentry **reactComponentAnnotation** configuration option is usually a good idea as it makes reports more readable by using component names instead of long selectors
+It is usually a good idea enable Sentry **reactComponentAnnotation** configuration option, as it makes reports more readable by using component names instead of long selectors
 
-To make this feature happen Sentry needs to add a data attributes to components, this does usually not pose a problem except sometimes the Sentry Annotations on third party components will cause an error in those third party tools
+To make the Annotation(s) feature work, Sentry needs to add a data attributes to components, this does usually not pose a problem except in some situations where the Sentry Annotations on a third party components will cause an error in those third party package.
 
-I have a more detailed explanation about annotations and the problems that can occur in my [Sentry Post](/web_development/posts/sentry-io)
-
-The solution to these problems is to disable the feature and wait for the Sentry team to fine tune the feature (which is quite young) and fix annotations bugs (I have linked to some tickets in my Sentry post, you may want to subscribe to them if you want to keep track of fixes)
+For those that run into problems after enabling the React Component Annotations feature, I have added a more detailed explanation as well as a workaround in the ["Issues with Sentry Component Annotations" chapter of the "Sentry" post](/web_development/posts/sentry-io#issues-with-sentry-component-annotations)  
 
 > [!MORE]  
 > [chris.lu "Sentry.io" post](/web_development/posts/sentry-io)  

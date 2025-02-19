@@ -2,7 +2,7 @@
 title: Sentry.io
 keywords: ['Sentry.io', 'logging', 'debugging', 'SaaS', 'wizard']
 published: 2024-08-07T11:22:33.444Z
-modified: 2024-09-02T16:16:16.444Z
+modified: 2025-06-02T16:16:16.444Z
 permalink: https://chris.lu/web_development/posts/sentry-io
 section: Web development
 ---
@@ -206,28 +206,42 @@ To enable Sentry **reactComponentAnnotation** configuration option is usually a 
 
 ### Issues with Sentry Component Annotations
 
-To make this feature happen Sentry needs to add a data attributes to components, this does usually not pose a problem except sometimes the Sentry Annotations on third party components will cause an error in those third party tools, like [react-three-fiber](https://github.com/pmndrs/react-three-fiber) which do NOT like those extra attributes at all
+For the **Sentry Component Annotation** feature to work, Sentry adds a `data-sentry` data attribute to the DOM of React components.
 
-This means that **React component annotations** are great unless you use a package like **React Three Fiber** or setup your project using **Vite**, then you need to disable the feature
+This does usually not pose a problem except with some packages that are incompatible. For example if you enable **Component Annotations** and use [@react-three/fiber](https://github.com/pmndrs/react-three-fiber) then you might see the following error ([Sentry Issue #530](https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/530)) popping up in your terminal:
 
-#### React three fiber (R3F) issue
+> TypeError: Cannot read properties of undefined (reading 'sentry')
 
-For now if you use **React three fiber (R3F)** the only workaround is to turn the Sentry **React component annotations** option off, by setting the `reactComponentAnnotation` variable to false
+A similar [Issue #492](https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/492) has impacted vite users
 
-It is only after I had opened an [Issue #13413](https://github.com/getsentry/sentry-javascript/issues/13413) in the **sentry-javascript** repository that I found the [Issue #530 (Cannot read properties of undefined (reading 'sentry') when using reactComponentAnnotation)](https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/530) in the **sentry-javascript-bundler-plugins** repository, which has a comment by one of the Sentry SDK maintainers, they mentioned that they consider adding more options in the future to let you exclude components
+<span className="neonBlueHighlightedText">Option 1</span> (just a workaround): Is to disable the feature by setting the **reactComponentAnnotation** configuration option to **false**:
 
-However as of now those options are not available yet (we can NOT enable React component annotations and exclude React three fiber), meaning the only option left is to disable the reactComponentAnnotation feature (if you chose to continue using R3F)
+```js
+reactComponentAnnotation: {
+    enabled: false,
+},
+```
+
+<span className="neonBlueHighlightedText">Option 2</span> (only available in Sentry > 9):
+
+The sentry-javascript-bundler-plugins [PR #617](https://github.com/getsentry/sentry-javascript-bundler-plugins/pull/617) has added a new **ignoredComponents** configuration option, that lets you tell Sentry which components should get ignored, meaning for those components Sentry will not try to add extra attributes to their DOM
+
+```js
+reactComponentAnnotation: {
+    enabled: true,
+    ignoredComponents: ['MY_COMPONENT_WHICH_BREAKS'],
+},
+```
+
+> [!WARN]
+> The first **sentry-javascript-bundler-plugins** version with support for the Sentry **ignoredComponents** is [version 2.23.0](https://github.com/getsentry/sentry-javascript-bundler-plugins/releases/tag/2.23.0). 
+>  
+> @Sentry/Next.js v8.45.0 still uses @sentry/bundler-plugin-core / @sentry/webpack-plugin v2.22.7
+>  
+> @Sentry/Next.js v9.0.1 has (@sentry/webpack-plugin) v3.1.2 as dependency, so this is the first version that has the new **ignoredComponents** feature merged
 
 > [!MORE]  
-> [Sentry "Issue #530" (open as of dec. 2024)](https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/530)  
-
-#### Vite issue
-
-There is a similar issue when using Vite and the @sentry/vite-plugin as described in the [Issue #492](https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/492) which (as of dec. 2024) is also still open
-
-Same as R3F, the only solution here is to NOT enable the annotations feature until the problem is fixed
-
-> [!MORE]  
-> [Sentry "Issue #492" (open as of dec. 2024)](https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/530)  
+> [Sentry bundler "Issue #530"](https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/530)  
+> [Sentry bundler "PR #617"](https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/530)  
 
 </article>
