@@ -2,7 +2,7 @@
 title: Content Security Policy (CSP)
 keywords: ['CSP', 'Content Security Policy', 'Reporting', 'Logging', 'Debugging', 'policy', 'directive', 'violation']
 published: 2024-08-04T11:22:33.444Z
-modified: 2024-08-14T21:20:01.444Z
+modified: 2025-02-23T21:20:01.444Z
 permalink: https://chris.lu/web_development/posts/csp
 section: Web development
 ---
@@ -424,23 +424,31 @@ const server = createServer((request, response) => {
     const query = parsedUrl.query;
     const path = parsedUrl.pathname;
 
-    console.log('parsedUrl: ', parsedUrl);
-    console.log('query: ', query);
-    console.log('path: ', path);
-    console.log('method: ', method);
-    console.log('headers: ', headers);
+    //console.log('parsedUrl: ', parsedUrl);
+    //console.log('query: ', query);
+    //console.log('path: ', path);
+    //console.log('method: ', method);
+    //console.log('headers: ', headers);
+    console.log('request.headers.origin: ', request.headers.origin);
+
+    const allowedOrigins = ['MY_ORIGIN'];
 
     if (method === 'OPTIONS') {
         const responseHeaders = {};
-        // TODO: check if origin is in whitelist
-        headers["Access-Control-Allow-Origin"] = request.headers.origin;
-        responseHeaders["Access-Control-Allow-Methods"] = "POST";
-        responseHeaders["Access-Control-Allow-Credentials"] = false;
-        //headers["Access-Control-Max-Age"] = '86400'; // 24 hours
-        responseHeaders["Access-Control-Max-Age"] = '300'; // 5 minutes (for testing)
-        responseHeaders["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept";
-        response.writeHead(200, responseHeaders);
-        response.end();
+        // check if origin is in an allowed list
+        if (allowedOrigins.includes(request.headers.origin)) {
+            headers["Access-Control-Allow-Origin"] = request.headers.origin;
+            responseHeaders["Access-Control-Allow-Methods"] = "POST";
+            responseHeaders["Access-Control-Allow-Credentials"] = false;
+            //headers["Access-Control-Max-Age"] = '86400'; // 24 hours
+            responseHeaders["Access-Control-Max-Age"] = '300'; // 5 minutes (for testing)
+            responseHeaders["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept";
+            response.writeHead(200, responseHeaders);
+            response.end();
+        } else {
+            response.writeHead(400, responseHeaders);
+            response.end();
+        }
     } else {
 
         let body = [];
