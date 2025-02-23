@@ -123,7 +123,7 @@ const nextConfig = [
             'jsx-a11y/aria-unsupported-elements': 'warn',
             'jsx-a11y/role-has-required-aria-props': 'warn',
             'jsx-a11y/role-supports-aria-props': 'warn',
-
+            '@stylistic/js/multiline-ternary': ['warn', { ignoreJSX: true }],
         },
         settings: {
             'react': {
