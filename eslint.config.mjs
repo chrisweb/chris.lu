@@ -53,8 +53,12 @@ const tseslintConfig = tseslint.config(
                 warnOnUnsupportedTypeScriptVersion: true,
             },
         },
+        plugins: {
+            '@stylistic': stylisticPlugin,
+        },
         rules: {
-            '@typescript-eslint/naming-convention': [
+            '@stylistic/multiline-ternary': ['warn', 'always-multiline', { ignoreJSX: false }],
+            /*'@typescript-eslint/naming-convention': [
                 'error',
                 {
                     'selector': 'interface',
@@ -66,7 +70,7 @@ const tseslintConfig = tseslint.config(
                         'match': true,
                     },
                 }
-            ],
+            ],*/
             '@typescript-eslint/ban-ts-comment': [
                 'error',
                 {
@@ -123,7 +127,6 @@ const nextConfig = [
             'jsx-a11y/aria-unsupported-elements': 'warn',
             'jsx-a11y/role-has-required-aria-props': 'warn',
             'jsx-a11y/role-supports-aria-props': 'warn',
-            '@stylistic/js/multiline-ternary': ['warn', { ignoreJSX: true }],
         },
         settings: {
             'react': {
