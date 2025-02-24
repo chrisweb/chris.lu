@@ -57,7 +57,6 @@ const tseslintConfig = tseslint.config(
             '@stylistic': stylisticPlugin,
         },
         rules: {
-            '@stylistic/multiline-ternary': ['warn', 'always-multiline', { ignoreJSX: false }],
             /*'@typescript-eslint/naming-convention': [
                 'error',
                 {
@@ -161,7 +160,7 @@ const stylisticConfig = [
             // this removes all legacy rules from eslint, typescript-eslint and react
             ...stylisticPlugin.configs['disable-legacy'].rules,
             // this adds the recommended rules from stylistic
-            ...stylisticPlugin.configs['recommended-flat'].rules,
+            ...stylisticPlugin.configs['recommended'].rules,
             // custom rules
             // https://github.com/typescript-eslint/typescript-eslint/issues/1824
             '@stylistic/indent': ['warn', 4],
@@ -174,7 +173,7 @@ const stylisticConfig = [
             //'@stylistic/jsx-one-expression-per-line': ['warn', { allow: 'single-line' }],
             '@stylistic/jsx-one-expression-per-line': 'off',
             '@stylistic/jsx-indent-props': ['warn', 4],
-            '@stylistic/multiline-ternary': ['warn', 'always-multiline', { ignoreJSX: false }],
+            '@stylistic/multiline-ternary': ['warn', 'always-multiline', { ignoreJSX: true }],
             '@stylistic/arrow-parens': ['warn', 'as-needed', { "requireForBlockBody": true }],
             '@stylistic/brace-style': ['warn', '1tbs', { allowSingleLine: true }],
             '@stylistic/operator-linebreak': ['warn', 'after'],
