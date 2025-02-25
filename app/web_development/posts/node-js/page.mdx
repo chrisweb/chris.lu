@@ -2,7 +2,7 @@
 title: Node.js
 keywords: ['Node.js', 'Nodejs', 'runtime', 'javascript', 'js']
 published: 2024-08-09T11:22:33.444Z
-modified: 2024-11-17T14:02:33.444Z
+modified: 2025-02-25T14:02:33.444Z
 permalink: https://chris.lu/web_development/posts/node-js
 section: Web development
 ---
@@ -57,6 +57,17 @@ There are several options when it comes to installing Node.js. The first option 
 > [!MORE]  
 > [Node.js "Download Node.js the way you want" page](https://nodejs.org/en/download/package-manager)  
 > [npm.js "download and install Node.js" documentation](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)  
+
+### Node.js native Typescript support (type stripping)
+
+Node.js has [announced](https://nodejs.org/en/blog/release/v22.6.0) that they added [native Typescript support](https://nodejs.org/en/learn/typescript/run-natively) in Node v22.6.0. This new feature allows us to run our Typescript script(s) natively without having to compile them to javascript first. What Node.js does, is that it strips the type annotations from your Typescript file and then run the code as Javascript. The [type stripping](https://nodejs.org/api/typescript.html#type-stripping) feature has evolved a lot since its first release but the module is still not stable (currently it is marked as in "Active development").
+
+> [!TIP]  
+> Node.js >= 22.7.0 [support typescript](https://nodejs.org/api/typescript.html) but you need to use the **--experimental-transform-types** flag. Node.js > 23.6.0 has type stripping enabled by default. If you want to use an older Node.js version then you will need to first compile the typescript code to javascript or you convert the code to javascript manually.
+
+> [!MORE]  
+> [Node.js "running Typescript natively" documentation](https://nodejs.org/en/learn/typescript/run-natively)  
+> [Node.js "Typescript module" API](https://nodejs.org/api/typescript.html)  
 
 ### Should I install the LTS or the current version
 
