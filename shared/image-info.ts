@@ -13,5 +13,5 @@ export const imageInfo: ImageInfoType = {
     'posts_vscode': ['VSCode', 'posts/vscode'],
     'tutorials_next-static-mdx-blog': ['Tutorial: Next.js 14 static MDX blog', 'tutorials/next-js-static-mdx-blog'],
     'tutorials_next-js-static-first-mdx-starterkit': ['Tutorial: Next.js 15 static first MDX starterkit', 'tutorials/next-js-static-first-mdx-starterkit'],
-    'tutorials_js-deepseek-r1-local-rag': ['Tutorial: DeepSeek-R1 AI local RAG using Javascript (Typescript)', 'tutorials/js-deepseek-r1-local-rag'],
+    'tutorials_js-deepseek-r1-local-rag': ['Tutorial: Local DeepSeek-R1 AI RAG using JavaScript (TypeScript)', 'tutorials/js-deepseek-r1-local-rag'],
 }
