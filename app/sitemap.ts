@@ -6,7 +6,6 @@ import { VFile } from 'vfile'
 import { matter } from 'vfile-matter'
 
 declare module 'vfile' {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     interface DataMap {
         matter: {
             modified?: string
