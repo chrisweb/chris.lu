@@ -1,6 +1,6 @@
 ---
-title: Local DeepSeek-R1 AI RAG using Javascript (Typescript) - Tutorial
-keywords: ['Next.js 15', 'React 19', 'DeepSeek-R1', 'llama 3', 'ai', 'RAG', 'pipeline', 'ollama', 'PostgreSQL', 'pgvector', 'LangChain.js', 'local', 'offline', 'Javascript', 'Typescript']
+title: Local DeepSeek-R1 AI RAG using JavaScript (TypeScript) - Tutorial
+keywords: ['Next.js 15', 'React 19', 'DeepSeek-R1', 'llama 3', 'ai', 'RAG', 'pipeline', 'ollama', 'PostgreSQL', 'pgvector', 'LangChain.js', 'local', 'offline', 'JavaScript', 'TypeScript']
 published: 2025-02-26T23:00:00.000Z
 modified: 2025-02-26T23:00:00.000Z
 permalink: https://chris.lu/web_development/tutorials/js-deepseek-r1-local-rag
@@ -35,26 +35,37 @@ export const metadata = {
 
 <article>
 
-# Local DeepSeek-R1 AI RAG using Javascript (Typescript)
+# Local DeepSeek-R1 AI RAG using JavaScript (TypeScript)
 
 ![A shiny AI bot is crawling through mountains of old paper documents to find a relevant answer to a question](../../../../public/assets/images/app/web_development/tutorials/js-deepseek-r1-local-rag/banner.png 'A shiny AI bot is crawling through mountains of old paper documents to find a relevant answer to a question { banner }')
 
 ## What are we going to a build in this tutorial?
 
-This tutorial is about building a Retrieval Augmented Generation (RAG) pipeline in Javascript (Typescript).
+This tutorial is about building a Retrieval Augmented Generation (RAG) pipeline in JavaScript (TypeScript).
 
-* Download **DeepSeek-R1** using **Ollama** and then run the LLM model locally
+* Download **DeepSeek-R1** using **Ollama** and then run the LLM model locally (privacy first, your data does not get transferred to third parties)
 * Use create-next-app to quickly setup a **Next.js 15** project
 * Create some UI components for our chat bot using **React 19**
 * Build a simple frontend and a backend using the **ai SDK** (which will handle the most difficult bits of streaming a response)
-* Install **PostgreSQL** and **pgvector** to store our embeddings
+* Install **PostgreSQL** and **pgvector** to store our vectors (embeddings)
 * Create a Retrieval-Augmented Generation (RAG) pipeline using **LangChain.js**, that will extract the content from our local (markdown) documents, turn each chunk into an embedding vector and finally store it in our vector database
-* Find knowledge using a similarity search in our vector database and then add it to the prompt, to provide the AI with information (before it starts reasoning)
+* Find relevant knowledge using a similarity search in our vector database
+* And finally add the knowledge to the prompt, to give the AI access to your own custom knowledge base (before it starts reasoning / answering)
+
+```mermaid
+graph LR
+    A[Documents] --> B[Split into Chunks]
+    B --> C[Convert to Embeddings]
+    C --> D[Store in Database]
+    E[User Question] --> F[Find Relevant Info]
+    F --> G[Add to AI Prompt]
+    G --> H[Get AI Response]
+```
 
 > [!TIP]  
 > the final source code for this project is available in the [js-deepseek-r1-local-rag](https://github.com/chrisweb/js-deepseek-r1-local-rag) GitHub repository
 
-## Offline DeepSeek-R1 using Ollama
+## Local (offline) DeepSeek-R1 using Ollama
 
 In this chapter we will start by installing [ollama](https://ollama.com/) and then ask it to pull the deepseek model. Once the model is running on own hardware we can test a few prompts using our terminal
 
@@ -372,7 +383,7 @@ npm run dev
 
 And if we then visit the page at `http://localhost:3000` we can submit the form to see the formdata console log (in the browser dev tools console tab)
 
-## AI client and backend in javascript
+## AI client and backend in JavaScript
 
 Next we are going to use the "AI" SDK to transform our simple form into a chat client. Then we will create an API route to pass the questions to ollama and then return a stream of responses.
 
@@ -534,7 +545,7 @@ If ollama is not running you will get an error like "Cannot connect to API", in 
 
 ## Setup PostgreSQL and pgvector
 
-In this chapter we will install [PostgreSQL](https://www.postgresql.org/) on our local machine and then add the [pgvector](https://github.com/pgvector/pgvector) plugin. **pgvector** will transform our PostgreSQL database into a vector database. It might not be the fastest solution, but it has the advantage that we only need one database for both our app data as well as the vectors.
+In this chapter we will install [PostgreSQL](https://www.postgresql.org/) on our local machine and then add the [pgvector](https://github.com/pgvector/pgvector) plugin. **pgvector** turns PostgreSQL into a vector store that lets you store and search through AI embeddings (vectors). It might not be the fastest solution, but it has the advantage that we will only need one database for both our app data as well as the vectors.
 
 An alternative to installing PostgreSQL and pgvector manually is to download and use the [pgvector docker](https://hub.docker.com/r/pgvector/pgvector) container.
 
@@ -640,24 +651,30 @@ You need to activate the vector extension for each of your databases in which yo
 
 ## AI Retrieval-Augmented Generation (RAG)
 
-In this chapter we will use a technique called **Retrieval-Augmented Generation (RAG)** to provide the AI with information from our local (markdown) documents. The goal is to find and then pass additional information to help the AI give better responses.
+In this chapter we will use a technique called **Retrieval-Augmented Generation (RAG)** to provide the AI with information from our local (markdown) documents. This helps the AI answer questions using information from your own documents
 
-To achieve this will write a script that will convert our content into embeddings (vectors) and then store them in our vector database.
+To achieve this will write a script that will convert our content into **embeddings** and then store them in our vector database.
+
+**Embeddings** convert text into numbers (vectors) that represent how similar each content chunk is to each other. Similar words get similar numbers, making it easy to find related content, for example:
+
+* "cat" → \[0.2, 0.5, -0.1]  
+* "kitten" → \[0.3, 0.4, -0.2]
+* "vibrator" → \[-0.8, 0.1, 0.9]
 
 Finally we will improve our chat API to be able to query our vector database and hopefully find relevant content that we can add to the prompt (a prompt can contain instructions for the LLM to understand the context and what it should do, additional information from sources it did not know about and the initial user question).
 
-### Node.js RAG script (in Typescript)
+### Node.js RAG script (in TypeScript)
 
-In this tutorial we will use a Node.js version which has [native Typescript support](/web_development/posts/node-js#nodejs-native-typescript-support-type-stripping) to run our script(s) (without having to compile them to javascript first).
+In this tutorial, we will use a Node.js version with native TypeScript support to run our script(s) (without having to compile them to javascript first).
 
 > [!MORE]  
 > [Node.js post (typescript support)](/web_development/posts/node-js#nodejs-native-typescript-support-type-stripping)  
 
 ### LangChain.js Installation
 
-Python is usually the language of choice when data engineers create a project, but as a web developer I prefer building prototypes using Javascript (Typescript) for the client side components as well as the Node.js backend. So instead of using the python version of the [Langchain Framework](https://github.com/langchain-ai/langchain) we will use the [LangChain.js](https://github.com/langchain-ai/langchainjs) version that is written in Javascript (Typescript)
+Python is usually the language of choice when data engineers create a project, but as a web developer I prefer building prototypes using JavaScript (TypeScript) for the client side components as well as the Node.js backend. So instead of using the python version of the [Langchain Framework](https://github.com/langchain-ai/langchain) we will use the [LangChain.js](https://github.com/langchain-ai/langchainjs) version that is written in JavaScript (TypeScript)
 
-LangChain is toolset to build RAG pipelines and other workflows powered by an AI model
+LangChain is a toolset to build RAG pipelines and other workflows powered by an AI model
 
 ```shell
 npm i langchain --save-exact
@@ -852,7 +869,7 @@ Lines 59 and 60: we count the amount of chunks we produced and then console log 
 
 ### Embeddings Model
 
-In this step we will add the [@langchain/ollama](https://github.com/langchain-ai/langchainjs/tree/main/libs/langchain-ollama/) dependency, which will allow LangChain.js to access our local AI embeddings model by using the [ollama Javascript (TypeScript) SDK](https://github.com/ollama/ollama-js)
+In this step we will add the [@langchain/ollama](https://github.com/langchain-ai/langchainjs/tree/main/libs/langchain-ollama/) dependency, which will allow LangChain.js to access our local AI embeddings model by using the [ollama JavaScript (TypeScript) SDK](https://github.com/ollama/ollama-js)
 
 First we need to install **@langchain/ollama**:
 
@@ -1134,11 +1151,11 @@ Line 8: we import node postgres
 
 Lines: 74-87: we create a pool of connections using node postgres
 
-Lines: 89-107: next we initialize the LangChain.js PGVectorStore. We first pass the PostgreSQL connections pool, then we set a name for our new table and then we define which columns we want to have in that table. The last configuration option we set is the distance strategy we intend to use later when do our similarity searches. The most popular strategies are cosine (default), innerProduct and euclidean, in this tutorial we will use cosine (I also did some tests and euclidean performed very well too, but cosine seemed to produce slightly better results, but make sure to experiment a bit with different strategies using your own content and try to find out which one works best for you)
+Lines: 89-107: next we initialize the LangChain.js PGVectorStore. We first pass the PostgreSQL connections pool, then we set a name for our new table and then we define which columns we want to have in that table. The last configuration option we set is the distance strategy we intend to use later when we do our similarity searches. The most popular strategies are cosine (default), innerProduct and euclidean, in this tutorial we will use cosine (I also did some tests and euclidean performed very well too, but cosine seemed to produce slightly better results, but make sure to experiment a bit with different strategies using your own content and try to determine which one works best for you)
 
 Lines: 109-112: another small helper function to close the client connections to our PostgreSQL database and then end the pool
 
-Lines: 116-121: We use our **createPool** function to get a pool of connections and use the listener function to track any potential errors (if there is an error it means we cant connect so we exit the script)
+Lines: 116-121: We use our **createPool** function to get a pool of connections and use the listener function to track any potential errors (if there is an error it means we cant connect to the database, so its best we exit the script at this point)
 
 Lines: 131-134: finally we can store our embeddings in our vector store, when that is done we end the connections pool using a built in function from the LangChain PGVectorStore, which closes all client connections to our database and then release the node postgres pool
 
@@ -1343,7 +1360,7 @@ Line 4: we import our new postgres lib
 
 Lines 13 to 17: we add a new interface for our embeddings table rows
 
-Lines 22 to 69: we have added the **findKnowledge** function, which will first establish a connection to the database, then run a query that using the cosine distance to find content that is similar to the question of the user. We turned both our content and the user question into embeddings and by using the cosine distance we calculate a score that represents how fow the question is compared to the content. Is the distance big then it means that the content is likely NOT similar and if the distance is small then there is a high chance that the content is similar
+Lines 22 to 69: we have added the **findKnowledge** function, which will first establish a connection to the database, then run a query that using the cosine distance to find content that is similar to the question of the user. We turned both our content and the user question into embeddings and by using the cosine distance we calculate a score that represents how far the question is compared to the content. Is the distance big then it means that the content is likely NOT similar and if the distance is small then there is a high chance that the content is similar
 
 Lines 71 to 92: the **getEmbedding** function is similar to the what we did in the embeddings script earlier, instead of converting chunks to embeddings it turns the question into an embedding
 
@@ -1373,7 +1390,7 @@ const query = `
 `
 ```
 
-The results will be different but not automatically better, which means you will have to run a multitude of experiments to be able to find out which one works best
+The results will be different but not automatically better, which means you will have to run a multitude of experiments to be able to determine which one works best
 
 > [!NOTE]  
 > pgvector indexes have some requirements / limitations, they only work with queries that are ordered by **ASC** (DESC does not work, so you probably want to avoid using cosine similarity and instead use cosine distance) and you also need to set a **LIMIT** to your queries
