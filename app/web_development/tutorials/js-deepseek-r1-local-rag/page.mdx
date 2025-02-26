@@ -52,16 +52,6 @@ This tutorial is about building a Retrieval Augmented Generation (RAG) pipeline 
 * Find relevant knowledge using a similarity search in our vector database
 * And finally add the knowledge to the prompt, to give the AI access to your own custom knowledge base (before it starts reasoning / answering)
 
-```mermaid
-graph LR
-    A[Documents] --> B[Split into Chunks]
-    B --> C[Convert to Embeddings]
-    C --> D[Store in Database]
-    E[User Question] --> F[Find Relevant Info]
-    F --> G[Add to AI Prompt]
-    G --> H[Get AI Response]
-```
-
 > [!TIP]  
 > the final source code for this project is available in the [js-deepseek-r1-local-rag](https://github.com/chrisweb/js-deepseek-r1-local-rag) GitHub repository
 
