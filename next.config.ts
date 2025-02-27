@@ -205,6 +205,8 @@ const nextConfig = (phase: string) => {
             // experimental typescript "statically typed links"
             // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
             typedRoutes: true,
+            // https://nextjs.org/blog/next-15-2#react-view-transitions-experimental
+            //viewTransition: true,
         },
         // hit or skip data cache logging (dev server)
         // https://nextjs.org/docs/app/api-reference/next-config-js/logging
