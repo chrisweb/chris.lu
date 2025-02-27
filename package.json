@@ -65,7 +65,7 @@
         "remark-table-of-contents": "2.1.0",
         "shiki": "2.5.0",
         "simplex-noise": "4.0.3",
-        "three": "0.173.0",
+        "three": "0.174.0",
         "vfile-matter": "5.0.0",
         "waveform-visualizer": "4.2.0",
         "web-audio-api-player": "5.3.2"
@@ -105,7 +105,7 @@
         "@react-three/fiber": "9.0.0-rc.10",
         "react": "canary",
         "react-dom": "canary",
-        "three": "0.173.0",
+        "three": "0.174.0",
         "shiki": "2.5.0"
     },
     "browserslist": [
