@@ -867,7 +867,13 @@ First we need to install **@langchain/ollama**:
 npm i @langchain/ollama --save-exact
 ```
 
-In this tutorial we will re-use DeepSeek-R1 to create high dimensional embeddings, so we don't need to pull an extra model, but if you prefer you could use an embedding model like [NOMIC](https://ollama.com/library/nomic-embed-text), in which case you would first need to pull the model, using the following command: `ollama pull nomic-embed-text:latest`
+In this tutorial we will use [NOMIC](https://ollama.com/library/nomic-embed-text) embedding model, you could also re-use DeepSeek-R1 as embedding model and make some tests to compare the quality of the knowledge that gets returned, if you switch to another embedding model make sure to make the changes in both files, the embeddings script and the API route, then empty the database and regenerate the embeddings
+
+Before we start writing more code we need to pull the nomic model using ollama, use the following command in your terminal: 
+
+```shell
+ollama pull nomic-embed-text:latest
+```
 
 Now we can create a new function that will use @langchain/ollama to create embeddings for each of our chunks:
 
@@ -935,8 +941,8 @@ async function processChunks(chunks: Document[]) {
 function getEmbeddingModel() {
     const options: OllamaEmbeddingsParams = {
         // https://ollama.com/library/nomic-embed-text
-        //model: 'nomic-embed-text:latest',
-        model: 'deepseek-r1:1.5b',
+        model: 'nomic-embed-text:latest',
+        //model: 'deepseek-r1:1.5b',
         baseUrl: 'http://localhost:11434',
     }
     const embeddings = new OllamaEmbeddings(options)
@@ -1058,8 +1064,8 @@ async function processChunks(chunks: Document[]) {
 function getEmbeddingModel() {
     const options: OllamaEmbeddingsParams = {
         // https://ollama.com/library/nomic-embed-text
-        //model: 'nomic-embed-text:latest',
-        model: 'deepseek-r1:1.5b',
+        model: 'nomic-embed-text:latest',
+        //model: 'deepseek-r1:1.5b',
         baseUrl: 'http://localhost:11434',
     }
     const embeddings = new OllamaEmbeddings(options)
@@ -1280,8 +1286,8 @@ const getEmbedding = async (question: string): Promise<number[]> => {
         baseURL: 'http://localhost:11434/api'
     })
 
-    //const embeddingModel = ollamaProvider.embedding('nomic-embed-text:latest')
-    const embeddingModel = ollamaProvider.embedding('deepseek-r1:1.5b')
+    const embeddingModel = ollamaProvider.embedding('nomic-embed-text:latest')
+    //const embeddingModel = ollamaProvider.embedding('deepseek-r1:1.5b')
 
     try {
         const result = await embed({
