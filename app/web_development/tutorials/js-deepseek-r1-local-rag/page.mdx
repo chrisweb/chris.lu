@@ -627,7 +627,7 @@ Next we need to run a query using the pgAdmin query tool. If you haven't install
 
 Open pgAdmin and connect to your local server
 
-First we create a **new database** (right click Databases and choose Create), in this tutorial we will name it **vector_store**
+First we create a **new database** (right click Databases and choose Create), in this tutorial we will name it **vector_store**, click on **Save** to create the database
 
 Next we right click on the database name and select **Query Tool**
 
@@ -1155,7 +1155,10 @@ You can now run the final embeddings script:
 npm run embeddings
 ```
 
-If you have a **ECONNREFUSED** error in your terminal, make sure ollama is running and if it is make sure you are using the correct port.
+> [!TIP]  
+> If you have a **ECONNREFUSED** error in your terminal, make sure ollama is running and if it is make sure you are using the correct port.
+>  
+> If you get the error **database "vector_store" does not exist** make sure you followed all the steps from the [Enabling pgvector for a database](#enabling-pgvector-for-a-database) chapter
 
 To check if the embeddings got stored successfully, start pgAdmin, right click on the database and choose the query tool, in the query tool run the following query:
 
