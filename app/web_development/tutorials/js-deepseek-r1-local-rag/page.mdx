@@ -1421,7 +1421,7 @@ Line 4: we import our new postgres lib
 
 Lines 13 to 17: we add a new interface for our embeddings table rows
 
-Lines 22 to 69: we have added the **findKnowledge** function, which will first establish a connection to the database, then we run a query that uses the cosine distance, to find content that is similar to the question of the user. We turned both our content and the user question into embeddings and by using the cosine distance we calculate a score that represents how far the question is compared to the content. Is the distance big then it means that the content is likely NOT similar and if the distance is small then there is a high chance that the content is similar
+Lines 22 to 69: we have added the **findKnowledge** function, which will first establish a connection to the database, then we run a query that uses the cosine distance, to find content that is similar to the question of the user. When using cosine distance the score range goes from 0 to 2, where 0 means the vectors are identical, 1 means they are not similar and 2 means they are the complete opposite (meaning a lower score is better). We turned both our content and the user question into embeddings and by using the cosine distance we calculate a score that represents how far the question is compared to the content. Is the distance big then it means that the content is likely NOT similar and if the distance is small then there is a high chance that the content is similar
 
 Lines 71 to 92: the **getEmbedding** function is similar to the what we did in the embeddings script earlier, instead of converting chunks to embeddings it turns the question into an embedding
 
@@ -1433,7 +1433,7 @@ Lines 121 to 126: we add the knowledge we found to the prompt and tell the AI th
 
 In the previous chapter we used used the cosine distance, but pgvector supports several distance functions
 
-You could experiment with other distance functions, for example by replacing the query using the **cosine distance** with a query using the **euclidean distance**:
+You could experiment with other distance functions, for example by replacing the query using the cosine distance with a query using the **euclidean distance** (also known as L2 distance):
 
 ```tsx title="/app/api/chat/route.ts" showLineNumbers{37} /vector <-> $1/#special
 const query = `
@@ -1444,7 +1444,9 @@ const query = `
 `
 ```
 
-Or instead of the cosine distance you could switch to the **cosine similarity** (cosine similarity and cosine distance are inversely related):
+The score for euclidean distance has no upper bound, it starts at zero when two vectors are similar and increases the further the vectors are apart (lower is better)
+
+Or you could switch to using the **cosine similarity** (cosine similarity and cosine distance are inversely related):
 
 ```tsx title="/app/api/chat/route.ts" showLineNumbers{37} /1 - (vector <=> $1)/#special
 const query = `
@@ -1454,6 +1456,8 @@ const query = `
     LIMIT 5
 `
 ```
+
+When using cosine similarity you will get a score that ranges from -1 to 1 where 1 is a perfect score, 0 means not similar and -1 means they are the complete opposite (higher is better)
 
 The results will be different but not automatically better, which means you will have to run a multitude of experiments to do, to be able to determine which one works best
 
