@@ -1,8 +1,8 @@
 ---
 title: Local DeepSeek-R1 AI RAG using JavaScript (TypeScript) - Tutorial
-keywords: ['Next.js 15', 'React 19', 'DeepSeek-R1', 'llama 3', 'ai', 'RAG', 'pipeline', 'ollama', 'PostgreSQL', 'pgvector', 'LangChain.js', 'local', 'offline', 'JavaScript', 'TypeScript']
+keywords: ['DeepSeek-R1', 'llama 3', 'ai', 'RAG', 'embeddings', 'pipeline', 'ollama.js', 'LangChain.js', 'PostgreSQL', 'pgvector', 'vector database', 'similarity search', 'Next.js 15', 'React 19', 'local', 'JavaScript', 'TypeScript']
 published: 2025-02-26T23:00:00.000Z
-modified: 2025-02-26T23:00:00.000Z
+modified: 2025-02-28T23:00:00.000Z
 permalink: https://chris.lu/web_development/tutorials/js-deepseek-r1-local-rag
 section: Web development
 ---
@@ -627,7 +627,7 @@ Next we need to run a query using the pgAdmin query tool. If you haven't install
 
 Open pgAdmin and connect to your local server
 
-First we create a **new database** (right click Databases and choose Create), in this tutorial we will name it **vector_store**
+First we create a **new database** (right click Databases and choose Create), in this tutorial we will name it **vector_store**, click on **Save** to create the database
 
 Next we right click on the database name and select **Query Tool**
 
@@ -831,7 +831,7 @@ Line 4: we import the LangChain Markdown (text) splitter, there are a lot of
 
 Line 5: we import the Document type from LangChain
 
-Lines 23 to 51: we first remove the frontmatter part from markdown documents, adding a block of frontmatter as a chunk is not recommended, which is why we remove the frontmatter. The best solution would be to pass the frontmatter string to a parser and then use the metadata to improve the information we will give the AI, but that goes beyond the scope of this tutorial
+Lines 23 to 51: we first remove the frontmatter part from markdown documents, adding a block of frontmatter as a chunk is not recommended, which is why we remove the frontmatter
 
 Next we specify the maximum size for our chunks, the second value tells the splitter how much overlap you want to have between two chunks, having some overlap can be useful to add context, in this example we set the value to zero to not have any overlap, but feel free to change that number for example to 100 or 200 to add some overlap
 
@@ -857,6 +857,67 @@ Lines 59 and 60: we count the amount of chunks we produced and then console log 
 > [LangChain.js "Text splitters" documentation](https://js.langchain.com/docs/concepts/text_splitters/)  
 > [LangChain.js "How to split code" documentation](https://js.langchain.com/docs/how_to/code_splitter/)  
 
+#### Extracting frontmatter metadata (optional)
+
+In the previous code example we removed the frontmatter from our markdown content, because passing it as string to the AI would diminish its semantic value. 
+
+A better solution would be to pass the frontmatter string to a parser and then use the metadata to improve the information we will give the AI.
+
+To parse the frontmatter you could install a package like [js-yaml](https://www.npmjs.com/package/js-yaml):
+
+```shell
+npm i js-yaml --save-exact
+```
+
+and if you use Typescript add the types:
+
+```shell
+npm i @types/js-yaml --save-exact --save-dev
+```
+
+Then you edit the embeddings.mts file and first add the new import for js-yaml:
+
+```ts title="scripts/embeddings.mts"
+import yaml from 'js-yaml'
+```
+
+And then add a custom frontmatter parser to the **chunkNorris** function:
+
+```ts title="frontmatter parser example"
+documents.forEach((document) => {
+    const frontmatter = document.pageContent.match(/---([\s\S]*?)---/)
+    if (frontmatter) {
+        const yamlContent = frontmatter[1]
+        const frontmatterData = yaml.load(yamlContent)
+        // we store the frontmatter in the document metadata
+        // you might prefer to do something more useful with it
+        // but that would go beyond the scope of this tutorial
+        document.metadata.frontmatter = frontmatterData
+        console.log('document.metadata: ', document.metadata)
+    }
+})
+
+// for each document remove the frontmatter
+documents.forEach((document) => {
+    document.pageContent = document.pageContent.replace(/---[\s\S]*?---/, '')
+})
+```
+
+Finally create a markdown test document:
+
+```md title="/docs/frontmatter-example.md"
+---
+title: Frontmatter example
+keywords: ['DeepSeek-R1', 'JavaScript']
+modified: 2025-02-28T23:00:00.000Z
+permalink: https://chris.lu/
+section: Web development
+---
+# Hello, World!
+```
+
+Now run the embeddings script (`npm run embeddings`) and then check what the console log has printed in your terminal
+
 ### Embeddings Model
 
 In this step we will add the [@langchain/ollama](https://github.com/langchain-ai/langchainjs/tree/main/libs/langchain-ollama/) dependency, which will allow LangChain.js to access our local AI embeddings model by using the [ollama JavaScript (TypeScript) SDK](https://github.com/ollama/ollama-js)
@@ -867,7 +928,13 @@ First we need to install **@langchain/ollama**:
 npm i @langchain/ollama --save-exact
 ```
 
-In this tutorial we will re-use DeepSeek-R1 to create high dimensional embeddings, so we don't need to pull an extra model, but if you prefer you could use an embedding model like [NOMIC](https://ollama.com/library/nomic-embed-text), in which case you would first need to pull the model, using the following command: `ollama pull nomic-embed-text:latest`
+In this tutorial we will use [nomic-embed-text](https://ollama.com/library/nomic-embed-text) embedding model, you could also re-use DeepSeek-R1 as embedding model and make some tests to compare the quality of the knowledge that gets returned, if you switch to another embedding model make sure to make the changes in both files, the embeddings script and the API route, then empty the database and regenerate the embeddings
+
+Before we start writing more code we need to pull the nomic model using ollama, use the following command in your terminal: 
+
+```shell
+ollama pull nomic-embed-text:latest
+```
 
 Now we can create a new function that will use @langchain/ollama to create embeddings for each of our chunks:
 
@@ -935,8 +1002,8 @@ async function processChunks(chunks: Document[]) {
 function getEmbeddingModel() {
     const options: OllamaEmbeddingsParams = {
         // https://ollama.com/library/nomic-embed-text
-        //model: 'nomic-embed-text:latest',
-        model: 'deepseek-r1:1.5b',
+        model: 'nomic-embed-text:latest',
+        //model: 'deepseek-r1:1.5b',
         baseUrl: 'http://localhost:11434',
     }
     const embeddings = new OllamaEmbeddings(options)
@@ -1058,8 +1125,8 @@ async function processChunks(chunks: Document[]) {
 function getEmbeddingModel() {
     const options: OllamaEmbeddingsParams = {
         // https://ollama.com/library/nomic-embed-text
-        //model: 'nomic-embed-text:latest',
-        model: 'deepseek-r1:1.5b',
+        model: 'nomic-embed-text:latest',
+        //model: 'deepseek-r1:1.5b',
         baseUrl: 'http://localhost:11434',
     }
     const embeddings = new OllamaEmbeddings(options)
@@ -1155,7 +1222,10 @@ You can now run the final embeddings script:
 npm run embeddings
 ```
 
-If you have a **ECONNREFUSED** error in your terminal, make sure ollama is running and if it is make sure you are using the correct port.
+> [!TIP]  
+> If you have a **ECONNREFUSED** error in your terminal, make sure ollama is running and if it is make sure you are using the correct port.
+>  
+> If you get the error **database "vector_store" does not exist** make sure you followed all the steps from the [Enabling pgvector for a database](#enabling-pgvector-for-a-database) chapter
 
 To check if the embeddings got stored successfully, start pgAdmin, right click on the database and choose the query tool, in the query tool run the following query:
 
@@ -1164,6 +1234,7 @@ SELECT * FROM vectors
 ```
 
 > [!MORE]  
+> [LangChain.js "pgvector" documentation](https://js.langchain.com/docs/integrations/vectorstores/pgvector/)  
 > [PGVectorStore API reference](https://v03.api.js.langchain.com/classes/_langchain_community.vectorstores_pgvector.PGVectorStore.html)  
 
 ### Find knowledge (and add it to the prompt)
@@ -1240,7 +1311,7 @@ const findKnowledge = async (question: string) => {
             SELECT content, metadata, vector <=> $1 AS distance
             FROM vectors
             ORDER BY distance
-            LIMIT 10
+            LIMIT 5
         `
 
         const result = await pgPool.query<EmbeddingsRow>(query, [embeddingString])
@@ -1276,8 +1347,8 @@ const getEmbedding = async (question: string): Promise<number[]> => {
         baseURL: 'http://localhost:11434/api'
     })
 
-    //const embeddingModel = ollamaProvider.embedding('nomic-embed-text:latest')
-    const embeddingModel = ollamaProvider.embedding('deepseek-r1:1.5b')
+    const embeddingModel = ollamaProvider.embedding('nomic-embed-text:latest')
+    //const embeddingModel = ollamaProvider.embedding('deepseek-r1:1.5b')
 
     try {
         const result = await embed({
@@ -1350,7 +1421,7 @@ Line 4: we import our new postgres lib
 
 Lines 13 to 17: we add a new interface for our embeddings table rows
 
-Lines 22 to 69: we have added the **findKnowledge** function, which will first establish a connection to the database, then run a query that using the cosine distance to find content that is similar to the question of the user. We turned both our content and the user question into embeddings and by using the cosine distance we calculate a score that represents how far the question is compared to the content. Is the distance big then it means that the content is likely NOT similar and if the distance is small then there is a high chance that the content is similar
+Lines 22 to 69: we have added the **findKnowledge** function, which will first establish a connection to the database, then we run a query that uses the cosine distance, to find content that is similar to the question of the user. We turned both our content and the user question into embeddings and by using the cosine distance we calculate a score that represents how far the question is compared to the content. Is the distance big then it means that the content is likely NOT similar and if the distance is small then there is a high chance that the content is similar
 
 Lines 71 to 92: the **getEmbedding** function is similar to the what we did in the embeddings script earlier, instead of converting chunks to embeddings it turns the question into an embedding
 
@@ -1358,35 +1429,58 @@ Lines 108 to 116: we call our findKnowledge function and add some basic error ha
 
 Lines 121 to 126: we add the knowledge we found to the prompt and tell the AI that we want it to use that knowledge when creating a response to the users message
 
-As we saw earlier you could experiment with other strategies by replacing the cosine distance query with an euclidean distance query:
+#### Cosine Similarity vs. Cosine Distance vs. Euclidean Distance in pgvector
+
+In the previous chapter we used used the cosine distance, but pgvector supports several distance functions
+
+You could experiment with other distance functions, for example by replacing the query using the **cosine distance** with a query using the **euclidean distance**:
 
 ```tsx title="/app/api/chat/route.ts" showLineNumbers{37} /vector <-> $1/#special
 const query = `
     SELECT content, metadata
     FROM vectors
     ORDER BY vector <-> $1
-    LIMIT 10
+    LIMIT 5
 `
 ```
 
-Or instead of the cosine distance you could switch to the **cosine similarity**:
+Or instead of the cosine distance you could switch to the **cosine similarity** (cosine similarity and cosine distance are inversely related):
 
 ```tsx title="/app/api/chat/route.ts" showLineNumbers{37} /1 - (vector <=> $1)/#special
 const query = `
     SELECT content, metadata, 1 - (vector <=> $1) AS similarity
     FROM vectors
     ORDER BY similarity DESC
-    LIMIT 10
+    LIMIT 5
 `
 ```
 
-The results will be different but not automatically better, which means you will have to run a multitude of experiments to be able to determine which one works best
+The results will be different but not automatically better, which means you will have to run a multitude of experiments to do, to be able to determine which one works best
 
 > [!NOTE]  
 > pgvector indexes have some requirements / limitations, they only work with queries that are ordered by **ASC** (DESC does not work, so you probably want to avoid using cosine similarity and instead use cosine distance) and you also need to set a **LIMIT** to your queries
->  
+>
 > We have not added an index in this tutorial, but I recommend you do this as a next step as it will improve the performance or your similarity queries a lot
 
 Now make sure the Next.js dev server is running and then open localhost:3000 in your browser to ask the AI some questions about things it can only know because you have added that knowledge to the prompt
+
+Congratulations 🎉 you just built a chatbot and a RAG pipeline in javascript, that runs on your own hardware
+
+> [!MORE]  
+> [pgvector "querying" readme](https://github.com/pgvector/pgvector?tab=readme-ov-file#querying)  
+
+## What's next?
+
+You could improve the chatbot itself, by adding more options to your UI. For example you could add a select box to the chatbot UI that lets the user choose from a list of options, then you use that information to search for documents that have the same value in their frontmatter metadata.
+
+Having a working prototype is a great first step but as we saw earlier in the tutorial, how you split the documents can have a big impact on the quality of the knowledge you will be able to retrieve later, so in my opinion this is where you should start applying optimizations. You could also install other embedding models and compare the quality of the embeddings they produce.
+
+Another area that needs some improvement is the part uses the user message to find relevant content. In this tutorial we only use the last message, but what if the user ask a question by entering multiple messages that are related to each other. There is also a lot of room for improvement regarding how you analyze the words that are in the user message, you could add sentiment analysis to find out if the user is frustrated, confused or hopefully satisfied and then tell the AI in the prompt to respond accordingly.
+
+Or you could improve the prompt by providing the AI with more or better quality knowledge. Building a RAG does not mean you have to solely rely on similarity searches. For example could also query additional sources, like a third party API, use a local search engine like Elasticsearch or scrap data from the web.
+
+Later when improving the MVP to build something that can go into production you will have to think about how to scale your project. The RAG pipeline could get improved by first making a list of all the documents that need to get parsed and then store the list in a database. Next you could use that list to build a queue of tasks where each tasks consists of calling a serverless instance that will load a single document, split it into chunks, create the embeddings and then store them using a serverless PostgreSQL service with support for pgvector.
+
+Finally what is very important is that you come up with a framework to measure the quality of the responses the AI gives you, so that you can constantly verify if the changes you just made have improved or maybe decreased the quality of answers the AI can produce.
 
 </article>
