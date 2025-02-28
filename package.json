@@ -24,8 +24,11 @@
         "url": "git+https://github.com/chrisweb/chris.lu.git"
     },
     "keywords": [
+        "chris.lu",
         "blog",
-        "chrisweb"
+        "chrisweb",
+        "webdev",
+        "tutorial"
     ],
     "author": "github.com/chrisweb",
     "license": "MIT",
