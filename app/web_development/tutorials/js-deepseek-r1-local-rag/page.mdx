@@ -1471,11 +1471,15 @@ Congratulations 🎉 you just built a chatbot and a RAG pipeline in javascript, 
 
 ## What's next?
 
+You could improve the chatbot itself, by adding more options to your UI. For example you could add a select box to the chatbot UI that lets the user choose from a list of options, then you use that information to search for documents that have the same value in their frontmatter metadata.
+
 Having a working prototype is a great first step but as we saw earlier in the tutorial, how you split the documents can have a big impact on the quality of the knowledge you will be able to retrieve later, so in my opinion this is where you should start applying optimizations. You could also install other embedding models and compare the quality of the embeddings they produce.
+
+Another area that needs some improvement is the part uses the user message to find relevant content. In this tutorial we only use the last message, but what if the user ask a question by entering multiple messages that are related to each other. There is also a lot of room for improvement regarding how you analyze the words that are in the user message, you could add sentiment analysis to find out if the user is frustrated, confused or hopefully satisfied and then tell the AI in the prompt to respond accordingly.
 
 Or you could improve the prompt by providing the AI with more or better quality knowledge. Building a RAG does not mean you have to solely rely on similarity searches. For example could also query additional sources, like a third party API, use a local search engine like Elasticsearch or scrap data from the web.
 
-Then you could improve the chatbot itself, by adding more options to your UI. For example you could add a select box to the chatbot UI that lets the user choose from a list of options, then you use that information to search for documents that have the same value in their frontmatter metadata.
+Later when improving the MVP to build something that can go into production you will have to think about how to scale your project. The RAG pipeline could get improved by first making a list of all the documents that need to get parsed and then store the list in a database. Next you could use that list to build a queue of tasks where each tasks consists of calling a serverless instance that will load a single document, split it into chunks, create the embeddings and then store them using a serverless PostgreSQL service with support for pgvector.
 
 Finally what is very important is that you come up with a framework to measure the quality of the responses the AI gives you, so that you can constantly verify if the changes you just made have improved or maybe decreased the quality of answers the AI can produce.
 
