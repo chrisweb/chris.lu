@@ -1311,7 +1311,7 @@ const findKnowledge = async (question: string) => {
             SELECT content, metadata, vector <=> $1 AS distance
             FROM vectors
             ORDER BY distance
-            LIMIT 10
+            LIMIT 5
         `
 
         const result = await pgPool.query<EmbeddingsRow>(query, [embeddingString])
@@ -1440,7 +1440,7 @@ const query = `
     SELECT content, metadata
     FROM vectors
     ORDER BY vector <-> $1
-    LIMIT 10
+    LIMIT 5
 `
 ```
 
@@ -1451,7 +1451,7 @@ const query = `
     SELECT content, metadata, 1 - (vector <=> $1) AS similarity
     FROM vectors
     ORDER BY similarity DESC
-    LIMIT 10
+    LIMIT 5
 `
 ```
 
