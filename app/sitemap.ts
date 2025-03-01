@@ -30,15 +30,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     mainPages.map((page) => {
 
         const pagePath = path.join(process.cwd(), page)
-
         const pageContent = fs.readFileSync(pagePath, 'utf8')
-
         const vfile = new VFile(pageContent)
 
         matter(vfile, { strip: true })
 
         const frontmatter = vfile.data.matter
-
         const url = 'https://chris.lu' + page.replace('app', '').replaceAll('\\', '/').replace('/page.mdx', '')
 
         siteMap.push({
@@ -54,15 +51,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     webDevPosts.map((page) => {
 
         const pagePath = path.join(process.cwd(), page)
-
         const pageContent = fs.readFileSync(pagePath, 'utf8')
-
         const vfile = new VFile(pageContent)
 
         matter(vfile)
 
         const frontmatter = vfile.data.matter
-
         const url = 'https://chris.lu' + page.replace('app', '').replaceAll('\\', '/').replace('/page.mdx', '')
 
         siteMap.push({
@@ -78,15 +72,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     webDevTutorials.map((page) => {
 
         const pagePath = path.join(process.cwd(), page)
-
         const pageContent = fs.readFileSync(pagePath, 'utf8')
-
         const vfile = new VFile(pageContent)
 
         matter(vfile)
 
         const frontmatter = vfile.data.matter
-
         const url = 'https://chris.lu' + page.replace('app', '').replaceAll('\\', '/').replace('/page.mdx', '')
 
         siteMap.push({
