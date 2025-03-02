@@ -29,7 +29,7 @@ type GLTFResult = GLTF & {
 type refType = (ref: Group) => void
 
 export interface IPalmProps extends Partial<Group> {
-    ref: refType
+    ref?: refType
 }
 
 const PALM_GLTF_PATH = '/assets/3d_models/palm/palm.gltf'
