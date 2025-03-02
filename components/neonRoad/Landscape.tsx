@@ -74,7 +74,7 @@ const Landscape: React.FC = () => {
                 {treeData.map(tree => (
                     <PalmModel
                         key={tree.id}
-                        position={new Vector3(...tree.position)}
+                        position={new Vector3().fromArray(tree.position.toArray())}
                         scale={palmScale}
                         rotation={tree.rotation}
                         ref={(palmMesh) => {
