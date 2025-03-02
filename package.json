@@ -46,7 +46,7 @@
         "@react-three/drei": "10.0.0-rc.3",
         "@react-three/fiber": "9.0.0-rc.10",
         "@react-three/postprocessing": "3.0.0-rc.2",
-        "@sentry/nextjs": "9.2.0",
+        "@sentry/nextjs": "9.3.0",
         "@shikijs/transformers": "2.5.0",
         "@vercel/analytics": "1.5.0",
         "@vercel/speed-insights": "1.2.0",
@@ -80,7 +80,7 @@
         "@react-three/eslint-plugin": "0.1.2",
         "@stylistic/eslint-plugin": "4.1.0",
         "@types/eslint-plugin-jsx-a11y": "6.10.0",
-        "@types/node": "22.13.5",
+        "@types/node": "22.13.8",
         "@types/react": "19.0.10",
         "@types/react-dom": "19.0.4",
         "babel-plugin-react-compiler": "beta",
@@ -92,7 +92,7 @@
         "eslint-plugin-mdx": "3.1.5",
         "eslint-plugin-react": "7.37.4",
         "eslint-plugin-react-compiler": "beta",
-        "eslint-plugin-react-hooks": "5.1.0",
+        "eslint-plugin-react-hooks": "5.2.0",
         "globals": "16.0.0",
         "jiti": "2.4.2",
         "remark-cli": "12.0.1",
@@ -100,7 +100,7 @@
         "remark-preset-lint-consistent": "6.0.1",
         "remark-preset-lint-markdown-style-guide": "6.0.1",
         "remark-preset-lint-recommended": "7.0.1",
-        "typescript": "5.7.3",
+        "typescript": "5.8.2",
         "typescript-eslint": "8.25.0"
     },
     "overrides": {
@@ -109,7 +109,8 @@
         "react": "canary",
         "react-dom": "canary",
         "three": "0.174.0",
-        "shiki": "2.5.0"
+        "shiki": "2.5.0",
+        "typescript": "5.8.2"
     },
     "browserslist": [
         ">0.1%, not dead, not Opera < 100, not op_mini all, not and_uc < 15, not samsung < 21, not android > 0, not and_ff < 117, not and_qq < 13, not ie <= 11"
