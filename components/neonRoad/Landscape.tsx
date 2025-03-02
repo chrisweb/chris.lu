@@ -1,122 +1,94 @@
 'use client'
 
-import { useLayoutEffect, useRef, useState, Suspense, useCallback } from 'react'
+import { useRef, useMemo, memo, Suspense } from 'react'
 import { useFrame } from '@react-three/fiber'
 import Terrain from './Terrain'
-import { Mesh } from 'three'
-import { moveFromAToBInLoop } from './lib/helpers'
 import PalmModel from './Palm'
-import { Vector3, Euler, type Group } from 'three'
+import { Mesh, Vector3, Euler, type Group } from 'three'
+import { moveFromAToBInLoop, randomDegrees } from './lib/helpers'
 
-const Terrains: React.FC = () => {
+interface TreeData {
+    id: string
+    position: Vector3
+    rotation: Euler
+    side: string
+    index: number
+}
 
-    const [terrainElementsState, setTerrainElementsState] = useState<React.ReactElement[]>([])
-    const [treesElementsState, setTreesElementsState] = useState<React.ReactElement[]>([])
+const Landscape: React.FC = () => {
 
     const terrainsRefs = useRef<Mesh[]>([])
-
-    // movement for trees on the left side
     const leftSideTreesRefs = useRef<Group[]>([])
-
-    // movement for trees on the right side
     const rightSideTreesRefs = useRef<Group[]>([])
 
-    useFrame((state, delta /*, xrFrame*/) => {
-        moveFromAToBInLoop(delta, terrainsRefs.current, 1, 1)
-    })
-    useFrame((state, delta /*, xrFrame*/) => {
-        moveFromAToBInLoop(delta, leftSideTreesRefs.current, 1, 0.2)
-    })
-    useFrame((state, delta /*, xrFrame*/) => {
-        moveFromAToBInLoop(delta, rightSideTreesRefs.current, 1, 0.2)
-    })
+    const terrainData = useMemo(() => [
+        { id: 0, zPosition: 0.5 },
+        { id: 1, zPosition: -0.5 },
+        { id: 2, zPosition: -1.5 }
+    ], [])
 
-    const createTerrain = useCallback((i: number, zPosition: number) => {
-        return (
-            <Terrain
-                zPosition={zPosition}
-                key={i}
-                ref={(terrainMesh) => {
-                    terrainsRefs.current[i] = terrainMesh
-                }}
-            />
-        )
-    }, [])
+    const treeData = useMemo(() => {
 
-    const randomDegrees = useCallback(() => {
-        const min = 0
-        const max = 360
-        return Math.floor(Math.random() * (max - min + 1) + min)
-    }, [])
-
-    const createPalm = useCallback((i: number, side: string, positionChange: number) => {
-
-        const position = new Vector3(side === 'left' ? 0.21 : -0.21, 0, positionChange)
-        const scale = new Vector3(0.009, 0.009, 0.009)
-        const rotation = new Euler(0, randomDegrees(), 0)
-
-        return (
-            <PalmModel
-                key={i.toString() + side}
-                position={position}
-                scale={scale}
-                rotation={rotation}
-                ref={(palmMesh) => {
-                    if (side === 'left') {
-                        leftSideTreesRefs.current[i] = palmMesh
-                    } else {
-                        rightSideTreesRefs.current[i] = palmMesh
-                    }
-                }}
-            />
-        )
-
-    }, [randomDegrees])
-
-    useLayoutEffect(() => {
-
-        // TERRAINS
-        const terrainElements: React.ReactElement[] = []
-
-        // the distance between the city (when the terrain comes
-        // into view) and the bottom of the camera field of view
-        // (at which point the terrain goes out of view)
-        // is approximately 2 units, so we need 3 terrains
-        // panels (of 1x1 in size), to ensure the distance between
-        // the camera and city is covered at all times
-        const terrainsZStartPositions = [0.5, -0.5, -1.5]
-
-        for (let i = 0; i < terrainsZStartPositions.length; i++) {
-
-            const zPosition = terrainsZStartPositions[i]
-
-            terrainElements.push(createTerrain(i, zPosition))
-        }
-
-        setTerrainElementsState(terrainElements)
-
-        // TREES
-        const treesElements: React.ReactElement[] = []
-
+        const data: TreeData[] = []
         const sides = ['left', 'right']
         const amountOfTreesPerSide = 12
 
         sides.forEach((side) => {
-
-            let positionChange = -1.5
+            let positionZ = -1.5
 
             for (let i = 0; i < amountOfTreesPerSide; i++) {
-                treesElements.push(createPalm(i, side, positionChange))
-                positionChange += 0.2
+                data.push({
+                    id: `${i.toString()}-${side}`,
+                    position: new Vector3(side === 'left' ? 0.21 : -0.21, 0, positionZ),
+                    rotation: new Euler(0, randomDegrees(), 0),
+                    side,
+                    index: i
+                })
+                positionZ += 0.2
             }
-
         })
 
-        setTreesElementsState(treesElements)
+        return data
+    }, [])
 
-    }, [createTerrain, createPalm])
+    const palmScale = useMemo(() => new Vector3(0.009, 0.009, 0.009), [])
 
-    return (<Suspense>{terrainElementsState}{treesElementsState}</Suspense>)
+    useFrame((_, delta) => {
+        moveFromAToBInLoop(delta, terrainsRefs.current, 1, 1)
+        moveFromAToBInLoop(delta, leftSideTreesRefs.current, 1, 0.2)
+        moveFromAToBInLoop(delta, rightSideTreesRefs.current, 1, 0.2)
+    })
+
+    return (
+        <>
+            <Suspense fallback={null}>
+                {terrainData.map(terrain => (
+                    <Terrain
+                        key={terrain.id}
+                        zPosition={terrain.zPosition}
+                        ref={(terrainMesh) => {
+                            terrainsRefs.current[terrain.id] = terrainMesh
+                        }}
+                    />
+                ))}
+                {treeData.map(tree => (
+                    <PalmModel
+                        key={tree.id}
+                        position={new Vector3().fromArray(tree.position.toArray())}
+                        scale={palmScale}
+                        rotation={tree.rotation}
+                        ref={(palmMesh) => {
+                            if (tree.side === 'left') {
+                                leftSideTreesRefs.current[tree.index] = palmMesh
+                            } else {
+                                rightSideTreesRefs.current[tree.index] = palmMesh
+                            }
+                        }}
+                    />
+                ))}
+            </Suspense>
+        </>
+    )
 }
 
-export default Terrains
+export default memo(Landscape)
