@@ -29,7 +29,7 @@ const moveFromAToBInLoop: MoveFromAToBInLoopType<Group | Mesh> = (delta, objects
 
     for (const nextObject of objectsBehindCamera) {
 
-        // order objecta by their z position
+        // order objects by their z position
         // from highest z position to lowest
         objectsRefs.sort((a, b) => b.position.z - a.position.z)
 
@@ -40,8 +40,8 @@ const moveFromAToBInLoop: MoveFromAToBInLoopType<Group | Mesh> = (delta, objects
 
         // if there are no visible objects (if deltatime is very big
         // it might happen that all objects are out of the field of view)
-        // we put the first objects, at where the camera - distance to
-        // the objects center
+        // to fix that, we put the first objects, at where the camera is
+        // minus the distance to the objects center
         if (objectsBehindCamera.length === objectsRefs.length) {
             nextObject.position.z = cameraZPosition - (distanceToNextObject / 2)
         } else {

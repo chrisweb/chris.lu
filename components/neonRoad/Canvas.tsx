@@ -1,7 +1,7 @@
 'use client'
 
 import { Suspense } from 'react'
-import { Canvas } from '@react-three/fiber'
+import { Canvas, type GLProps } from '@react-three/fiber'
 import { PerspectiveCamera, SoftShadows, AdaptiveDpr /*, Loader, OrbitControls*//*, PerformanceMonitor, PerformanceMonitorApi/*, Hud, useDetectGPU, useProgress, StatsGl*/ } from '@react-three/drei'
 import NightSky from './NightSky'
 import Sun from './Sun'
@@ -22,13 +22,6 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
     //if (process.env.NODE_ENV === 'development') {
     //console.log('useDetectGPU: ', gpuInfo)
     //}
-
-    // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#expanded-gl-prop
-    // https://threejs.org/docs/#api/en/renderers/WebGLRenderer
-    //import { RenderProps } from '@react-three/fiber'
-    /*const renderOptions: RenderProps = {
-        gl: {}
-    }*/
 
     /*const onCanvasCreatedHandler = (state: RootState) => {
         //if (process.env.NODE_ENV === 'development') {
@@ -60,13 +53,17 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
         return (<>Sorry, this 3D animation can not be displayed on your device</>)
     }
 
-    const aspect = (props.containerRef?.current?.clientWidth) ? props.containerRef.current.clientWidth / props.containerRef.current.clientHeight : 2
+    const aspect = (props.containerRef?.current?.clientWidth) ?
+        props.containerRef.current.clientWidth / props.containerRef.current.clientHeight :
+        2
 
-    // https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/unpackColorSpace
-    const rendererProps = {
-        drawingBufferColorSpace: 'display-p3',
-        unpackColorSpace: 'display-p3',
-        antialias: false,
+    // Optimize renderer properties
+    const glProps: GLProps = {
+        powerPreference: 'high-performance',
+        depth: false,
+        //unpackColorSpace: 'srgb',
+        //drawingBufferColorSpace: 'display-p3',
+        //unpackColorSpace: 'display-p3',
     }
 
     return (
@@ -74,13 +71,13 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
             <Canvas
                 // https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide#new-pixel-ratio-default
                 //dpr={Math.min(window.devicePixelRatio, 2)} // pixel ratio, should be 1 or 2
+                dpr={[1, 1.5]} // Limit pixel ratio to improve performance
                 // https://docs.pmnd.rs/react-three-fiber/api/canvas#render-defaults
-                shadows="soft" // PCFsoft
+                shadows="soft"
                 fallback={<Fallback />}
                 aria-label={props.altText}
                 role="img"
-                gl={rendererProps}
-                //frameloop="never"
+                gl={glProps}
                 //onCreated={onCanvasCreatedHandler}
             >
                 <Suspense fallback={<Fallback />}>
@@ -117,9 +114,11 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                     <Landscape />
                     <EffectComposer>
                         <Bloom
-                            luminanceThreshold={0.08}
-                            intensity={0.7}
-                            luminanceSmoothing={0.01}
+                            luminanceThreshold={0.1}
+                            intensity={0.6}
+                            luminanceSmoothing={0.025}
+                            // mipmap blur for better performance
+                            mipmapBlur
                         />
                     </EffectComposer>
                     {/* the following components can be useful in development */}
