@@ -15,7 +15,10 @@ const City: React.FC<IProps> = (props) => {
 
     const [cityTexture] = useTexture([
         CITY_TEXTURE_PATH,
-    ])
+    ], (textures) => {
+        const texture = Array.isArray(textures) ? textures[0] : textures
+        texture.generateMipmaps = false
+    })
 
     return (
         <mesh

@@ -15,7 +15,10 @@ const Sun: React.FC<IProps> = (props) => {
 
     const [sunTexture] = useTexture([
         SUN_TEXTURE_PATH,
-    ])
+    ], (textures) => {
+        const texture = Array.isArray(textures) ? textures[0] : textures
+        texture.generateMipmaps = false
+    })
 
     return (
         <mesh
@@ -28,6 +31,8 @@ const Sun: React.FC<IProps> = (props) => {
             <meshBasicMaterial
                 map={sunTexture}
                 transparent={true}
+                depthWrite={false}
+                toneMapped={false}
             />
         </mesh>
     )
