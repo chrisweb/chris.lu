@@ -37,8 +37,7 @@ const PALM_GLTF_PATH = '/assets/3d_models/palm/palm.gltf'
 // code for the gltf version
 const PalmModel = (props: IPalmProps) => {
 
-    // types problem see: https://github.com/pmndrs/gltfjsx/issues/167
-    const { nodes, materials } = useGLTF(PALM_GLTF_PATH) as GLTFResult
+    const { nodes, materials } = useGLTF(PALM_GLTF_PATH) as unknown as GLTFResult
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { name, ...palmProps } = props
