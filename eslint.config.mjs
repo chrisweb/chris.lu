@@ -77,7 +77,7 @@ const tseslintConfig = tseslint.config(
                     'ts-ignore': 'allow-with-description',
                     'ts-nocheck': false,
                     'ts-check': false,
-                    minimumDescriptionLength: 3,
+                    'minimumDescriptionLength': 3,
                 },
             ],
         },
@@ -119,7 +119,7 @@ const nextConfig = [
             'react/react-in-jsx-scope': 'off',
             'react/prop-types': 'off',
             'react/jsx-no-target-blank': 'off',
-            'jsx-a11y/alt-text': ['warn', { elements: ['img'], img: ['Image'], },],
+            'jsx-a11y/alt-text': ['warn', { elements: ['img'], img: ['Image'] }],
             'jsx-a11y/media-has-caption': 'warn',
             'jsx-a11y/aria-props': 'warn',
             'jsx-a11y/aria-proptypes': 'warn',
@@ -174,7 +174,7 @@ const stylisticConfig = [
             '@stylistic/jsx-one-expression-per-line': 'off',
             '@stylistic/jsx-indent-props': ['warn', 4],
             '@stylistic/multiline-ternary': ['warn', 'always-multiline', { ignoreJSX: true }],
-            '@stylistic/arrow-parens': ['warn', 'as-needed', { "requireForBlockBody": true }],
+            '@stylistic/arrow-parens': ['warn', 'as-needed', { requireForBlockBody: true }],
             '@stylistic/brace-style': ['warn', '1tbs', { allowSingleLine: true }],
             '@stylistic/operator-linebreak': ['warn', 'after'],
             '@stylistic/jsx-wrap-multilines': ['warn', {
@@ -230,7 +230,7 @@ const reactCompilerConfig = [
             'react-compiler': reactCompilerPlugin,
         },
         rules: {
-            'react-compiler/react-compiler': 'warn',
+            ...reactCompilerPlugin.configs.recommended.rules,
         },
     },
 ]
@@ -243,6 +243,6 @@ const config = [
     ...stylisticConfig,
     ...mdxConfig,
     ...reactCompilerConfig,
-];
+]
 
 export default config
