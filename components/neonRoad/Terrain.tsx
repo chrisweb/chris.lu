@@ -32,14 +32,7 @@ const Terrain: React.FC<ITerrainProps> = (props) => {
 
     // when using 1 the image is very blurry, 2 is good, 4 is great
     // default is 1
-    floorTextureClone.anisotropy = 4
-
-    // https://threejs.org/examples/#webgl_materials_texture_filters
-    // https://threejs.org/docs/#api/en/textures/Texture.magFilter
-    // https://threejs.org/docs/index.html#api/en/constants/Textures
-    //import { NearestFilter , NearestMipmapNearestFilter } from 'three'
-    //floorTextureClone.magFilter = NearestFilter
-    //floorTextureClone.minFilter = NearestMipmapNearestFilter
+    floorTextureClone.anisotropy = 2
 
     const displacementScale = 0.5
     const width = 32
@@ -185,7 +178,7 @@ const Terrain: React.FC<ITerrainProps> = (props) => {
             receiveShadow={true} // default is false
             ref={props.ref}
         >
-            <planeGeometry args={[1, 1, 32, 64]} />
+            <planeGeometry args={[1, 1, 16, 32]} />
             <meshStandardMaterial
                 map={floorTextureClone}
                 displacementScale={displacementScale}
