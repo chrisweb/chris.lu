@@ -104,7 +104,12 @@
         "typescript-eslint": "8.26.0"
     },
     "overrides": {
+        "babel-plugin-react-compiler": "beta",
         "next": "canary",
+        "@next/bundle-analyzer": "canary",
+        "@next/eslint-plugin-next": "canary",
+        "eslint-config-next": "canary",
+        "eslint-plugin-react-compiler": "beta",
         "react": "canary",
         "react-dom": "canary",
         "shiki": "2.5.0",
