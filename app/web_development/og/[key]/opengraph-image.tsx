@@ -29,6 +29,7 @@ export default async function Image(props: IImageProps) {
 
     const imageTitle = imageInfo[props.params.key][0]
     const imagePath = imageInfo[props.params.key][1]
+    const overlayPosition = imageInfo[props.params.key][2] ?? 'bottom'
 
     const baseUrl = process.env.VERCEL_URL ?
         `https://${process.env.VERCEL_URL}` :
@@ -74,16 +75,16 @@ export default async function Image(props: IImageProps) {
                         display: 'flex',
                         position: 'absolute',
                         left: '0px',
-                        bottom: '0px',
                         margin: 0,
                         padding: '30px 60px',
                         fontFamily: 'AntaRegular',
                         fontWeight: 400,
                         fontStyle: 'normal',
-                        fontSize: '50',
+                        fontSize: '40',
                         textShadow: '0px 0px 10px black',
                         color: 'rgb(255 0 170)',
-                        backgroundColor: 'rgb(0 0 0 0.9)',
+                        backgroundColor: 'rgb(0 0 0 0.7)',
+                        ...overlayPosition === 'bottom' ? { bottom: '0px' } : { top: '0px' },
                     }}
                 >
                     {imageTitle} | Chris.lu
