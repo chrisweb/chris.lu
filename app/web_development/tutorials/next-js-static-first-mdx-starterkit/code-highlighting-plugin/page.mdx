@@ -105,6 +105,10 @@ npm i rehype-pretty-code shiki@2.5.0 --save-exact
 
 > [!WARN]  
 > the latest shiki version **3** includes some [breaking changes](https://shiki.matsu.io/blog/v3), which is why shiki v3.x is currently **NOT** compatible with the latest rehype-pretty-code (0.14.0)
+>
+> ```shell
+> SyntaxError: The requested module 'shiki' does not provide an export named 'getHighlighter'
+> ```
 >  
 > there is however a [rehype-pretty-code PR (#257) in the works](https://github.com/rehype-pretty/rehype-pretty-code/pull/257)
 >  
