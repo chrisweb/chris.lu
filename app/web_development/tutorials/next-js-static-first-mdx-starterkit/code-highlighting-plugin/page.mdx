@@ -3,7 +3,7 @@ title: Code highlighting plugin - Next.js 15 Tutorial - Next.js 15 Tutorial
 description: Code highlighting plugin - Next.js 15 static first MDX starterkit | Web development tutorials | www.chris.lu
 keywords: ['highlighting', 'rehype', 'plugin', 'pretty', 'code', 'shiki']
 published: 2024-12-31T23:00:00.000Z
-modified: 2025-01-23T23:00:00.000Z
+modified: 2025-03-08T23:00:00.000Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit/code-highlighting-plugin
 section: Web development
 ---
@@ -100,26 +100,15 @@ This is why we will now add the **rehype pretty code** plugin.
 To install the **rehype pretty code** as well as the **shiki** package, we use the following command command:
 
 ```shell
-npm i rehype-pretty-code shiki --save-exact
+npm i rehype-pretty-code shiki@2.5.0 --save-exact
 ```
 
 > [!WARN]  
-> the latest shiki version is currently v2.x, but rehype-pretty-code expects a shiki v1 dependency, as there are no real [breaking changes](https://shiki.matsu.io/blog/v2#breaking-changes) in shiki v2 means it is safe to use shiki v2 with the [current (v0.14.0) rehype-pretty-code release](https://github.com/rehype-pretty/rehype-pretty-code/releases), but make sure to read over the [shiki v2 post](https://shiki.matsu.io/blog/v2#breaking-changes) as it contains interesting information about changes   
+> the latest shiki version **3** includes some [breaking changes](https://shiki.matsu.io/blog/v3), which is why shiki v3.x is currently **NOT** compatible with the latest rehype-pretty-code (0.14.0)
 >  
-> you will likely get an npm error like this:
+> there is however a [rehype-pretty-code PR (#257) in the works](https://github.com/rehype-pretty/rehype-pretty-code/pull/257)
 >  
-> > npm error code ERESOLVE
-> > npm error ERESOLVE could not resolve
->  
-> either use the npm cli force flag, like so: `npm i rehype-pretty-code@latest shiki@latest --save-exact --force`
->  
-> Or add shiki to your overrides in your package.json:
->  
-> ```json title="package.json"
->     "overrides": {
->        "shiki": "2.1.0"
->    }
-> ```
+> this is why the above npm install command uses shiki v2.5.0 which is the latest shiki version that is supported by rehype-pretty-code
 
 Next, we edit our `next.config.mjs` file (in the root of our project) to add the plugin configuration like so:
 
