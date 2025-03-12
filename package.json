@@ -86,10 +86,10 @@
         "babel-plugin-react-compiler": "beta",
         "eslint": "9.22.0",
         "eslint-config-next": "canary",
-        "eslint-import-resolver-typescript": "3.7.0",
+        "eslint-import-resolver-typescript": "3.8.5",
         "eslint-plugin-import": "2.31.0",
         "eslint-plugin-jsx-a11y": "6.10.2",
-        "eslint-plugin-mdx": "3.1.5",
+        "eslint-plugin-mdx": "3.2.0",
         "eslint-plugin-react": "7.37.4",
         "eslint-plugin-react-compiler": "beta",
         "eslint-plugin-react-hooks": "5.2.0",
@@ -101,7 +101,7 @@
         "remark-preset-lint-markdown-style-guide": "6.0.1",
         "remark-preset-lint-recommended": "7.0.1",
         "typescript": "5.8.2",
-        "typescript-eslint": "8.26.0"
+        "typescript-eslint": "8.26.1"
     },
     "overrides": {
         "babel-plugin-react-compiler": "beta",
