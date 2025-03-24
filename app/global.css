@@ -928,7 +928,7 @@ make the text color a bit darker */
 .socialIcon {
     margin-right: calc(var(--main-spacing) / 2);
     color: rgb(255, 225, 245);
-    filter: drop-shadow(0px 0px 2px var(--primary-light-color)) drop-shadow(0px 0px 10px var(--primary-light-color));
+    filter: drop-shadow(0px 0px 5px var(--primary-light-color));
 }
 
 /* not on mobile */
