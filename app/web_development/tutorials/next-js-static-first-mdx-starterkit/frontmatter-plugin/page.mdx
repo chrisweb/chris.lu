@@ -3,7 +3,7 @@ title: Frontmatter plugin - Next.js 15 Tutorial
 description: Frontmatter plugin - Next.js 15 static first MDX starterkit | Web development tutorials | www.chris.lu
 keywords: ['Frontmatter', 'YAML', 'plugin', 'remark', 'mdx', 'nextjs frontmatter', 'next/mdx', 'nextjs']
 published: 2024-12-31T23:00:00.000Z
-modified: 2024-12-31T23:00:00.000Z
+modified: 2025-03-31T23:00:00.000Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit/frontmatter-plugin
 section: Web development
 ---
@@ -67,11 +67,8 @@ What we will do in this chapter is **add 2 plugins** to our next/mdx setup that 
 Use the following command to install the 2 remark frontmatter plugins:
 
 ```shell
-npm i remark-frontmatter@latest remark-mdx-frontmatter@5.0.0 --save-exact
+npm i remark-frontmatter@latest remark-mdx-frontmatter@latest --save-exact
 ```
-
-> [!WARN]  
-> there is a [breaking change](https://github.com/remcohaszing/remark-mdx-frontmatter/issues/17) in remark-mdx-frontmatter v5.1.0, for now it is recommend to stay on v5.0.0, which is why in the command above we use **@5.0.0** and not @latest. There is an [issue (#17)](https://github.com/remcohaszing/remark-mdx-frontmatter/issues/17) you can follow if you are interested in updates  
 
 [remark-frontmatter](https://github.com/remarkjs/remark-frontmatter) is a plugin that will **parse the frontmatter**, without this plugin, an MDX page with frontmatter would just display the frontmatter as text (when getting rendered), after enabling this plugin, the frontmatter part will not show up in your MDX pages anymore but will get parsed as frontmatter yaml
 
