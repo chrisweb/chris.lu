@@ -13,9 +13,7 @@
         "typescript",
         "typescriptreact"
     ],
-    "files.associations": {
-        "*.mdx": "markdown"
-    },
+
     "eslint.onIgnoredFiles": "warn",
     "eslint.probe": [
         "javascript",

@@ -119,21 +119,6 @@ Open the [extensions view](/web_development/posts/vscode#vscode-extensions-view)
 
 Unlike other extension, the **MDX extension** does not require any custom settings configuration, install it and you are done
 
-#### file associations
-
-To change the file association (matching a **file extension** with a **language mode**), first open an MDX file, then in the bottom right corner of VSCode you will either have "Markdown" or "MDX" set as default, if it is set to MDX then I recommend setting it to "Markdown"
-
-Another option, if you have a `.vscode/settings.json` file in your workspace, is to edit that file and add the file association for MDX manually:
-
-```json title=".vscode/settings.json"
-    "files.associations": {
-        "*.mdx": "markdown"
-    },
-```
-
-> [!NOTE]  
-> by changing the file association to markdown, you are NOT disabling the MDX extension, it will continue to work and read your remark-link configuration file (if you have one in your workspace)
-
 ## Frameworks with MDX support
 
 All major frameworks support MDX either out of the box or via packages that you can install separately, Next.js has [@next/mdx](https://www.npmjs.com/package/@next/mdx), but there are alternatives that I listed in the [@next/mdx alternatives](#nextmdx-alternatives) chapter, Astro has [@astrojs/mdx](https://github.com/withastro/astro/tree/main/packages/integrations/mdx/), Remix devs often use [mdx-bundler](https://www.npmjs.com/package/mdx-bundler), and Gatsby has [gatsby-plugin-mdx](https://www.npmjs.com/package/gatsby-plugin-mdx), there is also a popular project called [Docusaurus](https://docusaurus.io/) which uses MDX, but it is more opinionated than the other frameworks as it focuses on building a documentation website
