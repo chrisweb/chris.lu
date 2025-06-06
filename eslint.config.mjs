@@ -175,7 +175,9 @@ const stylisticConfig = [
             //'@stylistic/jsx-one-expression-per-line': ['warn', { allow: 'single-line' }],
             '@stylistic/jsx-one-expression-per-line': 'off',
             '@stylistic/jsx-indent-props': ['warn', 4],
-            '@stylistic/multiline-ternary': ['warn', 'always-multiline', { ignoreJSX: true }],
+            //'@stylistic/multiline-ternary': ['warn', 'always-multiline', { ignoreJSX: true }],
+            // disabled "multiline-ternary" because "ignoreJSX" does not work
+            '@stylistic/multiline-ternary': 'off',
             '@stylistic/arrow-parens': ['warn', 'as-needed', { requireForBlockBody: true }],
             '@stylistic/brace-style': ['warn', '1tbs', { allowSingleLine: true }],
             '@stylistic/operator-linebreak': ['warn', 'after'],
