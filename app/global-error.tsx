@@ -1,19 +1,11 @@
-'use client' // Error components must be Client Components
+'use client'
 
 import * as Sentry from '@sentry/nextjs'
+import Error from 'next/error'
 import { useEffect } from 'react'
-import BaseButton from '@/components/base/button/Base'
 
-export default function GlobalError({
-    error,
-    reset,
-}: {
-    error: Error & { digest?: string }
-    reset: () => void
-}) {
-
+export default function GlobalError({ error }: { error: Error & { digest?: string } }) {
     useEffect(() => {
-        // log the error to Sentry.io
         Sentry.captureException(error)
     }, [error])
 
@@ -27,17 +19,8 @@ export default function GlobalError({
                             &nbsp;
                             <span className="emoji">😞</span>
                         </h1>
-                        <BaseButton
-                            clickCallback={() => {
-                                // attempt to recover by trying to re-render the segment
-                                reset()
-                            }}
-                        >
-                            Try again
-                        </BaseButton>
                     </section>
                 </main>
-
             </body>
         </html>
     )

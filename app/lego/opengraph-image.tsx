@@ -19,11 +19,11 @@ export const alt = `Chris.lu ${title} banner`
 export default async function Image() {
 
     const permanentMarkerRegular = fetch(
-        new URL('/public/assets/fonts/PermanentMarker-Regular.ttf', import.meta.url)
+        new URL('../../public/assets/fonts/PermanentMarker-Regular.ttf', import.meta.url)
     ).then(res => res.arrayBuffer())
 
     const imageData = await fetch(
-        new URL('/public/assets/images/og_image_background_1200x630.jpg', import.meta.url)
+        new URL('../../public/assets/images/og_image_background_1200x630.jpg', import.meta.url)
     ).then(res => res.arrayBuffer())
 
     return new ImageResponse(

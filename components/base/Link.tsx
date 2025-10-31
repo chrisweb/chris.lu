@@ -72,16 +72,16 @@ const BaseLink: React.FC<IBaseLinkProps> = (props) => {
 
     return (
         <>
-            {(withExternalIcon) ?
-                (
+            {(withExternalIcon)
+                ? (
                     <>
                         <a href={href.toString()} {...newLinkProps}>
                             {children}
                         </a>
                         <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="sm" className="inlineIcon" />
                     </>
-                ) :
-                (
+                )
+                : (
                     <Link href={href} {...newLinkProps}>
                         {children}
                     </Link>

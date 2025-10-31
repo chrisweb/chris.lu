@@ -31,9 +31,9 @@ export default async function Image(props: IImageProps) {
     const imagePath = imageInfo[props.params.key][1]
     const overlayPosition = imageInfo[props.params.key][2] ?? 'bottom'
 
-    const baseUrl = process.env.VERCEL_URL ?
-        `https://${process.env.VERCEL_URL}` :
-        `http://localhost:${process.env.PORT ?? '3000'}`
+    const baseUrl = process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : `http://localhost:${process.env.PORT ?? '3000'}`
 
     const antaRegular = await fetch(
         new URL('/public/assets/fonts/Anta-Regular.ttf', import.meta.url)

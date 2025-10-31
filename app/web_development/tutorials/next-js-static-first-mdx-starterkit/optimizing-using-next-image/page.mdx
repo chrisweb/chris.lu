@@ -464,61 +464,7 @@ Or if VSCode inserted the absolute path and not the relative path, like so:
 ![](file:///c%3A/Users/MY_USER/MY_PROJECT/public/images/playground_test.jpg)
 ```
 
-Then, I recommend you check out the next chapter
-
-### Telling VSCode that our MDX files contain markdown 
-
-Step 1: If VSCode only inserted a path but NO markdown syntax for the image, then this is because VSCode detected your page content is MDX, it should however think your content is markdown.
-
-We know by now that MDX is markdown + JSX, but VSCode (as of now, sees things a bit differently, but I hope this will change in the future) and does not enable some of the markdown features when the file content type is set to MDX.
-
-I recommend you open the `.vscode/settings.json` VSCode workspace settings file (that we already used in one of the first steps of this tutorial to tell VSCode to use the typescript version that is in our workspace) and add the following entry to it:
-
-```json title=".vscode/settings.json" showLineNumbers /,/9#special {12-14}
-{
-    "typescript.tsdk": "node_modules\\typescript\\lib",
-    "eslint.debug": true,
-    "eslint.validate": [
-        "markdown",
-        "mdx",
-        "javascript",
-        "javascriptreact",
-        "typescript",
-        "typescriptreact"
-    ],
-    "files.associations": {
-        "*.mdx": "markdown"
-    }
-}
-```
-
-Line 14 we add a comma
-
-Lines 15 to 17: we specify that we want VSCode to treat MDX files as if they were markdown (this will not change how Next.js renders your content or disable JSX, your content will still be MDX, it just tells VSCode to activate its markdown features when editing an MDX file)
-
-Now save the `.vscode/settings.json` file, and then to make sure that VSCode takes the changes into account, I recommend closing the `page.mdx` file and reopening it.
-
-Then, delete the image path and repeat the drag and drop of the image into the `page.mdx` file.
-
-This time, you should see the markdown image element instead of just a path.
-
-Step 2: If the path it inserts is the absolute path (and not the relative path), then this needs to be changed. You will notice that there is a **drop options** icon at the end of the line that looks like this:
-
-![image of the the VSCode drop options icon](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-first-mdx-starterkit/vscode_image_drop_options_icon.png)
-
-(the icon tends to disappear after a while, so if you don't see the icon, delete the image element and do a new drag & drop)
-
-Now click on that icon, or as VSCode suggests, you can use the keyboard shortcut by pressing `Ctrl+.` (macOS: `⌘.`, Linux: `Ctrl+.`), it should open a modal with 3 options where the first option should be **Insert Markdown Image** (if the first entry says "Drop using 'MDX' extension", then go back to **step 1**):
-
-![image of the the VSCode drop options menu](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-first-mdx-starterkit/vscode_image_drop_menu_option_markdown_image.png)
-
-Click on the first option to select **Insert Markdown Image**
-
-You should now have a markdown image element that looks like this:
-
-```md
-![alt text](../../../public/images/playground_test.png)
-```
+Then make sure that sure that the VSCode language for your MDX files is set to MDX, you can do that by clicking on the language mode in the bottom right corner of VSCode and then selecting **MDX** from the list of languages
 
 ### Markdown image preview in VSCode
 

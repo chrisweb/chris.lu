@@ -21,7 +21,7 @@ const Breadcrumbs: React.FC<IBreadcrumbsProps> = (props) => {
         <>
             <nav className={styles.nav} aria-label="Breadcrumbs">
                 {list.map(listItem => (
-                    <div key={crypto.randomUUID()} className={`fontSmall ${styles.inline}`}>
+                    <div key={listItem.href.toString()} className={`fontSmall ${styles.inline}`}>
                         <Link href={listItem.href}>{listItem.label}</Link>
                         <FontAwesomeIcon icon={faChevronRight} size="sm" className={styles.icon} />
                     </div>
