@@ -19,7 +19,7 @@ const ShareButton = forwardRef<ButtonWithIconRefType, IProps>((props, buttonRef)
 
     const { clickCallback, ...rest } = props
 
-    const [shareDataState, setShareDataState] = useState<IShareData | null>(null)
+    const [canShareState, setCanShareState] = useState(false)
 
     const buttonClickHandler = (/*event: React.MouseEvent<HTMLButtonElement>*/) => {
 
@@ -27,14 +27,28 @@ const ShareButton = forwardRef<ButtonWithIconRefType, IProps>((props, buttonRef)
             clickCallback()
         }
 
-        if (shareDataState !== null) {
+        // Build share data on demand to avoid storing it in state
+        const ogUrl = document.querySelector("meta[property='og:url']") as HTMLMetaElement | undefined
+        const url = ogUrl ? ogUrl.content : document.location.href
+
+        const ogTitle = document.querySelector("meta[property='og:title']") as HTMLMetaElement | undefined
+        const title = ogTitle ? ogTitle.content : 'Chris.lu'
+
+        const ogDescription = document.querySelector("meta[property='og:description']") as HTMLMetaElement | undefined
+        const defaultDescription = "chrisweb's blog about web development, games, Lego, music, memes, ... | chris.lu"
+        const description = ogDescription ? ogDescription.content : defaultDescription
+
+        const shareData: IShareData = { url, title, description }
+
+        if (typeof window.navigator.share === 'function') {
             window.navigator
-                .share(shareDataState)
+                .share(shareData)
                 .then(() => {
                     if (process.env.NODE_ENV === 'development') {
                         console.log('shared')
                     }
-                }).catch((error: unknown) => {
+                })
+                .catch((error: unknown) => {
                     if (process.env.NODE_ENV === 'development') {
                         console.log(error)
                     }
@@ -55,16 +69,19 @@ const ShareButton = forwardRef<ButtonWithIconRefType, IProps>((props, buttonRef)
         const defaultDescription = 'chrisweb\'s blog about web development, games, Lego, music, memes, ... | chris.lu'
         const description = ogDescription ? ogDescription.content : defaultDescription
 
-        const shareData = { url, title, description }
+        const shareData: IShareData = { url, title, description }
 
         if (typeof window.navigator.canShare === 'function' && window.navigator.canShare(shareData)) {
-            setShareDataState(shareData)
+            // Defer state update to avoid calling setState synchronously within an effect
+            setTimeout(() => {
+                setCanShareState(true)
+            }, 0)
         }
     }, [])
 
     return (
         <>
-            {(shareDataState !== null) && (
+            {canShareState && (
                 <button
                     onClick={buttonClickHandler}
                     className={`${styles.reset} ${styles.base} ${styles.cursor}`}

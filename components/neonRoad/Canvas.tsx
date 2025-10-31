@@ -15,6 +15,11 @@ interface IProps extends React.PropsWithChildren {
     containerRef?: React.RefObject<HTMLDivElement | null>
 }
 
+// Extract fallback component to module scope to avoid creating components during render
+function Fallback() {
+    return <>Sorry, this 3D animation can not be displayed on your device</>
+}
+
 const NeonRoadCanvas: React.FC<IProps> = (props) => {
 
     // uncomment if you want to see what useDetectGPU returns
@@ -49,13 +54,9 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
         return <></>
     }*/
 
-    const Fallback = () => {
-        return (<>Sorry, this 3D animation can not be displayed on your device</>)
-    }
-
-    const aspect = (props.containerRef?.current?.clientWidth) ?
-        props.containerRef.current.clientWidth / props.containerRef.current.clientHeight :
-        2
+    const aspect = (props.containerRef?.current?.clientWidth)
+        ? props.containerRef.current.clientWidth / props.containerRef.current.clientHeight
+        : 2
 
     // Optimize renderer properties
     const glProps: GLProps = {

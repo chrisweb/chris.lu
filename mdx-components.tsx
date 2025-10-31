@@ -59,8 +59,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         img: props => (<ImageDispatch {...props as ImageProps} />),
         aside: ({ children, ...props }: AsidePropsType) => (
             <>
-                {(props.id === 'articleToc') ?
-                    (
+                {(props.id === 'articleToc')
+                    ? (
                         <>
                             <aside>
                                 <BaseLink href="#skipToc" className="skipToc">Skip table of contents</BaseLink>
@@ -73,8 +73,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                             </aside>
                             <div id="skipToc" tabIndex={-1} />
                         </>
-                    ) :
-                    (
+                    )
+                    : (
                         <aside {...props}>
                             {children}
                         </aside>

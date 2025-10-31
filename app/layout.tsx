@@ -8,13 +8,14 @@ import type { Metadata, Viewport } from 'next'
 import { sharedMetaData } from '@/shared/metadata'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import { headers } from 'next/headers'
 
 export const metadata: Metadata = {
     // default next.js value
     // added this just to make the console message go away
-    metadataBase: process.env.VERCEL_URL ?
-        new URL(`https://${process.env.VERCEL_URL}`) :
-        new URL(`http://localhost:${process.env.PORT ?? '3000'}`),
+    metadataBase: process.env.VERCEL_URL
+        ? new URL(`https://${process.env.VERCEL_URL}`)
+        : new URL(`http://localhost:${process.env.PORT ?? '3000'}`),
     title: {
         template: '%s | chris.lu',
         default: 'Home | chris.lu',
@@ -77,9 +78,11 @@ const anta = Anta({
     display: 'swap',
 })
 
-export default function RootLayout({ children }: {
+export default async function RootLayout({ children }: {
     children: React.ReactNode
 }) {
+    // Access headers to make this a dynamic route and satisfy Sentry's crypto.randomUUID() requirement
+    await headers()
 
     return (
         <html lang="en" className={`${permanentMarkerFont.variable} ${vt323.variable} ${architectsDaughter.variable} ${sourceCodePro.variable} ${anta.variable}`}>

@@ -21,8 +21,8 @@ const VideoScroll: React.FC = () => {
         // rect.right <= (window.innerWidth || document.documentElement.clientWidth)
 
         return (
-            rect.bottom >= 0 &&
-            rect.top <= (window.innerHeight || document.documentElement.clientHeight)
+            rect.bottom >= 0
+            && rect.top <= (window.innerHeight || document.documentElement.clientHeight)
         )
     }
 
