@@ -13,7 +13,7 @@ const WaveformCanvas = forwardRef<Waveform, IProps>(({ onWaveClickHandler, waveD
 
     const waveCanvasRef = useRef<HTMLCanvasElement | null>(null)
 
-    const initializeWaveform = useCallback((): Waveform => {
+    const initializeWaveform = useCallback((initialData: number[]): Waveform => {
 
         const waveLayoutOptions: IWaveLayoutOptions = {
             waveHeightInPixel: 32,
@@ -22,7 +22,7 @@ const WaveformCanvas = forwardRef<Waveform, IProps>(({ onWaveClickHandler, waveD
 
         const waveCoreOptions: IWaveCoreOptions = {
             layout: waveLayoutOptions,
-            data: [],
+            data: initialData,
             waveformClickCallback: onWaveClickHandler,
         }
 
@@ -55,32 +55,33 @@ const WaveformCanvas = forwardRef<Waveform, IProps>(({ onWaveClickHandler, waveD
 
     }, [waveformRef])
 
+    // Initialize waveform on mount (runs once)
     useEffect(() => {
 
-        if (waveData.length > 0) {
-
-            const waveform = getWaveform()
-
-            waveform?.setWaveData(waveData)
-            waveform?.draw(0)
-
-        }
-
-    }, [waveData, getWaveform])
-
-    useEffect(() => {
-
-        if (typeof waveformRef !== 'function' && waveformRef !== null) {
-            waveformRef.current = initializeWaveform()
+        if (typeof waveformRef !== 'function' && waveformRef !== null && waveformRef.current === null) {
+            waveformRef.current = initializeWaveform([])
         }
 
         return () => {
             if (typeof waveformRef !== 'function' && waveformRef !== null) {
                 waveformRef.current?.destroy()
+                waveformRef.current = null
             }
         }
 
-    }, [waveformRef, initializeWaveform])
+    }, [initializeWaveform, waveformRef])
+
+    // Update waveform when data changes
+    useEffect(() => {
+
+        const waveform = getWaveform()
+
+        if (waveform !== null && waveData.length > 0) {
+            waveform.setWaveData(waveData)
+            waveform.draw(0)
+        }
+
+    }, [waveData, getWaveform])
 
     return (
         <>

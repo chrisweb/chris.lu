@@ -66,8 +66,10 @@ const Landscape: React.FC = () => {
                     <Terrain
                         key={terrain.id}
                         zPosition={terrain.zPosition}
-                        ref={(terrainMesh) => {
-                            terrainsRefs.current[terrain.id] = terrainMesh
+                        meshRef={(terrainMesh) => {
+                            if (terrainMesh) {
+                                terrainsRefs.current[terrain.id] = terrainMesh
+                            }
                         }}
                     />
                 ))}

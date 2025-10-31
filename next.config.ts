@@ -28,6 +28,7 @@ const nextConfig = (phase: string) => {
     })*/
 
     // https://rehype-pretty-code.netlify.app/
+    // Note: transformers removed for Turbopack compatibility
     const rehypePrettyCodeOptions: rehypePrettyCodeOptionsType = {
         // VSCode "SynthWave '84" theme
         theme: 'synthwave-84',
@@ -169,14 +170,49 @@ const nextConfig = (phase: string) => {
 
     const withMDX = createMdx({
         options: {
-            remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter, [remarkTableOfContents, remarkTableOfContentsOptions], [remarkGfm, remarkGfmOptions]],
-            rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions], rehypeSlug, rehypeMDXImportMedia, [rehypeAutolinkHeadings, rehypeAutolinkHeadingsOptions], [rehypeGithubAlerts, rehypeGithubAlertsOptions]],
+            remarkPlugins: [
+                remarkFrontmatter,
+                remarkMdxFrontmatter,
+                [remarkTableOfContents, remarkTableOfContentsOptions],
+                [remarkGfm, remarkGfmOptions],
+            ],
+            rehypePlugins: [
+                [rehypePrettyCode, rehypePrettyCodeOptions],
+                rehypeSlug,
+                rehypeMDXImportMedia,
+                [rehypeAutolinkHeadings, rehypeAutolinkHeadingsOptions],
+                [rehypeGithubAlerts, rehypeGithubAlertsOptions],
+            ],
         },
+        // options when using turbopack
+        // last test with next.js 16, still no plugins support
+        // i have plugins like the alerts that need js functions
+        // so as of now turbo is still not an option :/
+        /*options: {
+            remarkPlugins: [
+                //'remark-frontmatter',
+                //'remark-mdx-frontmatter',
+                ['remark-table-of-contents', remarkTableOfContentsOptions],
+                //['remark-gfm', remarkGfmOptions],
+            ],
+            rehypePlugins: [
+                //['rehype-pretty-code', rehypePrettyCodeOptions],
+                //'rehype-slug',
+                'rehype-mdx-import-media',
+                //['rehype-autolink-headings', rehypeAutolinkHeadingsOptions],
+                //['rehype-github-alerts', rehypeGithubAlertsOptions],
+            ],
+        },*/
     })
 
     const nextConfigOptions: NextConfig = {
         reactStrictMode: true,
         poweredByHeader: false,
+        reactCompiler: true,
+        // disabled cacheComponents because of https://github.com/getsentry/sentry-javascript/issues/14118
+        // note: usually you would not disable cacheComponents, but this site is mostly static
+        cacheComponents: false,
+        typedRoutes: true,
         experimental: {
             // experimental use rust compiler for MDX
             // as of now (07.10.2023) there is no support for rehype plugins
@@ -186,14 +222,6 @@ const nextConfig = (phase: string) => {
                 mdxType: 'gfm',
             },*/
             mdxRs: false,
-            // React compiler
-            reactCompiler: true,
-            // experimental partial prerendering
-            // https://nextjs.org/docs/messages/ppr-preview
-            ppr: true,
-            // experimental typescript "statically typed links"
-            // https://nextjs.org/docs/app/api-reference/next-config-js/typedRoutes
-            typedRoutes: true,
             // https://nextjs.org/blog/next-15-2#react-view-transitions-experimental
             //viewTransition: true,
         },
@@ -208,14 +236,20 @@ const nextConfig = (phase: string) => {
         images: {
             formats: ['image/avif', 'image/webp'],
             deviceSizes: [240, 336, 480, 704, 1080, 1408, 1920, 2112, 3840],
+            qualities: [100, 75],
+            localPatterns: [
+                {
+                    pathname: '/_next/image',
+                    // Allow any query parameters
+                },
+                {
+                    pathname: '/_next/static/media/**',
+                    // Allow any query parameters
+                },
+            ],
         },
         // Configure pageExtensions to include md and mdx
         pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'mdx'],
-        // disable linting during builds using "next lint"
-        // we have manually added our lint script in package.json to the build command
-        eslint: {
-            ignoreDuringBuilds: true,
-        },
         // eslint-disable-next-line @typescript-eslint/require-await
         headers: async () => {
             return [
@@ -445,35 +479,5 @@ export default withSentryConfig(withSentryConfig(nextConfig, {
     // See the following for more information:
     // https://docs.sentry.io/product/crons/
     // https://vercel.com/docs/cron-jobs
-    //automaticVercelMonitors: true,
-}), {
-    // For all available options, see:
-    // https://www.npmjs.com/package/@sentry/webpack-plugin#options
-
-    org: 'chrisweb',
-    project: 'javascript-nextjs',
-
-    // Only print logs for uploading source maps in CI
-    silent: !process.env.CI,
-
-    // For all available options, see:
-    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
-
-    // Upload a larger set of source maps for prettier stack traces (increases build time)
-    widenClientFileUpload: true,
-
-    // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
-    // This can increase your server load as well as your hosting bill.
-    // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
-    // side errors will fail.
-    tunnelRoute: '/monitoring',
-
-    // Automatically tree-shake Sentry logger statements to reduce bundle size
-    disableLogger: true,
-
-    // Enables automatic instrumentation of Vercel Cron Monitors. (Does not yet work with App Router route handlers.)
-    // See the following for more information:
-    // https://docs.sentry.io/product/crons/
-    // https://vercel.com/docs/cron-jobs
-    automaticVercelMonitors: true,
-})
+    automaticVercelMonitors: false,
+}))

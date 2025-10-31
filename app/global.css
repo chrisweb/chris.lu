@@ -575,7 +575,7 @@ progress {
 
 code {
     font-family: var(--codeblock-font-family);
-    font-size: var(--main-fontSize-small);
+    font-size: var(--main-fontSize-smaller);
     counter-reset: line;
 }
 

@@ -63,7 +63,7 @@ const Button: React.FC<IProps> = ({ children, colorChange, randomize }) => {
     const stringChildren = children as string[]
     const wordsList = children ? stringChildren.toString() : ''
     const parts = wordsList.split(', ')
-    const requestAnimationFrameRef = useRef(0)
+    // const requestAnimationFrameRef = useRef(0) // no longer needed; using local raf id in effect
     const animationTimestampRef = useRef(0)
     const partIndexRef = useRef(0)
     const characterIndexRef = useRef(0)
@@ -134,40 +134,41 @@ const Button: React.FC<IProps> = ({ children, colorChange, randomize }) => {
         })
     }, [])
 
-    const animate = useCallback((timeStamp: number) => {
+    useEffect(() => {
+        let rafId = 0
 
-        const elapsed = timeStamp - animationTimestampRef.current
+        const loop = (timeStamp: number) => {
+            const elapsed = timeStamp - animationTimestampRef.current
 
-        // only once every 150ms (for typing & pause)
-        // increase value to slow animation down
-        if (elapsed >= 150) {
-            switch (actionRef.current) {
-                case 'type':
-                    type()
-                    break
-                case 'pause':
-                    pause()
-                    break
-            }
-            animationTimestampRef.current = timeStamp
-        }
-
-        // faster for backspace, once every 50ms
-        if (elapsed >= 50) {
-            if (actionRef.current === 'backspace') {
-                backspace()
+            // only once every 150ms (for typing & pause)
+            // increase value to slow animation down
+            if (elapsed >= 150) {
+                switch (actionRef.current) {
+                    case 'type':
+                        type()
+                        break
+                    case 'pause':
+                        pause()
+                        break
+                }
                 animationTimestampRef.current = timeStamp
             }
-        }
-        requestAnimationFrameRef.current = requestAnimationFrame(animate)
-    }, [type, backspace, pause])
 
-    useEffect(() => {
-        requestAnimationFrameRef.current = requestAnimationFrame(animate)
-        return () => {
-            cancelAnimationFrame(requestAnimationFrameRef.current)
+            // faster for backspace, once every 50ms
+            if (elapsed >= 50) {
+                if (actionRef.current === 'backspace') {
+                    backspace()
+                    animationTimestampRef.current = timeStamp
+                }
+            }
+            rafId = requestAnimationFrame(loop)
         }
-    }, [animate])
+
+        rafId = requestAnimationFrame(loop)
+        return () => {
+            cancelAnimationFrame(rafId)
+        }
+    }, [type, backspace, pause])
 
     return (
         <>

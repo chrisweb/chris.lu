@@ -24,8 +24,8 @@
     background: #fff;
 }
 
-.slider::-moz-range-thumb,
-.slider::slider-thumb {
+.slider::-moz-range-thumb/*,
+.slider::slider-thumb*/ {
     appearance: none;
     height: 20px;
     width: 20px;
@@ -48,7 +48,7 @@
 }
 
 /* https://github.com/w3c/csswg-drafts/issues/4410#issuecomment-1720875895 */
-.slider::slider-fill {
+/*.slider::slider-fill {
     background-color: var(--secondary-light-color);
     height: 4px;
-}
+}*/

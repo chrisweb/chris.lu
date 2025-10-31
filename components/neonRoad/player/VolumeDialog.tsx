@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useRef, useEffect, useLayoutEffect } from 'react'
 import type { AnimationEvent, PropsWithChildren } from 'react'
 import { createPortal } from 'react-dom'
 import styles from './volumeDialog.module.css'
@@ -16,76 +16,70 @@ const VolumeDialog: React.FC<IProps> = (props) => {
 
     const { isOpen, onOpenCallback, onCloseCallback, children } = props
 
-    const [isDialogOpenState, setIsDialogOpenState] = useState(isOpen)
-    const [closeAnimationState, setCloseAnimationState] = useState(false)
-
     const dialogRef = useRef<HTMLDialogElement | null>(null)
-
-    const openModal = useCallback(() => {
-        setIsDialogOpenState(true)
-        if (typeof onOpenCallback === 'function') {
-            onOpenCallback()
-        }
-    }, [onOpenCallback])
-
-    const closeModal = useCallback(() => {
-        if (typeof onCloseCallback === 'function') {
-            onCloseCallback()
-        }
-        setIsDialogOpenState(false)
-    }, [onCloseCallback])
-
-    const onKeyDownHandler = useCallback((event: KeyboardEvent) => {
-        if (event.key === 'Escape') {
-            closeModal()
-        }
-    }, [closeModal])
+    const previousIsOpenRef = useRef(isOpen)
+    const isClosingRef = useRef(false)
 
     const animationEndHandler = (event: AnimationEvent<HTMLDialogElement>) => {
         if (event.animationName.startsWith('volumeDialog_close')) {
             dialogRef.current?.close()
-            setCloseAnimationState(false)
+            isClosingRef.current = false
         }
     }
 
-    useEffect(() => {
-        if (props.withEscKeyListener) {
-            document.addEventListener('keydown', onKeyDownHandler, false)
-        }
-        return () => {
-            if (props.withEscKeyListener) {
-                document.removeEventListener('keydown', onKeyDownHandler, false)
-            }
-        }
-    }, [onKeyDownHandler, props.withEscKeyListener])
-
-    useEffect(() => {
-        if (isOpen) {
-            openModal()
-        } else {
-            closeModal()
-        }
-    }, [isOpen, openModal, closeModal])
-
-    useEffect(() => {
+    // Handle dialog open/close based on isOpen prop
+    useLayoutEffect(() => {
         const dialogElement = dialogRef.current
+        const wasOpen = previousIsOpenRef.current
 
         if (dialogElement) {
-            if (isDialogOpenState) {
+            if (isOpen && !wasOpen) {
+                // Opening dialog
+                isClosingRef.current = false
+                dialogElement.classList.remove(styles.close)
                 dialogElement.show()
-            } else {
+                if (typeof onOpenCallback === 'function') {
+                    onOpenCallback()
+                }
+            } else if (!isOpen && wasOpen) {
+                // Closing dialog
                 if (dialogElement.hasAttribute('open')) {
-                    setCloseAnimationState(true)
+                    isClosingRef.current = true
+                    dialogElement.classList.add(styles.close)
+                }
+                if (typeof onCloseCallback === 'function') {
+                    onCloseCallback()
                 }
             }
         }
-    }, [isDialogOpenState])
+
+        previousIsOpenRef.current = isOpen
+    }, [isOpen, onOpenCallback, onCloseCallback])
+
+    // Handle Escape key listener
+    useEffect(() => {
+        if (!props.withEscKeyListener) return
+
+        const onKeyDownHandler = (event: KeyboardEvent) => {
+            if (event.key === 'Escape' && isOpen) {
+                // Trigger close by updating parent's state via callback
+                if (typeof onCloseCallback === 'function') {
+                    onCloseCallback()
+                }
+            }
+        }
+
+        document.addEventListener('keydown', onKeyDownHandler, false)
+        return () => {
+            document.removeEventListener('keydown', onKeyDownHandler, false)
+        }
+    }, [props.withEscKeyListener, isOpen, onCloseCallback])
 
     return createPortal(
         <dialog
             ref={dialogRef}
             onAnimationEnd={animationEndHandler}
-            className={`${styles.reset} ${styles.dialog} ${closeAnimationState ? styles.close : ''}`}
+            className={`${styles.reset} ${styles.dialog}`}
         >
             {children}
         </dialog>,

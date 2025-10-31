@@ -1,16 +1,14 @@
 import eslintPlugin from '@eslint/js'
-import tseslint, { configs as tseslintConfigs } from 'typescript-eslint'
-import importPlugin from 'eslint-plugin-import'
+import { configs as tseslintConfigs } from 'typescript-eslint'
 import reactPlugin from 'eslint-plugin-react'
 import reactHooksPlugin from 'eslint-plugin-react-hooks'
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y'
 import nextPlugin from '@next/eslint-plugin-next'
 import stylisticPlugin from '@stylistic/eslint-plugin'
-import * as mdxPlugin from 'eslint-plugin-mdx'
+import tailwindcssPlugin from 'eslint-plugin-tailwindcss'
 import reactCompilerPlugin from 'eslint-plugin-react-compiler'
-
-// currently an mts file until I find types
-// for all imported packages
+import { defineConfig } from 'eslint/config'
+import * as mdxPlugin from 'eslint-plugin-mdx'
 
 const eslintConfig = [
     {
@@ -29,11 +27,13 @@ const ignoresConfig = [
             '.next/',
             '.vscode/',
             'public/',
+            'components/ui/',
+            'next-env.d.ts',
         ]
     },
 ]
 
-const tseslintConfig = tseslint.config(
+const tseslintConfig = defineConfig(
     {
         name: 'custom/typescript-eslint/recommended',
         files: ['**/*.mjs', '**/*.ts?(x)'],
@@ -57,19 +57,10 @@ const tseslintConfig = tseslint.config(
             '@stylistic': stylisticPlugin,
         },
         rules: {
-            /*'@typescript-eslint/naming-convention': [
-                'error',
-                {
-                    'selector': 'interface',
-                    'format': [
-                        'PascalCase',
-                    ],
-                    'custom': {
-                        'regex': '^I[A-Z]',
-                        'match': true,
-                    },
-                }
-            ],*/
+            // this is an import rule, but it is off because typescript already displays errors
+            // the typescript error will highlight the exact error
+            '@typescript-eslint/no-unsafe-call': 'off',
+            '@typescript-eslint/triple-slash-reference': 'off',
             '@typescript-eslint/ban-ts-comment': [
                 'error',
                 {
@@ -91,30 +82,29 @@ const tseslintConfig = tseslint.config(
     },
 )
 
-const nextConfig = [
+const nextConfig = defineConfig(
     {
         name: 'custom/next/config',
         // no files (option) for this config as we want to apply it to all files
         plugins: {
             'react': reactPlugin,
             'jsx-a11y': jsxA11yPlugin,
-            'react-hooks': reactHooksPlugin,
             '@next/next': nextPlugin,
-            'import': importPlugin,
+            // commented out for now, because when i create a new file, the import plugin says it doesn't exist until I restart the linting server
+            //'import': importPlugin,
         },
         rules: {
             ...reactPlugin.configs.recommended.rules,
             ...reactPlugin.configs['jsx-runtime'].rules,
-            ...reactHooksPlugin.configs.recommended.rules,
             ...nextPlugin.configs.recommended.rules,
             // this is the nextjs strict mode
             ...nextPlugin.configs['core-web-vitals'].rules,
-            ...importPlugin.configs.recommended.rules,
+            //...importPlugin.configs.recommended.rules,
             //...jsxA11yPlugin.configs.recommended.rules,
             // OR more strict a11y rules
             ...jsxA11yPlugin.configs.strict.rules,
             // rules from eslint-config-next
-            'import/no-anonymous-default-export': 'warn',
+            //'import/no-anonymous-default-export': 'warn',
             'react/no-unknown-property': 'off',
             'react/react-in-jsx-scope': 'off',
             'react/prop-types': 'off',
@@ -146,9 +136,9 @@ const nextConfig = [
             'react/no-unescaped-entities': 'off',
         },
     },
-]
+)
 
-const stylisticConfig = [
+const stylisticConfig = defineConfig(
     {
         name: 'custom/stylistic/recommended',
         files: ['**/*.ts?(x)'],
@@ -165,7 +155,7 @@ const stylisticConfig = [
             // https://github.com/typescript-eslint/typescript-eslint/issues/1824
             '@stylistic/indent': ['warn', 4],
             '@stylistic/indent-binary-ops': ['warn', 4],
-            '@stylistic/quotes': ['warn', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
+            '@stylistic/quotes': ['warn', 'single', { avoidEscape: true, allowTemplateLiterals: 'always' }],
             '@stylistic/jsx-quotes': ['warn', 'prefer-double'],
             '@stylistic/semi': ['warn', 'never'],
             '@stylistic/eol-last': 'off',
@@ -180,7 +170,7 @@ const stylisticConfig = [
             '@stylistic/multiline-ternary': 'off',
             '@stylistic/arrow-parens': ['warn', 'as-needed', { requireForBlockBody: true }],
             '@stylistic/brace-style': ['warn', '1tbs', { allowSingleLine: true }],
-            '@stylistic/operator-linebreak': ['warn', 'after'],
+            '@stylistic/operator-linebreak': ['warn', 'before'],
             '@stylistic/jsx-wrap-multilines': ['warn', {
                 declaration: 'parens-new-line',
                 assignment: 'parens-new-line',
@@ -199,9 +189,38 @@ const stylisticConfig = [
             '@stylistic/no-trailing-spaces': ['warn'],
         },
     }
-]
+)
 
-const mdxConfig = [
+const tailwindcssConfig = defineConfig(
+    {
+        name: 'custom/tailwindcss/recommended',
+        files: ['**/*.ts?(x)'],
+        plugins: {
+            'tailwindcss': tailwindcssPlugin,
+        },
+        rules: {
+            // Basic rules that don't require config resolution
+            'tailwindcss/classnames-order': 'warn',
+            'tailwindcss/enforces-negative-arbitrary-values': 'warn',
+            'tailwindcss/enforces-shorthand': 'warn',
+            'tailwindcss/no-contradicting-classname': 'warn',
+            'tailwindcss/no-unnecessary-arbitrary-value': 'warn',
+            'tailwindcss/no-custom-classname': 'off',
+            'tailwindcss/migration-from-tailwind-2': 'off',
+        },
+        settings: {
+            tailwindcss: {
+                config: `${import.meta.dirname}/app/globals.css`,
+                cssFiles: [
+                    'app/**/*.css',
+                    'components/**/*.css',
+                ],
+            },
+        },
+    },
+)
+
+const mdxConfig = defineConfig(
     // https://github.com/mdx-js/eslint-mdx/blob/d6fc093fb32ab58fb226e8cf42ac77399b8a4758/README.md#flat-config
     {
         name: 'custom/mdx/recommended',
@@ -224,20 +243,34 @@ const mdxConfig = [
             'prefer-const': 'error',
         },
     },
-]
+)
 
-const reactCompilerConfig = [
+const reactHookConfig = defineConfig(
     {
-        name: 'custom/react-compiler/recommended',
+        // https://github.com/facebook/react/tree/main/packages/eslint-plugin-react-hooks
+        name: 'custom/react-hook/recommended',
         files: ['**/*.ts?(x)'],
         plugins: {
-            'react-compiler': reactCompilerPlugin,
+            'react-hooks': reactHooksPlugin,
         },
         rules: {
-            ...reactCompilerPlugin.configs.recommended.rules,
+            ...reactHooksPlugin.configs['recommended-latest'].rules
         },
-    },
-]
+    }
+)
+
+const reactCompilerConfig = defineConfig(
+   {
+       name: 'custom/react-compiler/recommended',
+       files: ['**/*.ts?(x)'],
+       plugins: {
+           'react-compiler': reactCompilerPlugin,
+       },
+       rules: {
+           ...reactCompilerPlugin.configs.recommended.rules
+       },
+   },
+)
 
 const config = [
     ...ignoresConfig,
@@ -245,7 +278,9 @@ const config = [
     ...tseslintConfig,
     ...nextConfig,
     ...stylisticConfig,
+    ...tailwindcssConfig,
     ...mdxConfig,
+    ...reactHookConfig,
     ...reactCompilerConfig,
 ]
 
