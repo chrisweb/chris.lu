@@ -48,7 +48,7 @@ TLDR: When using VSCode, the most important part, is to create a new `mcp.json` 
 
 ### Using the VSCode command
 
-The fastest way is to the following command:
+The fastest way is to use the following command:
 
 ```shell
 code --add-mcp '{"name":"next-devtools","command":"npx","args":["-y","next-devtools-mcp@latest"]}'
@@ -64,7 +64,7 @@ code --add-mcp '{\"name\":\"next-devtools\",\"command\":\"npx\",\"args\":[\"-y\"
 
 Some IDEs or AI coding tools have an `.mcp.json` in the root of the project, but that does not work when using VSCode.
 
-VSCode historically has stored files in a hidden `.vscode` folder, instead of using hidden files like `.mcp.json` at the root of a project. This means that in our case the file itself does not start with a dot (the folder is already hidden) the file is name is only `mcp.json`.
+VSCode historically has stored files in a hidden `.vscode` folder, instead of using hidden files like `.mcp.json` at the root of a project. This means that in our case the file itself does not start with a dot (the folder is already hidden) the filename is only `mcp.json`.
 
 To add the Next.js 16 Devtools MCP in VSCode, create or edit your mcp.json file:
 
@@ -88,9 +88,9 @@ Also note how VSCode uses "servers" and not "mcpServers".
 
 ### Other ways to add an MCP server (optional)
 
-**The third option** is to open the VSCode command palette, use the keyboard shortcut `Ctrl+Shift+p` (macOS: `⇧⌘P`, Linux: `Ctrl+Shift+P`) to do so, then type "MCP" and choose "MCP: Add Server"
+The **third option** is to open the VSCode command palette, use the keyboard shortcut `Ctrl+Shift+p` (macOS: `⇧⌘P`, Linux: `Ctrl+Shift+P`) to do so, then type "MCP" and choose "MCP: Add Server"
 
-There is a **fourth option** to add MCP servers, but its a bit hidden...
+The **fourth option** to add MCP servers, but its a bit hidden...
 
 As soon as you have an mcp.json file in VSCode, after you open that file, there will be a "Add Server..." button in the bottom left.
 
@@ -108,16 +108,26 @@ You can enable or disable tools, make sure the "MCP Server: Next Devtools" is en
 
 ## Upgrading to Next.js 16 using the Next.js 16 Devtools MCP
 
-If you have already upgraded your projects packages to Next.js 16, but haven't done a full upgrade of your own code yet, then you will want to try out the Next.js 16 MCP upgrade tool.
+If you have already upgraded your project's packages to Next.js 16, but haven't done a full upgrade of your own code yet, then you will want to try out the Next.js 16 MCP upgrade tool.
 
 > [!NOTE]
 > AIs can be slow especially when refactoring an existing project, a more efficient and faster way to update some parts of your project is to use the [Next.js 16 codemod](https://nextjs.org/docs/app/guides/upgrading/codemods) for Next.js 16 and use it first, after the codemod is done you can still run the MCP upgrade tool. The AI will notice that some things are already done and skip them, at the end it will give you a recap about the state of your project in regards to Next.js 16.
 
-To trigger the tool, make sure Github Copilot is set to Agent Mode, choose your favorite Agent (like Claude Sonnet 4.5) and then enter the following prompt:
+To trigger the tool, make sure Github Copilot is set to Agent Mode, choose your favorite Agent (like Claude Sonnet 4.5)
+
+I recommend using the slash commands as they guarantee that the right tool will be used, type `/mcp` and then select `/mcp.next-devtools.upgrade-nextjs-16` , this will trigger the tool
+
+Or you can use a prompt like this instead, which if lucky will trigger the upgrade-nextjs-16 tool too:
 
 ```txt
 Next Devtools, help me upgrade my Next.js app to version 16
 ```
+
+## Use the MCP Devtools to start using cache components in your Next.js 16 project
+
+The easiest way is to use the slash command `/mcp` into the copilot input field, and then select `/mcp.next-devtools.enable-cache-components`, this will trigger the tool
+
+This command will make use of a bunch of resources that are bundled in the Next.js devtools MCP, it will try to only use the ones that apply to your project, after the initial run feel free to keep asking the agent about certain cache component features to learn more about them even if your project does not use them yet, like the new "updateTag()" and refresh().
 
 ## Next.js 16 MCP server
 
@@ -125,7 +135,7 @@ When you are done upgrading your codebase to Next.js 16 I recommend enabling the
 
 Wait didn't we just install Next.js 16 MCP?
 
-What we did so far, is add the Next.js 16 Devtools MCP to VSCode. Those are new tools that your AI agents can now use, like the upgrade tool we just used. However there is a second MCP related feature, an MCP server inside of the Next.js dev server.
+What we did so far is add the Next.js 16 Devtools MCP to VSCode. Those are new tools that your AI agents can now use. What we are about to enable now is an MCP server inside of the Next.js dev server, that will give us access to a series other tools.
 
 ### Configuring Next.js experimental MCP server
 
@@ -188,10 +198,10 @@ then make sure the dev server is running:
 npm run dev
 ```
 
-finally we ask the AI for help, using the following prompt (make sure you are in agent mode):
+Finally we ask the AI for help, using the following prompt (make sure you are in agent mode):
 
 ```txt
-Next Devtools: bro, there is a bug on the server side, help me find it or my boss will get angry (dev server is already running on port 3000)
+Next Devtools: there is a bug on the server side, help me find it or my boss will get angry (dev server is already running on port 3000)
 ```
 
 producing a query like this:
@@ -212,24 +222,6 @@ finally it will call the get_errors tools and get a response like this:
 ```
 
 After that it will hopefully find the bug and fix it, as the dev server is running, HMR will kick in and display the fixed page in the browser
-
-## MCP Resources
-
-One last thing I noticed...
-
-If you open the extensions view
-
-Either click on the "Extensions" icon on the right:
-
-![VScode extensions view icon](../../../../public/assets/images/app/web_development/posts/vscode/vscode_extensions_view_icon.png)
-
-Or press `Ctrl+Shift+X` (macOS: `⇧⌘X`, Linux: `Ctrl+Shift+X`)
-
-Then at the bottom you will have a list of MCP servers, if you click on the gear on the next-devtools row, then you will have an option called "Browse Resources" and if you click on it, it will show a list of interesting prompts (mostly about the new cache components)
-
-If you find one resource interesting click on it and you will open a file containing a prompt
-
-Then copy paste it as prompt for the agent to work on it (Note: I assume that is what you are supposed to with it?). I executed the prompt while being in a blank Next.js 16 project I had just created using CNA (I doubt its a good idea to test those "prompts" on an existing project, if you do make sure you are on a new branch that you can discard later). I found those prompts educational, even though I am not sure it's their intended purpose ;) 
 
 > [!MORE]  
 > [Next Devtools MCP repository](https://github.com/vercel/next-devtools-mcp)  
