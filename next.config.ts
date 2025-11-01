@@ -224,6 +224,8 @@ const nextConfig = (phase: string) => {
             mdxRs: false,
             // https://nextjs.org/blog/next-15-2#react-view-transitions-experimental
             //viewTransition: true,
+            // MCP server
+            mcpServer: true
         },
         // hit or skip data cache logging (dev server)
         // https://nextjs.org/docs/app/api-reference/next-config-js/logging

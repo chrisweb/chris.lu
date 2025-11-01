@@ -15,21 +15,22 @@ export const contentType = 'image/png'
 export const alt = 'Chris.lu article banner'
 
 interface IImageProps {
-    params: {
+    params: Promise<{
         key: string
-    }
+    }>
 }
 
 // Image generation
 export default async function Image(props: IImageProps) {
+    const { key } = await props.params
 
-    if (!props.params.key) {
-        return
+    if (!key) {
+        return new Response('Missing key parameter', { status: 400 })
     }
 
-    const imageTitle = imageInfo[props.params.key][0]
-    const imagePath = imageInfo[props.params.key][1]
-    const overlayPosition = imageInfo[props.params.key][2] ?? 'bottom'
+    const imageTitle = imageInfo[key][0]
+    const imagePath = imageInfo[key][1]
+    const overlayPosition = imageInfo[key][2] ?? 'bottom'
 
     const baseUrl = process.env.VERCEL_URL
         ? `https://${process.env.VERCEL_URL}`

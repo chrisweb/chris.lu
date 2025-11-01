@@ -14,4 +14,5 @@ export const imageInfo: ImageInfoType = {
     'tutorials_next-static-mdx-blog': ['Tutorial: Next.js 14 static MDX blog', 'tutorials/next-js-static-mdx-blog', 'top'],
     'tutorials_next-js-static-first-mdx-starterkit': ['Tutorial: Next.js 15 static first MDX starterkit', 'tutorials/next-js-static-first-mdx-starterkit', 'top'],
     'tutorials_js-deepseek-r1-local-rag': ['Tutorial: Local DeepSeek-R1 AI RAG using JavaScript (TypeScript)', 'tutorials/js-deepseek-r1-local-rag'],
+    'tutorials_next-js_16_devtools_mcp': ['Tutorial: Next.js 16 Devtools MCP in VSCode', 'tutorials/next-js_16_devtools_mcp'],
 }
