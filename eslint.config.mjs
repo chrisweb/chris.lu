@@ -61,6 +61,10 @@ const tseslintConfig = defineConfig(
             // the typescript error will highlight the exact error
             '@typescript-eslint/no-unsafe-call': 'off',
             '@typescript-eslint/triple-slash-reference': 'off',
+            // disabled next rule due to bug:
+            // https://github.com/typescript-eslint/typescript-eslint/issues/11732
+            // https://github.com/eslint/eslint/issues/20272
+            '@typescript-eslint/unified-signatures': 'off',
             '@typescript-eslint/ban-ts-comment': [
                 'error',
                 {
