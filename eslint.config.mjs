@@ -1,3 +1,5 @@
+// eslint.config.mjs
+import { defineConfig } from 'eslint/config'
 import eslintPlugin from '@eslint/js'
 import { configs as tseslintConfigs } from 'typescript-eslint'
 import reactPlugin from 'eslint-plugin-react'
@@ -7,44 +9,44 @@ import nextPlugin from '@next/eslint-plugin-next'
 import stylisticPlugin from '@stylistic/eslint-plugin'
 import tailwindcssPlugin from 'eslint-plugin-tailwindcss'
 import reactCompilerPlugin from 'eslint-plugin-react-compiler'
-import { defineConfig } from 'eslint/config'
 import * as mdxPlugin from 'eslint-plugin-mdx'
 
-const eslintConfig = [
+// Global ignores configuration
+// Must be in its own config object to act as global ignores
+const ignoresConfig = defineConfig([
     {
-        name: 'custom/eslint/recommended',
-        // all files expect mdx files
-        files: ['**/*.mjs', '**/*.ts?(x)'],
-        ...eslintPlugin.configs.recommended,
-    },
-]
-
-const ignoresConfig = [
-    {
-        name: 'custom/eslint/ignores',
-        // the global ignores must be in it's own config object
+        name: 'project/ignores',
         ignores: [
             '.next/',
-            '.vscode/',
+            'node_modules/',
             'public/',
-            'components/ui/',
+            '.vscode/',
             'next-env.d.ts',
         ]
     },
-]
+])
 
-const tseslintConfig = defineConfig(
+// ESLint recommended rules for JavaScript/TypeScript
+const eslintConfig = defineConfig([
     {
-        name: 'custom/typescript-eslint/recommended',
-        files: ['**/*.mjs', '**/*.ts?(x)'],
+        name: 'project/javascript-recommended',
+        files: ['**/*.{js,mjs,ts,tsx}'],
+        ...eslintPlugin.configs.recommended,
+    },
+])
+
+// TypeScript configuration with type-checked rules
+const typescriptConfig = defineConfig([
+    {
+        name: 'project/typescript-strict',
+        files: ['**/*.{ts,tsx,mjs}'],
         extends: [
             ...tseslintConfigs.strictTypeChecked,
             ...tseslintConfigs.stylisticTypeChecked,
         ],
-        // only needed if you use TypeChecked rules
         languageOptions: {
             parserOptions: {
-                // https://typescript-eslint.io/getting-started/typed-linting
+                // Automatically detects tsconfig.json
                 projectService: true,
                 tsconfigRootDir: import.meta.dirname,
                 ecmaFeatures: {
@@ -53,18 +55,15 @@ const tseslintConfig = defineConfig(
                 warnOnUnsupportedTypeScriptVersion: true,
             },
         },
-        plugins: {
-            '@stylistic': stylisticPlugin,
-        },
         rules: {
-            // this is an import rule, but it is off because typescript already displays errors
-            // the typescript error will highlight the exact error
+            // Disable rules that conflict with TypeScript's own error checking
             '@typescript-eslint/no-unsafe-call': 'off',
             '@typescript-eslint/triple-slash-reference': 'off',
             // disabled next rule due to bug:
             // https://github.com/typescript-eslint/typescript-eslint/issues/11732
             // https://github.com/eslint/eslint/issues/20272
             '@typescript-eslint/unified-signatures': 'off',
+            // Allow ts-expect-error and ts-ignore with descriptions
             '@typescript-eslint/ban-ts-comment': [
                 'error',
                 {
@@ -78,42 +77,47 @@ const tseslintConfig = defineConfig(
         },
     },
     {
-        // disable type-aware linting on JS files
-        // only needed if you use TypeChecked rules
-        files: ['**/*.mjs'],
+        name: 'project/javascript-disable-type-check',
+        files: ['**/*.{js,mjs,cjs}'],
         ...tseslintConfigs.disableTypeChecked,
-        name: 'custom/typescript-eslint/disable-type-checked',
-    },
-)
+    }
+])
 
-const nextConfig = defineConfig(
+// React and Next.js configuration
+const reactConfig = defineConfig([
     {
-        name: 'custom/next/config',
-        // no files (option) for this config as we want to apply it to all files
+        name: 'project/react-next',
+        files: ['**/*.{jsx,tsx}'],
         plugins: {
             'react': reactPlugin,
+            'react-hooks': reactHooksPlugin,
             'jsx-a11y': jsxA11yPlugin,
             '@next/next': nextPlugin,
-            // commented out for now, because when i create a new file, the import plugin says it doesn't exist until I restart the linting server
-            //'import': importPlugin,
         },
         rules: {
+            // React recommended rules
             ...reactPlugin.configs.recommended.rules,
             ...reactPlugin.configs['jsx-runtime'].rules,
-            ...nextPlugin.configs.recommended.rules,
-            // this is the nextjs strict mode
-            ...nextPlugin.configs['core-web-vitals'].rules,
-            //...importPlugin.configs.recommended.rules,
-            //...jsxA11yPlugin.configs.recommended.rules,
-            // OR more strict a11y rules
+            // React Hooks rules (use recommended-latest for latest features)
+            ...reactHooksPlugin.configs['recommended-latest'].rules,
+            // Accessibility rules (strict mode for better a11y)
             ...jsxA11yPlugin.configs.strict.rules,
-            // rules from eslint-config-next
-            //'import/no-anonymous-default-export': 'warn',
-            'react/no-unknown-property': 'off',
-            'react/react-in-jsx-scope': 'off',
-            'react/prop-types': 'off',
-            'react/jsx-no-target-blank': 'off',
-            'jsx-a11y/alt-text': ['warn', { elements: ['img'], img: ['Image'] }],
+            // Next.js recommended rules
+            ...nextPlugin.configs.recommended.rules,
+            // Next.js Core Web Vitals rules
+            ...nextPlugin.configs['core-web-vitals'].rules,
+
+            // Customizations for modern React/Next.js
+            'react/react-in-jsx-scope': 'off', // Not needed in Next.js
+            'react/prop-types': 'off', // Use TypeScript instead
+            'react/no-unknown-property': 'off', // Conflicts with custom attributes
+            'react/jsx-no-target-blank': 'off', // Next.js handles this
+
+            // Fine-tuned accessibility rules
+            'jsx-a11y/alt-text': ['warn', {
+                elements: ['img'],
+                img: ['Image'] // Next.js Image component
+            }],
             'jsx-a11y/media-has-caption': 'warn',
             'jsx-a11y/aria-props': 'warn',
             'jsx-a11y/aria-proptypes': 'warn',
@@ -122,59 +126,48 @@ const nextConfig = defineConfig(
             'jsx-a11y/role-supports-aria-props': 'warn',
         },
         settings: {
-            'react': {
-                version: 'detect',
-            },
-            // only needed if you use (eslint-import-resolver-)typescript
-            'import/resolver': {
-                typescript: {
-                    alwaysTryTypes: true
-                }
+            react: {
+                version: 'detect', // Automatically detect React version
             },
         },
-    },
-    {
-        name: 'custom/next/config-mdx',
-        files: ['**/*.mdx'],
-        rules: {
-            'react/no-unescaped-entities': 'off',
-        },
-    },
-)
+    }
+])
 
-const stylisticConfig = defineConfig(
+// Code style and formatting configuration
+const stylisticConfig = defineConfig([
     {
-        name: 'custom/stylistic/recommended',
-        files: ['**/*.ts?(x)'],
-        // no files for this config as we want to apply it to all files
+        name: 'project/stylistic',
+        files: ['**/*.{js,mjs,ts,tsx}'],
         plugins: {
             '@stylistic': stylisticPlugin,
         },
         rules: {
-            // this removes all legacy rules from eslint, typescript-eslint and react
+            // Remove legacy formatting rules from ESLint/TypeScript ESLint
             ...stylisticPlugin.configs['disable-legacy'].rules,
-            // this adds the recommended rules from stylistic
-            ...stylisticPlugin.configs['recommended'].rules,
-            // custom rules
-            // https://github.com/typescript-eslint/typescript-eslint/issues/1824
+            // Add recommended stylistic rules as base
+            ...stylisticPlugin.configs.recommended.rules,
+
+            // Custom style preferences (adjust to your team's preferences)
             '@stylistic/indent': ['warn', 4],
             '@stylistic/indent-binary-ops': ['warn', 4],
-            '@stylistic/quotes': ['warn', 'single', { avoidEscape: true, allowTemplateLiterals: 'always' }],
+            '@stylistic/quotes': ['warn', 'single', {
+                avoidEscape: true,
+                allowTemplateLiterals: 'always'
+            }],
             '@stylistic/jsx-quotes': ['warn', 'prefer-double'],
             '@stylistic/semi': ['warn', 'never'],
-            '@stylistic/eol-last': 'off',
             '@stylistic/comma-dangle': ['warn', 'only-multiline'],
-            '@stylistic/padded-blocks': 'off',
-            '@stylistic/spaced-comment': 'off',
-            //'@stylistic/jsx-one-expression-per-line': ['warn', { allow: 'single-line' }],
-            '@stylistic/jsx-one-expression-per-line': 'off',
-            '@stylistic/jsx-indent-props': ['warn', 4],
-            //'@stylistic/multiline-ternary': ['warn', 'always-multiline', { ignoreJSX: true }],
-            // disabled "multiline-ternary" because "ignoreJSX" does not work
-            '@stylistic/multiline-ternary': 'off',
-            '@stylistic/arrow-parens': ['warn', 'as-needed', { requireForBlockBody: true }],
-            '@stylistic/brace-style': ['warn', '1tbs', { allowSingleLine: true }],
+            '@stylistic/arrow-parens': ['warn', 'as-needed', {
+                requireForBlockBody: true
+            }],
+            '@stylistic/brace-style': ['warn', '1tbs', {
+                allowSingleLine: true
+            }],
             '@stylistic/operator-linebreak': ['warn', 'before'],
+
+            // JSX-specific style rules
+            '@stylistic/jsx-indent-props': ['warn', 4],
+            '@stylistic/jsx-one-expression-per-line': 'off', // Too strict
             '@stylistic/jsx-wrap-multilines': ['warn', {
                 declaration: 'parens-new-line',
                 assignment: 'parens-new-line',
@@ -183,38 +176,46 @@ const stylisticConfig = defineConfig(
                 condition: 'parens-new-line',
                 logical: 'parens-new-line',
                 prop: 'parens-new-line',
-                propertyValue: 'parens-new-line',
             }],
             '@stylistic/jsx-curly-newline': ['warn', {
                 multiline: 'consistent',
                 singleline: 'forbid',
             }],
+
+            // Additional formatting preferences
+            '@stylistic/eol-last': 'off',
+            '@stylistic/padded-blocks': 'off',
+            '@stylistic/spaced-comment': 'off',
+            '@stylistic/multiline-ternary': 'off', // Conflicts with JSX
             '@stylistic/no-multiple-empty-lines': ['warn'],
             '@stylistic/no-trailing-spaces': ['warn'],
         },
     }
-)
+])
 
-const tailwindcssConfig = defineConfig(
+// Tailwind CSS configuration
+const tailwindConfig = defineConfig([
     {
-        name: 'custom/tailwindcss/recommended',
-        files: ['**/*.ts?(x)'],
+        name: 'project/tailwindcss',
+        files: ['**/*.{jsx,tsx}'],
         plugins: {
-            'tailwindcss': tailwindcssPlugin,
+            tailwindcss: tailwindcssPlugin,
         },
         rules: {
-            // Basic rules that don't require config resolution
+            // Class name ordering and validation
             'tailwindcss/classnames-order': 'warn',
             'tailwindcss/enforces-negative-arbitrary-values': 'warn',
             'tailwindcss/enforces-shorthand': 'warn',
             'tailwindcss/no-contradicting-classname': 'warn',
             'tailwindcss/no-unnecessary-arbitrary-value': 'warn',
-            'tailwindcss/no-custom-classname': 'off',
-            'tailwindcss/migration-from-tailwind-2': 'off',
+            'tailwindcss/no-custom-classname': 'off', // Allow custom classes
+            'tailwindcss/migration-from-tailwind-2': 'off', // Not needed for new projects
         },
         settings: {
             tailwindcss: {
-                config: `${import.meta.dirname}/app/globals.css`,
+                // Point to your Tailwind config file
+                config: `${import.meta.dirname}/tailwind.config.ts`,
+                // CSS files to analyze for Tailwind classes
                 cssFiles: [
                     'app/**/*.css',
                     'components/**/*.css',
@@ -222,23 +223,22 @@ const tailwindcssConfig = defineConfig(
             },
         },
     },
-)
+])
 
-const mdxConfig = defineConfig(
-    // https://github.com/mdx-js/eslint-mdx/blob/d6fc093fb32ab58fb226e8cf42ac77399b8a4758/README.md#flat-config
+// MDX configuration
+const mdxConfig = defineConfig([
     {
-        name: 'custom/mdx/recommended',
+        name: 'project/mdx-files',
         files: ['**/*.mdx'],
         ...mdxPlugin.flat,
         processor: mdxPlugin.createRemarkProcessor({
-            // I disabled linting code blocks
-            // as I was having performance issues
+            // Disable linting code blocks for better performance
             lintCodeBlocks: false,
             languageMapper: {},
         }),
     },
     {
-        name: 'custom/mdx/code-blocks',
+        name: 'project/mdx-code-blocks',
         files: ['**/*.mdx'],
         ...mdxPlugin.flatCodeBlocks,
         rules: {
@@ -247,45 +247,39 @@ const mdxConfig = defineConfig(
             'prefer-const': 'error',
         },
     },
-)
-
-const reactHookConfig = defineConfig(
     {
-        // https://github.com/facebook/react/tree/main/packages/eslint-plugin-react-hooks
-        name: 'custom/react-hook/recommended',
-        files: ['**/*.ts?(x)'],
-        plugins: {
-            'react-hooks': reactHooksPlugin,
-        },
+        name: 'project/mdx-react-overrides',
+        files: ['**/*.mdx'],
         rules: {
-            ...reactHooksPlugin.configs['recommended-latest'].rules
+            // MDX often has unescaped entities in text content
+            'react/no-unescaped-entities': 'off',
         },
     }
-)
+])
 
-const reactCompilerConfig = defineConfig(
-   {
-       name: 'custom/react-compiler/recommended',
-       files: ['**/*.ts?(x)'],
-       plugins: {
-           'react-compiler': reactCompilerPlugin,
-       },
-       rules: {
-           ...reactCompilerPlugin.configs.recommended.rules
-       },
-   },
-)
+// React Compiler configuration (experimental)
+const reactCompilerConfig = defineConfig([
+    {
+        name: 'project/react-compiler',
+        files: ['**/*.{jsx,tsx}'],
+        plugins: {
+            'react-compiler': reactCompilerPlugin,
+        },
+        rules: {
+            'react-compiler/react-compiler': 'error',
+        },
+    },
+])
 
-const config = [
+// Export the complete configuration
+// Order matters: ignores first, then general configs, then specific overrides
+export default defineConfig([
     ...ignoresConfig,
     ...eslintConfig,
-    ...tseslintConfig,
-    ...nextConfig,
+    ...typescriptConfig,
+    ...reactConfig,
     ...stylisticConfig,
-    ...tailwindcssConfig,
+    ...tailwindConfig,
     ...mdxConfig,
-    ...reactHookConfig,
     ...reactCompilerConfig,
-]
-
-export default config
+])
