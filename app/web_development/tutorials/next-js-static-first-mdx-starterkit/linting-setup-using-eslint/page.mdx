@@ -12,6 +12,7 @@ import { sharedMetaDataArticle } from '@/shared/metadata-article'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
+import ArchivedMessage from '@/components/tutorial/ArchivedMessage'
 
 export const metadata = {
     title: frontmatter.title,
@@ -44,6 +45,8 @@ export const metadata = {
     { label: 'Web development tutorials', href: '/web_development' },
     { label: 'Next.js 15 static first MDX starterkit', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit' },
 ]} />
+
+<ArchivedMessage case="next-js-15-linting-to-16" />
 
 # Next.js 15 and ESLint v9 linting setup
 

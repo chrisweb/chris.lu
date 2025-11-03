@@ -1,5 +1,7 @@
 .tocContainer {
+    max-height: 40vh;
     margin-bottom: var(--main-spacing);
+    overflow-y: auto;
 }
 
 /* on phone don't show toc */

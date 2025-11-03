@@ -1,11 +1,34 @@
 //import styles from './footer.module.css'
 import BaseLink from '@/components/base/Link'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHeart, faBug, faComments } from '@fortawesome/free-solid-svg-icons'
 
 const Disclaimer: React.FC = () => {
 
     return (
         <>
-            <hr /*className={/*styles.layoutFooterSeparator} *//>
+            <hr />
+            <p className="fontSmall fontDarker alignLeft">
+                <FontAwesomeIcon icon={faHeart} size="1x" className="startInlineIcon" />
+                <BaseLink href="https://buymeacoffee.com/chriswwweb">Buying me a coffee</BaseLink>
+                or&nbsp;
+                <BaseLink href="https://github.com/sponsors/chrisweb">sponsoring me</BaseLink>
+                on GitHub, are not mandatory but greatly appreciated, as it allows me to work on more content and keep the project free for everyone
+            </p>
+            <p className="fontSmall fontDarker alignLeft">
+                <FontAwesomeIcon icon={faBug} size="1x" className="startInlineIcon" />
+                If you find a bug / typo or you want to suggest a new feature, then please open an&nbsp;
+                <BaseLink href="https://github.com/chrisweb/chris.lu/issues">Issue</BaseLink>
+                on GitHub.
+            </p>
+            <p className="fontSmall fontDarker alignLeft">
+                <FontAwesomeIcon icon={faComments} className="startInlineIcon" />
+                Suggestions and Ideas are appreciated, please use the&nbsp;
+                <BaseLink href="https://discord.gg/4p59CCTUAJ">chris.lu Discord server</BaseLink>
+                or the&nbsp;
+                <BaseLink href="https://github.com/chrisweb/chris.lu/discussions">discussion board</BaseLink>
+                to leave feedback or ask a question.
+            </p>
             <p className="fontDarker">
                 All content on this site is licensed under a&nbsp;
                 <BaseLink href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</BaseLink>

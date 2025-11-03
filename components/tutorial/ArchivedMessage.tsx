@@ -24,6 +24,20 @@ const ArchivedMessage: React.FC<IArchivedMessageProps> = (props) => {
                         </div>
                     </>
                 )}
+                {props.case === 'next-js-15-linting-to-16' && (
+                    <>
+                        <div className={styles.border}>
+                            <div className={styles.core}>
+                                <p>
+                                    An <BaseLink href="/web_development/tutorials/next-js-16-linting-setup-eslint-9-flat-config"><strong>updated version</strong></BaseLink> of this tutorial for Next.js 16 is available.
+                                    <br />
+                                    <br />
+                                    <span className={styles.message}>This tutorial is for <strong>Next.js 15</strong>. If you&rsquo;re using Next.js 16, please refer to the updated tutorial which includes breaking changes and the latest ESLint setup.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </>
+                )}
             </div>
         </>
     )
