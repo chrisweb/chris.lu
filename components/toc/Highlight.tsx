@@ -25,7 +25,7 @@ const TocHighlight: FC<TocHighlightProps> = (props): JSX.Element => {
 
     const { headingsToObserve, rootMargin, threshold } = props
 
-    const tocHeadingsToObserve = headingsToObserve ?? 'h1, h2, h3'
+    const tocHeadingsToObserve = headingsToObserve ?? 'h1, h2'
     const tocRootMargin = rootMargin ?? '-10% 0px -40% 0px'
     const tocThreshold = threshold ?? 1
 
