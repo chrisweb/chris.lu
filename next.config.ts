@@ -433,7 +433,7 @@ const securityHeadersConfig = (phase: string) => {
 
 }
 
-export default withSentryConfig(withSentryConfig(nextConfig, {
+export default withSentryConfig(nextConfig, {
     // For all available options, see:
     // https://github.com/getsentry/sentry-webpack-plugin#options
 
@@ -482,4 +482,4 @@ export default withSentryConfig(withSentryConfig(nextConfig, {
     // https://docs.sentry.io/product/crons/
     // https://vercel.com/docs/cron-jobs
     automaticVercelMonitors: false,
-}))
+})

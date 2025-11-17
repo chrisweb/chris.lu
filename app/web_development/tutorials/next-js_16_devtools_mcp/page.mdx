@@ -2,7 +2,7 @@
 title: Next.js 16 Devtools MCP in VSCode - Tutorial
 keywords: ['Next.js 16', 'Devtools', 'MCP', 'VSCode', 'Tutorial']
 published: 2025-11-01T23:00:00.000Z
-modified: 2025-11-01T23:00:00.000Z
+modified: 2025-11-17T23:00:00.000Z
 permalink: https://chris.lu/web_development/tutorials/next-js_16_devtools_mcp
 section: Web development
 ---
@@ -106,14 +106,34 @@ You can enable or disable tools, make sure the "MCP Server: Next Devtools" is en
 
 ![VScode extensions view icon](../../../../public/assets/images/app/web_development/tutorials/next-js_16_devtools_mcp/nextjs_mcp_vscode_tools.png)
 
+### Initialize next-devtools
+
+To trigger the initialization, make sure Github Copilot is set to Agent Mode, choose your favorite model (like Claude Sonnet 4.5), then prompt the Copilot Agent the following sentence:
+
+```txt
+Use the next-devtools **init** tool to ensure the Next.js MCP is ready
+```
+
+Make sure to do a quick init every time you start a **new chat** session to ensure it is aware of your next-devtools
+
+> [!TIP]
+> If you have a custom agent file, or if you have a `.github\copilot-instructions.md` then add the following line to them to make initialization happen automatically for each session:
+>  
+> ```txt
+> ## next-devtools MCP
+>  
+> - When starting work, ALWAYS call the the **"init" tool** first, it needs to get called once per session. Do this automatically without being asked.
+> - Use the **"nextjs_runtime" tool** to query Next.js runtime information, diagnostics and internals.
+> - Use the **"nextjs_docs" tool** to look up Next.js documentation when needed.
+> - Use the **"browser_eval" tool** to use use playwright to interact with the web application in a browser-like environment for testing and debugging purposes.
+> ```
+
 ## Upgrading to Next.js 16 using the Next.js 16 Devtools MCP
 
 If you have already upgraded your project's packages to Next.js 16, but haven't done a full upgrade of your own code yet, then you will want to try out the Next.js 16 MCP upgrade tool.
 
 > [!NOTE]
 > AIs can be slow especially when refactoring an existing project, a more efficient and faster way to update some parts of your project is to use the [Next.js 16 codemod](https://nextjs.org/docs/app/guides/upgrading/codemods) for Next.js 16 and use it first, after the codemod is done you can still run the MCP upgrade tool. The AI will notice that some things are already done and skip them, at the end it will give you a recap about the state of your project in regards to Next.js 16.
-
-To trigger the tool, make sure Github Copilot is set to Agent Mode, choose your favorite Agent (like Claude Sonnet 4.5)
 
 I recommend using the slash commands as they guarantee that the right tool will be used, type `/mcp` and then select `/mcp.next-devtools.upgrade-nextjs-16` , this will trigger the tool
 
@@ -143,7 +163,7 @@ To enable the MCP dev server you need to do two things, enabled it in the config
 
 First we edit our next.config.ts file:
 
-```mjs title=".vscode/mcp.json" showLineNumbers {8-9}
+```mjs title="next.config.ts" showLineNumbers {8-9}
 const nextConfig: NextConfig = {
     reactStrictMode: true,
     typedRoutes: true,
@@ -165,9 +185,19 @@ then we start the dev server:
 npm run dev
 ```
 
+### Initialize the next-devtools MCP
+
+Make sure the next-devtools are initialized by sending the following prompt to the agent:
+
+```txt
+Use the next-devtools **init** tool to ensure the Next.js MCP is ready
+```
+
+### Have fun ;)
+
 That's it, the MCP server is now running alongside your dev server, meaning you can try out a prompt like this (make sure you are in agent mode):
 
-```shell
+```txt
 what tools does the nextjs mcp server expose
 ```
 
@@ -177,7 +207,7 @@ Either make sure you have no terminal running the dev server
 
 Or change you do change the prompt to this:
 
-```shell
+```txt
 what tools does the nextjs mcp server expose (dev server is already running on port 3000)
 ```
 
