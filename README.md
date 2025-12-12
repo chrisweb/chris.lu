@@ -16,6 +16,25 @@ This repository contains the source code for my blog ([chris.lu](https://chris.l
 
 On [chris.lu](https://chris.lu), you will find my tutorials and can learn more about me
 
+## Technologies used
+
+During development, I wrote a ["Next.js static first starterkit" tutorial](https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit) showcasing the technologies used in this blog. My favorite approach when working with Next.js is to start with a static core, later you can add dynamic islands where necessary. 
+
+### Content & MDX
+
+I added [MDX](https://mdxjs.com/) support to be able to create content using **@next/mdx**. The project uses a comprehensive MDX plugin pipeline:
+
+- **Remark plugins**: `remark-gfm`, `remark-frontmatter`, `remark-mdx-frontmatter`, [remark-table-of-contents](https://github.com/chrisweb/remark-table-of-contents) (custom)
+- **Rehype plugins**: `rehype-pretty-code`, [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts) (custom), `rehype-slug`, `rehype-autolink-headings`, `rehype-mdx-import-media`
+
+Content is written as MDX files in the `app/` directory with YAML frontmatter for metadata. The `%toc%` placeholder auto-generates a table of contents.
+
+### Special Features
+
+**WebGL Header Animation**: I had a lot of fun doing my [WebGL](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API) header animation using [react-three-fiber](https://github.com/pmndrs/react-three-fiber) (a React renderer for [three.js](https://github.com/mrdoob/three.js)). The animation is dynamically imported and includes adaptive DPR for performance.
+
+**Music Player**: I also added a jukebox like music player (on the top right) using my [web-audio-api-player](https://github.com/chrisweb/web-audio-api-player) and added a dynamic waveform using my [waveform-visualizer](https://github.com/chrisweb/waveform-visualizer) and [waveform-data-generator](https://github.com/chrisweb/waveform-data-generator) packages
+
 ## Quick Start
 
 ### Prerequisites
@@ -48,32 +67,6 @@ On [chris.lu](https://chris.lu), you will find my tutorials and can learn more a
 - **Port already in use**: Set a custom port with `PORT=3001 npm run dev`
 - **Build errors**: Try `npm run lint-fix` to auto-fix linting issues
 - **Node version mismatch**: Check your Node version with `node -v` (must be >= 20.11.0)
-
-## Technologies used
-
-During development, I wrote a ["Next.js static first starterkit" tutorial](https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit) showcasing the technologies used in this blog. My favorite approach when working with Next.js is to start with a static core, later you can add dynamic islands where necessary. 
-
-### Core Stack
-
-- **[Next.js](https://github.com/vercel/next.js)** 16.x (canary) - React framework with App Router
-- **[React](https://github.com/facebook/react)** 19.x - UI library
-- **[TypeScript](https://www.typescriptlang.org/)** 5.x - Type safety
-- **[ESLint](https://eslint.org/)** 9.x - Code linting (flat config)
-
-### Content & MDX
-
-I added [MDX](https://mdxjs.com/) support to be able to create content using **@next/mdx**. The project uses a comprehensive MDX plugin pipeline:
-
-- **Remark plugins**: `remark-gfm`, `remark-frontmatter`, `remark-mdx-frontmatter`, [remark-table-of-contents](https://github.com/chrisweb/remark-table-of-contents) (custom)
-- **Rehype plugins**: `rehype-pretty-code`, [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts) (custom), `rehype-slug`, `rehype-autolink-headings`, `rehype-mdx-import-media`
-
-Content is written as MDX files in the `app/` directory with YAML frontmatter for metadata. The `%toc%` placeholder auto-generates a table of contents.
-
-### Special Features
-
-**WebGL Header Animation**: I had a lot of fun doing my [WebGL](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API) header animation using [react-three-fiber](https://github.com/pmndrs/react-three-fiber) (a React renderer for [three.js](https://github.com/mrdoob/three.js)). The animation is dynamically imported and includes adaptive DPR for performance.
-
-**Music Player**: I also added a jukebox like music player (on the top right) using my [web-audio-api-player](https://github.com/chrisweb/web-audio-api-player) and added a dynamic waveform using my [waveform-visualizer](https://github.com/chrisweb/waveform-visualizer) and [waveform-data-generator](https://github.com/chrisweb/waveform-data-generator) packages
 
 ## Development Workflow
 
