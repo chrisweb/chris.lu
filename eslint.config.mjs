@@ -7,7 +7,6 @@ import reactHooksPlugin from 'eslint-plugin-react-hooks'
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y'
 import nextPlugin from '@next/eslint-plugin-next'
 import stylisticPlugin from '@stylistic/eslint-plugin'
-import tailwindcssPlugin from 'eslint-plugin-tailwindcss'
 import reactCompilerPlugin from 'eslint-plugin-react-compiler'
 import * as mdxPlugin from 'eslint-plugin-mdx'
 
@@ -193,38 +192,6 @@ const stylisticConfig = defineConfig([
     }
 ])
 
-// Tailwind CSS configuration
-const tailwindConfig = defineConfig([
-    {
-        name: 'project/tailwindcss',
-        files: ['**/*.{jsx,tsx}'],
-        plugins: {
-            tailwindcss: tailwindcssPlugin,
-        },
-        rules: {
-            // Class name ordering and validation
-            'tailwindcss/classnames-order': 'warn',
-            'tailwindcss/enforces-negative-arbitrary-values': 'warn',
-            'tailwindcss/enforces-shorthand': 'warn',
-            'tailwindcss/no-contradicting-classname': 'warn',
-            'tailwindcss/no-unnecessary-arbitrary-value': 'warn',
-            'tailwindcss/no-custom-classname': 'off', // Allow custom classes
-            'tailwindcss/migration-from-tailwind-2': 'off', // Not needed for new projects
-        },
-        settings: {
-            tailwindcss: {
-                // Point to your Tailwind config file
-                config: `${import.meta.dirname}/tailwind.config.ts`,
-                // CSS files to analyze for Tailwind classes
-                cssFiles: [
-                    'app/**/*.css',
-                    'components/**/*.css',
-                ],
-            },
-        },
-    },
-])
-
 // MDX configuration
 const mdxConfig = defineConfig([
     {
@@ -279,7 +246,6 @@ export default defineConfig([
     ...typescriptConfig,
     ...reactConfig,
     ...stylisticConfig,
-    ...tailwindConfig,
     ...mdxConfig,
     ...reactCompilerConfig,
 ])
