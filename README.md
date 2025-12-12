@@ -16,40 +16,105 @@ This repository contains the source code for my blog ([chris.lu](https://chris.l
 
 On [chris.lu](https://chris.lu), you will find my tutorials and can learn more about me
 
+## Quick Start
+
+### Prerequisites
+
+- **Node.js** >= 20.11.0
+- **npm** (comes with Node.js)
+
+### Installation & First Run
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/chrisweb/chris.lu.git
+   cd chris.lu
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm i
+   ```
+
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+### Troubleshooting
+
+- **Port already in use**: Set a custom port with `PORT=3001 npm run dev`
+- **Build errors**: Try `npm run lint-fix` to auto-fix linting issues
+- **Node version mismatch**: Check your Node version with `node -v` (must be >= 20.11.0)
+
 ## Technologies used
 
-During the development of the blog, I wrote a ["Next.js static MDX blog" tutorial](https://chris.lu/web-development/tutorials/next-js-static-mdx-blog) that showcases most of the technologies that I used
+During development, I wrote a ["Next.js static first starterkit" tutorial](https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit) showcasing the technologies used in this blog. My favorite approach when working with Next.js is to start with a static core, later you can add dynamic islands where necessary. 
 
-The framework I used is [Next.js 15.x](https://github.com/vercel/next.js) with [React 19.x](https://github.com/facebook/react)
+### Core Stack
 
-I added [MDX](https://mdxjs.com/) support to be able to create content using **@next/mdx**. I then also used several MDX (remark and rehype) plugins and even built two myself, [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts) and [remark-table-of-contents](https://github.com/chrisweb/remark-table-of-contents)
+- **[Next.js](https://github.com/vercel/next.js)** 16.x (canary) - React framework with App Router
+- **[React](https://github.com/facebook/react)** 19.x - UI library
+- **[TypeScript](https://www.typescriptlang.org/)** 5.x - Type safety
+- **[ESLint](https://eslint.org/)** 9.x - Code linting (flat config)
 
-I had a lot of fun doing my [WebGL](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API) header animation using [react-three-fiber](https://github.com/pmndrs/react-three-fiber) (a React renderer for [three.js](https://github.com/mrdoob/three.js))
+### Content & MDX
 
-I also added a jukebox like music player (on the top right) using my [web-audio-api-player](https://github.com/chrisweb/web-audio-api-player) and added a dynamic waveform using my [waveform-visualizer](https://github.com/chrisweb/waveform-visualizer) and [waveform-data-generator](https://github.com/chrisweb/waveform-data-generator) packages
+I added [MDX](https://mdxjs.com/) support to be able to create content using **@next/mdx**. The project uses a comprehensive MDX plugin pipeline:
+
+- **Remark plugins**: `remark-gfm`, `remark-frontmatter`, `remark-mdx-frontmatter`, [remark-table-of-contents](https://github.com/chrisweb/remark-table-of-contents) (custom)
+- **Rehype plugins**: `rehype-pretty-code`, [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts) (custom), `rehype-slug`, `rehype-autolink-headings`, `rehype-mdx-import-media`
+
+Content is written as MDX files in the `app/` directory with YAML frontmatter for metadata. The `%toc%` placeholder auto-generates a table of contents.
+
+### Special Features
+
+**WebGL Header Animation**: I had a lot of fun doing my [WebGL](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API) header animation using [react-three-fiber](https://github.com/pmndrs/react-three-fiber) (a React renderer for [three.js](https://github.com/mrdoob/three.js)). The animation is dynamically imported and includes adaptive DPR for performance.
+
+**Music Player**: I also added a jukebox like music player (on the top right) using my [web-audio-api-player](https://github.com/chrisweb/web-audio-api-player) and added a dynamic waveform using my [waveform-visualizer](https://github.com/chrisweb/waveform-visualizer) and [waveform-data-generator](https://github.com/chrisweb/waveform-data-generator) packages
+
+## Development Workflow
+
+### Running Locally
+
+- `npm run dev` - Standard development server
+- `npm run dev-ssl` - Development with self-signed SSL certificate (requires certificate setup)
+
+### Linting
+
+The project uses ESLint 9 with flat config for code and MDX content:
+
+- `npm run lint` - Check code and MDX for issues (used in build)
+- `npm run lint-fix` - Auto-fix linting problems
+- `npm run lint-nocache` - Lint without cache (useful for debugging)
+- `npm run lint-debug` - Verbose linting output
+- `npm run check-urls` - Validate external URLs in content (run sporadically, not in build)
+
+**When to use which**:
+- During development: `npm run lint-fix` to auto-correct issues
+- Before committing: `npm run lint` to verify
+- Periodically: `npm run check-urls` to validate external links
+
+### Creating Content
+
+1. **Blog posts/tutorials**: Create `.mdx` files in `app/web_development/posts/` or `app/web_development/tutorials/`
+2. **Add frontmatter** at the top of each MDX file:
+   ```yaml
+   ---
+   title: "Your Post Title"
+   description: "Brief description"
+   date: "2025-01-15"
+   ---
+   ```
+3. **Table of contents**: Use `%toc%` placeholder where you want the TOC to appear
+4. **Images**: Place in `public/assets/images/` and reference with `/assets/images/your-image.jpg`
+5. **OpenGraph images**: Create `opengraph-image.tsx` in the same directory as your page or use a global opengraph for a route segment as done in app\web_development\og\[key]
 
 ## Feedback & bug reports
 
 If you have feedback or want to discuss something, please use the [chris.lu github discussions](https://github.com/chrisweb/chris.lu/discussions), and if you find a bug, please report it using the [github issues](https://github.com/chrisweb/chris.lu/issues)
-
-## Scripts
-
-`npm run dev`: launch a dev server instance  
-`npm run dev-ssl`: same as dev but with a self signed SSL certificate for local HTTPS requests  
-`npm run build`: production build  
-`npm run build-debug`: production build with more verbose output, useful to debug builds  
-`npm run start`: start production server  
-`npm run next-lint`: backup of the default next.js lint command (use the next command instead)  
-`npm run lint`: custom linting script for code and MDX content  
-`npm run lint-nocache`: same as previous but without using the cache, useful when debugging  
-`npm run lint-debug`: linting command but more verbose output  
-`npm run lint-fix`: linting command that also attempts to automatically fix problems  
-`npm run info`: the default next.js script to get some info about the project  
-`npm run check-urls`: check if URLs in documents are alive or not, this linting is separate from the main linting script so that it can be used sporadically, as it makes lots of calls to 3rd party URLs to check if they are alive, it does not run during the build process so that a unreachable URL of a third party won't break the build, it is separate from eslint process and uses remark-cli
-
-## Node.js version
-
-Next.js [requires >=18.18.0](https://github.com/vercel/next.js/commit/ecd2be6d3b74d7af2513a8b355408a8f88ec6b25) (same as ESLint v9), Typescript ESLint [requires Node.js >=20.11.0](https://typescript-eslint.io/getting-started/typed-linting) (for import.meta.dirname in ESM files), this projects [package.json](./package.json) has the engines node set to 20.11.0, the latest Node.js LTS is 22.11.0 (Nov. 2024)
 
 ## License
 
