@@ -66,6 +66,7 @@
     display: flex;
     flex-flow: column;
     justify-content: center;
+    align-items: center;
     background-color: var(--main-background-color);
     --cornerSideLength: 12px;
     /* next line is a hack: in chrome a small line sometimes appears */
