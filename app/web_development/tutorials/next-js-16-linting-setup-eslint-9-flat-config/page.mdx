@@ -3,7 +3,7 @@ title: Next.js 16 Linting setup using ESLint 9 flat config
 description: Complete guide to setting up ESLint 9 with flat config in Next.js 16, including breaking changes, TypeScript, React, MDX, and modern tooling
 keywords: ['Next.js 16', 'ESLint 9', 'flat config', 'linting', 'TypeScript', 'React compiler', 'accessibility', 'defineConfig', 'typescript-eslint']
 published: 2025-11-03T10:00:00.000Z
-modified: 2025-11-03T10:00:00.000Z
+modified: 2025-12-13T10:00:00.000Z
 permalink: https://chris.lu/web_development/tutorials/next-js-16-linting-setup-eslint-9-flat-config
 section: Web development
 ---
@@ -477,44 +477,70 @@ export default defineConfig([
 
 If you're using Tailwind CSS, add the Tailwind plugin for class name validation and ordering.
 
-### Installing Tailwind plugin
+### Installing Tailwind v4 plugin
+
+There are two plugins for linting tailwindcss, the plugin we will use is [eslint-plugin-better-tailwindcss](https://www.npmjs.com/package/eslint-plugin-better-tailwindcss).
+
+As an alternative there is [eslint-plugin-tailwindcss](https://www.npmjs.com/package/eslint-plugin-tailwindcss) which works great with tailwind v2/3 but I had problems with v4 not finding my css file on windows. They have a beta with [tailwind v4 support](https://github.com/francoismassart/eslint-plugin-tailwindcss/releases/tag/v4.0.0-beta.0) and you can track the progress in their [v4 repository](https://github.com/francoismassart/eslint-plugin-tailwindcss/tree/alpha/v4).
+
+### eslint-plugin-better-tailwindcss
+
+> [!NOTE]  
+> We're going to use eslint-plugin-better-tailwindcss **v4** (beta), if you had this plugin installed before and are migrating to v4, then have a look at the [v4 changelog](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/v4/CHANGELOG.md#v400-beta0) as there are some breaking changes.
+
+#### installation
 
 ```shell
-npm install --save-dev --save-exact eslint-plugin-tailwindcss
+npm i eslint-plugin-better-tailwindcss@beta --save-dev --save-exact
 ```
 
-### Tailwind configuration
+> [!NOTE]
+> Note the @beta at the end of the package name. We are installing the **beta version**. A stable release is expected to ship before the end of 2025 (as stated by the author of the plugin in [#119](https://github.com/chrisweb/chris.lu/issues/119)). I am currently using the beta and had no problems so far.
+
+#### configuration
 
 ```javascript title="eslint.config.mjs"
 import { defineConfig } from 'eslint/config'
-import tailwindcssPlugin from 'eslint-plugin-tailwindcss'
+import tailwindcssPlugin from 'eslint-plugin-better-tailwindcss'
 
-const tailwindConfig = defineConfig([
+const tailwindcssConfig = defineConfig(
     {
-        name: 'project/tailwindcss',
-        files: ['**/*.{jsx,tsx}'],
+        name: 'custom/tailwindcss/recommended',
+        files: ['**/*.ts?(x)'],
         plugins: {
-            tailwindcss: tailwindcssPlugin,
+            'better-tailwindcss': tailwindcssPlugin,
         },
         rules: {
-            'tailwindcss/classnames-order': 'warn',
-            'tailwindcss/enforces-negative-arbitrary-values': 'warn',
-            'tailwindcss/enforces-shorthand': 'warn',
-            'tailwindcss/no-contradicting-classname': 'warn',
-            'tailwindcss/no-unnecessary-arbitrary-value': 'warn',
-            'tailwindcss/no-custom-classname': 'off',
+            // all rules (recommended = stylistic + correctness)
+            ...tailwindcssPlugin.configs.recommended.rules,
+            // stylistic rules only
+            //...tailwindcssPlugin.configs.stylistic.rules,
+            // correctness rules only
+            //...tailwindcssPlugin.configs.correctness.rules,
+            // single customizations
+            // https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/main/README.md#rules
+            // https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/main/docs/rules/enforce-consistent-line-wrapping.md
+            'better-tailwindcss/enforce-consistent-line-wrapping': ['warn', {
+                printWidth: 160,                   // Maximum line length (0 = disabled)
+                classesPerLine: 0,                 // Maximum classes per line (0 = disabled)
+                group: 'newLine',                  // Group separation: 'emptyLine' | 'never' | 'newLine'
+                preferSingleLine: true,            // Keep variants on single line until limits exceeded
+                indent: 4,                         // Indentation: number of spaces or 'tab'
+                lineBreakStyle: 'windows',         // Line breaks: 'windows' (\r\n) | 'unix' (\n)
+            }],
         },
         settings: {
-            tailwindcss: {
-                config: `${import.meta.dirname}/tailwind.config.ts`,
-                cssFiles: [
-                    'app/**/*.css',
-                    'components/**/*.css',
-                ],
-            },
+            'better-tailwindcss': {
+                // tailwindcss (4) css based
+                entryPoint: 'app/global.css',
+                // for tailwindcss (3) with a config
+                //"tailwindConfig": "tailwind.config.js"
+                // https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/main/docs/rules/no-unregistered-classes.md
+                detectComponentClasses: true, // Enable custom class detection
+            }
         },
     },
-])
+)
 
 // Add to export
 export default defineConfig([
@@ -524,12 +550,22 @@ export default defineConfig([
     ...reactConfig,
     ...mdxConfig,
     ...stylisticConfig,
-    ...tailwindConfig,
+    ...tailwindcssConfig,
 ])
 ```
 
+The rule you probably will want to configure is [enforce-consistent-line-wrapping](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/main/docs/rules/enforce-consistent-line-wrapping.md).
+
+One thing you might want to adjust is changing `lineBreakStyle` to `unix` (in the example it is set to windows as I use Windows).
+
+I also increased the max line width `printWidth` to 160 (a personal preference) and set the indentation to 4 spaces. Based on your coding style preference, you might want to change it to 2.
+
+> [!TIP]
+> **Understanding detectComponentClasses**: If you define custom classes in `@layer components` blocks in your CSS (common in design systems), enable `detectComponentClasses: true`. Without it, the linter flags your custom component classes as "unknown" even though they're valid. This setting scans your CSS files and validates custom classes alongside Tailwind utilities—essential if you're mixing Tailwind with custom components.
+
 > [!MORE]
-> [ESLint Plugin Tailwind CSS](https://github.com/francoismassart/eslint-plugin-tailwindcss)  
+> [ESLint Plugin Better Tailwind CSS](https://github.com/schoero/eslint-plugin-better-tailwindcss)  
+> [ESLint Plugin Better Tailwind CSS markdown docs](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/main/docs)
 
 ## React Compiler support
 
@@ -568,7 +604,7 @@ export default defineConfig([
     ...reactConfig,
     ...mdxConfig,
     ...stylisticConfig,
-    ...tailwindConfig,
+    ...tailwindcssConfig,
     ...reactCompilerConfig,
 ])
 ```
@@ -693,34 +729,34 @@ First, install all necessary packages. Here's the complete list:
 
 ```shell
 # Core ESLint
-npm install --save-dev --save-exact eslint@latest
+npm i eslint@latest --save-dev --save-exact
 
 # TypeScript ESLint
-npm install --save-dev --save-exact typescript-eslint
+npm i typescript-eslint --save-dev --save-exact
 
 # React and Next.js plugins
-npm install --save-dev --save-exact eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-jsx-a11y @next/eslint-plugin-next
+npm i eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-jsx-a11y @next/eslint-plugin-next --save-dev --save-exact
 
 # Code style
-npm install --save-dev --save-exact @stylistic/eslint-plugin
+npm i @stylistic/eslint-plugin --save-dev --save-exact
 
 # Tailwind CSS (optional, only if you use Tailwind)
-npm install --save-dev --save-exact eslint-plugin-tailwindcss
+npm i eslint-plugin-better-tailwindcss@beta --save-dev --save-exact
 
 # MDX support (optional, only if you use MDX)
-npm install --save-dev --save-exact eslint-plugin-mdx
+npm i eslint-plugin-mdx --save-dev --save-exact
 
 # React Compiler (optional, only if you use React Compiler)
-npm install --save-dev --save-exact eslint-plugin-react-compiler
+npm i eslint-plugin-react-compiler --save-dev --save-exact
 
 # TypeScript config support (optional, only if you want eslint.config.ts)
-npm install --save-dev --save-exact jiti @types/eslint
+npm i jiti @types/eslint --save-dev --save-exact
 ```
 
-Or install everything at once:
+Or i everything at once:
 
 ```shell
-npm install --save-dev --save-exact eslint@latest typescript-eslint eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-jsx-a11y @next/eslint-plugin-next @stylistic/eslint-plugin eslint-plugin-tailwindcss eslint-plugin-mdx eslint-plugin-react-compiler jiti @types/eslint
+npm i eslint@latest typescript-eslint eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-jsx-a11y @next/eslint-plugin-next @stylistic/eslint-plugin eslint-plugin-better-tailwindcss@beta eslint-plugin-mdx eslint-plugin-react-compiler jiti @types/eslint --save-dev --save-exact
 ```
 
 ### Minimal setup steps
@@ -779,7 +815,7 @@ import reactHooksPlugin from 'eslint-plugin-react-hooks'
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y'
 import nextPlugin from '@next/eslint-plugin-next'
 import stylisticPlugin from '@stylistic/eslint-plugin'
-import tailwindcssPlugin from 'eslint-plugin-tailwindcss'
+import tailwindcssPlugin from 'eslint-plugin-better-tailwindcss'
 import reactCompilerPlugin from 'eslint-plugin-react-compiler'
 import * as mdxPlugin from 'eslint-plugin-mdx'
 
@@ -966,36 +1002,42 @@ const stylisticConfig = defineConfig([
 ])
 
 // Tailwind CSS configuration
-const tailwindConfig = defineConfig([
+const tailwindcssConfig = defineConfig(
     {
-        name: 'project/tailwindcss',
-        files: ['**/*.{jsx,tsx}'],
+        name: 'custom/tailwindcss/recommended',
+        files: ['**/*.ts?(x)'],
         plugins: {
-            tailwindcss: tailwindcssPlugin,
+            'better-tailwindcss': tailwindcssPlugin,
         },
         rules: {
-            // Class name ordering and validation
-            'tailwindcss/classnames-order': 'warn',
-            'tailwindcss/enforces-negative-arbitrary-values': 'warn',
-            'tailwindcss/enforces-shorthand': 'warn',
-            'tailwindcss/no-contradicting-classname': 'warn',
-            'tailwindcss/no-unnecessary-arbitrary-value': 'warn',
-            'tailwindcss/no-custom-classname': 'off', // Allow custom classes
-            'tailwindcss/migration-from-tailwind-2': 'off', // Not needed for new projects
+            // all rules (recommended = stylistic + correctness)
+            ...tailwindcssPlugin.configs.recommended.rules,
+            // stylistic rules only
+            //...tailwindcssPlugin.configs.stylistic.rules,
+            // correctness rules only
+            //...tailwindcssPlugin.configs.correctness.rules,
+            // single customizations
+            // https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/main/README.md#rules
+            // https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/main/docs/rules/enforce-consistent-line-wrapping.md
+            'better-tailwindcss/enforce-consistent-line-wrapping': ['warn', {
+                printWidth: 160,                   // Maximum line length (0 = disabled)
+                classesPerLine: 0,                 // Maximum classes per line (0 = disabled)
+                group: 'newLine',                  // Group separation: 'emptyLine' | 'never' | 'newLine'
+                preferSingleLine: true,            // Keep variants on single line until limits exceeded
+                indent: 4,                         // Indentation: number of spaces or 'tab'
+                lineBreakStyle: 'windows',         // Line breaks: 'windows' (\r\n) | 'unix' (\n)
+            }],
         },
         settings: {
-            tailwindcss: {
-                // Point to your Tailwind config file
-                config: `${import.meta.dirname}/tailwind.config.ts`,
-                // CSS files to analyze for Tailwind classes
-                cssFiles: [
-                    'app/**/*.css',
-                    'components/**/*.css',
-                ],
-            },
+            'better-tailwindcss': {
+                // tailwindcss (4) css based
+                entryPoint: 'app/global.css',
+                // for tailwindcss (3) with a config
+                //"tailwindConfig": "tailwind.config.js"
+            }
         },
     },
-])
+)
 
 // MDX configuration
 const mdxConfig = defineConfig([
@@ -1051,7 +1093,7 @@ export default defineConfig([
     ...typescriptConfig,
     ...reactConfig,
     ...stylisticConfig,
-    ...tailwindConfig,
+    ...tailwindcssConfig,
     ...mdxConfig,
     ...reactCompilerConfig,
 ])
