@@ -19,7 +19,8 @@ const StaticImage: React.FC<IProps> = (props) => {
                 objectPosition: 'center',
             }}
             sizes="100vw"
-            priority
+            fetchPriority="high"
+            loading="eager"
             placeholder="blur"
         />
     )

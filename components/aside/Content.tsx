@@ -12,7 +12,14 @@ const AsideContent: React.FC = () => {
         <div className={styles.content}>
             <ShareButton />
             <a href="https://www.buymeacoffee.com/chriswwweb" className={`${styles.coffeeButton} shake`} rel="noopener noreferrer" target="_blank">
-                <Image src={buyMeACoffeeImport} priority fill alt="buy me a coffee, please" />
+                <Image
+                    src={buyMeACoffeeImport}
+                    alt="buy me a coffee, please"
+                    style={{
+                        width: '100%',
+                        height: 'auto',
+                    }}
+                />
             </a>
             <span className="fontDarker">* Please 😉</span>
             <p>
