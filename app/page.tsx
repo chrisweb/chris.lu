@@ -4,6 +4,19 @@ import Link from 'next/link'
 import ImageAnimatedEmoji from '@/components/base/image/AnimatedEmoji'
 import gifWaveStaticImport from '@/public/assets/images/noto_emoji_animated/48/waving.gif'
 import webpWaveStaticImport from '@/public/assets/images/noto_emoji_animated/48/waving.webp'
+import { sharedMetaData } from '@/shared/metadata'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+    title: 'Chris.lu - Web Development, Games, Music, Lego & More',
+    alternates: {
+        canonical: 'https://chris.lu/',
+    },
+    openGraph: {
+        ...sharedMetaData.openGraph,
+        url: 'https://chris.lu/',
+    },
+}
 
 export default function Homepage() {
 
