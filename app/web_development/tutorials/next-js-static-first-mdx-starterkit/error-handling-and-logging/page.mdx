@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
@@ -35,6 +36,8 @@ export const metadata = {
         tags: frontmatter.keywords,
     },
 }
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
 
 %toc%
 
@@ -89,7 +92,7 @@ export default function Error({
 }
 ```
 
-Lines 5 to 8: we create a Typescript interface for the props our error boundary
+Lines 5 to 8: we create a TypeScript interface for the props our error boundary
 
 Lines 10 to 13: a Next.js error boundary will give you two useful things, the error itself and a function that can rerender the segment in which the error occurred
 
@@ -189,7 +192,7 @@ After the installation, the wizard will automatically get launched, and it will 
 
 **Are you using Sentry SaaS or self-hosted Sentry?** You probably want to choose **Sentry SaaS (sentry.io)** like I did (but if you are a company and need a custom solution, then you might want to look at the hosted version), then press `Enter`.
 
-**Do you already have an account?** chose **Yes** (if you did follow the previous chapter or already had an account before), then press `Enter` (or choose **No** if you have no account yet and follow the [account creation](/web_development/posts/sentry-io#create-an-account-sign-up) process)
+**Do you already have an account?** choose **Yes** (if you did follow the previous chapter or already had an account before), then press `Enter` (or choose **No** if you have no account yet and follow the [account creation](/web_development/posts/sentry-io#create-an-account-sign-up) process)
 
 Then, the sentry wizard will ask you to log in, which will open the sentry login page in your default browser. Log into your account, then go back to your terminal.
 
@@ -204,15 +207,15 @@ Now, Sentry will install the latest Sentry SDK for Next.js.
 > [!WARN]  
 > be aware that some packages might have a problem with the extra attributes that Sentry adds to the DOM of a component, to make the Annotations feature work. If you want to learn more about this problem, then I recommend reading the ["Issues with Sentry Component Annotations" chapter of the "Sentry" post](/web_development/posts/sentry-io#issues-with-sentry-component-annotations)  
 
-**Do you want to create an example page** chose **YES** (we will later use it to test the Sentry setup, and then we will delete it)
+**Do you want to create an example page** choose **YES** (we will later use it to test the Sentry setup, and then we will delete it)
 
-**Are you using a CI/CD tool to build and deploy your application?** chose **YES** (if you are using Vercel, GitHub actions, or any other CI/CD deployment tool); If you do NOT use one,  choose **NO**)
+**Are you using a CI/CD tool to build and deploy your application?** choose **YES** (if you are using Vercel, GitHub Actions, or any other CI/CD deployment tool); If you do NOT use one,  choose **NO**)
 
 The Sentry.io Wizard will give you a **SENTRY_AUTH_TOKEN** string if you choose yes. If you use a CI/CD for your deployments, copy the token, and save it in a secure location, you will need this token later if, for example, you set up a custom GitHub action. You will want to add that token environment variable to your GitHub secrets. If you use another CI/CD service, check out their documentation to learn how to use that token to upload source maps to Sentry automatically. If using Vercel, you can use the [Sentry integration for Vercel](https://vercel.com/integrations/sentry), which will set the Vercel environment variables for you, or if you prefer you can add the token manually to your environment variables using the [Vercel environment variables interface](https://vercel.com/docs/projects/environment-variables).
 
 CI/CD tools can authenticate themselves to Sentry.io using the **SENTRY_AUTH_TOKEN** environment variable and then use the Sentry.io API to automatically upload the source maps of your build to Sentry.io. Later, if there is a bug report on Sentry.io, it will be able to use the source maps instead of the minified build files to show you where the error occurred.
 
-**Did you configure CI as shown above?** chose **YES**
+**Did you configure CI as shown above?** choose **YES**
 
 That was the last question:
 
@@ -238,7 +241,7 @@ npm i @sentry/nextjs@next --save-exact
 This will replace the current version of Sentry for Next.js with a more up to date but also more experimental version
 
 > [!WARN]  
-> be careful when you chose what version you install as there is not always an alpha or beta available, sometimes the newest beta or alpha that is tagged with **next** (on npmjs) will actually be older than the version tagged as **latest**  
+> be careful when you choose what version you install as there is not always an alpha or beta available, sometimes the newest beta or alpha that is tagged with **next** (on npmjs) will actually be older than the version tagged as **latest**  
 
 ## Sentry configuration
 
@@ -348,10 +351,10 @@ As of now (dec. 2024) there is no workaround available for this, you need to mak
 In the meantime if you are interested in seeing how the Sentry JS SDK support for Turbopack progresses, then I recommend subscribing to their ["Turbopack Support" issue #8105](https://github.com/getsentry/sentry-javascript/issues/8105)
 
 > [!NOTE]  
-> I assume the first Sentry SDK release that will be fully compatible with Turbopack will be v9 (this is an assumption)!? But before that happens there is a quite long list of [Sentry javascript SDK v9 tasks](https://github.com/getsentry/sentry-javascript/issues/14225), the Turbopack changes are related to **withSentryConfig**  
+> I assume the first Sentry SDK release that will be fully compatible with Turbopack will be v9 (this is an assumption)!? But before that happens there is a quite long list of [Sentry JavaScript SDK v9 tasks](https://github.com/getsentry/sentry-javascript/issues/14225), the Turbopack changes are related to **withSentryConfig**  
 
 > [!MORE]  
-> [Sentry "javascript SDK v9 tasks" issue](https://github.com/getsentry/sentry-javascript/issues/14225)  
+> [Sentry "JavaScript SDK v9 tasks" issue](https://github.com/getsentry/sentry-javascript/issues/14225)  
 
 ## The instrumentation file
 
@@ -420,7 +423,7 @@ Sentry.init({
         }),
     ],
 
-    environment: process.env.NODE_ENV ? process.env.NODE_ENV : '',
+    environment: process.env.NEXT_PUBLIC_VERCEL_ENV ?? process.env.NODE_ENV,
 })
 ```
 
@@ -434,7 +437,7 @@ Lines 22 and 27: we replace the default sentry values with our replaysOnErrorSam
 
 Line 31: we set the **replaysSessionSampleRate** to zero (related to the changes we did line 10 to 12)
 
-Line 42: we pass the environment to Sentry, meaning Sentry will know if the environment is preview or production (that value is based on the Vercel environment on which Next.js got deployed)
+Line 42: we pass the environment to Sentry, we use the **NEXT_PUBLIC_VERCEL_ENV** variable, which Vercel sets to **development**, **preview** or **production** (based on the Vercel environment on which Next.js got deployed), meaning Sentry will know if the environment is preview or production, we can NOT use **NODE_ENV** here, as its value is **production** for the Vercel preview builds as well as for the production builds, so Sentry would not be able to tell those two apart, this is why we only fall back to NODE_ENV if NEXT_PUBLIC_VERCEL_ENV is not set (which is the case when you build locally or deploy somewhere else than on Vercel)
 
 > [!WARN]  
 > If you copy paste the `sentry.client.config.ts` above into your project make sure you update the **YOUR_SENTRY_DSN_URL** placeholder with your own Sentry DSN  
@@ -524,7 +527,7 @@ The Next.js documentation explains well why this file is essential:
 > global-error is the least granular error UI and can be considered "catch-all" error handling for the whole application.
 
 > [!WARN]  
-> same as for the warnings above, if you used the current wizard with Next.js and a typescript configuration file then the wizard will have created a `app/global-error.jsx` file, if this is your case then delete the `app/global-error.jsx` and create a new `app/global-error.tsx` file, then insert the code as shown below
+> same as for the warnings above, if you used the current wizard with Next.js and a TypeScript configuration file then the wizard will have created a `app/global-error.jsx` file, if this is your case then delete the `app/global-error.jsx` and create a new `app/global-error.tsx` file, then insert the code as shown below
 
 We will update the global-error file Sentry just created, and add a slightly different UI using the same reset button we added to the regular error page instead of using the Next.js built in **NextError** component, the final version looks like this:
 

@@ -6,26 +6,24 @@ import HeaderNavigation from '@/components/header/Navigation'
 import Disclaimer from '@/components/footer/Disclaimer'
 import type { Metadata, Viewport } from 'next'
 import { sharedMetaData } from '@/shared/metadata'
-import { Analytics } from '@vercel/analytics/react'
+import { metadataBaseUrl, siteDescription } from '@/shared/site'
+import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
-import { headers } from 'next/headers'
 
 export const metadata: Metadata = {
-    // default next.js value
-    // added this just to make the console message go away
-    metadataBase: process.env.VERCEL_URL
-        ? new URL(`https://${process.env.VERCEL_URL}`)
-        : new URL(`http://localhost:${process.env.PORT ?? '3000'}`),
+    // resolves relative metadata urls (open graph / twitter images)
+    metadataBase: metadataBaseUrl(),
     title: {
         template: '%s | chris.lu',
         default: 'Home | chris.lu',
     },
-    description: 'chrisweb\'s blog about web development, games, Lego, music, memes, ... | chris.lu',
+    description: siteDescription,
     keywords: ['web development', 'lego', 'games', 'music', 'about me'],
     twitter: null,
-    alternates: {
-        canonical: 'https://chris.lu/',
-    },
+    // NO canonical here on purpose: a canonical set on the root layout is
+    // inherited by every page that forgets its own, which would tell search
+    // engines those pages are duplicates of the homepage, each page (the
+    // homepage included) declares its own canonical
     openGraph: {
         ...sharedMetaData.openGraph,
     },
@@ -78,12 +76,9 @@ const anta = Anta({
     display: 'swap',
 })
 
-export default async function RootLayout({ children }: {
+export default function RootLayout({ children }: {
     children: React.ReactNode
 }) {
-    // Access headers to make this a dynamic route and satisfy Sentry's crypto.randomUUID() requirement
-    await headers()
-
     return (
         <html lang="en" className={`${permanentMarkerFont.variable} ${vt323.variable} ${architectsDaughter.variable} ${sourceCodePro.variable} ${anta.variable}`}>
             <head />

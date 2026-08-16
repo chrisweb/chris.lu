@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
@@ -35,6 +36,8 @@ export const metadata = {
         tags: frontmatter.keywords,
     },
 }
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
 
 %toc%
 
@@ -70,9 +73,9 @@ After creating a GitHub account, we need to **create a repository** on GitHub fo
 
 First, we will **install git**, which is a version control tool we will use to synchronize our local code with our remote repository, check out the git post chapter about how to [install git](/web_development/posts/git) if needed.
 
-Next, to be able to write code, we need an Integrated Development Environment (IDE). My preferred IDE to write Javascript (Typescript) code is VSCode (Visual Studio Code), in a future chapter we will also install useful VSCode extensions. Have a look at the [install VSCode](/web_development/posts/vscode) guide in the VSCode post, and while you are in the VSCode post I recommend you also sign in to our GitHub account in VSCode, as described in the [Turn on settings sync (using your GitHub account)](/web_development/posts/vscode#turn-on-settings-sync-using-your-github-account) chapter, to sync our VSCode settings (in the GitHub cloud as a backup and so that you can use the same settings on different devices)
+Next, to be able to write code, we need an Integrated Development Environment (IDE). My preferred IDE to write JavaScript (TypeScript) code is VSCode (Visual Studio Code), in a future chapter we will also install useful VSCode extensions. Have a look at the [install VSCode](/web_development/posts/vscode) guide in the VSCode post, and while you are in the VSCode post I recommend you also sign in to our GitHub account in VSCode, as described in the [Turn on settings sync (using your GitHub account)](/web_development/posts/vscode#turn-on-settings-sync-using-your-github-account) chapter, to sync our VSCode settings (in the GitHub cloud as a backup and so that you can use the same settings on different devices)
 
-Next to be able to create a Javascript backend and run our Javascript code locally, we need to install the Node.js runtime (which comes with npm which we will use to manage our node_modules packages), have a look at the [install Node.js (and npm)](/web_development/posts/node-js) chapter in the Node.js post, or if you prefer you can use a [Node.js alternative](/web_development/posts/node-js#nodejs-alternatives) as there are several good ones available today
+Next to be able to create a JavaScript backend and run our JavaScript code locally, we need to install the Node.js runtime (which comes with npm which we will use to manage our node_modules packages), have a look at the [install Node.js (and npm)](/web_development/posts/node-js) chapter in the Node.js post, or if you prefer you can use a [Node.js alternative](/web_development/posts/node-js#nodejs-alternatives) as there are several good ones available today
 
 > [!NOTE]  
 > The **Next.js >= 14** "app directory features" require Node.js v18.17 or later, so if you skipped the Node.js installation document because you already have Node.js installed, then just make sure you have a version installed that is high enough

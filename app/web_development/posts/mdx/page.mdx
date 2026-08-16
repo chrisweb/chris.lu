@@ -1,5 +1,6 @@
 ---
 title: MDX
+description: What MDX is behind the scenes - how micromark, remark and rehype turn markdown into MDAST and HAST, plus useful sources, VSCode extensions and frameworks with MDX support
 keywords: ['MDX', 'markdown', 'md', 'micromark', 'unifiedjs', 'commonmark', 'remark', 'rehype', 'MDAST', 'HAST']
 published: 2024-08-10T11:22:33.444Z
 modified: 2025-01-01T10:10:10.444Z
@@ -8,9 +9,11 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 
 export const metadata = {
     title: frontmatter.title,
+    description: frontmatter.description,
     keywords: frontmatter.keywords,
     alternates: {
         canonical: frontmatter.permalink,
@@ -30,6 +33,8 @@ export const metadata = {
         tags: frontmatter.keywords,
     },
 }
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/posts_mdx/opengraph-image" />
 
 %toc%
 
@@ -59,7 +64,7 @@ The specifications are all managed by the [syntax-tree organization on github](h
 
 **MDAST** and **HAST** are the syntax tree specifications, but the actual tools are Remark and Rehype. 
 
-[remnark](https://github.com/remarkjs/remark) is a tool that transforms markdown with plugins, which they explain well in their README:
+[remark](https://github.com/remarkjs/remark) is a tool that transforms markdown with plugins, which they explain well in their README:
 
 > remark supports CommonMark by default. Non-standard markdown extensions can be enabled with plugins
 
@@ -67,7 +72,7 @@ The specifications are all managed by the [syntax-tree organization on github](h
 
 MDX supports both **remark** and **rehype** plugins. More about plugins in the ["using plugins to extend MDX" chapter](#using-plugins-to-extend-mdx)
 
-Note: if you want to experiment with MDX content, there is a great tool called [MDX playground](https://mdxjs.com/playground/). You can experiment with MDX content, and it will help you visualize how MDX content gets transformed from MDAST (markdown AST) to HAST (HTML AST) to ESAST (javascript / JSX)
+Note: if you want to experiment with MDX content, there is a great tool called [MDX playground](https://mdxjs.com/playground/). You can experiment with MDX content, and it will help you visualize how MDX content gets transformed from MDAST (markdown AST) to HAST (HTML AST) to ESAST (JavaScript / JSX)
 
 ## Collection of informative sources
 
@@ -85,7 +90,7 @@ Note: if you want to experiment with MDX content, there is a great tool called [
 * [MDX specification (mdx-js) github repository](https://github.com/mdx-js/specification)
 * [MDXAST chapter in the mdx-js specification](https://github.com/mdx-js/specification#mdxast)
 * [MDXHAST chapter in the mdx-js specification](https://github.com/mdx-js/specification#mdxhast)
-* [remnark github repository](https://github.com/remarkjs/remark)
+* [remark github repository](https://github.com/remarkjs/remark)
 * [rehype github repository](https://github.com/rehypejs/rehype)
 * [MDX playground](https://mdxjs.com/playground/)
 
@@ -121,7 +126,7 @@ Unlike other extension, the **MDX extension** does not require any custom settin
 
 ## Frameworks with MDX support
 
-All major frameworks support MDX either out of the box or via packages that you can install separately, Next.js has [@next/mdx](https://www.npmjs.com/package/@next/mdx), but there are alternatives that I listed in the [@next/mdx alternatives](#nextmdx-alternatives) chapter, Astro has [@astrojs/mdx](https://github.com/withastro/astro/tree/main/packages/integrations/mdx/), Remix devs often use [mdx-bundler](https://www.npmjs.com/package/mdx-bundler), and Gatsby has [gatsby-plugin-mdx](https://www.npmjs.com/package/gatsby-plugin-mdx), there is also a popular project called [Docusaurus](https://docusaurus.io/) which uses MDX, but it is more opinionated than the other frameworks as it focuses on building a documentation website
+All major frameworks support MDX either out of the box or via packages that you can install separately, Next.js has [@next/mdx](https://www.npmjs.com/package/@next/mdx), but there are alternatives that I listed in the [@next/mdx alternatives](#nextjs-mdx--markdown-packages) chapter, Astro has [@astrojs/mdx](https://github.com/withastro/astro/tree/main/packages/integrations/mdx/), Remix devs often use [mdx-bundler](https://www.npmjs.com/package/mdx-bundler), and Gatsby has [gatsby-plugin-mdx](https://www.npmjs.com/package/gatsby-plugin-mdx), there is also a popular project called [Docusaurus](https://docusaurus.io/) which uses MDX, but it is more opinionated than the other frameworks as it focuses on building a documentation website
 
 ### Next.js MDX & markdown packages
 

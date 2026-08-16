@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
@@ -35,6 +36,8 @@ export const metadata = {
         tags: frontmatter.keywords,
     },
 }
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
 
 %toc%
 
@@ -216,14 +219,14 @@ It is a powerful CSP directive (which is still experimental), to better understa
 
 If you are interested in using that directive then have a look at my [require-trusted-types-for](/web_development/posts/csp#require-trusted-types-for-directive) chapter in the CSP post
 
-## Example of a CSS violation
+## Example of a CSP violation
 
 > [!NOTE]  
 > To check for best practices, I used a tool by Google called [CSP Evaluator](https://csp-evaluator.withgoogle.com/), it showed a green checkmark for every directive except the **script-src** directive, where it mentioned that it would be better to remove **'unsafe-inline'**, however unsafe-inline is there because Next.js uses inline scripts a lot
 
-Let's edit the CSP rules in our `next.config.mjs` file and make the **script-src** directive stricter by not using **unsafe-eval** as recommended by the CSP Evaluator service, like so:
+Let's edit the CSP rules in our `next.config.ts` file and make the **script-src** directive stricter by not using **unsafe-eval** (the CSP Evaluator flagged **'unsafe-inline'**, which we can not remove, but as an exercise we will remove **'unsafe-eval'** to see what a violation looks like), like so:
 
-```js title="security.config.mjs" showLineNumbers{87} {6}#special
+```js title="next.config.ts" showLineNumbers{87} {6}#special
     // for dev environment enable unsafe-eval for hot-reload
     return `
         ${defaultCSPDirectives}
@@ -246,7 +249,7 @@ Go back into the browser and check the [Console Tab](https://developer.chrome.co
 Those violations are there because Next.js uses the JavaScript [eval()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval) function, eval is required for development scripts like the Hot Module Reload (HMR) tool, which is a tool that reloads our page every time we save a file.
 
 > [!WARN]  
-> JavaScript [eval()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#never_use_direct_eval!) function can be dangerous when you display content that got through user inputs (like a textarea or an input field), as a malicious hacker could inject Javascript as a sting and then your eval function would turn that string into executable Javascript that could do things like stealing user credentials to a server owned by the malicious actor
+> JavaScript [eval()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#never_use_direct_eval!) function can be dangerous when you display content that got through user inputs (like a textarea or an input field), as a malicious hacker could inject JavaScript as a sting and then your eval function would turn that string into executable JavaScript that could do things like stealing user credentials to a server owned by the malicious actor
 
 For HMR to work, we need to re-add the **'unsafe-eval** value to the **script-src** rule. Do that now, and then save the file to fix violations again.
 
@@ -429,7 +432,7 @@ Lines 81 and 96: we add the **reportCSPViolations** variable, which contains a r
 
 ## Adding security headers
 
-There are also some useful security headers besides CSP headers. Let's add 3 of those security headers to our Next.js configuration.
+There are also some useful security headers besides CSP headers. Let's add 4 of those security headers to our Next.js configuration.
 
 ### Next.js configuration security headers
 
@@ -490,7 +493,7 @@ Congratulations 🎉 you just made your project a lot more secure by setting up 
 > [!MORE]  
 > [MDN "Strict-Transport-Security" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)  
 > [MDN "Referrer-Policy" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy)  
-> [MDN "X-Content-Type-Options" documentation]()  
+> [MDN "X-Content-Type-Options" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options)  
 > [MDN "X-Frame-Options" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options)  
 
 <Pagination

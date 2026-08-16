@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react'
 import { Canvas, type GLProps } from '@react-three/fiber'
-import { PerspectiveCamera, SoftShadows, AdaptiveDpr /*, Loader, OrbitControls*//*, PerformanceMonitor, PerformanceMonitorApi/*, Hud, useDetectGPU, useProgress, StatsGl*/ } from '@react-three/drei'
+import { PerspectiveCamera, AdaptiveDpr /*, Loader, OrbitControls*//*, PerformanceMonitor, PerformanceMonitorApi/*, Hud, useDetectGPU, useProgress, StatsGl*/ } from '@react-three/drei'
 import NightSky from './NightSky'
 import Sun from './Sun'
 import SunLight from './SunLight'
@@ -74,7 +74,10 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                 //dpr={Math.min(window.devicePixelRatio, 2)} // pixel ratio, should be 1 or 2
                 dpr={[1, 1.5]} // Limit pixel ratio to improve performance
                 // https://docs.pmnd.rs/react-three-fiber/api/canvas#render-defaults
-                shadows="soft"
+                // since three.js r182 PCFShadowMap is soft (Vogel disk + hardware PCF),
+                // PCFSoftShadowMap ("soft") is deprecated and drei's <SoftShadows /> (PCSS
+                // shader patch) produces invalid GLSL, so "percentage" (PCFShadowMap) it is
+                shadows="percentage"
                 fallback={<Fallback />}
                 aria-label={props.altText}
                 role="img"
@@ -95,7 +98,6 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                     {/*<PerformanceMonitor onChange={onPerformanceChangeHandler} />*/}
                     <color attach="background" args={['#2f0f30']} />
                     <ambientLight color="#ecd7e2" intensity={15} />
-                    <SoftShadows />
                     <NightSky
                         position={[0, 1, -2.1]}
                         scale={[20, 3, 1]}
@@ -113,7 +115,8 @@ const NeonRoadCanvas: React.FC<IProps> = (props) => {
                         scale={[0.8, 0.3, 0]}
                     />
                     <Landscape />
-                    <EffectComposer>
+                    {/* multisampling default is 8, 4 looks the same here and uses less memory */}
+                    <EffectComposer multisampling={4}>
                         <Bloom
                             luminanceThreshold={0.1}
                             intensity={0.6}

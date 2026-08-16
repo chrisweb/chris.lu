@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
@@ -36,6 +37,8 @@ export const metadata = {
         tags: frontmatter.keywords,
     },
 }
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
 
 %toc%
 
@@ -191,7 +194,7 @@ Lines 18 to 24: we use fetch to get both the font file and the background image
 Lines 26 to 85: we use basic HTML and CSS to create the content of our opengraph image; we created a div that covers the whole width and height and used the background image to fill it; then we put a smaller div inside, using **position: absolute** to position it over the background; that div will also display the title; we finally made the background of the title div a bit darker using a black color with the opacity set 0.5 to make it semi transparent
 
 > [!NOTE]  
-> Btw did you notice how line 45 I turned a meme into a typescript comment? 😉
+> Btw did you notice how line 45 I turned a meme into a TypeScript comment? 😉
 
 Make sure the dev server is running and then visit the `http://localhost:3000/blog` blog page. If you then look at the tags inside of the `<head>{:html}` element, you will notice that Next.js has added 5 new opengraph tags for our image:
 
@@ -295,17 +298,17 @@ const size = {
 }
 
 interface OpenGraphImageProps {
-    params: {
+    params: Promise<{
         title: string
-    }
+    }>
 }
 
-export function generateImageMetadata({ params }: OpenGraphImageProps) {
+export async function generateImageMetadata({ params }: OpenGraphImageProps) {
 
     return [
         {
             id: 'blog_opengraph',
-            alt: `${params.title} | example.com`,
+            alt: `${(await params).title} | example.com`,
             size: size,
             contentType: 'image/png',
         },
@@ -314,7 +317,7 @@ export function generateImageMetadata({ params }: OpenGraphImageProps) {
 
 export default async function OGImage(props: OpenGraphImageProps) {
 
-    const { title } = props.params
+    const { title } = await props.params
 
     const kablammoFont = fetch(
         new URL('../../../../public/fonts/Kablammo-Regular.ttf', import.meta.url)
@@ -454,7 +457,7 @@ export default async function Blog({
 
 Line 2: we import the Metadata type to add type information to the return value of our customized generateMetadata function
 
-Line 3: we import the notFound function from the next/navigation package; what the notFound function does is well explained in the typescript tooltip:
+Line 3: we import the notFound function from the next/navigation package; what the notFound function does is well explained in the TypeScript tooltip:
 
 > In a Server Component, this will insert a <meta name="robots" content="noindex" /> meta tag and set the status code to 404.
 > In a Route Handler or Server Action, it will serve a 404 to the caller.

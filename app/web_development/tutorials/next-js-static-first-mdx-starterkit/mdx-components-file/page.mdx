@@ -1,7 +1,7 @@
 ---
 title: The mdx-components file - Next.js 15 Tutorial
 description: The mdx-components file - Next.js 15 static first MDX starterkit | Web development tutorials | www.chris.lu
-keywords: ['CI/CD', 'Vercel', 'build', 'Production', 'preview']
+keywords: ['mdx-components', 'MDX', 'markdown', 'components', 'React', 'CSS class', 'Next.js']
 published: 2024-12-31T23:00:00.000Z
 modified: 2024-12-31T23:00:00.000Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit/mdx-components-file
@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
@@ -35,6 +36,8 @@ export const metadata = {
         tags: frontmatter.keywords,
     },
 }
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
 
 %toc%
 

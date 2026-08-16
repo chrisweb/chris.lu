@@ -1,8 +1,7 @@
 import { ImageResponse } from 'next/og'
 import { imageInfo } from '@/shared/image-info'
-
-// Route segment config
-export const runtime = 'edge'
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 
 // Image metadata
 export const size = {
@@ -20,34 +19,35 @@ interface IImageProps {
     }>
 }
 
+// every banner is known upfront, so generate them all at build time
+// instead of on demand (a request time fetch of our own deployment
+// can not work while building, as the site is not deployed yet)
+export function generateStaticParams() {
+    return Object.keys(imageInfo).map(key => ({ key }))
+}
+
 // Image generation
 export default async function Image(props: IImageProps) {
     const { key } = await props.params
 
-    if (!key) {
-        return new Response('Missing key parameter', { status: 400 })
+    if (!Object.hasOwn(imageInfo, key)) {
+        return new Response('Unknown image key', { status: 404 })
     }
 
     const imageTitle = imageInfo[key][0]
     const imagePath = imageInfo[key][1]
     const overlayPosition = imageInfo[key][2] ?? 'bottom'
 
-    const baseUrl = process.env.VERCEL_URL
-        ? `https://${process.env.VERCEL_URL}`
-        : `http://localhost:${process.env.PORT ?? '3000'}`
+    const antaRegular = readFile(
+        join(process.cwd(), 'public/assets/fonts/Anta-Regular.ttf')
+    )
 
-    const antaRegular = await fetch(
-        new URL('/public/assets/fonts/Anta-Regular.ttf', import.meta.url)
-    ).then(res => res.arrayBuffer())
+    const imageFile = await readFile(
+        join(process.cwd(), 'public/assets/images/app/web_development', imagePath, 'opengraph.jpg')
+    )
 
-    const imageData = await fetch(
-        // relative does NOT work (for me)
-        //new URL('../../../../public/assets/images/app/web_development/' + imagePath + '/opengraph.jpg', import.meta.url)
-        // this works for font but not images
-        //new URL('/public/assets/images/app/web_development/' + imagePath + '/opengraph.jpg', import.meta.url)
-        // using this instead
-        baseUrl + '/assets/images/app/web_development/' + imagePath + '/opengraph.jpg'
-    ).then(res => res.arrayBuffer())
+    // satori (used by ImageResponse) needs an ArrayBuffer (not a Node.js Buffer) for the img src
+    const imageData = new Uint8Array(imageFile).buffer
 
     return new ImageResponse(
         // ImageResponse JSX element
@@ -60,7 +60,7 @@ export default async function Image(props: IImageProps) {
                 }}
             >
                 {
-                    // eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                         // @ts-ignore: this is fine 🔥
                         src={imageData}
@@ -100,7 +100,7 @@ export default async function Image(props: IImageProps) {
             fonts: [
                 {
                     name: 'AntaRegular',
-                    data: antaRegular,
+                    data: await antaRegular,
                     style: 'normal',
                     weight: 400,
                 },

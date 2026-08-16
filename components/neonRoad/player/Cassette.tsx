@@ -1,6 +1,5 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import styles from './cassette.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
@@ -21,23 +20,17 @@ const Walkman: React.FC<IProps> = (props) => {
 
     const { credits } = props
 
-    const [creditsState, setCreditsState] = useState<ICredits>(credits)
-
-    useEffect(() => {
-        setCreditsState(credits)
-    }, [credits])
-
     return (
         <>
             <div className={styles.cassette}>
                 <div className={`${styles.face} ${styles.front}`}>
-                    <a href={creditsState.license} target="_blank" rel="noreferrer" className={styles.songTitle}>
-                        {creditsState.name}
+                    <a href={credits.license} target="_blank" rel="noreferrer" className={styles.songTitle}>
+                        {credits.name}
                         &nbsp;
                         <FontAwesomeIcon icon={faCreativeCommons} color="white" />
                     </a>
-                    <a href={creditsState.artistWebsite} target="_blank" rel="noreferrer" className={styles.artistName}>
-                        {creditsState.artistName}
+                    <a href={credits.artistWebsite} target="_blank" rel="noreferrer" className={styles.artistName}>
+                        {credits.artistName}
                         &nbsp;
                         <FontAwesomeIcon icon={faArrowUpRightFromSquare} color="white" />
                     </a>

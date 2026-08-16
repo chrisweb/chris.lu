@@ -4,6 +4,7 @@ import fs from 'node:fs'
 import { glob } from 'glob'
 import { VFile } from 'vfile'
 import { matter } from 'vfile-matter'
+import { siteUrl } from '@/shared/site'
 
 declare module 'vfile' {
     interface DataMap {
@@ -14,80 +15,66 @@ declare module 'vfile' {
     }
 }
 
+// paths are globbed relative to (and re-joined onto) a statically written
+// "app" segment on purpose, a fully dynamic path.join(process.cwd(), page)
+// makes turbopack trace the WHOLE project into the server bundle
+const appDirectory = path.join(process.cwd(), 'app')
+
+const routeFromFile = (page: string): string => {
+
+    const route = page
+        .replaceAll('\\', '/')
+        .replace('/page.mdx', '')
+
+    return `${siteUrl}/${route}`
+
+}
+
+const modifiedFromFrontmatter = (page: string): Date | undefined => {
+
+    const pagePath = path.join(appDirectory, page)
+    const pageContent = fs.readFileSync(pagePath, 'utf8')
+    const vfile = new VFile(pageContent)
+
+    matter(vfile, { strip: true })
+
+    const modified = vfile.data.matter?.modified
+
+    if (!modified) {
+        return undefined
+    }
+
+    const date = new Date(modified)
+
+    // guard against a malformed frontmatter date ending up in the sitemap
+    return isNaN(date.getTime()) ? undefined : date
+
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
-    const defaultDate = 'August 12, 2024'
-
+    // changeFrequency and priority are deliberately not set, search engines
+    // ignore both, whereas lastModified is used but only stays trustworthy
+    // when it reflects a real edit, so it is emitted only for pages that
+    // actually declare a "modified" date in their frontmatter
     const siteMap: MetadataRoute.Sitemap = [{
-        url: 'https://chris.lu',
-        lastModified: new Date(defaultDate),
-        changeFrequency: 'weekly',
-        priority: 1,
+        url: siteUrl,
     }]
 
-    const mainPages = await glob('app/**/page.mdx', { maxDepth: 3 })
+    // every mdx route on the site, whatever its nesting depth
+    const pages = await glob('**/page.mdx', { cwd: appDirectory })
 
-    mainPages.map((page) => {
+    pages.forEach((page) => {
 
-        const pagePath = path.join(process.cwd(), page)
-        const pageContent = fs.readFileSync(pagePath, 'utf8')
-        const vfile = new VFile(pageContent)
-
-        matter(vfile, { strip: true })
-
-        const frontmatter = vfile.data.matter
-        const url = 'https://chris.lu' + page.replace('app', '').replaceAll('\\', '/').replace('/page.mdx', '')
+        const modified = modifiedFromFrontmatter(page)
 
         siteMap.push({
-            url: url,
-            lastModified: frontmatter?.modified ? new Date(frontmatter.modified) : new Date(defaultDate),
-            changeFrequency: 'weekly',
-            priority: 0.9,
+            url: routeFromFile(page),
+            ...modified && { lastModified: modified },
         })
+
     })
 
-    const webDevPosts = await glob('app/web_development/posts/**/page.mdx', { maxDepth: 5 })
-
-    webDevPosts.map((page) => {
-
-        const pagePath = path.join(process.cwd(), page)
-        const pageContent = fs.readFileSync(pagePath, 'utf8')
-        const vfile = new VFile(pageContent)
-
-        matter(vfile)
-
-        const frontmatter = vfile.data.matter
-        const url = 'https://chris.lu' + page.replace('app', '').replaceAll('\\', '/').replace('/page.mdx', '')
-
-        siteMap.push({
-            url: url,
-            lastModified: frontmatter?.modified ? new Date(frontmatter.modified) : new Date(defaultDate),
-            changeFrequency: 'weekly',
-            priority: 0.8,
-        })
-    })
-
-    const webDevTutorials = await glob('app/web_development/tutorials/**/page.mdx', { maxDepth: 6 })
-
-    webDevTutorials.map((page) => {
-
-        const pagePath = path.join(process.cwd(), page)
-        const pageContent = fs.readFileSync(pagePath, 'utf8')
-        const vfile = new VFile(pageContent)
-
-        matter(vfile)
-
-        const frontmatter = vfile.data.matter
-        const url = 'https://chris.lu' + page.replace('app', '').replaceAll('\\', '/').replace('/page.mdx', '')
-
-        siteMap.push({
-            url: url,
-            lastModified: frontmatter?.modified ? new Date(frontmatter.modified) : new Date(defaultDate),
-            changeFrequency: 'weekly',
-            priority: 0.8,
-        })
-    })
-
-    return siteMap
+    return siteMap.sort((a, b) => a.url.localeCompare(b.url))
 
 }

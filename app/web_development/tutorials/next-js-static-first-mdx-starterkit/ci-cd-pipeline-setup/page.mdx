@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
@@ -36,6 +37,8 @@ export const metadata = {
     },
 }
 
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
+
 %toc%
 
 <article>
@@ -53,15 +56,15 @@ In this part of the tutorial, we will set up a CI/CD pipeline that will automati
 > Vercel is a paid service but their Hobby plan is **free**, so if you haven't tried Vercel yet, you can get an idea of how it performs compared to your current deployment process. For personal blog the hobby plan is enough, but if you plan on deploying a high traffic website then costs will occur, to get a better idea about what is included in the free plan and what the potential costs are, I recommend checking out their [pricing page](https://vercel.com/pricing) first
 
 > [!NOTE]  
-> You might still remember how, in the past, we would use FTP software and manually transfer code to a server, or you might have struggled setting up GitHub actions... When using Vercel, they will set up the workflow for us and start monitoring our repository. If they detect a new commit (or pull request), they will fetch our code and automatically deploy it (on their infrastructure) for us.  
+> You might still remember how, in the past, we would use FTP software and manually transfer code to a server, or you might have struggled setting up GitHub Actions... When using Vercel, they will set up the workflow for us and start monitoring our repository. If they detect a new commit (or pull request), they will fetch our code and automatically deploy it (on their infrastructure) for us.  
 >  
 > This means we don't have to do anything else besides committing our code as we have already done before, but there will be no new additional step, meaning there is no further click on a button needed 😉  
 
-Of course, if you prefer to use GitHub actions to create your own CI/CD pipeline, feel free to do so
+Of course, if you prefer to use GitHub Actions to create your own CI/CD pipeline, feel free to do so
 
 Also, feel free to use another provider like [AWS](https://aws.amazon.com/), [Google cloud (GCP)](https://cloud.google.com/), [Azure](https://azure.microsoft.com/), [Netlify](https://www.netlify.com/), [Heroku](https://www.heroku.com/), to just name a few, but in this example, I show you how easy and quick it is to use [Vercel](https://vercel.com)
 
-I'm not sponsored and don't endorse any of the providers listed here, I just wanted to give Vercel a try for some time and thought it would fit well into this tutorial. So far I really like it, my blog [chris.lu](https://chris.lu) currently uses the hobby plan. I will try to make more tutorials in the future that use other deployment tools and hosting providers, maybe the next tutorial will be about deploying a static website to [GitHub pages](https://pages.github.com/) using [GitHub actions](https://docs.github.com/actions)
+I'm not sponsored and don't endorse any of the providers listed here, I just wanted to give Vercel a try for some time and thought it would fit well into this tutorial. So far I really like it, my blog [chris.lu](https://chris.lu) currently uses the hobby plan. I will try to make more tutorials in the future that use other deployment tools and hosting providers, maybe the next tutorial will be about deploying a static website to [GitHub pages](https://pages.github.com/) using [GitHub Actions](https://docs.github.com/actions)
 
 > [!MORE]  
 > [vercel.com "pricing" page](https://vercel.com/pricing)  

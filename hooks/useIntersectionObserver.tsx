@@ -1,9 +1,8 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 
 const useIntersectionObserver = (querySelector: string, rootMargin: string, threshold: number) => {
 
     const [activeIdState, setActiveIdState] = useState('')
-    const observerRef = useRef<IntersectionObserver | null>(null)
 
     useEffect(() => {
 
@@ -17,23 +16,19 @@ const useIntersectionObserver = (querySelector: string, rootMargin: string, thre
 
         }
 
-        if (typeof observerRef !== 'undefined') {
+        const observer = new IntersectionObserver(handleObserver, {
+            rootMargin: rootMargin,
+            threshold: threshold,
+        })
 
-            observerRef.current = new IntersectionObserver(handleObserver, {
-                rootMargin: rootMargin,
-                threshold: threshold,
-            })
+        const elements = document.querySelectorAll(querySelector)
 
-            const elements = document.querySelectorAll(querySelector)
-
-            elements.forEach((elem) => {
-                if (observerRef.current === null) return
-                observerRef.current.observe(elem)
-            })
-        }
+        elements.forEach((elem) => {
+            observer.observe(elem)
+        })
 
         return () => {
-            observerRef.current?.disconnect()
+            observer.disconnect()
         }
 
     }, [querySelector, rootMargin, threshold])

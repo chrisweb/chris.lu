@@ -5,10 +5,13 @@ import ImageAnimatedEmoji from '@/components/base/image/AnimatedEmoji'
 import gifWaveStaticImport from '@/public/assets/images/noto_emoji_animated/48/waving.gif'
 import webpWaveStaticImport from '@/public/assets/images/noto_emoji_animated/48/waving.webp'
 import { sharedMetaData } from '@/shared/metadata'
+import JsonLd from '@/components/seo/JsonLd'
+import { siteGraph } from '@/shared/json-ld'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
     title: 'Chris.lu - Web Development, Games, Music, Lego & More',
+    description: 'The personal blog of Chris Weber (chrisweb): Next.js and React tutorials, web development posts, plus Lego, games, music and memes.',
     alternates: {
         canonical: 'https://chris.lu/',
     },
@@ -22,6 +25,7 @@ export default function Homepage() {
 
     return (
         <>
+            <JsonLd graph={siteGraph()} />
             <section className="core">
                 <h1 className={`h1 ${styles.specialHeadingMargin}`}>
                     Hello, World!
@@ -34,6 +38,19 @@ export default function Homepage() {
                     <Typing>Web development, Lego bricks, Music, Games, Cooking, Movies & TV shows, Memes</Typing>
                 </p>
                 <div className={styles.portalsGrid}>
+                    <div className={styles.cyberPortalOuterGlow} id="holoarcade">
+                        <div className={styles.cyberPortalBorder}>
+                            <div className={styles.cyberPortalInnerGlow}>
+                                <div className={styles.cyberPortalCore}>
+                                    <p>
+                                        <Link href="/holoarcade" className="hyperLink">HoloArcade:</Link>
+                                        &nbsp;
+                                        The project I am currently building on my own: an AI powered platform where you create your own holo-worlds and holo-characters, and then step into them. Characters that remember you, worlds that change with the time of day, and moments you can turn into images, voices and videos. This portal tells you the whole story 🕹️
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div className={styles.cyberPortalOuterGlow} id="web_development">
                         <div className={styles.cyberPortalBorder}>
                             <div className={styles.cyberPortalInnerGlow}>
@@ -73,7 +90,7 @@ export default function Homepage() {
                             </div>
                         </div>
                     </div>
-                    <div className={styles.cyberPortalOuterGlow} id="lego">
+                    <div className={styles.cyberPortalOuterGlow} id="music">
                         <div className={styles.cyberPortalBorder}>
                             <div className={styles.cyberPortalInnerGlow}>
                                 <div className={styles.cyberPortalCore}>
@@ -86,7 +103,7 @@ export default function Homepage() {
                             </div>
                         </div>
                     </div>
-                    <div className={styles.cyberPortalOuterGlow} id="lego">
+                    <div className={styles.cyberPortalOuterGlow} id="memes">
                         <div className={styles.cyberPortalBorder}>
                             <div className={styles.cyberPortalInnerGlow}>
                                 <div className={styles.cyberPortalCore}>

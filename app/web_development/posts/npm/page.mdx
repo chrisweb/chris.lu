@@ -1,5 +1,6 @@
 ---
 title: npm & package.json
+description: My npm notes - the npm CLI, what goes into a package.json, how to publish your own package on npmjs.com and which npm alternatives exist
 keywords: ['npm', 'package.json', 'publishing', 'package']
 published: 2024-08-08T11:22:33.444Z
 modified: 2025-01-01T01:01:01.001Z
@@ -8,9 +9,11 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 
 export const metadata = {
     title: frontmatter.title,
+    description: frontmatter.description,
     keywords: frontmatter.keywords,
     alternates: {
         canonical: frontmatter.permalink,
@@ -31,6 +34,8 @@ export const metadata = {
     },
 }
 
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/posts_npm/opengraph-image" />
+
 %toc%
 
 <article>
@@ -48,11 +53,11 @@ export const metadata = {
 
 ### Installation
 
-You usually don't need to install NPM manually as it is bundled with Node.js. If you install Node.js, you already have NPM installed.
+You usually don't need to install npm manually as it is bundled with Node.js. If you install Node.js, you already have npm installed.
 
-### checking the current NPM version
+### checking the current npm version
 
-You can use the following command in the VSCode terminal (or your favorite command line tool) to check which version of NPM is currently installed:
+You can use the following command in the VSCode terminal (or your favorite command line tool) to check which version of npm is currently installed:
 
 ```shell
 npm -v
@@ -68,7 +73,7 @@ npm install -g npm@latest
 
 ## package.json
 
-**package.json** is a file you will find in most Javascript (Typescript) projects. Package.json is a JSON file that contains metadata about the project, like the project name, a description and the current version, a list of dependencies as well as devDependencies, scripts (custom scripts that can be run from the command line using `npm run SCRIPT_NAME`), ...
+**package.json** is a file you will find in most JavaScript (TypeScript) projects. Package.json is a JSON file that contains metadata about the project, like the project name, a description and the current version, a list of dependencies as well as devDependencies, scripts (custom scripts that can be run from the command line using `npm run SCRIPT_NAME`), ...
 
 **package-lock.json** is a file that gets created when you install packages using a package manager. It lists the exact version of each installed package and its dependencies (unlike the package.json itself, which often allows a range of versions to be installed). This file is important as it can be used to create reproducible builds. When you test your project on the staging (pre-production) server and then deploy it to production, you don't want the package versions to be different, as this could introduce bugs after you are done testing if a package uses a newer version in production than previously on the staging server.
 
@@ -230,7 +235,7 @@ First, you need to create a personal access token, and then by adding the privat
 
 ```json title="package.json"
 "dependencies": {
-    "GITHUB_REPOSITORY_NAME": "git+https://USER_NAME:PERSONAL_TOKEN@github.com:USER_NAME/REPOSITORY_NAME"
+    "GITHUB_REPOSITORY_NAME": "git+https://USER_NAME:PERSONAL_TOKEN@github.com/USER_NAME/REPOSITORY_NAME.git"
 }
 ```
 
@@ -306,11 +311,11 @@ The beta will not impact your **latest** package, meaning that if users use the 
 npm i PACKAGE_NAME@beta
 ```
 
-## NPM alternatives
+## npm alternatives
 
 The two major developer/code platforms **GitHub** and **GitLab** each have their own **package registries**. If you are interested I recommend you check out the [documentation on how to use packages hosted on GitHub](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#installing-a-package) or the [documentation on how to use packages hosted on GitLab](https://docs.gitlab.com/ee/user/packages/npm_registry/#install-a-package)
 
-In [march 2024 Deno announced jsr.io](https://deno.com/blog/jsr_open_beta), [JSR](https://jsr.io/) is an ESM only (and typescript first) package registry, also good to know is that [JSR has a npm compatibility layer](https://jsr.io/docs/npm-compatibility), check out the **JSR** [docs](https://jsr.io/docs/introduction) if you want to learn more about **publishing** or **installing** packages or check out the [Ryan Dahl introduces JSR at DevWorld 2024](https://youtu.be/MFCn4ce5dVc?si=T857PpDaOL0jROqk) YouTube video
+In [March 2024 Deno announced jsr.io](https://deno.com/blog/jsr_open_beta), [JSR](https://jsr.io/) is an ESM only (and TypeScript first) package registry, also good to know is that [JSR has a npm compatibility layer](https://jsr.io/docs/npm-compatibility), check out the **JSR** [docs](https://jsr.io/docs/introduction) if you want to learn more about **publishing** or **installing** packages or check out the [Ryan Dahl introduces JSR at DevWorld 2024](https://youtu.be/MFCn4ce5dVc?si=T857PpDaOL0jROqk) YouTube video
 
 > [!MORE]  
 > [jsr.io](https://jsr.io/)  

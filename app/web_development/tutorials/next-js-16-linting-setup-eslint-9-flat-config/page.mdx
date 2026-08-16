@@ -3,12 +3,13 @@ title: Next.js 16 Linting setup using ESLint 9 flat config
 description: Complete guide to setting up ESLint 9 with flat config in Next.js 16, including breaking changes, TypeScript, React, MDX, and modern tooling
 keywords: ['Next.js 16', 'ESLint 9', 'flat config', 'linting', 'TypeScript', 'React compiler', 'accessibility', 'defineConfig', 'typescript-eslint']
 published: 2025-11-03T10:00:00.000Z
-modified: 2025-12-13T10:00:00.000Z
+modified: 2026-08-15T14:00:00.000Z
 permalink: https://chris.lu/web_development/tutorials/next-js-16-linting-setup-eslint-9-flat-config
 section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
@@ -34,6 +35,8 @@ export const metadata = {
     },
 }
 
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-16-linting-setup-eslint-9-flat-config/opengraph-image" />
+
 %toc%
 
 <article>
@@ -41,6 +44,9 @@ export const metadata = {
 # Next.js 16 Linting setup using ESLint 9 flat config
 
 ![a school teacher underlining errors with red ink](../../../../public/assets/images/app/web_development/tutorials/next-js-16-linting-setup-eslint-9-flat-config/banner.png 'a school teacher underlining errors with red ink { banner }')
+
+> [!WARN]  
+> **This tutorial is deprecated:** it documents my ESLint 9 based setup, which I have since replaced. Several of the plugins used here (`eslint-config-next`, `eslint-plugin-react`, `eslint-plugin-jsx-a11y`, `eslint-plugin-react-compiler`) are NOT compatible with ESLint 10. The up to date version of this tutorial is here: [Next.js 16 Linting setup using ESLint 10 flat config](/web_development/tutorials/next-js-16-linting-setup-eslint-10-flat-config)
 
 Setting up proper linting in your Next.js 16 project is crucial for maintaining code quality and consistency. This comprehensive guide walks you through configuring ESLint 9 with the modern flat config format, including support for TypeScript, React, MDX, and various ESLint plugins.
 
@@ -655,7 +661,7 @@ Update your `package.json` with comprehensive linting scripts:
     "dev": "next dev",
     "build": "npm run lint && next build",
     "start": "next start",
-    "lint": "eslint --cache --cache-location .next/cache/eslint/",
+    "lint": "eslint --cache --cache-location .eslintcache",
     "lint:fix": "eslint --fix",
     "lint:nocache": "eslint",
     "lint:debug": "eslint --debug eslint.config.ts",
@@ -675,7 +681,7 @@ Update your `package.json` with comprehensive linting scripts:
 - `lint:inspect`: Open the Config Inspector web interface
 
 > [!TIP]
-> The `--cache` flag significantly speeds up linting by only checking changed files. Store the cache in `.next/cache/eslint/` to keep it with other Next.js cache files.
+> The `--cache` flag significantly speeds up linting by only checking changed files. Store the cache in a `.eslintcache` file in the project root, which is ESLint's own default location, so that clearing the `.next` build output does not throw the lint cache away with it. Remember to add `.eslintcache` to your `.gitignore`.
 
 ## ESLint debugging tools
 
@@ -771,7 +777,7 @@ npm i eslint@latest typescript-eslint eslint-plugin-react eslint-plugin-react-ho
     "dev": "next dev",
     "build": "npm run lint && next build",
     "start": "next start",
-    "lint": "eslint --cache --cache-location .next/cache/eslint/",
+    "lint": "eslint --cache --cache-location .eslintcache",
     "lint:fix": "eslint --fix"
   }
 }
@@ -1206,7 +1212,7 @@ export default defineConfig([
 Always enable caching in your lint scripts:
 
 ```shell
-eslint --cache --cache-location .next/cache/eslint/
+eslint --cache --cache-location .eslintcache
 ```
 
 ### 5. Progressive enhancement

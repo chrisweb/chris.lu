@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
@@ -35,6 +36,8 @@ export const metadata = {
         tags: frontmatter.keywords,
     },
 }
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
 
 %toc%
 
@@ -101,7 +104,7 @@ Lines 11 to 16: we set some options for the font:
 * like what [subset](https://fonts.google.com/knowledge/glossary/subsetting) do we want to use, in our case latin
 * the CSS variable (**--font-kablammo**) we want to use for the font
 * the (font-)[weight](https://fonts.google.com/knowledge/glossary/weight) that we will we use
-* the [display](https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display) strategy defines what happens during the period when the font is still getting fetched and not ready to be used, Next.js sets it to swap by default, so if you chose **swap** as in this example you could also just not set it or if you prefer to let the browser chose the display strategy then use **auto** as value, as described on the [chrome developer "font-display" page](https://developer.chrome.com/blog/font-display) when you chose auto most browsers will use a technique similar to **block**, meaning that for a short period of time, the browser will use an invisible fallback font face (to avoid layout shifts) and then when the font is ready it will swap in the font
+* the [display](https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display) strategy defines what happens during the period when the font is still getting fetched and not ready to be used, Next.js sets it to swap by default, so if you choose **swap** as in this example you could also just not set it or if you prefer to let the browser choose the display strategy then use **auto** as value, as described on the [chrome developer "font-display" page](https://developer.chrome.com/blog/font-display) when you choose auto most browsers will use a technique similar to **block**, meaning that for a short period of time, the browser will use an invisible fallback font face (to avoid layout shifts) and then when the font is ready it will swap in the font
 
 > [!TIP]  
 > Because the fonts are fully typed, you can just type an option name and will get a list of values that you can choose from  

@@ -15,8 +15,9 @@
 
 .clip {
     display: inline-block;
-    background-clip: text;
+    /* prefixed version must come BEFORE the standard property (see navigation.module.css) */
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 

@@ -1,7 +1,7 @@
 ---
-title: Typescript plugin and typed routes - Next.js 15 Tutorial
-description: Typescript plugin and typed routes - Next.js 15 static first MDX starterkit | Web development tutorials | www.chris.lu
-keywords: ['Typescript', 'plugin', 'typed', 'routes', 'Tutorial']
+title: TypeScript plugin and typed routes - Next.js 15 Tutorial
+description: TypeScript plugin and typed routes - Next.js 15 static first MDX starterkit | Web development tutorials | www.chris.lu
+keywords: ['TypeScript', 'plugin', 'typed', 'routes', 'Tutorial']
 published: 2024-12-31T23:00:00.000Z
 modified: 2024-12-31T23:00:00.000Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit/typescript-plugin-and-typed-routes
@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
@@ -36,6 +37,8 @@ export const metadata = {
     },
 }
 
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
+
 %toc%
 
 <article>
@@ -45,26 +48,26 @@ export const metadata = {
     { label: 'Next.js 15 static first MDX starterkit', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit' },
 ]} />
 
-# Typescript plugin and typed routes
+# TypeScript plugin and typed routes
 
-The next step is to ensure **Typescript** is correctly set up, and we will also enable an interesting feature called **statically typed routes**
+The next step is to ensure **TypeScript** is correctly set up, and we will also enable an interesting feature called **statically typed routes**
 
-## Next.js 15 typescript plugin
+## Next.js 15 TypeScript plugin
 
-Since [Next.js 13.1](https://nextjs.org/blog/next-13-1), the Next.js team added a new Typescript plugin:
+Since [Next.js 13.1](https://nextjs.org/blog/next-13-1), the Next.js team added a new TypeScript plugin:
 
 > We've built a new TypeScript plugin that provides suggestions for page and layout configuration options and provides helpful usage hints around Server and Client Components
 
-[Delba de Oliveira](https://github.com/delbaoliveira), which is part of the Next.js developer experience team, posted a [short "Next.js Typescript plugin" introduction video](https://www.youtube.com/watch?v=pqMqn9fKEf8) on Youtube that you may want to watch
+[Delba de Oliveira](https://github.com/delbaoliveira), which is part of the Next.js developer experience team, posted a [short "Next.js TypeScript plugin" introduction video](https://www.youtube.com/watch?v=pqMqn9fKEf8) on Youtube that you may want to watch
 
 > [!MORE]  
-> [Next.js "typescript config" api-reference](https://nextjs.org/docs/app/api-reference/config/typescript)  
+> [Next.js "TypeScript config" api-reference](https://nextjs.org/docs/app/api-reference/config/typescript)  
 
-### Switching from VSCode Typescript to the workspace version
+### Switching from VSCode TypeScript to the workspace version
 
-To make the Next.js 15 typescript plugin work, you need to make sure that the **Typescript** version that VSCode is using is the **workspace version** (the version that Next.js create app just installed) because, by default, VSCode will use a built-in Typescript version.
+To make the Next.js 15 TypeScript plugin work, you need to make sure that the **TypeScript** version that VSCode is using is the **workspace version** (the version that Next.js create app just installed) because, by default, VSCode will use a built-in TypeScript version.
 
-If you don't know yet how to change the typescript version to **workspace version** (in VSCode), check out the [VSCode typescript version](/web_development/posts/vscode#vscode-typescript-version) chapter in the VSCode post
+If you don't know yet how to change the TypeScript version to **workspace version** (in VSCode), check out the [VSCode TypeScript version](/web_development/posts/vscode#vscode-typescript-version) chapter in the VSCode post
 
 As soon as you switch to the **workspace version**, VSCode will create a new `.vscode/settings.json` file (or if you already have a VSCode settings.json, it will extend it):
 
@@ -74,10 +77,10 @@ As soon as you switch to the **workspace version**, VSCode will create a new `.v
 }
 ```
 
-There is nothing wrong in sharing the `.vscode/settings.json` file as it will ensure that everyone that works on your project (or if you use multiple devices yourself) will use the same workspace settings, like the typescript workspace version but also other settings, for example in one of the following chapters we will add helpful VSCode extension and VSCode will be listing in settings file, so that if someone works on your project but does not have the extension installed VSCode will show a modal that suggests installing it.
+There is nothing wrong in sharing the `.vscode/settings.json` file as it will ensure that everyone that works on your project (or if you use multiple devices yourself) will use the same workspace settings, like the TypeScript workspace version but also other settings, for example in one of the following chapters we will add helpful VSCode extension and VSCode will be listing in settings file, so that if someone works on your project but does not have the extension installed VSCode will show a modal that suggests installing it.
 
 > [!TIP]  
-> The Next.js typescript plugin comes with some useful features. It will for example, warn you if something is wrong in how you use the **use client** directive in your components and some more. I recommend keeping an eye on the [Next.js "typescript" documentation](https://nextjs.org/docs/app/api-reference/config/typescript) as the Next.js team adds more features over time
+> The Next.js TypeScript plugin comes with some useful features. It will for example, warn you if something is wrong in how you use the **use client** directive in your components and some more. I recommend keeping an eye on the [Next.js "TypeScript" documentation](https://nextjs.org/docs/app/api-reference/config/typescript) as the Next.js team adds more features over time
 
 Finally, I recommend you commit/sync the new `.vscode/settings.json`.
 
@@ -112,7 +115,7 @@ Then save your `next.config.ts` and add a commit message to explain that we enab
 
 > [!MORE]  
 > [Next.js "configuration options" reference](https://nextjs.org/docs/app/api-reference/config/next-config-js)  
-> [Typescript "JSDoc" reference](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html)  
+> [TypeScript "JSDoc" reference](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html)  
 > [Next.js "Statically Typed Links" documentation](https://nextjs.org/docs/app/api-reference/config/typescript#statically-typed-links)  
 > [Next.js "typedRoutes (experimental)" reference](https://nextjs.org/docs/app/api-reference/config/next-config-js/typedRoutes)  
 
@@ -177,7 +180,7 @@ Line 6: we add a short description for the dev with turbopack script
 
 Then we commit our `package.json` and `README.md` with a commit message that explains that we removed turbo from dev script but also created a new dev-turbo script as backup that uses the turbo flag, then sync your latest changes with your remote git provider
 
-Congratulations 🎉 you just made sure your typescript support is done correctly, which is a significant milestone before starting to code, and you now also have either turbopack or typed routes that will further improve your DX
+Congratulations 🎉 you just made sure your TypeScript support is done correctly, which is a significant milestone before starting to code, and you now also have either turbopack or typed routes that will further improve your DX
 
 <DonationsMessage />
 

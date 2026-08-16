@@ -20,6 +20,10 @@ const ImageAnimatedPicture: React.FC<IAnimatedPictureProps> = (props) => {
         height: props.height,
         quality: 100,
         className: props.className,
+        // forward the loading behavior, so that above the fold usages
+        // can set loading="eager" and fetchPriority="high"
+        loading: props.loading,
+        fetchPriority: props.fetchPriority,
     }
 
     const {
@@ -45,7 +49,6 @@ const ImageAnimatedPicture: React.FC<IAnimatedPictureProps> = (props) => {
             <picture>
                 <source srcSet={avifSource} type="image/avif" />
                 <source srcSet={webpSource} type="image/webp" />
-                {/* eslint-disable-next-line jsx-a11y/alt-text */}
                 <Image src={webpSource} {...rest} />
             </picture>
         </>

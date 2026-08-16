@@ -1,5 +1,6 @@
 ---
 title: Next.js 15 static first MDX starterkit - Tutorial
+description: A step by step tutorial series that builds a static first Next.js 15 starterkit with MDX content, covering the project setup, MDX plugins, styling, linting, CSP and deployment
 keywords: ['Next.js 15', 'nextjs 15', 'mdx', 'static first', 'markdown', 'blog', 'starterkit', 'tutorial', 'react 19', 'react compiler', 'ssg', 'ppr']
 published: 2024-12-31T23:00:00.000Z
 modified: 2024-12-31T23:00:00.000Z
@@ -8,10 +9,12 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Pagination from '@/components/tutorial/Pagination'
 
 export const metadata = {
     title: frontmatter.title,
+    description: frontmatter.description,
     keywords: frontmatter.keywords,
     alternates: {
         canonical: frontmatter.permalink,
@@ -32,6 +35,8 @@ export const metadata = {
     },
 }
 
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
+
 %toc%
 
 <article>
@@ -45,9 +50,9 @@ export const metadata = {
 * [Introduction (& full project source code)](/web_development/tutorials/next-js-static-first-mdx-starterkit/introduction)
 * [Prerequisites (setting up a development environment)](/web_development/tutorials/next-js-static-first-mdx-starterkit/prerequisites)
 * [Project setup (Next.js 15 & React 19) using CNA](/web_development/tutorials/next-js-static-first-mdx-starterkit/project-setup-using-CNA-and-first-commit)
-* [Next.js 15 Typescript plugin and typed routes](/web_development/tutorials/next-js-static-first-mdx-starterkit/typescript-plugin-and-typed-routes)
+* [Next.js 15 TypeScript plugin and typed routes](/web_development/tutorials/next-js-static-first-mdx-starterkit/typescript-plugin-and-typed-routes)
 * [Next.js 15 configuration (next.config.ts)](/web_development/tutorials/next-js-static-first-mdx-starterkit/next-config)
-* [First Typescript page](/web_development/tutorials/next-js-static-first-mdx-starterkit/first-typescript-page)
+* [First TypeScript page](/web_development/tutorials/next-js-static-first-mdx-starterkit/first-typescript-page)
 * [package.json scripts](/web_development/tutorials/next-js-static-first-mdx-starterkit/package-json-scripts)
 * [CI/CD pipeline setup (Vercel)](/web_development/tutorials/next-js-static-first-mdx-starterkit/ci-cd-pipeline-setup)
 * [Error handling and logging (Sentry.io)](/web_development/tutorials/next-js-static-first-mdx-starterkit/error-handling-and-logging)
@@ -56,7 +61,7 @@ export const metadata = {
 * [First MDX page and static rendering](/web_development/tutorials/next-js-static-first-mdx-starterkit/first-mdx-page-and-understanding-static-rendering)
 * [React in MDX and MDX in react](/web_development/tutorials/next-js-static-first-mdx-starterkit/react-in-mdx-and-mdx-in-react)
 * [Linting setup using ESLint 9 flat config](/web_development/tutorials/next-js-static-first-mdx-starterkit/linting-setup-using-eslint)
-* [Typescript linting and custom flat config](/web_development/tutorials/next-js-static-first-mdx-starterkit/typescript-eslint-flat-config)
+* [TypeScript linting and custom flat config](/web_development/tutorials/next-js-static-first-mdx-starterkit/typescript-eslint-flat-config)
 * [Linting MDX (markdown) using remark-lint](/web_development/tutorials/next-js-static-first-mdx-starterkit/eslint-mdx-plugin-and-remark-lint)
 * [Linting in VSCode using ESLint and MDX extensions](/web_development/tutorials/next-js-static-first-mdx-starterkit/linting-in-vscode-using-extensions)
 * [Styling and CSS Modules](/web_development/tutorials/next-js-static-first-mdx-starterkit/styling-and-css)

@@ -69,7 +69,8 @@ const HeaderNavigation: React.FC = () => {
 
     const mainMenuItems: IMainMenuItem[] = [
         { pathname: '/', text: 'Home' },
-        { pathname: '/web_development', text: 'Web development' },
+        { pathname: '/web_development', text: 'Web dev' },
+        { pathname: '/holoarcade', text: 'HoloArcade' },
         { pathname: '/lego', text: 'Lego' },
         { pathname: '/games', text: 'Games' },
         { pathname: '/music', text: 'Music' },

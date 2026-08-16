@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
@@ -35,6 +36,8 @@ export const metadata = {
         tags: frontmatter.keywords,
     },
 }
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
 
 %toc%
 
@@ -284,7 +287,7 @@ experimental: {
 },
 ```
 
-You can also specify which flavor of markdown that you want to use, as they mention in the [Next.js configuration page about the Rust compiler for MDX](https://nextjs.org/docs/app/api-reference/config/next-config-js/mdxRs) documentation, there are currently 2 markdown flavors you can chose fromm **commonmark** and **gfm**
+You can also specify which flavor of markdown that you want to use, as they mention in the [Next.js configuration page about the Rust compiler for MDX](https://nextjs.org/docs/app/api-reference/config/next-config-js/mdxRs) documentation, there are currently 2 markdown flavors you can choose from **commonmark** and **gfm**
 
 To enable mdxRS with github flavored markdown this is the configuration you would use:
 
@@ -302,9 +305,9 @@ experimental: {
 
 ### No support for MDX plugins < Next.js 15.1
 
-In Next.js 15 (and all versions before) if you try to use MDX (remark / rehype) plugins and have mdxRs enabled then they will silently fail to load. This is because the MDX Rust compiler can NOT read plugins written in Javascript.
+In Next.js 15 (and all versions before) if you try to use MDX (remark / rehype) plugins and have mdxRs enabled then they will silently fail to load. This is because the MDX Rust compiler can NOT read plugins written in JavaScript.
 
-In Next.js 15.1 you can still NOT use plugins (written in Javascript) if mdxRs is enabled (mdxRs is the next.config option that controls if the MDX compiler written in rust gets enabled), however @next/mdx added a new loader which will get used if you disable mdxRs. If you use the new loader you can even enable Turbopack (and have plugins still work).
+In Next.js 15.1 you can still NOT use plugins (written in JavaScript) if mdxRs is enabled (mdxRs is the next.config option that controls if the MDX compiler written in rust gets enabled), however @next/mdx added a new loader which will get used if you disable mdxRs. If you use the new loader you can even enable Turbopack (and have plugins still work).
 
 This was just a short introduction to the state of plugins in combination with mdxRs, we will have a more in depth look at how to use plugins in the upcoming page about [MDX plugins](/web_development/tutorials/next-js-static-first-mdx-starterkit/mdx-plugins).
 
@@ -354,7 +357,7 @@ declare module '*.mdx' {
 }
 ```
 
-Because we used **create next app** in our tsconfig.json, we **already** have the following **include** in our `tsconfig.json` (if it isn't in your tsconfig.json, then you need to add it), which means that `*.d.ts` files will get included when typescript does the compilation:
+Because we used **create next app** in our tsconfig.json, we **already** have the following **include** in our `tsconfig.json` (if it isn't in your tsconfig.json, then you need to add it), which means that `*.d.ts` files will get included when TypeScript does the compilation:
 
 ```json title="tsconfig.json" showLineNumbers
 "include": [

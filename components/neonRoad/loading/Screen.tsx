@@ -3,21 +3,19 @@
 import { useEffect, useState } from 'react'
 import styles from './screen.module.css'
 
+const messages = [
+    'Procedurally generating mountains',
+    'Planting trees',
+    'Straitening the road lines',
+]
+
 const LoadingScreen: React.FC = () => {
 
-    const [loadingMessageState, setLoadingMessageState] = useState<string>()
+    const [loadingMessageState, setLoadingMessageState] = useState<string>(messages[0] + '...')
 
     useEffect(() => {
 
-        const messages = [
-            'Procedurally generating mountains',
-            'Planting trees',
-            'Straitening the road lines',
-        ]
-
         let i = 0
-
-        setLoadingMessageState(messages[i] + '...')
 
         const intervalID = setInterval(() => {
             i++

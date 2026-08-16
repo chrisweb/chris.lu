@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
@@ -36,6 +37,8 @@ export const metadata = {
         tags: frontmatter.keywords,
     },
 }
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-static-mdx-blog/opengraph-image" />
 
 %toc%
 
@@ -132,12 +135,12 @@ Instead of using the **next lint** (the Next.js CLI linting command), we will cr
 
 When using the **next lint** CLI command, several things were done for us in the background, however, as we want to use the **ESLint** CLI, we need to set those flags ourselves
 
-For example, to enable ESLint cache, we need to use the `--cache` flag, and then we tell ESLint to use the same `.next/cache/eslint` cache folder that Next.js would use, using the `--cache-location` flag
+For example, to enable ESLint cache, we need to use the `--cache` flag, and then we tell ESLint where to store that cache using the `--cache-location` flag, we use a `.eslintcache` file in the root of the project (ESLint's own default location, so clearing the `.next` build output does not throw the lint cache away with it), remember to add `.eslintcache` to your `.gitignore`
 
 To test our command in the terminal (or your preferred command line tool) we are going to use **npx**:
 
 ```shell
-npx eslint ./ --cache --cache-location .next/cache/eslint
+npx eslint ./ --cache --cache-location .eslintcache
 ```
 
 To specify what files (extensions) get linted, we need to use the `--ext` flag followed by a list of extensions like so:
@@ -156,7 +159,7 @@ We change the **lint script** in the `package.json` to this:
     "build": "next build",
     "start": "next start",
     "next-lint": "next lint",
-    "lint": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint"
+    "lint": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .eslintcache"
   },
 ```
 
@@ -174,7 +177,7 @@ I have 3 more scripts that can be useful that you might want to add, too:
     "build": "next build",
     "start": "next start",
     "next-lint": "next lint",
-    "lint": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .next/cache/eslint",
+    "lint": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --cache --cache-location .eslintcache",
     "lint-nocache": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md",
     "lint-debug": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --debug",
     "lint-fix": "eslint ./ --ext .js,.jsx,.ts,.tsx,.mdx,.md --fix"

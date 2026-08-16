@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
@@ -36,6 +37,8 @@ export const metadata = {
     },
 }
 
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
+
 %toc%
 
 <article>
@@ -58,7 +61,7 @@ Using **npm run scripts** has the advantage of not needing to type (or even reme
 There are a few aliases for scripts that will make your commands even shorter, `start` is one of those so called **lifecycle scripts**, if you add a **start** script (like the one we have in our package.json) allows you to use the short version `npm start` (compared to the longer version `npm run start`)
 
 > [!MORE]  
-> [NPM "using scripts" documentation](https://docs.npmjs.com/cli/v10/using-npm/scripts)
+> [npm "using scripts" documentation](https://docs.npmjs.com/cli/v10/using-npm/scripts)
 
 ## How to use (npm run) scripts
 
@@ -85,7 +88,7 @@ npm run
 This will show you the 5 commands added by create next app.
 
 > [!MORE]  
-> [NPM "run scripts" documentation](https://docs.npmjs.com/cli/v10/commands/npm-run-script)  
+> [npm "run scripts" documentation](https://docs.npmjs.com/cli/v10/commands/npm-run-script)  
 
 ## Edit / add run scripts
 
@@ -138,7 +141,7 @@ Or to start the production server:
 npm start -- -p 4000
 ```
 
-## Next.js CLI commands and NPM npx
+## Next.js CLI commands and npm npx
 
 When using a command like `npm run dev`, npm will check for a script alias and then execute the corresponding command. In the case of `npm run dev`, it will execute `next dev`
 
@@ -219,11 +222,11 @@ To add the info CLI command to your `package.json`, open the `package.json` and 
     },
 ```
 
-Because we use the command as a script (in our `package.json`), we do NOT need to use **npx** anymore, as NPM does it (under the hood) for us.
+Because we use the command as a script (in our `package.json`), we do NOT need to use **npx** anymore, as npm does it (under the hood) for us.
 
 > [!MORE]  
 > [Next.js "cli" documentation](https://nextjs.org/docs/app/api-reference/cli/next)  
-> [NPM "npx" documentation](https://docs.npmjs.com/cli/v10/commands/npx)  
+> [npm "npx" documentation](https://docs.npmjs.com/cli/v10/commands/npx)  
 
 ## Next.js development server HTTPS (localhost SSL certificate)
 
@@ -255,7 +258,7 @@ You can now visit your localhost with SSL at `https://localhost:3000/`
 > [Next.js "HTTPS for local development" documentation](https://nextjs.org/docs/app/api-reference/cli/next#using-https-during-development)  
 
 <Pagination
-    previous={{ label: 'First Typescript page', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/first-typescript-page' }}
+    previous={{ label: 'First TypeScript page', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/first-typescript-page' }}
     next={{ label: 'CI/CD pipeline for automatic deployments', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/ci-cd-pipeline-setup' }}
 />
 

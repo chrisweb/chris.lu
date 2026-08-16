@@ -1,5 +1,6 @@
 ---
 title: Content Security Policy (CSP)
+description: Notes about Content Security Policy - setting a policy via meta element or header, the available directives, the state of violation reporting, logging violations and debugging tips
 keywords: ['CSP', 'Content Security Policy', 'Reporting', 'Logging', 'Debugging', 'policy', 'directive', 'violation']
 published: 2024-08-04T11:22:33.444Z
 modified: 2025-02-23T21:20:01.444Z
@@ -8,9 +9,11 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 
 export const metadata = {
     title: frontmatter.title,
+    description: frontmatter.description,
     keywords: frontmatter.keywords,
     alternates: {
         canonical: frontmatter.permalink,
@@ -31,6 +34,8 @@ export const metadata = {
     },
 }
 
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/posts_csp/opengraph-image" />
+
 %toc%
 
 <article>
@@ -39,14 +44,14 @@ export const metadata = {
 
 ![a female robocop, in front of a police car with the text CSP on the side door, in a futuristic city](../../../../public/assets/images/app/web_development/posts/csp/banner.png '{ banner }')
 
-**Content Security Policy (CSP)** is important as it can help you prevent cross-site scripting (XSS), clickjacking, and other code injection attacks resulting from executing malicious content. For example, malicious content can be hidden in remote code from a banner ads service you included in your app, or it could be hidden in code from a client side package you installed, which comes from a compromised NPM account.
+**Content Security Policy (CSP)** is important as it can help you prevent cross-site scripting (XSS), clickjacking, and other code injection attacks resulting from executing malicious content. For example, malicious content can be hidden in remote code from a banner ads service you included in your app, or it could be hidden in code from a client side package you installed, which comes from a compromised npm account.
 
-For example, using the Content-Security-Policy HTTP header to limit fetching resources only from sources you explicitly declared can mitigate the risks related to content injection attacks. OWASP has an interesting [OWASP "Content Security Policy (CSP)" cheat sheet](https://chromium.googlesource.com/chromium/src/+/HEAD/net/reporting/README.md) page with examples that show you what kind of malicious attacks the different CSP directives can help prevent
+For example, using the Content-Security-Policy HTTP header to limit fetching resources only from sources you explicitly declared can mitigate the risks related to content injection attacks. OWASP has an interesting [OWASP "Content Security Policy (CSP)" cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html) page with examples that show you what kind of malicious attacks the different CSP directives can help prevent
 
 > [!MORE]  
 > [MDN "Content Security Policy (CSP)" documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)  
 > [Wikipedia "Content Security Policy (CSP)" page](https://en.wikipedia.org/wiki/Content_Security_Policy)  
-> [OWASP "Content Security Policy (CSP)" cheat sheet](https://chromium.googlesource.com/chromium/src/+/HEAD/net/reporting/README.md)  
+> [OWASP "Content Security Policy (CSP)" cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html)  
 
 ## CSP policy using a meta element or header
 
@@ -97,7 +102,7 @@ Now that we have a basic CSP, I would check what violations get listed in your b
 Content-Security-Policy: default-src 'none'; img-src 'self'
 ```
 
-For a website that has images, javascript, and CSS and where the javascript code needs to make requests to a remote API (api.example.com), I would use this basic CSP policy:
+For a website that has images, JavaScript, and CSS and where the JavaScript code needs to make requests to a remote API (api.example.com), I would use this basic CSP policy:
 
 ```shell
 Content-Security-Policy: default-src 'none'; img-src 'self'; script-src 'self'; style-src 'self'; connect-src https://api.example.com
@@ -179,7 +184,7 @@ However, how CSP violation reports work has changed over the years. The W3C has 
 * in the [CSP level 1](https://www.w3.org/TR/2012/CR-CSP-20121115/) & [CSP level 2](https://www.w3.org/TR/CSP2/) recommendations, CSP violations get reported using a [report-uri](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-uri) reporting directive, if we look at [caniuse report-uri](https://caniuse.com/?search=report-uri) page we can see that it is supported by all major browsers
 * [CSP level 3](https://www.w3.org/TR/CSP3/) introduces a new [report-to](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-to) **reporting directive** and the w3c has marked the report-uri directive as deprecated. Have a look at the [caniuse report-to](https://caniuse.com/mdn-http_headers_content-security-policy_report-to) page to check how browser support evolves
 
-All browsers support the report-uri directive, but (as of now, june 2024) NOT all browsers support the report-to directive or the Report-To and Reporting-Endpoints headers:
+All browsers support the report-uri directive, but (as of now, June 2024) NOT all browsers support the report-to directive or the Report-To and Reporting-Endpoints headers:
 
 * Firefox supports the report-to directive but is behind a feature flag. The Firefox ["CSP: Implement report-to" Issue](https://bugzilla.mozilla.org/show_bug.cgi?id=1391243) is quite old, but one of the latest comments states that support has landed but is behind a feature flag). Support for the reporting API gets tracked using the ["Considering implementing the Reporting API" Issue](https://bugzilla.mozilla.org/show_bug.cgi?id=1492036) and first shipped in Firefox 65 but has also been behind a feature flag since
 * Safari added support for the report-to directive and the Reporting-Endpoints header in their [technology preview 154](https://developer.apple.com/documentation/safari-technology-preview-release-notes/stp-release-154#Reporting-API) and support landed in [Safari version 16.4](https://developer.apple.com/documentation/safari-release-notes/safari-16_4-release-notes) (released March 27, 2023)
@@ -229,7 +234,7 @@ An example of the Reporting API v0 (**deprecated**) using the report-to directiv
 ```shell
 Content-Security-Policy: ...;
     report-uri https://csp-logging.example.com;
-    report-to {"group":"default","max_age":10886400,"endpoints":[{"url":"https://csp-logging.example.com"}],"include_subdomains":true}
+    report-to default
 ```
 
 And using the Report-to header like this:
@@ -281,7 +286,7 @@ Reporting-Endpoints: default="https://csp-logging.example.com", second-endpoint=
 
 A lot of the paid SAAS Error Monitoring services can also be used to log CSP violations, [Sentry.io CSP logging documentation](https://docs.sentry.io/product/security-policy-reporting/), [raygun.com](https://raygun.com/documentation/language-guides/browser-reporting/crash-reporting/csp/) or [datadoghq.com](https://www.datadoghq.com/blog/content-security-policy-reporting-with-datadog/)
 
-An alternative is to host a logging tool on your own infrastructure. For example, Mozilla published an opensource [CSP logging service called "CSP Logger"](https://github.com/mozilla/csp-logger) on GitHub that is written in Javascript, but it only supports the report-uri directive and has not been updated in years
+An alternative is to host a logging tool on your own infrastructure. For example, Mozilla published an open source [CSP logging service called "CSP Logger"](https://github.com/mozilla/csp-logger) on GitHub that is written in JavaScript, but it only supports the report-uri directive and has not been updated in years
 
 You could also write your own CSP logging endpoint and store the reports in a database, but then you would probably also need to build an admin interface to filter and analyze the reports.
 
@@ -390,7 +395,7 @@ Chrome will send a request to your server using the OPTIONS method to test your 
 So, for example, these headers will NOT work:
 
 ```js
-headers["Access-Control-Allow-Origin"] = "*";
+responseHeaders["Access-Control-Allow-Origin"] = "*";
 responseHeaders["Access-Control-Allow-Methods"] = "*";
 responseHeaders["Access-Control-Allow-Headers"] = "*";
 ```
@@ -398,7 +403,7 @@ responseHeaders["Access-Control-Allow-Headers"] = "*";
 But these will work:
 
 ```js
-headers["Access-Control-Allow-Origin"] = request.headers.origin;
+responseHeaders["Access-Control-Allow-Origin"] = request.headers.origin;
 responseHeaders["Access-Control-Allow-Methods"] = "POST";
 responseHeaders["Access-Control-Allow-Headers"] = "Content-Type";
 ```
@@ -437,10 +442,10 @@ const server = createServer((request, response) => {
         const responseHeaders = {};
         // check if origin is in an allowed list
         if (allowedOrigins.includes(request.headers.origin)) {
-            headers["Access-Control-Allow-Origin"] = request.headers.origin;
+            responseHeaders["Access-Control-Allow-Origin"] = request.headers.origin;
             responseHeaders["Access-Control-Allow-Methods"] = "POST";
             responseHeaders["Access-Control-Allow-Credentials"] = false;
-            //headers["Access-Control-Max-Age"] = '86400'; // 24 hours
+            //responseHeaders["Access-Control-Max-Age"] = '86400'; // 24 hours
             responseHeaders["Access-Control-Max-Age"] = '300'; // 5 minutes (for testing)
             responseHeaders["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept";
             response.writeHead(200, responseHeaders);

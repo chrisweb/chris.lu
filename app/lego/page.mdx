@@ -1,7 +1,9 @@
 import { sharedMetaData } from '@/shared/metadata'
+import SectionJsonLd from '@/components/seo/SectionJsonLd'
 
 export const metadata = {
     title: 'Lego',
+    description: 'My AFOL (adult fan of Lego) corner: MOCs built with real bricks and in STUDIO, like "The Black Queen" pirate ship, plus the Lego YouTube channels I watch.',
     alternates: {
         canonical: 'https://chris.lu/lego',
     },
@@ -10,6 +12,8 @@ export const metadata = {
         url: 'https://chris.lu/lego',
     },
 }
+
+<SectionJsonLd title={metadata.title} description={metadata.description} path="/lego" />
 
 %toc%
 

@@ -1,5 +1,6 @@
 ---
 title: git
+description: My git notes and cheat sheet - installing git, initializing a repository, choosing a branching strategy, cloning, checking status and switching branches
 keywords: ['git', 'commit', 'repository', 'branch']
 published: 2024-08-03T11:22:33.444Z
 modified: 2024-09-04T14:22:33.444Z
@@ -8,9 +9,11 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 
 export const metadata = {
     title: frontmatter.title,
+    description: frontmatter.description,
     keywords: frontmatter.keywords,
     alternates: {
         canonical: frontmatter.permalink,
@@ -30,6 +33,8 @@ export const metadata = {
         tags: frontmatter.keywords,
     },
 }
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/posts_git/opengraph-image" />
 
 %toc%
 
@@ -329,13 +334,13 @@ To tell git to also commit changes where only the case of the filename changed, 
 In your terminal, go to the root of your repository, then use the following command to change the ignorecase configuration for your **current repository**:
 
 ```shell 
-git config core.ignorecase true
+git config core.ignorecase false
 ```
 
 If you want to make that change for all repositories (globally), then add the **--global** flag to the command:
 
 ```shell 
-git config --global core.ignorecase true
+git config --global core.ignorecase false
 ```
 
 **Option 2:** Edit the configuration file (manually)

@@ -1,5 +1,6 @@
 ---
 title: Next.js static MDX blog - Tutorial
+description: A step by step tutorial series that builds a statically rendered blog with Next.js and MDX, from the first page and the MDX plugin chain to linting, error handling and going live
 keywords: ['Next.js', 'Nextjs', 'static', 'mdx', 'blog', 'tutorial', 'react', 'ssg']
 published: 2024-08-13T17:12:21.444Z
 modified: 2024-08-26T06:06:06.444Z
@@ -9,10 +10,12 @@ section: Web development
 
 import VideoScroll from '@/components/video/Scroll'
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Pagination from '@/components/tutorial/Pagination'
 
 export const metadata = {
     title: frontmatter.title,
+    description: frontmatter.description,
     keywords: frontmatter.keywords,
     alternates: {
         canonical: frontmatter.permalink,
@@ -32,6 +35,8 @@ export const metadata = {
         tags: frontmatter.keywords,
     },
 }
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-static-mdx-blog/opengraph-image" />
 
 %toc%
 

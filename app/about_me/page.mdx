@@ -1,9 +1,11 @@
 import webpMindBlowingStaticImport from '@/public/assets/images/animated/mind_blowing.webp'
 import ImageAnimatedPicture from '@/components/base/image/AnimatedPicture'
 import { sharedMetaData } from '@/shared/metadata'
+import SectionJsonLd from '@/components/seo/SectionJsonLd'
 
 export const metadata = {
     title: 'About me',
+    description: 'My journey as a web developer, from typing BASIC games on an Amstrad CPC and running TombRaider.net to Jamendo, Clubee and what I am building now.',
     alternates: {
         canonical: 'https://chris.lu/about_me',
     },
@@ -12,6 +14,8 @@ export const metadata = {
         url: 'https://chris.lu/about_me',
     },
 }
+
+<SectionJsonLd title={metadata.title} description={metadata.description} path="/about_me" type="AboutPage" />
 
 %toc%
 

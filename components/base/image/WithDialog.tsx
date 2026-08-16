@@ -44,6 +44,7 @@ const ImageWithDialog: React.FC<IImageWithDialog> = (props) => {
                     // 336px = (768px - (2 x 32px) - 32px) / 2
                     // thumbnail width = (middle max width - (2 x spacing) - grid space between two columns) / 2
                     sizes="(max-width: 768px) 100vw, 336px"
+                    quality={90}
                     placeholder="blur"
                     alt={`thumbnail: ${altText}`}
                     {...rest}
@@ -67,6 +68,7 @@ const ImageWithDialog: React.FC<IImageWithDialog> = (props) => {
                             maxHeight: intrinsicHeight,
                         }}
                         sizes="100vw"
+                        quality={90}
                         placeholder="blur"
                         alt={altText}
                         {...rest}

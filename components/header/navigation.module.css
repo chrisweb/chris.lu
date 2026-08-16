@@ -1,7 +1,11 @@
 .layoutNavbarContainer {
     /* https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter */
-    backdrop-filter: saturate(200%) blur(5px);
+    /* prefixed version must come BEFORE the standard property: lightningcss
+    (used by Turbopack) merges both into one logical property where the last
+    declaration wins, so with the reverse order it would only emit the -webkit-
+    version, which chromium browsers do not support */
     -webkit-backdrop-filter: saturate(200%) blur(5px);
+    backdrop-filter: saturate(200%) blur(5px);
     background-color: rgba(var(--primary-light-value) / 0.01);
     position: fixed;
     top: 0;

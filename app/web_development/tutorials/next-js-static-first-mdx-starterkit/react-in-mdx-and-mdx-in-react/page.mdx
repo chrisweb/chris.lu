@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
@@ -36,6 +37,8 @@ export const metadata = {
     },
 }
 
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
+
 %toc%
 
 <article>
@@ -56,7 +59,7 @@ Of course, the big advantage of MDX over regular markdown is that we can use any
 > [!TIP]  
 > we are about to create several folders and then add a file, so you might start by creating the first folder and then inside of it the second folder...
 >  
-> But did you know, that you can also right click inside of the File Explorer (in the primary sidebar) and then chose **New File...** and enter the whole `components/tutorial_examples/buttons/Counting.tsx` path at once, VSCode will create all of the folders as well as the file (all in one go)
+> But did you know, that you can also right click inside of the File Explorer (in the primary sidebar) and then choose **New File...** and enter the whole `components/tutorial_examples/buttons/Counting.tsx` path at once, VSCode will create all of the folders as well as the file (all in one go)
 
 First, create a new folder `components` in the root of your project, then inside the `components` folder, create a `tutorial_examples` folder, and inside that folder, another `buttons` folder
 
@@ -131,12 +134,12 @@ Of course, this is just an example, you can import any component you want, for e
 
 ## MDX in pages and components
 
-Besides turning a whole page into an MDX page, as we saw in the previous chapter, you can also import MDX into typescript (.tsx) (or javascript (.js)) pages asl well as into React components, this page contains short examples for each case
+Besides turning a whole page into an MDX page, as we saw in the previous chapter, you can also import MDX into TypeScript (.tsx) (or JavaScript (.js)) pages asl well as into React components, this page contains short examples for each case
 
 > [!MORE]  
 > [Next.js "MDX rendering" documentation](https://nextjs.org/docs/app/building-your-application/configuring/mdx#rendering-mdx)  
 
-### import MDX content into a typescript page
+### import MDX content into a TypeScript page
 
 First, inside of the `/app/(tutorial_examples)` folder, create a new `mdx_in_a_page` folder
 

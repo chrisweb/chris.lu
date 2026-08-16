@@ -1,0 +1,97 @@
+import styles from './page.module.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlay, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
+import { sharedMetaData } from '@/shared/metadata'
+import SectionJsonLd from '@/components/seo/SectionJsonLd'
+
+export const metadata = {
+    title: 'HoloArcade',
+    description: 'HoloArcade.ai, the AI holo-simulation platform I have been building on my own for the last 6 months: build worlds and characters, then step into them.',
+    alternates: {
+        canonical: 'https://chris.lu/holoarcade',
+    },
+    openGraph: {
+        ...sharedMetaData.openGraph,
+        url: 'https://chris.lu/holoarcade',
+    },
+}
+
+<SectionJsonLd title={metadata.title} description={metadata.description} path="/holoarcade" />
+
+%toc%
+
+<article>
+
+# HoloArcade <span className="emoji">🕹️</span>
+
+<a href="https://www.youtube.com/watch?v=2-NXn-Jdfj0" target="_blank" rel="noopener noreferrer" className={styles.trailer}>
+    ![still from the animated HoloArcade beta trailer, the silhouette of a person standing in a bright doorway at the entrance of a dark holo-deck room made of glowing grid lines](../../public/assets/images/app/holoarcade/beta-trailer-thumbnail.png '{ banner }')
+    <span className={styles.playButton} aria-hidden="true"><FontAwesomeIcon icon={faPlay} /></span>
+    <span className={styles.watchPill}>Watch the beta trailer on YouTube <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="sm" className="inlineIcon" /></span>
+</a>
+
+I'm a solo indie dev, and for the last 6 months I have been building something I have wanted since I first watched sci-fi as a kid: [HoloArcade](https://www.holoarcade.ai), a community driven and AI powered platform where you build your own holo-worlds and holo-characters, and then step into them.
+
+It is in **beta** and open to everyone, so if the trailer above made you curious, you can [try it out right now](https://www.holoarcade.ai) <span className="emoji">🚀</span>
+
+## From "to be continued" to a beta
+
+At the very end of my [games](/games) page I wrote that watching solo devs build their dream game had reignited my desire to make my own game someday, but that I didn't have 3 to 4 years of savings lying around to do it, so "who knows what will happen next... to be continued".
+
+This is the "to be continued" <span className="emoji">😅</span>
+
+It is not the game I imagined back when I was typing BASIC listings into an Amstrad CPC (that story is on my [about me](/about_me) page), it turned into something else entirely: not one game, but a machine that lets you build your own.
+
+## What HoloArcade is
+
+The mental model is not "chat with a character card", it is "run your own holodeck". You describe what you want, and no prompt engineering degree is required.
+
+Pick a visual style, set a theme, and drop in whoever you want. A ninja, a caveman, and an alien having coffee in an 80s diner? That is a perfectly valid Wednesday <span className="emoji">🛸</span>
+
+## Two ways to build
+
+I wanted world and character building to feel more like playing a game than like wrestling with prompts, so there are two ways to do it:
+
+* **Talk to the Computer**, an onboard virtual intelligence that builds with you. Describe what you want and watch a playable holo-world take shape: the map, the scenes, the characters, ready to run from the first second
+* **Or take manual control** with the step-by-step builders. Okay, yes, under the hood it is a form with a few sliders, but let me have my moment <span className="emoji">😉</span>
+
+## Living simulations
+
+Once your world is built, you can actually step into it. You land on your world map, walk into any location you built, and interact with whoever is there. You are a player inside the world, not glued to a single character, so you can switch between anyone you meet.
+
+Change the time of day and the world moves with you: the light changes, and the characters go about their schedules, at work in the afternoon, at home at night. Suggest a change of outfit, or suggest moving somewhere else together and, if the character agrees, you travel there and the story continues.
+
+These are the parts I am the most proud of:
+
+* **Characters that actually remember you.** There is no shared pool of knowledge, every character keeps their own layered memory of you, shaped by how you treated them, and like a real memory the small details fade
+* **Outfits that stay put.** No more clothes changing at random between two images, the wardrobe system tracks what everybody is wearing and it only changes when the story calls for it
+* **Moments you can keep.** Freeze a scene between you and a character as a favorite moment, then regenerate it as a fresh image, a voice clip, or a video of that exact moment
+* **Worlds you can hear.** Character voices and ambient music per world, per location, and per scene, because hearing a place changes everything
+
+## A community, not just a sandbox
+
+Your creations stay private until you decide otherwise. When a simulation is ready you can publish it, and every release is a numbered version, a bit like a small game studio would do it. You can also [explore what other people have published](https://www.holoarcade.ai/explore) and play their simulations, adopt community characters and worlds into your own (credits travel with the content, movie style), or just hang out in the [forum](https://www.holoarcade.ai/forum) and talk about the platform.
+
+## Built by one person, on the stack I write about
+
+If you read the [tutorials](/web_development) on this blog, the stack will look familiar, it is the same one, pushed a lot harder: Next.js 16 with the App Router and cache components, React 19 and Tailwind v4.
+
+I did code the entire project using AI, but I did not blindly vibe code it, what I did is AI assisted coding, meaning I reviewed every single line of code the AI wrote.
+
+My trick to keep the knowledge inside the repository, instead of losing it in a chat history, is this one. Before any work starts, I ask the AI to write a markdown plan into a folder called `plans`, in which it describes what it is going to do, and I ask it to add optional questions at the end of that plan. Answering those questions clears up most of the misunderstandings before a single line of code gets written.
+
+Then, when the work is done, I ask the AI to convert the knowledge from that plan into markdown documentation that goes into a `docs` folder. Those documents are the knowledge history of the project, and each of them has a changelog like section, so that months later the AI and I can still remember what we did, and why we did it that way.
+
+Doing all of it alone means design, prompts, database, billing, moderation, legal pages, and the trailer, are all the same person. Some days that is exhausting, most days it is the most fun I have had building software <span className="emoji">🤖</span>
+
+## Free to play, coins for the heavy lifting
+
+Interacting with characters is 100% free. Generating media, or using the heavy duty advanced models, runs on HoloArcade coins from the [shop](https://www.holoarcade.ai/shop). That is what keeps the servers from melting, and the lights on <span className="emoji">💡</span>
+
+## Tell me what you think
+
+I would genuinely like you to [try HoloArcade](https://www.holoarcade.ai) and then tell me what you think. What did you like, what annoyed you, and what should I build next? The [FAQ](https://www.holoarcade.ai/faq) answers the most common questions, and the [forum](https://www.holoarcade.ai/forum) is the best place to leave feedback, but my [Discord](https://discord.gg/4p59CCTUAJ) works too.
+
+To be continued... again <span className="emoji">🌌</span>
+
+</article>

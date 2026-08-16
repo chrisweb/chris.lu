@@ -11,6 +11,7 @@ section: Web development
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBug, faComments } from '@fortawesome/free-solid-svg-icons'
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
@@ -37,6 +38,8 @@ export const metadata = {
         tags: frontmatter.keywords,
     },
 }
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
 
 %toc%
 
@@ -79,7 +82,7 @@ For this tutorial, I downloaded the ["Stranger Things 2 Sign in City at Night"](
 
 Next in the root of your project create a new `public` folder, then inside of the `public` folder create a new `images` folder
 
-Then move the image or photo you just downloaded into the `/public/images` folder and rename the image to `playground_test.jpg` (you can rename the file using VSCode, go into the files explorer that is in the sidebar, open the `/public/images` folder, then right click on the name of the image and chose **rename**, then type in the new name and then press `ENTER`), I renamed it to `playground_test.jpg` as I kept the original extension, but if your photo has another extension, like for example **png**, then you might want to rename your image `playground_test.png`
+Then move the image or photo you just downloaded into the `/public/images` folder and rename the image to `playground_test.jpg` (you can rename the file using VSCode, go into the files explorer that is in the sidebar, open the `/public/images` folder, then right click on the name of the image and choose **rename**, then type in the new name and then press `ENTER`), I renamed it to `playground_test.jpg` as I kept the original extension, but if your photo has another extension, like for example **png**, then you might want to rename your image `playground_test.png`
 
 Then open the `page.mdx` file (that is in the `/app/(tutorial_examples)/mdx-components_playground` folder) we created earlier and add the following content:
 
@@ -110,7 +113,7 @@ Line 1: we import the **next/image** component
 Line 16: we use the **next/image** component
 
 > [!NOTE]  
-> Although our image is in the `/public/images` folder, we have set the `src` to `/images/test.png`, we have omitted the `/public` folder as Next.js will assume that [static assets](https://nextjs.org/docs/app/building-your-application/optimizing/static-assets) like images are in the public folder
+> Although our image is in the `/public/images` folder, we have set the `src` to `/images/playground_test.jpg`, we have omitted the `/public` folder as Next.js will assume that [static assets](https://nextjs.org/docs/app/building-your-application/optimizing/static-assets) like images are in the public folder
 
 If you now look at the code, you will notice that the markdown image element is underlined:
 
@@ -120,7 +123,7 @@ This is the eslint **jsx-a11y** plugin telling us that it is recommended always 
 
 So let's first do that by adding an alt text like this:
 
-```mdx title="/app/app/(tutorial_examples)/mdx-components_playground/page.tsx" showLineNumbers{16} /alt/#special
+```mdx title="/app/(tutorial_examples)/mdx-components_playground/page.mdx" showLineNumbers{16} /alt/#special
 <Image src="/images/playground_test.jpg" alt="Street at night, the wet floor has reflections of the bright lights from multiple billboards and neon signs, one prominent billboard features an advertisement for the TV series Stranger Things 2" />
 ```
 
@@ -138,12 +141,12 @@ As the documentation for next/image tells us:
 
 If we fix this error, we will get another one that tells us that the height is required, too, so let's set the width and height values manually like so:
 
-```mdx title="/app/(tutorial_examples)/mdx-components_playground/page.tsx" showLineNumbers{16} /width="1200" height="750"/#special
+```mdx title="/app/(tutorial_examples)/mdx-components_playground/page.mdx" showLineNumbers{16} /width="1200" height="750"/#special
 <Image src="/images/playground_test.jpg" width="1200" height="750" alt="Street at night, the wet floor has reflections of the bright lights from multiple billboards and neon signs, one prominent billboard features an advertisement for the TV series Stranger Things 2" />
 ```
 
 > [!NOTE]  
-> I set the width to 5398 and height to 3374 in this case, but if you are using another image and don't know its exact dimensions, then you might want to look at the details of the image by hovering over the image in your operating system or by using an image editor like [Gimp](https://www.gimp.org/) to find out what dimensions your image has and then update the width and height of the image element accordingly
+> I set the width to 1200 and height to 750 in this case, but if you are using another image and don't know its exact dimensions, then you might want to look at the details of the image by hovering over the image in your operating system or by using an image editor like [Gimp](https://www.gimp.org/) to find out what dimensions your image has and then update the width and height of the image element accordingly
 
 Now let's save our `page.mdx` file again (assuming our development server is still running), and then we have another look at the `http://localhost:3000/mdx-components_playground` page in our browser
 
@@ -481,7 +484,7 @@ We then replace the **alt text** placeholder with the alt text we used in the pr
 When using markdown, the alt text goes into the brackets after the exclamation mark, like so:
 
 ```md
-![Street at night, the wet floor has reflections of the bright lights from multiple billboards and neon signs; one prominent billboard features an advertisement for the TV series Stranger Things 2](../../../public/images/playground_test.png)
+![Street at night, the wet floor has reflections of the bright lights from multiple billboards and neon signs; one prominent billboard features an advertisement for the TV series Stranger Things 2](../../../public/images/playground_test.jpg)
 ```
 
 > [!NOTE]  
@@ -494,7 +497,7 @@ When using markdown, the alt text goes into the brackets after the exclamation m
 And if you want to have a title, you can add it like so:
 
 ```md
-![Street at night, the wet floor reflects the bright lights from multiple billboards and neon signs. One prominent billboard features an advertisement for the TV series Stranger Things 2](../../../public/images/playground_test.png 'this is the image title')
+![Street at night, the wet floor reflects the bright lights from multiple billboards and neon signs. One prominent billboard features an advertisement for the TV series Stranger Things 2](../../../public/images/playground_test.jpg 'this is the image title')
 ```
 
 The title gets added at the very end after the path (before the closing parenthesis), it is surrounded by single quotes
@@ -519,7 +522,7 @@ Optimizing the LCP (or any core web vitals in general) is important as it will s
 
 For the first LCP optimization, if the dev server is not already running, first start the dev server (using the `npm run dev` command) and then open the `http://localhost:3000/mdx-components_playground` playground page URL in your browser
 
-We see that the image gets displayed, which is good (it is just too big, but we will handle the size with CSS later), now open **browser dev tools** (by pressing the `F12` key or right-click somewhere in the page and chose **Inspect**) and then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) and look at the row of the image
+We see that the image gets displayed, which is good (it is just too big, but we will handle the size with CSS later), now open **browser dev tools** (by pressing the `F12` key or right-click somewhere in the page and choose **Inspect**) and then open the [Network Tab](https://developer.chrome.com/docs/devtools/network) and look at the row of the image
 
 Next, if you look at the [Content-Disposition](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition) and [Content-Type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type) response headers you will notice that the extension of the image is **.webp** and the type is **image/webp**:
 
@@ -529,9 +532,9 @@ If you do NOT define any formats for images in your Next.js configuration file t
 
 This means that even though our source file is a [JPEG](https://web.dev/learn/images/jpeg) image, **next/image** has automatically converted it to a [WEBP](https://web.dev/learn/images/webp) image, this is already great as webp images are smaller than jpg files, but we want to use another **format** that creates even smaller files, and that format is [AVIF](https://web.dev/learn/images/avif). As we can see on the [avif caniuse page](https://caniuse.com/avif), **avif** is a format that is supported by most modern browsers but some older browsers don't, which is why we will also keep **webp** as a fallback
 
-To tell next/image to convert images to **avif** as well, we need to edit our **nextConfigOptions** in the `next.config.mjs` like this:
+To tell next/image to convert images to **avif** as well, we need to edit our **nextConfigOptions** in the `next.config.ts` like this:
 
-```js title="next.config.mjs" showLineNumbers {49-52}
+```js title="next.config.ts" showLineNumbers {49-52}
 import { withSentryConfig } from '@sentry/nextjs';
 import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
@@ -695,7 +698,7 @@ Lines 40 to 49 (and 56 to 57): we check if the type equals **banner**, and if it
 > [!NOTE]  
 > We can later extend this feature to check for other types; by adding more checks for new keywords
 >  
-> Like for example, if an image is of type **header**, we could decide to set the **fill** property as well as the CSS [object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) property to **cover**, what keywords you chose for the types and what you do based on a type is up to you
+> Like for example, if an image is of type **header**, we could decide to set the **fill** property as well as the CSS [object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) property to **cover**, what keywords you choose for the types and what you do based on a type is up to you
 
 Now, all we need to do is update the title of our markdown image element and use our new feature, like so:
 
@@ -734,7 +737,7 @@ This is the second LCP optimization. It will ensure that images above the fold l
 
 ## Image size adjustment using CSS
 
-Make sure the development server is running, and then check out the image on our playground page `http://localhost:3000/mdx-components_playground`, as you can see the image is way too big, this is because right now the height and width are set to the original dimensions of the image, but we want the image width to to be equal to the the article width minus the (left and right) padding
+Make sure the development server is running, and then check out the image on our playground page `http://localhost:3000/mdx-components_playground`, as you can see the image is way too big, this is because right now the height and width are set to the original dimensions of the image, but we want the image width to be equal to the article width minus the (left and right) padding
 
 For that reason, we are going to use the [style attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/style) and set the width for our image(s) to 100%, like so:
 
@@ -803,7 +806,7 @@ The ratio between the physical screen pixel density and the CSS pixel density is
 
 For screens with a **device pixel ratio** of **2**, we will need an image twice the size of an image we use for a lower-density screen. For a **device pixel ratio** of 3, we need an image that is 3 times bigger. This means that if we want an image to be sharp on a screen with a **device pixel ratio** of 3, and the image should be 800 CSS pixels wide, then we need to load an image with a width of 3 x 800 = 2400 pixels.
 
-To ensure we don't use images that are too big (which would waste bandwidth and result in a low LCP score) or images that are too small (which would get scaled up by the browser and end up being blurry), we are going to use the [sizes attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/sizes) and set some rules to help the browser chose the image with the most appropriate dimensions:
+To ensure we don't use images that are too big (which would waste bandwidth and result in a low LCP score) or images that are too small (which would get scaled up by the browser and end up being blurry), we are going to use the [sizes attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/sizes) and set some rules to help the browser choose the image with the most appropriate dimensions:
 
 ```tsx title="/components/base/Image.tsx" showLineNumbers{33} {18}
 const BaseImage: React.FC<ImageProps> = (props) => {
@@ -914,10 +917,10 @@ If we now put everything together, here is what the browser does for a screen wi
 * the browser also knows that our **device pixel ratio** is **1**, which is the second information the browser needs to determine which source to choose
 * so now the browser does the math: **image CSS width** multiplied by **device pixel ratio**, equals **image source width**, so **1088 x 1 = 1088 pixels**; at this point, it knows it will need an image source file that is at least 1088 pixels wide
 {/* spellchecker:disable-next-line */}
-* next, the browser looks at what image sources we offer by looking at the **srcset** sources list, it attempts to find a URL for an image width that is equal to or bigger than the 1088 pixels image it needs and finds an entry with a **condition descriptor** that is **1200w**, so it will use the image URL `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=1200&amp;q=75`
+* next, the browser looks at what image sources we offer by looking at the **srcset** sources list, it attempts to find a URL for an image width that is equal to or bigger than the 1088 pixels image it needs and finds an entry with a **condition descriptor** that is **1200w**, so it will use the image URL `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.jpg&amp;w=1200&amp;q=75`
 
 {/* spellchecker:disable-next-line */}
-The steps are the same for a screen with a higher density, but the result is not. Let's assume this time, the **device pixel ratio** is **2**, so the browser does the math again and finds out it needs an image source that is 1088 x **2** = 2176 pixels wide. Hence, it looks at the srcset again and the image source URL that is equal or bigger than 2176 pixels is `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.png&amp;w=3840&amp;q=75`, which is the URL for the source with a width of 3840 pixels.
+The steps are the same for a screen with a higher density, but the result is not. Let's assume this time, the **device pixel ratio** is **2**, so the browser does the math again and finds out it needs an image source that is 1088 x **2** = 2176 pixels wide. Hence, it looks at the srcset again and the image source URL that is equal or bigger than 2176 pixels is `/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fplayground_test.50052472.jpg&amp;w=3840&amp;q=75`, which is the URL for the source with a width of 3840 pixels.
 
 > [!NOTE]  
 > The browser will always try to find a source that is equal to or bigger than what is needed

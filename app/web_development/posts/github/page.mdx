@@ -1,5 +1,6 @@
 ---
 title: GitHub
+description: My GitHub notes - creating an account and a repository, switching branches, adding a custom profile README, a sponsor link and your own custom Octocat
 keywords: ['GitHub', 'git', 'repository', 'branch']
 published: 2024-08-11T11:22:33.444Z
 modified: 2024-08-11T11:22:33.444Z
@@ -8,9 +9,11 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 
 export const metadata = {
     title: frontmatter.title,
+    description: frontmatter.description,
     keywords: frontmatter.keywords,
     alternates: {
         canonical: frontmatter.permalink,
@@ -30,6 +33,8 @@ export const metadata = {
         tags: frontmatter.keywords,
     },
 }
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/posts_github/opengraph-image" />
 
 %toc%
 
@@ -84,7 +89,7 @@ If you have already created a repository in the past, click on your Avatar pictu
 Enter a **Repository name**, for example, **"nextjs-blog"**. Then, you can choose to make it private or keep it public.
 
 > [!TIP]  
-> I usually chose **public** because, at some point, you will probably want to share your work with others to ask for help or show them how cool your new project is. Also, if you are searching for a job having several projects, you worked on your GitHub account shows your potential future employer what a motivated dev you are
+> I usually choose **public** because, at some point, you will probably want to share your work with others to ask for help or show them how cool your new project is. Also, if you are searching for a job having several projects, you worked on your GitHub account shows your potential future employer what a motivated dev you are
 
 Next, you will have a checkbox for **Add a README file**. I recommend you DO NOT check this if you intend to use [Create Next App](https://www.npmjs.com/package/create-next-app) to set up a Next.js project as it will create a README.md itself and if it finds a README.md, it will ask you to delete it first, if however you don't use Next.js then feel free to check this box to have GitHub automatically create a new README.md file for your project
 
@@ -107,7 +112,7 @@ Next, you have a select box called **Add .gitignore**. Click on it and then sear
 > [!TIP]  
 > `.gitignore` files specify which files and directories should be excluded from tracking in a Git repository, meaning they will NOT be committed to your repository. Oh, and in case you wonder, yes, the .gitignore file itself should get committed (unlike the `.next` directory, which should not)
 
-Next, you have another select box to **Chose a license**. You can skip this if you want, but if you want a license and are unsure which one, it is safe to choose the **MIT** license. It is a very popular license used by a lot of javascript projects. For example, here is the [MIT license page of Next.js](https://github.com/vercel/next.js/blob/canary/license.md), and here is the [MIT license page of React](https://github.com/facebook/react/blob/main/LICENSE)
+Next, you have another select box to **Chose a license**. You can skip this if you want, but if you want a license and are unsure which one, it is safe to choose the **MIT** license. It is a very popular license used by a lot of JavaScript projects. For example, here is the [MIT license page of Next.js](https://github.com/vercel/next.js/blob/canary/license.md), and here is the [MIT license page of React](https://github.com/facebook/react/blob/main/LICENSE)
 
 > [!TIP]  
 > I usually pick the **MIT** license if it is a project that I want to share but also keep the copyright or pick the **creative commons zero** ([CC0](https://creativecommons.org/public-domain/cc0/)) license, which is a license that defines that you are waiving your copyright rights and hence the code will be in the public domain
@@ -126,7 +131,7 @@ GitHub will now have created a repository for you with a .gitignore, a LICENSE, 
 
 GitHub will always show you the default branch of a repository first. Usually, that branch is called **main** (unless you changed it to something else; in the past, that branch was called master)
 
-To switch to another branch, click on the branches dropdown (under the repository name) and select the branch you want to switch to. In this example, I will switch to a branch I named **review** (which is my simple git flow is the branch in which I commit code that is not ready yet to go into production)
+To switch to another branch, click on the branches dropdown (under the repository name) and select the branch you want to switch to. In this example, I will switch to a branch I named **preview** (which is my simple git flow is the branch in which I commit code that is not ready yet to go into production)
 
 ![](../../../../public/assets/images/app/web_development/posts/github/github_switch_branch.png)
 

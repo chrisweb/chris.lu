@@ -1,5 +1,6 @@
 ---
 title: VSCode
+description: My VSCode notes - installing the editor, turning on settings sync with your GitHub account, cloning a repository and working with folders and files
 keywords: ['VSCode', 'ide', 'programming', 'extension', 'theme']
 published: 2024-08-05T11:22:33.444Z
 modified: 2025-01-20T23:11:00.444Z
@@ -8,9 +9,11 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 
 export const metadata = {
     title: frontmatter.title,
+    description: frontmatter.description,
     keywords: frontmatter.keywords,
     alternates: {
         canonical: frontmatter.permalink,
@@ -31,6 +34,8 @@ export const metadata = {
     },
 }
 
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/posts_vscode/opengraph-image" />
+
 %toc%
 
 <article>
@@ -39,7 +44,7 @@ export const metadata = {
 
 ![a woman wearing a vscode t-shirt and writing code](../../../../public/assets/images/app/web_development/posts/vscode/banner.png '{ banner }')
 
-**VSCode** (Visual Studio Code) is a versatile Integrated Development Environment (IDE). VSCode is amazing to develop projects using Javascript / Typescript (and HTML, CSS) but it supports a wide range of other languages. I like VSCode because it has a lot of great features like smart code completion called [Intellisense](https://code.visualstudio.com/docs/editor/intellisense), code [refactoring](https://code.visualstudio.com/docs/editor/refactoring)...
+**VSCode** (Visual Studio Code) is a versatile Integrated Development Environment (IDE). VSCode is amazing to develop projects using JavaScript / TypeScript (and HTML, CSS) but it supports a wide range of other languages. I like VSCode because it has a lot of great features like smart code completion called [Intellisense](https://code.visualstudio.com/docs/editor/intellisense), code [refactoring](https://code.visualstudio.com/docs/editor/refactoring)...
 
 VSCode also comes with great [debugging](https://code.visualstudio.com/docs/editor/debugging) tools, meaning you can debug your frontend but also backend code within VSCode. For example, managing breakpoints is similar to debugging using the Chrome developer tools debugging tools. The [VSCode debugger](https://code.visualstudio.com/docs/editor/debugging) launch configuration json file (launch.json) makes it very easy to adapt the **debugger** to any project, and the debugger **launch.json** can then be shared as part of your git repository, to make it very easy for other developers that will work on your project, and that also use VSCode, to use the debugger without having to configure it themselves
 
@@ -52,7 +57,7 @@ VSCode also has an [extensions marketplace](https://code.visualstudio.com/docs/e
 >  
 > It is similar to how Chrome (not open source) is the Chromium (open source) build from Google, which contains proprietary pieces, like the Chrome logo image, but also pre-installed extensions or codecs that are not part of Chromium, the fully open source variant.
 >  
-> So if you want an opensource version of the VSCode build, I recommend you check out [VSCodium](https://vscodium.com/) instead
+> So if you want an open source version of the VSCode build, I recommend you check out [VSCodium](https://vscodium.com/) instead
 
 > [!MORE]  
 > [VSCode documentation](https://code.visualstudio.com/docs)  
@@ -70,7 +75,7 @@ Click on the **Accounts** icon on the left in the **Activity bar** (if you have 
 
 * now click on **Backup and Sync Settings...**
 * then, on the top center of your VSCode, click on the **Sign in**
-* then chose the option **Sign in with GitHub**
+* then choose the option **Sign in with GitHub**
 * this will open a window in your default browser; log in to your GitHub account via the web (if you are not already logged in)
 * after you have logged in, the second step on GitHub will ask you to **Authorize GitHub for VS Code** (if you haven't already done so previously); click on the green **Authorize Visual-Studio-Code** button to accept
 * then a modal box will appear in your browser asking you to open VSCode again (now that the GitHub login and authorization process is done, this will bring you back into VSCode)
@@ -84,13 +89,13 @@ If this is the first time you install VSCode, you will see a modal box in the ri
 
 There are several ways to clone a git (GitHub/GitLab/…) repository in VSCode. I will describe three options. The first two are simple and very similar. For those two, I will use the integrated VSCode source control tool. For the third option, I will use the terminal (you can use any command-line tool you prefer).
 
-**Option 1**: using the the **welcome** screen
+**Option 1**: using the **welcome** screen
 
 * if you just opened VSCode you will see a **welcome** screen, click on **Clone git repository...**
 
 ![](../../../../public/assets/images/app/web_development/posts/vscode/vscode_welcome_screen_clone_repository.png)
 
-**Option 2**: using the the **Source Control** tool
+**Option 2**: using the **Source Control** tool
 
 * click on the **Source Control** icon on the left in the **Activity bar** (if you have already customized VSCode, your Activity bar might be in another location) or use the keyboard shortcut `Ctrl+Shift+G` (macOS: `⇧⌘G`, Linux: `Ctrl+Shift+G`)
 
@@ -157,7 +162,7 @@ Congratulations 🎉 you now have a local copy of your GitHub repository
 ## Open a folder in VSCode
 
 * On the welcome screen, click on **Open Folder**; if you have no welcome screen, you can also (on top) click on **File** and then **Open Folder**; another option to open a folder is to use the keyboard shortcut `Ctrl+O` (macOS: `⌘O`, Linux: `Ctrl+O`)
-* Chose the same folder you chose when cloning your GitHub repository (if you followed the chapter [Cloning your GitHub repository in VSCode](#cloning-your-github-repository-in-vscode), it should be something like /users/YOUR_USERNAME/my_github_projects/MY_PROJECT) and then click on **Select folder**
+* Choose the same folder you chose when cloning your GitHub repository (if you followed the chapter [Cloning your GitHub repository in VSCode](#cloning-your-github-repository-in-vscode), it should be something like /users/YOUR_USERNAME/my_github_projects/MY_PROJECT) and then click on **Select folder**
 * If successful, you should now be able to see a list of files on the left
 
 ## Open a file in VSCode
@@ -182,15 +187,15 @@ The easiest way to save a file in VSCode is to use the keyboard shortcut `Ctrl+S
 One of the must used shortcuts is probably the **comment out / uncomment toggle shortcut**
 
 * first select the code you want to comment out or uncomment
-* then either use the shortcut `Ctrl+#` (macOS: `⌘#`, Linux: `Ctrl+#`)
+* then either use the shortcut `Ctrl+/` (macOS: `⌘/`, Linux: `Ctrl+/`)
 * or if you prefer using the command, [open the commend palette](#vscode-command-palette), start typing `Toggle Line Comment` until the command appears in the list and then select it.
 
 VSCode will **comment out** out the select lines of code if they are NOT commented out yet, if they are commented out VSCode will uncomment them
 
-VSCode will try to use language specific comments, meaning it will for example use `<!-- HTML comments -->` in HTML and `// single-line comments` in javascript (typescript). 
+VSCode will try to use language specific comments, meaning it will for example use `<!-- HTML comments -->` in HTML and `// single-line comments` in JavaScript (TypeScript). 
 
 > [!NOTE]  
-> If you prefer using a multi-line comment, then use the related **toggle block comment** command shortcut `Ctrl+Shift+A` (macOS: `⇧⌘A`, Linux: `Ctrl+Shift+A`).
+> If you prefer using a multi-line comment, then use the related **toggle block comment** command shortcut `Shift+Alt+A` (macOS: `⇧⌥A`, Linux: `Shift+Alt+A`).
 
 ## Open a VSCode terminal
 
@@ -226,15 +231,15 @@ This will open a nice diff panel with both files next to each other, the changes
 
 ### files are in the wrong order
 
-You can easily swap both files by using the **Swap Left and Right Side** button on the top right of the diff panel (it is a button with an icon that has a top arrow pointing to the right and and below an arrow pointing to the left):
+You can easily swap both files by using the **Swap Left and Right Side** button on the top right of the diff panel (it is a button with an icon that has a top arrow pointing to the right and below an arrow pointing to the left):
 
 ![](../../../../public/assets/images/app/web_development/tutorials/next-js-static-first-mdx-starterkit/vscode_diff_swap_sides_button.png)
 
 You can also achieve this by using the [VSCode command palette](#vscode-command-palette), when open start typing **Compare** and then select the **Compare: Swap Left and Right Editor Side** command (command is only available when a diff panel is open)
 
-## VSCode typescript version
+## VSCode TypeScript version
 
-To be able to switch to the **workspace typescript** version, you need first to open a typescript file (if you are currently in a NON-Typescript file like the README.md, then the VSCode command palette will NOT show you the option). It doesn't matter which typescript file you open. Just open the first one you see
+To be able to switch to the **workspace TypeScript** version, you need first to open a TypeScript file (if you are currently in a NON-TypeScript file like the README.md, then the VSCode command palette will NOT show you the option). It doesn't matter which TypeScript file you open. Just open the first one you see
 
 Next, open the VSCode command palette (if you don't remember how to do it, check out the [VSCode command palette](#vscode-command-palette) chapter above)
 
@@ -304,7 +309,7 @@ But when scrolling further down I noticed that there is an option that can overw
 
 > Controls whether Editor: Tab Size and Editor: Insert Spaces will be automatically detected when a file is opened based on the file contents.
 
-So I disabled this option, then went back to my file, did a right and chose **Format Document** (you can also use the shortcut `Shift+Alt+F` (macOS: `⇧⌥F`, Linux: `Ctrl+Shift+I`) instead) and this time my indentation was what I expected
+So I disabled this option, then went back to my file, did a right click and chose **Format Document** (you can also use the shortcut `Shift+Alt+F` (macOS: `⇧⌥F`, Linux: `Ctrl+Shift+I`) instead) and this time my indentation was what I expected
 
 If you prefer to change this option on a workspace level, then edit your settings.json that is in the .vscode folder at the root of your project and add:
 
@@ -357,7 +362,7 @@ To customize the VSCode scrollbar colors, we have 4 options we can customize, fo
 
 I chose those colors as they work well with the [SynthWave '84](https://marketplace.visualstudio.com/items?itemName=RobbOwen.synthwave-vscode) and have a high contrast value, but of course, feel free to adjust them to whatever you like best
 
-Even though VSCode is written in Javascript and hence uses CSS for styling, the only formats that are supported by default are #RGB, #RGBA, #RRGGBB and #RRGGBBAA (where AA is the alpha value, **ff** is fully opaque and **00** fully transparent), there are however extensions that allow you to use for example gradients, I however found this [stackoverflow anser](https://stackoverflow.com/a/75739431/656689) that recommends using the [Custom CSS and JS Loader](https://marketplace.visualstudio.com/items?itemName=be5invis.vscode-custom-css) extension to achieve just that
+Even though VSCode is written in JavaScript and hence uses CSS for styling, the only formats that are supported by default are #RGB, #RGBA, #RRGGBB and #RRGGBBAA (where AA is the alpha value, **ff** is fully opaque and **00** fully transparent), there are however extensions that allow you to use for example gradients, I however found this [stackoverflow anser](https://stackoverflow.com/a/75739431/656689) that recommends using the [Custom CSS and JS Loader](https://marketplace.visualstudio.com/items?itemName=be5invis.vscode-custom-css) extension to achieve just that
 
 > [!MORE]  
 > [VSCode "Custom CSS and JS Loader" extension](https://marketplace.visualstudio.com/items?itemName=be5invis.vscode-custom-css)  
@@ -429,7 +434,7 @@ When you drop an image into a markdown (MDX) document, VSCode will automatically
 
 ### VSCode markdown headings links
 
-To add links to headings inside a document, just use the default syntax for links, meaning you start with square brackets (`[]`), and between them, you add the link text (`[LINK_TEXT]`) then after the square brackets you use add regular brackets (`()`) for the path, as path start by typing a number sign (`#`) and a modal will open listing all your headline IDs, just chose the ID you want the link to point to and it will get inserted for you
+To add links to headings inside a document, just use the default syntax for links, meaning you start with square brackets (`[]`), and between them, you add the link text (`[LINK_TEXT]`) then after the square brackets you use add regular brackets (`()`) for the path, as path start by typing a number sign (`#`) and a modal will open listing all your headline IDs, just choose the ID you want the link to point to and it will get inserted for you
 
 ![vscode link to heading modal](../../../../public/assets/images/app/web_development/posts/vscode/vscode_link_to_heading_modal.png)
 

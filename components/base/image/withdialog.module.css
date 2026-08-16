@@ -50,8 +50,9 @@
 }
 
 .icon {
-    backdrop-filter: saturate(200%) blur(5px);
+    /* prefixed version must come BEFORE the standard property (see navigation.module.css) */
     -webkit-backdrop-filter: saturate(200%) blur(5px);
+    backdrop-filter: saturate(200%) blur(5px);
     background-color: rgba(var(--primary-light-value) / 0.01);
     padding: calc(var(--main-spacing) / 4);
 }

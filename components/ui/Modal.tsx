@@ -21,7 +21,6 @@ const UIModal: React.FC<IUIModalProps> = (props) => {
 
     const { isOpen, hasCloseButton, onCloseCallback, children, ...rest } = props
 
-    const [isModalOpenState, setIsModalOpenState] = useState(isOpen)
     const [closeAnimationState, setCloseAnimationState] = useState(false)
 
     const modalRef = useRef<HTMLDialogElement | null>(null)
@@ -36,7 +35,10 @@ const UIModal: React.FC<IUIModalProps> = (props) => {
         if (typeof onCloseCallback === 'function') {
             onCloseCallback()
         }
-        setIsModalOpenState(false)
+        // start the close animation, the animation end handler closes the dialog element
+        if (modalRef.current?.hasAttribute('open')) {
+            setCloseAnimationState(true)
+        }
     }
 
     const closeHandler = () => {
@@ -44,29 +46,28 @@ const UIModal: React.FC<IUIModalProps> = (props) => {
     }
 
     const animationEndHandler = (event: AnimationEvent<HTMLDialogElement>) => {
-        if (event.animationName.startsWith('modal_closeAnimation')) {
+        // CSS modules hash the keyframes name (e.g. modal-module__H0elPG__closeAnimation)
+        if (event.animationName.includes('closeAnimation')) {
             modalRef.current?.close()
             setCloseAnimationState(false)
         }
     }
 
     useEffect(() => {
-        setIsModalOpenState(isOpen)
-    }, [isOpen])
-
-    useEffect(() => {
         const modalElement = modalRef.current
 
         if (modalElement) {
-            if (isModalOpenState) {
-                modalElement.showModal()
+            if (isOpen) {
+                if (!modalElement.hasAttribute('open')) {
+                    modalElement.showModal()
+                }
             } else {
                 if (modalElement.hasAttribute('open')) {
                     setCloseAnimationState(true)
                 }
             }
         }
-    }, [isModalOpenState])
+    }, [isOpen])
 
     return createPortal(
         <dialog

@@ -24,16 +24,14 @@ node_modules/
 # Next.js build output
 .next
 
+# ESLint cache (kept out of .next so CI never restores a stale one)
+.eslintcache
+
 # Next bundle analyzer
 /analyze
 
 # Serverless directories
 .serverless/
 
-# Sentry Config File
-.sentryclirc
-
 # localhost ssl certificate(s)
 certificates
-# Sentry Config File
-.env.sentry-build-plugin
