@@ -8,7 +8,7 @@
         "build-debug": "next build --debug --turbopack",
         "start": "next start",
         "next-lint": "next lint",
-        "lint": "eslint --cache --cache-location .next/cache/eslint/",
+        "lint": "eslint --cache --cache-location .eslintcache",
         "lint-nocache": "eslint",
         "lint-debug": "eslint --debug",
         "lint-debug-config": "eslint --debug eslint.config.mjs",

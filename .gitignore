@@ -24,6 +24,9 @@ node_modules/
 # Next.js build output
 .next
 
+# ESLint cache (kept out of .next so CI never restores a stale one)
+.eslintcache
+
 # Next bundle analyzer
 /analyze
 

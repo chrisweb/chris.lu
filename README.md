@@ -10,7 +10,7 @@
 
 # chris.lu
 
-Hello World! 👋 
+Hello World! 👋
 
 This repository contains the source code for my blog ([chris.lu](https://chris.lu))
 
@@ -18,14 +18,14 @@ On [chris.lu](https://chris.lu), you will find my tutorials and can learn more a
 
 ## Technologies used
 
-During development, I wrote a ["Next.js static first starterkit" tutorial](https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit) showcasing the technologies used in this blog. My favorite approach when working with Next.js is to start with a static core, later you can add dynamic islands where necessary. 
+During development, I wrote a ["Next.js static first starterkit" tutorial](https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit) showcasing the technologies used in this blog. My favorite approach when working with Next.js is to start with a static core, later you can add dynamic islands where necessary.
 
 ### Content & MDX
 
 I added [MDX](https://mdxjs.com/) support to be able to create content using **@next/mdx**. The project uses a comprehensive MDX plugin pipeline:
 
-- **Remark plugins**: `remark-gfm`, `remark-frontmatter`, `remark-mdx-frontmatter`, [remark-table-of-contents](https://github.com/chrisweb/remark-table-of-contents) (custom)
-- **Rehype plugins**: `rehype-pretty-code`, [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts) (custom), `rehype-slug`, `rehype-autolink-headings`, `rehype-mdx-import-media`
+* **Remark plugins**: `remark-gfm`, `remark-frontmatter`, `remark-mdx-frontmatter`, [remark-table-of-contents](https://github.com/chrisweb/remark-table-of-contents) (custom)
+* **Rehype plugins**: `rehype-pretty-code`, [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts) (custom), `rehype-slug`, `rehype-autolink-headings`, `rehype-mdx-import-media`
 
 Content is written as MDX files in the `app/` directory with YAML frontmatter for metadata. The `%toc%` placeholder auto-generates a table of contents.
 
@@ -39,8 +39,8 @@ Content is written as MDX files in the `app/` directory with YAML frontmatter fo
 
 ### Prerequisites
 
-- **Node.js** >= 20.11.0
-- **npm** (comes with Node.js)
+* **Node.js** >= 20.11.0
+* **npm** (comes with Node.js)
 
 ### Installation & First Run
 
@@ -60,35 +60,36 @@ Content is written as MDX files in the `app/` directory with YAML frontmatter fo
    npm run dev
    ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+4. Open <http://localhost:3000> in your browser
 
 ### Troubleshooting
 
-- **Port already in use**: Set a custom port with `PORT=3001 npm run dev`
-- **Build errors**: Try `npm run lint-fix` to auto-fix linting issues
-- **Node version mismatch**: Check your Node version with `node -v` (must be >= 20.11.0)
+* **Port already in use**: Set a custom port with `PORT=3001 npm run dev`
+* **Build errors**: Try `npm run lint-fix` to auto-fix linting issues
+* **Node version mismatch**: Check your Node version with `node -v` (must be >= 20.11.0)
 
 ## Development Workflow
 
 ### Running Locally
 
-- `npm run dev` - Standard development server
-- `npm run dev-ssl` - Development with self-signed SSL certificate (requires certificate setup)
+* `npm run dev` - Standard development server
+* `npm run dev-ssl` - Development with self-signed SSL certificate (requires certificate setup)
 
 ### Linting
 
 The project uses ESLint 9 with flat config for code and MDX content:
 
-- `npm run lint` - Check code and MDX for issues (used in build)
-- `npm run lint-fix` - Auto-fix linting problems
-- `npm run lint-nocache` - Lint without cache (useful for debugging)
-- `npm run lint-debug` - Verbose linting output
-- `npm run check-urls` - Validate external URLs in content (run sporadically, not in build)
+* `npm run lint` - Check code and MDX for issues (used in build)
+* `npm run lint-fix` - Auto-fix linting problems
+* `npm run lint-nocache` - Lint without cache (useful for debugging)
+* `npm run lint-debug` - Verbose linting output
+* `npm run check-urls` - Validate external URLs in content (run sporadically, not in build)
 
 **When to use which**:
-- During development: `npm run lint-fix` to auto-correct issues
-- Before committing: `npm run lint` to verify
-- Periodically: `npm run check-urls` to validate external links
+
+* During development: `npm run lint-fix` to auto-correct issues
+* Before committing: `npm run lint` to verify
+* Periodically: `npm run check-urls` to validate external links
 
 ### Creating Content
 
@@ -103,7 +104,7 @@ The project uses ESLint 9 with flat config for code and MDX content:
    ```
 3. **Table of contents**: Use `%toc%` placeholder where you want the TOC to appear
 4. **Images**: Place in `public/assets/images/` and reference with `/assets/images/your-image.jpg`
-5. **OpenGraph images**: Create `opengraph-image.tsx` in the same directory as your page or use a global opengraph for a route segment as done in app\web_development\og\[key]
+5. **OpenGraph images**: Create `opengraph-image.tsx` in the same directory as your page or use a global opengraph for a route segment as done in app\web\_development\og\[key]
 
 ## Feedback & bug reports
 
@@ -111,4 +112,4 @@ If you have feedback or want to discuss something, please use the [chris.lu gith
 
 ## License
 
-Link to the [license document](https://github.com/chrisweb/chris.lu/blob/main/LICENSE)  
+Link to the [license document](https://github.com/chrisweb/chris.lu/blob/main/LICENSE)
