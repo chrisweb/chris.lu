@@ -359,13 +359,13 @@ If you want the full story about the remark presets and rules in `.remarkrc.mjs`
 
 ## Package.json scripts
 
-Next.js 16 removed the `next lint` command, so ESLint runs directly, and the build script runs it before the actual build. Caching (stored next to Next.js own cache) makes repeat runs fast:
+Next.js 16 removed the `next lint` command, so ESLint runs directly, and the build script runs it before the actual build. Caching makes repeat runs fast. `.eslintcache` is ESLint's own default cache location and keeping it out of `.next/` means clearing the build output does not throw the lint cache away with it (remember to add `.eslintcache` to your `.gitignore`):
 
 ```json title="package.json (excerpt)"
 {
     "scripts": {
         "build": "npm run lint && next build --turbopack",
-        "lint": "eslint --cache --cache-location .next/cache/eslint/",
+        "lint": "eslint --cache --cache-location .eslintcache",
         "lint-nocache": "eslint",
         "lint-fix": "eslint --fix"
     }

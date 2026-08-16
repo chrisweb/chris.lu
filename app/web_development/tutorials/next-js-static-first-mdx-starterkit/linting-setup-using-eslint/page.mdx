@@ -271,10 +271,10 @@ If you have converted your ESLint configuration to an `eslint.config.ts` file an
 As we can't use next lint we need to create our own linting command:
 
 * as we can NOT use **next lint**, we will use the **eslint cli** instead
-* finally we will enable caching (as would next lint do) and we set the cache folder path to the same folder that Next.js uses
+* finally we will enable caching (as would next lint do) and we set the cache file path to a `.eslintcache` file in the root of the project, which is ESLint's own default location and means clearing the `.next` build output does not throw the lint cache away with it, remember to add `.eslintcache` to your `.gitignore`
 
 ```shell
-npx eslint --cache --cache-location .next/cache/eslint/
+npx eslint --cache --cache-location .eslintcache
 ```
 
 Now that we have created a new command we can update our package.json (in the root of the project) to update our linting script(s):
@@ -285,7 +285,7 @@ Now that we have created a new command we can update our package.json (in the ro
     "dev-turbo": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint --cache --cache-location .next/cache/eslint/"
+    "lint": "eslint --cache --cache-location .eslintcache"
 },
 ```
 
@@ -297,7 +297,7 @@ There is one more problem left, the **next build** script uses **next lint** by 
     "dev-turbo": "next dev --turbopack",
     "build": "npm run lint && next build",
     "start": "next start",
-    "lint": "eslint --cache --cache-location .next/cache/eslint/"
+    "lint": "eslint --cache --cache-location .eslintcache"
 },
 ```
 
@@ -327,7 +327,7 @@ We update our `package.json` file (in the root) and add the following scripts:
     "build": "npm run lint && next build",
     "start": "next start",
     "next-lint": "next lint",
-    "lint": "eslint --cache --cache-location .next/cache/eslint/",
+    "lint": "eslint --cache --cache-location .eslintcache",
     "lint-nocache": "eslint",
     "lint-fix": "eslint --fix"
 },
@@ -387,7 +387,7 @@ If you want you can add those commands to your package json scripts:
     "build": "npm run lint && next build",
     "start": "next start",
     "next-lint": "next lint",
-    "lint": "eslint --cache --cache-location .next/cache/eslint/",
+    "lint": "eslint --cache --cache-location .eslintcache",
     "lint-nocache": "eslint",
     "lint-fix": "eslint --fix",
     "lint-debug-config": "eslint --debug eslint.config.ts",

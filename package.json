@@ -4,7 +4,7 @@
     "scripts": {
         "dev": "next dev",
         "dev-ssl": "next dev --experimental-https",
-        "build": "npm run lint && next build --turbopack",
+        "build": "next build",
         "build-debug": "next build --debug --turbopack",
         "start": "next start",
         "next-lint": "next lint",

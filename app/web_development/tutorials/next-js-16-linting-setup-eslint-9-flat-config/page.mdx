@@ -661,7 +661,7 @@ Update your `package.json` with comprehensive linting scripts:
     "dev": "next dev",
     "build": "npm run lint && next build",
     "start": "next start",
-    "lint": "eslint --cache --cache-location .next/cache/eslint/",
+    "lint": "eslint --cache --cache-location .eslintcache",
     "lint:fix": "eslint --fix",
     "lint:nocache": "eslint",
     "lint:debug": "eslint --debug eslint.config.ts",
@@ -681,7 +681,7 @@ Update your `package.json` with comprehensive linting scripts:
 - `lint:inspect`: Open the Config Inspector web interface
 
 > [!TIP]
-> The `--cache` flag significantly speeds up linting by only checking changed files. Store the cache in `.next/cache/eslint/` to keep it with other Next.js cache files.
+> The `--cache` flag significantly speeds up linting by only checking changed files. Store the cache in a `.eslintcache` file in the project root, which is ESLint's own default location, so that clearing the `.next` build output does not throw the lint cache away with it. Remember to add `.eslintcache` to your `.gitignore`.
 
 ## ESLint debugging tools
 
@@ -777,7 +777,7 @@ npm i eslint@latest typescript-eslint eslint-plugin-react eslint-plugin-react-ho
     "dev": "next dev",
     "build": "npm run lint && next build",
     "start": "next start",
-    "lint": "eslint --cache --cache-location .next/cache/eslint/",
+    "lint": "eslint --cache --cache-location .eslintcache",
     "lint:fix": "eslint --fix"
   }
 }
@@ -1212,7 +1212,7 @@ export default defineConfig([
 Always enable caching in your lint scripts:
 
 ```shell
-eslint --cache --cache-location .next/cache/eslint/
+eslint --cache --cache-location .eslintcache
 ```
 
 ### 5. Progressive enhancement
