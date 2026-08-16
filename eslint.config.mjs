@@ -97,8 +97,6 @@ const reactConfig = defineConfig([
         rules: {
             // React Hooks rules (use recommended-latest for latest features)
             ...reactHooksPlugin.configs['recommended-latest'].rules,
-            // downgrade set-state-in-effect from 'error' (in recommended-latest) to 'warn'
-            'react-hooks/set-state-in-effect': 'warn',
             // Next.js recommended rules
             ...nextPlugin.configs.recommended.rules,
             // Next.js Core Web Vitals rules
