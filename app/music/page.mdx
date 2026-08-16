@@ -6,9 +6,11 @@ import Link from 'next/link'
 import ImageDispatch from '@/components/base/image/Dispatch'
 import AsideContent from '@/components/aside/Content'
 import { sharedMetaData } from '@/shared/metadata'
+import SectionJsonLd from '@/components/seo/SectionJsonLd'
 
 export const metadata = {
     title: 'Music',
+    description: 'The music I listen to, including my own Spotify playlists like "Indie summer" and "Indie love (sad edition)".',
     alternates: {
         canonical: 'https://chris.lu/music',
     },
@@ -17,6 +19,8 @@ export const metadata = {
         url: 'https://chris.lu/music',
     },
 }
+
+<SectionJsonLd title={metadata.title} description={metadata.description} path="/music" />
 
 <aside>
     <div className="asideCore">

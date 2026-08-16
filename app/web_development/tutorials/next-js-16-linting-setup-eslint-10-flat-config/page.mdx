@@ -1,0 +1,597 @@
+---
+title: Next.js 16 Linting setup using ESLint 10 flat config
+description: Complete guide to setting up ESLint 10 with flat config in Next.js 16, migrating from the ESLint 9 plugin ecosystem, including TypeScript, React (via @eslint-react), React Compiler rules, MDX and modern tooling
+keywords: ['Next.js 16', 'ESLint 10', 'flat config', 'linting', 'TypeScript', '@eslint-react', 'React compiler', 'eslint-plugin-react-hooks', 'MDX', 'typescript-eslint']
+published: 2026-08-15T14:00:00.000Z
+modified: 2026-08-15T14:00:00.000Z
+permalink: https://chris.lu/web_development/tutorials/next-js-16-linting-setup-eslint-10-flat-config
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
+import DonationsMessage from '@/shared/donations-message.mdx'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+            type: "image/png",
+            width: 1200,
+            height: 630,
+            url: '/web_development/og/tutorials_next-js-16-linting-setup-eslint-10-flat-config/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+    },
+}
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-16-linting-setup-eslint-10-flat-config/opengraph-image" />
+
+%toc%
+
+<article>
+
+# Next.js 16 Linting setup using ESLint 10 flat config
+
+![a cyborg teacher grading code printouts with a glowing red pen while a small robot assistant hands her pages, next to a holographic board that reads ESLint v10](../../../../public/assets/images/app/web_development/tutorials/next-js-16-linting-setup-eslint-10-flat-config/banner.png 'a cyborg teacher grading code printouts with a glowing red pen { banner }')
+
+This tutorial documents my complete **ESLint 10** setup for a **Next.js 16** project, including type-aware TypeScript linting, React linting (with the React Compiler rules), Next.js specific rules, code style enforcement and MDX content linting.
+
+It is the successor of my [ESLint 9 linting setup tutorial](/web_development/tutorials/next-js-16-linting-setup-eslint-9-flat-config), and a big part of this new version is about the **migration**: ESLint 10 removed support for the legacy `.eslintrc.*` format entirely, and (more painful in practice) a chunk of the classic React plugin ecosystem did not follow, so this setup replaces some old friends with their modern successors.
+
+> [!TIP]  
+> **TL;DR:** Want the finished setup? Jump to the [Complete example configuration](#complete-example-configuration) section for the full `eslint.config.mjs` and the install commands.
+
+## ESLint 10: flat config only
+
+ESLint 9 introduced flat config as the default but kept a compatibility layer for the legacy `.eslintrc.*` format. **ESLint 10 removes the legacy format entirely**, there is only flat config now (`eslint.config.mjs` / `eslint.config.ts`).
+
+The consequence that actually matters: every plugin in your chain must ship flat config support AND declare ESLint 10 in its peer dependencies. That second part is where the migration pain lives, because npm refuses to install a plugin whose peer range stops at `^9`, no matter how well it would probably work.
+
+> [!MORE]  
+> [ESLint v10.0.0 release notes](https://eslint.org/blog/2026/01/eslint-v10.0.0-released/)  
+> [ESLint flat config documentation](https://eslint.org/docs/latest/use/configure/configuration-files)  
+
+## What changed compared to my ESLint 9 setup
+
+If you come from my previous setup (or a similar one), this is the delta, with the reasons:
+
+- **`eslint-config-next`**: removed (we use `@next/eslint-plugin-next` directly instead), because it hard-depends on `eslint-plugin-react` and `eslint-plugin-jsx-a11y`, which are both capped at ESLint 9, so keeping it blocks the whole install
+- **`eslint-plugin-react`**: replaced by `@eslint-react/eslint-plugin`, because `eslint-plugin-react` (7.x) declares peer support up to ESLint 9 only, while `@eslint-react` supports any ESLint version and has a modern TypeScript-aware preset
+- **`eslint-plugin-jsx-a11y`**: removed, because no ESLint 10 compatible release exists (at the time of writing)
+- **`eslint-plugin-react-compiler`**: removed, because the React Compiler rules now ship inside `eslint-plugin-react-hooks` (since v6), the standalone plugin is obsolete and even breaks react-hooks 7 (more on that in the [Troubleshooting](#troubleshooting) section)
+- **`eslint-plugin-react-hooks`** with the `recommended-latest` preset: unchanged, still the preset to use, and it now carries the compiler-powered rules
+
+> [!WARN]  
+> Removing `eslint-plugin-jsx-a11y` means this setup currently has **no accessibility linting**. That is a real loss, not a win. If accessibility rules are critical for your project, staying on ESLint 9 until jsx-a11y supports ESLint 10 is a legitimate choice. Also remember to clean up any `eslint-disable-next-line jsx-a11y/...` comments in your code, a disable comment for a rule that no longer exists is reported as an error ("Definition for rule ... was not found")
+
+## Installing the packages
+
+We install exact versions (`--save-exact`) to keep environments consistent:
+
+```shell
+npm install --save-dev --save-exact eslint @eslint/js typescript-eslint @eslint-react/eslint-plugin eslint-plugin-react-hooks @next/eslint-plugin-next @stylistic/eslint-plugin eslint-plugin-mdx
+```
+
+The versions this tutorial was written and tested with: `eslint` 10.8.1, `@eslint/js` 10.0.1, `typescript-eslint` 8.67.0, `@eslint-react/eslint-plugin` 5.18.6, `eslint-plugin-react-hooks` 7.1.1, `@next/eslint-plugin-next` 16.3.1, `@stylistic/eslint-plugin` 5.10.0, `eslint-plugin-mdx` 3.8.1
+
+> [!NOTE]  
+> Notice what is NOT in the list: `eslint-config-next`, `eslint-plugin-react`, `eslint-plugin-jsx-a11y` and `eslint-plugin-react-compiler`. If you migrate an existing project, uninstall them first, otherwise npm will greet you with an `ERESOLVE could not resolve` wall of peer dependency errors the moment you bump `eslint` to v10
+
+## The configuration structure
+
+The configuration lives in a `eslint.config.mjs` file at the project root and is split into named config groups (naming your config objects makes debugging with the [ESLint Config Inspector](https://eslint.org/blog/2024/04/eslint-config-inspector/) much easier), which get combined at the end:
+
+```javascript title="eslint.config.mjs (structure)"
+import { defineConfig } from 'eslint/config'
+
+// ... the config groups we will build in the next sections
+
+export default defineConfig([
+    ...ignoresConfig,
+    ...eslintConfig,
+    ...typescriptConfig,
+    ...reactConfig,
+    ...stylisticConfig,
+    ...mdxConfig,
+])
+```
+
+Order matters: ignores first, then the general configs, then the more specific overrides.
+
+### Global ignores
+
+The global ignores must be in their own config object (an object that ONLY has an `ignores` key), else they only apply to the config object they are part of:
+
+```javascript title="eslint.config.mjs (ignores)"
+const ignoresConfig = defineConfig([
+    {
+        name: 'project/ignores',
+        ignores: [
+            '.next/',
+            'node_modules/',
+            'public/',
+            '.vscode/',
+            'next-env.d.ts',
+        ]
+    },
+])
+```
+
+### ESLint recommended rules
+
+```javascript title="eslint.config.mjs (eslint recommended)"
+import eslintPlugin from '@eslint/js'
+
+const eslintConfig = defineConfig([
+    {
+        name: 'project/javascript-recommended',
+        files: ['**/*.{js,mjs,ts,tsx}'],
+        ...eslintPlugin.configs.recommended,
+    },
+])
+```
+
+> [!NOTE]  
+> The `@eslint/js` v10 recommended preset includes rules that were not enabled in v9, for example [no-useless-assignment](https://eslint.org/docs/latest/rules/no-useless-assignment). Expect a few new errors in an existing codebase after the upgrade, in my case it (correctly) flagged a `return previousState += character` inside a `useState` setter callback, which is better written as `return previousState + character`
+
+### TypeScript with type-aware rules
+
+We use the typescript-eslint **strictTypeChecked** and **stylisticTypeChecked** presets, meaning ESLint uses actual type information from the TypeScript compiler. The `projectService` option automatically finds your tsconfig:
+
+```javascript title="eslint.config.mjs (typescript)"
+import { configs as tseslintConfigs } from 'typescript-eslint'
+
+const typescriptConfig = defineConfig([
+    {
+        name: 'project/typescript-strict',
+        files: ['**/*.{ts,tsx,mjs}'],
+        extends: [
+            ...tseslintConfigs.strictTypeChecked,
+            ...tseslintConfigs.stylisticTypeChecked,
+        ],
+        languageOptions: {
+            parserOptions: {
+                // Automatically detects tsconfig.json
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+                ecmaFeatures: {
+                    jsx: true,
+                },
+                warnOnUnsupportedTypeScriptVersion: true,
+            },
+        },
+        rules: {
+            // Disable rules that conflict with TypeScript's own error checking
+            '@typescript-eslint/no-unsafe-call': 'off',
+            '@typescript-eslint/triple-slash-reference': 'off',
+            // disabled next rule due to bug:
+            // https://github.com/typescript-eslint/typescript-eslint/issues/11732
+            // https://github.com/eslint/eslint/issues/20272
+            '@typescript-eslint/unified-signatures': 'off',
+            // Allow ts-expect-error and ts-ignore with descriptions
+            '@typescript-eslint/ban-ts-comment': [
+                'error',
+                {
+                    'ts-expect-error': 'allow-with-description',
+                    'ts-ignore': 'allow-with-description',
+                    'ts-nocheck': false,
+                    'ts-check': false,
+                    'minimumDescriptionLength': 3,
+                },
+            ],
+        },
+    },
+    {
+        name: 'project/javascript-disable-type-check',
+        files: ['**/*.{js,mjs,cjs}'],
+        ...tseslintConfigs.disableTypeChecked,
+    }
+])
+```
+
+The second config object disables the type-aware rules for plain JavaScript files (like this very config file), because those are usually not covered by your tsconfig.
+
+### React linting with @eslint-react
+
+This is the biggest change compared to the ESLint 9 setup. [@eslint-react/eslint-plugin](https://eslint-react.xyz/) is a modern, TypeScript-first re-imagination of React linting. Its v5 exposes flat config presets that bundle the plugin registrations and the rules, so a single `extends` entry is all you need. We use the **recommended-TypeScript** preset:
+
+```javascript title="eslint.config.mjs (react and next.js)"
+import reactPlugin from '@eslint-react/eslint-plugin'
+import reactHooksPlugin from 'eslint-plugin-react-hooks'
+import nextPlugin from '@next/eslint-plugin-next'
+
+const reactConfig = defineConfig([
+    {
+        name: 'project/react-next',
+        files: ['**/*.{jsx,tsx}'],
+        // @eslint-react/eslint-plugin v5 exposes flat configs that bundle the plugin and its rules
+        // https://eslint-react.xyz/docs/presets
+        extends: [
+            reactPlugin.configs['recommended-typescript'],
+        ],
+        plugins: {
+            'react-hooks': reactHooksPlugin,
+            '@next/next': nextPlugin,
+        },
+        rules: {
+            // React Hooks rules (use recommended-latest for latest features)
+            ...reactHooksPlugin.configs['recommended-latest'].rules,
+            // downgrade set-state-in-effect from 'error' (in recommended-latest) to 'warn'
+            'react-hooks/set-state-in-effect': 'warn',
+            // Next.js recommended rules
+            ...nextPlugin.configs.recommended.rules,
+            // Next.js Core Web Vitals rules
+            ...nextPlugin.configs['core-web-vitals'].rules,
+        },
+    }
+])
+```
+
+A few things worth knowing about this config group:
+
+- the `@eslint-react` rules use their own namespaces (`@eslint-react/...`), so old overrides like `'react/prop-types': 'off'` do not apply anymore, and most of them are simply not needed: the plugin was designed for modern React and TypeScript, it does not check prop-types and does not complain about unknown DOM properties (a blessing when you use react-three-fiber)
+- expect NEW findings on an existing codebase: `@eslint-react/no-forward-ref` (React 19 does not need `forwardRef` anymore), `@eslint-react/no-children-to-array`, `@eslint-react/web-api-no-leaked-timeout` and friends are genuinely useful modernization hints
+- the Next.js rules come from `@next/eslint-plugin-next` directly, we spread its `recommended` and `core-web-vitals` rule sets, so we get everything `eslint-config-next` would have given us, without its incompatible dependencies
+
+### React Hooks and the React Compiler rules
+
+Since v6, `eslint-plugin-react-hooks` includes the **React Compiler powered rules**, the standalone `eslint-plugin-react-compiler` package is obsolete. The `recommended-latest` preset enables them, which means you get diagnostics like `react-hooks/set-state-in-effect`, `react-hooks/static-components` or `react-hooks/purity` errors that previously required the separate plugin.
+
+I downgrade `react-hooks/set-state-in-effect` from error (the preset default) to warn: it flags a pattern (calling a setState synchronously inside an effect) that existed in several of my components long before the rule did. The warnings keep the signal visible without blocking builds until each component gets refactored.
+
+> [!NOTE]  
+> The ESLint rules only report compiler findings, the React Compiler itself is enabled separately in your `next.config.ts` with the `reactCompiler: true` option (plus the `babel-plugin-react-compiler` package), that part is unchanged in this migration
+
+> [!MORE]  
+> [@eslint-react documentation](https://eslint-react.xyz/)  
+> [eslint-plugin-react-hooks on npm](https://www.npmjs.com/package/eslint-plugin-react-hooks)  
+> [React Compiler documentation](https://react.dev/learn/react-compiler)  
+
+### Code style with ESLint Stylistic
+
+Same as in the ESLint 9 setup, [ESLint Stylistic](https://eslint.style/) handles formatting (I prefer it over a separate formatter like Prettier, one tool, one pass):
+
+```javascript title="eslint.config.mjs (stylistic)"
+import stylisticPlugin from '@stylistic/eslint-plugin'
+
+const stylisticConfig = defineConfig([
+    {
+        name: 'project/stylistic',
+        files: ['**/*.{js,mjs,ts,tsx}'],
+        plugins: {
+            '@stylistic': stylisticPlugin,
+        },
+        rules: {
+            // Remove legacy formatting rules from ESLint/TypeScript ESLint
+            ...stylisticPlugin.configs['disable-legacy'].rules,
+            // Add recommended stylistic rules as base
+            ...stylisticPlugin.configs.recommended.rules,
+
+            // Custom style preferences (adjust to your team's preferences)
+            '@stylistic/indent': ['warn', 4],
+            '@stylistic/indent-binary-ops': ['warn', 4],
+            '@stylistic/quotes': ['warn', 'single', {
+                avoidEscape: true,
+                allowTemplateLiterals: 'always'
+            }],
+            '@stylistic/jsx-quotes': ['warn', 'prefer-double'],
+            '@stylistic/semi': ['warn', 'never'],
+            '@stylistic/comma-dangle': ['warn', 'only-multiline'],
+            '@stylistic/arrow-parens': ['warn', 'as-needed', {
+                requireForBlockBody: true
+            }],
+            '@stylistic/brace-style': ['warn', '1tbs', {
+                allowSingleLine: true
+            }],
+            '@stylistic/operator-linebreak': ['warn', 'before'],
+
+            // JSX-specific style rules
+            '@stylistic/jsx-indent-props': ['warn', 4],
+            '@stylistic/jsx-one-expression-per-line': 'off', // Too strict
+            '@stylistic/jsx-wrap-multilines': ['warn', {
+                declaration: 'parens-new-line',
+                assignment: 'parens-new-line',
+                return: 'parens-new-line',
+                arrow: 'parens-new-line',
+                condition: 'parens-new-line',
+                logical: 'parens-new-line',
+                prop: 'parens-new-line',
+            }],
+            '@stylistic/jsx-curly-newline': ['warn', {
+                multiline: 'consistent',
+                singleline: 'forbid',
+            }],
+
+            // Additional formatting preferences
+            '@stylistic/eol-last': 'off',
+            '@stylistic/padded-blocks': 'off',
+            '@stylistic/spaced-comment': 'off',
+            '@stylistic/multiline-ternary': 'off', // Conflicts with JSX
+            '@stylistic/no-multiple-empty-lines': ['warn'],
+            '@stylistic/no-trailing-spaces': ['warn'],
+        },
+    }
+])
+```
+
+### MDX content linting
+
+My content is written in MDX, and [eslint-plugin-mdx](https://www.npmjs.com/package/eslint-plugin-mdx) lets ESLint lint it, including running the remark-lint presets from a separate `.remarkrc.mjs` on the markdown parts:
+
+```javascript title="eslint.config.mjs (mdx)"
+import * as mdxPlugin from 'eslint-plugin-mdx'
+
+const mdxConfig = defineConfig([
+    {
+        name: 'project/mdx-files',
+        files: ['**/*.mdx'],
+        ...mdxPlugin.flat,
+        processor: mdxPlugin.createRemarkProcessor({
+            // Disable linting code blocks for better performance
+            lintCodeBlocks: false,
+            languageMapper: {},
+        }),
+    },
+    {
+        name: 'project/mdx-code-blocks',
+        files: ['**/*.mdx'],
+        ...mdxPlugin.flatCodeBlocks,
+        rules: {
+            ...mdxPlugin.flatCodeBlocks.rules,
+            'no-var': 'error',
+            'prefer-const': 'error',
+        },
+    },
+])
+```
+
+If you want the full story about the remark presets and rules in `.remarkrc.mjs`, that part did not change, it is covered in depth in the [eslint MDX plugin and remark-lint chapter](/web_development/tutorials/next-js-static-first-mdx-starterkit/eslint-mdx-plugin-and-remark-lint) of my starterkit tutorial.
+
+## Package.json scripts
+
+Next.js 16 removed the `next lint` command, so ESLint runs directly, and the build script runs it before the actual build. Caching (stored next to Next.js own cache) makes repeat runs fast:
+
+```json title="package.json (excerpt)"
+{
+    "scripts": {
+        "build": "npm run lint && next build --turbopack",
+        "lint": "eslint --cache --cache-location .next/cache/eslint/",
+        "lint-nocache": "eslint",
+        "lint-fix": "eslint --fix"
+    }
+}
+```
+
+## Complete example configuration
+
+The full `eslint.config.mjs`, all sections from above combined:
+
+```javascript title="eslint.config.mjs"
+// eslint.config.mjs
+import { defineConfig } from 'eslint/config'
+import eslintPlugin from '@eslint/js'
+import { configs as tseslintConfigs } from 'typescript-eslint'
+import reactPlugin from '@eslint-react/eslint-plugin'
+import reactHooksPlugin from 'eslint-plugin-react-hooks'
+import nextPlugin from '@next/eslint-plugin-next'
+import stylisticPlugin from '@stylistic/eslint-plugin'
+import * as mdxPlugin from 'eslint-plugin-mdx'
+
+const ignoresConfig = defineConfig([
+    {
+        name: 'project/ignores',
+        ignores: [
+            '.next/',
+            'node_modules/',
+            'public/',
+            '.vscode/',
+            'next-env.d.ts',
+        ]
+    },
+])
+
+const eslintConfig = defineConfig([
+    {
+        name: 'project/javascript-recommended',
+        files: ['**/*.{js,mjs,ts,tsx}'],
+        ...eslintPlugin.configs.recommended,
+    },
+])
+
+const typescriptConfig = defineConfig([
+    {
+        name: 'project/typescript-strict',
+        files: ['**/*.{ts,tsx,mjs}'],
+        extends: [
+            ...tseslintConfigs.strictTypeChecked,
+            ...tseslintConfigs.stylisticTypeChecked,
+        ],
+        languageOptions: {
+            parserOptions: {
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+                ecmaFeatures: {
+                    jsx: true,
+                },
+                warnOnUnsupportedTypeScriptVersion: true,
+            },
+        },
+        rules: {
+            '@typescript-eslint/no-unsafe-call': 'off',
+            '@typescript-eslint/triple-slash-reference': 'off',
+            '@typescript-eslint/unified-signatures': 'off',
+            '@typescript-eslint/ban-ts-comment': [
+                'error',
+                {
+                    'ts-expect-error': 'allow-with-description',
+                    'ts-ignore': 'allow-with-description',
+                    'ts-nocheck': false,
+                    'ts-check': false,
+                    'minimumDescriptionLength': 3,
+                },
+            ],
+        },
+    },
+    {
+        name: 'project/javascript-disable-type-check',
+        files: ['**/*.{js,mjs,cjs}'],
+        ...tseslintConfigs.disableTypeChecked,
+    }
+])
+
+const reactConfig = defineConfig([
+    {
+        name: 'project/react-next',
+        files: ['**/*.{jsx,tsx}'],
+        extends: [
+            reactPlugin.configs['recommended-typescript'],
+        ],
+        plugins: {
+            'react-hooks': reactHooksPlugin,
+            '@next/next': nextPlugin,
+        },
+        rules: {
+            ...reactHooksPlugin.configs['recommended-latest'].rules,
+            'react-hooks/set-state-in-effect': 'warn',
+            ...nextPlugin.configs.recommended.rules,
+            ...nextPlugin.configs['core-web-vitals'].rules,
+        },
+    }
+])
+
+const stylisticConfig = defineConfig([
+    {
+        name: 'project/stylistic',
+        files: ['**/*.{js,mjs,ts,tsx}'],
+        plugins: {
+            '@stylistic': stylisticPlugin,
+        },
+        rules: {
+            ...stylisticPlugin.configs['disable-legacy'].rules,
+            ...stylisticPlugin.configs.recommended.rules,
+            '@stylistic/indent': ['warn', 4],
+            '@stylistic/indent-binary-ops': ['warn', 4],
+            '@stylistic/quotes': ['warn', 'single', {
+                avoidEscape: true,
+                allowTemplateLiterals: 'always'
+            }],
+            '@stylistic/jsx-quotes': ['warn', 'prefer-double'],
+            '@stylistic/semi': ['warn', 'never'],
+            '@stylistic/comma-dangle': ['warn', 'only-multiline'],
+            '@stylistic/arrow-parens': ['warn', 'as-needed', {
+                requireForBlockBody: true
+            }],
+            '@stylistic/brace-style': ['warn', '1tbs', {
+                allowSingleLine: true
+            }],
+            '@stylistic/operator-linebreak': ['warn', 'before'],
+            '@stylistic/jsx-indent-props': ['warn', 4],
+            '@stylistic/jsx-one-expression-per-line': 'off', // Too strict
+            '@stylistic/jsx-wrap-multilines': ['warn', {
+                declaration: 'parens-new-line',
+                assignment: 'parens-new-line',
+                return: 'parens-new-line',
+                arrow: 'parens-new-line',
+                condition: 'parens-new-line',
+                logical: 'parens-new-line',
+                prop: 'parens-new-line',
+            }],
+            '@stylistic/jsx-curly-newline': ['warn', {
+                multiline: 'consistent',
+                singleline: 'forbid',
+            }],
+            '@stylistic/eol-last': 'off',
+            '@stylistic/padded-blocks': 'off',
+            '@stylistic/spaced-comment': 'off',
+            '@stylistic/multiline-ternary': 'off', // Conflicts with JSX
+            '@stylistic/no-multiple-empty-lines': ['warn'],
+            '@stylistic/no-trailing-spaces': ['warn'],
+        },
+    }
+])
+
+const mdxConfig = defineConfig([
+    {
+        name: 'project/mdx-files',
+        files: ['**/*.mdx'],
+        ...mdxPlugin.flat,
+        processor: mdxPlugin.createRemarkProcessor({
+            lintCodeBlocks: false,
+            languageMapper: {},
+        }),
+    },
+    {
+        name: 'project/mdx-code-blocks',
+        files: ['**/*.mdx'],
+        ...mdxPlugin.flatCodeBlocks,
+        rules: {
+            ...mdxPlugin.flatCodeBlocks.rules,
+            'no-var': 'error',
+            'prefer-const': 'error',
+        },
+    },
+])
+
+export default defineConfig([
+    ...ignoresConfig,
+    ...eslintConfig,
+    ...typescriptConfig,
+    ...reactConfig,
+    ...stylisticConfig,
+    ...mdxConfig,
+])
+```
+
+And the full install command:
+
+```shell
+npm install --save-dev --save-exact eslint @eslint/js typescript-eslint @eslint-react/eslint-plugin eslint-plugin-react-hooks @next/eslint-plugin-next @stylistic/eslint-plugin eslint-plugin-mdx
+```
+
+## Troubleshooting
+
+Real problems I hit during the migration, so you do not have to debug them yourself:
+
+### ERESOLVE errors when installing ESLint 10
+
+If npm fails with `ERESOLVE could not resolve` mentioning `@eslint/js` and a `Conflicting peer dependency: eslint@10.x`, one of your installed plugins declares a peer dependency range that stops at ESLint 9. Read the error tree from the bottom up to find the culprit, in my case: `eslint-plugin-jsx-a11y` (peer `^3 || ... || ^9`), `eslint-plugin-react` (peer `^3 || ... || ^9.7`) and `eslint-config-next` (which depends on both). Uninstall or replace them (see the [migration table](#what-changed-compared-to-my-eslint-9-setup)).
+
+One more trap: after fixing `package.json` the ERESOLVE error can persist, because npm also reconciles against your existing `package-lock.json` AND the hidden lockfile inside `node_modules` (`node_modules/.package-lock.json`). If the error stays after your manifest is clean, delete `node_modules` (and, if you are re-resolving everything anyway, the lockfile) and reinstall.
+
+### ESLint crashes with "Package subpath './v4' is not defined"
+
+```shell
+Error [ERR_PACKAGE_PATH_NOT_EXPORTED]: Package subpath './v4' is not defined by "exports" in ...\node_modules\zod-validation-error\package.json
+```
+
+This happens when the obsolete `eslint-plugin-react-compiler` is still installed next to `eslint-plugin-react-hooks` v7.1+: the old plugin pins `zod-validation-error@^3`, react-hooks accepts `^3.5.0 || ^4.0.0` but its code requires the `/v4` subpath that only exists in v4, and npm dedupes both onto v3. The fix is to uninstall `eslint-plugin-react-compiler` (its rules live inside react-hooks now) and run `npm update zod-validation-error` so it re-resolves to v4.
+
+### Definition for rule 'jsx-a11y/alt-text' was not found
+
+Leftover `eslint-disable` comments for removed plugins are errors, not no-ops. Search your codebase for the removed rule namespaces (`jsx-a11y/`, `react/`, `react-compiler/`) and delete or update the disable comments.
+
+## Conclusion
+
+Migrating to ESLint 10 is less about ESLint itself (flat config works exactly like it did in v9) and more about pruning your plugin list down to the ones that kept up:
+
+- **`@eslint/js` + `typescript-eslint` + `@stylistic`** carried over without changes
+- **React linting** moves from `eslint-plugin-react` to `@eslint-react/eslint-plugin` and gets better in the process (TypeScript-aware, modern React assumptions, useful React 19 modernization hints)
+- **React Compiler rules** now come from `eslint-plugin-react-hooks` `recommended-latest`, drop the standalone compiler plugin
+- **`eslint-config-next` is out**, spread the `@next/eslint-plugin-next` rule sets yourself
+- **accessibility linting is the open wound** of the ESLint 10 ecosystem right now, decide consciously whether that trade-off is acceptable for your project
+
+Congratulations 🎉 you now have a fully ESLint 10 compatible linting setup for your Next.js 16 project, covering TypeScript, React (including the React Compiler rules), Next.js, your code style and even your MDX content
+
+<DonationsMessage />
+
+</article>

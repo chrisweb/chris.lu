@@ -105,7 +105,7 @@ const Button: React.FC<IProps> = ({ children, colorChange, randomize }) => {
             actionRef.current = 'pause'
         }
         setWordState((previousState) => {
-            return previousState += character
+            return previousState + character
         })
     }, [parts, updatePartIndex, withColorChange, randomizeColors])
 

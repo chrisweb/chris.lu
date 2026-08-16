@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
@@ -35,6 +36,8 @@ export const metadata = {
         tags: frontmatter.keywords,
     },
 }
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
 
 %toc%
 

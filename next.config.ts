@@ -1,21 +1,8 @@
-import { withSentryConfig } from '@sentry/nextjs'
 // uncomment the following lines if you want to use the bundle analyzer
 //import WithBundleAnalyzer from '@next/bundle-analyzer'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 import createMdx from '@next/mdx'
-import { remarkTableOfContents, type IRemarkTableOfContentsOptions as remarkTableOfContentsOptionsType } from 'remark-table-of-contents'
-import rehypeAutolinkHeadings, { type Options as rehypeAutolinkHeadingsOptionsType } from 'rehype-autolink-headings'
-import { type ElementContent } from 'hast'
-import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
-import { toString as hastToString } from 'mdast-util-to-string'
-import rehypeSlug from 'rehype-slug'
-import remarkGfm, { type Options as remarkGfmOptionsType } from 'remark-gfm'
-import { rehypeGithubAlerts, type DefaultBuildType as rehypeGithubAlertsDefaultBuildType, type IOptions as rehypeGithubAlertsOptionsType } from 'rehype-github-alerts'
-import rehypeMDXImportMedia from 'rehype-mdx-import-media'
-import remarkFrontmatter from 'remark-frontmatter'
-import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
-import { rehypePrettyCode, type Options as rehypePrettyCodeOptionsType } from 'rehype-pretty-code'
-import { transformerNotationDiff } from '@shikijs/transformers'
+import path from 'node:path'
 import { NextConfig } from 'next'
 
 const nextConfig = (phase: string) => {
@@ -27,190 +14,39 @@ const nextConfig = (phase: string) => {
         openAnalyzer: false,
     })*/
 
-    // https://rehype-pretty-code.netlify.app/
-    // Note: transformers removed for Turbopack compatibility
-    const rehypePrettyCodeOptions: rehypePrettyCodeOptionsType = {
-        // VSCode "SynthWave '84" theme
-        theme: 'synthwave-84',
-        // Keep the background or use a custom background color?
-        keepBackground: true,
-        tokensMap: {
-            function: 'entity.name.function',
-            string: 'string',
-            key: '.meta.object-literal.key',
-        },
-        defaultLang: {
-            block: 'tsx',
-            inline: 'shell',
-        },
-        transformers: [transformerNotationDiff({
-            matchAlgorithm: 'v3',
-        })],
-    }
-
-    // https://github.com/chrisweb/remark-table-of-contents#options
-    const remarkTableOfContentsOptions: remarkTableOfContentsOptionsType = {
-        containerAttributes: {
-            id: 'articleToc',
-        },
-        navAttributes: {
-            'aria-label': 'table of contents'
-        },
-        maxDepth: 2,
-    }
-
-    // https://github.com/rehypejs/rehype-autolink-headings#api
-    const rehypeAutolinkHeadingsOptions: rehypeAutolinkHeadingsOptionsType = {
-        behavior: 'append',
-        properties: (node) => {
-            //console.log(node)
-            const headingText = hastToString(node.children[0])
-            return {
-                'class': 'headingAnchor',
-                'aria-label': 'Heading permalink for: ' + headingText,
-                'title': 'Heading permalink for: ' + headingText,
-            }
-        },
-        content: fromHtmlIsomorphic(
-            '<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" class="icon iconLink" aria-hidden="true"><path d="M11 17H7q-2.075 0-3.537-1.463Q2 14.075 2 12t1.463-3.538Q4.925 7 7 7h4v2H7q-1.25 0-2.125.875T4 12q0 1.25.875 2.125T7 15h4Zm-3-4v-2h8v2Zm5 4v-2h4q1.25 0 2.125-.875T20 12q0-1.25-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.462Q22 9.925 22 12q0 2.075-1.462 3.537Q19.075 17 17 17Z"/></svg>',
-            { fragment: true }
-        ).children as ElementContent[],
-    }
-
-    // https://github.com/remarkjs/remark-gfm
-    const remarkGfmOptions: remarkGfmOptionsType = {
-        singleTilde: false,
-    }
-
-    // https://github.com/chrisweb/rehype-github-alerts
-    const myGithubAlertBuild: rehypeGithubAlertsDefaultBuildType = (alertOptions, originalChildren) => {
-
-        const alert = {
-            type: 'element',
-            tagName: 'div',
-            properties: {
-                className: [
-                    'markdown-alert',
-                    `markdown-alert-${alertOptions.keyword.toLowerCase()}`,
-                ],
-            },
-            children: [
-                {
-                    type: 'element',
-                    tagName: 'div',
-                    properties: {
-                        className: [
-                            'markdown-alert-fake-border',
-                        ],
-                    },
-                    children: [
-                        {
-                            type: 'element',
-                            tagName: 'div',
-                            properties: {
-                                className: [
-                                    'markdown-alert-header'
-                                ]
-                            },
-                            children: [
-                                {
-                                    type: 'text',
-                                    value: alertOptions.title
-                                }
-                            ],
-                        },
-                        {
-                            type: 'element',
-                            tagName: 'div',
-                            properties: {
-                                className: [
-                                    'markdown-alert-body'
-                                ]
-                            },
-                            children: [
-                                ...originalChildren
-                            ],
-                        },
-                    ],
-                },
-            ],
-        }
-
-        return alert as ElementContent
-
-    }
-
-    // https://github.com/chrisweb/rehype-github-alerts#options
-    const rehypeGithubAlertsOptions: rehypeGithubAlertsOptionsType = {
-        supportLegacy: false,
-        build: myGithubAlertBuild,
-        alerts: [
-            {
-                keyword: 'NOTE',
-                icon: '',
-                title: 'Note',
-            },
-            {
-                keyword: 'TIP',
-                icon: '',
-                title: 'Tip',
-            },
-            {
-                keyword: 'MORE',
-                icon: '',
-                title: 'Read more',
-            },
-            {
-                keyword: 'WARN',
-                icon: '',
-                title: 'Warning',
-            },
-        ],
-    }
+    // plugin configs need to be JSON-serializable (plugin names as strings,
+    // options as plain objects) so that they can cross Turbopack's Rust
+    // boundary; plugins whose options need JS values (functions, transformer
+    // instances) or that have no default export are wrapped in local preset
+    // modules (lib/mdx/) referenced by absolute path
+    const mdxPluginPath = (fileName: string) => path.join(process.cwd(), 'lib', 'mdx', fileName)
 
     const withMDX = createMdx({
         options: {
             remarkPlugins: [
-                remarkFrontmatter,
-                remarkMdxFrontmatter,
-                [remarkTableOfContents, remarkTableOfContentsOptions],
-                [remarkGfm, remarkGfmOptions],
+                'remark-frontmatter',
+                'remark-mdx-frontmatter',
+                mdxPluginPath('remark-table-of-contents.mjs'),
+                // https://github.com/remarkjs/remark-gfm
+                ['remark-gfm', { singleTilde: false }],
             ],
             rehypePlugins: [
-                [rehypePrettyCode, rehypePrettyCodeOptions],
-                rehypeSlug,
-                rehypeMDXImportMedia,
-                [rehypeAutolinkHeadings, rehypeAutolinkHeadingsOptions],
-                [rehypeGithubAlerts, rehypeGithubAlertsOptions],
+                mdxPluginPath('rehype-pretty-code.mjs'),
+                'rehype-slug',
+                'rehype-mdx-import-media',
+                mdxPluginPath('rehype-autolink-headings.mjs'),
+                mdxPluginPath('rehype-github-alerts.mjs'),
             ],
         },
-        // options when using turbopack
-        // last test with next.js 16, still no plugins support
-        // i have plugins like the alerts that need js functions
-        // so as of now turbo is still not an option :/
-        /*options: {
-            remarkPlugins: [
-                //'remark-frontmatter',
-                //'remark-mdx-frontmatter',
-                ['remark-table-of-contents', remarkTableOfContentsOptions],
-                //['remark-gfm', remarkGfmOptions],
-            ],
-            rehypePlugins: [
-                //['rehype-pretty-code', rehypePrettyCodeOptions],
-                //'rehype-slug',
-                'rehype-mdx-import-media',
-                //['rehype-autolink-headings', rehypeAutolinkHeadingsOptions],
-                //['rehype-github-alerts', rehypeGithubAlertsOptions],
-            ],
-        },*/
     })
 
     const nextConfigOptions: NextConfig = {
         reactStrictMode: true,
         poweredByHeader: false,
         reactCompiler: true,
-        // disabled cacheComponents because of https://github.com/getsentry/sentry-javascript/issues/14118
-        // note: usually you would not disable cacheComponents, but this site is mostly static
+        // cacheComponents is currently disabled, the site is mostly static
+        // it was originally disabled because of a Sentry incompatibility
+        // (Sentry has since been removed), enabling it is planned
         cacheComponents: false,
         typedRoutes: true,
         experimental: {
@@ -238,7 +74,8 @@ const nextConfig = (phase: string) => {
         images: {
             formats: ['image/avif', 'image/webp'],
             deviceSizes: [240, 336, 480, 704, 1080, 1408, 1920, 2112, 3840],
-            qualities: [100, 75],
+            // 75 is too low for avif, so images use 90 (or 100 for animated ones)
+            qualities: [100, 90],
             localPatterns: [
                 {
                     pathname: '/_next/image',
@@ -287,6 +124,15 @@ const nextConfig = (phase: string) => {
                     destination: '/web_development',
                     permanent: true,
                 },
+                {
+                    // this chapter was published twice, once with "flavored"
+                    // misspelled as "flawored", the typo url is kept alive as
+                    // a redirect so old inbound links and search results do
+                    // not 404 on it
+                    source: '/web_development/tutorials/next-js-static-mdx-blog/github-flawored-markdown-plugin',
+                    destination: '/web_development/tutorials/next-js-static-mdx-blog/github-flavored-markdown-plugin',
+                    permanent: true,
+                },
             ]
         },
     }
@@ -299,24 +145,12 @@ const nextConfig = (phase: string) => {
 const securityHeadersConfig = (phase: string) => {
 
     const cspReportOnly = false
-    const reportingUrl = 'https://o4504017992482816.ingest.us.sentry.io/api/4506763918770176/security/?sentry_key=daf0befe66519725bbe2ad707a11bbb3'
-    const reportingDomainWildcard = 'https://*.ingest.us.sentry.io'
     const isDev = phase === PHASE_DEVELOPMENT_SERVER
 
     const cspHeader = () => {
 
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         const upgradeInsecure = (!isDev && !cspReportOnly) ? 'upgrade-insecure-requests;' : ''
-
-        // report directive to be added at the end
-        // with Reporting API fallback
-        /*const reportCSPViolations = `
-            report-uri ${reportingUrl};
-            report-to default
-        `*/
-
-        // reporting uri (CSP v1)
-        const reportCSPViolations = `report-uri ${reportingUrl};`
 
         // I wanted to add the trusted-types directive to the defaultCSPDirectives:
         // require-trusted-types-for 'script';
@@ -325,14 +159,13 @@ const securityHeadersConfig = (phase: string) => {
         // I think that even if fontawesome would support it
         // it would not work with the current version of next.js
 
-        // worker-src is for sentry replay
         // child-src is because safari <= 15.4 does not support worker-src
         const defaultCSPDirectives = `
             default-src 'none';
             media-src 'self';
             object-src 'none';
-            worker-src 'self' blob:;
-            child-src 'self' blob:;
+            worker-src 'self';
+            child-src 'self';
             manifest-src 'self';
             base-uri 'none';
             form-action 'none';
@@ -348,10 +181,9 @@ const securityHeadersConfig = (phase: string) => {
                 font-src 'self';
                 style-src 'self' 'unsafe-inline';
                 script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval';
-                connect-src 'self' https://vitals.vercel-insights.com ${reportingDomainWildcard};
+                connect-src 'self' https://vitals.vercel-insights.com;
                 img-src 'self' data:;
                 frame-src 'none';
-                ${reportCSPViolations}
             `
         }
 
@@ -366,10 +198,9 @@ const securityHeadersConfig = (phase: string) => {
                 font-src 'self' https://vercel.live/ https://assets.vercel.com https://fonts.gstatic.com;
                 style-src 'self' 'unsafe-inline' https://vercel.live/fonts;
                 script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://vercel.live/;
-                connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/ ${reportingDomainWildcard};
+                connect-src 'self' https://vercel.live/ https://vitals.vercel-insights.com https://*.pusher.com/ wss://*.pusher.com/;
                 img-src 'self' data: https://vercel.com/ https://vercel.live/;
                 frame-src 'self' https://vercel.live/;
-                ${reportCSPViolations}
             `
         }
 
@@ -433,53 +264,4 @@ const securityHeadersConfig = (phase: string) => {
 
 }
 
-export default withSentryConfig(nextConfig, {
-    // For all available options, see:
-    // https://github.com/getsentry/sentry-webpack-plugin#options
-
-    telemetry: false,
-
-    org: 'chrisweb',
-    project: 'javascript-nextjs',
-
-    // Only print logs for uploading source maps in CI
-    silent: !process.env.CI,
-
-    // For all available options, see:
-    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
-
-    // Upload a larger set of source maps for prettier stack traces (increases build time)
-    widenClientFileUpload: true,
-
-    // Automatically annotate React components to show their full name in breadcrumbs and session replay
-    reactComponentAnnotation: {
-        enabled: false,
-        // not sure what to do with this yet
-        // none of my attempts seem to work
-        // https://github.com/getsentry/sentry-javascript-bundler-plugins/issues/530
-        ignoredComponents: ['@react-three/fiber', '__r3f', 'r3f', 'PlaneGeometry', 'BufferGeometry', 'Canvas', 'ambientLight', 'DirectionalLight', 'AdaptiveDpr', 'EffectComposer', 'Bloom', 'OrthographicCamera', 'PerspectiveCamera', 'SoftShadows', 'mesh'],
-    },
-
-    // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
-    // This can increase your server load as well as your hosting bill.
-    // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
-    // side errors will fail.
-    tunnelRoute: '/monitoring',
-
-    // Hides source maps from generated client bundles
-    sourcemaps: {
-        //disable: false;
-        //assets: string | string[];
-        //ignore?: string | string[];
-        //deleteSourcemapsAfterUpload: boolean;
-    },
-
-    // Automatically tree-shake Sentry logger statements to reduce bundle size
-    disableLogger: true,
-
-    // Enables automatic instrumentation of Vercel Cron Monitors. (Does not yet work with App Router route handlers.)
-    // See the following for more information:
-    // https://docs.sentry.io/product/crons/
-    // https://vercel.com/docs/cron-jobs
-    automaticVercelMonitors: false,
-})
+export default nextConfig

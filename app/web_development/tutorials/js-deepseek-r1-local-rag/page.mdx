@@ -1,5 +1,6 @@
 ---
 title: Local DeepSeek-R1 AI RAG using JavaScript (TypeScript) - Tutorial
+description: Build a local offline RAG chat app with DeepSeek-R1 and Ollama, a Next.js 15 and React 19 frontend, a JavaScript AI client and backend, and PostgreSQL with pgvector
 keywords: ['DeepSeek-R1', 'llama 3', 'ai', 'RAG', 'embeddings', 'pipeline', 'ollama.js', 'LangChain.js', 'PostgreSQL', 'pgvector', 'vector database', 'similarity search', 'Next.js 15', 'React 19', 'local', 'JavaScript', 'TypeScript']
 published: 2025-02-26T23:00:00.000Z
 modified: 2025-02-28T23:00:00.000Z
@@ -8,9 +9,11 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 
 export const metadata = {
     title: frontmatter.title,
+    description: frontmatter.description,
     keywords: frontmatter.keywords,
     alternates: {
         canonical: frontmatter.permalink,
@@ -31,6 +34,8 @@ export const metadata = {
     },
 }
 
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_js-deepseek-r1-local-rag/opengraph-image" />
+
 %toc%
 
 <article>
@@ -38,6 +43,9 @@ export const metadata = {
 # Local DeepSeek-R1 AI RAG using JavaScript (TypeScript)
 
 ![An old human teacher is teaching a classroom full of AI robots new knowledge](../../../../public/assets/images/app/web_development/tutorials/js-deepseek-r1-local-rag/banner.png 'An old human teacher is teaching a classroom full of AI robots new knowledge { banner }')
+
+> [!WARN]  
+> This tutorial was written in February 2025 and targets **Next.js 15**, **React 19** and **version 4 of the ai SDK**. The install commands below pin those major versions on purpose. The ai SDK has changed a lot since: from version 5 on, `useChat` no longer returns `input`, `handleInputChange` and `handleSubmit`, messages expose `parts` instead of `content`, `CoreMessage` was renamed to `ModelMessage`, and `toDataStreamResponse` became `toUIMessageStreamResponse`. If you drop the version pins, the code in this tutorial will not work as written
 
 ## What are we going to a build in this tutorial?
 
@@ -152,7 +160,7 @@ This tutorial assumes that already have a development environment set up:
 
 * you will need to have **git** installed
 * an IDE like **VSCode**. We will use the VSCode terminal but feel free to use your favorite command line tool instead.
-* you also need to have **Node.js** installed, preferably a version >= 22.7.0 as those versions have support for running Typescript
+* you also need to have **Node.js** installed, preferably a version >= 22.7.0 as those versions have support for running TypeScript
 
 > [!MORE]  
 > [git post (installing and using git)](/web_development/posts/git)  
@@ -167,13 +175,13 @@ First you may want to create a **GitHub repository** for your new project, which
 
 Next **clone** that **project** locally using VSCode. For more details have a look at the [VSCode post](/web_development/posts/vscode)
 
-Now that our project is open in VSCode we use the **terminal** to run the CNA command (to install the latest Next.js canary version using CNA):
+Now that our project is open in VSCode we use the **terminal** to run the CNA command (pinned to the Next.js 15 line this tutorial was written for):
 
 ```shell
-npx create-next-app@canary
+npx create-next-app@15
 ```
 
-When you get asked if you agree to install the latest CNA canary, press **y** to accept
+When you get asked if you agree to install that version of CNA, press **y** to accept
 
 When asked for a **name** make sure you only enter a dot (`.`), to tell CNA that we are already in the project folder (and so it won't create one). As name for the project CNA will use the current folder name, if later you want to change the name, you can do so by editing the package.json in the root of the project and then changing the name to something else.
 
@@ -387,10 +395,16 @@ Next we are going to use the "AI" SDK to transform our simple form into a chat c
 
 ### AI SDK client component
 
-First we install the the [AI SDK](https://sdk.vercel.ai/docs/introduction) (by Vercel):
+First we install the [AI SDK](https://sdk.vercel.ai/docs/introduction) (by Vercel), pinned to version 4:
 
 ```shell
-npm i ai --save-exact
+npm i ai@4 --save-exact
+```
+
+We also install the React bindings, which is where the `useChat` hook we are about to use comes from. Version 4 of the ai SDK pulls this package in as a dependency of its own, so the import would resolve even without this step, but relying on someone else's dependency tree is fragile, so we add it explicitly:
+
+```shell
+npm i @ai-sdk/react@1 --save-exact
 ```
 
 Next we update our chat client like this:
@@ -453,7 +467,7 @@ The ai SDK has several official providers that connect to different AI APIs, but
 First we install ollama-ai-provider package:
 
 ```shell
-npm i ollama-ai-provider --save-exact
+npm i ollama-ai-provider@1 --save-exact
 ```
 
 Now that we have the ai SDK as well as the ollama provider we can create a new API route (`app/api/chat/route.ts`) to handle requests and stream the DeepSeek-R1 answer back to our client:
@@ -655,10 +669,10 @@ Finally we will improve our chat API to be able to query our vector database and
 
 ### Node.js RAG script (in TypeScript)
 
-In this tutorial, we will use a Node.js version with native TypeScript support to run our script(s) (without having to compile them to javascript first).
+In this tutorial, we will use a Node.js version with native TypeScript support to run our script(s) (without having to compile them to JavaScript first).
 
 > [!MORE]  
-> [Node.js post (typescript support)](/web_development/posts/node-js#nodejs-native-typescript-support-type-stripping)  
+> [Node.js post (TypeScript support)](/web_development/posts/node-js#nodejs-native-typescript-support-type-stripping)  
 
 ### LangChain.js Installation
 
@@ -667,7 +681,7 @@ Python is usually the language of choice when data engineers create a project, b
 LangChain is a toolset to build RAG pipelines and other workflows powered by an AI model
 
 ```shell
-npm i langchain --save-exact
+npm i langchain@0.3 --save-exact
 ```
 
 > [!MORE]  
@@ -675,7 +689,7 @@ npm i langchain --save-exact
 
 ### Data loader
 
-We create a new file `scripts/embeddings.mts` and then add the first feature of our RAG pipeline (the file extension of our script is **.mts** (typescript module), but **.ts** would work too):
+We create a new file `scripts/embeddings.mts` and then add the first feature of our RAG pipeline (the file extension of our script is **.mts** (TypeScript module), but **.ts** would work too):
 
 ```ts title="scripts/embeddings.mts" showLineNumbers
 import { DirectoryLoader } from 'langchain/document_loaders/fs/directory'
@@ -866,13 +880,13 @@ A better solution would be to pass the frontmatter string to a parser and then u
 To parse the frontmatter you could install a package like [js-yaml](https://www.npmjs.com/package/js-yaml):
 
 ```shell
-npm i js-yaml --save-exact
+npm i js-yaml@4 --save-exact
 ```
 
-and if you use Typescript add the types:
+and if you use TypeScript add the types:
 
 ```shell
-npm i @types/js-yaml --save-exact --save-dev
+npm i @types/js-yaml@4 --save-exact --save-dev
 ```
 
 Then you edit the embeddings.mts file and first add the new import for js-yaml:
@@ -925,7 +939,7 @@ In this step we will add the [@langchain/ollama](https://github.com/langchain-ai
 First we need to install **@langchain/ollama**:
 
 ```shell
-npm i @langchain/ollama --save-exact
+npm i @langchain/ollama@0.2 --save-exact
 ```
 
 In this tutorial we will use [nomic-embed-text](https://ollama.com/library/nomic-embed-text) embedding model, you could also re-use DeepSeek-R1 as embedding model and make some tests to compare the quality of the knowledge that gets returned, if you switch to another embedding model make sure to make the changes in both files, the embeddings script and the API route, then empty the database and regenerate the embeddings
@@ -1048,13 +1062,13 @@ This is why in previous chapter we installed PostgreSQL with pgvector, so that P
 To connect to our vector store we need install [@langchain/community](https://github.com/langchain-ai/langchainjs/tree/main/libs/langchain-community/) (the LangChain.js "community") package as it contains [PGVectorStore](https://v03.api.js.langchain.com/classes/_langchain_community.vectorstores_pgvector.PGVectorStore.html) class, which we will use to initialize a connection to our vectorstore, the second package is [pg (node-postgres)](https://www.npmjs.com/package/pg) a well known PostgreSQL client for Node.js:
 
 ```shell
-npm i @langchain/community pg --save-exact
+npm i @langchain/community@0.3 pg@8 --save-exact
 ```
 
 And then the types for pg (node-postgres):
 
 ```shell
-npm i @types/pg --save-exact --save-dev
+npm i @types/pg@8 --save-exact --save-dev
 ```
 
 Next we add a function to use the langchain pgvector vectorstore:
@@ -1468,7 +1482,7 @@ The results will be different but not automatically better, which means you will
 
 Now make sure the Next.js dev server is running and then open localhost:3000 in your browser to ask the AI some questions about things it can only know because you have added that knowledge to the prompt
 
-Congratulations 🎉 you just built a chatbot and a RAG pipeline in javascript, that runs on your own hardware
+Congratulations 🎉 you just built a chatbot and a RAG pipeline in JavaScript, that runs on your own hardware
 
 > [!MORE]  
 > [pgvector "querying" readme](https://github.com/pgvector/pgvector?tab=readme-ov-file#querying)  

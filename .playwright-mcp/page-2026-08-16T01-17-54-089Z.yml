@@ -1,0 +1,1520 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - button "open global navigation menu" [ref=e3]
+    - navigation [ref=e6]:
+      - link "Home" [ref=e7]:
+        - /url: /
+      - link "Web dev" [ref=e8]:
+        - /url: /web_development
+      - link "HoloArcade" [ref=e9]:
+        - /url: /holoarcade
+      - link "Lego" [ref=e10]:
+        - /url: /lego
+      - link "Games" [ref=e11]:
+        - /url: /games
+      - link "Music" [ref=e12]:
+        - /url: /music
+      - link "Memes" [ref=e13]:
+        - /url: /memes
+      - link "About me" [ref=e14]:
+        - /url: /about_me
+    - generic [ref=e16]:
+      - button "Play" [ref=e17]
+      - button "Forward" [ref=e20]
+      - button "Open Volume Dialog" [ref=e23]
+      - button "Open Song Credits Dialog" [ref=e26]
+    - generic [ref=e29]:
+      - generic: Chris.lu
+      - img "Chris.lu header image, displaying an 80s style landscape and sunset" [ref=e30]
+      - generic [ref=e32]:
+        - generic [ref=e33]:
+          - button "> Music ON" [ref=e34]
+          - button "Music OFF" [ref=e35]
+        - button "Play 3d animation" [ref=e36]:
+          - generic [ref=e37]: press start
+  - main [ref=e38]:
+    - complementary [ref=e39]:
+      - link "Skip table of contents":
+        - /url: "#skipToc"
+      - generic [ref=e40]:
+        - navigation "table of contents" [ref=e42]:
+          - list [ref=e43]:
+            - listitem [ref=e44]:
+              - link "Code highlighting plugin" [ref=e45]:
+                - /url: "#code-highlighting-plugin"
+              - list [ref=e46]:
+                - listitem [ref=e47]:
+                  - link "Adding a new playground page" [ref=e48]:
+                    - /url: "#adding-a-new-playground-page"
+                - listitem [ref=e49]:
+                  - link "Rehype pretty code installation" [ref=e50]:
+                    - /url: "#rehype-pretty-code-installation"
+                - listitem [ref=e51]:
+                  - link "Using VSCode themes for code highlighting" [ref=e52]:
+                    - /url: "#using-vscode-themes-for-code-highlighting"
+                - listitem [ref=e53]:
+                  - link "Code block styling" [ref=e54]:
+                    - /url: "#code-block-styling"
+                - listitem [ref=e55]:
+                  - link "Line numbers" [ref=e56]:
+                    - /url: "#line-numbers"
+                - listitem [ref=e57]:
+                  - link "Line highlighting" [ref=e58]:
+                    - /url: "#line-highlighting"
+                - listitem [ref=e59]:
+                  - link "Characters highlighting" [ref=e60]:
+                    - /url: "#characters-highlighting"
+                - listitem [ref=e61]:
+                  - link "Code block language flag" [ref=e62]:
+                    - /url: "#code-block-language-flag"
+                - listitem [ref=e63]:
+                  - link "Diff using a shiki transformer (optional)" [ref=e64]:
+                    - /url: "#diff-using-a-shiki-transformer-optional"
+                - listitem [ref=e65]:
+                  - link "Highlighting inline code" [ref=e66]:
+                    - /url: "#highlighting-inline-code"
+        - generic [ref=e67]:
+          - link [ref=e68]:
+            - /url: https://www.buymeacoffee.com/chriswwweb
+            - img "buy me a coffee, please" [ref=e69]
+          - text: "* Please 😉"
+          - paragraph [ref=e70]:
+            - link [ref=e71]:
+              - /url: https://discord.gg/4p59CCTUAJ
+            - link [ref=e74]:
+              - /url: https://bsky.app/profile/chriswwweb.bsky.social
+            - link [ref=e77]:
+              - /url: https://github.com/chrisweb
+            - link [ref=e80]:
+              - /url: https://mastodon.social/@chriswwweb
+    - article [ref=e83]:
+      - navigation "Breadcrumbs" [ref=e84]:
+        - link "Web development tutorials" [ref=e86]:
+          - /url: /web_development
+        - link "Next.js 15 static first MDX starterkit" [ref=e90]:
+          - /url: /web_development/tutorials/next-js-static-first-mdx-starterkit
+      - heading [level=1] [ref=e93]:
+        - text: Code highlighting plugin
+        - 'link "Heading permalink for: Code highlighting plugin" [ref=e94]':
+          - /url: "#code-highlighting-plugin"
+      - paragraph [ref=e97]:
+        - link "rehype pretty code" [ref=e98]:
+          - /url: https://rehype-pretty.pages.dev/
+        - text: is a rehype plugin that we will use to convert our regular markdown code blocks into
+        - strong [ref=e101]: highlighted
+        - text: code blocks
+      - paragraph [ref=e102]:
+        - text: For me, the best about
+        - strong [ref=e103]: rehype pretty code
+        - text: is that it uses
+        - link "shiki" [ref=e104]:
+          - /url: https://shiki.matsu.io/
+        - text: under the hood,
+        - strong [ref=e107]: shiki
+        - text: is fantastic at highlighting code, but it also comes with an impressive feature, which is that you can use your favorite VSCode theme to make your code blocks look the same as your code in VSCode
+      - generic [ref=e109]:
+        - generic [ref=e110]: Warning
+        - generic [ref=e111]:
+          - paragraph [ref=e112]: "If you use an older version of vscode-textmate and import the rehype-pretty-code plugin in your next.config.ts, then you will get a node.js error telling you that it can NOT import the \"vscode-textmate\" package (which is a shiki dependency, and shiki is a rehype-pretty-code dependency):"
+          - figure [ref=e113]:
+            - code [ref=e115]:
+              - generic [ref=e116]: "Error [ERR_PACKAGE_PATH_NOT_EXPORTED]: No \"exports\" main defined in @shikijs/vscode-textmate/package.json"
+          - paragraph [ref=e117]:
+            - text: The fix is to update vscode-textmate (the fork by shikijs) to at least version 9.3.1, as this is the first version containing the
+            - 'link "vscode-textmate package.json fix (PR #2)" [ref=e118]':
+              - /url: https://github.com/shikijs/vscode-textmate/pull/2
+            - text: ", the easiest way is to just update shiki to the latest version using this command:"
+            - code [ref=e122]:
+              - generic [ref=e123]: npm i shiki@latest
+      - heading [level=2] [ref=e124]:
+        - text: Adding a new playground page
+        - 'link "Heading permalink for: Adding a new playground page" [ref=e125]':
+          - /url: "#adding-a-new-playground-page"
+      - paragraph [ref=e128]:
+        - text: First, go into the
+        - code [ref=e130]:
+          - generic [ref=e131]: /app/(tutorial_examples)
+        - text: folder and then create a new
+        - code [ref=e133]:
+          - generic [ref=e134]: code-highlighting_playground
+        - text: folder
+      - paragraph [ref=e135]:
+        - text: Inside the
+        - code [ref=e137]:
+          - generic [ref=e138]: code-highlighting_playground
+        - text: folder, create a new
+        - code [ref=e140]:
+          - generic [ref=e141]: page.mdx
+        - text: "MDX page and add the following content:"
+      - figure "/app/(tutorial_examples)/code-highlighting_playground/page.mdx" [ref=e142]:
+        - code [ref=e145]:
+          - generic [ref=e146]: <article>
+          - generic [ref=e148]: "```js"
+          - generic [ref=e149]: "function helloWorld() {"
+          - generic [ref=e150]: // this is a comment
+          - generic [ref=e151]: let greeting = 'Hello World!'
+          - generic [ref=e152]: console.log(greeting)
+          - generic [ref=e153]: "}"
+          - generic [ref=e154]: "```"
+          - generic [ref=e156]: </article>
+      - paragraph [ref=e158]: We create a new playground MDX page, where lines 3 to 9, we add a code block example to our playground
+      - paragraph [ref=e159]:
+        - text: If the dev server is not already running, first start the dev server (using the
+        - code [ref=e161]:
+          - generic [ref=e162]: npm run dev
+        - text: command) and then open the
+        - code [ref=e164]:
+          - generic [ref=e165]: http://localhost:3000/code-highlighting_playground
+        - text: "playground page URL in your browser to have a look at the result:"
+      - paragraph [ref=e166]:
+        - img "MDX code block example with no code highlighting" [ref=e167]
+      - paragraph [ref=e168]:
+        - text: The markdown code block syntax got converted into
+        - code [ref=e170]:
+          - generic [ref=e171]: <pre>
+        - text: HTML element, and inside of that container, there is a
+        - code [ref=e173]:
+          - generic [ref=e174]: <code class="language-js">
+        - text: HTML element, but there is no colorful syntax highlighting yet.
+      - paragraph [ref=e175]:
+        - text: This is why we will now add the
+        - strong [ref=e176]: rehype pretty code
+        - text: plugin.
+      - generic [ref=e178]:
+        - generic [ref=e179]: Read more
+        - paragraph [ref=e181]:
+          - link "\"rehype pretty code\" website" [ref=e182]:
+            - /url: https://rehype-pretty.pages.dev/
+          - link "\"shiki\" website" [ref=e185]:
+            - /url: https://shiki.matsu.io/
+      - heading [level=2] [ref=e188]:
+        - text: Rehype pretty code installation
+        - 'link "Heading permalink for: Rehype pretty code installation" [ref=e189]':
+          - /url: "#rehype-pretty-code-installation"
+      - paragraph [ref=e192]:
+        - text: To install the
+        - strong [ref=e193]: rehype pretty code
+        - text: as well as the
+        - strong [ref=e194]: shiki
+        - text: "package, we use the following command:"
+      - figure [ref=e195]:
+        - code [ref=e197]:
+          - generic [ref=e198]: npm i rehype-pretty-code@latest shiki@latest --save-exact
+      - paragraph [ref=e199]:
+        - text: Next, we edit our
+        - code [ref=e201]:
+          - generic [ref=e202]: next.config.mjs
+        - text: "file (in the root of our project) to add the plugin configuration like so:"
+      - figure "next.config.mjs" [ref=e203]:
+        - code [ref=e206]:
+          - generic [ref=e207]: "import { withSentryConfig } from '@sentry/nextjs';"
+          - generic [ref=e208]: "//import type { NextConfig } from 'next'"
+          - generic [ref=e209]: "import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'"
+          - generic [ref=e210]: import createMdx from '@next/mdx'
+          - generic [ref=e211]: import rehypeMDXImportMedia from 'rehype-mdx-import-media'
+          - generic [ref=e212]:
+            - text: import
+            - mark [ref=e213]: rehypePrettyCode
+            - text: from 'rehype-pretty-code'
+          - generic [ref=e215]: "const nextConfig = (phase/*: string*/) => {"
+          - generic [ref=e217]: "const withMDX = createMdx({"
+          - generic [ref=e218]: "extension: /\\.mdx$/,"
+          - generic [ref=e219]: "options: {"
+          - generic [ref=e220]: // optional remark and rehype plugins
+          - generic [ref=e221]: "remarkPlugins: [],"
+          - generic [ref=e222]:
+            - text: "rehypePlugins: ["
+            - mark [ref=e223]: rehypePrettyCode
+            - text: ", rehypeMDXImportMedia],"
+          - generic [ref=e224]: "},"
+          - generic [ref=e225]: "})"
+      - paragraph [ref=e226]:
+        - text: "Line 2: as we went back to using JavaScript for our next.config file, we need to comment out type imports (we keep them as we will transition back to TypeScript as soon as the"
+        - link "next.config.ts has no support for ESM only packages" [ref=e227]:
+          - /url: "#no-nextconfigts"
+        - text: problem we discussed earlier is fixed)
+      - paragraph [ref=e228]:
+        - text: "Line 3: As this is not TypeScript code anymore, and we are importing a file (have a look at the Node.js documentation explaining why"
+        - link "file extensions are mandatory" [ref=e229]:
+          - /url: https://nodejs.org/api/esm.html#mandatory-file-extensions
+        - text: for more details), which is why we added the extension to the constants file path (to become
+        - code [ref=e233]:
+          - generic [ref=e234]: next/constants.js
+        - text: )
+      - paragraph [ref=e235]: "Without the file extension you would get this error in your terminal as soon as you try to launch the development server:"
+      - figure [ref=e236]:
+        - code [ref=e238]:
+          - generic [ref=e239]: "Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'next\\constants' imported from next.config.mjs"
+          - generic [ref=e241]: Did you mean to import "next/constants.js"
+      - paragraph [ref=e242]:
+        - text: "Line 6: we import our new"
+        - strong [ref=e243]: rehypePrettyCode
+        - text: plugin
+      - paragraph [ref=e244]: "Line 15: we add the plugin to the rehype plugins configuration"
+      - paragraph [ref=e245]: "Now have another look at the playground page in your browser, and you will notice that this already looks a lot better when using the shiki default colors for highlighting:"
+      - paragraph [ref=e246]:
+        - img "rehype-pretty-code code highlighting example with default colors" [ref=e247]
+      - generic [ref=e249]:
+        - generic [ref=e250]: Read more
+        - paragraph [ref=e252]:
+          - link "npm \"rehype-pretty-code\" package" [ref=e253]:
+            - /url: https://www.npmjs.com/package/rehype-pretty-code
+          - link "npm \"shiki\" package" [ref=e256]:
+            - /url: https://www.npmjs.com/package/shiki
+      - heading [level=2] [ref=e259]:
+        - text: Using VSCode themes for code highlighting
+        - 'link "Heading permalink for: Using VSCode themes for code highlighting" [ref=e260]':
+          - /url: "#using-vscode-themes-for-code-highlighting"
+      - paragraph [ref=e263]: Next, we will configure the rehype plugin to use a VSCode theme.
+      - generic [ref=e265]:
+        - generic [ref=e266]: Tip
+        - generic [ref=e267]:
+          - paragraph [ref=e268]:
+            - text: You can install any VSCode theme you like. If you haven't a favorite VSCode theme yet, have a look at the
+            - link "VSCode marketplace" [ref=e269]:
+              - /url: https://marketplace.visualstudio.com/vscode
+          - paragraph [ref=e272]:
+            - text: When you find one you like, I recommend you first check out if the
+            - link "themes bundled with shiki" [ref=e273]:
+              - /url: https://shiki.style/themes
+            - text: page lists it, all themes included in shiki come from the
+            - link "tm-themes package" [ref=e276]:
+              - /url: https://www.npmjs.com/package/tm-themes
+            - text: ", if a theme is in that package, then it is convenient as you don't need to install the theme yourself"
+      - paragraph [ref=e279]:
+        - text: To add a theme that
+        - strong [ref=e280]: shiki
+        - text: supports, all we need to do is edit the
+        - strong [ref=e281]: rehype-pretty-code
+        - text: plugin configuration in our
+        - code [ref=e283]:
+          - generic [ref=e284]: next.config.mjs
+        - text: "file, like so:"
+      - figure "next.config.mjs" [ref=e285]:
+        - code [ref=e288]:
+          - generic [ref=e289]: "import { withSentryConfig } from '@sentry/nextjs';"
+          - generic [ref=e290]: "//import type { NextConfig } from 'next'"
+          - generic [ref=e291]: "import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'"
+          - generic [ref=e292]: import createMdx from '@next/mdx'
+          - generic [ref=e293]: import rehypeMDXImportMedia from 'rehype-mdx-import-media'
+          - generic [ref=e294]: import rehypePrettyCode from 'rehype-pretty-code'
+          - generic [ref=e296]: "const nextConfig = (phase/*: string*/) => {"
+          - generic [ref=e298]: "/** @type {import('rehype-pretty-code').Options} */"
+          - generic [ref=e299]:
+            - text: const
+            - mark [ref=e300]: rehypePrettyCodeOptions
+            - text: "= {"
+          - generic [ref=e301]: "theme: 'dracula',"
+          - generic [ref=e302]: "}"
+          - generic [ref=e304]: "const withMDX = createMdx({"
+          - generic [ref=e305]: "extension: /\\.mdx$/,"
+          - generic [ref=e306]: "options: {"
+          - generic [ref=e307]: // optional remark and rehype plugins
+          - generic [ref=e308]: "remarkPlugins: [],"
+          - generic [ref=e309]:
+            - text: "rehypePlugins: [[rehypePrettyCode,"
+            - mark [ref=e310]: rehypePrettyCodeOptions
+            - text: "], rehypeMDXImportMedia],"
+          - generic [ref=e311]: "},"
+          - generic [ref=e312]: "})"
+      - paragraph [ref=e313]:
+        - text: "Line 9: we import the types for the"
+        - strong [ref=e314]: rehype-pretty-code
+        - text: configuration, which improves the DX as it shows us for every configuration option which values we can choose from
+      - paragraph [ref=e315]:
+        - text: "Lines 10 to 12: we create a"
+        - strong [ref=e316]: rehype-pretty-code
+        - text: options object and tell shiki that we want to use the bundled
+        - link "Dracula Theme for Visual Studio Code" [ref=e317]:
+          - /url: https://draculatheme.com/visual-studio-code
+      - paragraph [ref=e320]: "Because we added the types, we will get a nice autocomplete showing us what other values we could choose from:"
+      - paragraph [ref=e321]:
+        - img "rehype-pretty-code configuration options autocomplete because we added the types" [ref=e322]
+      - paragraph [ref=e323]: "Line 19: we add the options to our rehype plugins configuration"
+      - paragraph [ref=e324]: "Now have another look at the playground page in your browser, and you will notice that this time, the code is highlighted using the colors of the theme (using the same colors we have in VSCode using the Dracula Theme for Visual Studio Code):"
+      - paragraph [ref=e325]:
+        - img "rehype-pretty-code code highlighting example with Dracula theme for VSCode colors" [ref=e326]
+      - heading [level=3] [ref=e327]:
+        - text: Using a VSCode theme from a git repository
+        - 'link "Heading permalink for: Using a VSCode theme from a git repository" [ref=e328]':
+          - /url: "#using-a-vscode-theme-from-a-git-repository"
+      - paragraph [ref=e331]: If there is a theme you wish to use, but that theme is NOT among the ones bundled in shiki, then you can get the theme using its git repository as source.
+      - paragraph [ref=e332]:
+        - text: In this example, we will install a theme called
+        - link "One Dark Pro (Atom's iconic One Dark theme for Visual Studio Code)" [ref=e333]:
+          - /url: https://github.com/Binaryify/OneDark-Pro/
+      - generic [ref=e337]:
+        - generic [ref=e338]: Note
+        - paragraph [ref=e340]:
+          - text: We are using the
+          - strong [ref=e341]: One Dark Pro for VSCode
+          - text: theme in this example even though you can use this theme without actually downloading it (as we did in the previous example) because it is one of the many themes bundled with shiki, but I use it here as an example to show you what to do when using any theme from a git repository
+      - paragraph [ref=e342]:
+        - text: First, go to the git repository of the theme you want to use and copy the
+        - strong [ref=e343]: https
+        - text: URL, then install it using the npm install command, but instead of using a package name, you use the repository URL.
+      - paragraph [ref=e344]:
+        - text: For example, to install the
+        - strong [ref=e345]: One Dark Pro Theme
+        - text: "you would use the following command:"
+      - figure [ref=e346]:
+        - code [ref=e348]:
+          - generic [ref=e349]: npm i https://github.com/Binaryify/OneDark-Pro.git
+      - paragraph [ref=e350]: "The repository gets added to your node_modules like any other package, and the package.json then contains an entry like this:"
+      - figure "package.json" [ref=e351]:
+        - code [ref=e354]:
+          - generic [ref=e355]: "\"dependencies\": {"
+          - generic [ref=e356]: "\"material-theme\": \"github:Binaryify/OneDark-Pro\","
+          - generic [ref=e357]: "},"
+      - generic [ref=e359]:
+        - generic [ref=e360]: Note
+        - generic [ref=e361]:
+          - paragraph [ref=e362]:
+            - text: At first, I was surprised to see the name
+            - strong [ref=e363]: material-theme
+            - text: in my package.json, but this is normal
+          - paragraph [ref=e364]: It is the name the One Dark theme has defined as name in its package.json
+      - paragraph [ref=e365]: "Then you go into your Next.js configuration file and change the code to this:"
+      - figure "next.config.mjs" [ref=e366]:
+        - code [ref=e369]:
+          - generic [ref=e370]: "import { withSentryConfig } from '@sentry/nextjs';"
+          - generic [ref=e371]: "//import type { NextConfig } from 'next'"
+          - generic [ref=e372]: "import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'"
+          - generic [ref=e373]: import createMdx from '@next/mdx'
+          - generic [ref=e374]: import rehypeMDXImportMedia from 'rehype-mdx-import-media'
+          - generic [ref=e375]: import rehypePrettyCode from 'rehype-pretty-code'
+          - generic [ref=e376]: "import { readFileSync } from 'fs'"
+          - generic [ref=e378]: "const nextConfig = (phase/*: string*/) => {"
+          - generic [ref=e380]: const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
+          - generic [ref=e381]: const themeFileContent = readFileSync(themePath, 'utf-8')
+          - generic [ref=e383]: "/** @type {import('rehype-pretty-code').Options} */"
+          - generic [ref=e384]: "const rehypePrettyCodeOptions = {"
+          - generic [ref=e385]:
+            - text: "theme:"
+            - mark [ref=e386]: JSON.parse(themeFileContent)
+            - text: ","
+          - generic [ref=e387]: "}"
+          - generic [ref=e389]: "const withMDX = createMdx({"
+          - generic [ref=e390]: "extension: /\\.mdx$/,"
+          - generic [ref=e391]: "options: {"
+          - generic [ref=e392]: // optional remark and rehype plugins
+          - generic [ref=e393]: "remarkPlugins: [],"
+          - generic [ref=e394]: "rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions], rehypeMDXImportMedia],"
+          - generic [ref=e395]: "},"
+          - generic [ref=e396]: "})"
+      - paragraph [ref=e397]:
+        - text: "Line 7: we import the"
+        - strong [ref=e398]: readFileSync
+        - text: function from the Node.js
+        - link "file system module (fs)" [ref=e399]:
+          - /url: https://nodejs.org/api/fs.html
+      - paragraph [ref=e402]: "Line 11: we create a URL using the path to the location of our theme in the node_modules folder"
+      - paragraph [ref=e403]:
+        - text: "Line 12: we use the"
+        - strong [ref=e404]: readFileSync
+        - text: to read the content of the theme file
+      - paragraph [ref=e405]:
+        - text: "Line 16: we parse the themes json file content using the JavaScript"
+        - strong [ref=e406]: JSON parser
+        - text: before passing it to the plugin theme configuration option
+      - paragraph [ref=e407]: "Now have another look at the playground, and you will notice that this time, the code is highlighted using the colors of the One Dark Pro theme:"
+      - paragraph [ref=e408]:
+        - img "rehype-pretty-code code highlighting example with One Dark Pro theme for VSCode colors" [ref=e409]
+      - generic [ref=e411]:
+        - generic [ref=e412]: Note
+        - generic [ref=e413]:
+          - paragraph [ref=e414]: As themes are JSON files that you import in your configuration, and if you are into creating personalized color palettes, then you have the option to create or at least edit an existing theme
+          - paragraph [ref=e415]: All you need to do is create a json file (or clone one of the themes you like), bring in your own colors, and then import it the same way we imported a theme that we downloaded from GitHub
+          - paragraph [ref=e416]:
+            - text: If you have created your own theme you could then host it on GitHub to share it with others, and even go a step further by
+            - link "creating your own VSCode theme extension" [ref=e417]:
+              - /url: https://code.visualstudio.com/api/get-started/your-first-extension
+            - text: and then
+            - link "publish it on the VSCode marketplace" [ref=e420]:
+              - /url: https://code.visualstudio.com/api/working-with-extensions/publishing-extension
+      - generic [ref=e424]:
+        - generic [ref=e425]: Read more
+        - paragraph [ref=e427]:
+          - link "VSCode marketplace" [ref=e428]:
+            - /url: https://marketplace.visualstudio.com/vscode
+          - link "npm \"tm-themes\" package" [ref=e431]:
+            - /url: https://www.npmjs.com/package/tm-themes
+          - link "One Dark Pro theme for VSCode)" [ref=e434]:
+            - /url: https://github.com/Binaryify/OneDark-Pro/
+          - link "Dracula theme for VSCode" [ref=e437]:
+            - /url: https://draculatheme.com/visual-studio-code
+      - heading [level=2] [ref=e440]:
+        - text: Code block styling
+        - 'link "Heading permalink for: Code block styling" [ref=e441]':
+          - /url: "#code-block-styling"
+      - paragraph [ref=e444]:
+        - text: Next, we add the following CSS to our
+        - code [ref=e446]:
+          - generic [ref=e447]: global.css
+        - text: "file:"
+      - figure "/app/global.css" [ref=e448]:
+        - code [ref=e451]:
+          - generic [ref=e452]: "[data-rehype-pretty-code-figure],"
+          - generic [ref=e453]: "[data-rehype-pretty-code-figure]>pre {"
+          - generic [ref=e454]: "margin: 0;"
+          - generic [ref=e455]: "padding: 0;"
+          - generic [ref=e456]: "}"
+          - generic [ref=e458]: "[data-rehype-pretty-code-figure]>pre {"
+          - generic [ref=e459]: "width: 100%;"
+          - generic [ref=e460]: "overflow: auto;"
+          - generic [ref=e461]: "padding: var(--spacing);"
+          - generic [ref=e462]: "}"
+      - paragraph [ref=e463]:
+        - text: "Lines 135 to 139: we only reset the"
+        - strong [ref=e464]: margin
+        - text: and
+        - strong [ref=e465]: padding
+        - text: on the
+        - code [ref=e467]:
+          - generic [ref=e468]: <figure>
+        - text: element that is the container of a rehype-pretty-code code block;
+        - strong [ref=e469]: rehype-pretty-code
+        - text: use a
+        - code [ref=e471]:
+          - generic [ref=e472]: <figure>
+        - text: element as container around code blocks, that
+        - code [ref=e474]:
+          - generic [ref=e475]: <figure>
+        - text: element has a
+        - strong [ref=e476]: data-rehype-pretty-code-figure
+        - text: attribute, we use that attribute to target the element using a selector in our CSS, as well as the
+        - code [ref=e478]:
+          - generic [ref=e479]: <pre>
+        - text: element that is inside of the
+        - code [ref=e481]:
+          - generic [ref=e482]: <figure>
+        - text: element
+      - paragraph [ref=e483]:
+        - text: "Lines 141 to 145: we set the"
+        - strong [ref=e484]: width
+        - text: of the
+        - code [ref=e486]:
+          - generic [ref=e487]: <pre>
+        - text: element to
+        - strong [ref=e488]: 100%
+        - text: to make sure our code block is as wide as our articles, and then we set the
+        - strong [ref=e489]: overflow
+        - text: property to
+        - strong [ref=e490]: auto
+        - text: ", meaning that if the code inside of the code block is too large, then the code block is allowed to add (and display) a vertical scrollbar. If the code fits the code block then the scrollbar will be hidden. Finally we use our spacing variable to add some padding all around our code."
+      - heading [level=3] [ref=e491]:
+        - text: Customizing the code block background color
+        - 'link "Heading permalink for: Customizing the code block background color" [ref=e492]':
+          - /url: "#customizing-the-code-block-background-color"
+      - paragraph [ref=e495]: When styling and using themes, you can either keep the original background color defined in the themes json or deactivate it. This is especially interesting if the theme background color does not match your website's color palette at all and you want to use a different background color for your code blocks.
+      - paragraph [ref=e496]: As we will see, it is easy to configure rehype pretty code to use a custom background color instead of the one from the VSCode theme. However, it can be tricky to find a background color that both, looks good when placed in a page that uses your websites color palette, and still has a high enough contrast when used as background for code that gets highlighted using the VSCode theme colors.
+      - paragraph [ref=e497]:
+        - text: To disable the default theme background color, we edit the rehype pretty code configuration in our
+        - code [ref=e499]:
+          - generic [ref=e500]: next.config.mjs
+        - text: "file:"
+      - figure "next.config.mjs" [ref=e501]:
+        - code [ref=e504]:
+          - generic [ref=e505]: "/** @type {import('rehype-pretty-code').Options} */"
+          - generic [ref=e506]: "const rehypePrettyCodeOptions = {"
+          - generic [ref=e507]: "theme: JSON.parse(themeFileContent),"
+          - generic [ref=e508]: "keepBackground: false,"
+          - generic [ref=e509]: "}"
+      - paragraph [ref=e510]:
+        - text: "Line 16: we set the"
+        - code [ref=e512]:
+          - generic [ref=e513]: keepBackground
+        - text: option to false, which disables the default theme background color
+      - paragraph [ref=e514]:
+        - text: Then we
+        - strong [ref=e515]: add
+        - text: our background color to our rehype-pretty-code CSS in the
+        - code [ref=e517]:
+          - generic [ref=e518]: global.css
+        - text: "file:"
+      - figure "/app/global.css" [ref=e519]:
+        - code [ref=e522]:
+          - generic [ref=e523]: "[data-rehype-pretty-code-figure],"
+          - generic [ref=e524]: "[data-rehype-pretty-code-figure]>pre {"
+          - generic [ref=e525]: "margin: 0;"
+          - generic [ref=e526]: "padding: 0;"
+          - generic [ref=e527]: "}"
+          - generic [ref=e529]: "[data-rehype-pretty-code-figure]>pre {"
+          - generic [ref=e530]: "width: 100%;"
+          - generic [ref=e531]: "overflow: auto;"
+          - generic [ref=e532]: "padding: var(--spacing);"
+          - generic [ref=e533]: "background-color: #27162b;"
+          - generic [ref=e534]: "}"
+      - paragraph [ref=e535]:
+        - text: "Line 145: we add our"
+        - code [ref=e537]:
+          - generic [ref=e538]: background-color
+        - text: . I chose a very dark color to make sure we have a high contrast between the code colors and the background
+      - paragraph [ref=e539]:
+        - text: "Make sure your dev server is running and then have a look at the result of what we have achieved so far:"
+        - code [ref=e541]:
+          - generic [ref=e542]: http://localhost:3000/code-highlighting_playground
+      - paragraph [ref=e543]: (Also if you didn't do a commit recently, now is a good time to do so)
+      - heading [level=2] [ref=e544]:
+        - text: Line numbers
+        - 'link "Heading permalink for: Line numbers" [ref=e545]':
+          - /url: "#line-numbers"
+      - paragraph [ref=e548]:
+        - text: On its website, the
+        - strong [ref=e549]: rehype-pretty-code
+        - text: "plugin author recommends adding some more CSS if you want to display line numbers (in your code blocks on the left side):"
+      - figure "/app/global.css" [ref=e550]:
+        - code [ref=e553]:
+          - generic [ref=e554]: /* recommended by https://rehype-pretty-code.netlify.app/ */
+          - generic [ref=e555]: "code[data-line-numbers] {"
+          - generic [ref=e556]: "counter-reset: line;"
+          - generic [ref=e557]: "}"
+          - generic [ref=e559]: "code[data-line-numbers]>[data-line]::before {"
+          - generic [ref=e560]: "counter-increment: line;"
+          - generic [ref=e561]: "content: counter(line);"
+          - generic [ref=e563]: /* Other styling */
+          - generic [ref=e564]: "display: inline-block;"
+          - generic [ref=e565]: "width: 1rem;"
+          - generic [ref=e566]: "margin-right: 2rem;"
+          - generic [ref=e567]: "text-align: right;"
+          - generic [ref=e568]: "color: gray;"
+          - generic [ref=e569]: "}"
+          - generic [ref=e571]: "code[data-line-numbers-max-digits=\"2\"]>[data-line]::before {"
+          - generic [ref=e572]: "width: 2rem;"
+          - generic [ref=e573]: "}"
+          - generic [ref=e575]: "code[data-line-numbers-max-digits=\"3\"]>[data-line]::before {"
+          - generic [ref=e576]: "width: 3rem;"
+          - generic [ref=e577]: "}"
+      - paragraph [ref=e578]:
+        - text: "We are using an interesting CSS feature here: the"
+        - link "CSS counters" [ref=e579]:
+          - /url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_counter_styles/Using_CSS_counters
+        - text: feature is perfect for numbering code block lines but can be used for other things too, for example, if you want to add numbering to headings or lists
+      - paragraph [ref=e582]:
+        - text: Next, we need to go back to our playground and add a keyword on top of our code block to tell rehype pretty code to enable the
+        - strong [ref=e583]: line numbers
+        - text: for that code block, meaning only code blocks for which you use the
+        - strong [ref=e584]: showLineNumbers
+        - text: keyword will have line numbers. This is because when using the keyword, the rehype pretty code plugin will add
+        - code [ref=e586]:
+          - generic [ref=e587]: data-line-numbers
+        - text: attribute to the
+        - code [ref=e589]:
+          - generic [ref=e590]: <code>
+        - text: elements, our CSS selector which checks if that attribute exists will then apply the numbering
+      - figure "/app/(tutorial_examples)/code-highlighting_playground/page.mdx" [ref=e591]:
+        - code [ref=e594]:
+          - generic [ref=e595]: <article>
+          - generic [ref=e597]:
+            - text: "```js"
+            - mark [ref=e598]: showLineNumbers
+          - generic [ref=e599]: "function helloWorld() {"
+          - generic [ref=e600]: // this is a comment
+          - generic [ref=e601]: let greeting = 'Hello World!'
+          - generic [ref=e602]: console.log(greeting)
+          - generic [ref=e603]: "}"
+          - generic [ref=e604]: "```"
+          - generic [ref=e606]: </article>
+      - paragraph [ref=e608]:
+        - text: "Line 3: we add the"
+        - code [ref=e610]:
+          - generic [ref=e611]: showLineNumbers
+        - text: keyword to the code block markdown
+      - paragraph [ref=e612]:
+        - text: If your code block only contains a
+        - strong [ref=e613]: code fragment
+        - text: "and you want to indicate that the first line is NOT 1 but another number, then you add the number you wish to use for the first line inside curly brackets to the showLineNumbers keyword, like so:"
+      - figure "/app/(tutorial_examples)/code-highlighting_playground/page.mdx" [ref=e614]:
+        - code [ref=e617]:
+          - generic [ref=e618]: <article>
+          - generic [ref=e620]:
+            - text: "```js"
+            - mark [ref=e621]: "showLineNumbers{10}"
+          - generic [ref=e622]: "function helloWorld() {"
+          - generic [ref=e623]: // this is a comment
+          - generic [ref=e624]: let greeting = 'Hello World!'
+          - generic [ref=e625]: console.log(greeting)
+          - generic [ref=e626]: "}"
+          - generic [ref=e627]: "```"
+          - generic [ref=e629]: </article>
+      - paragraph [ref=e631]:
+        - text: "Line 3: we updated the"
+        - code [ref=e633]:
+          - generic [ref=e634]: showLineNumbers
+        - text: and attached
+        - code [ref=e636]:
+          - generic [ref=e637]: "{10}"
+        - text: to it, to tell the code block that the first line is number 10 (and NOT the default 1)
+      - generic [ref=e639]:
+        - generic [ref=e640]: Read more
+        - paragraph [ref=e642]:
+          - link "MDN \"CSS counters\" documentation" [ref=e643]:
+            - /url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_counter_styles/Using_CSS_counters
+      - heading [level=2] [ref=e646]:
+        - text: Line highlighting
+        - 'link "Heading permalink for: Line highlighting" [ref=e647]':
+          - /url: "#line-highlighting"
+      - paragraph [ref=e650]: Another great feature of rehype pretty code is that you can highlight code lines, and it is effortless to do so
+      - paragraph [ref=e651]: "First, we update our global.css and add some styling for highlighted lines, like so:"
+      - figure "/app/global.css" [ref=e652]:
+        - code [ref=e655]:
+          - generic [ref=e656]: /* code blocks custom styling */
+          - generic [ref=e657]: "[data-line] {"
+          - generic [ref=e658]: "border-left-width: 2px;"
+          - generic [ref=e659]: "border-left-style: solid;"
+          - generic [ref=e660]: "border-left-color: transparent;"
+          - generic [ref=e661]: "}"
+          - generic [ref=e663]: "[data-highlighted-line] {"
+          - generic [ref=e664]: "background-color: #58404c;"
+          - generic [ref=e665]: "border-left-color: #d6277f;"
+          - generic [ref=e666]: "}"
+      - paragraph [ref=e667]:
+        - text: "Lines 174 to 178: we use a selector to target all lines. Lines have a"
+        - code [ref=e669]:
+          - generic [ref=e670]: data-line
+        - text: attribute, and the CSS we add uses a border to create a vertical line on the left, we will then colorize that border when the code line is highlighted, but by default, we set it to
+        - code [ref=e672]:
+          - generic [ref=e673]: transparent
+        - text: ; to create this vertical line is of course not mandatory if you don't like it leave it away
+      - paragraph [ref=e674]:
+        - text: "Lines 180 to 183: we use a selector to target all lines that have a"
+        - code [ref=e676]:
+          - generic [ref=e677]: data-highlighted-line
+        - text: attribute; we change the background color of the line as well as the color of the border (vertical line) we added on the left
+      - paragraph [ref=e678]:
+        - text: Then we need to add the numbers of the lines we want to highlight inside of curly brackets (
+        - code [ref=e680]:
+          - generic [ref=e681]: "{}"
+        - text: "), like so:"
+      - figure "/app/(tutorial_examples)/code-highlighting_playground/page.mdx" [ref=e682]:
+        - code [ref=e685]:
+          - generic [ref=e686]: <article>
+          - generic [ref=e688]: "```js showLineNumbers {1} {3-4}"
+          - generic [ref=e689]: "function helloWorld() {"
+          - generic [ref=e690]: // this is a comment
+          - generic [ref=e691]: let greeting = 'Hello World!'
+          - generic [ref=e692]: console.log(greeting)
+          - generic [ref=e693]: "}"
+          - generic [ref=e694]: "```"
+          - generic [ref=e696]: </article>
+      - paragraph [ref=e698]:
+        - text: "Line 3: we removed the"
+        - code [ref=e700]:
+          - generic [ref=e701]: "{10}"
+        - text: curly brackets to make our line numbers start with 1 again, then we added a space and then a number inside of curly brackets
+        - code [ref=e703]:
+          - generic [ref=e704]: "{1}"
+        - text: to highlight the first line and also added
+        - code [ref=e706]:
+          - generic [ref=e707]: "{3-4}"
+        - text: to highlight lines 3 to 4
+      - paragraph [ref=e708]: As you can see, you can highlight a single line by using the line number, or you can set a range using two values to highlight from line X to line Y.
+      - paragraph [ref=e709]: If you want more than one highlighted line style, you can use IDs to create unlimited variations.
+      - paragraph [ref=e710]: "Let's start the other way around, this time we first add an ID to our curly brackets in the playground code block example:"
+      - figure "/app/(tutorial_examples)/code-highlighting_playground/page.mdx" [ref=e711]:
+        - code [ref=e714]:
+          - generic [ref=e715]: <article>
+          - generic [ref=e717]:
+            - text: "```js showLineNumbers {1}"
+            - mark [ref=e718]: "#errorLine"
+            - text: "{3-4}"
+          - generic [ref=e719]: "function helloWorld() {"
+          - generic [ref=e720]: // this is a comment
+          - generic [ref=e721]: let greeting = 'Hello World!'
+          - generic [ref=e722]: console.log(greeting)
+          - generic [ref=e723]: "}"
+          - generic [ref=e724]: "```"
+          - generic [ref=e726]: </article>
+      - paragraph [ref=e728]:
+        - text: "Line 3: we add a new highlight style ID after the curly brackets using a hashtag ("
+        - code [ref=e730]:
+          - generic [ref=e731]: "#"
+        - text: ), and then we set the highlight line ID to
+        - code [ref=e733]:
+          - generic [ref=e734]: errorLine
+      - paragraph [ref=e735]:
+        - text: If you launch the dev server, then open the playground URL
+        - code [ref=e737]:
+          - generic [ref=e738]: http://localhost:3000/code-highlighting_playground
+        - text: in your browser, right-click on the code block and then select
+        - strong [ref=e739]: Inspect
+        - text: ", you will notice that because we added the"
+        - code [ref=e741]:
+          - generic [ref=e742]: "#errorLine"
+        - text: ID we now have a
+        - code [ref=e744]:
+          - generic [ref=e745]: data-highlighted-line-id="errorLine"
+        - text: attribute, meaning we can now target
+        - code [ref=e747]:
+          - generic [ref=e748]: data-highlighted-line-id
+        - text: attributes that have the value
+        - code [ref=e750]:
+          - generic [ref=e751]: errorLine
+        - text: in our CSS to change their background (and left line) color(s)
+      - paragraph [ref=e752]:
+        - img "chrome dev tools element inspect showing the data-highlighted-line-id attribute with errorLine as value" [ref=e753]
+      - paragraph [ref=e754]:
+        - text: Next, we update our global.css again and add another highlight style, but this one is only for highlighted lines that have the ID
+        - code [ref=e756]:
+          - generic [ref=e757]: errorLine
+        - text: ":"
+      - figure "/app/global.css" [ref=e758]:
+        - code [ref=e761]:
+          - generic [ref=e762]: "[data-highlighted-line][data-highlighted-line-id=\"errorLine\"] {"
+          - generic [ref=e763]: "background-color: #6b2424;"
+          - generic [ref=e764]: "border-left-color: #ff003d;"
+          - generic [ref=e765]: "}"
+      - paragraph [ref=e766]:
+        - text: "Lines 185 to 188: we add a selector to target the"
+        - code [ref=e768]:
+          - generic [ref=e769]: data-highlighted-line-id
+        - text: attribute if it has the value
+        - code [ref=e771]:
+          - generic [ref=e772]: errorLine
+        - text: ; we also set a reddish color for the background and vertical line to make this code block line look like a code line with an error
+      - paragraph [ref=e773]:
+        - text: If you launch the dev server and then open the playground URL in your browser, you will see that the first line is highlighted but uses the
+        - code [ref=e775]:
+          - generic [ref=e776]: errorLine
+        - text: ID style. Lines 3 to 4 are highlighted, too, but as they have no ID, they use the default highlight line style.
+      - paragraph [ref=e777]:
+        - img "highlighted line using a special ID to make it look like there was an error at that line" [ref=e778]
+      - heading [level=2] [ref=e779]:
+        - text: Characters highlighting
+        - 'link "Heading permalink for: Characters highlighting" [ref=e780]':
+          - /url: "#characters-highlighting"
+      - paragraph [ref=e783]: Not only can you highlight lines, but you can also highlight a series of characters.
+      - paragraph [ref=e784]: "Go back to editing the playground markdown and change the code block to this:"
+      - figure "/app/(tutorial_examples)/code-highlighting_playground/page.mdx" [ref=e785]:
+        - code [ref=e788]:
+          - generic [ref=e789]: <article>
+          - generic [ref=e791]:
+            - text: "```js showLineNumbers /"
+            - mark [ref=e792]: helloWorld()
+            - text: /
+          - generic [ref=e793]: "function helloWorld() {"
+          - generic [ref=e794]: // this is a comment
+          - generic [ref=e795]: let greeting = 'Hello World!'
+          - generic [ref=e796]: console.log(greeting)
+          - generic [ref=e797]: "}"
+          - generic [ref=e798]: "```"
+          - generic [ref=e800]: </article>
+      - paragraph [ref=e802]:
+        - text: "Line 3: we remove the curly brackets (used to highlight a line) from the previous example and instead used two slashes ("
+        - code [ref=e804]:
+          - generic [ref=e805]: /
+        - text: ) to tell rehype pretty code that we want to highlight
+        - code [ref=e807]:
+          - generic [ref=e808]: helloWorld()
+      - paragraph [ref=e809]: "Next, we update our stylesheet and add some CSS to style highlighted characters:"
+      - figure "/app/global.css" [ref=e810]:
+        - code [ref=e813]:
+          - generic [ref=e814]: "[data-highlighted-chars] {"
+          - generic [ref=e815]: "background-color: #432936;"
+          - generic [ref=e816]: "}"
+      - paragraph [ref=e817]: "Lines 190 to 192: we add a custom background color for highlighted characters"
+      - paragraph [ref=e818]: "Same as for the highlighted lines, you can add an unlimited amount of highlighted character variations by using IDs like so:"
+      - figure "/app/(tutorial_examples)/code-highlighting_playground/page.mdx" [ref=e819]:
+        - code [ref=e822]:
+          - generic [ref=e823]: <article>
+          - generic [ref=e825]:
+            - text: "```js showLineNumbers /greeting/"
+            - mark [ref=e826]: "#mySpecialHighlight"
+          - generic [ref=e827]: "function helloWorld() {"
+          - generic [ref=e828]: // this is a comment
+          - generic [ref=e829]: let greeting = 'Hello World!'
+          - generic [ref=e830]: console.log(greeting)
+          - generic [ref=e831]: "}"
+          - generic [ref=e832]: "```"
+          - generic [ref=e834]: </article>
+      - paragraph [ref=e836]: "And then you need to add the style for that new ID:"
+      - figure "/app/global.css" [ref=e837]:
+        - code [ref=e840]:
+          - generic [ref=e841]: "[data-highlighted-chars][data-chars-id=\"mySpecialHighlight\"] {"
+          - generic [ref=e842]: "background-color: #874691;"
+          - generic [ref=e843]: "}"
+      - paragraph [ref=e844]:
+        - text: "Lines 194 to 196: we set the background color for highlighted characters when using the"
+        - strong [ref=e845]: mySpecialHighlight
+        - text: ID
+      - paragraph [ref=e846]: If you look at the result in your browser, you will notice that both occurrences of the greeting variable were highlighted.
+      - paragraph [ref=e847]: "To only highlight the second one, add the number 2 behind the second slash, like so:"
+      - figure "/app/(tutorial_examples)/code-highlighting_playground/page.mdx" [ref=e848]:
+        - code [ref=e851]:
+          - generic [ref=e852]: <article>
+          - generic [ref=e854]:
+            - text: "```js showLineNumbers /greeting/"
+            - mark [ref=e855]: "2"
+            - text: "#mySpecialHighlight"
+          - generic [ref=e856]: "function helloWorld() {"
+          - generic [ref=e857]: // this is a comment
+          - generic [ref=e858]: let greeting = 'Hello World!'
+          - generic [ref=e859]: console.log(greeting)
+          - generic [ref=e860]: "}"
+          - generic [ref=e861]: "```"
+          - generic [ref=e863]: </article>
+      - paragraph [ref=e865]: "Gives you this (only the second occurrence of \"greeting\" is highlighted):"
+      - paragraph [ref=e866]:
+        - img "tell the code block to highlight the \"greeting\" characters but only the second occurrence" [ref=e867]
+      - heading [level=2] [ref=e868]:
+        - text: Code block language flag
+        - 'link "Heading permalink for: Code block language flag" [ref=e869]':
+          - /url: "#code-block-language-flag"
+      - paragraph [ref=e872]:
+        - text: In the previous example(s), we already saw the first option, which consists of setting the programming language, for instance, to
+        - strong [ref=e873]: JavaScript
+        - text: by using the
+        - code [ref=e875]:
+          - generic [ref=e876]: js
+        - text: language flag (placed after the 3 backticks of our fenced code block), it is essential to set the language flag as rehype pretty code (shiki) needs that information to know what colors to use when highlighting your code.
+      - paragraph [ref=e877]:
+        - text: So far, we have always used JavaScript by adding the language flag
+        - code [ref=e879]:
+          - generic [ref=e880]: js
+        - text: ", but if you want, for example, to change the programming language from"
+        - strong [ref=e881]: JavaScript
+        - text: to
+        - strong [ref=e882]: JSX
+        - text: ", then all you need to do is change the language flag (after the backticks) to"
+        - code [ref=e884]:
+          - generic [ref=e885]: jsx
+        - text: ", like so:"
+      - figure "/app/(tutorial_examples)/code-highlighting_playground/page.mdx" [ref=e886]:
+        - code [ref=e889]:
+          - generic [ref=e890]: <article>
+          - generic [ref=e892]:
+            - text: "```"
+            - mark [ref=e893]: jsx
+            - text: showLineNumbers /greeting/2#mySpecialHighlight
+          - generic [ref=e894]: "function helloWorld() {"
+          - generic [ref=e895]: // this is a comment
+          - generic [ref=e896]: let greeting = 'Hello World!'
+          - generic [ref=e897]: console.log(greeting)
+          - generic [ref=e898]: "}"
+          - generic [ref=e899]: "```"
+          - generic [ref=e901]: </article>
+      - paragraph [ref=e903]:
+        - text: "Line 3: we changed the language flag from js to"
+        - strong [ref=e904]: jsx
+      - generic [ref=e906]:
+        - generic [ref=e907]: Tip
+        - generic [ref=e908]:
+          - paragraph [ref=e909]: You can use language flags like js and jsx, ts, and tsx, and also md and mdx, but for example, mjs or esm are not supported as language flags
+          - paragraph [ref=e910]:
+            - text: You can check out the complete list of language flags that are available by looking at the
+            - link "shiki languages file" [ref=e911]:
+              - /url: https://github.com/shikijs/shiki/blob/main/packages/shiki/src/assets/langs-bundle-full.ts#L1248
+      - heading [level=3] [ref=e914]:
+        - text: Configuring the code block default language
+        - 'link "Heading permalink for: Configuring the code block default language" [ref=e915]':
+          - /url: "#configuring-the-code-block-default-language"
+      - paragraph [ref=e918]: There is a second option to specify the programming language. This option is helpful if all your code blocks contain code written in the same language and you want to avoid having to set the language flag for every code block.
+      - paragraph [ref=e919]: "In this case, you can use the rehype pretty code configuration to set a default language:"
+      - figure "next.config.mjs" [ref=e920]:
+        - code [ref=e923]:
+          - generic [ref=e924]: "import { withSentryConfig } from '@sentry/nextjs';"
+          - generic [ref=e925]: "//import type { NextConfig } from 'next'"
+          - generic [ref=e926]: "import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'"
+          - generic [ref=e927]: import createMdx from '@next/mdx'
+          - generic [ref=e928]: import rehypeMDXImportMedia from 'rehype-mdx-import-media'
+          - generic [ref=e929]: import rehypePrettyCode from 'rehype-pretty-code'
+          - generic [ref=e930]: "import { readFileSync } from 'fs'"
+          - generic [ref=e932]: "const nextConfig = (phase/*: string*/) => {"
+          - generic [ref=e934]: const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
+          - generic [ref=e935]: const themeFileContent = readFileSync(themePath, 'utf-8')
+          - generic [ref=e937]: "/** @type {import('rehype-pretty-code').Options} */"
+          - generic [ref=e938]: "const rehypePrettyCodeOptions = {"
+          - generic [ref=e939]: "theme: JSON.parse(themeFileContent),"
+          - generic [ref=e940]: "keepBackground: false,"
+          - generic [ref=e941]: "defaultLang: {"
+          - generic [ref=e942]: "block: 'js',"
+          - generic [ref=e943]: "},"
+          - generic [ref=e944]: "}"
+      - paragraph [ref=e945]:
+        - text: "Lines 18 to 20: we set the rehype pretty code"
+        - code [ref=e947]:
+          - generic [ref=e948]: defaultLang
+        - text: configuration option for a code
+        - code [ref=e950]:
+          - generic [ref=e951]: block
+        - text: to
+        - code [ref=e953]:
+          - generic [ref=e954]: js
+      - paragraph [ref=e955]: "Now that we have a default language set, we can remove the language flag we had after the 3 backticks of our fenced code block, like so:"
+      - figure "/app/(tutorial_examples)/code-highlighting_playground/page.mdx" [ref=e956]:
+        - code [ref=e959]:
+          - generic [ref=e960]: <article>
+          - generic [ref=e962]: "```"
+          - generic [ref=e963]: "function helloWorld() {"
+          - generic [ref=e964]: // this is a comment
+          - generic [ref=e965]: let greeting = 'Hello World!'
+          - generic [ref=e966]: console.log(greeting)
+          - generic [ref=e967]: "}"
+          - generic [ref=e968]: "```"
+          - generic [ref=e970]: </article>
+      - paragraph [ref=e972]: "Line 3: we remove the language flag (and any other options)"
+      - paragraph [ref=e973]: "If you did follow the \"ESLint with remark lint setup\" we did earlier in this tutorial, then you should now see that our code block is underlined, and if you hover over it, you will see it is an ESLint warning:"
+      - paragraph [ref=e974]:
+        - 'img "ESLint warning in VSCode: Unexpected missing fenced code language flag in info string" [ref=e975]'
+      - paragraph [ref=e976]:
+        - text: We see this Remark lint
+        - link "remark-lint-fenced-code-flag" [ref=e977]:
+          - /url: https://github.com/remarkjs/remark-lint/blob/main/packages/remark-lint-fenced-code-flag/readme.md
+        - text: warning because remark-lint is not aware of the default language we just added
+      - paragraph [ref=e980]:
+        - text: If you want to remove the linting warning, use a
+        - link "comment to disable the rule" [ref=e981]:
+          - /url: /web_development/tutorials/next-js-static-first-mdx-starterkit/linting-in-vscode-using-extensions#disabling-rules-using-comments
+        - text: for that code block or if you want to disable that remark-link rule altogether, then you need to edit your
+        - code [ref=e983]:
+          - generic [ref=e984]: .remarkrc.mjs
+        - text: file and set the rule to false, as we previously did in the
+        - link "configuring remark-lint" [ref=e985]:
+          - /url: /web_development/tutorials/next-js-static-first-mdx-starterkit/eslint-mdx-plugin-and-remark-lint#markdown-linting-using-remark-lint
+        - text: chapter, after editing the remark-lint configuration you might want to
+        - link "restart the ESLint server in VSCode" [ref=e986]:
+          - /url: /web_development/tutorials/next-js-static-first-mdx-starterkit/linting-in-vscode-using-extensions#restarting-the-eslint-server-in-vscode
+        - text: and
+        - link "clear the ESLint cache" [ref=e987]:
+          - /url: /web_development/tutorials/next-js-static-first-mdx-starterkit/eslint-mdx-plugin-and-remark-lint#clearing-the-eslint-cache
+      - generic [ref=e989]:
+        - generic [ref=e990]: Note
+        - paragraph [ref=e992]:
+          - text: If you don't set a default language and also don't set a language flag on a code block, then rehype pretty code will
+          - strong [ref=e993]: NOT
+          - text: get activated for that code block, as it needs to know the programming language to be able to choose the correct colors when highlighting
+      - heading [level=3] [ref=e994]:
+        - text: diff (+/- lines) language flag
+        - 'link "Heading permalink for: diff (+/- lines) language flag" [ref=e995]':
+          - /url: "#diff---lines-language-flag"
+      - paragraph [ref=e998]:
+        - text: I mention the
+        - strong [ref=e999]: diff
+        - text: language flag separately as it has an extra feature, by adding a
+        - strong [ref=e1000]: +
+        - text: or
+        - strong [ref=e1001]: "-"
+        - text: sign to the start of a line you can tell the code highlighter to display the rows starting with a plus sign as if they had been added and the rows starting with a minus sign as if they had been removed (meaning lines that got added are green and lines that got removed are red)
+      - figure "/app/(tutorial_examples)/code-highlighting_playground/page.mdx" [ref=e1002]:
+        - code [ref=e1005]:
+          - generic [ref=e1006]: <article>
+          - generic [ref=e1008]: "```diff"
+          - generic [ref=e1009]: "function helloWorld() {"
+          - generic [ref=e1010]: "- // this is a comment"
+          - generic [ref=e1011]: + let greeting = 'Hello World!'
+          - generic [ref=e1012]: console.log(greeting)
+          - generic [ref=e1013]: "}"
+          - generic [ref=e1014]: "```"
+          - generic [ref=e1016]: </article>
+      - paragraph [ref=e1018]:
+        - text: With this language you can use the
+        - strong [ref=e1019]: +
+        - text: and
+        - strong [ref=e1020]: "-"
+        - text: signs to tell the code highlighter to display the rows starting with a plus sign as if they had been added and the rows starting with a minus sign as if they had been removed
+      - heading [level=2] [ref=e1021]:
+        - text: Diff using a shiki transformer (optional)
+        - 'link "Heading permalink for: Diff using a shiki transformer (optional)" [ref=e1022]':
+          - /url: "#diff-using-a-shiki-transformer-optional"
+      - paragraph [ref=e1025]:
+        - text: You can also use shiki transformers in your rehype-pretty-code setup, as we just saw in the previous chapter, to create diffs one way is to use a language flag, the second way is to use the
+        - link "shiki diff notation transformer" [ref=e1026]:
+          - /url: https://shiki.style/guide/transformers
+      - paragraph [ref=e1029]: "First we install the shiki transformers package:"
+      - figure [ref=e1030]:
+        - code [ref=e1032]:
+          - generic [ref=e1033]: npm i @shikijs/transformers --save-exact
+      - paragraph [ref=e1034]: "Next we add a diff notation transformer to our Next.js configuration:"
+      - figure "next.config.mjs" [ref=e1035]:
+        - code [ref=e1038]:
+          - generic [ref=e1039]: "import { withSentryConfig } from '@sentry/nextjs';"
+          - generic [ref=e1040]: "//import type { NextConfig } from 'next'"
+          - generic [ref=e1041]: "import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'"
+          - generic [ref=e1042]: import createMdx from '@next/mdx'
+          - generic [ref=e1043]: import rehypeMDXImportMedia from 'rehype-mdx-import-media'
+          - generic [ref=e1044]: import rehypePrettyCode from 'rehype-pretty-code'
+          - generic [ref=e1045]: "import { readFileSync } from 'fs'"
+          - generic [ref=e1046]: "import { transformerNotationDiff } from '@shikijs/transformers'"
+          - generic [ref=e1048]: "const nextConfig = (phase/*: string*/) => {"
+          - generic [ref=e1050]: const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
+          - generic [ref=e1051]: const themeFileContent = readFileSync(themePath, 'utf-8')
+          - generic [ref=e1053]: "/** @type {import('rehype-pretty-code').Options} */"
+          - generic [ref=e1054]: "const rehypePrettyCodeOptions = {"
+          - generic [ref=e1055]: "theme: JSON.parse(themeFileContent),"
+          - generic [ref=e1056]: "keepBackground: false,"
+          - generic [ref=e1057]: "defaultLang: {"
+          - generic [ref=e1058]: "block: 'js',"
+          - generic [ref=e1059]: "},"
+          - generic [ref=e1060]: "transformers: [transformerNotationDiff({"
+          - generic [ref=e1061]: "matchAlgorithm: 'v3',"
+          - generic [ref=e1062]: "})],"
+          - generic [ref=e1063]: "}"
+      - paragraph [ref=e1064]: "Line 8: we import the shiki \"diff notation\" transformer"
+      - paragraph [ref=e1065]:
+        - text: "Lines 22 to 24: add out shiki transformer to the rehype-pretty-code"
+        - strong [ref=e1066]: transformers option
+      - generic [ref=e1068]:
+        - generic [ref=e1069]: Note
+        - generic [ref=e1070]:
+          - paragraph [ref=e1071]:
+            - text: we did set the "transformer matching algorithm" option () to v3 (as recommended in the transformers chapter of the
+            - link "shiki v2 migration guide" [ref=e1072]:
+              - /url: https://shiki.style/blog/v2#transformers-matching-algorithm
+            - text: ") to get rid of the shiki deprecation notice:"
+          - blockquote [ref=e1075]:
+            - paragraph [ref=e1076]:
+              - text: "[SHIKI DEPRECATE]: The default"
+              - code [ref=e1078]:
+                - generic [ref=e1079]: "matchAlgorithm: \"v1\""
+              - text: is deprecated and will be removed in the future. Please explicitly set
+              - code [ref=e1081]:
+                - generic [ref=e1082]: "matchAlgorithm: \"v3\""
+              - text: in the transformer options.
+      - paragraph [ref=e1083]: "Next we edit our global.css to add styling for added and removed rows:"
+      - figure "/app/global.css" [ref=e1084]:
+        - code [ref=e1087]:
+          - generic [ref=e1088]: "[data-line].remove {"
+          - generic [ref=e1089]: "background-color: #852424;"
+          - generic [ref=e1090]: "border-left-color: #ff0000;"
+          - generic [ref=e1091]: "}"
+          - generic [ref=e1093]: "[data-line].add {"
+          - generic [ref=e1094]: "background-color: #248531;"
+          - generic [ref=e1095]: "border-left-color: #18c218;"
+          - generic [ref=e1096]: "}"
+      - paragraph [ref=e1097]:
+        - text: How the
+        - link "transformer diff notation" [ref=e1098]:
+          - /url: https://shiki.style/packages/transformers#transformernotationdiff
+        - text: works, is that at the end of every line you use a comment to tell the transformer if code got added (
+        - code [ref=e1102]:
+          - generic [ref=e1103]: // [!code ++]
+        - text: ) or removed (
+        - code [ref=e1105]:
+          - generic [ref=e1106]: // [!code --]
+        - text: "):"
+      - figure "/app/(tutorial_examples)/code-highlighting_playground/page.mdx" [ref=e1107]:
+        - code [ref=e1110]:
+          - generic [ref=e1111]: <article>
+          - generic [ref=e1113]: "```js"
+          - generic [ref=e1114]: "function helloWorld() {"
+          - generic [ref=e1115]: // this is a comment
+          - generic [ref=e1116]: let greeting = 'Hello World!'
+          - generic [ref=e1117]: console.log(greeting)
+          - generic [ref=e1118]: "}"
+          - generic [ref=e1119]: "```"
+          - generic [ref=e1121]: </article>
+      - generic [ref=e1124]:
+        - generic [ref=e1125]: Read more
+        - paragraph [ref=e1127]:
+          - link "shiki v2 migration guide" [ref=e1128]:
+            - /url: https://shiki.style/blog/v2
+          - link "shiki \"transformers\" guide" [ref=e1131]:
+            - /url: https://shiki.style/guide/transformers
+          - link "shiki \"diff notation transformer\" documentation" [ref=e1134]:
+            - /url: https://shiki.style/packages/transformers#transformernotationdiff
+      - heading [level=2] [ref=e1137]:
+        - text: Highlighting inline code
+        - 'link "Heading permalink for: Highlighting inline code" [ref=e1138]':
+          - /url: "#highlighting-inline-code"
+      - paragraph [ref=e1141]: Rehype pretty code can also highlight inline code.
+      - paragraph [ref=e1142]: "To showcase this, let's edit our playground to add an inline code example (below the code block example) like so:"
+      - figure "/app/(tutorial_examples)/code-highlighting_playground/page.mdx" [ref=e1143]:
+        - code [ref=e1146]:
+          - generic [ref=e1147]: <article>
+          - generic [ref=e1149]: "```js"
+          - generic [ref=e1150]: "function helloWorld() {"
+          - generic [ref=e1151]: // this is a comment
+          - generic [ref=e1152]: let greeting = 'Hello World!'
+          - generic [ref=e1153]: console.log(greeting)
+          - generic [ref=e1154]: "}"
+          - generic [ref=e1155]: "```"
+          - generic [ref=e1157]: "Some text `variable{:js}` some more text `helloWorld(){:js}` even more text"
+          - generic [ref=e1159]: </article>
+      - paragraph [ref=e1161]:
+        - text: As you might notice, if you run the dev server and then inspect the HTML in the browser, that rehype pretty code did not get applied, and instead, we still have a regular
+        - code [ref=e1163]:
+          - generic [ref=e1164]: <code>
+        - text: element
+      - paragraph [ref=e1165]: As we saw in the previous chapter, rehype pretty code needs information on what colors to apply.
+      - paragraph [ref=e1166]: In the previous example, we also saw that we have 2 options for specifying the programming language for a code block.
+      - paragraph [ref=e1167]: "For inline code, we have one more option:"
+      - list [ref=e1168]:
+        - listitem [ref=e1169]: add a language flag
+        - listitem [ref=e1170]: set a default language in the configuration
+        - listitem [ref=e1171]: add a token (this is an extra option only inline code can use)
+      - paragraph [ref=e1172]: "First, let's add a bit of CSS to our global.css to improve the styling of inline code:"
+      - figure "/app/global.css" [ref=e1173]:
+        - code [ref=e1176]:
+          - generic [ref=e1177]: /* inline code custom styling */
+          - generic [ref=e1178]: "[data-rehype-pretty-code-figure]>code {"
+          - generic [ref=e1179]: "border-radius: 5px;"
+          - generic [ref=e1180]: "padding: 0 4px;"
+          - generic [ref=e1181]: "background-color: #27162b;"
+          - generic [ref=e1182]: "}"
+          - generic [ref=e1184]: "[data-rehype-pretty-code-figure]>code [data-line] {"
+          - generic [ref=e1185]: "padding: 0px;"
+          - generic [ref=e1186]: "}"
+      - paragraph [ref=e1187]:
+        - text: Both code blocks and inline code use similar HTML elements, but there is one significant difference, which is that for code blocks, there is a
+        - code [ref=e1189]:
+          - generic [ref=e1190]: <pre>
+        - text: element between the
+        - code [ref=e1192]:
+          - generic [ref=e1193]: "[data-rehype-pretty-code-figure]"
+        - text: (the
+        - code [ref=e1195]:
+          - generic [ref=e1196]: <figure>
+        - text: element) and the
+        - code [ref=e1198]:
+          - generic [ref=e1199]: <code>
+        - text: element, but inline code has no
+        - code [ref=e1201]:
+          - generic [ref=e1202]: <pre>
+        - text: element between the two. We can use that to our advantage here, by using a child combinator (
+        - code [ref=e1204]:
+          - generic [ref=e1205]: ">"
+        - text: ) between
+        - code [ref=e1207]:
+          - generic [ref=e1208]: "[data-rehype-pretty-code-figure]"
+        - text: and
+        - code [ref=e1210]:
+          - generic [ref=e1211]: code
+        - text: . This ensures our styling will only get applied if the
+        - code [ref=e1213]:
+          - generic [ref=e1214]: <code>
+        - text: element is a direct child of the
+        - code [ref=e1216]:
+          - generic [ref=e1217]: "[data-rehype-pretty-code-figure]"
+        - text: (the
+        - code [ref=e1219]:
+          - generic [ref=e1220]: <figure>
+        - text: element).
+      - paragraph [ref=e1221]:
+        - text: The CSS we add is nothing special, we add a small border radius, some padding and the same background-color we previously used for the code blocks
+        - code [ref=e1223]:
+          - generic [ref=e1224]: <pre>
+        - text: element
+      - heading [level=3] [ref=e1225]:
+        - text: Inline code language
+        - 'link "Heading permalink for: Inline code language" [ref=e1226]':
+          - /url: "#inline-code-language"
+      - paragraph [ref=e1229]:
+        - text: As we saw in the list above, our
+        - strong [ref=e1230]: first option
+        - text: is to add a
+        - strong [ref=e1231]: language flag
+        - text: to let rehype pretty code (shiki) know what colors to use.
+      - paragraph [ref=e1232]:
+        - text: For inline code, the language flag needs to be inside curly brackets (
+        - code [ref=e1234]:
+          - generic [ref=e1235]: "{}"
+        - text: ) and preceded by a colon (
+        - code [ref=e1237]:
+          - generic [ref=e1238]: ":"
+        - text: "). The brackets need to be at the end of our inline code before the \"closing\" backtick, like so:"
+      - figure [ref=e1239]:
+        - code [ref=e1241]:
+          - generic [ref=e1242]:
+            - text: "Some text `variable"
+            - mark [ref=e1243]: "{:js}"
+            - text: "` some more text `function helloWorld()"
+            - mark [ref=e1244]: "{:js}"
+            - text: "` even more text"
+      - paragraph [ref=e1245]:
+        - text: Launch the dev server and look at your browser's playground page. You will see that the code is highlighted as intended. However, we will soon see a case where setting the language flag is not enough to get the correct colors. Our inline code has been highlighted, and the colors are correct. The
+        - code [ref=e1247]:
+          - generic [ref=e1248]: variable
+        - text: now has the same color as our variables in the code block above, and so does the
+        - code [ref=e1250]:
+          - generic [ref=e1251]: hello-world()
+        - text: function.
+      - paragraph [ref=e1252]: "Next, let's remove the language flags we added in the markdown for our inline code like so:"
+      - figure [ref=e1253]:
+        - code [ref=e1255]:
+          - generic [ref=e1256]: "Some text `variable` some more text `helloWorld()` even more text"
+      - paragraph [ref=e1257]:
+        - text: Instead, we are going to use the
+        - strong [ref=e1258]: 2nd option
+        - text: which consists of setting a
+        - strong [ref=e1259]: default language
+        - text: in our Next.js
+        - strong [ref=e1260]: configuration
+        - text: "file:"
+      - figure "next.config.mjs" [ref=e1261]:
+        - code [ref=e1264]:
+          - generic [ref=e1265]: "import { withSentryConfig } from '@sentry/nextjs';"
+          - generic [ref=e1266]: "//import type { NextConfig } from 'next'"
+          - generic [ref=e1267]: "import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'"
+          - generic [ref=e1268]: import createMdx from '@next/mdx'
+          - generic [ref=e1269]: import rehypeMDXImportMedia from 'rehype-mdx-import-media'
+          - generic [ref=e1270]: import rehypePrettyCode from 'rehype-pretty-code'
+          - generic [ref=e1271]: "import { readFileSync } from 'fs'"
+          - generic [ref=e1273]: "const nextConfig = (phase/*: string*/) => {"
+          - generic [ref=e1275]: const themePath = new URL('./node_modules/material-theme/themes/OneDark-Pro.json', import.meta.url)
+          - generic [ref=e1276]: const themeFileContent = readFileSync(themePath, 'utf-8')
+          - generic [ref=e1278]: "/** @type {import('rehype-pretty-code').Options} */"
+          - generic [ref=e1279]: "const rehypePrettyCodeOptions = {"
+          - generic [ref=e1280]: "theme: JSON.parse(themeFileContent),"
+          - generic [ref=e1281]: "keepBackground: false,"
+          - generic [ref=e1282]: "defaultLang: {"
+          - generic [ref=e1283]: "block: 'js',"
+          - generic [ref=e1284]: "inline: 'js',"
+          - generic [ref=e1285]: "},"
+          - generic [ref=e1286]: "}"
+      - paragraph [ref=e1287]:
+        - text: "Line 20: we add the"
+        - code [ref=e1289]:
+          - generic [ref=e1290]: inline
+        - text: option inside of the
+        - code [ref=e1292]:
+          - generic [ref=e1293]: defaultLang
+        - text: configuration for rehype pretty code and set its value to
+        - code [ref=e1295]:
+          - generic [ref=e1296]: js
+      - paragraph [ref=e1297]: If we look at our playground in the browser, we see that the 2nd option works well, too.
+      - paragraph [ref=e1298]:
+        - text: But look at what happens if we now remove the brackets of our
+        - code [ref=e1300]:
+          - generic [ref=e1301]: helloWorld
+        - text: "function:"
+      - figure [ref=e1302]:
+        - code [ref=e1304]:
+          - generic [ref=e1305]: "Some text `variable` some more text `helloWorld` even more text"
+      - paragraph [ref=e1306]: This time, even though we have specified the language (in the configuration), the color is wrong.
+      - paragraph [ref=e1307]: This is because, based on the little bit of code, the highlighter can NOT know that it is actually a function and instead assumes it is a variable.
+      - heading [level=3] [ref=e1308]:
+        - text: Inline code tokens
+        - 'link "Heading permalink for: Inline code tokens" [ref=e1309]':
+          - /url: "#inline-code-tokens"
+      - paragraph [ref=e1312]:
+        - text: For the
+        - strong [ref=e1313]: 3rd option
+        - text: to fix the color, we will tell the highlighter explicitly that this is a function.
+      - paragraph [ref=e1314]:
+        - text: To do that, we are going to use a
+        - strong [ref=e1315]: token
+        - text: "instead of the language flag, like so:"
+      - figure [ref=e1316]:
+        - code [ref=e1318]:
+          - generic [ref=e1319]: "Some text `variable` some more text `helloWorld{:.entity.name.function}` even more text"
+      - paragraph [ref=e1320]: Now, the color is what we would expect it to be for a function.
+      - paragraph [ref=e1321]:
+        - text: Tokens are similar to language flags, but the difference is that they are inside of curly brackets at the end of inline code, and
+        - strong [ref=e1322]: tokens start with a colon and a dot
+        - text: (
+        - code [ref=e1324]:
+          - generic [ref=e1325]: :.
+        - text: ) while
+        - strong [ref=e1326]: language flags only begin with a colon
+        - text: (
+        - code [ref=e1328]:
+          - generic [ref=e1329]: ":"
+        - text: )
+      - heading [level=3] [ref=e1330]:
+        - text: How do I know which tokens are available?
+        - 'link "Heading permalink for: How do I know which tokens are available?" [ref=e1331]':
+          - /url: "#how-do-i-know-which-tokens-are-available"
+      - paragraph [ref=e1334]:
+        - text: In a previous chapter, we used a VSCode theme and VSCode has a guide on their website about
+        - link "what tokens to use when building themes" [ref=e1335]:
+          - /url: https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers
+        - text: ", on top of the page there is a list of"
+        - strong [ref=e1338]: Standard token types
+        - text: and on the bottom you will find a list of
+        - strong [ref=e1339]: Predefined TextMate scope mappings
+      - paragraph [ref=e1340]: Another way to find out what tokens your theme uses is to look at the json file of the VSCode theme you use.
+      - paragraph [ref=e1341]:
+        - text: In that json file, there is a section called
+        - strong [ref=e1342]: tokenColors
+        - text: ", which is the list of all the tokens and colors the theme uses"
+      - paragraph [ref=e1343]:
+        - text: For example, this is the
+        - link "json file for the OneDark Pro theme" [ref=e1344]:
+          - /url: https://github.com/Binaryify/OneDark-Pro/blob/2d42e24be590925e686a477113723b7c28015a50/themes/OneDark-Pro.json
+        - text: on GitHub, it is not always easy to find that json file, for example, the Dracula theme needs to get built first, on GitHub the Dracula theme uses a
+        - link "yaml file to configure the tokens and colors" [ref=e1347]:
+          - /url: https://github.com/dracula/visual-studio-code/blob/e475d548db27773fa0004b252c0a4701f187fb7e/src/dracula.yml
+        - text: ", if the YAML file is not enough you could check out the repository and build the Dracula theme yourself, or if you have it installed in VSCode, you could look at the json file in the theme folder (on Windows the path to themes folder is:"
+        - code [ref=e1351]:
+          - generic [ref=e1352]: "%USERPROFILE%\\.vscode\\extensions"
+        - text: ", on macOS it is"
+        - code [ref=e1354]:
+          - generic [ref=e1355]: ~/.vscode/extensions
+        - text: and on Linux, it is
+        - code [ref=e1357]:
+          - generic [ref=e1358]: ~/.vscode/extensions
+        - text: )
+      - generic [ref=e1360]:
+        - generic [ref=e1361]: Read more
+        - paragraph [ref=e1363]:
+          - link "VSCode \"Semantic Highlight\" guide" [ref=e1364]:
+            - /url: https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide#standard-token-types-and-modifiers
+      - heading [level=3] [ref=e1367]:
+        - text: token aliases
+        - 'link "Heading permalink for: token aliases" [ref=e1368]':
+          - /url: "#token-aliases"
+      - paragraph [ref=e1371]:
+        - text: There is one last feature I want to bring up, which is
+        - strong [ref=e1372]: token aliases
+        - text: ", if you don't want always to have to remember and type the full token name, which can be tedious as some tokens have rather complex names like"
+        - code [ref=e1374]:
+          - generic [ref=e1375]: .meta.object-literal.key
+      - paragraph [ref=e1376]:
+        - text: To add those aliases to our setup, we need to edit our
+        - code [ref=e1378]:
+          - generic [ref=e1379]: rehypePrettyCodeOptions
+        - text: "configuration like so:"
+      - figure "next.config.mjs" [ref=e1380]:
+        - code [ref=e1383]:
+          - generic [ref=e1384]: "/** @type {import('rehype-pretty-code').Options} */"
+          - generic [ref=e1385]: "const rehypePrettyCodeOptions = {"
+          - generic [ref=e1386]: "theme: JSON.parse(themeFileContent),"
+          - generic [ref=e1387]: "keepBackground: false,"
+          - generic [ref=e1388]: "defaultLang: {"
+          - generic [ref=e1389]: "block: 'js',"
+          - generic [ref=e1390]: "inline: 'js',"
+          - generic [ref=e1391]: "},"
+          - generic [ref=e1392]: "tokensMap: {"
+          - generic [ref=e1393]: "fn: 'entity.name.function',"
+          - generic [ref=e1394]: "cmt: 'comment',"
+          - generic [ref=e1395]: "str: 'string',"
+          - generic [ref=e1396]: "var: 'entity.name.variable',"
+          - generic [ref=e1397]: "obj: 'variable.other.object',"
+          - generic [ref=e1398]: "prop: 'meta.property.object',"
+          - generic [ref=e1399]: "int: 'constant.numeric',"
+          - generic [ref=e1400]: "},"
+          - generic [ref=e1401]: "}"
+      - paragraph [ref=e1402]: "Lines 21 to 29: we add several custom token aliases to our rehype pretty code configuration; I tried to use abbreviations that are easy to remember without having to check out the configuration file constantly"
+      - generic [ref=e1404]:
+        - generic [ref=e1405]: Note
+        - generic [ref=e1406]:
+          - paragraph [ref=e1407]: What tokens are available will vary from theme to theme
+          - paragraph [ref=e1408]:
+            - text: For example, in OneDark Pro, there is a token
+            - strong [ref=e1409]: constant.numeric
+            - text: that I used to create the
+            - strong [ref=e1410]: int
+            - text: alias
+          - paragraph [ref=e1411]:
+            - text: But in the Dracula theme, it does not exist. There is only a global
+            - strong [ref=e1412]: constant
+            - text: but no specific definition for a numeric constant
+          - paragraph [ref=e1413]: Which means you might need to make some adjustments to your tokens map depending on what theme you use
+      - paragraph [ref=e1414]:
+        - text: However, as I mentioned early in this tutorial, it doesn't hurt to also document them in the
+        - code [ref=e1416]:
+          - generic [ref=e1417]: README.md
+        - text: "file of the project:"
+      - figure [ref=e1418]:
+        - code [ref=e1420]:
+          - generic [ref=e1421]: "## Inline code token aliases"
+          - generic [ref=e1423]: This section contains a list of token aliases for inline code in Markdown (MDX) files.
+          - generic [ref=e1425]: Tokens get added at the end of inline code markup.
+          - generic [ref=e1427]: "They start with a curly bracket, then a colon followed by a dot, the token alias, and then a closing curly bracket:"
+          - generic [ref=e1429]: "```md"
+          - generic [ref=e1430]: "some text `myVariable{:.token}`"
+          - generic [ref=e1431]: "```"
+          - generic [ref=e1433]: "Available token aliases:"
+          - generic [ref=e1435]: "* fn: function"
+          - generic [ref=e1436]: "* cmt: comment"
+          - generic [ref=e1437]: "* str: string (between quotes)"
+          - generic [ref=e1438]: "* var: variable"
+          - generic [ref=e1439]: "* obj: object"
+          - generic [ref=e1440]: "* prop: object property"
+          - generic [ref=e1441]: "* int: integer"
+      - paragraph [ref=e1442]: "Next, we add a code block and a list of inline code examples to our code-highlighting playground page to test our tokens map, this time using the tsx language flag:"
+      - figure "/app/(tutorial_examples)/code-highlighting_playground/page.mdx" [ref=e1443]:
+        - code [ref=e1446]:
+          - generic [ref=e1447]: <article>
+          - generic [ref=e1449]: "```tsx"
+          - generic [ref=e1450]: "function helloWorld() {"
+          - generic [ref=e1451]: // read me
+          - generic [ref=e1452]: "let foo = { bar: 'text', baz: 123 }"
+          - generic [ref=e1453]: console.log(foo.bar, foo.baz)
+          - generic [ref=e1454]: "}"
+          - generic [ref=e1455]: "```"
+          - generic [ref=e1457]: "* I am a function `helloWorld{:.fn}`"
+          - generic [ref=e1458]: "* I am a comment `read me{:.cmt}`"
+          - generic [ref=e1459]: "* I am a string `'text'{:.str}`"
+          - generic [ref=e1460]: "* I am a variable `foo{:.var}`"
+          - generic [ref=e1461]: "* I am an object `foo{:.obj}`"
+          - generic [ref=e1462]: "* I am an object property `bar{:.prop}`"
+          - generic [ref=e1463]: "* I am an integer (numeric constant) `123{:.int}`"
+          - generic [ref=e1465]: </article>
+      - paragraph [ref=e1467]: If we used the correct tokens to create our aliases map, the colors in the list of inline code examples (where we use the aliases) should match the colors in the code block above.
+      - paragraph [ref=e1468]:
+        - img "the result when using rehype pretty code for a code block and some inline code examples" [ref=e1469]
+      - generic [ref=e1471]:
+        - generic [ref=e1472]: Tip
+        - paragraph [ref=e1474]:
+          - text: There are even more features like
+          - strong [ref=e1475]: visitor hooks
+          - text: and
+          - strong [ref=e1476]: custom highlighters
+          - text: (which we will not see in this tutorial), but you can find more info about them in the
+          - link "rehype pretty code" [ref=e1477]:
+            - /url: https://rehype-pretty.pages.dev/
+          - text: and
+          - link "shiki" [ref=e1480]:
+            - /url: https://shiki.style/
+          - text: docs websites
+      - paragraph [ref=e1483]: Congratulations 🎉 you finished learning about how to highlight code using a rehype plugin and learned how to use most of its features (including using VSCode themes)
+      - paragraph [ref=e1484]:
+        - text: If you liked this post, please consider buying me a
+        - link "coffee" [ref=e1485]:
+          - /url: https://buymeacoffee.com/chriswwweb
+        - text: ☕ or
+        - link "sponsor" [ref=e1488]:
+          - /url: https://github.com/sponsors/chrisweb
+        - text: ❤️ me on GitHub, as it will help me create more content and keep it free for everyone
+      - navigation "Pagination" [ref=e1491]:
+        - link "Previous MDX plugins" [ref=e1493]:
+          - /url: /web_development/tutorials/next-js-static-first-mdx-starterkit/mdx-plugins
+          - generic [ref=e1494]: Previous
+          - generic [ref=e1495]: MDX plugins
+        - link "Next Rehype slug plugin to add IDs to headings" [ref=e1499]:
+          - /url: /web_development/tutorials/next-js-static-first-mdx-starterkit/headings-id-plugin
+          - generic [ref=e1500]: Next
+          - generic [ref=e1501]: Rehype slug plugin to add IDs to headings
+  - contentinfo [ref=e1504]:
+    - separator [ref=e1505]
+    - paragraph [ref=e1506]:
+      - link "Buying me a coffee" [ref=e1509]:
+        - /url: https://buymeacoffee.com/chriswwweb
+      - text: or
+      - link "sponsoring me" [ref=e1512]:
+        - /url: https://github.com/sponsors/chrisweb
+      - text: on GitHub, are not mandatory but greatly appreciated, as it allows me to work on more content and keep the project free for everyone
+    - paragraph [ref=e1515]:
+      - text: If you find a bug / typo or you want to suggest a new feature, then please open an
+      - link "Issue" [ref=e1518]:
+        - /url: https://github.com/chrisweb/chris.lu/issues
+      - text: on GitHub.
+    - paragraph [ref=e1521]:
+      - text: Suggestions and Ideas are appreciated, please use the
+      - link "chris.lu Discord server" [ref=e1524]:
+        - /url: https://discord.gg/4p59CCTUAJ
+      - text: or the
+      - link "discussion board" [ref=e1527]:
+        - /url: https://github.com/chrisweb/chris.lu/discussions
+      - text: to leave feedback or ask a question.
+    - paragraph [ref=e1530]:
+      - text: All content on this site is licensed under a
+      - link "CC BY-NC-SA 4.0" [ref=e1531]:
+        - /url: https://creativecommons.org/licenses/by-nc-sa/4.0/
+      - text: license. The source code of this project is licensed under
+      - link "MIT" [ref=e1534]:
+        - /url: https://github.com/chrisweb/chris.lu/blob/main/LICENSE
+      - text: and a copy of the source code can be found in the
+      - link "chris.lu public GitHub repository" [ref=e1537]:
+        - /url: https://github.com/chrisweb/chris.lu
+      - text: . A list of all open source packages used to build this project can be found in the
+      - link "package.json" [ref=e1540]:
+        - /url: https://github.com/chrisweb/chris.lu/blob/main/package.json
+      - text: file. This website uses music licensed under different creative commons licenses, the music tracks
+      - link "credits" [ref=e1543]:
+        - /url: https://github.com/chrisweb/chris.lu/blob/main/public/assets/music/CREDITS.txt
+      - text: file can be found in the repository of this project or by clicking on the "eject" button of the player on the top right of the screen. This website uses
+      - link "Free Icons by Font Awesome" [ref=e1546]:
+        - /url: https://fontawesome.com/search?o=r&m=free
+      - text: .

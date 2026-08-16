@@ -46,7 +46,6 @@ const ImageAnimatedEmoji: React.FC<IAnimatedEmojiProps> = (props) => {
         <>
             <picture>
                 <source srcSet={webpSource} type="image/webp" />
-                {/* eslint-disable-next-line jsx-a11y/alt-text */}
                 <Image src={gifSource} {...rest} className="animatedEmoji" />
             </picture>
         </>

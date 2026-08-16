@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
@@ -35,6 +36,8 @@ export const metadata = {
         tags: frontmatter.keywords,
     },
 }
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
 
 %toc%
 
@@ -115,11 +118,11 @@ const HeaderNavigation: React.FC = () => {
 export default HeaderNavigation
 ```
 
-First, we create a typescript interface and then use it to type our static list of pages. Of course, in a more complex project, you might want to fetch this list from a database (at build time), but for our simple example, a json will do, then we iterate through the list to create an entry for each page in our `nav` element
+First, we create a TypeScript interface and then use it to type our static list of pages. Of course, in a more complex project, you might want to fetch this list from a database (at build time), but for our simple example, a json will do, then we iterate through the list to create an entry for each page in our `nav` element
 
 The important part here is to use the `Route` type (that we imported on top) for the `href` value to ensure that next/link understands it is a route and not just a random string, without the `Route` type, you will end up seeing errors like this one:
 
-![Next.js Typescript Type error: Type string is not assignable to type UrlObject | RouteImpl](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-first-mdx-starterkit/nextjs_typescript_type_error_string_is_not_a_route.png 'Type error: Type string is not assignable to type UrlObject | RouteImpl')
+![Next.js TypeScript Type error: Type string is not assignable to type UrlObject | RouteImpl](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-first-mdx-starterkit/nextjs_typescript_type_error_string_is_not_a_route.png 'Type error: Type string is not assignable to type UrlObject | RouteImpl')
 
 ## Adding the navigation to the layout
 
@@ -345,7 +348,7 @@ Now launch the dev server if it isn't already running (using the `npm run dev` c
 
 Then right click into the page and select **Inspect**
 
-Have a look at the the two links inside of the `<nav>{:html}` element (inside of the `<header>{:html}` element), you will see that one of the two now has an `.active{:css}` class and when you click on the links in the navigation that class will jump from one anchor to the other, depending on what page you are. In the next part of the tutorial we will add styling to make this active class more useful.
+Have a look at the two links inside of the `<nav>{:html}` element (inside of the `<header>{:html}` element), you will see that one of the two now has an `.active{:css}` class and when you click on the links in the navigation that class will jump from one anchor to the other, depending on what page you are. In the next part of the tutorial we will add styling to make this active class more useful.
 
 Congratulations 🎉 you created your navigation component using next/link and next/navigation
 

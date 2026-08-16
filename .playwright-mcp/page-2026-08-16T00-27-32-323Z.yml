@@ -1,0 +1,78 @@
+- generic [active] [ref=f4e1]:
+  - banner [ref=f4e2]:
+    - navigation [ref=f4e4]:
+      - link "Home" [ref=f4e5]:
+        - /url: /
+      - link "HoloArcade" [ref=f4e6]:
+        - /url: /holoarcade
+      - link "Web dev" [ref=f4e7]:
+        - /url: /web_development
+      - link "Lego" [ref=f4e8]:
+        - /url: /lego
+      - link "Games" [ref=f4e9]:
+        - /url: /games
+      - link "Music" [ref=f4e10]:
+        - /url: /music
+      - link "Memes" [ref=f4e11]:
+        - /url: /memes
+      - link "About me" [ref=f4e12]:
+        - /url: /about_me
+    - generic [ref=f4e16]:
+      - button "Play" [ref=f4e17]
+      - button "Forward" [ref=f4e20]
+      - button "Open Volume Dialog" [ref=f4e23]
+      - button "Open Song Credits Dialog" [ref=f4e26]
+    - generic [ref=f4e29]:
+      - generic: Chris.lu
+      - img "Chris.lu header image, displaying an 80s style landscape and sunset" [ref=f4e30]
+      - generic [ref=f4e32]:
+        - generic [ref=f4e33]:
+          - button "> Music ON" [ref=f4e34]
+          - button "Music OFF" [ref=f4e35]
+        - button "Play 3d animation" [ref=f4e36]:
+          - generic [ref=f4e37]: press start
+  - main [ref=f4e38]:
+    - heading "Loading..." [level=1] [ref=f4e40]
+  - contentinfo [ref=f4e41]:
+    - separator [ref=f4e42]
+    - paragraph [ref=f4e43]:
+      - link "Buying me a coffee" [ref=f4e46]:
+        - /url: https://buymeacoffee.com/chriswwweb
+      - text: or
+      - link "sponsoring me" [ref=f4e49]:
+        - /url: https://github.com/sponsors/chrisweb
+      - text: on GitHub, are not mandatory but greatly appreciated, as it allows me to work on more content and keep the project free for everyone
+    - paragraph [ref=f4e52]:
+      - text: If you find a bug / typo or you want to suggest a new feature, then please open an
+      - link "Issue" [ref=f4e55]:
+        - /url: https://github.com/chrisweb/chris.lu/issues
+      - text: on GitHub.
+    - paragraph [ref=f4e58]:
+      - text: Suggestions and Ideas are appreciated, please use the
+      - link "chris.lu Discord server" [ref=f4e61]:
+        - /url: https://discord.gg/4p59CCTUAJ
+      - text: or the
+      - link "discussion board" [ref=f4e64]:
+        - /url: https://github.com/chrisweb/chris.lu/discussions
+      - text: to leave feedback or ask a question.
+    - paragraph [ref=f4e67]:
+      - text: All content on this site is licensed under a
+      - link "CC BY-NC-SA 4.0" [ref=f4e68]:
+        - /url: https://creativecommons.org/licenses/by-nc-sa/4.0/
+      - text: license. The source code of this project is licensed under
+      - link "MIT" [ref=f4e71]:
+        - /url: https://github.com/chrisweb/chris.lu/blob/main/LICENSE
+      - text: and a copy of the source code can be found in the
+      - link "chris.lu public GitHub repository" [ref=f4e74]:
+        - /url: https://github.com/chrisweb/chris.lu
+      - text: . A list of all open source packages used to build this project can be found in the
+      - link "package.json" [ref=f4e77]:
+        - /url: https://github.com/chrisweb/chris.lu/blob/main/package.json
+      - text: file. This website uses music licensed under different creative commons licenses, the music tracks
+      - link "credits" [ref=f4e80]:
+        - /url: https://github.com/chrisweb/chris.lu/blob/main/public/assets/music/CREDITS.txt
+      - text: file can be found in the repository of this project or by clicking on the "eject" button of the player on the top right of the screen. This website uses
+      - link "Free Icons by Font Awesome" [ref=f4e83]:
+        - /url: https://fontawesome.com/search?o=r&m=free
+      - text: .
+  - button "Open Next.js Dev Tools" [ref=f4e91] [cursor=pointer]

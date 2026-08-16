@@ -1,0 +1,131 @@
+/* the trailer poster links out to YouTube instead of embedding it, an
+   iframe embed would need the CSP "frame-src" directive to be opened up
+   for youtube (in every environment) and would also add third party
+   cookies / a consent surface to this blog */
+
+.trailer {
+    --cornerSize: 40px;
+    /* next line is a hack: in chrome a small line sometimes appears */
+    will-change: transform;
+    clip-path:
+        polygon(0 0,
+            100% 0,
+            100% calc(100% - var(--cornerSize)),
+            calc(100% - var(--cornerSize)) 100%,
+            0 100%);
+
+    background-color: #010016;
+    position: relative;
+    display: block;
+    overflow: hidden;
+    margin-block: var(--main-spacing);
+    /* removes the inline gap below the image */
+    line-height: 0;
+}
+
+/* mdx wraps the image into a paragraph, its default margins would show up
+   as black bands above and below the image (the background of this card) */
+.trailer p {
+    margin: 0;
+}
+
+.trailer img {
+    display: block;
+    transition: transform 0.3s ease-in-out;
+}
+
+.playButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background-image: linear-gradient(45deg, var(--primary-light-color) 20%, var(--secondary-light-color) 80%);
+    box-shadow: 0 0 20px rgba(255 0 170 / 0.6);
+    color: #fff;
+    font-size: var(--main-fontSize-big3);
+    /* the play triangle is optically off center inside a circle */
+    padding-left: 6px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.watchPill {
+    position: absolute;
+    /* top right, the bottom right corner is cut off by the clip path */
+    right: var(--main-spacing);
+    top: var(--main-spacing);
+    display: inline-flex;
+    align-items: center;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    background-color: rgba(var(--main-background-value) / 0.6);
+    border: 1px solid rgba(var(--main-text-value) / 0.3);
+    border-radius: 999px;
+    padding: 6px 16px;
+    color: var(--main-text-color);
+    font-size: var(--main-fontSize-smaller);
+    font-weight: var(--main-fontWeight-links);
+    line-height: var(--main-lineHeight-default);
+    white-space: nowrap;
+}
+
+/* experimental: p3 colors */
+@media (color-gamut: p3) {
+
+    .watchPill {
+        background-color: color(display-p3 var(--main-background-value) / 0.6);
+        border-color: color(display-p3 var(--main-text-value) / 0.3);
+    }
+
+}
+
+/* not on mobile */
+@media (hover: hover) {
+
+    .trailer:hover img {
+        transform: scale(1.03);
+    }
+
+    .trailer:hover .playButton {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .trailer img,
+    .playButton {
+        transition: none;
+    }
+
+    .trailer:hover img,
+    .trailer:hover .playButton {
+        transform: none;
+    }
+
+    .trailer:hover .playButton {
+        transform: translate(-50%, -50%);
+    }
+
+}
+
+@media all and (max-width: 768px) {
+
+    .playButton {
+        width: 64px;
+        height: 64px;
+        font-size: var(--main-fontSize-big5);
+    }
+
+    .watchPill {
+        right: calc(var(--main-spacing) / 2);
+        top: calc(var(--main-spacing) / 2);
+    }
+
+}

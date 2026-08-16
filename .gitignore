@@ -30,10 +30,5 @@ node_modules/
 # Serverless directories
 .serverless/
 
-# Sentry Config File
-.sentryclirc
-
 # localhost ssl certificate(s)
 certificates
-# Sentry Config File
-.env.sentry-build-plugin

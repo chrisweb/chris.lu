@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
@@ -35,6 +36,8 @@ export const metadata = {
         tags: frontmatter.keywords,
     },
 }
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
 
 %toc%
 
@@ -74,7 +77,7 @@ Lines 7 to 10: we edit the title meta tag, the default title value was previousl
 
 Line 8: by using the [title.template](https://nextjs.org/docs/app/api-reference/functions/generate-metadata#template) we ensure that all will titles have a similar structure on every page and it helps reduce repetition (DRY)
 
-Line 9: the second property is the default title for the homepage (which is required, when using template)
+Line 9: the second property is the fallback title that gets used for any route that does not set its own title (which is required, when using template)
 
 The template will work for any pages that are in the same route segment as the layout, as this is the **root** layout of our project, it means the template will work on **all our pages**
 
@@ -93,7 +96,7 @@ Look at what is inside your page's `<head>{:html}` element. There are, for examp
 <meta name="description" content="My description">
 ```
 
-The `viewport` tag gets always added to every page by default, but you can customize the **content** value of the viewport using the [generateViewport](https://nextjs.org/docs/app/api-reference/functions/generate-viewport) function:
+The `viewport` tag gets always added to every page by default, but you can customize the **content** value of the viewport by exporting a [viewport](https://nextjs.org/docs/app/api-reference/functions/generate-viewport) object:
 
 ```tsx title="custom viewport example"
 import type { Viewport } from 'next'
@@ -129,7 +132,7 @@ As we saw when inspecting the `<head>{:html}` element of our page had meta tags,
 > [!MORE]  
 > [Next.js "generate-viewport" documentation](https://nextjs.org/docs/app/api-reference/functions/generate-viewport)
 
-## Metadata in typescript pages
+## Metadata in TypeScript pages
 
 Let's keep the **home** page as is and instead edit the second page we created earlier, which is the `/app/blog/page.tsx` file, and add some metadata to it:
 
@@ -179,7 +182,7 @@ export const metadata = {
 
 ```
 
-Lines 1 to 3: we create a new **metadata** object and add a custom title for the GFM playground page (we do NOT import the `Metadata` type as MDX files are not typescript)
+Lines 1 to 3: we create a new **metadata** object and add a custom title for the GFM playground page (we do NOT import the `Metadata` type as MDX files are not TypeScript)
 
 If you inspect the source of the playground page `http://localhost:3000/gfm_playground`, you will see the MDX page has the correct "GFM playground page | example.com" title (which uses the title of the page metadata) combined with the template from the layout
 
@@ -197,9 +200,9 @@ Next.js will detect your app and fav icon files in the `/app` folder and **autom
 
 ```html
 <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16">
-<link rel="apple-touch-icon" href="/apple-icon1.png?foo" type="image/png" sizes="152x152">
-<link rel="apple-touch-icon" href="/apple-icon1.png?bar" type="image/png" sizes="192x192">
-<link rel="apple-touch-icon" href="/apple-icon1.png?baz" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="/apple-icon1.png" type="image/png" sizes="152x152">
+<link rel="apple-touch-icon" href="/apple-icon2.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/apple-icon3.png" type="image/png" sizes="512x512">
 ```
 
 If you have an image and want to quickly create a favicon online then I recommend checking out [realfavicongenerator.net](https://realfavicongenerator.net/)
@@ -306,7 +309,7 @@ Route (app)                                          Size     First Load JS
 ○  (Static)  prerendered as static content
 ```
 
-The same code that we added to the MDX page, can be used in a typescript page and brings the advantage that we can add type information like so:
+The same code that we added to the MDX page, can be used in a TypeScript page and brings the advantage that we can add type information like so:
 
 ```tsx title="/app/blog/page.tsx" showLineNumbers
 import type { Metadata, ResolvingMetadata } from 'next'

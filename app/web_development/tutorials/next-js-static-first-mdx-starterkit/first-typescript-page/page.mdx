@@ -1,7 +1,7 @@
 ---
-title: First Typescript page - Next.js 15 Tutorial
-description: First Typescript page - Next.js 15 static first MDX starterkit | Web development tutorials | www.chris.lu
-keywords: ['typescript', 'nextjs', 'app', 'directory', 'page', 'route', 'layout', 'HMR', 'hot', 'module', 'reload']
+title: First TypeScript page - Next.js 15 Tutorial
+description: First TypeScript page - Next.js 15 static first MDX starterkit | Web development tutorials | www.chris.lu
+keywords: ['TypeScript', 'nextjs', 'app', 'directory', 'page', 'route', 'layout', 'HMR', 'hot', 'module', 'reload']
 published: 2024-12-31T23:00:00.000Z
 modified: 2024-12-31T23:00:00.000Z
 permalink: https://chris.lu/web_development/tutorials/next-js-static-first-mdx-starterkit/first-typescript-page
@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 
@@ -35,6 +36,8 @@ export const metadata = {
     },
 }
 
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
+
 %toc%
 
 <article>
@@ -44,7 +47,7 @@ export const metadata = {
     { label: 'Next.js 15 static first MDX starterkit', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit' },
 ]} />
 
-# First Typescript page
+# First TypeScript page
 
 I hope you are still there because it is finally time to start coding (a bit) 🙂, but first a bit of theory about routing 😉 (feel free to skip the first chapter if you know it already), and then we create our very first page
 
@@ -85,13 +88,13 @@ If you haven't read my [The road to React 19 and Next.js 15](/web_development/po
 > [Next.js "routing" documentation](https://nextjs.org/docs/app/building-your-application/routing)  
 > [chris.lu "pages VS app router" post](/web_development/posts/road-to-react-19-next-js-15#pages-vs-app-router)  
 
-## Our 1st typescript page
+## Our 1st TypeScript page
 
 Start by opening the `app` folder, which create-next-app created for us during the initial setup of our project
 
 If you have a bit of time, have a look at what Next.js 15 has put in there (it's always good to have a look at what the Next.js team recommends), but after that, **delete** all the files in the `/app` folder as I want to go step by step through the process of creating a Next.js blog, you can also **delete** the content in the `/public` folder as we won't need the assets of the demo project anymore
 
-Next, create a new file in the `app` folder and name it `page.tsx` (or `page.jsx` if you choose to use javascript)
+Next, create a new file in the `app` folder and name it `page.tsx` (or `page.jsx` if you choose to use JavaScript)
 
 Then add the following content into the `page.tsx` file and finally save it
 
@@ -107,7 +110,7 @@ export default function Home() {
 }
 ```
 
-Congratulations 🎉 you just coded your first Next.js page in typescript, next we will make sure the page actually works
+Congratulations 🎉 you just coded your first Next.js page in TypeScript, next we will make sure the page actually works
 
 ## Start the development server
 
@@ -119,7 +122,7 @@ npm run dev
 
 Now, in the terminal, press `Ctrl` and then click on the Next.js local server URL or open your browser and put the following URL into the address bar: `http://localhost:3000/`
 
-As you can see, Next.js has compiled our typescript page, and the development server has responded to the browser request, which is why we can see our "Hello World?" message
+As you can see, Next.js has compiled our TypeScript page, and the development server has responded to the browser request, which is why we can see our "Hello World?" message
 
 ## The root layout is required
 
@@ -131,7 +134,7 @@ You will notice that Next.js re-added the `/app/layout.tsx` file (when we starte
 
 ### No root layout replacement for you Turbo users
 
-We just saw that when using the `npm run dev` command, Next.js will automatically create a root layout file, this is however only the case when you have removed the `--turbopack` flag from the dev script command (in our package.json) as we did in a previous [Typescript plugin and typed routes](/web_development/tutorials/next-js-static-first-mdx-starterkit/typescript-plugin-and-typed-routes) chapter
+We just saw that when using the `npm run dev` command, Next.js will automatically create a root layout file, this is however only the case when you have removed the `--turbopack` flag from the dev script command (in our package.json) as we did in a previous [TypeScript plugin and typed routes](/web_development/tutorials/next-js-static-first-mdx-starterkit/typescript-plugin-and-typed-routes) chapter
 
 If you use the `npm run dev-turbo` command (or if you prefer, use `npm run dev -- --turbopack`, note that use two hyphen (`--`) before the `--turbopack` flag, this is because we do NOT want to apply the flag to our dev script but instead want to pass the flag the to the next dev command inside of our dev script) and you do NOT have root Layout, then Next.js will **NOT** automatically create one for you 😔.
 
@@ -208,7 +211,7 @@ Even though you haven't reloaded the page manually, you will notice that your ch
 
 Let's go back to our project, make sure the dev server is running or use the `npm run dev` command to start it and then open `http://localhost:3000/` in your browser
 
-In your browser **right click** somewhere on the page and then select **Inspect** (or open the **browser dev tools** by pressing the `F12` and then open the `Elements` tab), you will see that Next.js injects a bunch of Javascript code into our page and some of those javascript files are heavy, this is because Next.js adds, for example, a tool called **Hot Module Reload** (HMR) (all the HMR code won't get loaded in production, Next.js only adds those files to our page when in development mode)
+In your browser **right click** somewhere on the page and then select **Inspect** (or open the **browser dev tools** by pressing the `F12` and then open the `Elements` tab), you will see that Next.js injects a bunch of JavaScript code into our page and some of those JavaScript files are heavy, this is because Next.js adds, for example, a tool called **Hot Module Reload** (HMR) (all the HMR code won't get loaded in production, Next.js only adds those files to our page when in development mode)
 
 HMR starts watching for file changes as soon as you start the development server
 
@@ -221,13 +224,13 @@ If we edit and save (or add a new file), HMR will detect the change and tell Nex
 
 We started the development server earlier, but how do we stop it? If you have never done it before, it might not be obvious how to do it
 
-The easiest way to stop the development is to press `Ctrl+S` (macOS: `⌘S`, Linux: `Ctrl+S`)
+The easiest way to stop the development server is to press `Ctrl+C` (the same shortcut on Windows, macOS and Linux)
 
-Then you will get asked if you want to quit:
+On Windows you will then get asked if you want to quit:
 
 > Terminate batch job (Y/N)?
 
-To confirm, either enter `Y` and then press `ENTER` or just press `Ctrl+S` (macOS: `⌘S`, Linux: `Ctrl+S`) again
+To confirm, either enter `Y` and then press `ENTER` or just press `Ctrl+C` again
 
 <Pagination
     previous={{ label: 'Next.js configuration', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/next-config' }}

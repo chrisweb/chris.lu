@@ -31,7 +31,7 @@ const SunLight: React.FC<IProps> = (props) => {
             castShadow={true} // default is false
             position={props.position}
             intensity={props.intensity}
-            shadow-mapSize={[1024 * 2, 1024 * 2]}
+            shadow-mapSize={[1024, 1024]}
         >
             <orthographicCamera
                 attach="shadow-camera"

@@ -15,6 +15,7 @@ const AsideContent: React.FC = () => {
                 <Image
                     src={buyMeACoffeeImport}
                     alt="buy me a coffee, please"
+                    quality={90}
                     style={{
                         width: '100%',
                         height: 'auto',

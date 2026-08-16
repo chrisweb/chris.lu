@@ -1,5 +1,6 @@
 ---
 title: Vercel
+description: My Vercel notes - creating an account, adding a new project from a repository and setting up the Sentry integration for Vercel
 keywords: ['Vercel', 'ci/cd', 'deployment', 'hosting', 'SaaS']
 published: 2024-08-06T11:22:33.444Z
 modified: 2024-08-06T11:22:33.444Z
@@ -8,9 +9,11 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 
 export const metadata = {
     title: frontmatter.title,
+    description: frontmatter.description,
     keywords: frontmatter.keywords,
     alternates: {
         canonical: frontmatter.permalink,
@@ -31,6 +34,8 @@ export const metadata = {
     },
 }
 
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/posts_vercel/opengraph-image" />
+
 %toc%
 
 <article>
@@ -39,7 +44,7 @@ export const metadata = {
 
 ![a book with the title vercel.com surrounded by magical items](../../../../public/assets/images/app/web_development/posts/vercel/banner.png '{ banner }')
 
-**Vercel.com** is a cloud platform that automates your Javascript project's building, deploying, and scaling. Vercel can be set up to watch your GitHub repository, and every time you merge a pull request, it can trigger a new build process. When the build process is done, it will automatically deploy the code (depending on the branch, it will either deploy it as a staging or production version).
+**Vercel.com** is a cloud platform that automates your JavaScript project's building, deploying, and scaling. Vercel can be set up to watch your GitHub repository, and every time you merge a pull request, it can trigger a new build process. When the build process is done, it will automatically deploy the code (depending on the branch, it will either deploy it as a staging or production version).
 
 Vercel has a (free) [Hobby](https://vercel.com/pricing) plan for developers who want to start a side project or just experiment with the service. It includes 6000 minutes of build execution for Automatic CI/CD deployments, 100 GB of bandwidth usage, and more.
 

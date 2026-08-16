@@ -1,0 +1,108 @@
+- generic [active] [ref=f20e1]:
+  - banner [ref=f20e2]:
+    - button "open global navigation menu" [ref=f20e3]
+    - navigation [ref=f20e6]:
+      - link "Home" [ref=f20e7]:
+        - /url: /
+      - link "Web development" [ref=f20e8]:
+        - /url: /web_development
+      - link "Lego" [ref=f20e9]:
+        - /url: /lego
+      - link "Games" [ref=f20e10]:
+        - /url: /games
+      - link "Music" [ref=f20e11]:
+        - /url: /music
+      - link "Memes" [ref=f20e12]:
+        - /url: /memes
+      - link "About me" [ref=f20e13]:
+        - /url: /about_me
+    - generic [ref=f20e17]:
+      - button "Play" [ref=f20e147]
+      - button "Forward" [ref=f20e21]
+      - button "Open Volume Dialog" [ref=f20e24]
+      - button "Open Song Credits Dialog" [ref=f20e27]
+    - generic [ref=f20e30]:
+      - generic: Chris.lu
+      - img "Chris.lu header image, displaying an 80s style landscape and sunset" [ref=f20e148]
+      - generic [ref=f20e150]:
+        - generic [ref=f20e151]:
+          - button "> Music ON" [ref=f20e152]
+          - button "Music OFF" [ref=f20e153]
+        - button "Play 3d animation" [ref=f20e154]:
+          - generic [ref=f20e155]: press start
+  - main [ref=f20e39]:
+    - generic [ref=f20e40]:
+      - heading "Hello, World!" [level=1] [ref=f20e41]
+      - paragraph [ref=f20e43]: Welcome to my blog, my name is Chris Weber (aka chrisweb)
+      - paragraph [ref=f20e44]:
+        - text: I like
+        - generic [ref=f20e145]: Lego bricks
+      - generic [ref=f20e45]:
+        - paragraph [ref=f20e50]:
+          - link "Web Development:" [ref=f20e51]:
+            - /url: /web_development
+          - text: In this portal you will find my articles about all things web development, so mostly about Javascript (Typescript), React, Next.js, APIs, CI/CD deployment, capacitor (web apps), WebGL, but probably also some posts about Cloud (serverless, edge, CDNs, ...), AI, IoT and maybe some more
+        - paragraph [ref=f20e56]:
+          - link "Games:" [ref=f20e57]:
+            - /url: /games
+          - text: I have always liked playing video games, be it on consoles, PC and yes even mobile (I know shame on me 😉). Playing games is my oldest hobby I still enjoy these days. I like playing games and also like watching people play on Twitch and sometimes I even do both at the same time.
+        - paragraph [ref=f20e62]:
+          - link "Lego:" [ref=f20e63]:
+            - /url: /lego
+          - text: If there is one hobby that helps me chill after a busy day it for sure is building things using bricks. I like building a lot as I can do it in the evening while also bing watching my favorite TV series or just listening to music. I like being creative and like watching Videos or Streams from other AFOLs.
+        - paragraph [ref=f20e68]:
+          - link "Music:" [ref=f20e69]:
+            - /url: /music
+          - text: There are a lot of different activities during which I like listening to music, hence the music genres I listen to vary depending on what I do. I have my road trip playlists for when I'm in my car, my work playlist I listen to while coding, my chill playlists when building with bricks, ...
+        - paragraph [ref=f20e74]:
+          - link "Memes:" [ref=f20e75]:
+            - /url: /memes
+          - text: A growing collection of memes that make me laugh. The most important ingredient for a good meme is humor, without it a meme is just a quote on a picture. A good meme can be used as a source of light relief during a tense situation.
+        - paragraph [ref=f20e80]:
+          - link "About me:" [ref=f20e81]:
+            - /url: /about_me
+          - text: Everything on this blog is already about me, but I also wanted to have a more personal area where I can write about things that are not related to web development, playing games and building with bricks.
+  - contentinfo [ref=f20e82]:
+    - separator [ref=f20e83]
+    - paragraph [ref=f20e84]:
+      - link "Buying me a coffee" [ref=f20e87]:
+        - /url: https://buymeacoffee.com/chriswwweb
+      - text: or
+      - link "sponsoring me" [ref=f20e90]:
+        - /url: https://github.com/sponsors/chrisweb
+      - text: on GitHub, are not mandatory but greatly appreciated, as it allows me to work on more content and keep the project free for everyone
+    - paragraph [ref=f20e93]:
+      - text: If you find a bug / typo or you want to suggest a new feature, then please open an
+      - link "Issue" [ref=f20e96]:
+        - /url: https://github.com/chrisweb/chris.lu/issues
+      - text: on GitHub.
+    - paragraph [ref=f20e99]:
+      - text: Suggestions and Ideas are appreciated, please use the
+      - link "chris.lu Discord server" [ref=f20e102]:
+        - /url: https://discord.gg/4p59CCTUAJ
+      - text: or the
+      - link "discussion board" [ref=f20e105]:
+        - /url: https://github.com/chrisweb/chris.lu/discussions
+      - text: to leave feedback or ask a question.
+    - paragraph [ref=f20e108]:
+      - text: All content on this site is licensed under a
+      - link "CC BY-NC-SA 4.0" [ref=f20e109]:
+        - /url: https://creativecommons.org/licenses/by-nc-sa/4.0/
+      - text: license. The source code of this project is licensed under
+      - link "MIT" [ref=f20e112]:
+        - /url: https://github.com/chrisweb/chris.lu/blob/main/LICENSE
+      - text: and a copy of the source code can be found in the
+      - link "chris.lu public GitHub repository" [ref=f20e115]:
+        - /url: https://github.com/chrisweb/chris.lu
+      - text: . A list of all open source packages used to build this project can be found in the
+      - link "package.json" [ref=f20e118]:
+        - /url: https://github.com/chrisweb/chris.lu/blob/main/package.json
+      - text: file. This website uses music licensed under different creative commons licenses, the music tracks
+      - link "credits" [ref=f20e121]:
+        - /url: https://github.com/chrisweb/chris.lu/blob/main/public/assets/music/CREDITS.txt
+      - text: file can be found in the repository of this project or by clicking on the "eject" button of the player on the top right of the screen. This website uses
+      - link "Free Icons by Font Awesome" [ref=f20e124]:
+        - /url: https://fontawesome.com/search?o=r&m=free
+      - text: .
+  - button "Open Next.js Dev Tools" [ref=f20e132] [cursor=pointer]
+  - alert [ref=f20e146]

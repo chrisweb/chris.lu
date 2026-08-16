@@ -1,7 +1,9 @@
 import { sharedMetaData } from '@/shared/metadata'
+import SectionJsonLd from '@/components/seo/SectionJsonLd'
 
 export const metadata = {
     title: 'Memes',
+    description: 'A collection of the memes I like, mostly about programming, web development and the daily life of a developer.',
     alternates: {
         canonical: 'https://chris.lu/memes',
     },
@@ -10,6 +12,8 @@ export const metadata = {
         url: 'https://chris.lu/memes',
     },
 }
+
+<SectionJsonLd title={metadata.title} description={metadata.description} path="/memes" />
 
 %toc%
 

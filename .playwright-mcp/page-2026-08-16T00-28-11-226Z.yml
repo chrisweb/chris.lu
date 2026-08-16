@@ -1,0 +1,250 @@
+- generic [active] [ref=f5e1]:
+  - banner [ref=f5e2]:
+    - navigation [ref=f5e4]:
+      - link "Home" [ref=f5e5]:
+        - /url: /
+      - link "HoloArcade" [ref=f5e6]:
+        - /url: /holoarcade
+      - link "Web dev" [ref=f5e7]:
+        - /url: /web_development
+      - link "Lego" [ref=f5e8]:
+        - /url: /lego
+      - link "Games" [ref=f5e9]:
+        - /url: /games
+      - link "Music" [ref=f5e10]:
+        - /url: /music
+      - link "Memes" [ref=f5e11]:
+        - /url: /memes
+      - link "About me" [ref=f5e12]:
+        - /url: /about_me
+    - generic [ref=f5e16]:
+      - button "Play" [ref=f5e17]
+      - button "Forward" [ref=f5e20]
+      - button "Open Volume Dialog" [ref=f5e23]
+      - button "Open Song Credits Dialog" [ref=f5e26]
+    - generic [ref=f5e29]:
+      - generic: Chris.lu
+      - img "Chris.lu header image, displaying an 80s style landscape and sunset" [ref=f5e30]
+      - generic [ref=f5e32]:
+        - generic [ref=f5e33]:
+          - button "> Music ON" [ref=f5e34]
+          - button "Music OFF" [ref=f5e35]
+        - button "Play 3d animation" [ref=f5e36]:
+          - generic [ref=f5e37]: press start
+  - main [ref=f5e38]:
+    - complementary [ref=f5e39]:
+      - link "Skip table of contents":
+        - /url: "#skipToc"
+      - generic [ref=f5e40]:
+        - navigation "table of contents" [ref=f5e42]:
+          - list [ref=f5e43]:
+            - listitem [ref=f5e44]:
+              - link "HoloArcade 🕹️" [ref=f5e45]:
+                - /url: "#holoarcade-%EF%B8%8F"
+              - list [ref=f5e46]:
+                - listitem [ref=f5e47]:
+                  - link "From \"to be continued\" to a beta" [ref=f5e48]:
+                    - /url: "#from-to-be-continued-to-a-beta"
+                - listitem [ref=f5e49]:
+                  - link "What HoloArcade is" [ref=f5e50]:
+                    - /url: "#what-holoarcade-is"
+                - listitem [ref=f5e51]:
+                  - link "Two ways to build" [ref=f5e52]:
+                    - /url: "#two-ways-to-build"
+                - listitem [ref=f5e53]:
+                  - link "Living simulations" [ref=f5e54]:
+                    - /url: "#living-simulations"
+                - listitem [ref=f5e55]:
+                  - link "A community, not just a sandbox" [ref=f5e56]:
+                    - /url: "#a-community-not-just-a-sandbox"
+                - listitem [ref=f5e57]:
+                  - link "Built by one person, on the stack I write about" [ref=f5e58]:
+                    - /url: "#built-by-one-person-on-the-stack-i-write-about"
+                - listitem [ref=f5e59]:
+                  - link "Free to play, coins for the heavy lifting" [ref=f5e60]:
+                    - /url: "#free-to-play-coins-for-the-heavy-lifting"
+                - listitem [ref=f5e61]:
+                  - link "Tell me what you think" [ref=f5e62]:
+                    - /url: "#tell-me-what-you-think"
+        - generic [ref=f5e63]:
+          - link [ref=f5e64]:
+            - /url: https://www.buymeacoffee.com/chriswwweb
+            - img "buy me a coffee, please" [ref=f5e65]
+          - text: "* Please 😉"
+          - paragraph [ref=f5e66]:
+            - link [ref=f5e67]:
+              - /url: https://discord.gg/4p59CCTUAJ
+            - link [ref=f5e70]:
+              - /url: https://bsky.app/profile/chriswwweb.bsky.social
+            - link [ref=f5e73]:
+              - /url: https://github.com/chrisweb
+            - link [ref=f5e76]:
+              - /url: https://mastodon.social/@chriswwweb
+    - article [ref=f5e79]:
+      - heading [level=1] [ref=f5e80]:
+        - text: HoloArcade 🕹️
+        - 'link "Heading permalink for: HoloArcade" [ref=f5e81]':
+          - /url: "#holoarcade-️"
+      - link [ref=f5e84]:
+        - /url: https://www.youtube.com/watch?v=2-NXn-Jdfj0
+        - paragraph [ref=f5e85]:
+          - img "still from the animated HoloArcade beta trailer, an orc in a red dress sitting in a tavern" [ref=f5e86]
+        - generic [ref=f5e90]: Watch the beta trailer on YouTube
+      - paragraph [ref=f5e93]:
+        - text: "I'm a solo indie dev, and for the last 6 months I have been building something I have wanted since I first watched sci-fi as a kid:"
+        - link "HoloArcade" [ref=f5e94]:
+          - /url: https://www.holoarcade.ai
+        - text: ", a community driven and AI powered platform where you build your own holo-worlds and holo-characters, and then step into them."
+      - paragraph [ref=f5e97]:
+        - text: It is in
+        - strong [ref=f5e98]: beta
+        - text: and open to everyone, so if the trailer above made you curious, you can
+        - link "try it out right now" [ref=f5e99]:
+          - /url: https://www.holoarcade.ai
+        - text: 🚀
+      - heading [level=2] [ref=f5e102]:
+        - text: From "to be continued" to a beta
+        - 'link "Heading permalink for: From \"to be continued\" to a beta" [ref=f5e103]':
+          - /url: "#from-to-be-continued-to-a-beta"
+      - paragraph [ref=f5e106]:
+        - text: At the very end of my
+        - link "games" [ref=f5e107]:
+          - /url: /games
+        - text: page I wrote that watching solo devs build their dream game had reignited my desire to make my own game someday, but that I didn't have 3 to 4 years of savings lying around to do it, so "who knows what will happen next... to be continued".
+      - paragraph [ref=f5e108]: This is the "to be continued" 😅
+      - paragraph [ref=f5e109]:
+        - text: It is not the game I imagined back when I was typing BASIC listings into an Amstrad CPC (that story is on my
+        - link "about me" [ref=f5e110]:
+          - /url: /about_me
+        - text: "page), it turned into something else entirely: not one game, but a machine that lets you build your own."
+      - heading [level=2] [ref=f5e111]:
+        - text: What HoloArcade is
+        - 'link "Heading permalink for: What HoloArcade is" [ref=f5e112]':
+          - /url: "#what-holoarcade-is"
+      - paragraph [ref=f5e115]: The mental model is not "chat with a character card", it is "run your own holodeck". You describe what you want, and no prompt engineering degree is required.
+      - paragraph [ref=f5e116]: Pick a visual style, set a theme, and drop in whoever you want. A ninja, a caveman, and an alien having coffee in an 80s diner? That is a perfectly valid Wednesday 🛸
+      - heading [level=2] [ref=f5e117]:
+        - text: Two ways to build
+        - 'link "Heading permalink for: Two ways to build" [ref=f5e118]':
+          - /url: "#two-ways-to-build"
+      - paragraph [ref=f5e121]: "I wanted world and character building to feel more like playing a game than like wrestling with prompts, so there are two ways to do it:"
+      - list [ref=f5e122]:
+        - listitem [ref=f5e123]:
+          - strong [ref=f5e124]: Talk to the Computer
+          - text: ", an onboard virtual intelligence that builds with you. Describe what you want and watch a playable holo-world take shape: the map, the scenes, the characters, ready to run from the first second"
+        - listitem [ref=f5e125]:
+          - strong [ref=f5e126]: Or take manual control
+          - text: with the step-by-step builders. Okay, yes, under the hood it is a form with a few sliders, but let me have my moment 😉
+      - heading [level=2] [ref=f5e127]:
+        - text: Living simulations
+        - 'link "Heading permalink for: Living simulations" [ref=f5e128]':
+          - /url: "#living-simulations"
+      - paragraph [ref=f5e131]: Once your world is built, you can actually step into it. You land on your world map, walk into any location you built, and interact with whoever is there. You are a player inside the world, not glued to a single character, so you can switch between anyone you meet.
+      - paragraph [ref=f5e132]: "Change the time of day and the world moves with you: the light changes, and the characters go about their schedules, at work in the afternoon, at home at night. Suggest a change of outfit, or suggest moving somewhere else together and, if the character agrees, you travel there and the story continues."
+      - paragraph [ref=f5e133]: "These are the parts I am the most proud of:"
+      - list [ref=f5e134]:
+        - listitem [ref=f5e135]:
+          - strong [ref=f5e136]: Characters that actually remember you.
+          - text: There is no shared pool of knowledge, every character keeps their own layered memory of you, shaped by how you treated them, and like a real memory the small details fade
+        - listitem [ref=f5e137]:
+          - strong [ref=f5e138]: Outfits that stay put.
+          - text: No more clothes changing at random between two images, the wardrobe system tracks what everybody is wearing and it only changes when the story calls for it
+        - listitem [ref=f5e139]:
+          - strong [ref=f5e140]: Moments you can keep.
+          - text: Freeze a scene between you and a character as a favorite moment, then regenerate it as a fresh image, a voice clip, or a video of that exact moment
+        - listitem [ref=f5e141]:
+          - strong [ref=f5e142]: Worlds you can hear.
+          - text: Character voices and ambient music per world, per location, and per scene, because hearing a place changes everything
+      - heading [level=2] [ref=f5e143]:
+        - text: A community, not just a sandbox
+        - 'link "Heading permalink for: A community, not just a sandbox" [ref=f5e144]':
+          - /url: "#a-community-not-just-a-sandbox"
+      - paragraph [ref=f5e147]:
+        - text: Your creations stay private until you decide otherwise. When a simulation is ready you can publish it, and every release is a numbered version, a bit like a small game studio would do it. You can also
+        - link "explore what other people have published" [ref=f5e148]:
+          - /url: https://www.holoarcade.ai/explore
+        - text: and play their simulations, adopt community characters and worlds into your own (credits travel with the content, movie style), or just hang out in the
+        - link "forum" [ref=f5e151]:
+          - /url: https://www.holoarcade.ai/forum
+        - text: and talk about the platform.
+      - heading [level=2] [ref=f5e154]:
+        - text: Built by one person, on the stack I write about
+        - 'link "Heading permalink for: Built by one person, on the stack I write about" [ref=f5e155]':
+          - /url: "#built-by-one-person-on-the-stack-i-write-about"
+      - paragraph [ref=f5e158]:
+        - text: If you read the
+        - link "tutorials" [ref=f5e159]:
+          - /url: /web_development
+        - text: "on this blog, the stack will look familiar, it is the same one, pushed a lot harder: Next.js 16 with the App Router and cache components, React 19, Tailwind v4, Drizzle ORM on a Neon serverless Postgres, Better Auth, the AI SDK for everything text, and durable Vercel Workflows for the media pipelines that generate images, voices, music and videos. Every generated media file is signed with C2PA content credentials, so it stays identifiable as AI generated."
+      - paragraph [ref=f5e160]: Doing all of it alone means design, prompts, database, billing, moderation, legal pages, and the trailer, are all the same person. Some days that is exhausting, most days it is the most fun I have had building software 🤖
+      - heading [level=2] [ref=f5e161]:
+        - text: Free to play, coins for the heavy lifting
+        - 'link "Heading permalink for: Free to play, coins for the heavy lifting" [ref=f5e162]':
+          - /url: "#free-to-play-coins-for-the-heavy-lifting"
+      - paragraph [ref=f5e165]:
+        - text: Interacting with characters is 100% free. Generating media, or using the heavy duty advanced models, runs on HoloArcade coins from the
+        - link "shop" [ref=f5e166]:
+          - /url: https://www.holoarcade.ai/shop
+        - text: . That is what keeps the servers from melting, and the lights on 💡
+      - heading [level=2] [ref=f5e169]:
+        - text: Tell me what you think
+        - 'link "Heading permalink for: Tell me what you think" [ref=f5e170]':
+          - /url: "#tell-me-what-you-think"
+      - paragraph [ref=f5e173]:
+        - text: I would genuinely like you to
+        - link "try HoloArcade" [ref=f5e174]:
+          - /url: https://www.holoarcade.ai
+        - text: and then tell me what you think. What did you like, what annoyed you, and what should I build next? The
+        - link "FAQ" [ref=f5e177]:
+          - /url: https://www.holoarcade.ai/faq
+        - text: answers the most common questions, and the
+        - link "forum" [ref=f5e180]:
+          - /url: https://www.holoarcade.ai/forum
+        - text: is the best place to leave feedback, but my
+        - link "Discord" [ref=f5e183]:
+          - /url: https://discord.gg/4p59CCTUAJ
+        - text: works too.
+      - paragraph [ref=f5e186]: To be continued... again 🌌
+  - contentinfo [ref=f5e187]:
+    - separator [ref=f5e188]
+    - paragraph [ref=f5e189]:
+      - link "Buying me a coffee" [ref=f5e192]:
+        - /url: https://buymeacoffee.com/chriswwweb
+      - text: or
+      - link "sponsoring me" [ref=f5e195]:
+        - /url: https://github.com/sponsors/chrisweb
+      - text: on GitHub, are not mandatory but greatly appreciated, as it allows me to work on more content and keep the project free for everyone
+    - paragraph [ref=f5e198]:
+      - text: If you find a bug / typo or you want to suggest a new feature, then please open an
+      - link "Issue" [ref=f5e201]:
+        - /url: https://github.com/chrisweb/chris.lu/issues
+      - text: on GitHub.
+    - paragraph [ref=f5e204]:
+      - text: Suggestions and Ideas are appreciated, please use the
+      - link "chris.lu Discord server" [ref=f5e207]:
+        - /url: https://discord.gg/4p59CCTUAJ
+      - text: or the
+      - link "discussion board" [ref=f5e210]:
+        - /url: https://github.com/chrisweb/chris.lu/discussions
+      - text: to leave feedback or ask a question.
+    - paragraph [ref=f5e213]:
+      - text: All content on this site is licensed under a
+      - link "CC BY-NC-SA 4.0" [ref=f5e214]:
+        - /url: https://creativecommons.org/licenses/by-nc-sa/4.0/
+      - text: license. The source code of this project is licensed under
+      - link "MIT" [ref=f5e217]:
+        - /url: https://github.com/chrisweb/chris.lu/blob/main/LICENSE
+      - text: and a copy of the source code can be found in the
+      - link "chris.lu public GitHub repository" [ref=f5e220]:
+        - /url: https://github.com/chrisweb/chris.lu
+      - text: . A list of all open source packages used to build this project can be found in the
+      - link "package.json" [ref=f5e223]:
+        - /url: https://github.com/chrisweb/chris.lu/blob/main/package.json
+      - text: file. This website uses music licensed under different creative commons licenses, the music tracks
+      - link "credits" [ref=f5e226]:
+        - /url: https://github.com/chrisweb/chris.lu/blob/main/public/assets/music/CREDITS.txt
+      - text: file can be found in the repository of this project or by clicking on the "eject" button of the player on the top right of the screen. This website uses
+      - link "Free Icons by Font Awesome" [ref=f5e229]:
+        - /url: https://fontawesome.com/search?o=r&m=free
+      - text: .
+  - button "Open Next.js Dev Tools" [ref=f5e237] [cursor=pointer]

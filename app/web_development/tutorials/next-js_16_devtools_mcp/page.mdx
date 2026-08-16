@@ -1,16 +1,20 @@
 ---
-title: Next.js 16 Devtools MCP in VSCode - Tutorial
-keywords: ['Next.js 16', 'Devtools', 'MCP', 'VSCode', 'Tutorial']
+title: Next.js 16 Devtools MCP for Claude Code and GitHub Copilot - Tutorial
+description: Setup guide for the Next.js 16 MCP tooling with Claude Code CLI and GitHub Copilot, including the built-in dev server MCP, the next-devtools-mcp bridge, Windows gotchas and verified example prompts
+keywords: ['Next.js 16', 'Devtools', 'MCP', 'Claude Code', 'GitHub Copilot', 'VSCode', 'agents', 'Tutorial']
 published: 2025-11-01T23:00:00.000Z
-modified: 2025-11-17T23:00:00.000Z
+modified: 2026-08-15T16:00:00.000Z
 permalink: https://chris.lu/web_development/tutorials/next-js_16_devtools_mcp
 section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
+import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
     title: frontmatter.title,
+    description: frontmatter.description,
     keywords: frontmatter.keywords,
     alternates: {
         canonical: frontmatter.permalink,
@@ -31,231 +35,217 @@ export const metadata = {
     },
 }
 
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js_16_devtools_mcp/opengraph-image" />
+
 %toc%
 
 <article>
 
-# Next.js 16 Devtools MCP in VSCode
+# Next.js 16 Devtools MCP for Claude Code and GitHub Copilot
 
-<video autoPlay muted playsInline width="100%" poster="/assets/images/app/web_development/tutorials/next-js_16_devtools_mcp/banner.png">
-  <source src="/assets/video/app/web_development/tutorials/next-js_16_devtools_mcp/banner.mp4" type="video/mp4" />
-  Your browser does not support the video tag.
-</video>
+![a pixel art scene of a happy robot and a next.js server tower sitting side by side on a beach, watching a synthwave sunset, connected by a cable labeled MCP](../../../../public/assets/images/app/web_development/tutorials/next-js_16_devtools_mcp/banner.png 'a pixel art scene of a happy robot and a next.js server tower watching a synthwave sunset together { banner }')
 
-## VSCode MCP file
+> [!NOTE]  
+> **This article got a full overhaul (August 2026):** the first version was only about VSCode and described `next-devtools-mcp` 0.3, which had tools like `init` and `upgrade-nextjs-16` that **no longer exist**. This version covers the current state (Next.js 16.3, `next-devtools-mcp` 0.4) for both **Claude Code CLI** and **GitHub Copilot**, and every example prompt in it has been verified against a real project before publishing
 
-TLDR: When using VSCode, the most important part, is to create a new `mcp.json` file in your `.vscode` folder, you can either use a command or do it manually.
+Your AI agent does not need you to copy-paste stack traces anymore. Next.js 16 ships MCP tooling that lets Claude Code or GitHub Copilot ask your **running dev server** directly: what errors do you have, what routes exist, what is in your logs. This tutorial sets it up, and then shows you what to actually DO with it.
 
-### Using the VSCode command
+## The two "MCP things", disambiguated
 
-The fastest way is to use the following command:
+People (me included) keep confusing two different pieces, so let us sort this out first:
+
+- **The MCP server built into `next dev`**: since Next.js 16 your dev server exposes an MCP endpoint at `http://localhost:3000/_next/mcp` (the port follows your dev server). It is **enabled by default**, no flag needed (the `experimental.mcpServer` option from the Next.js 15 days is history). It exposes runtime diagnostic tools, on Next.js 16.3 that list is: `get_errors`, `get_logs`, `get_routes`, `get_page_metadata`, `get_project_metadata`, `get_server_action_by_id`, `get_request_insights`, plus the Turbopack only `get_compilation_issues` and `compile_route`. This endpoint only exists while `next dev` is running
+- **`next-devtools-mcp` (the npm package)**: this is the thing you register with your agent. Since version 0.4.0 it is a deliberately **thin connector** with only four tools: `nextjs_index` (discovers running dev servers, so nobody has to hardcode ports), `nextjs_call` (proxies calls to the built-in endpoint), `nextjs_docs` (points the agent at the version-matched docs bundled inside `node_modules/next/dist/docs/`) and `browser_eval` (points the agent at the `agent-browser` CLI for browser automation)
+
+So: you **register** the package, you **run** the dev server, and the package connects the two. The docs and browser tools even work without a running dev server.
+
+> [!WARN]  
+> A lot of tutorials (including the previous version of this one 😅) tell you to "always call the **init** tool first". That tool was removed in `next-devtools-mcp` 0.4.0, together with `upgrade-nextjs-16`, `enable-cache-components` and the bundled knowledge base resources. If your agent complains that a tool does not exist, you are following stale advice, check the "Migrating from 0.3.x" section of the [next-devtools-mcp readme](https://github.com/vercel/next-devtools-mcp)
+
+> [!NOTE]  
+> Not to be confused with `mcp-handler` (previously `@vercel/mcp-adapter`): that package is for **building your own MCP server** inside your Next.js app, as a product feature. It has nothing to do with coding agent tooling
+
+## Setup for Claude Code CLI
+
+Claude Code reads MCP servers from a `.mcp.json` file at the project root (project scope, so you can commit it to git and it works for every session in that repository). The quickest way is the `claude mcp add` command:
 
 ```shell
-code --add-mcp '{"name":"next-devtools","command":"npx","args":["-y","next-devtools-mcp@latest"]}'
+claude mcp add next-devtools --scope project -- cmd /c npx -y next-devtools-mcp@latest
 ```
 
-If you are using **PowerShell**, it will strip the double quotes from the command, so you need to escape them first:
+Note the `cmd /c` part: that is the **Windows gotcha**. On Windows, `npx` is a `npx.cmd` batch file that can not be spawned directly by Claude Code, without the wrapper the server shows up in `claude mcp list` but never connects (`spawn npx ENOENT`). On macOS and Linux you drop the `cmd /c`.
 
-```shell
-code --add-mcp '{\"name\":\"next-devtools\",\"command\":\"npx\",\"args\":[\"-y\",\"next-devtools-mcp@latest\"]}'
+The resulting `.mcp.json`:
+
+```json title=".mcp.json (Windows)"
+{
+    "mcpServers": {
+        "next-devtools": {
+            "command": "cmd",
+            "args": ["/c", "npx", "-y", "next-devtools-mcp@latest"]
+        }
+    }
+}
 ```
 
-### Manually adding an MCP file  
+```json title=".mcp.json (macOS / Linux)"
+{
+    "mcpServers": {
+        "next-devtools": {
+            "command": "npx",
+            "args": ["-y", "next-devtools-mcp@latest"]
+        }
+    }
+}
+```
 
-Some IDEs or AI coding tools have an `.mcp.json` in the root of the project, but that does not work when using VSCode.
+Restart Claude Code (project scoped servers trigger a one-time approval prompt), then type `/mcp` to check the connection status, or run `claude mcp list` in the terminal to see a health check.
 
-VSCode historically has stored files in a hidden `.vscode` folder, instead of using hidden files like `.mcp.json` at the root of a project. This means that in our case the file itself does not start with a dot (the folder is already hidden) the filename is only `mcp.json`.
+> [!TIP]  
+> If `claude mcp add` mangles the `/c` argument on Windows (a known CLI parser quirk), just create the `.mcp.json` file by hand, it is the same result
 
-To add the Next.js 16 Devtools MCP in VSCode, create or edit your mcp.json file:
+## Setup for GitHub Copilot in VS Code
+
+Copilot does NOT read `.mcp.json`, it has its own file: `.vscode/mcp.json` (note: no leading dot on the filename, the `.vscode` folder is already hidden). Two things are different from the Claude Code format and trip up every copy-paste: the root key is **`servers`** (not `mcpServers`) and every server needs an explicit **`type`**:
 
 ```json title=".vscode/mcp.json"
 {
     "servers": {
         "next-devtools": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "next-devtools-mcp@latest"
-            ],
-            "type": "stdio"
+            "type": "stdio",
+            "command": "cmd",
+            "args": ["/c", "npx", "-y", "next-devtools-mcp@latest"]
         }
     },
     "inputs": []
 }
 ```
 
-Also note how VSCode uses "servers" and not "mcpServers".
+(Same `cmd /c` rule: drop it on macOS/Linux.) Then switch Copilot Chat to **Agent** mode, MCP tools are invisible in Ask and Edit modes. Click the tools icon below the prompt input to verify "next-devtools" is enabled.
 
-### Other ways to add an MCP server (optional)
+Copilot also supports connecting **directly** to the built-in endpoint over HTTP, without the bridge (you lose port auto-discovery, docs and browser tools, but it is a nice fallback):
 
-The **third option** is to open the VSCode command palette, use the keyboard shortcut `Ctrl+Shift+p` (macOS: `⇧⌘P`, Linux: `Ctrl+Shift+P`) to do so, then type "MCP" and choose "MCP: Add Server"
-
-The **fourth option** to add MCP servers, but its a bit hidden...
-
-As soon as you have an mcp.json file in VSCode, after you open that file, there will be a "Add Server..." button in the bottom left.
-
-What is great about those two options is that they allow you to add other MCP servers from sources like NPM, or really any other remote MCP server via a HTTP connection.
-
-### Configure Tools
-
-If you followed the above steps you should now be able to see the new Tools in VSCode.
-
-To open the tools list click on the **tools icon** below the copilot prompt input.
-
-You can enable or disable tools, make sure the "MCP Server: Next Devtools" is enabled:
-
-![VScode extensions view icon](../../../../public/assets/images/app/web_development/tutorials/next-js_16_devtools_mcp/nextjs_mcp_vscode_tools.png)
-
-### Initialize next-devtools
-
-To trigger the initialization, make sure Github Copilot is set to Agent Mode, choose your favorite model (like Claude Sonnet 4.5), then prompt the Copilot Agent the following sentence:
-
-```txt
-Use the next-devtools **init** tool to ensure the Next.js MCP is ready
-```
-
-Make sure to do a quick init every time you start a **new chat** session to ensure it is aware of your next-devtools
-
-> [!TIP]
-> If you have a custom agent file, or if you have a `.github\copilot-instructions.md` then add the following line to them to make initialization happen automatically for each session:
->  
-> ```txt
-> ## next-devtools MCP
->  
-> - When starting work, ALWAYS call the the **"init" tool** first, it needs to get called once per session. Do this automatically without being asked.
-> - Use the **"nextjs_runtime" tool** to query Next.js runtime information, diagnostics and internals.
-> - Use the **"nextjs_docs" tool** to look up Next.js documentation when needed.
-> - Use the **"browser_eval" tool** to use use playwright to interact with the web application in a browser-like environment for testing and debugging purposes.
-> ```
-
-## Upgrading to Next.js 16 using the Next.js 16 Devtools MCP
-
-If you have already upgraded your project's packages to Next.js 16, but haven't done a full upgrade of your own code yet, then you will want to try out the Next.js 16 MCP upgrade tool.
-
-> [!NOTE]
-> AIs can be slow especially when refactoring an existing project, a more efficient and faster way to update some parts of your project is to use the [Next.js 16 codemod](https://nextjs.org/docs/app/guides/upgrading/codemods) for Next.js 16 and use it first, after the codemod is done you can still run the MCP upgrade tool. The AI will notice that some things are already done and skip them, at the end it will give you a recap about the state of your project in regards to Next.js 16.
-
-I recommend using the slash commands as they guarantee that the right tool will be used, type `/mcp` and then select `/mcp.next-devtools.upgrade-nextjs-16` , this will trigger the tool
-
-Or you can use a prompt like this instead, which if lucky will trigger the upgrade-nextjs-16 tool too:
-
-```txt
-Next Devtools, help me upgrade my Next.js app to version 16
-```
-
-## Use the MCP Devtools to start using cache components in your Next.js 16 project
-
-The easiest way is to use the slash command `/mcp` into the copilot input field, and then select `/mcp.next-devtools.enable-cache-components`, this will trigger the tool
-
-This command will make use of a bunch of resources that are bundled in the Next.js devtools MCP, it will try to only use the ones that apply to your project. After the initial run feel free to keep asking the agent about certain "cache components" features to learn more about them, even if your project does not use them yet, like the new "updateTag()" and refresh().
-
-## Next.js 16 MCP server
-
-When you are done upgrading your codebase to Next.js 16 I recommend enabling the built in (local) Next.js 16 MCP server.
-
-Wait didn't we just install Next.js 16 MCP?
-
-What we did so far is add the Next.js 16 Devtools MCP to VSCode. Those are new tools that your AI agents can now use. What we are about to enable now is an MCP server inside of the Next.js dev server, that will give us access to a series other tools.
-
-### Configuring Next.js experimental MCP server
-
-To enable the MCP dev server you need to do two things, enabled it in the config and then start the Next.js dev server.
-
-First we edit our next.config.ts file:
-
-```mjs title="next.config.ts" showLineNumbers {8-9}
-const nextConfig: NextConfig = {
-    reactStrictMode: true,
-    typedRoutes: true,
-    reactCompiler: true,
-    // enable "use cache" directive and PPR (previously dynamicIO)
-    cacheComponents: true,
-    experimental: {
-        // MCP server
-        mcpServer: true
+```json title=".vscode/mcp.json (direct HTTP variant)"
+{
+    "servers": {
+        "nextjs-mcp": {
+            "type": "http",
+            "url": "http://localhost:3000/_next/mcp"
+        }
     },
+    "inputs": []
 }
 ```
 
-### start the dev server
+> [!NOTE]  
+> There is no single config file that both tools read: Claude Code wants `.mcp.json`, Copilot wants `.vscode/mcp.json`. The practical move is to put the same `npx` command in both files and commit both, each tool then spawns its own instance of the same bridge
 
-then we start the dev server:
+## Things you can actually ask your agent to do
 
-```shell
-npm run dev
-```
+This is the fun part. All of the following prompts were **verified against a real running project** (Next.js 16.3.1, Turbopack, Windows) while writing this article, they are not theoretical.
 
-### Initialize the next-devtools MCP
-
-Make sure the next-devtools are initialized by sending the following prompt to the agent:
+### Find errors without copy-pasting stack traces
 
 ```txt
-Use the next-devtools **init** tool to ensure the Next.js MCP is ready
+use the nextjs mcp to check if my app has any errors
 ```
 
-### Have fun ;)
-
-That's it, the MCP server is now running alongside your dev server, meaning you can try out a prompt like this (make sure you are in agent mode):
-
-```txt
-what tools does the nextjs mcp server expose
-```
-
-My copilot AI Agent is quite lazy, it rarely checks if something is already running in the terminal and instead opens a new one, to fix this you have two options:
-
-Either make sure you have no terminal running the dev server
-
-Or change you do change the prompt to this:
-
-```txt
-what tools does the nextjs mcp server expose (dev server is already running on port 3000)
-```
-
-## Debugging Next.js using its own MCP tool(s)
-
-We can use the new tools to debug server errors.
-
-First edit a page in a your project, for example the homepage, add the following bug:
-
-```tsx
-// i want the ai to find the following code 
-throw new Error('this is a bug')
-```
-
-then make sure the dev server is running:
-
-```shell
-npm run dev
-```
-
-Finally we ask the AI for help, using the following prompt (make sure you are in agent mode):
-
-```txt
-Next Devtools: there is a bug on the server side, help me find it or my boss will get angry (dev server is already running on port 3000)
-```
-
-producing a query like this:
+The agent calls `get_errors` (through `nextjs_call`) and receives a source-mapped answer. I planted a `throw new Error('mcp verification test error')` in a page, and this is what the agent got back:
 
 ```json
 {
-  "action": "list_tools",
-  "port": 3000
+    "sessionErrors": [{
+        "url": "/mcp-test-error",
+        "runtimeErrors": [{
+            "errorName": "Error",
+            "message": "mcp verification test error",
+            "stack": [{ "file": "app\\mcp-test-error\\page.tsx", "methodName": "McpTestErrorPage", "line": 3, "column": 11 }]
+        }]
+    }]
 }
 ```
 
-and if successful it will make a list of tools, it will identify the "get_errors" tool as the most suitable (based on the wording in your prompt, asking to find an error)
+Exact file, exact line, exact column. The agent goes straight to the bug.
 
-finally it will call the get_errors tools and get a response like this:
+> [!WARN]  
+> One nuance I only found out by testing: `get_errors` reports **browser-reported** runtime errors. If nobody opened the broken page in a browser, the error list stays empty (a `curl` request is not enough). So either open the page yourself first, or ask the agent to open it with its browser tooling and THEN check for errors
 
-```json
-{"success":true,"port":3000,"toolName":"get_errors","result":[...]}
+### Read the dev server logs
+
+```txt
+check the next.js dev server logs, are there any warnings or errors I should know about?
 ```
 
-After that it will hopefully find the bug and fix it, as the dev server is running, HMR will kick in and display the fixed page in the browser
+The agent calls `get_logs`, which returns the path to a structured log file (`.next/dev/logs/next-development.log`), and then reads it. Bonus that surprised me: the log does not only contain server output, **browser console logs are forwarded into it too** (each line is tagged with `"source": "Server"` or `"source": "Browser"`), so the agent sees your client-side `console.log` output without opening devtools.
+
+### List all routes
+
+```txt
+use the nextjs mcp and list all routes of my app
+```
+
+The agent calls `get_routes` and gets the complete live route table of the running app (in my case 100+ routes, including things you forget exist, like every `opengraph-image` route). Great before refactorings, or to ask follow-ups like "which of these routes have no metadata?".
+
+### Check for compilation issues (Turbopack)
+
+```txt
+use the nextjs mcp to check for compilation issues
+```
+
+Calls `get_compilation_issues` (Turbopack only), which returns current compiler diagnostics without you scrolling through the terminal. There is also `compile_route` to force-compile a route before visiting it.
+
+### Verify a page in a real browser
+
+```txt
+use the browser tools to open the homepage and check for console errors
+```
+
+The `browser_eval` tool does not drive a browser itself (that changed in 0.4.0 too): it detects the [agent-browser](https://www.npmjs.com/package/agent-browser) CLI and hands your agent precise instructions to drive it (`agent-browser open <url>`, `click`, `screenshot`, ...). If agent-browser is not installed it tells the agent how to install it. Rendering a page in a real browser catches what curl never will: hydration errors, client-side exceptions, and (see above) it is what feeds `get_errors`.
+
+### Look things up in the version-matched docs
+
+```txt
+look up how cache components work, use the docs that match my installed next.js version
+```
+
+The `nextjs_docs` tool points the agent at the full Next.js documentation that ships **inside** `node_modules/next/dist/docs/` since Next.js 16.2, matching your exact installed version. No more confidently wrong answers based on Next.js 14 training data.
+
+## Make sure the agent rules block is in your agent file
+
+Since Next.js 16.3, `next dev` automatically writes (and keeps updated) a managed block in your `AGENTS.md` (or `CLAUDE.md`), pointing agents at those bundled docs. This is not MCP, it is a plain markdown mechanism, but it is the highest-leverage part of the whole setup: Vercel's own evals found that docs grounding via the agent file beats every other approach they tested.
+
+Check that this block is present in your `AGENTS.md` or `CLAUDE.md`, and if you are on 16.2 (or the file got mangled), add it manually. On anything older than 16.2 there is no point in adding it, as the block points at bundled docs that do not exist yet in `node_modules/next/dist/docs/`, so on 16.0 or 16.1 you first need to upgrade:
+
+```md title="AGENTS.md or CLAUDE.md (managed block)"
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
+```
+
+Commit it: `next dev` re-adds the block if it is missing, so deleting it from a diff only re-creates the uncommitted change forever.
+
+## What happened to the upgrade and cache components tools?
+
+The previous version of this article showed `/mcp.next-devtools.upgrade-nextjs-16` and `/mcp.next-devtools.enable-cache-components`. Both left the MCP server in 0.4.0 and are now distributed as **agent skills** instead (installable via `npx skills`, e.g. `next-dev-loop` or `next-cache-components-optimizer`). For version upgrades, the fastest path remains the codemod:
+
+```shell
+npx @next/codemod@latest upgrade
+```
 
 > [!MORE]  
-> [Next Devtools MCP repository](https://github.com/vercel/next-devtools-mcp)  
-> [VSCode Copilot mcp-servers docs](https://code.visualstudio.com/docs/copilot/customization/mcp-servers)  
-> [Next.js 16 MCP docs](https://nextjs.org/docs/app/guides/mcp)  
+> [next-devtools-mcp repository](https://github.com/vercel/next-devtools-mcp)  
+> [Next.js MCP docs](https://nextjs.org/docs/app/guides/mcp)  
+> [Claude Code MCP docs](https://code.claude.com/docs/en/mcp)  
+> [VSCode Copilot MCP servers docs](https://code.visualstudio.com/docs/copilot/customization/mcp-servers)  
+
+Congratulations 🎉 your agent can now interrogate your running Next.js app directly, instead of asking you to paste terminal output like it is 2024
+
+<DonationsMessage />
 
 </article>

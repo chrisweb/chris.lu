@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
@@ -36,6 +37,8 @@ export const metadata = {
     },
 }
 
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
+
 %toc%
 
 <article>
@@ -52,7 +55,7 @@ There is more than just one plugin related to GitHub markdown:
 * [the "remark-gfm" plugin](https://www.npmjs.com/package/remark-gfm)  
 * ["rehype-github" plugins](https://github.com/rehypejs/rehype-github)  
 
-There is the **remark-gfm plugin** which transforms GitHub Flavored Markdown (GFM) into HTML, the remark-gfm plugin will add the same features to your MDX pages that GitHub has introduced in their own GitHub Flavored Markdown (GFM), for example, it has support for **autolink literals**, **footnotes**, **strikethrough**, **markdown tables**, **tasklists**, ...
+There is the **remark-gfm plugin** which adds GitHub Flavored Markdown (GFM) syntax support to remark (turning that syntax into HTML is then done by remark-rehype), the remark-gfm plugin will add the same features to your MDX pages that GitHub has introduced in their own GitHub Flavored Markdown (GFM), for example, it has support for **autolink literals**, **footnotes**, **strikethrough**, **markdown tables**, **tasklists**, ...
 
 There is also the **rehype "GitHub" plugins repository**, which lists a lot of plugins you can use to match how GitHub transforms markdown to HTML. Some are remark plugins like [remark-github-yaml-metadata](https://github.com/rehypejs/rehype-github/tree/main/packages/yaml-metadata), which you can use to display the frontmatter of every MDX page as table, but most are rehype plugins, like [rehype-github-color](https://github.com/rehypejs/rehype-github/tree/main/packages/color), which will add a color preview rectangle to your hex color codes, check out the repository for a complete list of plugins it has to offer
 
@@ -68,9 +71,9 @@ There is also the **rehype "GitHub" plugins repository**, which lists a lot of p
 
 ## Next.js 15 remark-gfm Rust alternative
 
-This is a reminder that earlier in this tutorial when we did the initial MDX setup, we saw that instead of using the default MDX compiler written in Javascript, we can use the [Next.js 15 MDX Rust compiler](/web_development/tutorials/next-js-static-first-mdx-starterkit/nextjs-mdx-setup#nextjs-15-mdx-rust-compiler) (experimental)
+This is a reminder that earlier in this tutorial when we did the initial MDX setup, we saw that instead of using the default MDX compiler written in JavaScript, we can use the [Next.js 15 MDX Rust compiler](/web_development/tutorials/next-js-static-first-mdx-starterkit/nextjs-mdx-setup#nextjs-15-mdx-rust-compiler) (experimental)
 
-If this is the only plugin you plan to use, then you could use the next.config **mdxRs** option and set the **mdxType** to **gfm** instead of installing and adding the **remark-gfm** (javascript) plugin to your configuration. This would enable the Rust Compiler for MDX and also add gfm flavored markdown support. Then you could enable the turbopack flag in the dev server command (by changing the `npm run dev` script in the **package.json** back to: `"dev": "next dev --turbopack"`)
+If this is the only plugin you plan to use, then you could use the next.config **mdxRs** option and set the **mdxType** to **gfm** instead of installing and adding the **remark-gfm** (JavaScript) plugin to your configuration. This would enable the Rust Compiler for MDX and also add gfm flavored markdown support. Then you could enable the turbopack flag in the dev server command (by changing the `npm run dev` script in the **package.json** back to: `"dev": "next dev --turbopack"`)
 
 ## GitHub flavored markdown (gfm) plugin
 
@@ -156,7 +159,7 @@ Lines 46 to 49: we add a configuration object for the plugin, we first add the o
 
 I personally always use two, so I don't need this feature (but if you prefer using one then don't set this option)
 
-Line 55: we add an array containing the **remarkGfm** plugin as well as the **remarkGfmOptions** options object (we just created) to the **rehypePlugins** array
+Line 55: we add an array containing the **remarkGfm** plugin as well as the **remarkGfmOptions** options object (we just created) to the **remarkPlugins** array
 
 ## GitHub flavored markdown (gfm) linting
 
@@ -417,7 +420,7 @@ const BaseCheckbox: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = (pro
         })
     }
 
-    return (<input onChange={changeHandler} defaultChecked={isChecked} {...newProps} value="test" />)
+    return (<input onChange={changeHandler} checked={isChecked} {...newProps} />)
 
 }
 

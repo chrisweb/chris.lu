@@ -1,5 +1,5 @@
 ---
-title: Code highlighting plugin - Next.js 15 Tutorial - Next.js 15 Tutorial
+title: Code highlighting plugin - Next.js 15 Tutorial
 description: Code highlighting plugin - Next.js 15 static first MDX starterkit | Web development tutorials | www.chris.lu
 keywords: ['highlighting', 'rehype', 'plugin', 'pretty', 'code', 'shiki']
 published: 2024-12-31T23:00:00.000Z
@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
@@ -35,6 +36,8 @@ export const metadata = {
         tags: frontmatter.keywords,
     },
 }
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
 
 %toc%
 
@@ -97,7 +100,7 @@ This is why we will now add the **rehype pretty code** plugin.
 
 ## Rehype pretty code installation
 
-To install the **rehype pretty code** as well as the **shiki** package, we use the following command command:
+To install the **rehype pretty code** as well as the **shiki** package, we use the following command:
 
 ```shell
 npm i rehype-pretty-code@latest shiki@latest --save-exact
@@ -125,9 +128,9 @@ const nextConfig = (phase/*: string*/) => {
     })
 ```
 
-Line 2: as we went back to using Javascript for our next.config file, we need to comment out type imports (we keep them as we will transition back to Typescript as soon as the [next.config.ts has no support for ESM only packages](#no-nextconfigts) problem we discussed earlier is fixed)
+Line 2: as we went back to using JavaScript for our next.config file, we need to comment out type imports (we keep them as we will transition back to TypeScript as soon as the [next.config.ts has no support for ESM only packages](#no-nextconfigts) problem we discussed earlier is fixed)
 
-Line 3: As this is not Typescript code anymore, and we are importing a file (have a look at the Node.js documentation explaining why [file extensions are mandatory](https://nodejs.org/api/esm.html#mandatory-file-extensions) for more details), which is why we added the extension to the constants file path (to become `next/constants.js`)
+Line 3: As this is not TypeScript code anymore, and we are importing a file (have a look at the Node.js documentation explaining why [file extensions are mandatory](https://nodejs.org/api/esm.html#mandatory-file-extensions) for more details), which is why we added the extension to the constants file path (to become `next/constants.js`)
 
 Without the file extension you would get this error in your terminal as soon as you try to launch the development server:
 
@@ -146,8 +149,8 @@ Now have another look at the playground page in your browser, and you will notic
 ![rehype-pretty-code code highlighting example with default colors](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-first-mdx-starterkit/rehype-pretty-code_plugin_default_colors.png)
 
 > [!MORE]  
-> [NPM "rehype-pretty-code" package](https://www.npmjs.com/package/rehype-pretty-code)  
-> [NPM "shiki" package](https://www.npmjs.com/package/shiki)  
+> [npm "rehype-pretty-code" package](https://www.npmjs.com/package/rehype-pretty-code)  
+> [npm "shiki" package](https://www.npmjs.com/package/shiki)  
 
 ## Using VSCode themes for code highlighting
 
@@ -266,11 +269,11 @@ Line 11: we create a URL using the path to the location of our theme in the node
 
 Line 12: we use the **readFileSync** to read the content of the theme file
 
-Line 16: we parse the themes json file content using the javascript **JSON parser** before passing it to the plugin theme configuration option
+Line 16: we parse the themes json file content using the JavaScript **JSON parser** before passing it to the plugin theme configuration option
 
 Now have another look at the playground, and you will notice that this time, the code is highlighted using the colors of the One Dark Pro theme:
 
-![rehype-pretty-code code highlighting example with Dracula theme for VSCode colors](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-first-mdx-starterkit/rehype-pretty-code_plugin_one-dark-pro_theme.png)
+![rehype-pretty-code code highlighting example with One Dark Pro theme for VSCode colors](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-first-mdx-starterkit/rehype-pretty-code_plugin_one-dark-pro_theme.png)
 
 > [!NOTE]  
 > As themes are JSON files that you import in your configuration, and if you are into creating personalized color palettes, then you have the option to create or at least edit an existing theme  
@@ -281,7 +284,7 @@ Now have another look at the playground, and you will notice that this time, the
 
 > [!MORE]  
 > [VSCode marketplace](https://marketplace.visualstudio.com/vscode)  
-> [NPM "tm-themes" package](https://www.npmjs.com/package/tm-themes)  
+> [npm "tm-themes" package](https://www.npmjs.com/package/tm-themes)  
 > [One Dark Pro theme for VSCode)](https://github.com/Binaryify/OneDark-Pro/)  
 > [Dracula theme for VSCode](https://draculatheme.com/visual-studio-code)  
 
@@ -342,7 +345,7 @@ Then we **add** our background color to our rehype-pretty-code CSS in the `globa
 }
 ```
 
-Line 145: we add our `background-color`. I chose a very dark color to make we have a high contrast between the code colors and the background
+Line 145: we add our `background-color`. I chose a very dark color to make sure we have a high contrast between the code colors and the background
 
 Make sure your dev server is running and then have a look at the result of what we have achieved so far: `http://localhost:3000/code-highlighting_playground`
 
@@ -592,11 +595,11 @@ Gives you this (only the second occurrence of "greeting" is highlighted):
 
 ## Code block language flag
 
-In the previous example(s), we already saw the first option, which consists of setting the programming language, for instance, to **javascript** by using the `js` language flag (placed after the 3 backticks of our fenced code block), it is essential to set the language flag as rehype pretty code (shiki) needs that information to know what colors to use when highlighting your code.
+In the previous example(s), we already saw the first option, which consists of setting the programming language, for instance, to **JavaScript** by using the `js` language flag (placed after the 3 backticks of our fenced code block), it is essential to set the language flag as rehype pretty code (shiki) needs that information to know what colors to use when highlighting your code.
 
-So far, we have always used javascript by adding the language flag `js`, but if you want, for example, to change the programming language from **javascript** to **JSX**, then all you need to do is change the language flag (after the backticks) to `jsx`, like so:
+So far, we have always used JavaScript by adding the language flag `js`, but if you want, for example, to change the programming language from **JavaScript** to **JSX**, then all you need to do is change the language flag (after the backticks) to `jsx`, like so:
 
-````md title="/app/(tutorial_examples)code-highlighting_playground/page.mdx" showLineNumbers {3} /jsx/#special
+````md title="/app/(tutorial_examples)/code-highlighting_playground/page.mdx" showLineNumbers {3} /jsx/#special
 <article>
 
 ```jsx showLineNumbers /greeting/2#mySpecialHighlight
@@ -768,7 +771,7 @@ Next we edit our global.css to add styling for added and removed rows:
 
 How the [transformer diff notation](https://shiki.style/packages/transformers#transformernotationdiff) works, is that at the end of every line you use a comment to tell the transformer if code got added (`// [!code ++]`) or removed (`// [!code --]`):
 
-````md title="/app/(tutorial_examples)/code-highlighting_playground/page.mdx" showLineNumbers {11}
+````md title="/app/(tutorial_examples)/code-highlighting_playground/page.mdx" showLineNumbers {6-7}
 <article>
 
 ```js
@@ -778,6 +781,10 @@ function helloWorld() {
     console.log(greeting) // [!code --]
 }
 ```
+
+</article>
+
+````
 
 > [!MORE]  
 > [shiki v2 migration guide](https://shiki.style/blog/v2)  
@@ -996,7 +1003,7 @@ Next, we add a code block and a list of inline code examples to our code-highlig
 ```tsx
 function helloWorld() {
     // read me
-    let foo = { bar: 'text', bar: 123 }
+    let foo = { bar: 'text', baz: 123 }
     console.log(foo.bar, foo.baz)
 }
 ```
@@ -1020,7 +1027,7 @@ If we used the correct tokens to create our aliases map, the colors in the list 
 > [!TIP]  
 > There are even more features like **visitor hooks** and **custom highlighters** (which we will not see in this tutorial), but you can find more info about them in the [rehype pretty code](https://rehype-pretty.pages.dev/) and [shiki](https://shiki.style/) docs websites
 
-Congratulations 🎉 you finished learning about how to highlight code using a remark plugin and learned how to use most of its features (including using VSCode themes)
+Congratulations 🎉 you finished learning about how to highlight code using a rehype plugin and learned how to use most of its features (including using VSCode themes)
 
 <DonationsMessage />
 

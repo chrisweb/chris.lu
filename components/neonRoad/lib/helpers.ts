@@ -1,8 +1,8 @@
-import type { Mesh, Group } from 'three'
+import type { Object3D } from 'three'
 
 type MoveFromAToBInLoopType<Objects_Refs> = (delta: number, objectsRefs: Objects_Refs[], cameraZPosition: number, distanceToNextObject: number) => void
 
-const moveFromAToBInLoop: MoveFromAToBInLoopType<Group | Mesh> = (delta, objectsRefs, cameraZPosition, distanceToNextObject) => {
+const moveFromAToBInLoop: MoveFromAToBInLoopType<Object3D> = (delta, objectsRefs, cameraZPosition, distanceToNextObject) => {
 
     const objectsBehindCamera = []
     const speed = 0.05

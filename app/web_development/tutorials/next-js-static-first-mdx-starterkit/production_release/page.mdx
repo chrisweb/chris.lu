@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
@@ -36,6 +37,8 @@ export const metadata = {
     },
 }
 
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
+
 %toc%
 
 <article>
@@ -51,10 +54,10 @@ This part of the tutorial covers three important things when going into producti
 
 ## Vercel alternatives
 
-In this tutorial, we deploy to Vercel, but there are a lot of alternatives to chose from. 
+In this tutorial, we deploy to Vercel, but there are a lot of alternatives to choose from. 
 
 > [!TIP]  
-> Next.js 15 comes with [improvements to self hosting](https://nextjs.org/blog/next-15#improvements-for-self-hosting) make it easier for you to chose and alternative to Vercel
+> Next.js 15 comes with [improvements to self hosting](https://nextjs.org/blog/next-15#improvements-for-self-hosting) make it easier for you to choose an alternative to Vercel
 
 For example one alternative to Vercel is [Deno Deploy](https://deno.com/blog/nextjs-on-deno-deploy) which has support for Next.js (both static and SSR)
 
@@ -68,9 +71,9 @@ If you want to mimic Vercel and build your own serverless infrastructure, then y
 
 ## Production deployment
 
-First, make sure all code is committed in the review branch
+First, make sure all code is committed in the preview branch
 
-Wait for the review to deploy on Vercel
+Wait for the preview to deploy on Vercel
 
 Check the preview to make sure everything works as intended
 
@@ -80,7 +83,7 @@ Open your repository page
 
 Create a **pull request** to merge the code from the preview branch into the main (production) branch
 
-Wait for all potential GitHub actions to finish checking your build, and when the bottom box, including the merge button, are all green (because all checks have passed successfully), click on **merge**
+Wait for all potential GitHub Actions to finish checking your build, and when the bottom box, including the merge button, are all green (because all checks have passed successfully), click on **merge**
 
 When merged, Vercel will start a production deployment
 
@@ -115,7 +118,7 @@ If this is the first domain, in the middle of the page there are two options, to
 
 If you already added a domain, the page will look a bit differently, but you will still have 3 options on top, **Buy**, **Add Existing**, and **Transfer In**
 
-I already own a domain and I see no reason why I would transfer it, as all my domains are at the same registrar and I would like to keep it like that, so I will chose **add** a domain
+I already own a domain and I see no reason why I would transfer it, as all my domains are at the same registrar and I would like to keep it like that, so I will choose **add** a domain
 
 After clicking on **add**, a modal box will appear and ask you to choose your project, so do just that and then click on **Continue**
 
@@ -132,7 +135,7 @@ ns1.vercel-dns.com
 ns2.vercel-dns.com
 ```
 
-So now you need to visit the website of your registrar and **Edit the nameservers for your domain**, wait for the nameservers update to finish (you either have a status box on the registrar website or get a notification telling you when it is done), this notification is only to tell you that the registrar has made the change, for all worldwide DNS servers to get the update will take some time (worst case scenario is 24h, usually it is a lot less)
+So now you need to visit the website of your registrar and **Edit the nameservers for your domain**, wait for the nameservers update to finish (you either have a status box on the registrar website or get a notification telling you when it is done), this notification is only to tell you that the registrar has made the change, for all worldwide DNS servers to get the update will take some time (worst case scenario is 48h, usually it is a lot less)
 
 Now go back to [vercel.com](https://vercel.com/), then click on the project for which you want to add a domain
 

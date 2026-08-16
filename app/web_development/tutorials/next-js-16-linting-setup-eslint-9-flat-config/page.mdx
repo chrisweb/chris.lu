@@ -3,12 +3,13 @@ title: Next.js 16 Linting setup using ESLint 9 flat config
 description: Complete guide to setting up ESLint 9 with flat config in Next.js 16, including breaking changes, TypeScript, React, MDX, and modern tooling
 keywords: ['Next.js 16', 'ESLint 9', 'flat config', 'linting', 'TypeScript', 'React compiler', 'accessibility', 'defineConfig', 'typescript-eslint']
 published: 2025-11-03T10:00:00.000Z
-modified: 2025-12-13T10:00:00.000Z
+modified: 2026-08-15T14:00:00.000Z
 permalink: https://chris.lu/web_development/tutorials/next-js-16-linting-setup-eslint-9-flat-config
 section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import DonationsMessage from '@/shared/donations-message.mdx'
 
 export const metadata = {
@@ -34,6 +35,8 @@ export const metadata = {
     },
 }
 
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-16-linting-setup-eslint-9-flat-config/opengraph-image" />
+
 %toc%
 
 <article>
@@ -41,6 +44,9 @@ export const metadata = {
 # Next.js 16 Linting setup using ESLint 9 flat config
 
 ![a school teacher underlining errors with red ink](../../../../public/assets/images/app/web_development/tutorials/next-js-16-linting-setup-eslint-9-flat-config/banner.png 'a school teacher underlining errors with red ink { banner }')
+
+> [!WARN]  
+> **This tutorial is deprecated:** it documents my ESLint 9 based setup, which I have since replaced. Several of the plugins used here (`eslint-config-next`, `eslint-plugin-react`, `eslint-plugin-jsx-a11y`, `eslint-plugin-react-compiler`) are NOT compatible with ESLint 10. The up to date version of this tutorial is here: [Next.js 16 Linting setup using ESLint 10 flat config](/web_development/tutorials/next-js-16-linting-setup-eslint-10-flat-config)
 
 Setting up proper linting in your Next.js 16 project is crucial for maintaining code quality and consistency. This comprehensive guide walks you through configuring ESLint 9 with the modern flat config format, including support for TypeScript, React, MDX, and various ESLint plugins.
 

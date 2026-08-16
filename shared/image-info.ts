@@ -14,6 +14,8 @@ export const imageInfo: ImageInfoType = {
     'tutorials_next-static-mdx-blog': ['Tutorial: Next.js 14 static MDX blog', 'tutorials/next-js-static-mdx-blog', 'top'],
     'tutorials_next-js-static-first-mdx-starterkit': ['Tutorial: Next.js 15 static first MDX starterkit', 'tutorials/next-js-static-first-mdx-starterkit', 'top'],
     'tutorials_js-deepseek-r1-local-rag': ['Tutorial: Local DeepSeek-R1 AI RAG using JavaScript (TypeScript)', 'tutorials/js-deepseek-r1-local-rag', 'top'],
-    'tutorials_next-js_16_devtools_mcp': ['Tutorial: Next.js 16 Devtools MCP in VSCode', 'tutorials/next-js_16_devtools_mcp', 'bottom'],
+    'tutorials_next-js_16_devtools_mcp': ['Tutorial: Next.js 16 Devtools MCP for Claude Code and GitHub Copilot', 'tutorials/next-js_16_devtools_mcp', 'bottom'],
     'tutorials_next-js-16-linting-setup-eslint-9-flat-config': ['Tutorial: Next.js 16 Linting setup using ESLint 9 flat config', 'tutorials/next-js-16-linting-setup-eslint-9-flat-config', 'top'],
+    'tutorials_next-js-16-turbopack-mdx-plugins': ['Tutorial: Next.js 16 Turbopack with MDX plugins that have function options', 'tutorials/next-js-16-turbopack-mdx-plugins', 'top'],
+    'tutorials_next-js-16-linting-setup-eslint-10-flat-config': ['Tutorial: Next.js 16 Linting setup using ESLint 10 flat config', 'tutorials/next-js-16-linting-setup-eslint-10-flat-config', 'top'],
 }

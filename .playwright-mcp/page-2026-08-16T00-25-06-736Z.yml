@@ -1,0 +1,199 @@
+- generic [active] [ref=f3e1]:
+  - banner [ref=f3e2]:
+    - navigation [ref=f3e4]:
+      - link "Home" [ref=f3e5]:
+        - /url: /
+      - link "HoloArcade" [ref=f3e6]:
+        - /url: /holoarcade
+      - link "Web dev" [ref=f3e7]:
+        - /url: /web_development
+      - link "Lego" [ref=f3e8]:
+        - /url: /lego
+      - link "Games" [ref=f3e9]:
+        - /url: /games
+      - link "Music" [ref=f3e10]:
+        - /url: /music
+      - link "Memes" [ref=f3e11]:
+        - /url: /memes
+      - link "About me" [ref=f3e12]:
+        - /url: /about_me
+    - generic [ref=f3e16]:
+      - button "Play" [ref=f3e17]
+      - button "Forward" [ref=f3e20]
+      - button "Open Volume Dialog" [ref=f3e23]
+      - button "Open Song Credits Dialog" [ref=f3e26]
+    - generic [ref=f3e29]:
+      - generic: Chris.lu
+      - img "Chris.lu header image, displaying an 80s style landscape and sunset" [ref=f3e30]
+      - generic [ref=f3e32]:
+        - generic [ref=f3e33]:
+          - button "> Music ON" [ref=f3e34]
+          - button "Music OFF" [ref=f3e35]
+        - button "Play 3d animation" [ref=f3e36]:
+          - generic [ref=f3e37]: press start
+  - main [ref=f3e38]:
+    - complementary [ref=f3e39]:
+      - generic [ref=f3e40]:
+        - list [ref=f3e41]:
+          - listitem [ref=f3e42]:
+            - link "My GitHub Projects" [ref=f3e45]:
+              - /url: https://github.com/chrisweb
+        - generic [ref=f3e48]:
+          - link [ref=f3e49]:
+            - /url: https://www.buymeacoffee.com/chriswwweb
+            - img "buy me a coffee, please" [ref=f3e50]
+          - text: "* Please 😉"
+          - paragraph [ref=f3e51]:
+            - link [ref=f3e52]:
+              - /url: https://discord.gg/4p59CCTUAJ
+            - link [ref=f3e55]:
+              - /url: https://bsky.app/profile/chriswwweb.bsky.social
+            - link [ref=f3e58]:
+              - /url: https://github.com/chrisweb
+            - link [ref=f3e61]:
+              - /url: https://mastodon.social/@chriswwweb
+    - generic [ref=f3e64]:
+      - heading "Web development" [level=1] [ref=f3e65]
+      - heading [level=2] [ref=f3e67]:
+        - text: Tutorials
+        - 'link "Heading permalink for: Tutorials" [ref=f3e68]':
+          - /url: "#tutorials"
+      - generic [ref=f3e71]:
+        - link "a cyborg teacher grading code printouts with a glowing red pen while a small robot assistant hands her pages Next.js 16 Linting setup using ESLint 10 flat config" [ref=f3e72]:
+          - /url: /web_development/tutorials/next-js-16-linting-setup-eslint-10-flat-config
+          - paragraph [ref=f3e73]:
+            - img "a cyborg teacher grading code printouts with a glowing red pen while a small robot assistant hands her pages" [ref=f3e74]
+            - generic [ref=f3e75]: Next.js 16 Linting setup using ESLint 10 flat config
+        - link "a friendly robot wrapping a glowing ball of code into a wooden crate labeled wrapper, next to a conveyor belt that moves crates into a giant neon turbo turbine Next.js 16 Turbopack with MDX plugins that have function options" [ref=f3e76]:
+          - /url: /web_development/tutorials/next-js-16-turbopack-mdx-plugins
+          - paragraph [ref=f3e77]:
+            - img "a friendly robot wrapping a glowing ball of code into a wooden crate labeled wrapper, next to a conveyor belt that moves crates into a giant neon turbo turbine" [ref=f3e78]
+            - generic [ref=f3e79]: Next.js 16 Turbopack with MDX plugins that have function options
+        - link "a pixel art scene of a happy robot and a next.js server tower sitting side by side on a beach, watching a synthwave sunset, connected by a cable labeled MCP Next.js 16 Devtools MCP for Claude Code and GitHub Copilot" [ref=f3e80]:
+          - /url: /web_development/tutorials/next-js_16_devtools_mcp
+          - paragraph [ref=f3e81]:
+            - img "a pixel art scene of a happy robot and a next.js server tower sitting side by side on a beach, watching a synthwave sunset, connected by a cable labeled MCP" [ref=f3e82]
+            - generic [ref=f3e83]: Next.js 16 Devtools MCP for Claude Code and GitHub Copilot
+        - link "An old human teacher is teaching a classroom full of AI robots new knowledge Local DeepSeek-R1 AI RAG using Javascript (Typescript)" [ref=f3e84]:
+          - /url: /web_development/tutorials/js-deepseek-r1-local-rag
+          - paragraph [ref=f3e85]:
+            - img "An old human teacher is teaching a classroom full of AI robots new knowledge" [ref=f3e86]
+            - generic [ref=f3e87]: Local DeepSeek-R1 AI RAG using Javascript (Typescript)
+        - link "voodoo lady mixing potions in a big cauldron, it represents a dev using different packages like Next.js 15 and React 19 to build an MDX static first starterkit Next.js 15 + React 19 (ESLint 9) static first MDX starterkit" [ref=f3e88]:
+          - /url: /web_development/tutorials/next-js-static-first-mdx-starterkit
+          - paragraph [ref=f3e89]:
+            - img "voodoo lady mixing potions in a big cauldron, it represents a dev using different packages like Next.js 15 and React 19 to build an MDX static first starterkit" [ref=f3e90]
+            - generic [ref=f3e91]: Next.js 15 + React 19 (ESLint 9) static first MDX starterkit
+      - heading [level=2] [ref=f3e92]:
+        - text: Posts
+        - 'link "Heading permalink for: Posts" [ref=f3e93]':
+          - /url: "#posts"
+      - generic [ref=f3e96]:
+        - link "a futuristic city with two signs \"react\" and \"next.js\" The road to React 19 and Next.js 14" [ref=f3e97]:
+          - /url: /web_development/posts/road-to-react-19-next-js-15
+          - paragraph [ref=f3e98]:
+            - img "a futuristic city with two signs \"react\" and \"next.js\"" [ref=f3e99]
+            - generic [ref=f3e100]: The road to React 19 and Next.js 14
+        - link "a female robocop, in front of a police car with the text CSP on the side door, in a futuristic city Content Security Policy (CSP)" [ref=f3e101]:
+          - /url: /web_development/posts/csp
+          - paragraph [ref=f3e102]:
+            - img "a female robocop, in front of a police car with the text CSP on the side door, in a futuristic city" [ref=f3e103]
+            - generic [ref=f3e104]: Content Security Policy (CSP)
+        - link "a woman wearing a VSCode t-shirt and writing code VSCode" [ref=f3e105]:
+          - /url: /web_development/posts/vscode
+          - paragraph [ref=f3e106]:
+            - img "a woman wearing a VSCode t-shirt and writing code" [ref=f3e107]
+            - generic [ref=f3e108]: VSCode
+        - link "a waterfall of code with the text node.js Node.js" [ref=f3e109]:
+          - /url: /web_development/posts/node-js
+          - paragraph [ref=f3e110]:
+            - img "a waterfall of code with the text node.js" [ref=f3e111]
+            - generic [ref=f3e112]: Node.js
+        - link "two superheroes pointing at each other, it represents two versions of a file getting compared in a git diff git" [ref=f3e113]:
+          - /url: /web_development/posts/git
+          - paragraph [ref=f3e114]:
+            - img "two superheroes pointing at each other, it represents two versions of a file getting compared in a git diff" [ref=f3e115]
+            - generic [ref=f3e116]: git
+        - link "a stylized depiction of the GitHub mascot \"octocat\" in a futuristic city with a neon sign that reads GitHub and Git GitHub" [ref=f3e117]:
+          - /url: /web_development/posts/github
+          - paragraph [ref=f3e118]:
+            - img "a stylized depiction of the GitHub mascot \"octocat\" in a futuristic city with a neon sign that reads GitHub and Git" [ref=f3e119]
+            - generic [ref=f3e120]: GitHub
+        - link "a book with the title vercel.com surrounded by magical items Vercel" [ref=f3e121]:
+          - /url: /web_development/posts/vercel
+          - paragraph [ref=f3e122]:
+            - img "a book with the title vercel.com surrounded by magical items" [ref=f3e123]
+            - generic [ref=f3e124]: Vercel
+        - link "a robot with sentry.io written on his chest that is catching bugs with a huge net Sentry.io" [ref=f3e125]:
+          - /url: /web_development/posts/sentry-io
+          - paragraph [ref=f3e126]:
+            - img "a robot with sentry.io written on his chest that is catching bugs with a huge net" [ref=f3e127]
+            - generic [ref=f3e128]: Sentry.io
+        - link "conveyor belts moving lots of packages NPM and package.json" [ref=f3e129]:
+          - /url: /web_development/posts/npm
+          - paragraph [ref=f3e130]:
+            - img "conveyor belts moving lots of packages" [ref=f3e131]
+            - generic [ref=f3e132]: NPM and package.json
+        - link "a mad scientist mixing the content of a bottle labeled markdown with the content of another bottle labeled JSX into a big bowl labeled MDX MDX introduction" [ref=f3e133]:
+          - /url: /web_development/posts/mdx
+          - paragraph [ref=f3e134]:
+            - img "a mad scientist mixing the content of a bottle labeled markdown with the content of another bottle labeled JSX into a big bowl labeled MDX" [ref=f3e135]
+            - generic [ref=f3e136]: MDX introduction
+      - heading [level=3] [ref=f3e137]:
+        - text: Archived tutorials
+        - 'link "Heading permalink for: Archived tutorials" [ref=f3e138]':
+          - /url: "#archived-tutorials"
+      - generic [ref=f3e141]:
+        - link "a school teacher underlining errors with red ink Next.js 16 Linting setup using ESLint 9 flat config" [ref=f3e142]:
+          - /url: /web_development/tutorials/next-js-16-linting-setup-eslint-9-flat-config
+          - paragraph [ref=f3e143]:
+            - img "a school teacher underlining errors with red ink" [ref=f3e144]
+            - generic [ref=f3e145]: Next.js 16 Linting setup using ESLint 9 flat config
+        - link "voodoo lady mixing potions in a big cauldron, it represents a dev using different packages to build a project using an IDE Next.js 14 / React 18 static MDX Blog" [ref=f3e146]:
+          - /url: /web_development/tutorials/next-js-static-mdx-blog
+          - paragraph [ref=f3e147]:
+            - img "voodoo lady mixing potions in a big cauldron, it represents a dev using different packages to build a project using an IDE" [ref=f3e148]
+            - generic [ref=f3e149]: Next.js 14 / React 18 static MDX Blog
+  - contentinfo [ref=f3e150]:
+    - separator [ref=f3e151]
+    - paragraph [ref=f3e152]:
+      - link "Buying me a coffee" [ref=f3e155]:
+        - /url: https://buymeacoffee.com/chriswwweb
+      - text: or
+      - link "sponsoring me" [ref=f3e158]:
+        - /url: https://github.com/sponsors/chrisweb
+      - text: on GitHub, are not mandatory but greatly appreciated, as it allows me to work on more content and keep the project free for everyone
+    - paragraph [ref=f3e161]:
+      - text: If you find a bug / typo or you want to suggest a new feature, then please open an
+      - link "Issue" [ref=f3e164]:
+        - /url: https://github.com/chrisweb/chris.lu/issues
+      - text: on GitHub.
+    - paragraph [ref=f3e167]:
+      - text: Suggestions and Ideas are appreciated, please use the
+      - link "chris.lu Discord server" [ref=f3e170]:
+        - /url: https://discord.gg/4p59CCTUAJ
+      - text: or the
+      - link "discussion board" [ref=f3e173]:
+        - /url: https://github.com/chrisweb/chris.lu/discussions
+      - text: to leave feedback or ask a question.
+    - paragraph [ref=f3e176]:
+      - text: All content on this site is licensed under a
+      - link "CC BY-NC-SA 4.0" [ref=f3e177]:
+        - /url: https://creativecommons.org/licenses/by-nc-sa/4.0/
+      - text: license. The source code of this project is licensed under
+      - link "MIT" [ref=f3e180]:
+        - /url: https://github.com/chrisweb/chris.lu/blob/main/LICENSE
+      - text: and a copy of the source code can be found in the
+      - link "chris.lu public GitHub repository" [ref=f3e183]:
+        - /url: https://github.com/chrisweb/chris.lu
+      - text: . A list of all open source packages used to build this project can be found in the
+      - link "package.json" [ref=f3e186]:
+        - /url: https://github.com/chrisweb/chris.lu/blob/main/package.json
+      - text: file. This website uses music licensed under different creative commons licenses, the music tracks
+      - link "credits" [ref=f3e189]:
+        - /url: https://github.com/chrisweb/chris.lu/blob/main/public/assets/music/CREDITS.txt
+      - text: file can be found in the repository of this project or by clicking on the "eject" button of the player on the top right of the screen. This website uses
+      - link "Free Icons by Font Awesome" [ref=f3e192]:
+        - /url: https://fontawesome.com/search?o=r&m=free
+      - text: .
+  - button "Open Next.js Dev Tools" [ref=f3e200] [cursor=pointer]

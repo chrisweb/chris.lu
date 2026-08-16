@@ -33,7 +33,9 @@
     cursor: var(--cursor-pointer);
 }
 
-@media all and (max-width: 1120px) {
+/* the waveform is decorative, it gets hidden as soon as the header gets
+   too narrow to fit the main navigation next to the player controls */
+@media all and (max-width: 1560px) {
     .audioWaveForm {
         display: none;
     }

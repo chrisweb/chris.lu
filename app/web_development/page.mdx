@@ -8,9 +8,11 @@ import ImageAnimatedEmoji from '@/components/base/image/AnimatedEmoji'
 import gifRocketStaticImport from '@/public/assets/images/noto_emoji_animated/48/rocket.gif'
 import webpRocketStaticImport from '@/public/assets/images/noto_emoji_animated/48/rocket.webp'
 import { sharedMetaData } from '@/shared/metadata'
+import SectionJsonLd from '@/components/seo/SectionJsonLd'
 
 export const metadata = {
     title: 'Web development',
+    description: 'Web development tutorials and posts by chrisweb, covering Next.js, React, TypeScript, MDX, ESLint, CSP and the tooling I use every day.',
     alternates: {
         canonical: 'https://chris.lu/web_development',
     },
@@ -19,6 +21,8 @@ export const metadata = {
         url: 'https://chris.lu/web_development',
     },
 }
+
+<SectionJsonLd title={metadata.title} description={metadata.description} path="/web_development" type="CollectionPage" />
 
 <aside>
     <div className="asideCore">
@@ -34,13 +38,17 @@ export const metadata = {
     <h1 className="h1">Web development&nbsp;<ImageAnimatedEmoji gifStaticImport={gifRocketStaticImport} webpStaticImport={webpRocketStaticImport} alt="animated emoji flying rocket" /></h1>
     ## Tutorials
     <div className="grid">
-        <Link href="/web_development/tutorials/next-js-16-linting-setup-eslint-9-flat-config" className={styles.preview}>
-            ![a school teacher underlining errors with red ink](../../public/assets/images/app/web_development/tutorials/next-js-16-linting-setup-eslint-9-flat-config/banner.png '{ card }')
-            <span className={styles.title}>Next.js 16 Linting setup using ESLint 9 flat config</span>
+        <Link href="/web_development/tutorials/next-js-16-linting-setup-eslint-10-flat-config" className={styles.preview}>
+            ![a cyborg teacher grading code printouts with a glowing red pen while a small robot assistant hands her pages](../../public/assets/images/app/web_development/tutorials/next-js-16-linting-setup-eslint-10-flat-config/banner.png '{ card }')
+            <span className={styles.title}>Next.js 16 Linting setup using ESLint 10 flat config</span>
+        </Link>
+        <Link href="/web_development/tutorials/next-js-16-turbopack-mdx-plugins" className={styles.preview}>
+            ![a friendly robot wrapping a glowing ball of code into a wooden crate labeled wrapper, next to a conveyor belt that moves crates into a giant neon turbo turbine](../../public/assets/images/app/web_development/tutorials/next-js-16-turbopack-mdx-plugins/banner.png '{ card }')
+            <span className={styles.title}>Next.js 16 Turbopack with MDX plugins that have function options</span>
         </Link>
         <Link href="/web_development/tutorials/next-js_16_devtools_mcp" className={styles.preview}>
-            ![an alien inside of a spaceship, writing code on his computer](../../public/assets/images/app/web_development/tutorials/next-js_16_devtools_mcp/banner.png '{ card }')
-            <span className={styles.title}>Next.js 16 Devtools MCP in VSCode</span>
+            ![a pixel art scene of a happy robot and a next.js server tower sitting side by side on a beach, watching a synthwave sunset, connected by a cable labeled MCP](../../public/assets/images/app/web_development/tutorials/next-js_16_devtools_mcp/banner.png '{ card }')
+            <span className={styles.title}>Next.js 16 Devtools MCP for Claude Code and GitHub Copilot</span>
         </Link>
         <Link href="/web_development/tutorials/js-deepseek-r1-local-rag" className={styles.preview}>
             ![An old human teacher is teaching a classroom full of AI robots new knowledge](../../public/assets/images/app/web_development/tutorials/js-deepseek-r1-local-rag/banner.png '{ card }')
@@ -96,6 +104,10 @@ export const metadata = {
     </div>
     ### Archived tutorials
     <div className="grid">
+        <Link href="/web_development/tutorials/next-js-16-linting-setup-eslint-9-flat-config" className={styles.preview}>
+            ![a school teacher underlining errors with red ink](../../public/assets/images/app/web_development/tutorials/next-js-16-linting-setup-eslint-9-flat-config/banner.png '{ card }')
+            <span className={styles.title}>Next.js 16 Linting setup using ESLint 9 flat config</span>
+        </Link>
         <Link href="/web_development/tutorials/next-js-static-mdx-blog" className={styles.preview}>
             ![voodoo lady mixing potions in a big cauldron, it represents a dev using different packages to build a project using an IDE](../../public/assets/images/app/web_development/tutorials/next-js-static-mdx-blog/banner.png '{ card }')
             <span className={styles.title}>Next.js 14 / React 18 static MDX Blog</span>

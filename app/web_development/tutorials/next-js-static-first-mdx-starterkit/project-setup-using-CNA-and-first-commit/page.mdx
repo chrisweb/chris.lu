@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
@@ -36,6 +37,8 @@ export const metadata = {
     },
 }
 
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
+
 %toc%
 
 <article>
@@ -53,7 +56,7 @@ On this page we will quickly create a new branch for our project so that we are 
 
 For this project we will use a simple branching strategy. Which means we will have a **main** branch and an extra **preview** branch. We will develop locally and commit into the preview branch, then we will synchronize the changes with the remote preview branch. Then a CI/CD pipeline will deploy the preview branch. When we are done testing the preview deployment we will create a pull request to merge the review branch into our main branch. The CI/CD pipeline will then deploy the main branch into production. 
 
-Depending on the amount of people that will work on your project, you might want to chose a more complex strategy. If you want to learn more about branching strategies, have a look at my [Choosing a git Branching Strategy](/web_development/posts/git#choosing-a-git-branching-strategy) chapter in the git post
+Depending on the amount of people that will work on your project, you might want to choose a more complex strategy. If you want to learn more about branching strategies, have a look at my [Choosing a git Branching Strategy](/web_development/posts/git#choosing-a-git-branching-strategy) chapter in the git post
 
 ### Add a "preview" (git) branch (using VSCode git tools)
 
@@ -94,14 +97,14 @@ To create a new Next.js 15 project, we are going to use [Create Next App](https:
 > [!NOTE]  
 > We will use the `--use-npm` flag to tell CNA that I plan on using npm to manage packages, if you prefer using another package manager, you can change the option to `--use-pnpm` for [pnpm](https://pnpm.io/), `--use-yarn` for [yarn](https://yarnpkg.com/) or `--use-bun` for [bun](https://bun.sh/package-manager)
 >  
-> We will also use the `--typescript` flag to tell CNA that we want to develop using Typescript, meaning we will NOR get asked if we prefer Javascript or Typescript
+> We will also use the `--typescript` flag to tell CNA that we want to develop using TypeScript, meaning we will NOR get asked if we prefer JavaScript or TypeScript
 
 > [!TIP]  
-> I will not argue in favor or against Typescript here, this is not the right place, but I recommend and will be using Typescript in this tutorial.
+> I will not argue in favor or against TypeScript here, this is not the right place, but I recommend and will be using TypeScript in this tutorial.
 >  
-> If you prefer Javascript then remove the `--typescript` flag before executing the CNA command
+> If you prefer JavaScript then remove the `--typescript` flag before executing the CNA command
 >  
-> However if you never used Typescript before, then maybe just give it a try while building this project and see for yourself how different it is from using Javascript. Then when the project is done you will be able to judge for yourself which one you like more.
+> However if you never used TypeScript before, then maybe just give it a try while building this project and see for yourself how different it is from using JavaScript. Then when the project is done you will be able to judge for yourself which one you like more.
 
 Make sure the VSCode terminal is open (if you need help to open the terminal in VSCode, check out my chapter [open a VSCode terminal](/web_development/posts/vscode#open-a-vscode-terminal) from the VSCode post)
 
@@ -131,10 +134,10 @@ Next, you will get asked some more questions so that Next.js knows what it needs
 * **Would you like to use `src/` directory?** I will leave this on **No** and then press `ENTER`, if you prefer to place all your code in an `src/` directory, then press the `→` right arrow key to select "Yes"; some people prefer it, for example, to be able to restrict searches in files to files that are in the `src/` directory and hence avoid getting a result from the node_modules directory, my personal preference for small projects like the one we are about to build, is to NOT use the `src/` directory as I like to see all my directories in the root (without having to first open a sub-directory)
 * **Would you like to use App Router?** definitely keep this on **Yes** and then press `ENTER`; since Next.js 13 you have two routers (directories) to choose from, you can use the pages router and add your pages into the **pages** directory which is the older version, or you could use the more modern version, which is the **app** router (directory), I highly recommend enabling the app directory (you can still create the pages directory manually at a later stage, if you want to use it, both can be used alongside each other), in this tutorial we will only use the app directory
 * **Would you like to use Turbopack for next dev?** for now we keep this on **Yes** and then press `ENTER`; Next.js recommends using Turbopack (in dev), which is why it is now an option when using CNA. However in some cases it needs to get disabled, for example typed routes and the Sentry SDK are NOT yet supported, the [introduction page](/web_development/tutorials/next-js-static-first-mdx-starterkit/introduction#not-all-nextjs-15-and-turbopack-features-are-stable) has a small recap about potential problems you could encounter when using Turbopack
-* **Would you like to customize the default import alias (@/*)?** press `→` (the right arrow key) to select **Yes** and then press `ENTER`; if you selected **TypeScript** in the first question, enabling this will tell CNA to add an alias for a given path in the `tsconfig.json` (the Typescript configuration file), if you chose **Javascript** it will create the alias in the `jsconfig.json` file (this alias can be used for imports as a "base path" to a dependency (package), to learn more about this feature I recommend you have a quick look at the [Next.js "Absolute Imports and Module Path Aliases" documentation](https://nextjs.org/docs/app/getting-started/installation#set-up-absolute-imports-and-module-path-aliases))
+* **Would you like to customize the default import alias (@/*)?** press `→` (the right arrow key) to select **Yes** and then press `ENTER`; if you selected **TypeScript** in the first question, enabling this will tell CNA to add an alias for a given path in the `tsconfig.json` (the TypeScript configuration file), if you chose **JavaScript** it will create the alias in the `jsconfig.json` file (this alias can be used for imports as a "base path" to a dependency (package), to learn more about this feature I recommend you have a quick look at the [Next.js "Absolute Imports and Module Path Aliases" documentation](https://nextjs.org/docs/app/getting-started/installation#set-up-absolute-imports-and-module-path-aliases))
 * **What import alias would you like configured?** I personally keep the default `@/*`, but feel free to choose another one if you prefer, then press `ENTER`
 
-That's it the **Create Next App** will now install Next.js and React (and React DOM) for us, it will then also install some development dependencies based on what we chose, like Typescript and ESLint, and then it will create some default configuration files for those tools
+That's it the **Create Next App** will now install Next.js and React (and React DOM) for us, it will then also install some development dependencies based on what we chose, like TypeScript and ESLint, and then it will create some default configuration files for those tools
 
 > [!TIP]  
 > When you use CNA, some of the options you chose will get stored so that the next time you use it again, it will take your stored preferences instead of default values
@@ -218,7 +221,7 @@ Congratulations 🎉 you just created a solid foundation for your project using 
 
 <Pagination
     previous={{ label: 'Prerequisites', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/prerequisites' }}
-    next={{ label: 'Typescript plugin and typed routes', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/typescript-plugin-and-typed-routes' }}
+    next={{ label: 'TypeScript plugin and typed routes', href: '/web_development/tutorials/next-js-static-first-mdx-starterkit/typescript-plugin-and-typed-routes' }}
 />
 
 </article>

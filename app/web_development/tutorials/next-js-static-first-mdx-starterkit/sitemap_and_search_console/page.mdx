@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -37,6 +38,8 @@ export const metadata = {
         tags: frontmatter.keywords,
     },
 }
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
 
 %toc%
 
@@ -166,7 +169,7 @@ Lines 2 and 3: we import two modules from nodejs which we will use to create a p
 
 Lines 4 to 6: we import 3 more packages, glob will be used to get a list of pages in a directory, vfile will be used to turn the page content from a string into a vfile and finally vfile-matter will be used to extract the frontmatter from the vfile. The last two packages are part of [unifiedjs](https://github.com/unifiedjs) which is the organization that does all those amazing packages like remark, rehype, mdx and a lot more
 
-Lines 8 to 15: we declare a module for our vfile content to strictly type the frontmatter we will extract as they suggest doing in the [vfile-matter README](https://github.com/vfile/vfile-matter?tab=readme-ov-file#types). This will tell typescript that frontmatter.modified and frontmatter.permalink are **strings** instead of having typescript assume that they are of type **any**.
+Lines 8 to 15: we declare a module for our vfile content to strictly type the frontmatter we will extract as they suggest doing in the [vfile-matter README](https://github.com/vfile/vfile-matter?tab=readme-ov-file#types). This will tell TypeScript that frontmatter.modified and frontmatter.permalink are **strings** instead of having TypeScript assume that they are of type **any**.
 
 Line 19: we set a default date for all pages that don't have frontmatter and hence no last updated date
 
@@ -203,7 +206,7 @@ Now click on the 3 dots next to your domain name and click on **configure**
 
 We are now going to create a new DNS record, the **Name** (**subdomain**) field we **leave it empty**
 
-Then as **Type** chose **TXT**
+Then as **Type** choose **TXT**
 
 For the **value** go back to the search console and copy the google verification string from the verification modal box, then go back to vercel and paste the **google-site-verification=xxxxxxx** into the value field
 

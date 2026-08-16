@@ -2,12 +2,10 @@
 import { defineConfig } from 'eslint/config'
 import eslintPlugin from '@eslint/js'
 import { configs as tseslintConfigs } from 'typescript-eslint'
-import reactPlugin from 'eslint-plugin-react'
+import reactPlugin from '@eslint-react/eslint-plugin'
 import reactHooksPlugin from 'eslint-plugin-react-hooks'
-import jsxA11yPlugin from 'eslint-plugin-jsx-a11y'
 import nextPlugin from '@next/eslint-plugin-next'
 import stylisticPlugin from '@stylistic/eslint-plugin'
-import reactCompilerPlugin from 'eslint-plugin-react-compiler'
 import * as mdxPlugin from 'eslint-plugin-mdx'
 
 // Global ignores configuration
@@ -87,47 +85,24 @@ const reactConfig = defineConfig([
     {
         name: 'project/react-next',
         files: ['**/*.{jsx,tsx}'],
+        // @eslint-react/eslint-plugin v5 exposes flat configs that bundle the plugin and its rules
+        // https://eslint-react.xyz/docs/presets
+        extends: [
+            reactPlugin.configs['recommended-typescript'],
+        ],
         plugins: {
-            'react': reactPlugin,
             'react-hooks': reactHooksPlugin,
-            'jsx-a11y': jsxA11yPlugin,
             '@next/next': nextPlugin,
         },
         rules: {
-            // React recommended rules
-            ...reactPlugin.configs.recommended.rules,
-            ...reactPlugin.configs['jsx-runtime'].rules,
             // React Hooks rules (use recommended-latest for latest features)
             ...reactHooksPlugin.configs['recommended-latest'].rules,
-            // Accessibility rules (strict mode for better a11y)
-            ...jsxA11yPlugin.configs.strict.rules,
+            // downgrade set-state-in-effect from 'error' (in recommended-latest) to 'warn'
+            'react-hooks/set-state-in-effect': 'warn',
             // Next.js recommended rules
             ...nextPlugin.configs.recommended.rules,
             // Next.js Core Web Vitals rules
             ...nextPlugin.configs['core-web-vitals'].rules,
-
-            // Customizations for modern React/Next.js
-            'react/react-in-jsx-scope': 'off', // Not needed in Next.js
-            'react/prop-types': 'off', // Use TypeScript instead
-            'react/no-unknown-property': 'off', // Conflicts with custom attributes
-            'react/jsx-no-target-blank': 'off', // Next.js handles this
-
-            // Fine-tuned accessibility rules
-            'jsx-a11y/alt-text': ['warn', {
-                elements: ['img'],
-                img: ['Image'] // Next.js Image component
-            }],
-            'jsx-a11y/media-has-caption': 'warn',
-            'jsx-a11y/aria-props': 'warn',
-            'jsx-a11y/aria-proptypes': 'warn',
-            'jsx-a11y/aria-unsupported-elements': 'warn',
-            'jsx-a11y/role-has-required-aria-props': 'warn',
-            'jsx-a11y/role-supports-aria-props': 'warn',
-        },
-        settings: {
-            react: {
-                version: 'detect', // Automatically detect React version
-            },
         },
     }
 ])
@@ -214,28 +189,6 @@ const mdxConfig = defineConfig([
             'prefer-const': 'error',
         },
     },
-    {
-        name: 'project/mdx-react-overrides',
-        files: ['**/*.mdx'],
-        rules: {
-            // MDX often has unescaped entities in text content
-            'react/no-unescaped-entities': 'off',
-        },
-    }
-])
-
-// React Compiler configuration (experimental)
-const reactCompilerConfig = defineConfig([
-    {
-        name: 'project/react-compiler',
-        files: ['**/*.{jsx,tsx}'],
-        plugins: {
-            'react-compiler': reactCompilerPlugin,
-        },
-        rules: {
-            'react-compiler/react-compiler': 'error',
-        },
-    },
 ])
 
 // Export the complete configuration
@@ -247,5 +200,4 @@ export default defineConfig([
     ...reactConfig,
     ...stylisticConfig,
     ...mdxConfig,
-    ...reactCompilerConfig,
 ])

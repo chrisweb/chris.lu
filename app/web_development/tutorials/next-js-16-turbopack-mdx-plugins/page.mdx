@@ -1,0 +1,380 @@
+---
+title: Next.js 16 Turbopack with MDX plugins that have function options
+description: How to build MDX pages with Turbopack in Next.js 16 when your remark and rehype plugins have options that can NOT be serialized (functions), using local wrapper modules
+keywords: ['Next.js 16', 'Turbopack', 'MDX', 'remark', 'rehype', 'plugins', 'serializable options', 'webpack', 'wrapper modules', 'mdx-js-loader']
+published: 2026-08-15T12:00:00.000Z
+modified: 2026-08-15T12:00:00.000Z
+permalink: https://chris.lu/web_development/tutorials/next-js-16-turbopack-mdx-plugins
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
+import DonationsMessage from '@/shared/donations-message.mdx'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+            type: "image/png",
+            width: 1200,
+            height: 630,
+            url: '/web_development/og/tutorials_next-js-16-turbopack-mdx-plugins/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+        tags: frontmatter.keywords,
+    },
+}
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-16-turbopack-mdx-plugins/opengraph-image" />
+
+%toc%
+
+<article>
+
+# Next.js 16 Turbopack with MDX plugins that have function options
+
+![a friendly robot wrapping a glowing ball of code into a wooden crate labeled wrapper, next to a conveyor belt that moves crates labeled remark, rehype and MDX into a giant neon turbo turbine](../../../../public/assets/images/app/web_development/tutorials/next-js-16-turbopack-mdx-plugins/banner.png 'a friendly robot wrapping a glowing ball of code into a wooden crate labeled wrapper { banner }')
+
+If you use **@next/mdx** to turn MDX files into pages and your **remark and rehype plugins** need options that are **functions** (a custom build function, shiki transformers, a properties callback, ...), then you have probably seen this "Good to know" in the Next.js documentation:
+
+> remark and rehype plugins without serializable options cannot be used yet with Turbopack, because JavaScript functions can't be passed to Rust
+
+For a long time, my conclusion was "OK, so Turbopack is not an option for me", and I kept building with webpack (using the `--webpack` flag). This tutorial shows why that conclusion is wrong: you CAN use Turbopack today, with your full plugin chain intact, including every single function option. The trick is to move the plugin configurations that Turbopack can not serialize into small **local wrapper modules**, which the MDX loader then imports for you.
+
+> [!TIP]  
+> **TL;DR:** Turbopack only needs the plugin **list** in your Next.js config to be serializable, NOT the plugin code itself. Put each plugin that has function options into a local module that exports a `[plugin, options]` tuple as **default export**, then reference that module by **absolute path (string)** in your `next.config.ts`. Jump to [the fix](#the-fix-local-wrapper-modules) if you want to skip the background story.
+
+## The problem
+
+My blog (the page you are reading right now 😉) is a static first Next.js project where every post and tutorial is a `page.mdx` file. The MDX pipeline uses a bunch of remark and rehype plugins, and three of them have options that are **NOT serializable**:
+
+- [rehype-github-alerts](https://github.com/chrisweb/rehype-github-alerts) uses a custom `build` **function** to output my own alerts markup (the styled "TIP" box you saw above is produced by it)
+- [rehype-pretty-code](https://rehype-pretty.pages.dev/) uses **shiki transformers** (for example `transformerNotationDiff`), which are function instances
+- [rehype-autolink-headings](https://github.com/rehypejs/rehype-autolink-headings) uses a `properties` **callback** to generate a unique aria-label for each heading permalink
+
+This is what (a shortened version of) my `next.config.ts` looked like, the webpack way, where you import the plugins and pass the options (including functions) directly:
+
+```ts title="next.config.ts (webpack only version)"
+import createMdx from '@next/mdx'
+import { rehypeGithubAlerts } from 'rehype-github-alerts'
+import { rehypePrettyCode } from 'rehype-pretty-code'
+import { transformerNotationDiff } from '@shikijs/transformers'
+
+const myGithubAlertBuild = (alertOptions, originalChildren) => {
+    // returns a custom hast (HTML AST) structure
+}
+
+const withMDX = createMdx({
+    options: {
+        rehypePlugins: [
+            [rehypePrettyCode, {
+                theme: 'synthwave-84',
+                // a function instance, NOT serializable
+                transformers: [transformerNotationDiff({ matchAlgorithm: 'v3' })],
+            }],
+            // a function, NOT serializable
+            [rehypeGithubAlerts, { build: myGithubAlertBuild }],
+        ],
+    },
+})
+```
+
+Turbopack can not accept this configuration, because the MDX loader options need to cross the boundary between the Turbopack **Rust** code and the **JavaScript** loader, and a JavaScript function can not be turned into JSON. The [Next.js MDX documentation](https://nextjs.org/docs/app/guides/mdx#using-plugins-with-turbopack) tells you to use **strings** (package names) instead:
+
+```js title="next.config.mjs (what the docs show)"
+const withMDX = createMDX({
+    options: {
+        remarkPlugins: [
+            // without options
+            'remark-gfm',
+            // with (serializable) options
+            ['remark-toc', { heading: 'The Table' }],
+        ],
+    },
+})
+```
+
+That works great as long as your options are plain JSON... which mine were not. So I stayed on webpack, until webpack itself became the problem.
+
+### Why "just keep using webpack" stopped being an option
+
+Starting with Next.js 16.2.0 there is a **regression in the webpack build** ([vercel/next.js#91735](https://github.com/vercel/next.js/issues/91735)): every MDX page that exports `metadata` fails to compile with this (wrong) error, even though none of the pages are client components:
+
+```shell
+./app/about_me/page.mdx
+Error: x You are attempting to export "metadata" from a component marked with
+"use client", which is disallowed. "metadata" must be resolved on the server ...
+```
+
+Exporting metadata from a `page.mdx` is the officially documented pattern, and the same code builds fine with Turbopack (and built fine with webpack up to Next.js 16.1.6). So if you are on Next.js 16.2+ and use MDX pages with metadata exports, you are stuck between:
+
+- a webpack build that is broken (until the fix lands upstream)
+- a Turbopack build that (seemingly) can not run your plugins
+
+Which is exactly the motivation I needed to find a real solution 😅
+
+> [!MORE]  
+> [vercel/next.js#91735 "MDX export const metadata fails to build with webpack in 16.2.0"](https://github.com/vercel/next.js/issues/91735)  
+> [Next.js docs: "Using plugins with Turbopack"](https://nextjs.org/docs/app/guides/mdx#using-plugins-with-turbopack)  
+
+## How the MDX loader resolves string plugins
+
+The key insight comes from reading the source of the loader that `@next/mdx` uses (you can find it in your own project at `node_modules/@next/mdx/mdx-js-loader.js`):
+
+```js title="node_modules/@next/mdx/mdx-js-loader.js (excerpt)"
+function interopDefault(mod) {
+    return mod.default || mod
+}
+
+async function importPluginForPath(pluginPath, projectRoot) {
+    const path = require.resolve(pluginPath, { paths: [projectRoot] })
+    return interopDefault(
+        await import(process.platform === 'win32' ? pathToFileURL(path) : path)
+    )
+}
+
+async function importPlugin(plugin, projectRoot) {
+    if (Array.isArray(plugin) && typeof plugin[0] === 'string') {
+        plugin[0] = await importPluginForPath(plugin[0], projectRoot)
+    }
+    if (typeof plugin === 'string') {
+        plugin = await importPluginForPath(plugin, projectRoot)
+    }
+    return plugin
+}
+```
+
+Three things matter here:
+
+- Even when you build with Turbopack, this loader is still **JavaScript running in Node.js**, only its **options** travel through Rust (which is why they must be serializable)
+- A string plugin gets resolved with `require.resolve()` and then imported, so the string does NOT have to be a package name, an **absolute path to a local file** works too
+- The **default export** of the imported module is used as the plugin entry, and because a unified plugin entry is allowed to be a `[plugin, options]` **tuple**, your default export can bundle the plugin AND its options (functions included) together
+
+In other words: the functions never have to cross the Rust boundary, they just have to live in a module that the loader imports itself.
+
+## The fix: local wrapper modules
+
+I created a `lib/mdx/` directory (any directory works) and moved every plugin configuration that Turbopack can not serialize into its own small wrapper module. Here is the one for my custom alerts:
+
+```js title="lib/mdx/rehype-github-alerts.mjs"
+import { rehypeGithubAlerts } from 'rehype-github-alerts'
+
+const myGithubAlertBuild = (alertOptions, originalChildren) => {
+    // your custom build function, exactly as it was in next.config.ts before
+}
+
+const rehypeGithubAlertsOptions = {
+    supportLegacy: false,
+    build: myGithubAlertBuild,
+    alerts: [
+        { keyword: 'NOTE', icon: '', title: 'Note' },
+        { keyword: 'TIP', icon: '', title: 'Tip' },
+    ],
+}
+
+// a unified "plugin tuple": [plugin, options]
+export default [rehypeGithubAlerts, rehypeGithubAlertsOptions]
+```
+
+And the one for the code highlighting plugin with its shiki transformers:
+
+```js title="lib/mdx/rehype-pretty-code.mjs"
+import { rehypePrettyCode } from 'rehype-pretty-code'
+import { transformerNotationDiff } from '@shikijs/transformers'
+
+const rehypePrettyCodeOptions = {
+    theme: 'synthwave-84',
+    keepBackground: true,
+    transformers: [transformerNotationDiff({
+        matchAlgorithm: 'v3',
+    })],
+}
+
+// a unified "plugin tuple": [plugin, options]
+export default [rehypePrettyCode, rehypePrettyCodeOptions]
+```
+
+Then in `next.config.ts` the whole MDX plugin configuration becomes a list of strings and plain objects, which Turbopack is happy to serialize. The wrapper modules get referenced by **absolute path**, built with `process.cwd()`:
+
+```ts title="next.config.ts (Turbopack compatible version)"
+import createMdx from '@next/mdx'
+import path from 'node:path'
+
+const mdxPluginPath = (fileName: string) => path.join(process.cwd(), 'lib', 'mdx', fileName)
+
+const withMDX = createMdx({
+    options: {
+        remarkPlugins: [
+            'remark-frontmatter',
+            'remark-mdx-frontmatter',
+            mdxPluginPath('remark-table-of-contents.mjs'),
+            // serializable options can stay inline, as a [name, options] tuple
+            ['remark-gfm', { singleTilde: false }],
+        ],
+        rehypePlugins: [
+            mdxPluginPath('rehype-pretty-code.mjs'),
+            'rehype-slug',
+            'rehype-mdx-import-media',
+            mdxPluginPath('rehype-autolink-headings.mjs'),
+            mdxPluginPath('rehype-github-alerts.mjs'),
+        ],
+    },
+})
+```
+
+Note that plugins with no options at all ('remark-frontmatter', 'rehype-slug', ...) and plugins whose options are plain JSON (`['remark-gfm', { singleTilde: false }]`) do NOT need a wrapper, the string form from the documentation is all you need for those.
+
+> [!TIP]  
+> Since Next.js 16 the `@next/mdx` types officially accept strings in the plugin lists, so the TypeScript version of the config shown above compiles without any type casting.
+
+### The "no default export" gotcha
+
+There is a second reason a plugin might need a wrapper, even when its options are perfectly serializable: the loader uses the **default export** of the resolved module (`mod.default || mod`). A plugin package that only has a **named export** will not survive the string form, the import returns the whole module namespace object instead of the plugin function.
+
+My own [remark-table-of-contents](https://github.com/chrisweb/remark-table-of-contents) plugin is such a case, it only exports `remarkTableOfContents` (named), so it got a wrapper too, even though its options are plain JSON:
+
+```js title="lib/mdx/remark-table-of-contents.mjs"
+import { remarkTableOfContents } from 'remark-table-of-contents'
+
+const remarkTableOfContentsOptions = {
+    containerAttributes: {
+        id: 'articleToc',
+    },
+    maxDepth: 2,
+}
+
+// a unified "plugin tuple": [plugin, options]
+export default [remarkTableOfContents, remarkTableOfContentsOptions]
+```
+
+A quick way to check if a package has a default export: look at how you import it today. If you write `import remarkGfm from 'remark-gfm'` (no curly braces) it has a default export and the plain string form works, if you write `import { somePlugin } from 'some-plugin'` (curly braces) you need a wrapper.
+
+### Updating the package.json scripts
+
+With the config converted, you can drop the `--webpack` flag. One detail: if any of your Next.js plugins (in my case `@sentry/nextjs` and `@next/mdx` itself) inject a webpack configuration function, then a plain `next build` will bail with a "webpack config found" error, to prevent misconfiguration. Passing the `--turbopack` flag explicitly tells Next.js that this is intentional:
+
+```json title="package.json (excerpt)"
+{
+    "scripts": {
+        "dev": "next dev",
+        "build": "npm run lint && next build --turbopack"
+    }
+}
+```
+
+`next dev` uses Turbopack by default in Next.js 16 and does not need the flag.
+
+> [!WARN]  
+> The wrapper modules are loaded by the MDX loader, they are NOT part of the watched app code. After editing a file in `lib/mdx/` you need to **restart the dev server** to see the change, same as when you edit `next.config.ts` itself.
+
+### Verifying that the plugins really run
+
+A successful build only proves that the code compiles, it does not prove your plugins actually transformed the content. After the migration, open a page in the browser and check the generated HTML for markers that only your function options can produce, in my case:
+
+- the custom alerts markup produced by my `build` function
+- the `diff add` / `diff remove` classes produced by the shiki notation transformer in code blocks
+- the per-heading aria-labels produced by the autolink `properties` callback
+
+If one of the wrapper modules failed to load, you would NOT get a build error for it in every situation, so checking the output once is worth the two minutes.
+
+## Fix it yourself, step by step
+
+If you have the same problem, here is the complete recipe:
+
+1. Create a `lib/mdx/` directory in your project
+1. For every plugin whose options contain functions (or that has no default export), create a `lib/mdx/PLUGIN_NAME.mjs` wrapper that imports the plugin, defines the options, and does `export default [plugin, options]`
+1. In your Next.js config, replace the plugin imports with strings: package names for plugins with a default export and serializable (or no) options, absolute paths (`path.join(process.cwd(), 'lib', 'mdx', '...')`) for your wrappers
+1. Remove the now unused plugin imports and option objects from the Next.js config
+1. Remove the `--webpack` flag from your `dev` script and change your `build` script to `next build --turbopack`
+1. Restart the dev server, open a few MDX pages and verify the plugin output is present in the HTML
+
+## Copy paste instructions for your AI agent
+
+If you use an AI coding agent (Claude Code, Cursor, Codex, ...) you can paste the following instructions and let it do the migration for you:
+
+```text
+My Next.js 16 project uses @next/mdx with remark/rehype plugins whose options
+are not JSON-serializable (functions), which currently forces webpack builds.
+Migrate the MDX pipeline to be Turbopack compatible:
+
+1. Read node_modules/@next/mdx/mdx-js-loader.js first: string plugin entries
+   are resolved with require.resolve + import() and the module's DEFAULT export
+   is used as the plugin entry, so a default export can be a [plugin, options]
+   tuple. This works for absolute file paths too, functions never cross the
+   Rust boundary.
+2. For each plugin in my next config whose options contain functions, AND for
+   each plugin that has no default export (named-export-only packages), create
+   a wrapper module lib/mdx/<plugin-name>.mjs that imports the plugin, defines
+   the exact same options as today, and does: export default [plugin, options]
+3. In the next config, convert remarkPlugins/rehypePlugins to strings: package
+   names for plugins with default exports and serializable options (options as
+   ['name', {...}] tuples), and absolute paths via
+   path.join(process.cwd(), 'lib', 'mdx', '<file>.mjs') for the wrappers.
+4. Update package.json: remove --webpack from the dev script, use
+   "next build --turbopack" for the build script (the explicit flag is needed
+   because plugins that inject webpack config make a plain build bail).
+5. Verify: run the build, then start the dev server and check the rendered
+   HTML of an MDX page for output that only the function options can produce
+   (custom markup, transformer classes, callback-generated attributes).
+Do not enable experimental.mdxRs, it silently drops all remark/rehype plugins.
+```
+
+## Further details
+
+Some extra context that did not fit in the recipe:
+
+### Why not use the Rust MDX compiler (mdxRs)?
+
+You might wonder if `experimental.mdxRs` is the easier way out, it is not: when `mdxRs` is enabled, `@next/mdx` switches to a different loader (`mdx-rs-loader.js`) that passes only a handful of options (`parse`, `jsx`, ...) to the Rust compiler and **silently discards** your `remarkPlugins` and `rehypePlugins`. Your MDX would compile, but with zero plugins: no frontmatter exports, no code highlighting, no table of contents, nothing. It is also still marked experimental and not recommended for production.
+
+So make sure `mdxRs` is **turned off** in your Next.js config. It is off by default, so if your config does not mention it at all you are fine, but double check that you do not have `experimental: { mdxRs: true }` in there (setting `mdxRs: false` explicitly is also fine, it is the same as not setting it):
+
+```ts title="next.config.ts (excerpt)"
+const nextConfigOptions: NextConfig = {
+    experimental: {
+        // needs to be off (or absent), else all remark/rehype plugins get dropped
+        mdxRs: false,
+    },
+}
+```
+
+### The webpack regression, in case you want to stay on webpack
+
+If you can not (or do not want to) switch to Turbopack, your options for the webpack regression from [#91735](https://github.com/vercel/next.js/issues/91735) are staying on Next.js 16.1.6 (the last version where the webpack MDX build works) or waiting for one of the fix PRs ([#91755](https://github.com/vercel/next.js/pull/91755) and [#95057](https://github.com/vercel/next.js/pull/95057), both still open at the time of writing) to be merged and released. Keep in mind that Next.js 16.2.5 contains a security fix for an SSRF via WebSocket upgrade requests ([CVE-2026-44578](https://github.com/advisories/GHSA-c4j6-fc7j-m34r)), the vulnerability itself only affects **self-hosted** deployments that use WebSocket upgrades, deployments hosted on Vercel are not affected. This means that staying on 16.1.6 also means shipping without that fix, which is only an acceptable trade-off if you are NOT self-hosting (so if you are hosted on Vercel).
+
+### Additional notes: the exact setup used in this tutorial
+
+A short recap of the setup this was built and tested with, to make it easier to reproduce:
+
+- **Node.js** >= 20.11 and **Next.js 16.3.1** with **@next/mdx 16.3.1** and **@mdx-js/loader 3.1.1** (App Router, `pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'mdx']`, an `mdx-components.tsx` file in the project root, `experimental.mdxRs` NOT enabled)
+- the MDX pages live directly in the `app/` directory as `page.mdx` route files, each one starts with YAML frontmatter and does an `export const metadata = ...` (the export that triggers the webpack regression in 16.2+)
+- **remark plugins**, in order: `remark-frontmatter` (string), `remark-mdx-frontmatter` (string), `remark-table-of-contents` (wrapper, because it has no default export), `remark-gfm` (string with inline serializable options)
+- **rehype plugins**, in order: `rehype-pretty-code` (wrapper, because of the shiki transformer functions), `rehype-slug` (string), `rehype-mdx-import-media` (string), `rehype-autolink-headings` (wrapper, because of the `properties` callback), `rehype-github-alerts` (wrapper, because of the custom `build` function)
+- the wrapper modules live in `lib/mdx/` and are referenced by absolute path via `path.join(process.cwd(), 'lib', 'mdx', '...')`
+- scripts: `"dev": "next dev"` (Turbopack is the default) and `"build": "next build --turbopack"` (explicit flag because `@sentry/nextjs` and `@next/mdx` inject webpack config functions, which would otherwise make the build bail)
+
+### Where to see a complete working example
+
+This blog is open source, so you can see the complete real world setup (wrapper modules, the full `next.config.ts`, the MDX pages) in the [chris.lu repository on GitHub](https://github.com/chrisweb/chris.lu).
+
+> [!MORE]  
+> [Next.js docs: MDX guide](https://nextjs.org/docs/app/guides/mdx)  
+> [Next.js docs: Turbopack](https://nextjs.org/docs/app/api-reference/turbopack)  
+> [unified docs: plugins (PluginTuple)](https://unifiedjs.com/learn/guide/using-unified/)  
+> [chris.lu source code on GitHub](https://github.com/chrisweb/chris.lu)  
+
+Congratulations 🎉 your MDX pipeline now runs on Turbopack, with every plugin (and every function option) intact
+
+<DonationsMessage />
+
+</article>

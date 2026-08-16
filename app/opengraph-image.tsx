@@ -1,7 +1,6 @@
 import { ImageResponse } from 'next/og'
-
-// Route segment config
-export const runtime = 'edge'
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 
 // Image metadata
 export const size = {
@@ -16,13 +15,16 @@ export const alt = 'Chris.lu banner'
 // Image generation
 export default async function Image() {
 
-    const permanentMarkerRegular = fetch(
-        new URL('../public/assets/fonts/PermanentMarker-Regular.ttf', import.meta.url)
-    ).then(res => res.arrayBuffer())
+    const permanentMarkerRegular = readFile(
+        join(process.cwd(), 'public/assets/fonts/PermanentMarker-Regular.ttf')
+    )
 
-    const imageData = await fetch(
-        new URL('../public/assets/images/og_image_background_1200x630.jpg', import.meta.url)
-    ).then(res => res.arrayBuffer())
+    const imageFile = await readFile(
+        join(process.cwd(), 'public/assets/images/og_image_background_1200x630.jpg')
+    )
+
+    // satori (used by ImageResponse) needs an ArrayBuffer (not a Node.js Buffer) for the img src
+    const imageData = new Uint8Array(imageFile).buffer
 
     return new ImageResponse(
         // ImageResponse JSX element
@@ -36,7 +38,7 @@ export default async function Image() {
                     justifyContent: 'center',
                 }}
             >
-                {/* eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                     // @ts-ignore: this is fine 🔥
                     src={imageData}

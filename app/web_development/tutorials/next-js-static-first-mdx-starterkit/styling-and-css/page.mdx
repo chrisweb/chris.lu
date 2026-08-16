@@ -9,6 +9,7 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 import Breadcrumbs from '@/components/tutorial/Breadcrumbs'
 import Pagination from '@/components/tutorial/Pagination'
 import DonationsMessage from '@/shared/donations-message.mdx'
@@ -35,6 +36,8 @@ export const metadata = {
         tags: frontmatter.keywords,
     },
 }
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_next-js-static-first-mdx-starterkit/opengraph-image" />
 
 %toc%
 
@@ -80,7 +83,7 @@ If you want to use a UI library instead, then maybe have a look at projects like
 
 ## Getting started with CSS Modules
 
-Next.js supports [CSS Modules](https://github.com/css-modules/css-modules) out of the box, which means there is NO need to install any extra packages, and CSS Modules are **React Server Components (RSC)** compatible, which these days should be a requirement for CSS libraries that you intend to use with Next.js 13 / 14
+Next.js supports [CSS Modules](https://github.com/css-modules/css-modules) out of the box, which means there is NO need to install any extra packages, and CSS Modules are **React Server Components (RSC)** compatible, which these days should be a requirement for CSS libraries that you intend to use with Next.js 15
 
 **CSS Modules** let you write vanilla CSS in `*.module.css` files that you then import into your components or pages
 
@@ -158,7 +161,7 @@ In this chapter, we will have a look at some of them
 
 A significant advantage of CSS Modules is that you don't have to worry about unique names
 
-The library makes them unique for you by adding a hash to the name, meaning you can have two classes named **button** in two different files, as they are **component scoped** by default, they will be unique after compilation. The disadvantage with CSS Modules is that when you look at the name using the developer tools, the class and animation names won't be precisely what you have defined, instead the format for names will be: `[filename]_[classname]__[hash]`, so they will still be recognizable but NOT exactly the same. If you don't want the CSS modules to create unique class names for you, you have the option to set a [**stable** class name](https://www.gatsbyjs.com/docs/how-to/styling/css-modules/#enabling-user-stylesheets-with-a-stable-class-name).
+The library makes them unique for you by adding a hash to the name, meaning you can have two classes named **button** in two different files, as they are **component scoped** by default, they will be unique after compilation. The disadvantage with CSS Modules is that when you look at the name using the developer tools, the class and animation names won't be precisely what you have defined, instead the format for names will be: `[filename]_[classname]__[hash]`, so they will still be recognizable but NOT exactly the same. If you don't want the CSS modules to create unique class names for you, you have the option to configure the underlying css-loader so that it generates a **stable** class name.
 
 Make sure your dev server is running and then in your browser navigate to the styling page at `http://localhost:3000/styling`
 
@@ -166,7 +169,7 @@ Then right-click, choose **Inspect** or press `F12` to open the dev tools, then 
 
 ![chrome dev tools elements tab showing how CSS modules class names look after compilation](../../../../../public/assets/images/app/web_development/tutorials/next-js-static-first-mdx-starterkit/chrome_dev_tools_inspect_css_modules.png)
 
-If you want to add more than one class, either use a package like [classnames](https://www.npmjs.com/package/classnames) or just use [native javascript template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) like so:
+If you want to add more than one class, either use a package like [classnames](https://www.npmjs.com/package/classnames) or just use [native JavaScript template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) like so:
 
 ```tsx title="/components/tutorial_examples/UI/Button.tsx" showLineNumbers {6} "&#x60;${styles.reset} ${styles.core}&#x60;"
 import styles from './button.module.css'
@@ -183,7 +186,7 @@ const UIButton: React.FC = () => {
 export default UIButton
 ```
 
-Line 6: we use a javascript template literal to add two classes to the button (instead of just one)
+Line 6: we use a JavaScript template literal to add two classes to the button (instead of just one)
 
 Then we add the second class to our CSS Module:
 
@@ -226,7 +229,7 @@ In the CSS module file, you add the corresponding CSS like this:
 
 Here are a few more things about CSS Modules worth knowing:
 
-* CSS modules allow you to do composition by using the compose keyword, this works like an import in javascript and allows you to include one css module into another css module
+* CSS modules allow you to do composition by using the `composes` keyword, this works like an import in JavaScript and allows you to include one css module into another css module
 * you can change the first part of the CSS Module filename (*.module.css) to whatever you want (I usually use the same name as the component), so if my component is Button.tsx, then my CSS module will be called button.module.css
 * you can use CSS modules everywhere, they are not just for components, you can use them for pages and layouts, and you can place them anywhere, here we put them into the components folder, but you can also place them in the app folder if you prefer
 
@@ -509,7 +512,7 @@ Lines 33 to 36: we use the **body type selector** and reset the margin value(s) 
 
 Lines 38 to 45: we add some margin to the **footer** and **header** using the respective type selectors, we also add a minimum height to the footer, which will create a bit of space at the end of our pages, this is useful as on mobile and tablet you sometimes have a device or browser UI that will put something on the bottom of the screen that would be over your last bit of content, making the bottom part hard to read or even prevent interacting with something in your page. By adding a bit of space you ensure that the user will always see all of your content (when the page is fully scrolled down)
  
-Lines 47 to 53: we use the **main type selector** to tell the browser that we want to use the [CSS Flexbox layout](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Flexbox) by setting the **display** property to [flex](https://developer.mozilla.org/en-US/docs/Web/CSS/display#flex); for this element we set a maximum width using the CSS variable we created in the `:root`, the maximum width is 1120px to ensure that even on very large viewports (screens) the main element will not stretch to the full available width, this is important for the text we will place inside of our main section because if chapters of the text are very wide, it makes them hard to read; we set both the margin-left and margin-left to auto to make sure that our `<main>{:html}` element will get centered if the viewport is wider than the **max-width** we just set; finally, we also add a little bit of margin to the bottom to make sure there is a bit of space between our content and the footer of the page
+Lines 47 to 53: we use the **main type selector** to tell the browser that we want to use the [CSS Flexbox layout](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Flexbox) by setting the **display** property to [flex](https://developer.mozilla.org/en-US/docs/Web/CSS/display#flex); for this element we set a maximum width using the CSS variable we created in the `:root`, the maximum width is 1120px to ensure that even on very large viewports (screens) the main element will not stretch to the full available width, this is important for the text we will place inside of our main section because if chapters of the text are very wide, it makes them hard to read; we set both the margin-left and margin-right to auto to make sure that our `<main>{:html}` element will get centered if the viewport is wider than the **max-width** we just set; finally, we also add a little bit of margin to the bottom to make sure there is a bit of space between our content and the footer of the page
 
 > [!NOTE]  
 > When choosing to use the **CSS Flexbox layout** as we did for the main element, the browser automatically assumes that the [flex-flow](https://developer.mozilla.org/en-US/docs/Web/CSS/flex-flow) is set to row, which means that if we put an `<article>{:html}` into our `<main>{:html}` as well as an `<aside>{:html}` then both will get displayed as two columns next to each other (yes flex-flow row creates "columns")

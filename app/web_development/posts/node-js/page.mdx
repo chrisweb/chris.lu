@@ -1,6 +1,7 @@
 ---
 title: Node.js
-keywords: ['Node.js', 'Nodejs', 'runtime', 'javascript', 'js']
+description: My Node.js notes - installing Node.js, checking which version you run, verifying that your version is still receiving security support, and the available alternatives
+keywords: ['Node.js', 'Nodejs', 'runtime', 'JavaScript', 'js']
 published: 2024-08-09T11:22:33.444Z
 modified: 2025-02-25T14:02:33.444Z
 permalink: https://chris.lu/web_development/posts/node-js
@@ -8,9 +9,11 @@ section: Web development
 ---
 
 import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
 
 export const metadata = {
     title: frontmatter.title,
+    description: frontmatter.description,
     keywords: frontmatter.keywords,
     alternates: {
         canonical: frontmatter.permalink,
@@ -31,6 +34,8 @@ export const metadata = {
     },
 }
 
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/posts_node-js/opengraph-image" />
+
 %toc%
 
 <article>
@@ -39,13 +44,13 @@ export const metadata = {
 
 ![a waterfall of code with the text node.js](../../../../public/assets/images/app/web_development/posts/node-js/banner.png '{ banner }')
 
-When [Node.js](https://nodejs.org/) first showed up, most people were probably using PHP, Java or Ruby as backend language. **Node.js** gave us the possibility to use Javascript outside a web browser, meaning that for the first time we could use the same language for backend as well as frontend code. If you add other tools like [Electron](https://www.electronjs.org/), [Cordova](https://cordova.apache.org/) or [Capacitor](https://capacitorjs.com/) to your stack and you can use Javascript for your desktop and mobile apps too. It will never be possible to have a fully Isomorphic cross platform codebase, but by using Node.js you can reuse some of your Javascript code.
+When [Node.js](https://nodejs.org/) first showed up, most people were probably using PHP, Java or Ruby as backend language. **Node.js** gave us the possibility to use JavaScript outside a web browser, meaning that for the first time we could use the same language for backend as well as frontend code. If you add other tools like [Electron](https://www.electronjs.org/), [Cordova](https://cordova.apache.org/) or [Capacitor](https://capacitorjs.com/) to your stack and you can use JavaScript for your desktop and mobile apps too. It will never be possible to have a fully Isomorphic cross platform codebase, but by using Node.js you can reuse some of your JavaScript code.
 
-> Node.js is an open-source, cross-platform JavaScript runtime environment that executes JavaScript 
+> Node.js is an open-source, cross-platform JavaScript runtime environment that executes JavaScript code outside a web browser
 
-Under the hood, Node.js uses the Chrome (chromium) [V8 engine](https://nodejs.org/en/learn/getting-started/the-v8-javascript-engine), meaning it is based on the same asynchronous, event-driven model that Chrome uses. Still, there are differences. If you would like to learn more about those differences, check out the Node.js article [Differences between Node.js and the Browser](https://nodejs.org/en/learn/getting-started/differences-between-nodejs-and-the-browser).
+Under the hood, Node.js uses the Chrome (chromium) [V8 engine](https://nodejs.org/en/learn/getting-started/the-v8-javascript-engine) to execute your JavaScript, but V8 is only the JavaScript engine, the asynchronous, event-driven model of Node.js comes from [libuv](https://libuv.org/), the library that provides its event loop and non-blocking I/O. Still, there are differences. If you would like to learn more about those differences, check out the Node.js article [Differences between Node.js and the Browser](https://nodejs.org/en/learn/getting-started/differences-between-nodejs-and-the-browser).
 
-The significant advantage when using Node.js is that web applications can be written using a single programming language rather than different languages for server-side and client-side scripts. If later you also use other tools like [capacitor](https://capacitorjs.com/) or [electron](https://www.electronjs.org/), then you will be able to go a step further and create mobile and desktop apps for your project and still use Javascript as the only programming language, which also means that a lot of the code you wrote can be shared between the backend, frontend and even your apps.
+The significant advantage when using Node.js is that web applications can be written using a single programming language rather than different languages for server-side and client-side scripts. If later you also use other tools like [capacitor](https://capacitorjs.com/) or [electron](https://www.electronjs.org/), then you will be able to go a step further and create mobile and desktop apps for your project and still use JavaScript as the only programming language, which also means that a lot of the code you wrote can be shared between the backend, frontend and even your apps.
 
 ## Installation
 
@@ -58,16 +63,16 @@ There are several options when it comes to installing Node.js. The first option 
 > [Node.js "Download Node.js the way you want" page](https://nodejs.org/en/download/package-manager)  
 > [npm.js "download and install Node.js" documentation](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)  
 
-### Node.js native Typescript support (type stripping)
+### Node.js native TypeScript support (type stripping)
 
-Node.js has [announced](https://nodejs.org/en/blog/release/v22.6.0) that they added [native Typescript support](https://nodejs.org/en/learn/typescript/run-natively) in Node v22.6.0. This new feature allows us to run our Typescript script(s) natively without having to compile them to javascript first. What Node.js does, is that it strips the type annotations from your Typescript file and then run the code as Javascript. The [type stripping](https://nodejs.org/api/typescript.html#type-stripping) feature has evolved a lot since its first release but the module is still not stable (currently it is marked as in "Active development").
+Node.js has [announced](https://nodejs.org/en/blog/release/v22.6.0) that they added [native TypeScript support](https://nodejs.org/en/learn/typescript/run-natively) in Node v22.6.0. This new feature allows us to run our TypeScript script(s) natively without having to compile them to JavaScript first. What Node.js does, is that it strips the type annotations from your TypeScript file and then run the code as JavaScript. The [type stripping](https://nodejs.org/api/typescript.html#type-stripping) feature has evolved a lot since its first release but the module is still not stable (currently it is marked as in "Active development").
 
 > [!TIP]  
-> Node.js >= 22.7.0 [support typescript](https://nodejs.org/api/typescript.html) but you need to use the **--experimental-transform-types** flag. Node.js > 23.6.0 has type stripping enabled by default. If you want to use an older Node.js version then you will need to first compile the typescript code to javascript or you convert the code to javascript manually.
+> Node.js >= 22.6.0 [supports TypeScript](https://nodejs.org/api/typescript.html) but you need to use the **--experimental-strip-types** flag, which only strips the type annotations. For TypeScript only features, like enums or namespaces, you additionally need the **--experimental-transform-types** flag, which got added in Node.js >= 22.7.0. Node.js > 23.6.0 has type stripping enabled by default. If you want to use an older Node.js version then you will need to first compile the TypeScript code to JavaScript or you convert the code to JavaScript manually.
 
 > [!MORE]  
-> [Node.js "running Typescript natively" documentation](https://nodejs.org/en/learn/typescript/run-natively)  
-> [Node.js "Typescript module" API](https://nodejs.org/api/typescript.html)  
+> [Node.js "running TypeScript natively" documentation](https://nodejs.org/en/learn/typescript/run-natively)  
+> [Node.js "TypeScript module" API](https://nodejs.org/api/typescript.html)  
 
 ### Should I install the LTS or the current version
 

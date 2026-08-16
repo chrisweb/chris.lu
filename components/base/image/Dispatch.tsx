@@ -50,6 +50,7 @@ const ImageDispatch: React.FC<ImageProps> = (props) => {
                 // 704px = 768px - (2 x 32px)
                 // banner width = middle max width - (2 x spacing)
                 sizes="(max-width: 768px) 100vw, 704px"
+                quality={90}
                 fetchPriority="high"
                 loading="eager"
                 placeholder="blur"
@@ -75,6 +76,7 @@ const ImageDispatch: React.FC<ImageProps> = (props) => {
                 // 336px = (768px - (2 x 32px) - 32px) / 2
                 // thumbnail width = (middle max width - (2 x spacing) - grid space between two columns) / 2
                 sizes="(max-width: 768px) 100vw, 336px"
+                quality={90}
                 loading="lazy"
                 placeholder="blur"
                 alt={alt || ''}
@@ -108,6 +110,7 @@ const ImageDispatch: React.FC<ImageProps> = (props) => {
             // 704px = 768px - (2 x 32px)
             // banner width = middle max width - (2 x spacing)
             sizes="(max-width: 768px) 100vw, 704px"
+            quality={90}
             loading="lazy"
             placeholder="blur"
             alt={alt || ''}

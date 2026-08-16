@@ -5,8 +5,9 @@
 }
 
 .modal::backdrop {
-    backdrop-filter: saturate(200%) blur(40px);
+    /* prefixed version must come BEFORE the standard property (see navigation.module.css) */
     -webkit-backdrop-filter: saturate(200%) blur(40px);
+    backdrop-filter: saturate(200%) blur(40px);
     background-color: rgba(var(--primary-light-value) / 0.01);
 }
 
