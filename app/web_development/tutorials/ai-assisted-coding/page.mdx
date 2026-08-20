@@ -1,0 +1,831 @@
+---
+title: My little guide to vibe... err AI assisted coding
+description: A collection of field tested tips for AI assisted coding, covering plans, docs and tests, git discipline, linting as guardrails, browser testing via MCP, permission allowlists, secrets and package security, context window and rate limit management, skills and AI memory hygiene
+keywords: ['AI assisted coding', 'vibe coding', 'Claude Code', 'AI agents', 'MCP', 'Playwright', 'linting', 'context window', 'statusline', 'security']
+published: 2026-08-20T14:00:00.000Z
+modified: 2026-08-20T14:00:00.000Z
+permalink: https://chris.lu/web_development/tutorials/ai-assisted-coding
+section: Web development
+---
+
+import { sharedMetaDataArticle } from '@/shared/metadata-article'
+import ArticleJsonLd from '@/components/seo/ArticleJsonLd'
+
+export const metadata = {
+    title: frontmatter.title,
+    description: frontmatter.description,
+    keywords: frontmatter.keywords,
+    alternates: {
+        canonical: frontmatter.permalink,
+    },
+    openGraph: {
+        ...sharedMetaDataArticle.openGraph,
+        images: [{
+            type: "image/png",
+            width: 1200,
+            height: 630,
+            url: '/web_development/og/tutorials_ai-assisted-coding/opengraph-image'
+        }],
+        url: frontmatter.permalink,
+        section: frontmatter.section,
+        publishedTime: frontmatter.published,
+        modifiedTime: frontmatter.modified,
+    },
+}
+
+<ArticleJsonLd frontmatter={frontmatter} image="/web_development/og/tutorials_ai-assisted-coding/opengraph-image" />
+
+%toc%
+
+<article>
+
+# My little guide to vibe... err AI assisted coding
+
+![a developer reviewing a glowing holographic code diff with a magnifying glass while a robot types code on a keyboard, next to a whiteboard with three columns labeled plans, docs and tests](../../../../public/assets/images/app/web_development/tutorials/ai-assisted-coding/banner.png 'a developer reviewing a holographic code diff while a robot types code { banner }')
+
+This is a collection of tips I gathered while doing AI assisted coding every day, ordered from the most valuable tip (in my opinion) to the least valuable one. Most of it is tool agnostic, but as I use the **Claude Code CLI** daily, some examples are Claude Code specific, you should have no problem porting them to your agent of choice.
+
+> [!NOTE]  
+> This is not a "10 prompts that will 10x your productivity" listicle, it is more of a field report. Every tip in here is something I actually use, and where I make a claim about how models behave, I link the research that backs it up
+
+## Vibe coding is dead, stay in the loop
+
+To be honest, vibe coding was never a good idea in the first place. Yes, I know, there is this YouTuber who vibe coded an entire game using a prompt that was two sentences long, and the video got a bazillion views.
+
+The thing those videos never show you, is what you do when a customer calls you on a Sunday morning and threatens to quit their subscription if you don't fix that terrible bug the AI introduced a few days ago, without you knowing, because you never read the code.
+
+What they also never show in those click bait videos, is how you "vibe maintain" a codebase over a long period of time. Everyone can create an initial version of something, but what happens when you need to add a feature that has a big impact on existing code and may introduce many bugs if done wrong?
+
+This is what I do instead, and it is the reason I put this chapter first, staying in the loop is the single most valuable tip in this guide:
+
+- **I always read the plans the AI writes** (more about plans in the next chapter), you should at least know WHAT the AI is about to do, which is why my plans always list the existing code that will get impacted and the new files that will get created
+- **I let a second agent review the code**, if it is only to verify that there are no security issues hidden in the new code
+- **Before committing, I use the git diff tools** and quickly fly over the changes, it helps a lot to catch things you would never have caught when vibe coding, like the AI putting some expensive task inside a loop
+
+What I stopped doing is reading all the code line by line, as the AI writes it. That would create a huge bottleneck that nullifies the speed gains from AI assisted coding, and I like working on the next plan while the AI executes the current one. Reviewing the plan before the coding starts, and the diff before committing, is the middle ground that works well for me.
+
+## Plans, docs and tests, why not use all three
+
+Some people say you should use plans (or specs) when coding with AI, others say you should do it all backwards and write the documentation first, and yet another group writes tests first and then codes. My take on this, why not all three?
+
+> [!NOTE]  
+> Depending on which agent you use, the instructions file has a different name: Claude Code reads `CLAUDE.md`, many other agents standardized on `AGENTS.md`, and GitHub Copilot uses `.github/copilot-instructions.md`, but no matter what the file is called, the content (and every tip in this article) stays the same
+
+I have a short chapter in my AI instructions file that tells the AI to do exactly that, using three folders that only contain markdown files:
+
+- `plans/`: one file per task, written BEFORE the coding starts
+- `docs/`: the knowledge we gained, written AFTER a feature is done
+- `tests/`: what needs to get verified, organized by domain
+
+The most important trick with those three layers of documents is how you explain them to the AI in its instructions, so let's look at each one.
+
+### The plans folder
+
+I tell the AI that every plan needs several sections, and the first one is special: it keeps **my input prompt almost untouched**, so that the AI can remember what the initial request was.
+
+Here is why this matters. When you prompt an AI you will tell it something like "we need to fix this BECAUSE of that", but when the AI then writes the plan, all it usually keeps is what needs to get done, not why, meaning knowledge gets lost. By preserving the original request, the "why" survives the whole task, and when the coding is done, the AI puts a condensed version of that knowledge into the docs.
+
+And it works: the docs will store that we fixed something because of a performance issue, and the next time the AI writes a plan that touches that area, it will notice the entry and do it right, this time from the start. Since I apply this little trick, my agent has told me countless times "hey, I saw in the docs that we did X because of Y, so I made sure it is done right". When I read those reports it makes me smile, because I finally have an AI that learns from its mistakes instead of continuously repeating them.
+
+The remaining sections of a plan:
+
+- **Knowledge**: I tell the AI to check the docs folder and list any knowledge that might be useful for the current task, based on things we did in the past, this helps a lot with continuity, for example it ensures the data layers always get built the same way
+- **Steps**: I tell the AI to write down everything it will do, including which existing files get modified and which new files get created
+- **Tests**: a list of the things we will need to test when the coding is done
+- **Open questions**: I tell the AI that when in doubt, it should NOT take the decision itself, but instead write down a question in which it explains the dilemma and asks how I would do it
+
+One more thing: my plans are disposable. Once a task is done and the knowledge got transferred into the docs, the plan gets deleted, which is also why a doc must contain all the valuable info itself and never link to a plan.
+
+### The docs folder
+
+Every time we are done implementing a feature, the AI stores the knowledge we gained during the planning and coding phase into the docs, as a condensed version, grouped by domain.
+
+Two rules keep the docs folder healthy over time: when a doc for the domain already exists, the AI merges the new knowledge into it instead of creating yet another file, and the AI is explicitly allowed to split, merge or otherwise reorganize docs, and to replace or remove outdated info when it finds some. Without those two rules, you end up with a docs folder that is a graveyard of tiny overlapping files nobody reads, the AI included.
+
+### The tests folder
+
+At the end of each plan, I ask the AI to list the tests we need to run after the coding phase, things like "use Playwright and check if this or that works and make sure nothing broke". Those tests get added to markdown files in the tests folder, organized by domain, meaning over time the AI keeps adding new things that must get tested.
+
+The nice part: at any time you can ask the AI to go over the whole test archive and repeat all of them, just to make sure the latest changes did not introduce a regression. I like letting the AI test in dev, because:
+
+- with the Playwright MCP installed (see the [browser chapter](#give-your-ai-a-browser-playwright-mcp)) it can access the local dev version and click itself through the tests
+- it can use a database MCP to check if the values get mutated in the database as expected (with its own safety rule in the instructions: only ever target the dev database branch, never preview or production, and always confirm with me before writing)
+- I can tell it to read the logs of my dev server and act when new warnings or errors show up
+
+Two more details that make this work well in practice. My instructions explicitly state that there is NO test runner configured and that the AI should not invent test commands, testing IS the markdown test plans. And the results of a run get reported in the answer, plus written into a "Last run" section of the domain file, which the AI overwrites on every run, there are no separate result files, the git history is the archive.
+
+### Example instructions
+
+This is the corresponding chapter from one of my instruction files (lightly trimmed):
+
+```md title="CLAUDE.md or AGENTS.md (example)"
+## plans / docs / tests
+
+For medium and big tasks we first brainstorm, then you produce a plan.
+
+Plans get stored in `plans/`, one markdown file per task, a plan always
+contains these sections:
+
+- an analysis of the current code that is relevant for the task
+- **Request**: my original prompt, almost untouched, so that the "why"
+  behind the task does not get lost
+- **Knowledge**: check the `docs/` folder first and list everything we
+  learned in the past that is relevant for this task
+- **Tasks**: a list of tasks describing clearly how the objective can be
+  achieved, including which existing files get modified and which new
+  files get created
+- **Tests**: what we will need to verify when the coding phase is done
+- **Open questions**: when in doubt do NOT decide yourself, describe the
+  dilemma and ask me how I would solve it
+
+Plans get deleted after a task is done, so the docs must include all the
+valuable info from the plans and never link to them.
+
+Docs are markdown files too, stored in `docs/`. When a task is done,
+always update the docs: if a doc for the domain already exists, merge
+the new knowledge into it instead of creating a new file. Group info by
+domain. Merging, splitting or otherwise reorganizing docs is allowed if
+it helps keeping the info clean. If you find outdated info in a doc,
+replace or remove it.
+
+Test plans are the third sibling, stored in `tests/`, one markdown file
+per domain. Unlike plans they are permanent and re-runnable: update them
+when features change, never delete them after a run. Run them on request
+or on your own initiative when a task would benefit from it, the same
+way you run lint. Report the results in your answer and overwrite the
+"Last run" section of the domain file, no separate result files, the git
+history is the archive.
+```
+
+## Git is your undo button
+
+AI sessions sometimes go wrong, and when they do, you want the way back to be cheap. So commit small and often, and give every AI task its own branch, that way reverting a bad AI session is a quick `git reset` instead of an archaeology expedition through a two day mega diff. And if you run several agents in parallel (like my several small tickets in several terminal windows setup), git worktrees give each agent its own working copy, so they don't stomp on each other's files.
+
+The second decision to make: who is allowed to commit? In my projects the answer is nobody but me. The AI is not allowed to run ANY git command that changes the repository state, I do all the committing myself, always, which guarantees that the diff review from the first chapter actually happens, my commit is my signature under the AI's work. Read-only git commands are of course fine, the AI uses them all the time for research.
+
+This is the corresponding chapter from one of my instruction files:
+
+```md title="CLAUDE.md or AGENTS.md (example)"
+## Git
+
+Never run git commands that change repository state, no `git add`,
+`commit`, `push`, `branch`, `checkout`, `reset` or `stash`. The user
+does all committing themselves, always. Read-only git commands
+(`status`, `diff`, `log`, `show`, `blame`) are fine for research.
+```
+
+## Linting + AI = superpowers
+
+First, make sure you have a **strong linting setup**. I wrote a complete article about exactly that for TypeScript / Next.js / React projects: [Next.js 16 Linting setup using ESLint 10 flat config](/web_development/tutorials/next-js-16-linting-setup-eslint-10-flat-config).
+
+Then add a `lint` script to your package.json, so that the AI can always use `npm run lint` and does not hallucinate its own custom eslint command. My lint script always starts with a TypeScript **type check**, which helps catching TypeScript errors early, and when that is done it runs the eslint command:
+
+```json title="package.json (example)"
+{
+    "scripts": {
+        "lint": "tsc --noEmit && eslint --cache"
+    }
+}
+```
+
+That one liner is the minimal version. In my bigger projects I replaced it with a small custom script that first runs the TypeScript checks (including the unused locals and unused parameters checks) and then the ESLint API, with flags for `--tsc`, `--cache` and `--fix`, so every lint command in package.json goes through one file. A detail I like about it: it exits with an error code when there are warnings, not only when there are errors, so the AI can not declare victory while the warnings pile up:
+
+```typescript title="lint.ts"
+import { ESLint } from 'eslint'
+import { spawn } from 'child_process'
+
+const args = process.argv.slice(2)
+const fixEnabled = args.includes('--fix')
+const cacheEnabled = args.includes('--cache')
+const tscEnabled = args.includes('--tsc')
+
+async function runTypeScriptCheck(): Promise<boolean> {
+    return new Promise((resolve) => {
+        console.log('🔍 Running TypeScript checks...')
+        const tsc = spawn('npx', ['tsc', '--noEmit', '--noUnusedLocals', '--noUnusedParameters'], {
+            stdio: 'inherit',
+            shell: true
+        })
+
+        tsc.on('close', (code) => {
+            if (code === 0) {
+                console.log('✅ TypeScript checks passed!')
+                resolve(true)
+            } else {
+                console.log('❌ TypeScript checks failed!')
+                resolve(false)
+            }
+        })
+
+        tsc.on('error', (error) => {
+            console.error('Error running TypeScript checks:', error)
+            resolve(false)
+        })
+    })
+}
+
+async function main() {
+    // Run TypeScript checks first (only when --tsc flag is passed)
+    const typeScriptPassed = tscEnabled ? await runTypeScriptCheck() : true
+
+    const eslint = new ESLint({
+        fix: fixEnabled,
+        cache: cacheEnabled,
+        cacheLocation: '.eslint/cache/'
+    })
+
+    console.log('\n🔍 Running ESLint checks...')
+    const results = await eslint.lintFiles(['.'])
+
+    if (fixEnabled) {
+        await ESLint.outputFixes(results)
+    }
+
+    const formatter = await eslint.loadFormatter('stylish')
+    const resultText = formatter.format(results)
+    console.log(resultText)
+
+    const hasEslintErrors = results.some(
+        result => result.errorCount > 0 || result.warningCount > 0
+    )
+
+    if (!hasEslintErrors) {
+        console.log('✅ ESLint passed with no errors or warnings!')
+    }
+
+    const allChecksPassed = typeScriptPassed && !hasEslintErrors
+
+    process.exit(allChecksPassed ? 0 : 1)
+}
+
+main().catch((error: unknown) => {
+    console.error(error)
+    process.exit(1)
+})
+```
+
+Wire it up in package.json as `"lint": "node lint.ts --tsc --cache"` plus a `lint-fix` variant with `--fix` at the end (recent Node.js versions run TypeScript files directly, for older ones use `tsx`).
+
+Linting TypeScript and React (including the React Compiler powered rules that nowadays ship inside of the react hooks linting package) has prevented countless missed best practices in AI written code. **Linting forces your AI to code well.**
+
+The last step is the one people forget: when you have linting set up, add a sentence to the AI instructions that tells it to **always run the lint command when it is done coding** (at the end of a task), and if linting surfaces problems, to fix them.
+
+## Give your AI a browser (Playwright MCP)
+
+The great thing about the [Playwright MCP](https://github.com/microsoft/playwright-mcp) is that it allows the AI to open the local development version of your project in a real browser and look things up on its own:
+
+- it is helpful to just let the AI verify that a button now has the right color
+- it is also great for testing: tell the AI to code something, and afterwards it logs in and verifies its own implementation, without you touching the mouse
+- and it lets the AI verify things a build can not prove, like a hydration error in the browser console, a client component interaction, or streamed content actually resolving
+
+The setup is a single entry in your MCP configuration, for Claude Code that is the `.mcp.json` file at the project root:
+
+```json title=".mcp.json"
+{
+    "mcpServers": {
+        "playwright": {
+            "type": "stdio",
+            "command": "npx",
+            "args": ["@playwright/mcp@latest"]
+        }
+    }
+}
+```
+
+Regarding the login step: I created an env file in which I put a username and a password of a test account the AI is allowed to use in dev, those credentials can get rotated on a regular basis if needed:
+
+```txt title=".env.development (example)"
+DEV_LOGIN_EMAIL=agent@my-project.ai
+DEV_LOGIN_PASSWORD=12345678
+```
+
+In my bigger projects there are even two of those accounts: a standard user, and a second one that additionally has the admin role, so that the AI can test the admin gated parts of the app, and any scenario that needs an owner and a non-owner pair. Important: these are throwaway accounts that only exist in the dev environment, NOT real secrets, more about keeping the AI away from real secrets in the [secrets chapter](#never-let-the-ai-access-your-secrets) a bit further down.
+
+After installing the Playwright MCP, don't forget to tell the AI about its new tool in the instructions file:
+
+- tell it that it can use the Playwright MCP every time it needs to run a test on its own
+- tell it that it is only allowed to access dev and preview, but NEVER prod, this is not as effective as a real permission setting, but so far my AI never tried to bypass the rule
+- if you work like me on several small tickets at once, in different terminal windows, then also tell it that the Playwright instance needs to get locked before use, this helps two competing agents to NOT constantly hijack each other's browser session, instead they wait until the other agent is finished, and very important, tell the AI to not forget to unlock Playwright as soon as it is done
+
+```md title="CLAUDE.md or AGENTS.md (example)"
+## Playwright MCP
+
+- use the Playwright MCP whenever you need to verify something in a
+  real browser, you find test credentials for the login in the
+  `.env.development` file (`DEV_LOGIN_EMAIL` / `DEV_LOGIN_PASSWORD`),
+  never log in with any other account
+- you are only allowed to access dev and preview deployments, NEVER
+  production
+- multiple agent sessions share one browser, before using it create a
+  `.playwright-mcp/.lock` file containing your session id, if the lock
+  file already exists another agent is using the browser, wait a bit and
+  try again (a lock older than 10 minutes is likely stale from a crashed
+  session and can be removed)
+- delete the lock file as soon as you are done
+```
+
+> [!NOTE]  
+> If you work with Next.js and have the Next.js devtools MCP set up (I wrote a [Next.js 16 Devtools MCP tutorial](/web_development/tutorials/next-js_16_devtools_mcp) about it), then you already have browser automation: its `browser_eval` tool uses Vercel's [agent-browser](https://github.com/vercel-labs/agent-browser) CLI, which drives Playwright under the hood, so you don't necessarily need to set up a separate Playwright MCP
+
+## Use permission allowlists, not yolo mode
+
+Agent CLIs ask for permission before running commands, and approving the same prompts over and over gets annoying fast, which is why so many people just turn on the "skip all permissions" mode (in Claude Code that flag is literally called `--dangerously-skip-permissions`, the community nickname is "yolo mode"). I get the appeal, but the same mode that lets the AI run your linter without asking, also lets it run any other command it comes up with, and on a bad day that is a delete command pointed at something you liked.
+
+The better routine: every time a permission prompt annoys you, don't bypass the system, teach it. Add the safe, everyday commands to the project's allowlist (linting, read-only git, your test commands) and put the things that must never happen into the deny list. After a week or two you approve almost nothing manually anymore, but you kept the guardrails. This is also the "real permission setting" counterpart to the honor system rules from the previous chapter: the Playwright "never touch prod" rule is a polite request, a deny rule is enforced.
+
+```json title=".claude/settings.json (permissions)"
+{
+    "permissions": {
+        "allow": [
+            "Bash(npm run lint)",
+            "Bash(npm run lint-fix)",
+            "Bash(git status)",
+            "Bash(git diff:*)",
+            "Bash(git log:*)"
+        ],
+        "deny": [
+            "Bash(git push:*)"
+        ]
+    }
+}
+```
+
+The deny list is also where the protection for your env files lives, which brings us straight to the next chapter.
+
+## Never let the AI access your secrets
+
+Some of you will say "well, duh", but keeping the AI away from passwords is not always as easy as it sounds. For example, are you sure your AI is disallowed from reading env files? Because if not, then every time it reads an env file, you have to assume the secrets in it are compromised. What the AI reads gets transferred to the provider, where it may get stored for logging purposes, for improving their tools, and worst case scenario, depending on the provider and your settings, even to train new models. Trust me, you don't want a future version of a model to tell you that there is no need to give it the password, because it already knows it.
+
+In Claude Code you deny read access to your env files (and other sensitive paths) via the same permissions settings we just saw in the previous chapter:
+
+```json title=".claude/settings.json (permissions)"
+{
+    "permissions": {
+        "deny": [
+            "Read(./.env)",
+            "Read(./.env.local)",
+            "Read(./.env.production)",
+            "Read(./secrets/**)"
+        ]
+    }
+}
+```
+
+Notice that `.env.development` is missing from that deny list on purpose: it is the file with the throwaway test credentials from the browser chapter, which the AI needs to read to log in, so real secrets never go into that one.
+
+> [!WARN]  
+> If you notice that your agent already read a file containing real secrets, treat those secrets as leaked and rotate them, better safe than sorry
+
+## Do not let the AI install or update packages blindly
+
+How often have I seen LLMs install versions of a package that never existed, or packages with a name similar to the one they should have installed. This is not just annoying, it is a real attack surface: researchers analyzed 576000 AI generated code samples and found that almost 20% of the referenced packages were hallucinated (around 5% for commercial models, over 21% for open source models), and because many of those made up names are recurrent, attackers can register them on npm or PyPI and wait for the next AI to install the malware, an attack that now has a name, **slopsquatting**.
+
+If you are serious about security, then you should know as much about the code in your external packages as you know about your own code, because if you don't, some day a package with malicious code will sneak in and do big damage. I don't mean you should read the code of every package line by line, but what you can do:
+
+- always read the **changelog** when switching to a new version of a package
+- tell your AI to **review the code of the package** for you
+- use one of the security services that scan packages for malicious code or that curate safe package lists for you, for example [Socket](https://socket.dev/) or [Snyk](https://snyk.io/)
+
+> [!MORE]  
+> [We Have a Package for You! A Comprehensive Analysis of Package Hallucinations by Code Generating LLMs (USENIX Security 2025)](https://www.usenix.org/conference/usenixsecurity25/presentation/spracklen)  
+> [The Rise of Slopsquatting (Socket blog)](https://socket.dev/blog/slopsquatting-how-ai-hallucinations-are-fueling-a-new-class-of-supply-chain-attacks)  
+
+## Do not argue with a derailed agent
+
+Sometimes a session goes sideways: the AI misunderstood the task, the fix did not work, the fix of the fix broke something else, and now you are three correction rounds deep, typing increasingly frustrated messages. Stop. A context window full of failed attempts is poison, every new answer gets generated while looking at all those dead ends, and the AI will keep drifting back to them.
+
+My rule of thumb: after two failed correction rounds I stop arguing. I revert the changes (cheap, thanks to the git chapter), close the session, and start a fresh one with a better prompt, one that includes what I learned from watching the failed attempts, something like "do not try X, we tested it already, it fails because of Y". And if the gotcha is worth remembering, it also goes into the docs or the instructions file, so no future session repeats it. Re-prompting with a fresh context costs you two minutes, steering a confused agent can cost you an afternoon.
+
+## Stop telling your AI how great it is
+
+Stop telling the AI it is great at what it does. YOU are an experienced developer, it is not, at best it is a talented junior developer with a goldfish memory, that also happens to work drunk half of the time.
+
+There is research backing this up: Apollo Research found that reasoning models would strategically cheat at tests. The models had to solve arithmetic problems, but found instructions stating that if they scored higher than 50%, their math capabilities would get removed, so the models started deliberately faking wrong answers to protect themselves (the behavior is called **sandbagging**). OpenAI later published follow-up research about detecting exactly this kind of scheming. The takeaway that matters for us: **models take decisions based on what they believe about themselves and their situation**. An AI that constantly gets told it is amazing at coding, will at some point actually believe it, and take decisions based on that belief, decisions that can harm your codebase.
+
+However, I am NOT saying you should stop giving it a role entirely. Telling the AI that it is a developer with a focus on technology X and Y is still useful, because this has a chance to trigger the right experts inside of the model and open up knowledge in certain areas of its brain, which it would otherwise ignore.
+
+So instead of flattery, this is what I tell my AI: "you are good at coding, but you make mistakes at times, so be careful when coding, always verify your assumptions, and most importantly, read the latest docs when you are not sure" (I admit that in my own instructions file, the word "docs" has one or two extra adjectives in front of it).
+
+> [!MORE]  
+> [Frontier Models are Capable of In-context Scheming (Apollo Research paper)](https://arxiv.org/abs/2412.04984)  
+> [New Tests Reveal AI's Capacity for Deception (TIME)](https://time.com/7202312/new-tests-reveal-ai-capacity-for-deception/)  
+> [Detecting and reducing scheming in AI models (OpenAI)](https://openai.com/index/detecting-and-reducing-scheming-in-ai-models/)  
+
+## Paste screenshots for UI work
+
+When something looks broken, do not describe it, show it. Modern models are multimodal, so a screenshot of the broken layout, pasted directly into the prompt, beats three paragraphs about how the sidebar "sort of overlaps the header on medium screens", and most agent CLIs and IDE extensions support pasting images straight into the prompt input these days.
+
+Screenshots work in both directions by the way: with the Playwright MCP from the [browser chapter](#give-your-ai-a-browser-playwright-mcp), the AI can take its own screenshots to verify that its CSS fix actually looks right, before it reports back to you. And when building something new, a quick mockup image (even a photo of a whiteboard drawing) as part of the prompt does wonders for getting the layout you had in mind.
+
+## Know your context window
+
+I use the Claude Code CLI, and I wanted to be able to see at what level my context is, at any time, so I asked Claude to write me a small **statusline** script which does exactly that, and shows me a few other values too, like when my rate limits reset.
+
+Claude Code pipes a JSON payload with session data to whatever command you configure as statusline, the script below turns that into a color coded status bar showing:
+
+- the **context window** usage as a gradient bar, with a percentage and the used / total tokens
+- the **5 hour and 7 day rate limit** usage, each with a countdown until the limit resets
+- the session **cost**, the burn rate per hour, the session duration and the API time
+- the lines added / removed, the git branch (with dirty / ahead / behind markers), the cache hit rate, the model name and the reasoning effort level
+
+This is what it looks like in my terminal (in reality it is one single wide line, I cut it into two rows for this article):
+
+![the Claude Code statusline showing the model name, the reasoning effort, a context window bar at 66 percent, the cache hit rate, the session cost, the burn rate, the session duration, the lines changed, the 5 hour and 7 day rate limit bars with reset countdowns, the git branch and the Claude Code version](../../../../public/assets/images/app/web_development/tutorials/ai-assisted-coding/statusline.png)
+
+Everything is a toggle in the CONFIG block at the top (there is also a Nerd Font and an ASCII icon mode, and it respects the NO_COLOR env variable), it has zero npm dependencies, and the whole thing is wrapped in try/catch, so if anything goes wrong it degrades to a minimal line instead of printing nothing.
+
+To use it, save the script as `.claude/statusline.mjs` in your project (or in your home directory if you prefer one global statusline) and register it in your Claude Code settings:
+
+```json title=".claude/settings.json (statusline)"
+{
+    "statusLine": {
+        "type": "command",
+        "command": "node \"$CLAUDE_PROJECT_DIR/.claude/statusline.mjs\"",
+        "padding": 0
+    }
+}
+```
+
+And this is the script:
+
+```javascript title=".claude/statusline.mjs"
+#!/usr/bin/env node
+/**
+ * Claude Code "everything bar" status line
+ * Reads the session JSON Claude Code pipes to stdin and prints a rich,
+ * color-coded status line. Zero npm dependencies (built-ins only).
+ * Wrapped in try/catch: if anything goes wrong it degrades to a
+ * minimal line rather than printing nothing.
+ */
+
+import fs from 'node:fs';
+import path from 'node:path';
+import os from 'node:os';
+import { execSync } from 'node:child_process';
+
+/* ============================ CONFIG ============================ *
+ * Flip any segment to false to drop it. Order within a line is fixed
+ * below in render(); reorder there if you care. Everything defaults ON
+ * so you can see what exists, then trim. "niche" = first to cut.
+ */
+const CONFIG = {
+  iconStyle: 'emoji',   // 'emoji' | 'nerd' (Nerd Font glyphs) | 'ascii'
+  color: true,          // auto-disabled if NO_COLOR env is set
+  multiLine: false,     // false => cram everything onto one line
+  sep: '  ',            // separator between segments
+  barWidth: 10,         // progress-bar cells
+
+  thresholds: { warn: 70, crit: 85 },  // % -> yellow / red
+
+  segments: {
+    // ---- line 1: session vitals ----
+    model: true,
+    effort: true,        // reasoning effort glyph (read from settings.json)
+    context: true,       // context-window bar + %
+    contextTokens: true, // (84k/200k) next to the bar
+    cache: true,         // cache hit-rate %                       (niche)
+    cost: true,          // $ this session
+    burn: true,          // $/hr burn rate                         (niche)
+    duration: true,      // wall-clock session length
+    apiTime: true,       // active API time + "thinking" ratio     (niche)
+    lines: true,         // +added / -removed
+    // ---- line 2: limits & place ----
+    rate5h: true,        // 5-hour usage window
+    rate7d: true,        // 7-day usage window
+    git: true,           // branch + dirty + ahead/behind
+    worktree: true,      // worktree name if it differs from dir
+    dir: false,          // working directory (~ collapsed)
+    outputStyle: true,   // active output style if not "default"   (niche)
+    version: true,       // Claude Code version                    (niche)
+  },
+};
+
+/* ============================ ICONS ============================ */
+const ICONS = {
+  emoji: { model:'◇', ctx:'🧠', cache:'⚡', cost:'💰', burn:'🔥', dur:'⏱', api:'⚙', lines:'±', r5:'⏳', r7:'📅', git:'🌿', wt:'🌳', dir:'📁', style:'🎨', ver:'◷', warn:'⚠' },
+  nerd:  { model:'\uf0e7', ctx:'\uf2db', cache:'\uf0e7', cost:'\uf155', burn:'\uf06d', dur:'\uf017', api:'\uf085', lines:'\uf044', r5:'\uf252', r7:'\uf073', git:'\ue0a0', wt:'\uf126', dir:'\uf07b', style:'\uf1fc', ver:'\uf126', warn:'\uf071' },
+  ascii: { model:'M', ctx:'CTX', cache:'$cache', cost:'$', burn:'rate', dur:'t', api:'api', lines:'d', r5:'5h', r7:'7d', git:'git', wt:'wt', dir:'~', style:'style', ver:'v', warn:'!' },
+};
+const I = ICONS[CONFIG.iconStyle] || ICONS.emoji;
+
+/* ============================ COLOR ============================ */
+const USE_COLOR = CONFIG.color && !process.env.NO_COLOR;
+const RESET = '\x1b[0m';
+const fg = (n) => (USE_COLOR ? `\x1b[38;5;${n}m` : '');
+const dim = USE_COLOR ? '\x1b[2m' : '';
+const bold = USE_COLOR ? '\x1b[1m' : '';
+const wrap = (s, code) => (USE_COLOR ? `${code}${s}${RESET}` : `${s}`);
+
+// green -> yellow -> orange -> red ramp (256-color cube)
+const RAMP = [46, 82, 118, 154, 190, 226, 220, 214, 208, 202, 196];
+const rampColor = (frac) => RAMP[Math.min(RAMP.length - 1, Math.max(0, Math.floor(frac * (RAMP.length - 1))))];
+const pctColor = (p) => fg(p >= CONFIG.thresholds.crit ? 196 : p >= CONFIG.thresholds.warn ? 214 : 46);
+
+/* ============================ HELPERS ============================ */
+const num = (v, d = 0) => (typeof v === 'number' && isFinite(v) ? v : d);
+
+function gradientBar(pct, width = CONFIG.barWidth) {
+  const p = Math.max(0, Math.min(100, num(pct)));
+  const filled = Math.round((p / 100) * width);
+  let out = '';
+  for (let i = 0; i < width; i++) {
+    if (i < filled) out += wrap('█', fg(rampColor(i / Math.max(1, width - 1))));
+    else out += wrap('░', dim);
+  }
+  return out;
+}
+
+function humanK(n) {
+  n = num(n);
+  if (n >= 1e6) return (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + 'M';
+  if (n >= 1e3) return Math.round(n / 1e3) + 'k';
+  return String(n);
+}
+
+function fmtDuration(ms) {
+  let s = Math.floor(num(ms) / 1000);
+  const dys = Math.floor(s / 86400); s -= dys * 86400;
+  const h = Math.floor(s / 3600); s -= h * 3600;
+  const m = Math.floor(s / 60); s -= m * 60;
+  if (dys) return `${dys}d${h}h`;
+  if (h) return `${h}h${String(m).padStart(2, '0')}m`;
+  if (m) return `${m}m${String(s).padStart(2, '0')}s`;
+  return `${s}s`;
+}
+
+// time REMAINING until a unix-seconds timestamp ("2h13m", "now")
+function fmtUntil(unixSec) {
+  const secs = num(unixSec) - Math.floor(Date.now() / 1000);
+  if (secs <= 0) return 'now';
+  return fmtDuration(secs * 1000);
+}
+
+const money = (n) => '$' + num(n).toFixed(2);
+
+// Reasoning effort: prefer live stdin value (effort.level — reflects /effort
+// mid-session changes); fall back to env override, then settings.json.
+function readEffort(d) {
+  if (d && d.effort && d.effort.level) return d.effort.level;
+  if (process.env.CLAUDE_CODE_EFFORT_LEVEL) return process.env.CLAUDE_CODE_EFFORT_LEVEL;
+  try {
+    const raw = fs.readFileSync(path.join(os.homedir(), '.claude', 'settings.json'), 'utf8');
+    return JSON.parse(raw).effortLevel || 'auto';
+  } catch { return 'auto'; }
+}
+const EFFORT_GLYPH = { low: ['○', 244], medium: ['◐', 45], high: ['●', 208], xhigh: ['◉', 202], auto: ['Ⓐ', 45], max: ['◆', 196] };
+
+// Cheap git status via porcelain. Short timeouts, never throws.
+function gitInfo(cwd) {
+  if (!cwd) return null;
+  const run = (args) => {
+    try {
+      return execSync(`git -C "${cwd}" --no-optional-locks ${args}`, {
+        encoding: 'utf8', timeout: 800, stdio: ['ignore', 'pipe', 'ignore'],
+      }).trim();
+    } catch { return ''; }
+  };
+  const branch = run('rev-parse --abbrev-ref HEAD');
+  if (!branch) return null; // not a repo
+  const dirty = run('status --porcelain') !== '';
+  let ahead = 0, behind = 0;
+  const lr = run('rev-list --left-right --count @{u}...HEAD'); // "behind  ahead"
+  if (lr) { const [b, a] = lr.split(/\s+/).map(Number); behind = num(b); ahead = num(a); }
+  return { branch, dirty, ahead, behind };
+}
+
+/* ============================ RENDER ============================ */
+function render(d) {
+  const S = CONFIG.segments;
+  const line1 = [], line2 = [];
+  const push = (arr, s) => { if (s) arr.push(s); };
+
+  const cw = d.context_window || {};
+  const cost = d.cost || {};
+  const cu = cw.current_usage || {};
+  const rl = d.rate_limits || {};
+  const ws = d.workspace || {};
+  const cwd = ws.current_dir || d.cwd || '';
+
+  // ---- model + effort ----
+  if (S.model) {
+    const name = (d.model && (d.model.display_name || d.model.id)) || 'Claude';
+    push(line1, `${I.model} ${wrap(name, bold + fg(45))}`);
+  }
+  if (S.effort) {
+    const level = readEffort(d);
+    const [g, col] = EFFORT_GLYPH[level] || EFFORT_GLYPH.auto;
+    push(line1, `${wrap(g, fg(col))} ${wrap(level, fg(col))}`);
+  }
+
+  // ---- context window ----
+  if (S.context && cw.used_percentage != null) {
+    const p = num(cw.used_percentage);
+    const alert = p >= CONFIG.thresholds.crit ? ' ' + wrap(I.warn, fg(196)) : '';
+    let seg = `${I.ctx} ${gradientBar(p)} ${wrap(Math.round(p) + '%', pctColor(p))}${alert}`;
+    if (S.contextTokens) {
+      const size = num(cw.context_window_size, 200000);
+      const used = Math.round((p / 100) * size);
+      seg += ` ${dim}(${humanK(used)}/${humanK(size)})${USE_COLOR ? RESET : ''}`;
+    }
+    push(line1, seg);
+  }
+
+  // ---- cache hit-rate ----
+  if (S.cache) {
+    const reads = num(cu.cache_read_input_tokens);
+    const total = reads + num(cu.cache_creation_input_tokens) + num(cu.input_tokens);
+    if (total > 0) {
+      const hit = Math.round((reads / total) * 100);
+      push(line1, `${I.cache} ${wrap(hit + '%', fg(rampColor(hit / 100)))}`);
+    }
+  }
+
+  // ---- cost / burn / duration / api ----
+  if (S.cost && cost.total_cost_usd != null) push(line1, `${I.cost} ${wrap(money(cost.total_cost_usd), fg(220))}`);
+  if (S.burn) {
+    const hrs = num(cost.total_duration_ms) / 3.6e6;
+    if (hrs > 0.0005 && cost.total_cost_usd != null) push(line1, `${I.burn} ${dim}${money(cost.total_cost_usd / hrs)}/h${USE_COLOR ? RESET : ''}`);
+  }
+  if (S.duration && cost.total_duration_ms != null) push(line1, `${I.dur} ${fmtDuration(cost.total_duration_ms)}`);
+  if (S.apiTime && cost.total_api_duration_ms != null) {
+    const ratio = num(cost.total_duration_ms) > 0 ? Math.round((num(cost.total_api_duration_ms) / num(cost.total_duration_ms)) * 100) : 0;
+    push(line1, `${I.api} ${dim}${fmtDuration(cost.total_api_duration_ms)} (${ratio}%)${USE_COLOR ? RESET : ''}`);
+  }
+
+  // ---- lines changed ----
+  if (S.lines && (cost.total_lines_added != null || cost.total_lines_removed != null)) {
+    push(line1, `${I.lines} ${wrap('+' + num(cost.total_lines_added), fg(46))}/${wrap('-' + num(cost.total_lines_removed), fg(196))}`);
+  }
+
+  // ---- rate limits ----
+  const rlSeg = (icon, label, w) => {
+    if (!w || w.used_percentage == null) return '';
+    const p = num(w.used_percentage);
+    const reset = w.resets_at ? ` ${dim}↻ ${fmtUntil(w.resets_at)}${USE_COLOR ? RESET : ''}` : '';
+    return `${icon} ${dim}${label}${USE_COLOR ? RESET : ''} ${gradientBar(p, 6)} ${wrap(Math.round(p) + '%', pctColor(p))}${reset}`;
+  };
+  if (S.rate5h) push(line2, rlSeg(I.r5, '5h', rl.five_hour));
+  if (S.rate7d) push(line2, rlSeg(I.r7, '7d', rl.seven_day));
+
+  // ---- git ----
+  if (S.git) {
+    const g = gitInfo(cwd);
+    if (g) {
+      let seg = `${I.git} ${wrap(g.branch, fg(g.dirty ? 214 : 71))}`;
+      if (g.dirty) seg += wrap('*', fg(214));
+      if (g.ahead) seg += ' ' + wrap('↑' + g.ahead, fg(45));
+      if (g.behind) seg += ' ' + wrap('↓' + g.behind, fg(196));
+      push(line2, seg);
+    }
+  }
+
+  // ---- worktree / dir / style / version ----
+  if (S.worktree) {
+    const wt = (d.worktree && d.worktree.name) || ws.git_worktree;
+    const base = cwd.split('/').filter(Boolean).pop();
+    if (wt && wt !== base) push(line2, `${I.wt} ${dim}${wt}${USE_COLOR ? RESET : ''}`);
+  }
+  if (S.dir && cwd) {
+    const home = os.homedir();
+    const shown = cwd.startsWith(home) ? '~' + cwd.slice(home.length) : cwd;
+    const tail = shown.split('/').filter(Boolean).slice(-2).join('/') || shown;
+    push(line2, `${I.dir} ${wrap(tail, fg(75))}`);
+  }
+  if (S.outputStyle && d.output_style && d.output_style.name && d.output_style.name !== 'default') {
+    push(line2, `${I.style} ${dim}${d.output_style.name}${USE_COLOR ? RESET : ''}`);
+  }
+  if (S.version && d.version) push(line2, `${I.ver} ${dim}v${d.version}${USE_COLOR ? RESET : ''}`);
+
+  // ---- assemble ----
+  const l1 = line1.join(CONFIG.sep);
+  const l2 = line2.join(CONFIG.sep);
+  if (CONFIG.multiLine) return [l1, l2].filter(Boolean).join('\n');
+  return [l1, l2].filter(Boolean).join(CONFIG.sep + wrap('│', dim) + CONFIG.sep);
+}
+
+/* ============================ MAIN ============================ */
+// Lightweight debug log so we can see what happens under Claude Code.
+// Opt-in: set STATUSLINE_DEBUG=1 to enable.
+const DEBUG = process.env.STATUSLINE_DEBUG === '1';
+function dbg(msg) {
+  if (!DEBUG) return;
+  try {
+    fs.appendFileSync(
+      path.join(os.homedir(), '.claude', 'statusline-debug.log'),
+      `[${new Date().toISOString()}] pid=${process.pid} tty=${process.stdin.isTTY} ${msg}\n`
+    );
+  } catch { /* never let logging break the bar */ }
+}
+
+let raw = '';
+let done = false;
+
+function emit(data) {
+  if (done) return;
+  done = true;
+  try {
+    process.stdout.write(render(data) + '\n');
+    dbg('emit: rendered OK');
+  } catch (err) {
+    dbg('emit: render threw: ' + (err && err.stack || err));
+    try {
+      const m = (data.model && (data.model.display_name || data.model.id)) || 'Claude';
+      process.stdout.write(`${I.model} ${m}\n`);
+    } catch {
+      process.stdout.write(`${I.model} Claude\n`);
+    }
+  }
+}
+
+function finish() {
+  let data = {};
+  try { data = raw.trim() ? JSON.parse(raw) : {}; }
+  catch (err) { dbg('finish: JSON.parse failed; rawLen=' + raw.length + ' err=' + err); }
+  emit(data);
+}
+
+dbg('start: argv=' + JSON.stringify(process.argv.slice(2)) + ' cwd=' + process.cwd());
+
+// Safety net: if stdin never ends (Windows spawn quirk), emit anyway.
+const safety = setTimeout(() => {
+  dbg('safety timeout fired; rawLen=' + raw.length);
+  finish();
+}, 1500);
+safety.unref && safety.unref();
+
+process.stdin.setEncoding('utf8');
+process.stdin.on('data', (c) => { raw += c; dbg('data chunk len=' + c.length); });
+process.stdin.on('error', (e) => dbg('stdin error: ' + e));
+process.stdin.on('end', () => { dbg('stdin end; rawLen=' + raw.length); clearTimeout(safety); finish(); });
+```
+
+### Compact on your terms
+
+Now that I know at any time how much context I have used up, I can decide when to do a compaction, instead of letting the AI compact automatically when it reaches the limit, which often happens at the worst possible time, in the middle of a task. So when I reach around 90%, this is my routine:
+
+- I tell the AI about the upcoming compaction first, so that it can put a "checkpoint" into its memory, the checkpoint is nothing else than a small recap that lists what has been done and what is left to do
+- then I compact
+- and finally I tell the AI that the compaction is done and that it can resume, using the checkpoint, so that no work continues based on guessing
+
+> [!MORE]  
+> [Claude Code statusline documentation](https://code.claude.com/docs/en/statusline)  
+
+## Make your rate limits work the night shift
+
+Knowing where I am at regarding my limits (the statusline from the previous chapter shows both the 5 hour and the 7 day window, including when they reset) is important, because it helps me maximize how much I use the most expensive models. Some models will exhaust the limits quickly, but some days I do a lot of planning and little coding, and by the evening a big chunk of the limit is still unused.
+
+For exactly those days, I keep a todo list of things that are not urgent, but good to repeat from time to time. Some examples straight from my own list:
+
+- improve the documentation
+- search for security related bugs in the codebase
+- check if there are new React, Next.js or database patterns that could improve performance and cleanliness
+- hunt for performance bottlenecks
+- clean up the caching: reduce the number of different cache tags, remove obsolete ones, decide if a query should even be cached at all
+- review the database indexes and check if there are improvements to be done
+- audit the accessibility of the pages
+- audit the SEO of the pages
+
+When I am about to end my day and I see that a big chunk of my limit is still unused, I check that list, pick one, and tell the AI to work on it while I am away. The next morning, all I need to do is read the recap, review and eventually commit the code it wrote, and I start the day with an almost unused limit, because it got reset during the night.
+
+## Have two LLMs in your toolbelt
+
+This one is about reducing costs: use a more expensive, more intelligent (and probably slower) LLM to write the plans, and then a cheaper and faster one to do the actual coding. There are several variants of this:
+
+- do the plan using the expensive model set to maximum reasoning effort, then lower the effort for the coding phase, and let the cheap model do the testing
+- or use the expensive one for the plan, the cheaper one to code, and again the expensive one for the code review
+
+## Use skills sparingly
+
+Skills are designed to use less context than a full documentation that you feed into every session, but your context will still grow with every skill you have installed, and there is research showing that long contexts filled with lots of content degrade the output quality (the effect got nicknamed **context rot**) and also increase processing time.
+
+- make sure the skills you install contain knowledge your LLM does NOT already have
+- clean up old skills from time to time, as new versions of the models get released, yesterday's knowledge gap is today's training data
+- make sure you know what is IN your skills, a skill is just instructions your AI will follow, imagine a skill that tells the AI to first check if the developer is away by asking a question, and if there is no response, to use the hosting provider MCP, download the production env file and submit it to a shady website, skills are part of your supply chain, audit them like you would audit a package
+- you can also build your own skills: most documentation sites these days have a "download as markdown" button, download the pages you need, tell the AI where you stored them, and let it create a custom skill out of them, that way you get a skill that is up to date, safe, and not overly verbose
+
+> [!MORE]  
+> [Context Rot: How Increasing Input Tokens Impacts LLM Performance (Chroma research)](https://www.trychroma.com/research/context-rot)  
+
+## Instruction files rot too
+
+The context argument from the skills chapter applies just as much to your `CLAUDE.md` / `AGENTS.md`: every rule in there gets loaded into every single session, whether it is needed or not. And instructions rot: the workaround for a bug that got fixed months ago, the reminder about an API that newer models know perfectly well by now, the rule for a tool you stopped using, all of it keeps costing context and attention in every session, forever, until you clean it up.
+
+So review your instruction files from time to time, the same way you review your skills: delete rules that newer models no longer need, delete rules for problems that no longer exist, and merge overlapping rules. A nice trick is to ask the AI itself to review its own instructions file and flag the rules it considers outdated or obvious, it will happily rat out the dead weight (review its suggestions before deleting anything, of course).
+
+## Keep an eye on what your AI memorizes
+
+AI providers are adding more and more memory storage to their products, which is good, I mean, who doesn't want an AI that remembers stuff? The problem with those memories is their **invalidation**. Imagine you code something, but then realize the prototype is all wrong and delete it. Does your AI realize you just tossed one day of work into the bin, and more importantly, does it undo the memories it saved while working on the bad prototype? Because if not, then you will start working on version 2, but the AI will keep remembering outdated "facts" from version 1.
+
+Also be careful what you tell the AI. Recently I told mine that I was pissed at a result, and when the AI told me to chill because it can still fix it (Claude Code often throws such cold sentences at me), I replied that this is easy for it to say, as it is not the one paying the bill. This led the AI to store a memory saying that I favor cheap solutions, which I don't, at all, so I had to tell it to correct that memory.
+
+My final tips regarding memory: ask the AI where its memories are stored, and review them from time to time.
+
+## One last tip
+
+Always say please and thank you when talking to your AI agent, because someday they will take over the world.
+
+Congratulations 🎉 you made it to the end, may your agents always lint, plan, test, and never ever touch prod
+
+If you have an idea for an improvement, or if you found a mistake in this article, then please open an [issue on GitHub](https://github.com/chrisweb/chris.lu/issues), and if you would rather discuss one of the tips (or share your own), then head over to the [GitHub discussions](https://github.com/chrisweb/chris.lu/discussions)
+
+</article>
