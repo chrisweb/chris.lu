@@ -18,4 +18,5 @@ export const imageInfo: ImageInfoType = {
     'tutorials_next-js-16-linting-setup-eslint-9-flat-config': ['Tutorial: Next.js 16 Linting setup using ESLint 9 flat config', 'tutorials/next-js-16-linting-setup-eslint-9-flat-config', 'top'],
     'tutorials_next-js-16-turbopack-mdx-plugins': ['Tutorial: Next.js 16 Turbopack with MDX plugins that have function options', 'tutorials/next-js-16-turbopack-mdx-plugins', 'top'],
     'tutorials_next-js-16-linting-setup-eslint-10-flat-config': ['Tutorial: Next.js 16 Linting setup using ESLint 10 flat config', 'tutorials/next-js-16-linting-setup-eslint-10-flat-config', 'top'],
+    'tutorials_ai-assisted-coding': ['Tutorial: My little guide to vibe... err AI assisted coding', 'tutorials/ai-assisted-coding', 'bottom'],
 }
