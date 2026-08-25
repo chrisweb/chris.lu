@@ -92,7 +92,14 @@ The remaining sections of a plan:
 - **Knowledge**: I tell the AI to check the docs folder and list any knowledge that might be useful for the current task, based on things we did in the past, this helps a lot with continuity, for example it ensures the data layers always get built the same way
 - **Steps**: I tell the AI to write down everything it will do, including which existing files get modified and which new files get created
 - **Tests**: a list of the things we will need to test when the coding is done
+- **Unvetoed decisions**: an inventory of every decision the AI is about to make on its own, more about this one below
 - **Open questions**: I tell the AI that when in doubt, it should NOT take the decision itself, but instead write down a question in which it explains the dilemma and asks how I would do it
+
+The **unvetoed decisions** section is the newest addition to my plans, and it covers a blind spot that the open questions section can not: "when in doubt, ask" only catches decisions the AI knows are decisions. Most of the time the AI is not in doubt at all, it confidently picks a name, a default value, a threshold, a wording, and that choice then travels invisibly inside of a big diff. So every plan now has to list the decisions the implementation would otherwise make unsupervised, naming and vocabulary choices, defaults, thresholds, formats, UX micro behaviors, anything that is not literally dictated by my request or by the existing code, one line per decision stating the intended choice. The effect is that I can veto a decision by just reading the plan, which is a lot cheaper than discovering it days later somewhere in the code.
+
+Like several rules in my instruction files, this one was born from a real incident: the AI once shipped a feature in which it had decided, across more than a dozen prompt files, to call the player "the reader", a vocabulary it invented and that no other file in the project used. The plan never mentioned it, and I would have vetoed it in a second if it had. One companion sentence makes the rule complete: if a new decision of this kind pops up during the coding phase that the plan did not list, the AI must surface it in the conversation instead of silently deciding.
+
+That incident actually produced a second rule, one that lives in the instructions file rather than in the plans: when the AI produces new material, prompts, user facing copy, code idioms, it has to **adopt the vocabulary** and conventions the neighboring files already use, and never introduce a parallel register silently. If a deviation seems genuinely better, it should propose it in one sentence and wait for my approval, instead of shipping it buried inside a large deliverable. The two rules complement each other: the vocabulary rule prevents most of these inventions from happening at all, and the unvetoed decisions section catches the ones that still slip through, before the coding starts.
 
 One more thing: my plans are disposable. Once a task is done and the knowledge got transferred into the docs, the plan gets deleted, which is also why a doc must contain all the valuable info itself and never link to a plan.
 
@@ -114,9 +121,11 @@ The nice part: at any time you can ask the AI to go over the whole test archive 
 
 Two more details that make this work well in practice. My instructions explicitly state that there is NO test runner configured and that the AI should not invent test commands, testing IS the markdown test plans. And the results of a run get reported in the answer, plus written into a "Last run" section of the domain file, which the AI overwrites on every run, there are no separate result files, the git history is the archive.
 
+One more rule that pairs well with letting the AI near the database: the AI never applies a migration itself. It is allowed to generate the migration file and to verify that what got generated looks correct, but running the migration is my job, always (the same "nobody but me" principle as the committing in the [git chapter](#git-is-your-undo-button) below). And every AI written script that mutates data is a **dry run by default**: it prints what it would change and nothing else, only an explicit `--execute` flag makes it actually write, which turns reviewing the effects into the default and the destructive part into a deliberate second step.
+
 ### Example instructions
 
-This is the corresponding chapter from one of my instruction files (lightly trimmed):
+These are the corresponding chapters from one of my instruction files (lightly trimmed):
 
 ```md title="CLAUDE.md or AGENTS.md (example)"
 ## plans / docs / tests
@@ -135,6 +144,14 @@ contains these sections:
   achieved, including which existing files get modified and which new
   files get created
 - **Tests**: what we will need to verify when the coding phase is done
+- **Unvetoed decisions**: an inventory of every decision you would
+  otherwise make unsupervised, naming and vocabulary choices, defaults,
+  thresholds, formats, UX micro behaviors, anything not literally
+  dictated by my request or by the existing code, one line per
+  decision stating the intended choice, so that I can veto it by
+  reading the plan. If a new decision of this kind comes up during
+  the coding phase and it is not in the plan, surface it in the
+  conversation instead of silently deciding
 - **Open questions**: when in doubt do NOT decide yourself, describe the
   dilemma and ask me how I would solve it
 
@@ -155,6 +172,14 @@ or on your own initiative when a task would benefit from it, the same
 way you run lint. Report the results in your answer and overwrite the
 "Last run" section of the domain file, no separate result files, the git
 history is the archive.
+
+## Adopt existing vocabulary
+
+When producing new material (prompts, user facing copy, code idioms),
+adopt the vocabulary and conventions the neighboring files already
+use, never introduce a parallel register silently. If a deviation
+seems genuinely better, propose it in one sentence and wait for my
+approval, never ship it embedded inside a large deliverable.
 ```
 
 ## Git is your undo button
